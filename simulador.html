@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIMULA FÁCIL IA – Simulador de processos químicos (aplicativo) | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="Aplicativo do SIMULA FÁCIL IA: simulador de processos químicos gratuito no navegador, com destilação, McCabe-Thiele, reatores CSTR e PFR, trocadores de calor, extração e geração de código MATLAB, Octave e Python. Autor: Prof. Juan Canellas Bosch Neto (Engenharia Química – UFSJ).">
+<meta name="author" content="Juan Canellas Bosch Neto">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="img/favicon.png" type="image/png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="SIMULA FÁCIL IA">
+<meta property="og:title" content="SIMULA FÁCIL IA – Simulador de processos químicos">
+<meta property="og:description" content="Simulador de processos químicos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
+<meta property="og:image" content="img/og-image.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="lgBadge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14c4b8"/><stop offset="1" stop-color="#0a6f86"/></linearGradient>
+    <linearGradient id="lgLiq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd23f"/><stop offset="1" stop-color="#ff6b4a"/></linearGradient>
+    <symbol id="logo" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="31" fill="url(#lgBadge)"/>
+      <rect x="11" y="10" width="13" height="40" rx="6.5" fill="#ffffff"/>
+      <path d="M13.5 19h8M13.5 25h8M13.5 31h8M13.5 37h8M13.5 43h8" stroke="#0a6f86" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M24 15h7M24 45h7" stroke="#ffd23f" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M36 14h12M38.5 14v11L32 44.5c-1.2 3.4.8 5.5 4 5.5h12.5c3.2 0 5.2-2.1 4-5.5L46 25V14" fill="#ffffff" stroke="#ffffff" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M34.6 38.5h16.8l2.6 6.3c.9 2.6-.4 4-2.8 4H35c-2.4 0-3.7-1.4-2.8-4z" fill="url(#lgLiq)"/>
+      <circle cx="40" cy="33" r="2" fill="#ff6b4a"/><circle cx="45" cy="29" r="1.4" fill="#ffd23f"/><circle cx="43" cy="22" r="1.1" fill="#14c4b8"/>
+    </symbol>
+  </defs>
+</svg>
+<header class="top">
+  <button class="brand" id="btnHome" title="Tela inicial">
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><em>Simulador de processos químicos</em></span>
+    <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
+  </button>
+  <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
+  <div class="tools">
+    <button id="btnNew" title="Novo fluxograma">Novo</button>
+    <label class="sr" for="exampleSel">Exemplos</label>
+    <select id="exampleSel" title="Carregar exemplo"><option value="">Exemplos…</option></select>
+    <button id="btnUndo" title="Desfazer (Ctrl+Z)">Desfazer</button>
+    <button id="btnRun" class="primary" title="Simular (F5)"><svg viewBox="0 0 12 12" width="11" height="11"><path d="M2 1l9 5-9 5z" fill="currentColor"/></svg> Simular</button>
+    <button id="btnReport" title="Fluxograma final com resultados">Fluxograma final</button>
+    <button id="btnMatlab" title="Gerar código MATLAB/Octave">MATLAB/Octave</button>
+    <button id="btnPython" title="Gerar código Python (NumPy, SciPy, Matplotlib)">Python</button>
+    <button id="btnSave" title="Salvar projeto (.json)">Salvar</button>
+    <button id="btnOpen" title="Abrir projeto (.json)">Abrir</button>
+    <button id="btnAbout" title="Sobre o SIMULA FÁCIL IA e autoria">Sobre</button>
+    <input type="file" id="fileOpen" accept=".json,application/json" hidden>
+  </div>
+</header>
+
+<main class="work">
+  <aside class="palette" id="palette" aria-label="Paleta de equipamentos"></aside>
+
+  <section class="center">
+    <div class="canvas-bar">
+      <span id="simStatus" class="chip idle">Não simulado</span>
+      <span id="compSummary" class="muted small"></span>
+      <span class="spacer"></span>
+      <span class="hint small">Clique numa saída <b class="dot out"></b> e depois numa entrada <b class="dot in"></b> para ligar · Del apaga · arraste o fundo para mover</span>
+      <button class="icon" id="zoomOut" title="Afastar">−</button>
+      <button class="icon" id="zoomFit" title="Ajustar à tela">⤢</button>
+      <button class="icon" id="zoomIn" title="Aproximar">+</button>
+    </div>
+    <div class="canvas-wrap" id="canvasWrap">
+      <svg id="pfd" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fluxograma do processo"></svg>
+      <div class="empty-hint" id="emptyHint">
+        <h2>Comece pelo agente ou pela paleta</h2>
+        <p>Descreva o processo ao agente (pode anexar uma figura do fluxograma), escolha um exemplo pronto ou clique nos equipamentos à esquerda.</p>
+      </div>
+    </div>
+    <div class="drawer" id="drawer">
+      <div class="drawer-head">
+        <strong id="drawerTitle">Gráficos</strong>
+        <span class="muted small">fonte 18 · “Baixar PNG” em cada gráfico</span>
+        <span class="spacer"></span>
+        <button id="drawerToggle" class="icon" title="Recolher/expandir">▾</button>
+      </div>
+      <div class="drawer-body" id="charts"></div>
+    </div>
+  </section>
+
+  <aside class="side">
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="agent" class="on">Agente IA</button>
+      <button role="tab" data-tab="props">Propriedades</button>
+      <button role="tab" data-tab="results">Resultados</button>
+      <button role="tab" data-tab="thermo">Termodinâmica</button>
+    </nav>
+
+    <section class="pane on" id="tab-agent" role="tabpanel">
+      <div class="chat" id="chat"></div>
+      <div class="chips" id="quickPrompts"></div>
+      <form class="composer" id="composer">
+        <div class="attach-row" id="attachRow" hidden></div>
+        <label class="sr" for="chatInput">Mensagem para o agente</label>
+        <textarea id="chatInput" rows="3" placeholder="Descreva o processo, peça sugestões ou cole uma figura (Ctrl+V)…"></textarea>
+        <div class="composer-row">
+          <label class="btn ghost" id="attachBtn" title="Anexar figura do processo"><input type="file" id="imgInput" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>Anexar figura</label>
+          <label class="sr" for="tierSel">Profundidade</label>
+          <select id="tierSel" title="Profundidade do raciocínio"><option value="quick">Rápido</option><option value="default" selected>Equilibrado</option><option value="complex">Profundo</option></select>
+          <span class="spacer"></span>
+          <button type="button" id="stopBtn" class="ghost" hidden>Parar</button>
+          <button type="submit" id="sendBtn" class="primary">Enviar</button>
+        </div>
+        <p class="small muted" id="agentNote"></p>
+      </form>
+    </section>
+
+    <section class="pane" id="tab-props" role="tabpanel"><div id="propsBody" class="pad"></div></section>
+    <section class="pane" id="tab-results" role="tabpanel"><div id="resultsBody" class="pad"></div></section>
+    <section class="pane" id="tab-thermo" role="tabpanel"><div id="thermoBody" class="pad"></div></section>
+  </aside>
+</main>
+
+
+<div class="welcome" id="welcome" hidden>
+  <div class="wcard" role="dialog" aria-modal="true" aria-labelledby="wTitle">
+    <button class="icon wclose" id="wClose" title="Fechar e ir para o simulador">✕</button>
+    <section class="whero">
+      <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
+      <div class="whero-txt">
+        <p class="weyebrow">Engenharia Química · UFSJ</p>
+        <h1 id="wTitle">SIMULA FÁCIL IA</h1>
+        <p class="wsub">Simulador de processos químicos</p>
+        <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
+      </div>
+      <svg class="wart" viewBox="0 0 260 150" aria-hidden="true">
+        <rect x="18" y="18" width="34" height="118" rx="17" fill="#ffffff" stroke="#0a6f86" stroke-width="3"/>
+        <path d="M24 40h22M24 54h22M24 68h22M24 82h22M24 96h22M24 110h22" stroke="#0a6f86" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M52 30h28M52 124h28M0 77h18" stroke="#ffd23f" stroke-width="5" stroke-linecap="round"/>
+        <rect x="96" y="58" width="56" height="64" rx="12" fill="#ffffff" stroke="#0a6f86" stroke-width="3"/>
+        <path d="M124 38v52M112 90h24" stroke="#0a6f86" stroke-width="3" stroke-linecap="round"/>
+        <path d="M99 96h50v12c0 6-4 11-10 11h-30c-6 0-10-5-10-11z" fill="#ff6b4a" opacity=".9"/>
+        <path d="M152 90h26" stroke="#ffd23f" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="206" cy="58" r="12" fill="#ffd23f"/><circle cx="234" cy="40" r="9" fill="#ff6b4a"/><circle cx="232" cy="78" r="9" fill="#ffffff" stroke="#0a6f86" stroke-width="3"/>
+        <path d="M206 58L234 40M206 58L232 78" stroke="#ffffff" stroke-width="4"/>
+        <circle cx="190" cy="112" r="6" fill="#ffffff" opacity=".7"/><circle cx="210" cy="126" r="4" fill="#ffffff" opacity=".5"/><circle cx="176" cy="132" r="3" fill="#ffffff" opacity=".5"/>
+      </svg>
+    </section>
+    <section class="wactions">
+      <button class="wbtn coral" id="wAgent"><span class="wico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1.3" fill="currentColor"/><circle cx="13" cy="10.5" r="1.3" fill="currentColor"/><circle cx="17" cy="10.5" r="1.3" fill="currentColor"/></svg></span><b>Conversar com o agente IA</b><span>Descreva o processo ou envie uma figura do fluxograma</span></button>
+      <button class="wbtn sun" id="wExamples"><span class="wico"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 10c-.6 1.3.2 2 1.4 2h11.2c1.2 0 2-.7 1.4-2l-5-10V3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7.5 15h9" stroke="currentColor" stroke-width="2"/></svg></span><b>Abrir um exemplo pronto</b><span>Colunas, reatores, trocadores e extratores</span></button>
+      <button class="wbtn teal" id="wBlank"><span class="wico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="13" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 7.5h4v9" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><b>Montar do zero</b><span>Arraste equipamentos da paleta e ligue as correntes</span></button>
+    </section>
+    <h2 class="wh2" id="wExTitle">Exemplos prontos</h2>
+    <div class="wex" id="wExGrid"></div>
+    <div class="wfeat">
+      <span>NRTL · UNIQUAC · UNIFAC · Peng-Robinson</span><span>Colunas rigorosas e McCabe-Thiele</span><span>CSTR e PFR transientes</span><span>Gráficos com fonte 18</span><span>Código MATLAB, Octave e Python</span><span>Fluxograma final em PNG</span>
+    </div>
+    <p class="wbook">Baseado no livro <i>Modelagem e Simulação de Processos Dinâmicos</i>, de Juan Canellas Bosch Neto (Editora Appris, 2019).</p>
+    <label class="wnoshow"><input type="checkbox" id="wNoShow"> Não mostrar esta tela ao abrir</label>
+  </div>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head"><h2 id="modalTitle">—</h2><span class="spacer"></span><div id="modalActions"></div><button class="icon" id="modalClose" title="Fechar">✕</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script src="js/site-config.js"></script>
+<script src="js/credits.js"></script>
+<script src="js/numeric.js"></script>
+<script src="js/thermo.js"></script>
+<script src="js/units.js"></script>
+<script src="js/flowsheet.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/pfd.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/matlab.js"></script>
+<script src="js/python.js"></script>
+<script src="js/examples.js"></script>
+<script src="js/agent.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

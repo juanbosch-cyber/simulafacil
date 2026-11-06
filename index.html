@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIMULA FÁCIL IA – Simulador de processos químicos online | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA é um simulador de processos químicos gratuito e online, criado pelo Prof. Juan Canellas Bosch Neto (Engenharia Química – UFSJ, PPGEQ-DEQUI-CAP). Destilação e McCabe-Thiele, reatores CSTR e PFR, trocadores de calor, extração, agente de inteligência artificial e geração de código MATLAB, Octave e Python.">
+<meta name="keywords" content="simulador de processos químicos, simulação de processos, SIMULA FÁCIL IA, Juan Canellas Bosch Neto, UFSJ, engenharia química, McCabe-Thiele, destilação, CSTR, PFR, trocador de calor, NRTL, UNIFAC, Peng-Robinson, MATLAB, Octave, Python, DWSIM, Aspen, modelagem e simulação de processos dinâmicos">
+<meta name="author" content="Juan Canellas Bosch Neto">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="img/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="img/favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="SIMULA FÁCIL IA">
+<meta property="og:title" content="SIMULA FÁCIL IA – Simulador de processos químicos">
+<meta property="og:description" content="Simulador de processos químicos gratuito, no navegador, com agente de IA e código MATLAB, Octave e Python. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
+<meta property="og:image" content="img/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "#simulafacil",
+      "name": "SIMULA FÁCIL IA – Simulador de processos químicos",
+      "alternateName": ["SIMULA FÁCIL IA", "Simula Fácil", "Simulador de processos químicos UFSJ"],
+      "url": "simulador.html",
+      "applicationCategory": "EducationalApplication",
+      "applicationSubCategory": "Simulação de processos químicos",
+      "operatingSystem": "Navegador web (Windows, macOS, Linux, Android, iOS)",
+      "inLanguage": "pt-BR",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" },
+      "description": "Simulador de processos químicos no navegador, no estilo Aspen Plus e DWSIM, com termodinâmica NRTL, UNIQUAC, UNIFAC e Peng-Robinson, colunas de destilação rigorosas e McCabe-Thiele, reatores CSTR e PFR transientes, trocadores de calor, extração, agente de inteligência artificial e geração de código MATLAB, Octave e Python.",
+      "featureList": ["Destilação rigorosa e McCabe-Thiele", "Destilação extrativa", "Reatores CSTR e PFR em regime permanente e transiente", "Trocadores casco e tubo e de placas", "Extração líquido-líquido e sólido-líquido", "Diagramas Txy e detecção de azeótropos", "Fluxograma final em PNG e SVG", "Código MATLAB, GNU Octave e Python"],
+      "author": { "@id": "#autor" },
+      "contributor": { "@type": "Organization", "name": "CLAUDE (Anthropic)" },
+      "sourceOrganization": { "@id": "#ufsj" },
+      "educationalUse": ["aula", "exercício", "projeto de disciplina"],
+      "audience": { "@type": "EducationalAudience", "educationalRole": "student" }
+    },
+    {
+      "@type": "Person",
+      "@id": "#autor",
+      "name": "Juan Canellas Bosch Neto",
+      "honorificPrefix": "Prof.",
+      "jobTitle": "Professor de Modelagem e Simulação de Processos",
+      "worksFor": { "@id": "#ufsj" },
+      "affiliation": [{ "@id": "#ufsj" }, { "@type": "Organization", "name": "PPGEQ – Programa de Pós-Graduação em Engenharia Química (DEQUI-CAP-UFSJ)" }],
+      "knowsAbout": ["Modelagem e simulação de processos", "Engenharia química", "Processos dinâmicos", "Controle de processos"],
+      "sameAs": ["https://jboschbr.wix.com/juan"]
+    },
+    {
+      "@type": "CollegeOrUniversity",
+      "@id": "#ufsj",
+      "name": "Universidade Federal de São João del-Rei (UFSJ)",
+      "department": { "@type": "Organization", "name": "Departamento de Engenharia Química e Estatística (DEQUI) – Campus Alto Paraopeba" },
+      "url": "https://ufsj.edu.br"
+    },
+    {
+      "@type": "Book",
+      "name": "Modelagem e simulação de processos dinâmicos aplicada às engenharias química, de bioprocessos, elétrica, mecânica, de controle, aeroespacial e fluidodinâmica computacional",
+      "author": { "@id": "#autor" },
+      "publisher": { "@type": "Organization", "name": "Editora Appris" },
+      "datePublished": "2019",
+      "inLanguage": "pt-BR"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "O SIMULA FÁCIL IA é gratuito?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. O simulador abre direto no navegador, sem instalação e sem custo." } },
+        { "@type": "Question", "name": "Quem criou o SIMULA FÁCIL IA?", "acceptedAnswer": { "@type": "Answer", "text": "O Prof. Juan Canellas Bosch Neto, do Curso de Engenharia Química da UFSJ (PPGEQ-DEQUI-CAP-UFSJ), autor do livro Modelagem e Simulação de Processos Dinâmicos (Editora Appris), com coautoria do CLAUDE (Anthropic)." } },
+        { "@type": "Question", "name": "O simulador gera código MATLAB e Python?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. Cada simulação pode ser exportada como função MATLAB/GNU Octave ou script Python (NumPy, SciPy, Matplotlib), com o fluxograma nos ícones padrão e gráficos com fonte 18." } },
+        { "@type": "Question", "name": "Como uso o agente de inteligência artificial?", "acceptedAnswer": { "@type": "Answer", "text": "O agente funciona na versão do simulador aberta no Claude: entre com uma conta do Claude, descreva o processo ou envie uma figura do fluxograma, e o agente monta, simula e sugere melhorias." } }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+:root { --ink: #11262d; --muted: #4d6168; --line: #d6e1e4; --bg: #f3f8f8; --panel: #fff; --teal: #0a8f8c; --ocean: #0a6f86; --pop: #ff6b4a; --sun: #ffc93c; --leaf: #2bb673; --stream: #1f6feb;
+  --fun: "Nunito", "Segoe UI", sans-serif; --body: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif; color-scheme: light; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font: 16px/1.6 var(--body); color: var(--ink); background: var(--bg); }
+a { color: var(--ocean); }
+img { max-width: 100%; height: auto; display: block; }
+.wrap { width: min(1120px, 100% - 32px); margin: 0 auto; }
+header.top { background: linear-gradient(105deg, #073b4c 0%, #0a6f86 50%, #10a8a0 100%); color: #fff; }
+nav.bar { display: flex; align-items: center; gap: 14px; padding: 12px 0; flex-wrap: wrap; }
+nav.bar .brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font: 900 20px var(--fun); }
+nav.bar .brand svg { width: 40px; height: 40px; }
+nav.bar .links { margin-left: auto; display: flex; gap: 16px; flex-wrap: wrap; }
+nav.bar .links a { color: #fff; text-decoration: none; font-weight: 600; opacity: .92; }
+nav.bar .links a:hover { opacity: 1; text-decoration: underline; }
+.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 34px; align-items: center; padding: 34px 0 54px; }
+.eyebrow { font: 800 13px var(--fun); letter-spacing: .14em; text-transform: uppercase; color: var(--sun); margin: 0 0 6px; }
+.hero h1 { font: 900 clamp(34px, 5vw, 54px)/1.02 var(--fun); margin: 0 0 6px; text-wrap: balance; }
+.hero h1 span { display: block; font-size: .5em; font-weight: 800; color: #e3fffb; margin-top: 8px; }
+.hero p.lead { font-size: 18px; color: #e9f7f6; margin: 14px 0 18px; max-width: 34em; }
+.author-pill { display: inline-block; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); border-radius: 12px; padding: 8px 12px; font-size: 14.5px; line-height: 1.5; }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 99px; font: 800 16px var(--fun); text-decoration: none; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+.btn.sun { background: var(--sun); color: #2a1b00; } .btn.pop { background: var(--pop); color: #fff; } .btn.ghost { background: rgba(255,255,255,.14); color: #fff; box-shadow: none; border: 1px solid rgba(255,255,255,.4); }
+.btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+.shot { border-radius: 14px; overflow: hidden; box-shadow: 0 18px 50px rgba(0,0,0,.35); border: 3px solid rgba(255,255,255,.35); background: #fff; }
+section { padding: 54px 0; }
+section h2 { font: 900 32px/1.15 var(--fun); margin: 0 0 8px; text-wrap: balance; }
+section p.sub { color: var(--muted); margin: 0 0 26px; max-width: 46em; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); gap: 16px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px; border-top: 5px solid var(--c, var(--teal)); }
+.card:nth-child(4n+2) { --c: var(--pop); } .card:nth-child(4n+3) { --c: var(--sun); } .card:nth-child(4n+4) { --c: var(--leaf); }
+.card svg { height: 66px; width: auto; max-width: 120px; margin-bottom: 8px; }
+.card h3 { font: 800 18px var(--fun); margin: 0 0 4px; }
+.card p { margin: 0; color: var(--muted); font-size: 15px; }
+.band { background: var(--panel); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+.figure { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 10px; }
+.figure figcaption { font-size: 14px; color: var(--muted); padding: 8px 4px 2px; }
+.author { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: start; }
+.author .badge { width: 120px; height: 120px; }
+.author h3 { font: 900 24px var(--fun); margin: 0; }
+.author .role { color: var(--muted); margin: 2px 0 12px; }
+.book { margin-top: 12px; padding: 12px 14px; border-left: 4px solid var(--sun); background: #fff8e5; border-radius: 6px; }
+.cite { font-family: ui-monospace, Consolas, monospace; font-size: 13.5px; background: #fff; border: 1px dashed var(--line); border-radius: 10px; padding: 12px; overflow-x: auto; }
+details { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; }
+details summary { font-weight: 700; cursor: pointer; }
+.qr { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+#qrbox { background: #fff; padding: 12px; border-radius: 12px; border: 1px solid var(--line); width: 236px; height: 236px; display: grid; place-items: center; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { background: #e1f5f3; padding: 5px 12px; border-radius: 99px; font-size: 14px; font-weight: 600; }
+.chips span:nth-child(3n+2) { background: #ffe5de; } .chips span:nth-child(3n+3) { background: #fff1c9; }
+footer { background: #073b4c; color: #d8eeee; padding: 28px 0; font-size: 14px; }
+footer a { color: var(--sun); }
+:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+@media (max-width: 860px) { .hero, .two { grid-template-columns: 1fr; } .author { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn:hover { transform: none; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <nav class="bar" aria-label="Navegação principal">
+      <a class="brand" href="./"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>SIMULA FÁCIL IA</a>
+      <div class="links"><a href="simulador.html">Abrir o simulador</a><a href="#recursos">Recursos</a><a href="#codigos">MATLAB e Python</a><a href="#autor">Autor</a><a href="#turma">Para a turma</a><a href="#perguntas">Perguntas</a></div>
+    </nav>
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Engenharia Química · UFSJ</p>
+        <h1>SIMULA FÁCIL IA<span>Simulador de processos químicos</span></h1>
+        <p class="lead">Monte fluxogramas como no Aspen Plus, HYSYS e DWSIM, direto no navegador e de graça: destilação com McCabe-Thiele, reatores CSTR e PFR transientes, trocadores de calor e extratores. Um agente de inteligência artificial conversa sobre o processo, lê figuras e sugere melhorias.</p>
+        <p class="author-pill"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
+        <div class="cta">
+          <a class="btn sun" href="simulador.html">Abrir o simulador</a>
+          <a class="btn pop" id="claudeBtn" href="https://claude.ai/artifact/SthNvttmGPgrtdmR9Bs95Q" target="_blank" rel="noopener">Usar com o agente IA ↗</a>
+        </div>
+      </div>
+      <div class="shot"><img src="img/simulador.webp" width="1440" height="900" alt="Tela do SIMULA FÁCIL IA com o fluxograma de uma destilação extrativa de etanol com etilenoglicol: duas colunas, condensadores, refervedores e cargas térmicas"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="recursos">
+  <div class="wrap">
+    <h2>O que dá para simular</h2>
+    <p class="sub">Motor numérico rigoroso, com os mesmos métodos dos simuladores comerciais, em uma interface feita para a sala de aula.</p>
+    <div class="grid">
+      <article class="card"><svg viewBox="-4 -4 120 238" aria-hidden="true"><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="4" y="6" width="46" height="218" rx="12"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 30 L45 30"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 44 L45 44"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 58 L45 58"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 72 L45 72"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 86 L45 86"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 100 L45 100"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 114 L45 114"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 128 L45 128"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 142 L45 142"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 156 L45 156"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 170 L45 170"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 184 L45 184"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 198 L45 198"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M36 6 L36 2 L82 2 L82 10"/><circle fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" cx="82" cy="21" r="11"/><path fill="none" stroke="#2f74d0" stroke-width="1.8" d="M73 21 L91 21"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M82 32 L82 38"/><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="62" y="38" width="40" height="16" rx="8"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M102 46 L112 46"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M70 54 L70 62 L50 62"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M38 224 L38 229 L82 229 L82 219"/><circle fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" cx="82" cy="208" r="11"/><path fill="none" stroke="#d24a35" stroke-width="1.8" d="M73 208 L91 208"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M82 197 L82 188 L50 188"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M93 208 L112 208"/></svg><h3>Destilação</h3><p>Coluna rigorosa (método do ponto de bolha com Newton simultâneo), shortcut de Fenske–Underwood–Gilliland, McCabe-Thiele, destilação extrativa e retirada lateral.</p></article>
+      <article class="card"><svg viewBox="-4 -4 78 92" aria-hidden="true"><rect fill="none" stroke="#ec6a4c" stroke-width="1.2" stroke-dasharray="4 3" x="3" y="14" width="64" height="66" rx="13"/><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="7" y="12" width="56" height="66" rx="11"/><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="29" y="0" width="12" height="7" rx="1"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M35 7 L35 60"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M23 60 L47 60"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M23 54 L35 60 L47 54"/><path fill="none" stroke="#d24a35" stroke-width="1.8" d="M3 70 L0 70"/><path fill="none" stroke="#d24a35" stroke-width="1.8" d="M67 22 L70 22"/></svg><h3>Reatores CSTR</h3><p>Regime permanente, transiente e batelada, isotérmico, adiabático ou com camisa, com cinética de Arrhenius.</p></article>
+      <article class="card"><svg viewBox="-4 -4 138 48" aria-hidden="true"><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="4" y="6" width="122" height="28" rx="8"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M16 34 L26 6"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M32 34 L42 6"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M48 34 L58 6"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M64 34 L74 6"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M80 34 L90 6"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M96 34 L106 6"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M112 34 L122 6"/></svg><h3>Reatores PFR</h3><p>Perfis ao longo do volume e simulação transiente por método das linhas, com superfície 3D de concentração e conversão.</p></article>
+      <article class="card"><svg viewBox="-4 -4 128 64" aria-hidden="true"><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="10" y="10" width="100" height="36" rx="18"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M24 10 L24 46"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M24 20 L100 20"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M24 28 L100 28"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M24 36 L100 36"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M30 0 L30 10"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M92 46 L92 56"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M0 28 L10 28"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M110 28 L120 28"/></svg><h3>Trocadores de calor</h3><p>Casco e tubo e de placas: MLDT, fator F, área, número de tubos ou placas e perfil T×Q com mudança de fase.</p></article>
+      <article class="card"><svg viewBox="-4 -4 62 188" aria-hidden="true"><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="4" y="4" width="46" height="172" rx="12"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M27 14 L27 154"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M15 46 L39 46"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M15 72 L39 72"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M15 98 L39 98"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M15 124 L39 124"/><rect fill="none" stroke="#ec6a4c" stroke-width="1.2" x="21" y="4" width="12" height="8" rx="2"/></svg><h3>Extração</h3><p>Extração líquido-líquido em contracorrente e lixiviação sólido-líquido, como a extração de óleo de soja com hexano.</p></article>
+      <article class="card"><svg viewBox="-4 -4 62 108" aria-hidden="true"><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="6" y="4" width="42" height="92" rx="21"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" stroke-dasharray="4 3" d="M12 18 L42 18"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" stroke-dasharray="4 3" d="M10 62 L44 62"/></svg><h3>Flash e decantador</h3><p>Flash TP, adiabático e por fração vaporizada; separação líquido-líquido em decantador.</p></article>
+      <article class="card"><svg viewBox="-4 -4 64 60" aria-hidden="true"><path fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" d="M12 44 L40 44 L46 51 L6 51Z"/><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="26" y="8" width="30" height="9" rx="0"/><circle fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" cx="26" cy="28" r="18"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M17 28 L33 20 L33 36Z"/></svg><h3>Bombas, compressores e válvulas</h3><p>Potência, temperatura de saída e reciclos convergidos pelo método de Wegstein.</p></article>
+      <article class="card"><svg viewBox="-4 -4 62 188" aria-hidden="true"><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="4" y="4" width="46" height="172" rx="12"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M8 34 L46 34"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M8 146 L46 146"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M8 40 L46 60"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M46 40 L8 60"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M8 60 L46 80"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M46 60 L8 80"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M8 80 L46 100"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M46 80 L8 100"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M8 100 L46 120"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M46 100 L8 120"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M8 120 L46 140"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M46 120 L8 140"/></svg><h3>Termodinâmica</h3><p>Ideal, NRTL, Wilson, UNIQUAC, UNIFAC preditivo, Peng-Robinson e SRK, com diagramas Txy e detecção de azeótropos.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="codigos" class="band">
+  <div class="wrap">
+    <h2>Do fluxograma ao código MATLAB, Octave e Python</h2>
+    <p class="sub">Cada simulação vira um programa autocontido: o fluxograma é desenhado com os ícones padrão de engenharia de processos e os gráficos saem com fonte 18, prontos para relatórios e aulas.</p>
+    <div class="two">
+      <figure class="figure"><img src="img/mccabe-python.webp" width="2210" height="1040" loading="lazy" alt="Diagrama de McCabe-Thiele etanol/água gerado pelo script Python exportado, com a coluna de destilação ao lado"><figcaption>McCabe-Thiele etanol/água gerado pelo script Python exportado.</figcaption></figure>
+      <figure class="figure"><img src="img/fluxograma-python.webp" width="2080" height="652" loading="lazy" alt="Fluxograma de destilação extrativa gerado em Python com ícones padrão de colunas, condensadores e refervedores"><figcaption>Fluxograma da destilação extrativa desenhado pelo mesmo script.</figcaption></figure>
+    </div>
+    <div class="chips" style="margin-top:18px"><span>MATLAB R2016b+</span><span>GNU Octave 6+</span><span>Python 3.9+ (NumPy, SciPy, Matplotlib)</span><span>Jupyter e Google Colab</span><span>Fluxograma final em PNG e SVG</span><span>Tabela de correntes em CSV</span></div>
+  </div>
+</section>
+
+<section id="autor">
+  <div class="wrap author">
+    <svg class="badge" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
+    <div>
+      <h2 style="margin-bottom:4px">Sobre o autor</h2>
+      <h3>Prof. Juan Canellas Bosch Neto</h3>
+      <p class="role">Professor de Modelagem e Simulação de Processos – Curso de Engenharia Química da Universidade Federal de São João del-Rei (UFSJ), Campus Alto Paraopeba · PPGEQ-DEQUI-CAP-UFSJ</p>
+      <p>O SIMULA FÁCIL IA foi concebido para o ensino de modelagem e simulação de processos: o aluno monta o processo, vê os balanços de massa e energia convergirem e leva o modelo para o MATLAB, o Octave ou o Python. O desenvolvimento do código, do motor numérico e do agente de IA teve coautoria do CLAUDE (Anthropic).</p>
+      <div class="book"><b>Livro do autor:</b> <i>Modelagem e simulação de processos dinâmicos aplicada às engenharias química, de bioprocessos, elétrica, mecânica, de controle, aeroespacial e fluidodinâmica computacional</i>. Curitiba: Editora Appris, 2019.</div>
+      <p style="margin-top:14px">Site do professor: <a href="https://jboschbr.wix.com/juan" rel="author">jboschbr.wix.com/juan</a></p>
+      <h3 style="font-size:18px;margin-top:18px">Como citar</h3>
+      <div class="cite" id="citeBox">BOSCH NETO, Juan Canellas. <b>SIMULA FÁCIL IA</b>: simulador de processos químicos. São João del-Rei: UFSJ, 2026. Disponível em: <span id="citeUrl">https://SEU-USUARIO.github.io/simulafacil/</span>. Acesso em: <span id="citeDate">dia mês ano</span>.</div>
+    </div>
+  </div>
+</section>
+
+<section id="turma" class="band">
+  <div class="wrap">
+    <h2>Para a turma</h2>
+    <p class="sub">Projete o QR code na aula ou copie o link. O simulador abre no celular, no tablet e no computador, sem instalação.</p>
+    <div class="qr">
+      <div id="qrbox" role="img" aria-label="QR code com o endereço desta página"></div>
+      <div>
+        <p style="margin:0 0 6px"><b>Endereço:</b> <span id="pageUrl">https://SEU-USUARIO.github.io/simulafacil/</span></p>
+        <div class="cta" style="margin-top:8px"><button class="btn sun" id="copyUrl" type="button" style="border:0;cursor:pointer">Copiar link</button><button class="btn pop" id="saveQr" type="button" style="border:0;cursor:pointer">Baixar QR code</button></div>
+        <p style="color:var(--muted);font-size:14px;margin-top:12px">O agente de IA funciona na versão aberta no Claude: cada aluno entra com a própria conta do Claude (há plano gratuito).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="perguntas">
+  <div class="wrap">
+    <h2>Perguntas frequentes</h2>
+    <details><summary>É gratuito? Precisa instalar alguma coisa?</summary><p>É gratuito e não precisa instalar nada: abre direto no navegador, inclusive no celular.</p></details>
+    <details><summary>Os resultados são confiáveis?</summary><p>O motor foi validado contra dados clássicos: o azeótropo etanol/água previsto é 0,897 a 78,1 °C (experimental 0,894 a 78,15 °C), e os balanços de massa fecham em todos os exemplos. Para projeto industrial, confira os parâmetros binários com um banco de dados de referência.</p></details>
+    <details><summary>Como uso o agente de inteligência artificial?</summary><p>Clique em “Usar com o agente IA”, entre com uma conta do Claude e descreva o processo ou envie uma foto do fluxograma. O agente monta, simula e sugere melhorias com os números do simulador.</p></details>
+    <details><summary>Posso usar em aulas e trabalhos?</summary><p>Sim. O simulador foi feito para o ensino. Cite-o como indicado em “Como citar”.</p></details>
+    <details><summary>Os projetos ficam salvos?</summary><p>O simulador guarda o último projeto no próprio navegador. Use “Salvar” para baixar o projeto (.json) e “Abrir” para continuar em outro computador.</p></details>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p style="margin:0 0 6px"><b>SIMULA FÁCIL IA – Simulador de processos químicos</b></p>
+    <p style="margin:0">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE · <a href="simulador.html">Abrir o simulador</a></p>
+  </div>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="lgBadge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14c4b8"/><stop offset="1" stop-color="#0a6f86"/></linearGradient>
+    <linearGradient id="lgLiq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd23f"/><stop offset="1" stop-color="#ff6b4a"/></linearGradient>
+    <symbol id="logo" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="31" fill="url(#lgBadge)"/>
+      <rect x="11" y="10" width="13" height="40" rx="6.5" fill="#ffffff"/>
+      <path d="M13.5 19h8M13.5 25h8M13.5 31h8M13.5 37h8M13.5 43h8" stroke="#0a6f86" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M24 15h7M24 45h7" stroke="#ffd23f" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M36 14h12M38.5 14v11L32 44.5c-1.2 3.4.8 5.5 4 5.5h12.5c3.2 0 5.2-2.1 4-5.5L46 25V14" fill="#ffffff" stroke="#ffffff" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M34.6 38.5h16.8l2.6 6.3c.9 2.6-.4 4-2.8 4H35c-2.4 0-3.7-1.4-2.8-4z" fill="url(#lgLiq)"/>
+      <circle cx="40" cy="33" r="2" fill="#ff6b4a"/><circle cx="45" cy="29" r="1.4" fill="#ffd23f"/><circle cx="43" cy="22" r="1.1" fill="#14c4b8"/>
+    </symbol>
+  </defs>
+</svg>
+<script src="js/site-config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function () {
+  var cfg = window.SIMULAFACIL_CONFIG || {};
+  var here = location.href.split('#')[0].replace(/index\.html$/, '');
+  var url = /^https?:/.test(here) ? here : (cfg.siteUrl || here);
+  if (cfg.claudeUrl) document.getElementById('claudeBtn').href = cfg.claudeUrl;
+  document.getElementById('pageUrl').textContent = url;
+  document.getElementById('citeUrl').textContent = url;
+  var d = new Date(), m = ['jan.', 'fev.', 'mar.', 'abr.', 'maio', 'jun.', 'jul.', 'ago.', 'set.', 'out.', 'nov.', 'dez.'];
+  document.getElementById('citeDate').textContent = d.getDate() + ' ' + m[d.getMonth()] + ' ' + d.getFullYear();
+  var box = document.getElementById('qrbox');
+  if (window.QRCode) { new QRCode(box, { text: url, width: 212, height: 212, colorDark: '#073b4c', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M }); }
+  else box.textContent = 'QR code indisponível (sem internet).';
+  document.getElementById('copyUrl').onclick = function () { navigator.clipboard.writeText(url).then(function () { document.getElementById('copyUrl').textContent = 'Link copiado!'; }); };
+  document.getElementById('saveQr').onclick = function () {
+    var c = box.querySelector('canvas'); if (!c) return;
+    var a = document.createElement('a'); a.href = c.toDataURL('image/png'); a.download = 'simula-facil-ia-qrcode.png'; document.body.appendChild(a); a.click(); a.remove();
+  };
+})();
+</script>
+</body>
+</html>

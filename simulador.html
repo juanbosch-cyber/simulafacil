@@ -280,6 +280,14 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
 .wbtn b { font: 800 17px var(--font-fun); }
 .wbtn > span:last-child { font-size: 13px; opacity: .92; }
 .wbtn.coral { background: linear-gradient(135deg, #ff7a52, #ff4f6d); }
+.wbtn.wagent { cursor: default; grid-template-rows: auto auto auto; }
+.wbtn.wagent:hover { transform: none; }
+.wbtn .wdesc { font-size: 13px; opacity: .92; }
+.wpicks { grid-column: 1 / -1; display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.wpick { flex: 1 1 120px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; white-space: normal; background: rgba(255,255,255,.96); color: #c2334f; border: 0; border-radius: 10px; padding: 8px 12px; font: 800 16px var(--font-fun); cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.12); }
+.wpick:hover { background: #fff; transform: translateY(-1px); border: 0; }
+.wpick small { font: 500 11.5px system-ui, sans-serif; color: #6b3b45; }
+@media (prefers-reduced-motion: reduce) { .wpick:hover { transform: none; } }
 .wbtn.sun { background: linear-gradient(135deg, #ffc93c, #ff9f1c); color: #2a1b00; }
 .wbtn.sun .wico { background: rgba(255,255,255,.4); }
 .wbtn.teal { background: linear-gradient(135deg, #12b5a6, #0a6f86); }
@@ -308,6 +316,7 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
 .gem-remember { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
 .gem-box p { margin: 4px 0 0; }
 #provSel { font-weight: 600; }
+.gem-line select { flex: 1; min-width: 0; }
 
 </style>
 </head>
@@ -402,7 +411,7 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
             <label for="gemKey">Chave da API</label>
             <div class="gem-line"><input id="gemKey" type="password" autocomplete="off" spellcheck="false" placeholder="cole aqui a chave do Google AI Studio (AIza…)"><button type="button" id="gemShow" class="ghost" title="Mostrar ou ocultar a chave">👁</button></div>
             <label for="gemModel">Modelo</label>
-            <div class="gem-line"><input id="gemModel" list="gemModels" spellcheck="false"><datalist id="gemModels"></datalist><button type="button" id="gemList" class="ghost">Listar modelos</button></div>
+            <div class="gem-line"><select id="gemModel"></select><button type="button" id="gemList" class="ghost" title="Conferir a chave e listar os modelos disponíveis para ela">Listar</button></div>
           </div>
           <label class="small gem-remember"><input type="checkbox" id="gemRemember"> Lembrar a chave neste navegador (não marque em computador compartilhado)</label>
           <p class="small muted" id="gemStatus"></p>
@@ -454,7 +463,7 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
       </svg>
     </section>
     <section class="wactions">
-      <button class="wbtn coral" id="wAgent"><span class="wico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1.3" fill="currentColor"/><circle cx="13" cy="10.5" r="1.3" fill="currentColor"/><circle cx="17" cy="10.5" r="1.3" fill="currentColor"/></svg></span><b>Conversar com o agente IA</b><span>Descreva o processo ou envie uma figura do fluxograma</span></button>
+      <div class="wbtn coral wagent" id="wAgent"><span class="wico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1.3" fill="currentColor"/><circle cx="13" cy="10.5" r="1.3" fill="currentColor"/><circle cx="17" cy="10.5" r="1.3" fill="currentColor"/></svg></span><b>Conversar com o agente IA</b><span class="wdesc">Descreva o processo ou envie uma figura. Escolha a IA:</span><div class="wpicks"><button type="button" class="wpick" id="wGemini">Gemini<small>chave grátis do Google AI Studio</small></button><button type="button" class="wpick" id="wClaude">Claude<small id="wClaudeNote">usa a sua conta do Claude</small></button></div></div>
       <button class="wbtn sun" id="wExamples"><span class="wico"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 10c-.6 1.3.2 2 1.4 2h11.2c1.2 0 2-.7 1.4-2l-5-10V3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7.5 15h9" stroke="currentColor" stroke-width="2"/></svg></span><b>Abrir um exemplo pronto</b><span>Colunas, reatores, trocadores e extratores</span></button>
       <button class="wbtn teal" id="wBlank"><span class="wico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="13" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 7.5h4v9" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><b>Montar do zero</b><span>Arraste equipamentos da paleta e ligue as correntes</span></button>
     </section>
@@ -3831,12 +3840,16 @@ def pfr_transiente(P, nome):
 (function (root) {
   const SF = root.SF = root.SF || {};
   const BASE = 'https://generativelanguage.googleapis.com/v1beta';
-  const DEFAULT_MODEL = 'gemini-flash-latest';
+  const DEFAULT_MODEL = 'gemini-pro-latest';      // Pro = raciocínio avançado (exige chave com faturamento)
+  const FALLBACK_MODEL = 'gemini-flash-latest';   // Flash no modo Raciocínio: gratuito
   const SUGGESTED = [
-    { id: 'gemini-flash-latest', label: 'Gemini Flash (mais recente) — nível gratuito' },
-    { id: 'gemini-flash-lite-latest', label: 'Gemini Flash-Lite (mais recente) — mais rápido, gratuito' },
-    { id: 'gemini-pro-latest', label: 'Gemini Pro (mais recente) — exige chave com faturamento' }
+    { id: 'gemini-pro-latest', label: 'Pro – avançado (pago)' },
+    { id: 'gemini-flash-latest', label: 'Flash – Raciocínio (grátis)' },
+    { id: 'gemini-flash-lite-latest', label: 'Flash-Lite – rápido (grátis)' }
   ];
+  const isPro = m => /pro/i.test(cleanModel(m));
+  // chave sem faturamento pedindo um modelo Pro: cota zero do nível gratuito ou permissão negada
+  const needsBilling = (e, m) => !!e && isPro(m) && (e.status === 403 || (e.status === 429 && /free.?tier|limit:\s*0|billing|paid/i.test(String(e.message || ''))) || (e.status === 400 && /billing|paid|free.?tier/i.test(String(e.message || ''))));
   const IMG_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/heic', 'image/heif'];
   // "Raciocínio" do simulador → nível de pensamento do Gemini
   const LEVEL = { quick: 'low', default: 'medium', complex: 'high' };
@@ -3978,13 +3991,13 @@ def pfr_transiente(P, nome):
     if (e && e.code === 'gemini_network') return 'Sem conexão com o Gemini. Verifique a internet. Se estiver na rede da universidade, ela pode bloquear generativelanguage.googleapis.com; dentro do Claude, a página também pode bloquear o acesso ao Google — nesse caso use o site do simulador no GitHub.';
     if (/API key not valid|API_KEY_INVALID/i.test(m) || (s === 400 && /key/i.test(m))) return 'Chave do Gemini inválida. Copie de novo a chave no Google AI Studio (começa com "AIza").';
     if (s === 401 || s === 403 || r === 'PERMISSION_DENIED') return 'A chave não tem permissão para usar o Gemini. Contas institucionais podem ter o Google AI Studio bloqueado pelo administrador; gere a chave com uma conta Google pessoal. Detalhe: ' + m;
-    if (s === 404 || r === 'NOT_FOUND') return 'Modelo não encontrado para esta chave. Clique em "Listar modelos" e escolha um da lista. Detalhe: ' + m;
-    if (s === 429 || r === 'RESOURCE_EXHAUSTED') return 'Limite de uso do Gemini atingido (o nível gratuito tem limite por minuto e por dia; modelos Pro exigem faturamento). Espere um pouco ou use o modelo Flash ou Flash-Lite.';
+    if (s === 404 || r === 'NOT_FOUND') return 'Modelo não encontrado para esta chave. Clique em "Listar" e escolha um modelo da lista. Detalhe: ' + m;
+    if (s === 429 || r === 'RESOURCE_EXHAUSTED') return 'Limite de uso do Gemini atingido (o nível gratuito tem limite por minuto e por dia; o Gemini Pro exige chave com faturamento). Espere um pouco ou escolha o Gemini Flash no quadro Configurar o Gemini.';
     if (s >= 500) return 'O Gemini está instável no momento (erro ' + s + '). Tente de novo em instantes.';
     return 'Erro do Gemini' + (s ? ' (' + s + ')' : '') + ': ' + m;
   }
 
-  SF.gemini = { run, listModels, explain, toSchema, declarations, fixArgs, thinkingConfig, cleanModel, DEFAULT_MODEL, SUGGESTED, IMG_TYPES, BASE };
+  SF.gemini = { run, listModels, explain, toSchema, declarations, fixArgs, thinkingConfig, cleanModel, isPro, needsBilling, DEFAULT_MODEL, FALLBACK_MODEL, SUGGESTED, IMG_TYPES, BASE };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -4158,7 +4171,8 @@ def pfr_transiente(P, nome):
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
     set(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { /* sem armazenamento */ } }
   };
-  const K_PROV = 'simulafacil.provider', K_KEY = 'simulafacil.geminiKey', K_MODEL = 'simulafacil.geminiModel';
+  const K_PROV = 'simulafacil.provider', K_KEY = 'simulafacil.geminiKey', K_MODEL = 'simulafacil.geminiModel', K_TIER = 'simulafacil.tier.';
+  const TIER_DEFAULT = { claude: 'default', gemini: 'complex' }; // Gemini começa no modo Raciocínio
 
   function init(app) {
     const chat = $('#chat'), input = $('#chatInput'), form = $('#composer'), note = $('#agentNote');
@@ -4176,19 +4190,29 @@ def pfr_transiente(P, nome):
     /* ---- configuração do Gemini */
     let sessionKey = store.get(K_KEY) || '';
     gemKey.value = sessionKey; $('#gemRemember').checked = !!store.get(K_KEY);
-    gemModel.value = store.get(K_MODEL) || GM.DEFAULT_MODEL;
-    function fillModels(list) { const dl = $('#gemModels'); dl.innerHTML = ''; list.forEach(m => { const o = document.createElement('option'); o.value = m.id; o.label = m.label; dl.appendChild(o); }); }
-    fillModels(GM.SUGGESTED);
+    function fillModels(listed) {
+      const keep = GM.cleanModel(gemModel.value || store.get(K_MODEL) || GM.DEFAULT_MODEL);
+      gemModel.innerHTML = '';
+      const group = (label, items) => { const g = document.createElement('optgroup'); g.label = label; items.forEach(m => { const o = document.createElement('option'); o.value = m.id; o.textContent = m.label; g.appendChild(o); }); gemModel.appendChild(g); };
+      group('Recomendados', GM.SUGGESTED);
+      const extra = (listed || []).filter(m => !GM.SUGGESTED.some(s => s.id === m.id)).map(m => ({ id: m.id, label: m.label + ' (' + m.id + ')' }));
+      if (extra.length) group('Disponíveis na sua chave', extra);
+      if (![].some.call(gemModel.options, o => o.value === keep)) group('Escolhido antes', [{ id: keep, label: keep }]);
+      gemModel.value = keep;
+    }
+    fillModels(null);
     function saveKey() { sessionKey = gemKey.value.trim(); store.set(K_KEY, $('#gemRemember').checked && sessionKey ? sessionKey : null); updateGemSummary(); }
     function updateGemSummary() { $('#gemSummary').textContent = sessionKey ? 'Gemini: ' + GM.cleanModel(gemModel.value) + ' · chave informada (clique para alterar)' : 'Configurar o Gemini: falta a chave da API'; }
+    const tierSel = $('#tierSel');
+    tierSel.addEventListener('change', () => store.set(K_TIER + provider, tierSel.value));
     gemKey.addEventListener('change', saveKey); gemKey.addEventListener('input', () => { sessionKey = gemKey.value.trim(); });
     $('#gemRemember').onchange = saveKey;
-    gemModel.addEventListener('change', () => { gemModel.value = GM.cleanModel(gemModel.value); store.set(K_MODEL, gemModel.value); updateGemSummary(); });
+    gemModel.addEventListener('change', () => { store.set(K_MODEL, gemModel.value); updateGemSummary(); });
     $('#gemShow').onclick = () => { gemKey.type = gemKey.type === 'password' ? 'text' : 'password'; };
     $('#gemList').onclick = async () => {
       saveKey(); if (!sessionKey) { gemStatus.textContent = 'Cole a chave primeiro.'; gemKey.focus(); return; }
       gemStatus.textContent = 'Consultando os modelos disponíveis para esta chave…';
-      try { const list = await GM.listModels(sessionKey); fillModels(list.length ? list : GM.SUGGESTED); gemStatus.textContent = 'Chave válida: ' + list.length + ' modelos Gemini disponíveis. Clique no campo Modelo para escolher.'; }
+      try { const list = await GM.listModels(sessionKey); fillModels(list); gemStatus.textContent = 'Chave válida: ' + list.length + ' modelos Gemini disponíveis. Escolha no campo Modelo. O Pro só responde se a chave tiver faturamento ativado.'; }
       catch (e) { gemStatus.textContent = GM.explain(e); }
     };
     updateGemSummary();
@@ -4196,6 +4220,7 @@ def pfr_transiente(P, nome):
     /* ---- escolha do modelo de IA */
     function setProvider(p, persist) {
       provider = p === 'gemini' ? 'gemini' : 'claude'; provSel.value = provider;
+      tierSel.value = store.get(K_TIER + provider) || TIER_DEFAULT[provider];
       if (persist) store.set(K_PROV, provider);
       gemBox.hidden = provider !== 'gemini';
       if (provider === 'gemini' && !sessionKey) gemBox.open = true;
@@ -4206,6 +4231,8 @@ def pfr_transiente(P, nome):
       else note.innerHTML = 'O Claude funciona na versão do simulador aberta dentro do Claude (é preciso entrar com uma conta do Claude).' + (claudeUrl ? ' <a href="' + claudeUrl + '" target="_blank" rel="noopener"><b>Abrir a versão com o Claude</b></a>' : '') + ' Aqui você pode usar o <b>Gemini</b> com a sua chave.';
     }
     provSel.onchange = () => setProvider(provSel.value, true);
+    // usado pela tela inicial (botões Gemini e Claude)
+    SF.agent.choose = p => { setProvider(p, true); if (provider === 'gemini' && !sessionKey) { gemBox.open = true; setTimeout(() => gemKey.focus(), 60); } else setTimeout(() => input.focus(), 60); };
 
     function renderAttach() {
       const row = $('#attachRow'); row.innerHTML = ''; row.hidden = !attachments.length;
@@ -4241,7 +4268,7 @@ def pfr_transiente(P, nome):
       const u = add('user', md(text || '(figura anexada)')); imgs.forEach(f => { const im = document.createElement('img'); im.src = URL.createObjectURL(f); im.alt = 'figura anexada'; u.appendChild(im); });
       const userTurn = (text || 'Analise a figura anexada e monte o fluxograma correspondente.') + (imgs.length ? '\n[' + imgs.length + ' figura(s) anexada(s) a esta mensagem]' : '');
       const bot = add('bot', ''); const tools = document.createElement('div'); const body = document.createElement('div'); bot.appendChild(tools); bot.appendChild(body);
-      if (provider === 'gemini') { const tag = document.createElement('div'); tag.className = 'small muted'; tag.textContent = 'Gemini · ' + GM.cleanModel(gemModel.value); bot.insertBefore(tag, tools); }
+      if (provider === 'gemini') { const tag = document.createElement('div'); tag.className = 'small muted'; tag.textContent = 'Gemini · ' + GM.cleanModel(gemModel.value) + ' · ' + $('#tierSel').options[$('#tierSel').selectedIndex].text; bot.insertBefore(tag, tools); }
       body.innerHTML = '<span class="thinking"><i></i><i></i><i></i></span>';
       const ui = { tool: msg => { const t = document.createElement('div'); t.className = 'tool'; t.textContent = '⚙ ' + msg; tools.appendChild(t); chat.scrollTop = chat.scrollHeight; } };
       const st = app.getState();
@@ -4275,12 +4302,22 @@ def pfr_transiente(P, nome):
 
     async function sendGemini({ userTurn, ctxTurn, imgs, body, ui }) {
       try {
-        const res = await GM.run({
-          key: sessionKey, model: gemModel.value, tier: $('#tierSel').value,
+        const ask = model => GM.run({
+          key: sessionKey, model, tier: tierSel.value,
           system: RULES + catalog(), history: history.slice(-12), text: ctxTurn, images: imgs,
           tools: makeTools(app, ui), signal: ctl.signal, onTool: ui.tool,
           onText: t => { body.innerHTML = md(t); chat.scrollTop = chat.scrollHeight; }
         });
+        let res, model = GM.cleanModel(gemModel.value);
+        try { res = await ask(model); }
+        catch (e) {
+          if (!GM.needsBilling(e, model)) throw e;
+          // chave sem faturamento: o Pro não responde; segue com o Flash no modo Raciocínio
+          gemModel.value = GM.FALLBACK_MODEL; store.set(K_MODEL, GM.FALLBACK_MODEL); updateGemSummary();
+          const tag = body.parentNode.querySelector('.small.muted'); if (tag) tag.textContent = 'Gemini · ' + GM.FALLBACK_MODEL + ' · ' + tierSel.options[tierSel.selectedIndex].text;
+          add('sys', 'Sua chave não tem acesso ao <b>Gemini Pro</b> (ele exige faturamento ativado no Google AI Studio). Respondi com o <b>Gemini Flash</b> no nível <b>' + esc(tierSel.options[tierSel.selectedIndex].text) + '</b>. Se ativar o faturamento, escolha de novo o Pro em “Configurar o Gemini”.');
+          res = await ask(GM.FALLBACK_MODEL);
+        }
         body.innerHTML = md(res.text || '(sem texto na resposta)');
         gemBox.open = false;
         if (res.truncated) body.insertAdjacentHTML('beforeend', '<p class="small muted">Resposta interrompida pelo limite — peça a continuação.</p>');
@@ -4811,12 +4848,14 @@ def pfr_transiente(P, nome):
     });
     let noShow = false; try { noShow = localStorage.getItem('simulafacil.noWelcome') === '1'; } catch (e) { /* */ }
     $('#wNoShow').checked = noShow;
-    $('#welcome').hidden = false; setTimeout(() => $('#wAgent').focus(), 30);
+    $('#welcome').hidden = false; setTimeout(() => $('#wGemini').focus(), 30);
   }
   function closeWelcome() { $('#welcome').hidden = true; setTimeout(() => pfd.fit(), 30); }
   $('#wClose').onclick = closeWelcome;
   $('#welcome').onclick = e => { if (e.target.id === 'welcome') closeWelcome(); };
-  $('#wAgent').onclick = () => { closeWelcome(); switchTab('agent'); setTimeout(() => $('#chatInput').focus(), 50); };
+  function talkWith(p) { closeWelcome(); switchTab('agent'); if (SF.agent.choose) SF.agent.choose(p); else setTimeout(() => $('#chatInput').focus(), 50); }
+  $('#wGemini').onclick = () => talkWith('gemini');
+  $('#wClaude').onclick = () => { const url = window.SIMULAFACIL_CONFIG && window.SIMULAFACIL_CONFIG.claudeUrl; if (!window.claude && url) window.open(url, '_blank', 'noopener'); else talkWith('claude'); };
   $('#wExamples').onclick = () => { $('#wExTitle').scrollIntoView({ behavior: 'smooth', block: 'start' }); const f = $('#wExGrid button'); if (f) f.focus(); };
   $('#wBlank').onclick = () => { closeWelcome(); pushUndo(); state = blank(); results = null; pfd.sel = null; afterChange(true); pfd.fit(); renderCharts(null, []); switchTab('thermo'); toast('Escolha os componentes e o modelo; depois clique nos equipamentos da paleta'); };
   $('#wNoShow').onchange = e => { try { localStorage.setItem('simulafacil.noWelcome', e.target.checked ? '1' : '0'); } catch (err) { /* */ } };
@@ -4828,7 +4867,7 @@ def pfr_transiente(P, nome):
     const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.className = 'btn claude-link'; a.textContent = 'Usar com o Claude ↗';
     a.title = 'Abrir a versão em que o agente usa o Claude (requer conta do Claude). Aqui o agente pode usar o Gemini.';
     $('.tools').insertBefore(a, $('#btnNew'));
-    // a conversa da tela inicial continua aqui: fora do Claude o agente usa o Gemini
+    const wn = $('#wClaudeNote'); if (wn) wn.textContent = 'abre a versão no Claude ↗';
   })();
 
   /* ------------------------------------------------------------------ API para o agente */

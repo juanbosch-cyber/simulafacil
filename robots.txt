@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://SEU-USUARIO.github.io/simulafacil/sitemap.xml
+Sitemap: https://juanbosch-cyber.github.io/simulafacil/sitemap.xml

@@ -197,7 +197,8 @@ textarea { resize: vertical; width: 100%; }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 12px 8px; }
 .chips button { white-space: normal; text-align: left; font-size: 12px; padding: 4px 10px; border-radius: 99px; background: color-mix(in srgb, var(--sun) 22%, var(--panel)); border-color: color-mix(in srgb, var(--sun) 70%, transparent); }
 .composer { border-top: 1px solid var(--line); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
-.composer-row { display: flex; gap: 6px; align-items: center; }
+.composer-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.composer-row select { max-width: 128px; min-width: 0; }
 .attach-row { display: flex; gap: 6px; flex-wrap: wrap; }
 .attach-row .att { position: relative; } .attach-row img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); }
 .attach-row .att button { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; padding: 0; border-radius: 50%; justify-content: center; font-size: 11px; }
@@ -298,6 +299,16 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
 @media (max-width: 560px) { .whero { grid-template-columns: 1fr; text-align: left; } .wlogo { width: 72px; height: 72px; } .brand-auth { display: none; } }
 @media (prefers-reduced-motion: reduce) { .wbtn, .pal-item { transition: none; } .wbtn:hover, .pal-item:hover { transform: none; } }
 
+/* configuração do Gemini no agente */
+.gem-box { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; background: var(--panel-2); }
+.gem-box summary { cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--accent); }
+.gem-box[open] summary { margin-bottom: 6px; }
+.gem-grid { display: grid; grid-template-columns: auto 1fr; gap: 6px 8px; align-items: center; font-size: 12.5px; }
+.gem-line { display: flex; gap: 6px; min-width: 0; } .gem-line input { flex: 1; min-width: 0; }
+.gem-remember { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
+.gem-box p { margin: 4px 0 0; }
+#provSel { font-weight: 600; }
+
 </style>
 </head>
 <body>
@@ -385,10 +396,24 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
         <div class="attach-row" id="attachRow" hidden></div>
         <label class="sr" for="chatInput">Mensagem para o agente</label>
         <textarea id="chatInput" rows="3" placeholder="Descreva o processo, peça sugestões ou cole uma figura (Ctrl+V)…"></textarea>
+        <details class="gem-box" id="gemBox" hidden>
+          <summary id="gemSummary">Configurar o Gemini (chave e modelo)</summary>
+          <div class="gem-grid">
+            <label for="gemKey">Chave da API</label>
+            <div class="gem-line"><input id="gemKey" type="password" autocomplete="off" spellcheck="false" placeholder="cole aqui a chave do Google AI Studio (AIza…)"><button type="button" id="gemShow" class="ghost" title="Mostrar ou ocultar a chave">👁</button></div>
+            <label for="gemModel">Modelo</label>
+            <div class="gem-line"><input id="gemModel" list="gemModels" spellcheck="false"><datalist id="gemModels"></datalist><button type="button" id="gemList" class="ghost">Listar modelos</button></div>
+          </div>
+          <label class="small gem-remember"><input type="checkbox" id="gemRemember"> Lembrar a chave neste navegador (não marque em computador compartilhado)</label>
+          <p class="small muted" id="gemStatus"></p>
+          <p class="small muted">Gere a chave grátis em <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio → Get API key</a>. A chave fica só no seu navegador e vai direto para o Google. No nível gratuito, o Google pode usar as conversas para melhorar os modelos: não envie dados confidenciais.</p>
+        </details>
         <div class="composer-row">
-          <label class="btn ghost" id="attachBtn" title="Anexar figura do processo"><input type="file" id="imgInput" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>Anexar figura</label>
-          <label class="sr" for="tierSel">Profundidade</label>
-          <select id="tierSel" title="Profundidade do raciocínio"><option value="quick">Rápido</option><option value="default" selected>Equilibrado</option><option value="complex">Profundo</option></select>
+          <label class="btn ghost" id="attachBtn" title="Anexar figura do processo"><input type="file" id="imgInput" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>📎 Figura</label>
+          <label class="sr" for="provSel">Modelo de IA</label>
+          <select id="provSel" title="Modelo de IA do agente"><option value="claude">Claude</option><option value="gemini">Gemini</option></select>
+          <label class="sr" for="tierSel">Raciocínio</label>
+          <select id="tierSel" title="Nível de raciocínio"><option value="quick">Rápido</option><option value="default" selected>Equilibrado</option><option value="complex">Raciocínio</option></select>
           <span class="spacer"></span>
           <button type="button" id="stopBtn" class="ghost" hidden>Parar</button>
           <button type="submit" id="sendBtn" class="primary">Enviar</button>
@@ -455,10 +480,10 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
 <script>/* js/site-config.js */
 /* SIMULA FÁCIL IA — configuração do site.
    claudeUrl: link da versão com o agente de IA (abra o artefato no Claude, clique em Compartilhar/Publicar e cole aqui o link público).
-   siteUrl:   endereço deste site no GitHub Pages (troque SEU-USUARIO pelo seu usuário do GitHub). */
+   siteUrl:   endereço deste site no GitHub Pages (troque juanbosch-cyber pelo seu usuário do GitHub). */
 window.SIMULAFACIL_CONFIG = {
   claudeUrl: 'https://claude.ai/artifact/SthNvttmGPgrtdmR9Bs95Q',
-  siteUrl: 'https://SEU-USUARIO.github.io/simulafacil/'
+  siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/'
 };
 
 </script>
@@ -3798,8 +3823,173 @@ def pfr_transiente(P, nome):
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
+<script>/* js/gemini.js */
+/* SIMULA FÁCIL IA — cliente do Gemini (Google) para o agente de IA.
+ * Chama a API REST generateContent direto do navegador com a chave do próprio usuário
+ * (gerada no Google AI Studio). Faz o laço de chamada de funções (ferramentas do simulador),
+ * devolve as "thought signatures" exigidas pelos modelos Gemini 3+ e envia figuras em base64. */
+(function (root) {
+  const SF = root.SF = root.SF || {};
+  const BASE = 'https://generativelanguage.googleapis.com/v1beta';
+  const DEFAULT_MODEL = 'gemini-flash-latest';
+  const SUGGESTED = [
+    { id: 'gemini-flash-latest', label: 'Gemini Flash (mais recente) — nível gratuito' },
+    { id: 'gemini-flash-lite-latest', label: 'Gemini Flash-Lite (mais recente) — mais rápido, gratuito' },
+    { id: 'gemini-pro-latest', label: 'Gemini Pro (mais recente) — exige chave com faturamento' }
+  ];
+  const IMG_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/heic', 'image/heif'];
+  // "Raciocínio" do simulador → nível de pensamento do Gemini
+  const LEVEL = { quick: 'low', default: 'medium', complex: 'high' };
+  const BUDGET = { quick: 1024, default: 8192, complex: -1 }; // Gemini 2.5 usa orçamento em tokens
+
+  function cleanModel(m) { return String(m || DEFAULT_MODEL).trim().replace(/^models\//, '') || DEFAULT_MODEL; }
+
+  function thinkingConfig(model, tier) {
+    if (/gemini-(1\.|2\.0)/.test(model)) return null;            // modelos antigos: sem raciocínio configurável
+    if (/gemini-2\.5/.test(model)) return { thinkingBudget: BUDGET[tier] ?? 8192 };
+    return { thinkingLevel: LEVEL[tier] || 'medium' };           // Gemini 3 em diante
+  }
+
+  // JSON Schema → Schema do Gemini (subconjunto OpenAPI). Usado só se a API recusar parametersJsonSchema.
+  function toSchema(s) {
+    s = s || {};
+    const t = String(s.type || 'string').toUpperCase(), o = { type: t };
+    if (s.description) o.description = s.description;
+    if (s.enum) o.enum = s.enum.map(String);
+    if (t === 'ARRAY') o.items = toSchema(s.items || { type: 'string' });
+    if (t === 'OBJECT') {
+      const p = s.properties || {}, keys = Object.keys(p);
+      if (!keys.length) return { type: 'STRING', description: ((s.description || '') + ' Objeto JSON escrito como texto.').trim() };
+      o.properties = {}; keys.forEach(k => { o.properties[k] = toSchema(p[k]); });
+      if (s.required && s.required.length) o.required = s.required.slice();
+    }
+    return o;
+  }
+
+  function declarations(tools, mode) {
+    return tools.map(t => {
+      const d = { name: t.name, description: t.description }, s = t.inputSchema;
+      if (s && s.properties && Object.keys(s.properties).length) { if (mode === 'json') d.parametersJsonSchema = s; else d.parameters = toSchema(s); }
+      return d;
+    });
+  }
+
+  // no modo de esquema simplificado, objetos livres chegam como texto JSON
+  function fixArgs(v) {
+    if (typeof v === 'string') { const s = v.trim(); if ((s[0] === '{' && s.slice(-1) === '}') || (s[0] === '[' && s.slice(-1) === ']')) { try { return fixArgs(JSON.parse(s)); } catch (e) { return v; } } return v; }
+    if (Array.isArray(v)) return v.map(fixArgs);
+    if (v && typeof v === 'object') { const o = {}; Object.keys(v).forEach(k => { o[k] = fixArgs(v[k]); }); return o; }
+    return v;
+  }
+
+  function apiError(status, j, fallback) {
+    const e = (j && j.error) || {};
+    const err = new Error(e.message || fallback || ('HTTP ' + status));
+    err.status = status; err.reason = e.status || ''; err.code = 'gemini_http';
+    return err;
+  }
+
+  async function request(path, key, opts) {
+    let r;
+    try { r = await fetch(BASE + path, Object.assign({}, opts, { headers: Object.assign({ 'x-goog-api-key': key }, (opts && opts.headers) || {}) })); }
+    catch (e) {
+      if (e && e.name === 'AbortError') throw Object.assign(new Error('Interrompido'), { code: 'cancelled' });
+      throw Object.assign(new Error('Sem conexão com o Gemini'), { code: 'gemini_network' });
+    }
+    let j = null; try { j = await r.json(); } catch (e) { /* corpo vazio */ }
+    if (!r.ok) throw apiError(r.status, j);
+    return j;
+  }
+
+  function generate(key, model, body, signal) {
+    return request('/models/' + encodeURIComponent(model) + ':generateContent', key, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal });
+  }
+
+  async function listModels(key, signal) {
+    const j = await request('/models?pageSize=200', key, { method: 'GET', signal });
+    return (j.models || [])
+      .filter(m => /gemini/i.test(m.name) && (m.supportedGenerationMethods || []).indexOf('generateContent') >= 0)
+      .map(m => ({ id: cleanModel(m.name), label: m.displayName || cleanModel(m.name) }));
+  }
+
+  function fileToPart(file) {
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => { const s = String(fr.result); resolve({ inlineData: { mimeType: file.type || 'image/png', data: s.slice(s.indexOf(',') + 1) } }); };
+      fr.onerror = () => reject(new Error('não foi possível ler a figura'));
+      fr.readAsDataURL(file);
+    });
+  }
+
+  /* Conversa com ferramentas.
+   * opts: { key, model, tier, system, history:[{role:'user'|'assistant', content}], text, images:[File], tools, signal, onText, onTool, maxSteps } */
+  async function run(opts) {
+    const model = cleanModel(opts.model), tools = opts.tools || [];
+    const imgParts = await Promise.all((opts.images || []).map(fileToPart));
+    const contents = (opts.history || []).filter(h => h && h.content).map(h => ({ role: h.role === 'assistant' ? 'model' : 'user', parts: [{ text: String(h.content) }] }));
+    contents.push({ role: 'user', parts: imgParts.concat([{ text: opts.text }]) });
+    let mode = 'json', think = thinkingConfig(model, opts.tier), text = '', steps = 0;
+    const retried = {}, maxSteps = opts.maxSteps || 14;
+    while (steps < maxSteps) {
+      const body = { systemInstruction: { parts: [{ text: opts.system }] }, contents };
+      if (tools.length) body.tools = [{ functionDeclarations: declarations(tools, mode) }];
+      if (think) body.generationConfig = { thinkingConfig: think };
+      let j;
+      try { j = await generate(opts.key, model, body, opts.signal); }
+      catch (e) {
+        const msg = String(e.message || '');
+        if (e.status === 400 && think && /think/i.test(msg) && !retried.think) { retried.think = true; think = null; continue; }
+        if (e.status === 400 && mode === 'json' && /parametersJsonSchema|parameters_json_schema|Unknown name|schema/i.test(msg) && !retried.schema) { retried.schema = true; mode = 'openapi'; continue; }
+        throw e;
+      }
+      steps++;
+      const cand = j && j.candidates && j.candidates[0];
+      if (!cand || !cand.content || !(cand.content.parts || []).length) {
+        const why = (j && j.promptFeedback && j.promptFeedback.blockReason) || (cand && cand.finishReason) || 'EMPTY';
+        if (why === 'MALFORMED_FUNCTION_CALL' && !retried.malformed) { retried.malformed = true; contents.push({ role: 'user', parts: [{ text: 'A chamada de ferramenta anterior veio malformada. Tente de novo com argumentos JSON válidos.' }] }); continue; }
+        if (text) return { text, finishReason: why };
+        throw Object.assign(new Error('O Gemini não produziu resposta (' + why + ').'), { code: 'gemini_empty', reason: why });
+      }
+      const parts = cand.content.parts;
+      const t = parts.filter(p => typeof p.text === 'string' && !p.thought).map(p => p.text).join('');
+      if (t.trim()) { text += (text ? '\n\n' : '') + t; if (opts.onText) opts.onText(text); }
+      const calls = parts.filter(p => p.functionCall);
+      if (!calls.length) return { text, finishReason: cand.finishReason, truncated: cand.finishReason === 'MAX_TOKENS', usage: j.usageMetadata };
+      // devolve a resposta do modelo como veio (com as thought signatures) e depois os resultados das ferramentas
+      contents.push({ role: 'model', parts });
+      const responses = [];
+      for (const p of calls) {
+        const fc = p.functionCall, tool = tools.find(x => x.name === fc.name);
+        let out;
+        try { if (!tool) throw new Error('ferramenta desconhecida: ' + fc.name); out = await tool.execute(fixArgs(fc.args || {})); }
+        catch (err) { out = { erro: String((err && err.message) || err) }; if (opts.onTool) opts.onTool('Erro em ' + fc.name + ': ' + out.erro); }
+        if (out === undefined || out === null || typeof out !== 'object' || Array.isArray(out)) out = { resultado: out === undefined ? 'ok' : out };
+        const fr = { name: fc.name, response: out }; if (fc.id) fr.id = fc.id;
+        responses.push({ functionResponse: fr });
+      }
+      contents.push({ role: 'user', parts: responses });
+    }
+    return { text: text + (text ? '\n\n' : '') + '_(Parei após ' + maxSteps + ' etapas de ferramentas. Peça para continuar, se precisar.)_', truncated: true };
+  }
+
+  // mensagem amigável para cada erro
+  function explain(e) {
+    const s = e && e.status, m = String((e && e.message) || ''), r = (e && e.reason) || '';
+    if (e && e.code === 'gemini_network') return 'Sem conexão com o Gemini. Verifique a internet. Se estiver na rede da universidade, ela pode bloquear generativelanguage.googleapis.com; dentro do Claude, a página também pode bloquear o acesso ao Google — nesse caso use o site do simulador no GitHub.';
+    if (/API key not valid|API_KEY_INVALID/i.test(m) || (s === 400 && /key/i.test(m))) return 'Chave do Gemini inválida. Copie de novo a chave no Google AI Studio (começa com "AIza").';
+    if (s === 401 || s === 403 || r === 'PERMISSION_DENIED') return 'A chave não tem permissão para usar o Gemini. Contas institucionais podem ter o Google AI Studio bloqueado pelo administrador; gere a chave com uma conta Google pessoal. Detalhe: ' + m;
+    if (s === 404 || r === 'NOT_FOUND') return 'Modelo não encontrado para esta chave. Clique em "Listar modelos" e escolha um da lista. Detalhe: ' + m;
+    if (s === 429 || r === 'RESOURCE_EXHAUSTED') return 'Limite de uso do Gemini atingido (o nível gratuito tem limite por minuto e por dia; modelos Pro exigem faturamento). Espere um pouco ou use o modelo Flash ou Flash-Lite.';
+    if (s >= 500) return 'O Gemini está instável no momento (erro ' + s + '). Tente de novo em instantes.';
+    return 'Erro do Gemini' + (s ? ' (' + s + ')' : '') + ': ' + m;
+  }
+
+  SF.gemini = { run, listModels, explain, toSchema, declarations, fixArgs, thinkingConfig, cleanModel, DEFAULT_MODEL, SUGGESTED, IMG_TYPES, BASE };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
 <script>/* js/agent.js */
-/* SIMULA FÁCIL IA — agente de IA (Claude) com leitura de figuras e ferramentas que montam, alteram e simulam o fluxograma */
+/* SIMULA FÁCIL IA — agente de IA (Claude ou Gemini) com leitura de figuras e ferramentas que montam, alteram e simulam o fluxograma */
 (function (root) {
   'use strict';
   const SF = root.SF = root.SF || {};
@@ -3963,23 +4153,71 @@ def pfr_transiente(P, nome):
     ];
   }
 
-  /* ---------------- interface do chat */
+  /* ---------------- interface do chat (Claude ou Gemini) */
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { /* sem armazenamento */ } }
+  };
+  const K_PROV = 'simulafacil.provider', K_KEY = 'simulafacil.geminiKey', K_MODEL = 'simulafacil.geminiModel';
+
   function init(app) {
     const chat = $('#chat'), input = $('#chatInput'), form = $('#composer'), note = $('#agentNote');
-    const history = []; let attachments = [], ctl = null, sample = null, limits = null, busy = false;
+    const provSel = $('#provSel'), gemBox = $('#gemBox'), gemKey = $('#gemKey'), gemModel = $('#gemModel'), gemStatus = $('#gemStatus');
+    const GM = SF.gemini;
+    const history = []; let attachments = [], ctl = null, sample = null, limits = null, busy = false, claudeReady = false;
+    let provider = 'claude';
     const QUICK = ['Monte a destilação etanol/água do PDF e explique o McCabe-Thiele', 'Como obter etanol anidro a 99,5%? Monte a melhor opção', 'Analise os resultados atuais e sugira otimizações', 'Qual modelo termodinâmico devo usar?', 'Gere o código MATLAB e Python deste processo'];
     const qp = $('#quickPrompts'); QUICK.forEach(q => { const b = document.createElement('button'); b.type = 'button'; b.textContent = q; b.onclick = () => { input.value = q; send(); }; qp.appendChild(b); });
+    const claudeUrl = (window.SIMULAFACIL_CONFIG && window.SIMULAFACIL_CONFIG.claudeUrl) || '';
 
     function add(kind, html) { const d = document.createElement('div'); d.className = 'msg ' + kind; d.innerHTML = html; chat.appendChild(d); chat.scrollTop = chat.scrollHeight; return d; }
-    add('bot', md('Olá! Sou o agente do **SIMULA FÁCIL IA**. Descreva o processo (vazões, composições, temperaturas, pureza desejada) ou anexe uma figura do fluxograma, e eu monto, simulo e sugiro melhorias. Um exemplo de destilação etanol/água já está carregado.'));
+    add('bot', md('Olá! Sou o agente do **SIMULA FÁCIL IA**. Descreva o processo (vazões, composições, temperaturas, pureza desejada) ou anexe uma figura do fluxograma, e eu monto, simulo e sugiro melhorias. Escolha abaixo o modelo de IA: **Claude** ou **Gemini**. Um exemplo de destilação etanol/água já está carregado.'));
+
+    /* ---- configuração do Gemini */
+    let sessionKey = store.get(K_KEY) || '';
+    gemKey.value = sessionKey; $('#gemRemember').checked = !!store.get(K_KEY);
+    gemModel.value = store.get(K_MODEL) || GM.DEFAULT_MODEL;
+    function fillModels(list) { const dl = $('#gemModels'); dl.innerHTML = ''; list.forEach(m => { const o = document.createElement('option'); o.value = m.id; o.label = m.label; dl.appendChild(o); }); }
+    fillModels(GM.SUGGESTED);
+    function saveKey() { sessionKey = gemKey.value.trim(); store.set(K_KEY, $('#gemRemember').checked && sessionKey ? sessionKey : null); updateGemSummary(); }
+    function updateGemSummary() { $('#gemSummary').textContent = sessionKey ? 'Gemini: ' + GM.cleanModel(gemModel.value) + ' · chave informada (clique para alterar)' : 'Configurar o Gemini: falta a chave da API'; }
+    gemKey.addEventListener('change', saveKey); gemKey.addEventListener('input', () => { sessionKey = gemKey.value.trim(); });
+    $('#gemRemember').onchange = saveKey;
+    gemModel.addEventListener('change', () => { gemModel.value = GM.cleanModel(gemModel.value); store.set(K_MODEL, gemModel.value); updateGemSummary(); });
+    $('#gemShow').onclick = () => { gemKey.type = gemKey.type === 'password' ? 'text' : 'password'; };
+    $('#gemList').onclick = async () => {
+      saveKey(); if (!sessionKey) { gemStatus.textContent = 'Cole a chave primeiro.'; gemKey.focus(); return; }
+      gemStatus.textContent = 'Consultando os modelos disponíveis para esta chave…';
+      try { const list = await GM.listModels(sessionKey); fillModels(list.length ? list : GM.SUGGESTED); gemStatus.textContent = 'Chave válida: ' + list.length + ' modelos Gemini disponíveis. Clique no campo Modelo para escolher.'; }
+      catch (e) { gemStatus.textContent = GM.explain(e); }
+    };
+    updateGemSummary();
+
+    /* ---- escolha do modelo de IA */
+    function setProvider(p, persist) {
+      provider = p === 'gemini' ? 'gemini' : 'claude'; provSel.value = provider;
+      if (persist) store.set(K_PROV, provider);
+      gemBox.hidden = provider !== 'gemini';
+      if (provider === 'gemini' && !sessionKey) gemBox.open = true;
+      $('#attachBtn').hidden = provider === 'claude' ? !(claudeReady && limits && limits.images) : false;
+      $('#imgInput').accept = provider === 'gemini' ? GM.IMG_TYPES.join(',') : ((limits && limits.images && limits.images.mediaTypes) || []).join(',');
+      if (provider === 'gemini') note.textContent = 'Agente com Gemini (Google): monta e simula o fluxograma por ferramentas, usando a sua chave da API do Google AI Studio.';
+      else if (claudeReady) note.textContent = (limits && limits.tools ? 'Agente com Claude (Anthropic): monta e simula o fluxograma por ferramentas. ' : 'Esta visualização não permite ferramentas: o agente responde em texto. ') + 'Usa a sua conta do Claude.';
+      else note.innerHTML = 'O Claude funciona na versão do simulador aberta dentro do Claude (é preciso entrar com uma conta do Claude).' + (claudeUrl ? ' <a href="' + claudeUrl + '" target="_blank" rel="noopener"><b>Abrir a versão com o Claude</b></a>' : '') + ' Aqui você pode usar o <b>Gemini</b> com a sua chave.';
+    }
+    provSel.onchange = () => setProvider(provSel.value, true);
 
     function renderAttach() {
       const row = $('#attachRow'); row.innerHTML = ''; row.hidden = !attachments.length;
       attachments.forEach((f, k) => { const d = document.createElement('div'); d.className = 'att'; const img = document.createElement('img'); img.src = URL.createObjectURL(f); img.alt = f.name || 'figura'; const x = document.createElement('button'); x.type = 'button'; x.textContent = '✕'; x.title = 'Remover'; x.onclick = () => { attachments.splice(k, 1); renderAttach(); }; d.appendChild(img); d.appendChild(x); row.appendChild(d); });
     }
     function addFiles(files) {
-      if (!limits || !limits.images) { note.textContent = 'Envio de figuras indisponível nesta visualização.'; return; }
-      Array.from(files).forEach(f => { if (limits.images.mediaTypes.indexOf(f.type) >= 0 && attachments.length < limits.images.maxCount) attachments.push(f); });
+      let types, max, maxBytes = 15e6;
+      if (provider === 'gemini') { types = GM.IMG_TYPES; max = 6; }
+      else { if (!limits || !limits.images) { note.textContent = 'Envio de figuras indisponível nesta visualização.'; return; } types = limits.images.mediaTypes; max = limits.images.maxCount; maxBytes = Infinity; }
+      let skipped = 0;
+      Array.from(files).forEach(f => { if (types.indexOf(f.type) >= 0 && f.size <= maxBytes && attachments.length < max) attachments.push(f); else skipped++; });
+      if (skipped) note.textContent = skipped + ' arquivo(s) ignorado(s): use PNG, JPEG ou WEBP' + (provider === 'gemini' ? ' de até 15 MB (máx. 6 figuras).' : '.');
       renderAttach();
     }
     $('#imgInput').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
@@ -3991,23 +4229,26 @@ def pfr_transiente(P, nome):
     form.addEventListener('submit', e => { e.preventDefault(); send(); });
     $('#stopBtn').onclick = () => { if (ctl) ctl.abort(); };
 
-    function setBusy(b) { busy = b; $('#sendBtn').disabled = b; $('#stopBtn').hidden = !b; }
+    function setBusy(b) { busy = b; $('#sendBtn').disabled = b; $('#stopBtn').hidden = !b; provSel.disabled = b; }
     const ERR = { rate_limited: 'Limite de uso atingido. Tente novamente em alguns instantes.', session_expired: 'Sessão expirada: entre novamente no Claude.', refused: 'O pedido não pôde ser atendido. Reformule a mensagem.', empty_completion: 'O agente não produziu resposta. Simplifique o pedido.', upstream_error: 'Falha temporária de conexão. Tente novamente.', image_rejected: 'Figura não aceita (tipo ou tamanho). Use PNG ou JPEG menor.', prompt_too_large: 'Conversa longa demais: comece uma nova.' };
 
     async function send() {
       const text = input.value.trim(); if (busy || (!text && !attachments.length)) return;
+      if (provider === 'claude' && !sample) { add('sys', 'O Claude funciona na versão do simulador aberta no Claude.' + (claudeUrl ? ' <a href="' + claudeUrl + '" target="_blank" rel="noopener">Abrir a versão com o Claude</a>.' : '') + ' Ou escolha <b>Gemini</b> no menu ao lado do botão Figura e use a sua chave do Google AI Studio.'); return; }
+      if (provider === 'gemini' && !sessionKey) { gemBox.hidden = false; gemBox.open = true; gemStatus.textContent = 'Cole a chave da API do Gemini para conversar.'; gemKey.focus(); add('sys', 'Para usar o Gemini, cole a sua chave da API (gerada grátis no Google AI Studio) no quadro "Configurar o Gemini".'); return; }
       $('#quickPrompts').hidden = true;
-      if (!sample) { const url = (window.SIMULAFACIL_CONFIG && window.SIMULAFACIL_CONFIG.claudeUrl) || ''; add('sys', 'O agente de IA funciona na versão aberta no Claude.' + (url ? ' <a href="' + url + '" target="_blank" rel="noopener">Abrir a versão com o agente</a>.' : '') + ' O simulador continua disponível aqui.'); return; }
       const imgs = attachments.slice(); attachments = []; renderAttach(); input.value = '';
       const u = add('user', md(text || '(figura anexada)')); imgs.forEach(f => { const im = document.createElement('img'); im.src = URL.createObjectURL(f); im.alt = 'figura anexada'; u.appendChild(im); });
       const userTurn = (text || 'Analise a figura anexada e monte o fluxograma correspondente.') + (imgs.length ? '\n[' + imgs.length + ' figura(s) anexada(s) a esta mensagem]' : '');
       const bot = add('bot', ''); const tools = document.createElement('div'); const body = document.createElement('div'); bot.appendChild(tools); bot.appendChild(body);
+      if (provider === 'gemini') { const tag = document.createElement('div'); tag.className = 'small muted'; tag.textContent = 'Gemini · ' + GM.cleanModel(gemModel.value); bot.insertBefore(tag, tools); }
       body.innerHTML = '<span class="thinking"><i></i><i></i><i></i></span>';
       const ui = { tool: msg => { const t = document.createElement('div'); t.className = 'tool'; t.textContent = '⚙ ' + msg; tools.appendChild(t); chat.scrollTop = chat.scrollHeight; } };
       const st = app.getState();
       const ctxTurn = 'Estado atual do simulador (JSON):\n' + stateSummary(st) + '\n\nResultados da última simulação:\n' + JSON.stringify(resultSummary(app)) + '\n\nMensagem do usuário:\n' + userTurn;
-      const turns = [{ role: 'user', content: RULES + catalog() }].concat(history.slice(-12), [{ role: 'user', content: ctxTurn }]);
       ctl = new AbortController(); setBusy(true);
+      if (provider === 'gemini') { await sendGemini({ userTurn, ctxTurn, imgs, body, ui }); return; }
+      const turns = [{ role: 'user', content: RULES + catalog() }].concat(history.slice(-12), [{ role: 'user', content: ctxTurn }]);
       try {
         const opts = { signal: ctl.signal, cache: false, modelTier: $('#tierSel').value, onText: ({ text: t }) => { body.innerHTML = md(t); chat.scrollTop = chat.scrollHeight; } };
         if (limits && limits.tools) { delete opts.cache; opts.tools = makeTools(app, ui); }
@@ -4025,26 +4266,39 @@ def pfr_transiente(P, nome):
         if (e && e.text) body.innerHTML = md(e.text); else body.innerHTML = '';
         const code = e && e.code;
         if (code === 'cancelled') body.insertAdjacentHTML('beforeend', '<p class="small muted">Interrompido.</p>');
-        else if (code === 'not_granted' || code === 'sampling_disabled' || code === 'not_declared' || code === 'capability_disabled' || code === 'capability_removed') { add('sys', 'O uso do Claude não foi autorizado nesta página. O simulador continua funcionando normalmente.'); sample = null; }
+        else if (code === 'not_granted' || code === 'sampling_disabled' || code === 'not_declared' || code === 'capability_disabled' || code === 'capability_removed') { add('sys', 'O uso do Claude não foi autorizado nesta página. O simulador continua funcionando normalmente; você também pode escolher o Gemini.'); sample = null; claudeReady = false; setProvider(provider); }
         else if (code === 'images_unavailable') add('sys', 'Envio de figuras indisponível nesta visualização; descreva o processo em texto.');
         else add('sys', ERR[code] || ('Erro do agente: ' + ((e && e.message) || code || e)));
         if (e && e.text) history.push({ role: 'user', content: userTurn }, { role: 'assistant', content: e.text });
       } finally { setBusy(false); ctl = null; }
     }
 
-    // capacidade "sample" do Claude
+    async function sendGemini({ userTurn, ctxTurn, imgs, body, ui }) {
+      try {
+        const res = await GM.run({
+          key: sessionKey, model: gemModel.value, tier: $('#tierSel').value,
+          system: RULES + catalog(), history: history.slice(-12), text: ctxTurn, images: imgs,
+          tools: makeTools(app, ui), signal: ctl.signal, onTool: ui.tool,
+          onText: t => { body.innerHTML = md(t); chat.scrollTop = chat.scrollHeight; }
+        });
+        body.innerHTML = md(res.text || '(sem texto na resposta)');
+        gemBox.open = false;
+        if (res.truncated) body.insertAdjacentHTML('beforeend', '<p class="small muted">Resposta interrompida pelo limite — peça a continuação.</p>');
+        history.push({ role: 'user', content: userTurn }, { role: 'assistant', content: res.text || '' });
+      } catch (e) {
+        if (body.querySelector('.thinking')) body.innerHTML = '';
+        if (e && e.code === 'cancelled') body.insertAdjacentHTML('beforeend', '<p class="small muted">Interrompido.</p>');
+        else { add('sys', esc(GM.explain(e))); if (e && (e.status === 400 || e.status === 403) && /key|permission/i.test(String(e.message))) { gemBox.open = true; } }
+      } finally { setBusy(false); ctl = null; chat.scrollTop = chat.scrollHeight; }
+    }
+
+    // capacidade "sample" do Claude e escolha inicial do modelo de IA
     (async () => {
       try { sample = window.claude && window.claude.use ? await window.claude.use('sample') : null; } catch (e) { sample = null; }
-      if (!sample) {
-        $('#attachBtn').hidden = true;
-        const url = (window.SIMULAFACIL_CONFIG && window.SIMULAFACIL_CONFIG.claudeUrl) || '';
-        note.innerHTML = 'O agente de IA funciona na versão do simulador aberta dentro do Claude (é preciso entrar com uma conta do Claude).' + (url ? ' <a href="' + url + '" target="_blank" rel="noopener"><b>Abrir a versão com o agente IA</b></a>' : '');
-        if (url && !window.claude) add('sys', 'Esta é a versão aberta do simulador: tudo funciona aqui, menos a conversa com o agente de IA. <a href="' + url + '" target="_blank" rel="noopener">Abrir a versão com o agente no Claude</a>.');
-        return;
-      }
-      try { limits = await sample.limits(); } catch (e) { limits = null; }
-      if (!limits || !limits.images) $('#attachBtn').hidden = true; else $('#imgInput').accept = limits.images.mediaTypes.join(',');
-      note.textContent = (limits && limits.tools ? 'O agente monta e simula o fluxograma por ferramentas. ' : 'Esta visualização não permite ferramentas: o agente responde em texto. ') + 'Usa a sua conta do Claude.';
+      if (sample) { try { limits = await sample.limits(); } catch (e) { limits = null; } claudeReady = true; }
+      const saved = store.get(K_PROV);
+      setProvider(saved || (claudeReady ? 'claude' : 'gemini'));
+      if (!claudeReady && !saved && claudeUrl && !window.claude) add('sys', 'Nesta versão do simulador o agente usa o <b>Gemini</b>: cole a sua chave da API no quadro abaixo. Para usar o <b>Claude</b>, <a href="' + claudeUrl + '" target="_blank" rel="noopener">abra a versão no Claude</a>.');
     })();
   }
 
@@ -4567,14 +4821,14 @@ def pfr_transiente(P, nome):
   $('#wBlank').onclick = () => { closeWelcome(); pushUndo(); state = blank(); results = null; pfd.sel = null; afterChange(true); pfd.fit(); renderCharts(null, []); switchTab('thermo'); toast('Escolha os componentes e o modelo; depois clique nos equipamentos da paleta'); };
   $('#wNoShow').onchange = e => { try { localStorage.setItem('simulafacil.noWelcome', e.target.checked ? '1' : '0'); } catch (err) { /* */ } };
   $('#btnHome').onclick = openWelcome;
-  // fora do Claude (site próprio): botão para a versão com o agente de IA
+  // fora do Claude (site próprio): botão para a versão em que o agente usa o Claude
   (function () {
     const url = window.SIMULAFACIL_CONFIG && window.SIMULAFACIL_CONFIG.claudeUrl;
     if (window.claude || !url) return;
-    const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.className = 'btn claude-link'; a.textContent = 'Agente IA no Claude ↗';
-    a.title = 'Abrir a versão com o agente de inteligência artificial (requer conta no Claude)';
+    const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.className = 'btn claude-link'; a.textContent = 'Usar com o Claude ↗';
+    a.title = 'Abrir a versão em que o agente usa o Claude (requer conta do Claude). Aqui o agente pode usar o Gemini.';
     $('.tools').insertBefore(a, $('#btnNew'));
-    const w = $('#wAgent'); if (w) { w.onclick = () => { window.open(url, '_blank', 'noopener'); }; w.querySelector('span:last-child').textContent = 'Abre a versão no Claude (requer conta do Claude)'; }
+    // a conversa da tela inicial continua aqui: fora do Claude o agente usa o Gemini
   })();
 
   /* ------------------------------------------------------------------ API para o agente */

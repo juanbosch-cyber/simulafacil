@@ -327,6 +327,12 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
 .gem-prof .gem-line { margin-top: 4px; } .gem-prof input { flex: 1; min-width: 0; font-size: 12px; }
 .gem-how summary { cursor: pointer; font-weight: 600; color: var(--accent); } .gem-how[open] summary { margin-bottom: 4px; }
 
+/* escolha da IA do agente */
+.prov-row { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+.prov-row select { flex: 1; min-width: 0; font-weight: 600; }
+.wpick .wbadge { display: inline-block; font: 700 10.5px system-ui, sans-serif; background: #c2334f; color: #fff; border-radius: 99px; padding: 1px 7px; vertical-align: middle; margin-left: 4px; }
+.wpick.wpref { box-shadow: 0 0 0 2px #fff, 0 3px 10px rgba(0,0,0,.18); }
+
 </style>
 </head>
 <body>
@@ -414,6 +420,7 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
         <div class="attach-row" id="attachRow" hidden></div>
         <label class="sr" for="chatInput">Mensagem para o agente</label>
         <textarea id="chatInput" rows="3" placeholder="Descreva o processo, peça sugestões ou cole uma figura (Ctrl+V)…"></textarea>
+        <div class="prov-row"><label for="provSel">IA do agente</label><select id="provSel" title="Modelo de IA do agente"><option value="claude">Claude — preferencial</option><option value="gem">Gemini UFSJ (sem chave)</option><option value="gemini">Gemini (chave da API)</option></select></div>
         <details class="gem-box" id="gemBox" hidden>
           <summary id="gemSummary">Configurar o Gemini (chave e modelo)</summary>
           <div class="gem-grid">
@@ -445,8 +452,6 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
         </div>
         <div class="composer-row">
           <label class="btn ghost" id="attachBtn" title="Anexar figura do processo"><input type="file" id="imgInput" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>📎 Figura</label>
-          <label class="sr" for="provSel">Modelo de IA</label>
-          <select id="provSel" title="Modelo de IA do agente"><option value="gem">Gemini UFSJ</option><option value="gemini">Gemini (chave)</option><option value="claude">Claude</option></select>
           <label class="sr" for="tierSel">Raciocínio</label>
           <select id="tierSel" title="Nível de raciocínio"><option value="quick">Rápido</option><option value="default" selected>Equilibrado</option><option value="complex">Raciocínio</option></select>
           <span class="spacer"></span>
@@ -489,8 +494,8 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
       </svg>
     </section>
     <section class="wactions">
-      <div class="wbtn coral wagent" id="wAgent"><span class="wico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1.3" fill="currentColor"/><circle cx="13" cy="10.5" r="1.3" fill="currentColor"/><circle cx="17" cy="10.5" r="1.3" fill="currentColor"/></svg></span><b>Conversar com o agente IA</b><span class="wdesc">Descreva o processo ou envie uma figura. Escolha a IA:</span><div class="wpicks"><button type="button" class="wpick" id="wGemini">Gemini<small>com o e-mail da UFSJ</small></button><button type="button" class="wpick" id="wClaude">Claude<small id="wClaudeNote">usa a sua conta do Claude</small></button></div></div>
-      <button class="wbtn sun" id="wExamples"><span class="wico"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 10c-.6 1.3.2 2 1.4 2h11.2c1.2 0 2-.7 1.4-2l-5-10V3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7.5 15h9" stroke="currentColor" stroke-width="2"/></svg></span><b>Abrir um exemplo pronto</b><span>Colunas, reatores, trocadores e extratores</span></button>
+      <div class="wbtn coral wagent" id="wAgent"><span class="wico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1.3" fill="currentColor"/><circle cx="13" cy="10.5" r="1.3" fill="currentColor"/><circle cx="17" cy="10.5" r="1.3" fill="currentColor"/></svg></span><b>Conversar com o agente IA</b><span class="wdesc">Descreva o processo ou envie uma figura. Escolha a IA:</span><div class="wpicks"><button type="button" class="wpick wpref" id="wClaude">Claude <span class="wbadge">preferencial</span><small id="wClaudeNote">usa a sua conta do Claude</small></button><button type="button" class="wpick" id="wGemini">Gemini<small>com o e-mail da UFSJ</small></button></div></div>
+      <button class="wbtn sun" id="wExamples"><span class="wico"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 10c-.6 1.3.2 2 1.4 2h11.2c1.2 0 2-.7 1.4-2l-5-10V3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7.5 15h9" stroke="currentColor" stroke-width="2"/></svg></span><b>Abrir um exemplo pronto</b><span>Colunas, reatores, trocadores, extratores, adsorção e embalagens</span></button>
       <button class="wbtn teal" id="wBlank"><span class="wico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="13" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 7.5h4v9" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><b>Montar do zero</b><span>Arraste equipamentos da paleta e ligue as correntes</span></button>
     </section>
     <h2 class="wh2" id="wExTitle">Exemplos prontos</h2>
@@ -517,7 +522,7 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
    claudeUrl: link da versão com o agente de IA (abra o artefato no Claude, clique em Compartilhar/Publicar e cole aqui o link público).
    siteUrl:   endereço deste site no GitHub Pages (troque juanbosch-cyber pelo seu usuário do GitHub). */
 window.SIMULAFACIL_CONFIG = {
-  claudeUrl: 'https://claude.ai/artifact/SthNvttmGPgrtdmR9Bs95Q',
+  claudeUrl: 'https://claude.ai/artifact/A8LR4WDCvpfBY9XhF5T3TF',
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/'
 };
 
@@ -766,6 +771,176 @@ window.SIMULAFACIL_CONFIG = {
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
+<script>/* js/transport.js */
+/* SIMULA FÁCIL IA — modelos de transporte de massa 1D transientes (EDPs)
+ *  • Coluna de adsorção em leito fixo: dispersão axial + advecção + transferência de massa LDF,
+ *    isotermas de Langmuir, Freundlich ou linear (curva de breakthrough / ruptura).
+ *  • Embalagem: difusão de um gás (O2) através do material (2ª lei de Fick) com consumo
+ *    por Michaelis–Menten, primeira ordem ou sem reação.
+ * Discretização: diferenças finitas centradas (com ajuste exponencial de Il'in–Allen–Southwell na
+ * advecção, estável para qualquer número de Péclet de célula) e integração no tempo por BDF2
+ * implícito com Newton sobre sistema tridiagonal (algoritmo de Thomas). */
+(function (root) {
+  'use strict';
+  const SF = root.SF = root.SF || {};
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+
+  function thomas(a, b, c, d) { // a: sub, b: diag, c: super (tamanho n); resolve no lugar
+    const n = b.length, cp = new Float64Array(n), dp = new Float64Array(n), x = new Float64Array(n);
+    cp[0] = c[0] / b[0]; dp[0] = d[0] / b[0];
+    for (let i = 1; i < n; i++) { const m = b[i] - a[i] * cp[i - 1]; cp[i] = c[i] / m; dp[i] = (d[i] - a[i] * dp[i - 1]) / m; }
+    x[n - 1] = dp[n - 1];
+    for (let i = n - 2; i >= 0; i--) x[i] = dp[i] - cp[i] * x[i + 1];
+    return x;
+  }
+  function interp(xs, ys, x) { // interpolação linear em malha crescente
+    if (x <= xs[0]) return ys[0]; const n = xs.length; if (x >= xs[n - 1]) return ys[n - 1];
+    let lo = 0, hi = n - 1; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (xs[m] <= x) lo = m; else hi = m; }
+    const w = (x - xs[lo]) / (xs[hi] - xs[lo]); return ys[lo] + w * (ys[hi] - ys[lo]);
+  }
+  function crossing(t, y, level) { // primeiro instante em que y cruza "level" subindo
+    for (let k = 1; k < y.length; k++) if (y[k - 1] < level && y[k] >= level) return t[k - 1] + (level - y[k - 1]) / (y[k] - y[k - 1]) * (t[k] - t[k - 1]);
+    return y.length && y[0] >= level ? t[0] : null;
+  }
+  const linspace = (a, b, n) => Array.from({ length: n }, (_, i) => a + (b - a) * i / (n - 1));
+
+  /* ------------------------------------------------------------ isotermas (q em mg/g, C em mg/L) */
+  function isotherm(o) {
+    const kind = o.isotherm || 'Langmuir';
+    if (kind === 'Freundlich') {
+      const KF = o.KF, nF = Math.max(o.nF, 1e-3), e = 1e-6 * Math.max(o.C0, 1e-12), q0 = KF * Math.pow(e, 1 / nF);
+      return { f: C => KF * Math.pow(Math.max(C, 0) + e, 1 / nF) - q0, df: C => KF / nF * Math.pow(Math.max(C, 0) + e, 1 / nF - 1), name: 'Freundlich' };
+    }
+    if (kind === 'Linear') return { f: C => o.Kd * Math.max(C, 0), df: () => o.Kd, name: 'Linear' };
+    return { f: C => o.qm * o.KL * Math.max(C, 0) / (1 + o.KL * Math.max(C, 0)), df: C => o.qm * o.KL / Math.pow(1 + o.KL * Math.max(C, 0), 2), name: 'Langmuir' };
+  }
+
+  /* ------------------------------------------------------------ adsorção em leito fixo
+   * ∂C/∂t = De ∂²C/∂z² − u ∂C/∂z − ((1−ε)/ε) ρp ∂q/∂t ;  ∂q/∂t = kf (q*(C) − q)
+   * C(0,t) = C0 (1 − e^(−t/τr)) ; ∂C/∂z(L,t) = 0 ; C(z,0) = q(z,0) = 0
+   * Unidades: z, L em m; u em m/s; De em m²/s; ρp em kg/m³ (= g/L); C em mg/L; q em mg/g; kf em 1/s; t em s. */
+  function adsorption(o) {
+    const L = o.L, u = o.u, De = Math.max(o.De, 0), eps = o.eps, rho = o.rho, kf = o.kf, C0 = o.C0, tEnd = o.tEnd;
+    const ramp = Math.max(o.ramp || 0, 0), beta = (1 - eps) / eps * rho, iso = isotherm(o);
+    if (!(L > 0 && u > 0 && eps > 0 && eps < 1 && rho > 0 && kf >= 0 && C0 > 0 && tEnd > 0)) throw new Error('parâmetros do leito inválidos');
+    const nUser = clamp(Math.round(o.nodes || 60), 10, 400);
+    // malha interna: refina até Pe de célula ≤ 1 (no máximo 800 intervalos)
+    const N = clamp(De > 0 ? Math.max(nUser - 1, Math.ceil(L * u / De)) : 800, nUser - 1, 800);
+    const dz = L / N, Pe = De > 0 ? u * dz / De : Infinity;
+    const Deff = De > 0 ? (Pe < 1e-6 ? De : De * (Pe / 2) / Math.tanh(Pe / 2)) : u * dz / 2;
+    const Cin = t => ramp > 0 ? C0 * (1 - Math.exp(-t / ramp)) : C0;
+    // passo de tempo: Courant ≤ 1 e ao menos 2000 passos; no máximo 40 000
+    let nSteps = Math.ceil(Math.max(2000, tEnd / (dz / u)));
+    nSteps = Math.min(nSteps, 40000); const dt = tEnd / nSteps;
+    const m = N; // incógnitas C1..CN
+    let C = new Float64Array(N + 1), Cold = new Float64Array(N + 1), q = new Float64Array(N + 1), qold = new Float64Array(N + 1);
+    const a = new Float64Array(m), bD = new Float64Array(m), c = new Float64Array(m), r = new Float64Array(m);
+    const kd = Deff / (dz * dz), ka = u / (2 * dz);
+    const nOut = clamp(Math.round(o.nOut || 200), 20, 400);
+    const tOut = linspace(0, tEnd, nOut), zUser = linspace(0, L, nUser);
+    const outC = [], outQ = [], tAll = [0], cOutAll = [0], cInAll = [Cin(0)];
+    const sample = () => { outC.push(zUser.map(z => interp(zArr, C, z))); outQ.push(zUser.map(z => interp(zArr, q, z))); };
+    const zArr = Array.from({ length: N + 1 }, (_, j) => j * dz);
+    C[0] = Cin(0); sample(); let iOut = 1, newtonMax = 0;
+    for (let s = 1; s <= nSteps; s++) {
+      const t = s * dt, bdf2 = s > 1, g = bdf2 ? 2 / 3 : 1, a1 = bdf2 ? 4 / 3 : 1, a2 = bdf2 ? -1 / 3 : 0;
+      const gdt = g * dt, den = 1 + gdt * kf;
+      const Bc = new Float64Array(N + 1), Aq = new Float64Array(N + 1);
+      for (let j = 0; j <= N; j++) { Bc[j] = a1 * C[j] + a2 * Cold[j]; Aq[j] = a1 * q[j] + a2 * qold[j]; }
+      const Cn = Float64Array.from(C); Cn[0] = Cin(t);
+      if (s === 1) for (let j = 1; j <= N; j++) Cn[j] = C[j];
+      let it = 0;
+      for (; it < 30; it++) {
+        for (let j = 1; j <= N; j++) {
+          const k = j - 1, Cj = Cn[j], qs = iso.f(Cj), dqs = iso.df(Cj);
+          const sink = beta * kf * (qs - Aq[j]) / den;
+          let lap, adv;
+          if (j < N) { lap = kd * (Cn[j + 1] - 2 * Cj + Cn[j - 1]); adv = ka * (Cn[j + 1] - Cn[j - 1]); a[k] = -gdt * (kd + ka); c[k] = -gdt * (kd - ka); }
+          else { lap = kd * (2 * Cn[j - 1] - 2 * Cj); adv = 0; a[k] = -gdt * 2 * kd; c[k] = 0; }
+          if (j === 1) a[k] = 0; // C0 conhecido (Dirichlet)
+          bD[k] = 1 + gdt * (2 * kd + beta * kf * dqs / den);
+          r[k] = -(Cj - Bc[j] - gdt * (lap - adv - sink));
+        }
+        const dx = thomas(a, bD, c, r); let mx = 0;
+        for (let j = 1; j <= N; j++) { Cn[j] += dx[j - 1]; mx = Math.max(mx, Math.abs(dx[j - 1])); }
+        if (mx < 1e-10 * C0) break;
+      }
+      newtonMax = Math.max(newtonMax, it + 1);
+      const qn = new Float64Array(N + 1);
+      for (let j = 0; j <= N; j++) qn[j] = (Aq[j] + gdt * kf * iso.f(Cn[j])) / den;
+      Cold = C; C = Cn; qold = q; q = qn;
+      tAll.push(t); cOutAll.push(C[N]); cInAll.push(C[0]);
+      while (iOut < nOut && tOut[iOut] <= t + 1e-9 * tEnd) { // amostra (interpolação no tempo entre passos)
+        const w = (tOut[iOut] - (t - dt)) / dt;
+        const Cs = Array.from(C, (v, j) => Cold[j] + w * (v - Cold[j])), Qs = Array.from(q, (v, j) => qold[j] + w * (v - qold[j]));
+        outC.push(zUser.map(z => interp(zArr, Cs, z))); outQ.push(zUser.map(z => interp(zArr, Qs, z))); iOut++;
+      }
+    }
+    // balanços
+    const trap = (x, y) => { let s = 0; for (let k = 1; k < x.length; k++) s += 0.5 * (y[k] + y[k - 1]) * (x[k] - x[k - 1]); return s; };
+    const intOut = trap(tAll, cOutAll), intIn = trap(tAll, cInAll); // mg·s/L
+    let qAvg = 0; for (let j = 1; j <= N; j++) qAvg += 0.5 * (q[j] + q[j - 1]) * dz; qAvg /= L;
+    const ratio = cOutAll.map(v => v / C0);
+    return {
+      t: tOut, z: zUser, C: outC, q: outQ, tAll, ratio, intOut, intIn, qAvg, qEq: iso.f(C0), iso: iso.name,
+      grid: { N, dz, Pe, Deff, dt, nSteps, newtonMax },
+      tb: crossing(tAll, ratio, 0.05), tTarget: o.target != null ? crossing(tAll, ratio, o.target) : null, ts: crossing(tAll, ratio, 0.95),
+      ratioEnd: C[N] / C0
+    };
+  }
+
+  /* ------------------------------------------------------------ difusão com reação (embalagem)
+   * ∂C/∂t = D ∂²C/∂x² − R(C) ; C(0,t) = Cext ; ∂C/∂x(L,t) = 0 ; C(x,0) = C0
+   * R = Rmax C/(Km + C) (Michaelis–Menten), k1 C (1ª ordem) ou 0. C em mol/m³, x em m, t em s. */
+  function diffusionReaction(o) {
+    const L = o.L, D = o.D, C0 = o.C0, Cext = o.Cext, tEnd = o.tEnd, model = o.reaction || 'Michaelis-Menten';
+    if (!(L > 0 && D > 0 && tEnd > 0 && C0 >= 0 && Cext >= 0)) throw new Error('parâmetros da embalagem inválidos');
+    const Rf = model === 'primeira ordem' ? (C => o.k1 * Math.max(C, 0)) : model === 'sem reação' ? (() => 0) : (C => o.Rmax * Math.max(C, 0) / (o.Km + Math.max(C, 0)));
+    const dR = model === 'primeira ordem' ? (() => o.k1) : model === 'sem reação' ? (() => 0) : (C => o.Rmax * o.Km / Math.pow(o.Km + Math.max(C, 0), 2));
+    const nUser = clamp(Math.round(o.nodes || 60), 10, 400), N = Math.max(nUser - 1, 60), dx = L / N;
+    const nSteps = clamp(Math.round(o.steps || 4000), 500, 40000), dt = tEnd / nSteps, kd = D / (dx * dx);
+    const xArr = Array.from({ length: N + 1 }, (_, j) => j * dx), xUser = linspace(0, L, nUser);
+    const nOut = clamp(Math.round(o.nOut || 120), 20, 400), tOut = linspace(0, tEnd, nOut);
+    let C = new Float64Array(N + 1).fill(C0), Cold = new Float64Array(N + 1).fill(C0); C[0] = Cext; Cold[0] = Cext;
+    const a = new Float64Array(N), b = new Float64Array(N), c = new Float64Array(N), r = new Float64Array(N);
+    const out = [xUser.map(x => interp(xArr, C, x))];
+    const tAll = [0], flux = [], cons = [], cInner = [C[N]], cMean = [];
+    const meanOf = arr => { let s = 0; for (let j = 1; j <= N; j++) s += 0.5 * (arr[j] + arr[j - 1]) * dx; return s / L; };
+    const fluxOf = arr => -D * (-3 * arr[0] + 4 * arr[1] - arr[2]) / (2 * dx); // mol/(m²·s), positivo para dentro
+    const consOf = arr => { let s = 0; for (let j = 1; j <= N; j++) s += 0.5 * (Rf(arr[j]) + Rf(arr[j - 1])) * dx; return s; }; // mol/(m²·s)
+    flux.push(fluxOf(C)); cons.push(consOf(C)); cMean.push(meanOf(C));
+    let iOut = 1;
+    for (let s = 1; s <= nSteps; s++) {
+      const t = s * dt, bdf2 = s > 1, g = bdf2 ? 2 / 3 : 1, a1 = bdf2 ? 4 / 3 : 1, a2 = bdf2 ? -1 / 3 : 0, gdt = g * dt;
+      const B = Float64Array.from(C, (v, j) => a1 * v + a2 * Cold[j]);
+      const Cn = Float64Array.from(C); Cn[0] = Cext;
+      for (let it = 0; it < 30; it++) {
+        for (let j = 1; j <= N; j++) {
+          const k = j - 1, Cj = Cn[j];
+          const lap = j < N ? kd * (Cn[j + 1] - 2 * Cj + Cn[j - 1]) : kd * (2 * Cn[j - 1] - 2 * Cj);
+          a[k] = j === 1 ? 0 : -gdt * (j < N ? kd : 2 * kd); c[k] = j < N ? -gdt * kd : 0;
+          b[k] = 1 + gdt * (2 * kd + dR(Cj));
+          r[k] = -(Cj - B[j] - gdt * (lap - Rf(Cj)));
+        }
+        const d = thomas(a, b, c, r); let mx = 0;
+        for (let j = 1; j <= N; j++) { Cn[j] += d[j - 1]; mx = Math.max(mx, Math.abs(d[j - 1])); }
+        if (mx < 1e-12 * Math.max(C0, Cext, 1e-30)) break;
+      }
+      Cold = C; C = Cn;
+      tAll.push(t); flux.push(fluxOf(C)); cons.push(consOf(C)); cInner.push(C[N]); cMean.push(meanOf(C));
+      while (iOut < nOut && tOut[iOut] <= t + 1e-9 * tEnd) {
+        const w = (tOut[iOut] - (t - dt)) / dt, Cs = Array.from(C, (v, j) => Cold[j] + w * (v - Cold[j]));
+        out.push(xUser.map(x => interp(xArr, Cs, x))); iOut++;
+      }
+    }
+    const trap = (x, y) => { let s = 0; for (let k = 1; k < x.length; k++) s += 0.5 * (y[k] + y[k - 1]) * (x[k] - x[k - 1]); return s; };
+    return { t: tOut, x: xUser, C: out, tAll, flux, cons, cInner, cMean, absorbed: trap(tAll, flux), consumed: trap(tAll, cons), grid: { N, dx, dt, nSteps } };
+  }
+
+  SF.transport = { adsorption, diffusionReaction, isotherm, crossing, interp, thomas };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
 <script>/* js/thermo.js */
 /* SIMULA FÁCIL IA — Termodinâmica
    Banco de componentes, pressão de vapor (Antoine / Lee-Kesler), modelos de coeficiente de atividade
@@ -820,6 +995,7 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'comp-B', name: 'Componente genérico B (soluto, M=100)', formula: 'B', mw: 100, rho: 1000, nv: true, cpl: 200 },
     { id: 'comp-C', name: 'Componente genérico C (soluto, M=200)', formula: 'C', mw: 200, rho: 1000, nv: true, cpl: 400 },
     { id: 'comp-D', name: 'Componente genérico D (soluto, M=50)', formula: 'D', mw: 50, rho: 1000, nv: true, cpl: 100 },
+    { id: 'mn-ion', name: 'Íon manganês Mn²⁺ (soluto, M=54,94)', formula: 'Mn2+', mw: 54.938, rho: 7210, nv: true, cpl: 26 },
     { id: 'inert-solid', name: 'Sólido inerte (farelo/torta)', formula: '(C6H10O5)n', mw: 162.14, rho: 1500, solid: true, cpl: 210 }
   ];
   const COMP = {}; COMPONENTS.forEach(c => { COMP[c.id] = c; });
@@ -1415,7 +1591,7 @@ window.SIMULAFACIL_CONFIG = {
       Object.assign({ def: 80 }, P_T), Object.assign({ def: 1.01325 }, P_P), { k: 'Q', label: 'Carga térmica', u: 'kW', def: 0 }, { k: 'vf', label: 'Fração vaporizada', u: '0–1', def: 0.5 }] },
     decanter: { label: 'Decantador (ELL)', cat: 'Separadores/Vasos', ins: ['in'], outs: ['light', 'heavy'], params: [Object.assign({ def: 25 }, P_T), Object.assign({ def: 1.01325 }, P_P)] },
     column_short: { label: 'Coluna shortcut (FUG)', cat: 'Colunas', ins: ['feed'], outs: ['distillate', 'bottoms'], params: [
-      { k: 'lk', label: 'Chave leve', type: 'comp' }, { k: 'hk', label: 'Chave pesado', type: 'comp' },
+      { k: 'lk', label: 'Chave leve', type: 'comp' }, { k: 'hk', label: 'Chave pesada', type: 'comp' },
       { k: 'lkRec', label: 'Recuperação da chave leve no destilado', u: '0–1', def: 0.99 }, { k: 'hkRec', label: 'Recuperação da chave pesada no fundo', u: '0–1', def: 0.99 },
       { k: 'RRmin', label: 'R / Rmín', u: '', def: 1.3 }, Object.assign({ def: 1.01325 }, P_P)] },
     column: { label: 'Coluna de destilação rigorosa', cat: 'Colunas', ins: ['feed', 'feed2', 'feed3'], outs: ['distillate', 'bottoms', 'side'], params: [
@@ -1450,7 +1626,43 @@ window.SIMULAFACIL_CONFIG = {
       Object.assign({ def: 60 }, P_T), { k: 'U', label: 'Coef. U da parede', u: 'W/m²·K', def: 300 }, { k: 'Tw', label: 'Temperatura da parede', u: '°C', def: 25 },
       { k: 'tEnd', label: 'Tempo de simulação (transiente)', u: 's', def: 120 }, { k: 'cells', label: 'Células de discretização', u: '', def: 60 }, RXN] },
     rconv: { label: 'Reator de conversão', cat: 'Reatores', ins: ['in'], outs: ['out'], params: [
-      { k: 'thermal', label: 'Energia', type: 'select', options: ['isotérmico', 'adiabático'], def: 'isotérmico' }, Object.assign({ def: 60 }, P_T), RXN] }
+      { k: 'thermal', label: 'Energia', type: 'select', options: ['isotérmico', 'adiabático'], def: 'isotérmico' }, Object.assign({ def: 60 }, P_T), RXN] },
+    adsorber: { label: 'Coluna de adsorção (leito fixo)', cat: 'Adsorção e difusão', ins: ['in'], outs: ['out'], params: [
+      { k: 'solute', label: 'Adsorbato (vazio = soluto principal)', type: 'comp', def: '' },
+      { k: 'L', label: 'Altura do leito L', u: 'm', def: 0.15 },
+      { k: 'uMode', label: 'Velocidade do fluido', type: 'select', options: ['informar velocidade intersticial', 'calcular pela vazão e diâmetro'], def: 'informar velocidade intersticial' },
+      { k: 'u', label: 'Velocidade intersticial u (se informar)', u: 'm/s', def: 0.001 },
+      { k: 'D', label: 'Diâmetro da coluna (se calcular)', u: 'm', def: 0.05 },
+      { k: 'eps', label: 'Porosidade do leito ε', u: '0–1', def: 0.45 },
+      { k: 'rho', label: 'Densidade aparente do adsorvente ρp', u: 'kg/m³', def: 120 },
+      { k: 'De', label: 'Coef. de dispersão axial De', u: 'm²/s', def: 1e-6 },
+      { k: 'kf', label: 'Coef. de transferência de massa kf (LDF)', u: '1/h', def: 0.067 },
+      { k: 'isotherm', label: 'Isoterma', type: 'select', options: ['Langmuir', 'Freundlich', 'Linear'], def: 'Langmuir' },
+      { k: 'qm', label: 'Langmuir: capacidade máxima qm', u: 'mg/g', def: 40 },
+      { k: 'KL', label: 'Langmuir: constante de afinidade KL', u: 'L/mg', def: 0.15 },
+      { k: 'KF', label: 'Freundlich: KF', u: '(mg/g)(L/mg)^(1/n)', def: 5 },
+      { k: 'nF', label: 'Freundlich: expoente n', u: '', def: 2 },
+      { k: 'Kd', label: 'Linear: Kd', u: 'L/g', def: 1 },
+      { k: 'tEnd', label: 'Tempo de operação', u: 'h', def: 3 },
+      { k: 'target', label: 'Remoção desejada (linha de referência)', u: '%', def: 63 },
+      { k: 'ramp', label: 'Rampa da entrada (estabilidade numérica)', u: 's', def: 10 },
+      { k: 'nodes', label: 'Pontos da malha espacial', u: '', def: 60 }] },
+    packaging: { label: 'Embalagem (difusão de O₂ com reação)', cat: 'Adsorção e difusão', ins: ['in'], outs: ['out'], params: [
+      { k: 'gas', label: 'Gás que permeia', type: 'comp', def: 'oxygen' },
+      { k: 'e', label: 'Espessura do material L', u: 'mm', def: 1 },
+      { k: 'A', label: 'Área da superfície A', u: 'm²', def: 0.05 },
+      { k: 'V', label: 'Volume interno V', u: 'm³', def: 5e-4 },
+      { k: 'Perm', label: 'Permeabilidade P do material', u: 'm³(STP)·m/(m²·s·Pa)', def: 2.2e-17 },
+      { k: 'Dif', label: 'Coef. de difusão efetivo D', u: 'm²/s', def: 1.5e-11 },
+      { k: 'reaction', label: 'Consumo R', type: 'select', options: ['Michaelis-Menten', 'primeira ordem', 'sem reação'], def: 'Michaelis-Menten' },
+      { k: 'Rmax', label: 'Michaelis–Menten: Rmax', u: 'mol/(m³·s)', def: 2e-4 },
+      { k: 'Km', label: 'Michaelis–Menten: Km', u: 'mol/m³', def: 1 },
+      { k: 'k1', label: 'Primeira ordem: k1', u: '1/s', def: 2e-5 },
+      { k: 'C0', label: 'Concentração inicial no material C0', u: 'mol/m³', def: 8.6 },
+      { k: 'CextMode', label: 'Concentração externa', type: 'select', options: ['da corrente de entrada', 'informar'], def: 'da corrente de entrada' },
+      { k: 'Cext', label: 'Concentração externa Cext (se informar)', u: 'mol/m³', def: 8.6 },
+      { k: 'tEnd', label: 'Tempo de simulação', u: 'h', def: 24 },
+      { k: 'nodes', label: 'Pontos da malha espacial', u: '', def: 60 }] }
   };
   Object.keys(TYPES).forEach(k => { TYPES[k].type = k; });
 
@@ -2247,6 +2459,106 @@ window.SIMULAFACIL_CONFIG = {
     return { out: { out }, res, duty: Q };
   };
 
+
+  /* ------------------------------------------------------------------ adsorção em leito fixo (curva de breakthrough) */
+  const TR = () => SF.transport;
+  const downsample = (t, y, n) => { if (t.length <= n) return { t, y }; const st = (t.length - 1) / (n - 1), T = [], Y = []; for (let i = 0; i < n; i++) { const k = Math.round(i * st); T.push(t[k]); Y.push(y[k]); } return { t: T, y: Y }; };
+  IMPL.adsorber = function (th, b, ins) {
+    const s = ins.in, p = b.params, n = th.n, warn = [], plots = [];
+    const v0 = s.F * th.vL(s.z) * 1000;                        // L/s
+    if (!(v0 > 0)) throw new Error('vazão de líquido nula na entrada');
+    const solv = s.z.indexOf(Math.max.apply(null, s.z));
+    let iS = p.solute ? th.ids.indexOf(p.solute) : -1;
+    if (p.solute && iS < 0) throw new Error('adsorbato "' + p.solute + '" não está na lista de componentes');
+    if (iS < 0) { let best = -1; for (let i = 0; i < n; i++) if (i !== solv && s.flows[i] > (best >= 0 ? s.flows[best] : 0)) best = i; iS = best; }
+    if (iS < 0 || !(s.flows[iS] > 0)) throw new Error('não há adsorbato (soluto) na corrente de entrada');
+    const mw = th.c[iS].mw, C0 = s.flows[iS] / v0 * mw * 1000;  // mg/L
+    const Q = v0 / 1000, eps = num(p.eps, 0.45), L = num(p.L, 0.15);
+    let u, Dc;
+    if (p.uMode === 'calcular pela vazão e diâmetro') { Dc = num(p.D, 0.05); u = Q / (eps * Math.PI * Dc * Dc / 4); }
+    else { u = num(p.u, 0.001); Dc = Math.sqrt(4 * Q / (Math.PI * eps * u)); }
+    const tEnd = num(p.tEnd, 3) * 3600, target = clamp(num(p.target, 63), 0, 100);
+    const o = { L, u, De: num(p.De, 1e-6), eps, rho: num(p.rho, 120), kf: num(p.kf, 0.067) / 3600, C0, tEnd, ramp: num(p.ramp, 10),
+      isotherm: p.isotherm || 'Langmuir', qm: num(p.qm, 40), KL: num(p.KL, 0.15), KF: num(p.KF, 5), nF: num(p.nF, 2), Kd: num(p.Kd, 1),
+      nodes: num(p.nodes, 60), target: 1 - target / 100 };
+    const r = TR().adsorption(o);
+    const A = Math.PI * Dc * Dc / 4, Vbed = A * L, mAds = (1 - eps) * o.rho * Vbed;  // kg de adsorvente
+    const capacity = r.qEq * mAds * 1000;                    // mg
+    const tStoich = capacity / (Q * 1000 * C0) + L / u;      // s
+    const removal = 1 - r.intOut / r.intIn, adsorbed = Q * 1000 * (r.intIn - r.intOut); // mg
+    const fmtT = x => x == null ? 'não atingido em ' + (tEnd / 3600).toLocaleString('pt-BR') + ' h' : x / 3600;
+    const flows = s.flows.slice(); flows[iS] = s.flows[iS] * r.intOut / r.intIn;
+    const out = mkStream(th, flows, s.T, s.P);
+    if (u * L / Math.max(o.De, 1e-30) < 2) warn.push('Dispersão axial muito alta (Pe do leito < 2): o leito se comporta quase como tanque agitado.');
+    const res = [
+      { k: 'Adsorbato', v: th.c[iS].name, u: '' }, { k: 'Concentração de entrada C0', v: C0, u: 'mg/L' }, { k: 'Vazão de líquido', v: Q * 3.6e6, u: 'L/h' },
+      { k: 'Velocidade intersticial u', v: u, u: 'm/s' }, { k: 'Diâmetro da coluna', v: Dc, u: 'm' }, { k: 'Tempo de residência no leito L/u', v: L / u, u: 's' },
+      { k: 'Massa de adsorvente (1−ε)·ρp·V', v: mAds * 1000, u: 'g' }, { k: 'q* em equilíbrio com C0 (' + r.iso + ')', v: r.qEq, u: 'mg/g' },
+      { k: 'Capacidade de equilíbrio do leito', v: capacity, u: 'mg' }, { k: 'Tempo estequiométrico', v: tStoich / 3600, u: 'h' },
+      { k: 'Ruptura (C/C0 = 0,05)', v: fmtT(r.tb), u: r.tb == null ? '' : 'h' },
+      { k: 'Remoção de ' + target.toLocaleString('pt-BR') + '% (C/C0 = ' + (1 - target / 100).toLocaleString('pt-BR') + ')', v: fmtT(r.tTarget), u: r.tTarget == null ? '' : 'h' },
+      { k: 'Saturação (C/C0 = 0,95)', v: fmtT(r.ts), u: r.ts == null ? '' : 'h' },
+      { k: 'C/C0 na saída no tempo final', v: r.ratioEnd, u: '' }, { k: 'Remoção média no período', v: removal * 100, u: '%' },
+      { k: 'Massa adsorvida no período', v: adsorbed, u: 'mg' }, { k: 'q médio no leito no tempo final', v: r.qAvg, u: 'mg/g' },
+      { k: 'Corrente de saída', v: 'efluente médio de 0 a ' + (tEnd / 3600).toLocaleString('pt-BR') + ' h', u: '' },
+      { k: 'Malha interna (intervalos · Pe de célula)', v: r.grid.N + ' · ' + r.grid.Pe.toFixed(2).replace('.', ','), u: '' }];
+    const ds = downsample(r.tAll, r.ratio, 400);
+    const tgt = 1 - target / 100;
+    plots.push({ kind: 'curves', title: 'Curva de breakthrough (ruptura) — ' + th.c[iS].name, data: {
+      xLabel: 'Tempo (h)', yLabel: 'C / C₀', yRange: [0, 1.2], xRange: [0, tEnd / 3600],
+      series: [{ name: 'Simulação (C/C₀ na saída)', x: ds.t.map(t => t / 3600), y: ds.y, color: '#1f4fd1', width: 3.5 }],
+      hlines: [{ y: tgt, name: target.toLocaleString('pt-BR') + '% de remoção (C/C₀ = ' + tgt.toLocaleString('pt-BR') + ')', color: '#c2185b' },
+        { y: 0.05, name: 'Ruptura (5%)', color: '#d1302b' }, { y: 0.95, name: 'Saturação (95%)', color: '#222222' }] } });
+    plots.push({ kind: 'surface', title: 'Leito: concentração no fluido C(z, t)', data: {
+      x: r.z.map(z => z * 100), y: r.t.map(t => t / 3600), z: r.C, color: r.C.map(row => row.map(c => c / C0)),
+      xLabel: 'Posição z (cm)', yLabel: 'Tempo (h)', zLabel: 'C (mg/L)', cLabel: 'C/C₀', cmin: 0, cmax: 1, hover: 'z = %{x:.2f} cm<br>t = %{y:.2f} h<br>C = %{z:.3f} mg/L' } });
+    const picks = [0.1, 0.25, 0.5, 0.75, 1].map(f => Math.min(r.t.length - 1, Math.round(f * (r.t.length - 1))));
+    plots.push({ kind: 'curves', title: 'Perfis no leito: carga do adsorvente q(z)', data: { xLabel: 'Posição z (cm)', yLabel: 'q (mg/g)',
+      series: picks.map(k => ({ name: 't = ' + (r.t[k] / 3600).toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' h', x: r.z.map(z => z * 100), y: r.q[k] })) } });
+    return { out: { out }, res, warn, plots, ads: { o, iS, C0, Q, u, Dc, mAds } };
+  };
+
+  /* ------------------------------------------------------------------ embalagem: difusão de O2 com reação (2ª lei de Fick) */
+  IMPL.packaging = function (th, b, ins) {
+    const s = ins.in, p = b.params, warn = [], plots = [];
+    const gid = p.gas || 'oxygen', ig = th.ids.indexOf(gid);
+    if (ig < 0) throw new Error('gás "' + gid + '" não está na lista de componentes');
+    const T = s.T, e = num(p.e, 1) / 1000, A = num(p.A, 0.05), Vint = num(p.V, 5e-4), Perm = num(p.Perm, 2.2e-17);
+    const Cstream = s.z[ig] * s.P / (R * T);                 // mol/m³ (gás ideal)
+    const Cext = p.CextMode === 'informar' ? num(p.Cext, 8.6) : Cstream;
+    const o = { L: e, D: num(p.Dif, 1.5e-11), C0: num(p.C0, 8.6), Cext, tEnd: num(p.tEnd, 24) * 3600, reaction: p.reaction || 'Michaelis-Menten',
+      Rmax: num(p.Rmax, 2e-4), Km: num(p.Km, 1), k1: num(p.k1, 2e-5), nodes: num(p.nodes, 60) };
+    const r = TR().diffusionReaction(o);
+    const kT = (101325 / 273.15) * Perm * A * T / (Vint * e);  // Eq. (17): k = 370,95·P·A·T/(V·e)  [1/s]
+    const last = r.cMean.length - 1, Cmean = r.cMean[last], Cin = r.cInner[last];
+    const conv = o.C0 > 0 ? (o.C0 - Cmean) / o.C0 * 100 : NaN;
+    const molAbs = r.absorbed * A, molCons = r.consumed * A;
+    const flows = s.flows.slice(); flows[ig] = Math.max(0, s.flows[ig] - molAbs / o.tEnd);
+    const out = mkStream(th, flows, s.T, s.P);
+    if (s.z[ig] <= 0 && p.CextMode !== 'informar') warn.push('A corrente de entrada não tem ' + th.c[ig].name + ': Cext = 0.');
+    const res = [
+      { k: 'Gás que permeia', v: th.c[ig].name, u: '' }, { k: 'Concentração externa Cext', v: Cext, u: 'mol/m³' },
+      { k: 'Constante global k (Eq. 17: 370,95·P·A·T/(V·e))', v: kT, u: '1/s' }, { k: 'Tempo característico 1/k', v: 1 / kT / 3600, u: 'h' },
+      { k: 'Tempo de difusão L²/D', v: e * e / o.D / 3600, u: 'h' },
+      { k: 'C na face interna (x = L) no tempo final', v: Cin, u: 'mol/m³' }, { k: 'C média no material no tempo final', v: Cmean, u: 'mol/m³' },
+      { k: 'Conversão média de ' + th.c[ig].name + ' no tempo final', v: conv, u: '%' },
+      { k: 'Fluxo que entra pela face externa (t final)', v: r.flux[r.flux.length - 1], u: 'mol/(m²·s)' },
+      { k: th.c[ig].name + ' absorvido no período', v: molAbs, u: 'mol' }, { k: th.c[ig].name + ' consumido pela reação no período', v: molCons, u: 'mol' },
+      { k: 'Corrente de saída', v: 'ambiente menos o ' + th.c[ig].name + ' absorvido (média no período)', u: '' }];
+    const Cmat = r.x.map((_, j) => r.C.map(row => row[j]));           // linhas = posição, colunas = tempo
+    plots.push({ kind: 'surface', title: 'Perfil 3D da concentração de ' + th.c[ig].name + ' na embalagem', data: {
+      x: r.t.map(t => t / 3600), y: r.x.map(x => x * 1000), z: Cmat, color: Cmat.map(row => row.map(c => o.C0 > 0 ? (o.C0 - c) / o.C0 * 100 : 0)),
+      xLabel: 'Tempo (h)', yLabel: 'Dimensão x (mm)', zLabel: 'C (mol/m³)', cLabel: 'Conversão (%)', colorscale: 'Turbo',
+      hover: 't = %{x:.2f} h<br>x = %{y:.3f} mm<br>C = %{z:.3f} mol/m³' } });
+    const picks = [0, 0.125, 0.25, 0.5, 1].map(f => Math.min(r.t.length - 1, Math.round(f * (r.t.length - 1))));
+    plots.push({ kind: 'curves', title: 'Perfis de concentração no material', data: { xLabel: 'Dimensão x (mm)', yLabel: 'C (mol/m³)',
+      series: picks.map(k => ({ name: 't = ' + (r.t[k] / 3600).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' h', x: r.x.map(x => x * 1000), y: r.C[k] })) } });
+    const ds1 = downsample(r.tAll, r.cInner, 300), ds2 = downsample(r.tAll, r.cMean, 300);
+    plots.push({ kind: 'curves', title: 'Concentração × tempo', data: { xLabel: 'Tempo (h)', yLabel: 'C (mol/m³)',
+      series: [{ name: 'Face interna (x = L)', x: ds1.t.map(t => t / 3600), y: ds1.y }, { name: 'Média no material', x: ds2.t.map(t => t / 3600), y: ds2.y }] } });
+    return { out: { out }, res, warn, plots, pack: { o, kT, ig } };
+  };
+
   SF.units = { TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn };
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -2402,7 +2714,9 @@ window.SIMULAFACIL_CONFIG = {
     leaching: { w: 130, h: 70, ports: { solvent: P(0, 18, 'l', 'in'), solids: P(0, 52, 'l', 'in'), overflow: P(130, 18, 'r', 'out'), underflow: P(130, 52, 'r', 'out') } },
     cstr: { w: 70, h: 84, ports: { in: P(0, 24, 'l', 'in'), out: P(70, 72, 'r', 'out') } },
     pfr: { w: 130, h: 40, ports: { in: P(0, 20, 'l', 'in'), out: P(130, 20, 'r', 'out') } },
-    rconv: { w: 64, h: 80, ports: { in: P(0, 22, 'l', 'in'), out: P(64, 64, 'r', 'out') } }
+    rconv: { w: 64, h: 80, ports: { in: P(0, 22, 'l', 'in'), out: P(64, 64, 'r', 'out') } },
+    adsorber: { w: 56, h: 130, ports: { in: P(0, 16, 'l', 'in'), out: P(56, 114, 'r', 'out') } },
+    packaging: { w: 84, h: 70, ports: { in: P(0, 35, 'l', 'in'), out: P(84, 35, 'r', 'out') } }
   };
 
   /* primitivas: rect (x,y,w,h,r), circ (cx,cy,r), line (polilinha aberta), poly (polígono fechado), text.
@@ -2462,7 +2776,14 @@ window.SIMULAFACIL_CONFIG = {
     cstr: () => [R(3, 14, 64, 66, 13, 'lnd'), R(7, 12, 56, 66, 11), R(29, 0, 12, 7, 1), L([[35, 7], [35, 60]]), L([[23, 60], [47, 60]]), L([[23, 54], [35, 60], [47, 54]]),
       L([[3, 70], [0, 70]], 'hot'), L([[67, 22], [70, 22]], 'hot')],
     pfr: () => { const o = [R(4, 6, 122, 28, 8)]; for (let x = 16; x < 120; x += 16) o.push(L([[x, 34], [x + 10, 6]])); return o; },
-    rconv: () => [R(6, 6, 52, 68, 11), T(32, 45, 'X%')]
+    rconv: () => [R(6, 6, 52, 68, 11), T(32, 45, 'X%')],
+    adsorber: () => { // vaso de leito fixo: grades de suporte e partículas de adsorvente
+      const o = [R(6, 4, 44, 122, 20), L([[0, 16], [6, 16]]), L([[50, 114], [56, 114]]), L([[10, 30], [46, 30]]), L([[10, 100], [46, 100]])];
+      for (let y = 38; y <= 94; y += 11) for (let x = (((y - 38) / 11) % 2 ? 17 : 13); x <= 44; x += 9) o.push(C(x, y, 3, 'ln'));
+      return o;
+    },
+    packaging: () => [R(12, 8, 60, 54, 5), R(19, 15, 46, 40, 3, 'lnd'), L([[0, 35], [12, 35]]), L([[72, 35], [84, 35]]),
+      L([[2, 20], [10, 20]]), L([[6, 17], [10, 20], [6, 23]]), L([[2, 50], [10, 50]]), L([[6, 47], [10, 50], [6, 53]]), T(42, 40, 'O2')]
   };
   function prims(t) { return PRIMS[t] ? PRIMS[t]() : [R(0, 0, G[t] ? G[t].w : 60, G[t] ? G[t].h : 60, 6)]; }
 
@@ -2829,8 +3150,27 @@ window.SIMULAFACIL_CONFIG = {
         if (d.T) { data.push({ x: d.V, y: d.T, mode: 'lines', name: 'T (°C)', yaxis: 'y2', line: { color: '#d1495b', dash: 'dot', width: 3 } }); L.yaxis2 = { title: { text: 'Temperatura (°C)', font: { size: FS } }, tickfont: { size: FS }, overlaying: 'y', side: 'right' }; L.margin.r = 80; }
         return { data, layout: L };
       }
+      case 'curves': { // curvas genéricas com linhas horizontais de referência
+        const data = d.series.map((s, k) => ({ x: s.x, y: s.y, mode: s.markers ? 'lines+markers' : 'lines', name: s.name, line: { color: s.color || PALETTE[k % 8], width: s.width || 3, dash: s.dash || 'solid' }, marker: { size: 6 } }));
+        const xr = d.xRange || [Math.min.apply(null, d.series[0].x), Math.max.apply(null, d.series[0].x)];
+        (d.hlines || []).forEach(h => data.push({ x: xr, y: [h.y, h.y], mode: 'lines', name: h.name, line: { color: h.color || css('--muted'), width: 2, dash: 'dash' }, hoverinfo: 'name' }));
+        const L = baseLayout(p.title, d.xLabel || '', d.yLabel || '');
+        if (d.xRange) L.xaxis.range = d.xRange; if (d.yRange) L.yaxis.range = d.yRange;
+        if (d.hlines && d.hlines.length) L.legend = Object.assign(L.legend, { x: 0.99, xanchor: 'right', y: 0.02, yanchor: 'bottom' });
+        return { data, layout: L };
+      }
       case 'surface': {
         const ink = css('--ink');
+        if (d.x) { // superfície genérica: x, y, z (linhas = y), cor = color
+          const sc2 = t => ({ title: { text: t, font: { size: FS } }, tickfont: { size: 15 }, gridcolor: css('--line'), color: ink });
+          const data2 = [{ type: 'surface', x: d.x, y: d.y, z: d.z, surfacecolor: d.color || d.z, colorscale: d.colorscale || 'Jet', cmin: d.cmin, cmax: d.cmax,
+            colorbar: { title: { text: d.cLabel || '', font: { size: FS }, side: 'right' }, tickfont: { size: FS }, len: 0.8 },
+            contours: { z: { show: false } }, hovertemplate: (d.hover || 'x = %{x}<br>y = %{y}<br>z = %{z}') + '<extra></extra>' }];
+          const L2 = baseLayout(p.title, '', ''); delete L2.xaxis; delete L2.yaxis;
+          L2.scene = { xaxis: sc2(d.xLabel || 'x'), yaxis: sc2(d.yLabel || 'y'), zaxis: sc2(d.zLabel || 'z'), camera: { eye: { x: -1.6, y: -1.6, z: 0.9 } }, aspectmode: 'manual', aspectratio: { x: 1.3, y: 1.1, z: 0.8 } };
+          L2.margin = { l: 0, r: 0, t: 56, b: 0 }; L2.height = 560;
+          return { data: data2, layout: L2, wide: true, tall: true };
+        }
         const sc = t => ({ title: { text: t, font: { size: FS } }, tickfont: { size: 15 }, gridcolor: css('--line'), color: ink });
         const data = [{ type: 'surface', x: d.V, y: d.t, z: d.C, surfacecolor: d.X, colorscale: 'Jet', cmin: 0, cmax: 1,
           colorbar: { title: { text: 'Conversão X', font: { size: FS }, side: 'right' }, tickfont: { size: FS }, len: 0.8 },
@@ -3174,6 +3514,74 @@ end
         "fprintf('  MATLAB: C final = %s mol/L ; T final = %.2f °C\\n', mat2str(Y(end, 1:end-1), 4), Y(end, end) - 273.15);", 'end');
       return out.join('\n');
     }
+    if (b.type === 'adsorber' && r.ads) {
+      const o = r.ads.o, Nint = Math.min(400, Math.max(Math.round(o.nodes) - 1, o.De > 0 ? Math.ceil(o.L * o.u / o.De) : 400));
+      out.push('function ' + fname + '(D, FS)', header,
+        '% Curva de breakthrough (ruptura) em leito fixo: dispersão axial + advecção + LDF com isoterma ' + o.isotherm + '.',
+        '% No MATLAB usa pdepe (como no código original); no GNU Octave usa o método das linhas com ode15s.', printRes.join('\n'),
+        '% 1. PARÂMETROS OPERACIONAIS E DO ADSORVENTE',
+        'p.L = ' + n2s(o.L) + ';          % comprimento do leito (m)', 'p.u = ' + n2s(o.u) + ';          % velocidade intersticial (m/s)',
+        'p.De = ' + n2s(o.De) + ';        % coeficiente de dispersão axial (m^2/s)', 'p.epsilon = ' + n2s(o.eps) + ';   % porosidade do leito',
+        'p.rho_p = ' + n2s(o.rho) + ';     % densidade aparente do adsorvente (kg/m^3 = g/L)', 'p.C0 = ' + n2s(o.C0) + ';        % concentração na alimentação (mg/L)',
+        'p.kf = ' + n2s(o.kf) + ';     % coeficiente de transferência de massa LDF (1/s) = ' + n2s(o.kf * 3600) + ' 1/h',
+        'p.isoterma = ' + str(o.isotherm) + '; p.qm = ' + n2s(o.qm) + '; p.KL = ' + n2s(o.KL) + '; p.KF = ' + n2s(o.KF) + '; p.nF = ' + n2s(o.nF) + '; p.Kd = ' + n2s(o.Kd) + ';',
+        'p.rampa = ' + n2s(o.ramp) + ';      % rampa suave na entrada (s), para estabilidade numérica', 'alvo = ' + n2s(o.target) + ';      % C/C0 da remoção desejada',
+        '% 2. MALHA ESPAÇO-TEMPORAL', 'n_z = ' + Math.round(o.nodes) + '; z = linspace(0, p.L, n_z);', 't_final = ' + n2s(o.tEnd) + '; t = linspace(0, t_final, 200);',
+        "if exist('OCTAVE_VERSION', 'builtin') == 0 && exist('pdepe', 'file') == 2",
+        '    % 3. RESOLUÇÃO VIA PDEPE (MATLAB)', "    opcoes = odeset('RelTol', 1e-4, 'AbsTol', 1e-6);",
+        '    sol = pdepe(0, @(zz, tt, u_var, Dudz) ads_pde(zz, tt, u_var, Dudz, p), @(zz) [0; 0], @(xl, ul, xr, ur, tt) ads_bc(xl, ul, xr, ur, tt, p), z, t, opcoes);',
+        "    C = sol(:, :, 1);   % C(t, z)", "    metodo = 'pdepe';", 'else',
+        '    % 3. MÉTODO DAS LINHAS + ODE15S (GNU Octave): malha fina com Péclet de célula <= 1',
+        '    N = ' + Nint + '; zz = linspace(0, p.L, N + 1); dz = zz(2) - zz(1);',
+        "    [~, Y] = ode15s(@(tt, y) ads_mol(tt, y, p, N, dz), t, zeros(2*N, 1), odeset('RelTol', 1e-6, 'AbsTol', 1e-9));",
+        '    Cz = [p.C0*(1 - exp(-t(:)/p.rampa)), Y(:, 1:N)];   % C(t, z) na malha fina', "    C = interp1(zz(:), Cz.', z(:)).';", "    metodo = 'método das linhas (ode15s)';", 'end',
+        '% 4. CURVA DE BREAKTHROUGH NA SAÍDA (z = L)', 'razao = C(:, end)/p.C0; th = t/3600;',
+        "figure('Name', " + str(b.name + ' — breakthrough') + ", 'Color', 'w', 'Position', [80 80 1050 620]);",
+        "plot(th, razao, 'b-o', 'LineWidth', 2, 'MarkerSize', 4, 'MarkerFaceColor', 'b'); grid on; hold on;",
+        "plot([0 th(end)], [alvo alvo], 'm--', 'LineWidth', 1.5); plot([0 th(end)], [0.05 0.05], 'r--', 'LineWidth', 1.5); plot([0 th(end)], [0.95 0.95], 'k--', 'LineWidth', 1.5);",
+        "set(gca, 'FontSize', FS); xlabel('Tempo (horas)', 'FontWeight', 'bold'); ylabel('C / C_0', 'FontWeight', 'bold'); ylim([0 1.2]); xlim([0 th(end)]);",
+        "title(['Curva de breakthrough — ', " + str(b.name) + "]);",
+        "legend(['Simulação (', metodo, ')'], sprintf('%.0f%% de remoção (C/C_0 = %.2f)', (1 - alvo)*100, alvo), 'Ruptura (5%)', 'Saturação (95%)', 'Location', 'east');",
+        "fprintf('  MATLAB/Octave (%s): C/C0 na saída em t final = %.4f\\n', metodo, razao(end));",
+        'niveis = [0.05 alvo 0.95]; rotulos = {\'ruptura (5%)\', \'remoção desejada\', \'saturação (95%)\'};',
+        'for k = 1:3, i = find(razao >= niveis(k), 1); if isempty(i), fprintf(\'  %-18s: não atingido\\n\', rotulos{k}); else, fprintf(\'  %-18s: %.3f h\\n\', rotulos{k}, th(i)); end, end',
+        '% 5. SUPERFÍCIE C(z, t)', "figure('Name', " + str(b.name + ' — C(z,t)') + ", 'Color', 'w', 'Position', [100 100 1000 650]);",
+        "surf(z*100, th, C, C/p.C0, 'EdgeColor', 'none'); colormap(jet); cb = colorbar; ylabel(cb, 'C/C_0');",
+        "xlabel('z (cm)'); ylabel('Tempo (h)'); zlabel('C (mg/L)'); title(['Leito ', " + str(b.name) + ", ': C(z, t)']); view(-125, 28); set(gca, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'packaging' && r.pack) {
+      const o = r.pack.o, pm = b.params, Tk = res.streams[(st.streams.find(x => x.to === b.id) || {}).id].T;
+      out.push('function ' + fname + '(D, FS)', header,
+        '% Difusão de O2 na embalagem (EDP 1D): dC/dt = D*d2C/dx2 - R(C). No MATLAB usa pdepe; no GNU Octave, método das linhas com ode15s.', printRes.join('\n'),
+        '% 1. PARÂMETROS FÍSICOS E GEOMÉTRICOS',
+        'P_perm = ' + n2s(+pm.Perm || 2.2e-17) + ';   % permeabilidade do material, m^3(STP)*m/(m^2*s*Pa)', 'L = ' + n2s(o.L) + ';   % espessura da embalagem (m)',
+        'A = ' + n2s(+pm.A || 0.05) + ';   % área da superfície (m^2)', 'V = ' + n2s(+pm.V || 5e-4) + ';   % volume interno (m^3)', 'T = ' + n2s(Tk) + ';   % temperatura (K)', 'e = L;',
+        'k_transf = (370.95*P_perm*A*T)/(V*e);   % Eq. (17): constante global de transferência (1/s)',
+        'p.D = ' + n2s(o.D) + ';   % coeficiente de difusão efetivo (m^2/s)',
+        'p.modelo = ' + str(o.reaction) + '; p.R_max = ' + n2s(o.Rmax) + '; p.K_m = ' + n2s(o.Km) + '; p.k1 = ' + n2s(o.k1) + ';',
+        'C0 = ' + n2s(o.C0) + ';   % concentração inicial no material (mol/m^3)', 'p.C_ext = ' + n2s(o.Cext) + ';   % concentração externa constante (mol/m^3)',
+        '% 2. DISCRETIZAÇÃO ESPACIAL E TEMPORAL', 'num_x = ' + Math.round(o.nodes) + '; x = linspace(0, L, num_x);', 't_final = ' + n2s(o.tEnd) + '; t = linspace(0, t_final, 120);',
+        "if exist('OCTAVE_VERSION', 'builtin') == 0 && exist('pdepe', 'file') == 2",
+        '    sol = pdepe(0, @(xx, tt, u, DuDx) emb_pde(xx, tt, u, DuDx, p), @(xx) C0, @(xl, ul, xr, ur, tt) emb_bc(xl, ul, xr, ur, tt, p), x, t);',
+        "    C = sol(:, :, 1);   % C(t, x)", "    metodo = 'pdepe';", 'else',
+        '    N = num_x - 1; dx = x(2) - x(1);',
+        "    [~, Y] = ode15s(@(tt, y) emb_mol(tt, y, p, N, dx), t, C0*ones(N, 1), odeset('RelTol', 1e-8, 'AbsTol', 1e-10));",
+        "    C = [p.C_ext*ones(numel(t), 1), Y];", "    metodo = 'método das linhas (ode15s)';", 'end',
+        'Conversao = ((C0 - C)./C0)*100;   % conversão / consumo de O2 (%)',
+        "fprintf('  MATLAB/Octave (%s): k (Eq. 17) = %.4e 1/s ; C na face interna em t final = %.4f mol/m^3\\n', metodo, k_transf, C(end, end));",
+        '% 3. GRÁFICO TRIDIMENSIONAL (X: tempo, Y: dimensão x, Z: concentração; cor = conversão)',
+        "figure('Name', " + str(b.name + ' — difusão de O2') + ", 'Color', 'w', 'Position', [80 80 1050 680]);",
+        '[T_grid, X_grid] = meshgrid(t/3600, x*1000);',
+        "surf(T_grid, X_grid, C', Conversao', 'EdgeColor', 'none');",
+        "title('Perfil 3D da concentração de O_2 na embalagem'); xlabel('Tempo [h]'); ylabel('Dimensão x [mm]'); zlabel('Concentração de O_2 [mol/m^3]');",
+        "try, colormap(turbo); catch, colormap(jet); end", "cb = colorbar; ylabel(cb, 'Conversão de O_2 (%)');",
+        "grid on; box on; view(130, 30); set(gca, 'FontSize', FS);", "try, lighting phong; camlight left; catch, end",
+        "figure('Name', " + str(b.name + ' — perfis') + ", 'Color', 'w', 'Position', [120 120 950 600]); hold on;",
+        "for k = round(linspace(1, numel(t), 5)), plot(x*1000, C(k, :), 'LineWidth', 2.5, 'DisplayName', sprintf('t = %.1f h', t(k)/3600)); end",
+        "grid on; xlabel('Dimensão x (mm)'); ylabel('C (mol/m^3)'); title('Perfis de concentração no material'); legend('Location', 'best'); set(gca, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
     if (b.type === 'pfr') {
       const p = b.params, rx = SF.units.compileReactions(th, p.reactions);
       const sId = (st.streams.find(x => x.to === b.id) || {}).id, s = res.streams[sId];
@@ -3289,6 +3697,70 @@ dy = dY(:);
 end
 `;
 
+
+  const ADS_FUNCS = `% --- adsorção em leito fixo: funções do pdepe e do método das linhas ---
+function [c, f, s] = ads_pde(z, t, u_var, Dudz, p)
+C_val = max(0, u_var(1)); q_val = max(0, u_var(2));
+dq_dt = p.kf*(ads_qeq(C_val, p) - q_val);          % LDF: dq/dt = kf (q* - q)
+c = [1; 1];
+f = [p.De*Dudz(1); 0];                              % fluxo dispersivo
+s = [-p.u*Dudz(1) - ((1 - p.epsilon)/p.epsilon)*p.rho_p*dq_dt; dq_dt];
+end
+
+function [pl, ql, pr, qr] = ads_bc(xl, ul, xr, ur, t, p)
+C_in = p.C0*(1 - exp(-t/p.rampa));                  % entrada (z = 0) com rampa suave
+pl = [ul(1) - C_in; 0]; ql = [0; 1];
+pr = [0; 0]; qr = [1; 1];                           % saída (z = L): dC/dz = 0
+end
+
+function q = ads_qeq(C, p)
+C = max(C, 0);
+switch p.isoterma
+    case 'Freundlich'
+        e = 1e-6*p.C0; q = p.KF*(C + e).^(1/p.nF) - p.KF*e^(1/p.nF);
+    case 'Linear'
+        q = p.Kd*C;
+    otherwise
+        q = p.qm*p.KL*C./(1 + p.KL*C);              % Langmuir
+end
+end
+
+function dy = ads_mol(t, y, p, N, dz)
+C = y(1:N); q = y(N+1:end);
+Cf = [p.C0*(1 - exp(-t/p.rampa)); C; C(end-1)];   % nó fantasma em z = L
+lap = (Cf(3:end) - 2*Cf(2:end-1) + Cf(1:end-2))/dz^2;
+adv = (Cf(3:end) - Cf(1:end-2))/(2*dz);
+dq = p.kf*(ads_qeq(C, p) - q);
+dy = [p.De*lap - p.u*adv - (1 - p.epsilon)/p.epsilon*p.rho_p*dq; dq];
+end`;
+
+  const EMB_FUNCS = `% --- embalagem: difusão com reação (pdepe e método das linhas) ---
+function R = emb_R(C, p)
+C = max(C, 0);
+switch p.modelo
+    case 'primeira ordem'
+        R = p.k1*C;
+    case 'sem reação'
+        R = 0*C;
+    otherwise
+        R = p.R_max*C./(p.K_m + C);                 % Michaelis-Menten
+end
+end
+
+function [c, f, s] = emb_pde(x, t, u, DuDx, p)
+c = 1; f = p.D*DuDx; s = -emb_R(u, p);              % Fick + consumo
+end
+
+function [pl, ql, pr, qr] = emb_bc(xl, ul, xr, ur, t, p)
+pl = ul - p.C_ext; ql = 0;                          % x = 0: concentração externa constante
+pr = 0; qr = 1;                                     % x = L: fluxo nulo
+end
+
+function dC = emb_mol(t, C, p, N, dx)
+Cf = [p.C_ext; C; C(end-1)];
+dC = p.D*(Cf(3:end) - 2*Cf(2:end-1) + Cf(1:end-2))/dx^2 - emb_R(C, p);
+end`;
+
   function generate(st, res, fn) {
     const td = thermoData(st);
     const blocks = st.blocks.map(b => ({ b, code: blockCode(st, res, b, td) })).filter(x => x.code);
@@ -3318,7 +3790,8 @@ end
     const types = Array.from(new Set(st.blocks.map(b => b.type)));
     const parts = [head.join('\n'), td.code, streamTableCode(st, res), pfdCode(st, res), PFD_HEAD, iconLibMatlab(types)]
       .concat(blocks.map(x => x.code))
-      .concat(needVLE ? [VLE_FUNCS] : []).concat(needFlash ? [FLASH_FUNC] : []).concat(needCSTR ? [CSTR_RHS] : []).concat(needPFR ? [PFR_TRANS] : []);
+      .concat(needVLE ? [VLE_FUNCS] : []).concat(needFlash ? [FLASH_FUNC] : []).concat(needCSTR ? [CSTR_RHS] : []).concat(needPFR ? [PFR_TRANS] : [])
+      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []);
     return parts.join('\n\n') + '\n';
   }
 
@@ -3619,6 +4092,100 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         "    print(f'  Python: C final = {np.round(s.y[:-1, -1], 4)} mol/L ; T final = {s.y[-1, -1] - 273.15:.2f} °C')",
         '    fig.tight_layout()', '    return [fig]']).join('\n');
     }
+    if (b.type === 'adsorber' && r.ads) {
+      const a = r.ads, o = a.o;
+      const Nint = Math.min(400, Math.max(Math.round(o.nodes) - 1, o.De > 0 ? Math.ceil(o.L * o.u / o.De) : 400));
+      return head.concat([
+        '    # Coluna de adsorção em leito fixo — curva de breakthrough (ruptura)',
+        '    # dC/dt = De d2C/dz2 - u dC/dz - ((1-eps)/eps) rho_p dq/dt ;  dq/dt = kf (q*(C) - q)   (LDF)',
+        '    # C(0,t) = C0 (1 - exp(-t/rampa)) ; dC/dz(L,t) = 0 ; leito inicialmente limpo',
+        '    L, u, De = ' + [o.L, o.u, o.De].map(n2s).join(', ') + '      # m, m/s, m²/s',
+        '    eps, rho_p = ' + n2s(o.eps) + ', ' + n2s(o.rho) + '      # -, kg/m³ (= g/L)',
+        '    C0, kf = ' + n2s(o.C0) + ', ' + n2s(o.kf) + '      # mg/L, 1/s',
+        '    isoterma = ' + str(o.isotherm) + '; qm, KL = ' + n2s(o.qm) + ', ' + n2s(o.KL) + '; KF, nF = ' + n2s(o.KF) + ', ' + n2s(o.nF) + '; Kd = ' + n2s(o.Kd),
+        '    t_final, rampa, alvo = ' + n2s(o.tEnd) + ', ' + n2s(o.ramp) + ', ' + n2s(o.target) + '   # s, s, C/C0 da remoção desejada',
+        '    N = ' + Nint + '   # intervalos da malha (Péclet de célula <= 1)',
+        '    z = np.linspace(0, L, N + 1); dz = z[1] - z[0]; beta = (1 - eps) / eps * rho_p',
+        '    def qeq(C):',
+        '        C = np.maximum(C, 0)',
+        "        if isoterma == 'Freundlich':",
+        '            e = 1e-6 * C0; return KF * (C + e) ** (1 / nF) - KF * e ** (1 / nF)',
+        "        if isoterma == 'Linear':",
+        '            return Kd * C',
+        '        return qm * KL * C / (1 + KL * C)',
+        '    def rhs(t, y):',
+        '        C, q = y[:N], y[N:]                       # nós 1..N',
+        '        Cf = np.concatenate(([C0 * (1 - np.exp(-t / rampa))], C, [C[-2]]))   # nó fantasma: dC/dz = 0 em z = L',
+        '        lap = (Cf[2:] - 2 * Cf[1:-1] + Cf[:-2]) / dz**2',
+        '        adv = (Cf[2:] - Cf[:-2]) / (2 * dz)',
+        '        dq = kf * (qeq(C) - q)',
+        '        return np.concatenate((De * lap - u * adv - beta * dq, dq))',
+        '    T3 = np.eye(N) + np.eye(N, k=1) + np.eye(N, k=-1); I = np.eye(N)',
+        '    t = np.linspace(0, t_final, 200)',
+        "    sol = solve_ivp(rhs, [0, t_final], np.zeros(2 * N), method='BDF', t_eval=t, rtol=1e-6, atol=1e-9, jac_sparsity=np.block([[T3, I], [I, I]]))",
+        '    C = np.vstack([C0 * (1 - np.exp(-sol.t / rampa)), sol.y[:N]])   # C(z, t), incluindo z = 0',
+        '    razao = C[-1] / C0; th = sol.t / 3600',
+        '    def cruza(nivel):',
+        '        k = np.where(razao >= nivel)[0]',
+        '        return None if len(k) == 0 else th[k[0]]',
+        "    for nome, nivel in (('ruptura (5%)', 0.05), ('remoção desejada', alvo), ('saturação (95%)', 0.95)):",
+        '        tt = cruza(nivel)',
+        "        print(f'  Python: {nome:18s} C/C0 = {nivel:.2f}: ' + ('não atingido' if tt is None else f'{tt:.3f} h'))",
+        "    print(f'  Python: C/C0 na saída no tempo final = {razao[-1]:.4f}')",
+        '    fig1, ax = plt.subplots(figsize=(11, 6.5))',
+        "    ax.plot(th, razao, 'b-o', lw=2.5, ms=4, mfc='b', label='Simulação (método das linhas)')",
+        "    ax.axhline(alvo, color='m', ls='--', lw=1.8, label=f'{(1 - alvo) * 100:.0f}% de remoção (C/C$_0$ = {alvo:.2f})')",
+        "    ax.axhline(0.05, color='r', ls='--', lw=1.8, label='Ruptura (5%)'); ax.axhline(0.95, color='k', ls='--', lw=1.8, label='Saturação (95%)')",
+        "    ax.set_xlabel('Tempo (horas)', fontweight='bold'); ax.set_ylabel('C / C$_0$', fontweight='bold'); ax.set_ylim(0, 1.2); ax.set_xlim(0, th[-1])",
+        "    ax.set_title(" + str('Curva de breakthrough — ' + b.name) + "); ax.grid(True, alpha=.4); ax.legend(loc='center right', fontsize=14); fig1.tight_layout()",
+        '    fig2 = plt.figure(figsize=(12, 8)); ax3 = fig2.add_subplot(111, projection=\'3d\')',
+        '    Z, TT = np.meshgrid(z * 100, th)',
+        "    sf = ax3.plot_surface(Z, TT, C.T, facecolors=cm.jet(np.clip(C.T / C0, 0, 1)), linewidth=0, antialiased=True, shade=False)",
+        "    mp = cm.ScalarMappable(cmap='jet'); mp.set_array([0, 1]); fig2.colorbar(mp, ax=ax3, shrink=0.6, pad=0.1, label='C/C$_0$')",
+        "    ax3.set_xlabel('z (cm)', labelpad=14); ax3.set_ylabel('Tempo (h)', labelpad=14); ax3.set_zlabel('C (mg/L)', labelpad=12)",
+        "    ax3.set_title(" + str('Leito ' + b.name + ': C(z, t)') + "); ax3.view_init(28, -125); fig2.tight_layout()",
+        '    return [fig1, fig2]']).join('\n');
+    }
+    if (b.type === 'packaging' && r.pack) {
+      const o = r.pack.o, pm = b.params, Tk = res.streams[(st.streams.find(x => x.to === b.id) || {}).id].T;
+      return head.concat([
+        '    # Difusão de O2 através da embalagem (2ª lei de Fick com consumo): dC/dt = D d2C/dx2 - R(C)',
+        '    # x = 0: face externa, C = Cext (Dirichlet) ; x = L: face interna, dC/dx = 0 (Neumann) ; C(x,0) = C0',
+        '    P_perm, A, V, T = ' + [+pm.Perm || 2.2e-17, +pm.A || 0.05, +pm.V || 5e-4, Tk].map(n2s).join(', ') + '   # m³(STP)·m/(m²·s·Pa), m², m³, K',
+        '    L = ' + n2s(o.L) + '; e = L       # espessura (m)',
+        '    k_transf = (370.95 * P_perm * A * T) / (V * e)   # Eq. (17): constante global de transferência (1/s)',
+        '    D = ' + n2s(o.D) + '   # m²/s',
+        '    modelo = ' + str(o.reaction) + '; R_max, K_m, k1 = ' + [o.Rmax, o.Km, o.k1].map(n2s).join(', '),
+        '    C0, C_ext = ' + n2s(o.C0) + ', ' + n2s(o.Cext) + '   # mol/m³',
+        '    t_final = ' + n2s(o.tEnd) + '   # s',
+        '    N = ' + Math.max(Math.round(o.nodes) - 1, 60) + '; x = np.linspace(0, L, N + 1); dx = x[1] - x[0]',
+        '    def R(C):',
+        '        C = np.maximum(C, 0)',
+        "        if modelo == 'primeira ordem': return k1 * C",
+        "        if modelo == 'sem reação': return 0 * C",
+        '        return R_max * C / (K_m + C)              # Michaelis-Menten',
+        '    def rhs(t, C):',
+        '        Cf = np.concatenate(([C_ext], C, [C[-2]]))',
+        '        return D * (Cf[2:] - 2 * Cf[1:-1] + Cf[:-2]) / dx**2 - R(C)',
+        '    t = np.linspace(0, t_final, 120)',
+        "    sol = solve_ivp(rhs, [0, t_final], np.full(N, C0), method='BDF', t_eval=t, rtol=1e-8, atol=1e-10, jac_sparsity=np.eye(N) + np.eye(N, k=1) + np.eye(N, k=-1))",
+        '    C = np.vstack([np.full(len(sol.t), C_ext), sol.y])   # C(x, t)',
+        '    conv = (C0 - C) / C0 * 100 if C0 > 0 else 0 * C',
+        "    print(f'  Python: k (Eq. 17) = {k_transf:.4e} 1/s ; C na face interna em t final = {C[-1, -1]:.4f} mol/m³')",
+        '    th, xmm = sol.t / 3600, x * 1000',
+        '    TG, XG = np.meshgrid(th, xmm)',
+        '    fig1 = plt.figure(figsize=(12, 8)); ax = fig1.add_subplot(111, projection=\'3d\')',
+        "    cn = plt.Normalize(conv.min(), max(conv.max(), conv.min() + 1e-9))",
+        "    ax.plot_surface(TG, XG, C, facecolors=cm.turbo(cn(conv)), linewidth=0, antialiased=True, shade=False)",
+        "    mp = cm.ScalarMappable(norm=cn, cmap='turbo'); mp.set_array(conv); fig1.colorbar(mp, ax=ax, shrink=0.6, pad=0.12, label='Conversão de O$_2$ (%)')",
+        "    ax.set_xlabel('Tempo [h]', labelpad=14); ax.set_ylabel('Dimensão x [mm]', labelpad=14); ax.set_zlabel('C [mol/m³]', labelpad=12)",
+        "    ax.set_title('Perfil 3D da concentração de O$_2$ na embalagem'); ax.view_init(30, 130); fig1.tight_layout()",
+        '    fig2, ax2 = plt.subplots(figsize=(11, 6.5))',
+        '    for k in np.linspace(0, len(th) - 1, 5).astype(int):',
+        "        ax2.plot(xmm, C[:, k], lw=2.5, label=f't = {th[k]:.1f} h')",
+        "    ax2.set_xlabel('Dimensão x (mm)'); ax2.set_ylabel('C (mol/m³)'); ax2.set_title('Perfis de concentração no material'); ax2.grid(True, alpha=.4); ax2.legend(); fig2.tight_layout()",
+        '    return [fig1, fig2]']).join('\n');
+    }
     if (b.type === 'pfr') {
       const p = b.params, rx = SF.units.compileReactions(th, p.reactions);
       const s = res.streams[(st.streams.find(x => x.to === b.id) || {}).id];
@@ -3852,7 +4419,23 @@ def pfr_transiente(P, nome):
       blocks: [
         { id: 'F', type: 'feed', name: 'BTX', params: { T: 90, vf: 0, P: 1.2, flow: 100, flowUnit: 'kmol/h', composition: { benzene: 0.4, toluene: 0.4, 'p-xylene': 0.2 } } },
         { id: 'C', type: 'column_short', name: 'T-101', params: { lk: 'benzene', hk: 'toluene', lkRec: 0.99, hkRec: 0.99, RRmin: 1.3, P: 1.01325 } }],
-      streams: [S('1', 'F', 'out', 'C', 'feed')] } }
+      streams: [S('1', 'F', 'out', 'C', 'feed')] } },
+    { key: 'adsorcao-mn', title: 'Adsorção de Mn²⁺ em leito fixo — curva de breakthrough (Langmuir + LDF)', fs: {
+      name: 'Adsorção de Mn2+ - breakthrough', components: ['water', 'mn-ion'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Efluente com Mn²⁺', params: { T: 25, P: 1.01325, vf: '', flow: 0.003, flowUnit: 'm³/h', basis: 'concentração (mol/L)', solvent: 'water', composition: { water: 0, 'mn-ion': 1.82024e-4 } } },
+        { id: 'C1', type: 'adsorber', name: 'C-101', params: { solute: 'mn-ion', L: 0.15, uMode: 'informar velocidade intersticial', u: 0.001, D: 0.05, eps: 0.45, rho: 120, De: 1e-6, kf: 0.067,
+          isotherm: 'Langmuir', qm: 40, KL: 0.15, KF: 5, nF: 2, Kd: 1, tEnd: 3, target: 63, ramp: 10, nodes: 60 } },
+        { id: 'P', type: 'product', name: 'Água tratada' }],
+      streams: [S('1', 'F', 'out', 'C1', 'in'), S('2', 'C1', 'out', 'P', 'in')] } },
+    { key: 'embalagem-o2', title: 'Embalagem com reação interna — difusão de O₂ + Michaelis-Menten (EDP 1D)', fs: {
+      name: 'Embalagem - difusao de O2', components: ['nitrogen', 'oxygen'], model: 'IDEAL',
+      blocks: [
+        { id: 'A', type: 'feed', name: 'Ar ambiente', params: { T: 25, P: 1.01325, vf: '', flow: 1, flowUnit: 'kmol/h', basis: 'molar', composition: { nitrogen: 0.79, oxygen: 0.21 } } },
+        { id: 'E', type: 'packaging', name: 'EMB-01', params: { gas: 'oxygen', e: 1, A: 0.05, V: 5e-4, Perm: 2.2e-17, Dif: 1.5e-11, reaction: 'Michaelis-Menten', Rmax: 2e-4, Km: 1, k1: 2e-5,
+          C0: 8.6, CextMode: 'informar', Cext: 8.6, tEnd: 24, nodes: 60 } },
+        { id: 'S', type: 'product', name: 'Ar (saída)' }],
+      streams: [S('1', 'A', 'out', 'E', 'in'), S('2', 'E', 'out', 'S', 'in')] } }
   ];
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -4282,14 +4865,14 @@ def pfr_transiente(P, nome):
       tierSel.value = store.get(K_TIER + provider) || TIER_DEFAULT[provider];
       if (persist) store.set(K_PROV, provider);
       gemBox.hidden = provider !== 'gemini'; gemUfsjBox.hidden = provider !== 'gem'; tierSel.hidden = provider === 'gem';
-      $('#sendBtn').textContent = provider === 'gem' ? 'Enviar ao Gemini' : 'Enviar';
+      $('#sendBtn').textContent = provider === 'gem' ? 'Enviar ao Gemini' : (provider === 'claude' && !claudeReady && claudeUrl) ? 'Abrir no Claude ↗' : 'Enviar';
       if (provider === 'gemini' && !sessionKey) gemBox.open = true;
       $('#attachBtn').hidden = provider === 'claude' ? !(claudeReady && limits && limits.images) : provider === 'gem';
       $('#imgInput').accept = provider === 'gemini' ? GM.IMG_TYPES.join(',') : ((limits && limits.images && limits.images.mediaTypes) || []).join(',');
       if (provider === 'gem') note.innerHTML = 'Gemini da UFSJ, sem chave: usa o aplicativo Gemini com o seu e-mail da UFSJ. Lá, escolha o modo <b>Raciocínio</b> ou <b>Pro</b>.';
       else if (provider === 'gemini') note.textContent = 'Agente com Gemini (Google): monta e simula o fluxograma por ferramentas, usando a sua chave da API do Google AI Studio.';
       else if (claudeReady) note.textContent = (limits && limits.tools ? 'Agente com Claude (Anthropic): monta e simula o fluxograma por ferramentas. ' : 'Esta visualização não permite ferramentas: o agente responde em texto. ') + 'Usa a sua conta do Claude.';
-      else note.innerHTML = 'O Claude funciona na versão do simulador aberta dentro do Claude (é preciso entrar com uma conta do Claude).' + (claudeUrl ? ' <a href="' + claudeUrl + '" target="_blank" rel="noopener"><b>Abrir a versão com o Claude</b></a>' : '') + ' Aqui você pode usar o <b>Gemini</b> com a sua chave.';
+      else note.innerHTML = '<b>Claude (preferencial)</b>: funciona na versão do simulador aberta no Claude, com a sua conta do Claude.' + (claudeUrl ? ' <a href="' + claudeUrl + '" target="_blank" rel="noopener"><b>Abrir a versão com o Claude</b></a>.' : '') + ' Sem conta do Claude, escolha <b>Gemini UFSJ</b>.';
     }
     provSel.onchange = () => setProvider(provSel.value, true);
 
@@ -4385,8 +4968,12 @@ def pfr_transiente(P, nome):
     async function send() {
       const text = input.value.trim(); if (busy) return;
       if (provider === 'gem') { await sendGem(text); return; }
+      if (provider === 'claude' && !sample) {
+        if (claudeUrl) { const t = input.value.trim(); if (t) copyText(t); window.open(claudeUrl, '_blank', 'noopener'); add('sys', 'Abri a versão do simulador com o <b>Claude</b> numa nova aba' + (t ? ' e copiei o seu pedido: lá, cole na aba Agente IA com <b>Ctrl+V</b>' : '') + '. Para continuar aqui sem o Claude, escolha <b>Gemini UFSJ</b> no menu “IA do agente”.'); }
+        else add('sys', 'O Claude funciona na versão do simulador aberta no Claude. Para continuar aqui, escolha <b>Gemini UFSJ</b> no menu “IA do agente”.');
+        return;
+      }
       if (!text && !attachments.length) return;
-      if (provider === 'claude' && !sample) { add('sys', 'O Claude funciona na versão do simulador aberta no Claude.' + (claudeUrl ? ' <a href="' + claudeUrl + '" target="_blank" rel="noopener">Abrir a versão com o Claude</a>.' : '') + ' Ou escolha <b>Gemini</b> no menu ao lado do botão Figura e use a sua chave do Google AI Studio.'); return; }
       if (provider === 'gemini' && !sessionKey) { gemBox.hidden = false; gemBox.open = true; gemStatus.textContent = 'Cole a chave da API do Gemini para conversar.'; gemKey.focus(); add('sys', 'Para usar o Gemini, cole a sua chave da API (gerada grátis no Google AI Studio) no quadro "Configurar o Gemini".'); return; }
       $('#quickPrompts').hidden = true;
       const imgs = attachments.slice(); attachments = []; renderAttach(); input.value = '';
@@ -4459,8 +5046,8 @@ def pfr_transiente(P, nome):
       try { sample = window.claude && window.claude.use ? await window.claude.use('sample') : null; } catch (e) { sample = null; }
       if (sample) { try { limits = await sample.limits(); } catch (e) { limits = null; } claudeReady = true; }
       const saved = store.get(K_PROV);
-      setProvider(saved || (claudeReady ? 'claude' : 'gem'));
-      if (!claudeReady && !saved && claudeUrl && !window.claude) add('sys', 'Nesta versão do simulador o agente usa o <b>Gemini da UFSJ</b>: escreva o pedido e clique em <b>Enviar ao Gemini</b> (entre no Gemini com o e-mail da UFSJ). Também dá para usar o Gemini com chave da API ou o <a href="' + claudeUrl + '" target="_blank" rel="noopener">Claude</a>.');
+      setProvider(saved || 'claude');   // o Claude é a opção preferencial
+      if (!claudeReady && !saved && claudeUrl && !window.claude) add('sys', 'O agente preferencial é o <b>Claude</b>: clique em <b>Abrir no Claude</b> para usar a versão do simulador com o Claude (entre com a sua conta do Claude). Sem conta do Claude, escolha <b>Gemini UFSJ</b> no menu “IA do agente” e use o e-mail da UFSJ.');
     })();
   }
 
@@ -4973,7 +5560,7 @@ def pfr_transiente(P, nome):
     });
     let noShow = false; try { noShow = localStorage.getItem('simulafacil.noWelcome') === '1'; } catch (e) { /* */ }
     $('#wNoShow').checked = noShow;
-    $('#welcome').hidden = false; setTimeout(() => $('#wGemini').focus(), 30);
+    $('#welcome').hidden = false; setTimeout(() => $('#wClaude').focus(), 30);
   }
   function closeWelcome() { $('#welcome').hidden = true; setTimeout(() => pfd.fit(), 30); }
   $('#wClose').onclick = closeWelcome;

@@ -453,6 +453,12 @@ body.mobile .eq { font-size: 15px; }
 .eq .ovl { text-decoration: overline; }
 .eq-hint { display: flex; gap: 12px; align-items: flex-start; margin: 4px 0 12px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--accent); border-left: 6px solid var(--accent); background: var(--accent-weak); color: var(--ink); font-size: 14.5px; line-height: 1.45; }
 .eq-hint-ico { font-size: 26px; line-height: 1; flex: none; }
+/* manual em PDF */
+.top .tools a.manual-link { background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.28); color: #fff; border-radius: 99px; padding: 6px 13px; text-decoration: none; display: inline-flex; align-items: center; font: inherit; }
+.top .tools a.manual-link:hover { background: rgba(255,255,255,.24); border-color: #fff; }
+body.mobile .top .tools a.manual-link { background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 12px 8px; font-size: 15px; justify-content: center; min-height: 46px; }
+.wmanual { margin: 10px 0 0; font-size: 15px; font-weight: 700; } .wmanual a { color: var(--accent); }
+@media (max-width: 1400px) { body:not(.mobile) .tools { gap: 5px; } body:not(.mobile) .top .tools button, body:not(.mobile) .top .tools select, body:not(.mobile) .top .tools a.manual-link, body:not(.mobile) .top .tools a.claude-link { padding: 6px 9px; } }
 
 </style>
 </head>
@@ -490,6 +496,7 @@ body.mobile .eq { font-size: 15px; }
     <button id="btnPython" title="Gerar código Python (NumPy, SciPy, Matplotlib)">Python</button>
     <button id="btnSave" title="Salvar projeto (.json)">Salvar</button>
     <button id="btnOpen" title="Abrir projeto (.json)">Abrir</button>
+    <a id="btnManual" class="btn manual-link" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener" title="Abrir ou baixar o manual em PDF">📘 Manual</a>
     <button id="btnAbout" title="Sobre o SIMULA FÁCIL IA e autoria">Sobre</button>
     <button id="btnThermoM" class="m-only" type="button">Componentes e termodinâmica</button>
     <button id="btnViewMode" type="button" hidden>📱 Versão para celular</button>
@@ -642,6 +649,7 @@ body.mobile .eq { font-size: 15px; }
     <div class="wfeat">
       <span>NRTL · UNIQUAC · UNIFAC · Peng-Robinson</span><span>Colunas rigorosas e McCabe-Thiele</span><span>CSTR e PFR transientes</span><span>Gráficos com fonte 18</span><span>Código MATLAB, Octave e Python</span><span>Fluxograma final em PNG</span><span>Equações de cada modelo</span><span>Versão para celular</span>
     </div>
+    <p class="wmanual"><a class="manual-href" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener">📘 Baixar o manual do SIMULA FÁCIL IA (PDF)</a></p>
     <p class="wbook">Baseado no livro <i>Modelagem e Simulação de Processos Dinâmicos</i>, de Juan Canellas Bosch Neto (Editora Appris, 2019).</p>
     <p class="wvis visitas" hidden><span aria-hidden="true">👥</span> <b class="vis-n"></b> visitas ao SIMULA FÁCIL IA</p>
     <label class="wnoshow"><input type="checkbox" id="wNoShow"> Não mostrar esta tela ao abrir</label>
@@ -668,13 +676,15 @@ body.mobile .eq { font-size: 15px; }
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 <script>/* js/site-config.js */
 /* SIMULA FÁCIL IA — configuração do site.
-   claudeUrl: link da versão com o agente de IA (abra o artefato no Claude, clique em Compartilhar/Publicar e cole aqui o link público).
-   siteUrl:   endereço deste site no GitHub Pages (troque juanbosch-cyber pelo seu usuário do GitHub).
-   goatcounter: código da conta em goatcounter.com que conta as visitas (veja js/visitas.js). */
+   claudeUrl:   link da versão com o agente de IA (abra o artefato no Claude, clique em Compartilhar/Publicar e cole aqui o link público).
+   siteUrl:     endereço deste site no GitHub Pages (troque juanbosch-cyber pelo seu usuário do GitHub).
+   goatcounter: código da conta em goatcounter.com que conta as visitas (veja js/visitas.js); '' desliga.
+   manual:      nome do arquivo PDF do manual, enviado para a mesma pasta do site no GitHub. */
 window.SIMULAFACIL_CONFIG = {
   claudeUrl: 'https://claude.ai/artifact/A8LR4WDCvpfBY9XhF5T3TF',
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
-  goatcounter: 'simulafacilufsj' // código da conta no GoatCounter (contador de visitas); deixe '' para desligar
+  goatcounter: 'simulafacilufsj',
+  manual: 'Manual_SIMULA_FACIL_IA.pdf'
 };
 
 </script>
@@ -6008,6 +6018,7 @@ def pfr_transiente(P, nome):
       '<li>Colunas rigorosas pelo método do ponto de bolha (Wang–Henke + θ) com Newton simultâneo (Naphtali–Sandholm).</li>' +
       '<li>Reatores CSTR e PFR em regime permanente e transiente; trocadores, extratores, vasos e máquinas.</li>' +
       '<li>Fluxograma final, gráficos com fonte 18 e geração de código MATLAB, Octave e Python.</li></ul>' +
+      '<div class="subhead">Manual</div><p><a href="' + esc(manualUrl()) + '" target="_blank" rel="noopener">📘 Baixar o manual do SIMULA FÁCIL IA (PDF)</a></p>' +
       '<div class="subhead">Referência</div><p class="small">' + esc(C.bookRef) + '</p>' +
       (SF.visitas && SF.visitas.total ? '<p class="small muted">' + SF.visitas.html('👥 ', ' visitas ao SIMULA FÁCIL IA') + '</p>' : '') + '</div>', []);
   }
@@ -6115,6 +6126,14 @@ def pfr_transiente(P, nome):
   $('#wBlank').onclick = () => { closeWelcome(); pushUndo(); state = blank(); results = null; pfd.sel = null; afterChange(true); pfd.fit(); renderCharts(null, []); switchTab('thermo'); toast('Escolha os componentes e o modelo; depois clique nos equipamentos da paleta'); };
   $('#wNoShow').onchange = e => { try { localStorage.setItem('simulafacil.noWelcome', e.target.checked ? '1' : '0'); } catch (err) { /* */ } };
   $('#btnHome').onclick = openWelcome;
+  // manual em PDF: no site, o arquivo fica na mesma pasta; dentro do Claude, usa o endereço do site
+  function manualUrl() {
+    const cfg = window.SIMULAFACIL_CONFIG || {}, f = cfg.manual || 'Manual_SIMULA_FACIL_IA.pdf';
+    if (/^https?:/i.test(f)) return f;
+    const insideClaude = !!window.claude || /claude\.ai|claudeusercontent|anthropic/i.test(location.hostname) || !/^https?:/.test(location.protocol);
+    return insideClaude && cfg.siteUrl ? cfg.siteUrl + f : f;
+  }
+  document.querySelectorAll('#btnManual, .manual-href').forEach(a => { a.href = manualUrl(); });
   // fora do Claude (site próprio): botão para a versão em que o agente usa o Claude
   (function () {
     const url = window.SIMULAFACIL_CONFIG && window.SIMULAFACIL_CONFIG.claudeUrl;

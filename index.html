@@ -168,6 +168,7 @@ footer a { color: var(--sun); }
         <div class="cta">
           <a class="btn sun" href="simulador.html">Abrir o simulador</a>
           <a class="btn pop" id="claudeBtn" href="https://claude.ai/artifact/A8LR4WDCvpfBY9XhF5T3TF" target="_blank" rel="noopener">Usar com o Claude (preferencial) ↗</a>
+          <a class="btn ghost" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener">📘 Manual (PDF)</a>
         </div>
         <p class="pc-pill"><span aria-hidden="true">💻</span> Completo no computador · <span aria-hidden="true">📱</span> versão para celular</p>
         <p class="vis-pill visitas" hidden><span aria-hidden="true">👥</span> <b class="vis-n"></b> visitas ao simulador</p>
@@ -253,7 +254,7 @@ footer a { color: var(--sun); }
 <footer>
   <div class="wrap">
     <p style="margin:0 0 6px"><b>SIMULA FÁCIL IA – Simulador de processos químicos</b></p>
-    <p style="margin:0">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE · <a href="simulador.html">Abrir o simulador</a></p>
+    <p style="margin:0">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE · <a href="simulador.html">Abrir o simulador</a> · <a href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener">Manual (PDF)</a></p>
     <p class="visitas" style="margin:8px 0 0" hidden>Contador de visitas: <b class="vis-n"></b></p>
   </div>
 </footer>
@@ -275,13 +276,15 @@ footer a { color: var(--sun); }
 </svg>
 <script>/* js/site-config.js */
 /* SIMULA FÁCIL IA — configuração do site.
-   claudeUrl: link da versão com o agente de IA (abra o artefato no Claude, clique em Compartilhar/Publicar e cole aqui o link público).
-   siteUrl:   endereço deste site no GitHub Pages (troque juanbosch-cyber pelo seu usuário do GitHub).
-   goatcounter: código da conta em goatcounter.com que conta as visitas (veja js/visitas.js). */
+   claudeUrl:   link da versão com o agente de IA (abra o artefato no Claude, clique em Compartilhar/Publicar e cole aqui o link público).
+   siteUrl:     endereço deste site no GitHub Pages (troque juanbosch-cyber pelo seu usuário do GitHub).
+   goatcounter: código da conta em goatcounter.com que conta as visitas (veja js/visitas.js); '' desliga.
+   manual:      nome do arquivo PDF do manual, enviado para a mesma pasta do site no GitHub. */
 window.SIMULAFACIL_CONFIG = {
   claudeUrl: 'https://claude.ai/artifact/A8LR4WDCvpfBY9XhF5T3TF',
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
-  goatcounter: 'simulafacilufsj' // código da conta no GoatCounter (contador de visitas); deixe '' para desligar
+  goatcounter: 'simulafacilufsj',
+  manual: 'Manual_SIMULA_FACIL_IA.pdf'
 };
 
 </script>

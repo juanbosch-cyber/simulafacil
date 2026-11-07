@@ -5718,11 +5718,11 @@ def pfr_transiente(P, nome):
     const b = state.blocks.find(x => x.id === sel.id); if (!b) { el.innerHTML = ''; return; }
     const T = U.TYPES[b.type];
     let h = '<div class="blk-head">' + IC.paletteIcon(b.type) + '<div style="flex:1"><input id="blkName" value="' + esc(b.name) + '" aria-label="Nome do equipamento"><div class="small muted">' + esc(T.label) + ' · ' + esc(b.id) + '</div></div></div>';
+    let eqOpen = true; try { eqOpen = localStorage.getItem('simulafacil.eqOpen') !== '0'; } catch (e) { /* */ }
+    if (SF.models) h += SF.models.html(b.type, b.params, state.model, eqOpen); // equações logo abaixo do nome do equipamento
     const r = results && results.blocks && results.blocks[b.id];
     if (r) h += '<div class="subhead">Resultados</div>' + resTable(r) + ((r.plots || []).length ? '<div class="row-actions"><button id="showCharts">Ver gráficos (' + r.plots.length + ')</button></div>' : '');
     if (results && results.errors) { const e = results.errors.find(x => x.block === b.id); if (e) h += '<div class="note err">' + esc(e.msg) + '</div>'; }
-    let eqOpen = true; try { eqOpen = localStorage.getItem('simulafacil.eqOpen') !== '0'; } catch (e) { /* */ }
-    if (SF.models) h += SF.models.html(b.type, b.params, state.model, eqOpen);
     h += '<div class="subhead">Especificações</div>';
     T.params.forEach(f => { h += fieldHTML(b, f); });
     h += '<div class="row-actions"><button id="runFromProps" class="primary">Simular</button><button id="delBlk">Excluir equipamento</button></div>';

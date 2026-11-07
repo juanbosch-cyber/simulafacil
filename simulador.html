@@ -108,7 +108,7 @@ textarea { resize: vertical; width: 100%; }
 .top .tools button.primary:hover { filter: brightness(1.05); background: var(--sun); }
 
 /* área de trabalho */
-.work { flex: 1; display: grid; grid-template-columns: 196px minmax(0, 1fr) 410px; min-height: 0; }
+.work { flex: 1; display: grid; --pal-w: 196px; --side-w: 410px; grid-template-columns: var(--pal-w) minmax(0, 1fr) var(--side-w); min-height: 0; position: relative; }
 .palette { background: var(--panel); border-right: 1px solid var(--line); overflow-y: auto; padding: 8px; }
 .pal-cat { margin-bottom: 10px; }
 .pal-cat h3 { display: flex; align-items: center; gap: 6px; font: 600 11px/1 var(--font-cond); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 8px 4px 6px; }
@@ -159,11 +159,11 @@ textarea { resize: vertical; width: 100%; }
 .rubber { stroke: var(--accent); stroke-dasharray: 6 4; stroke-width: 2; fill: none; pointer-events: none; }
 
 /* gaveta de gráficos */
-.drawer { border-top: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; height: 46%; min-height: 40px; }
+.drawer { border-top: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; height: 46%; min-height: 40px; position: relative; }
 .drawer.closed { height: 40px; } .drawer.closed .drawer-body { display: none; }
 .drawer-head { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-bottom: 1px solid var(--line); }
-.drawer-body { flex: 1; overflow: auto; padding: 8px; display: grid; grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)); gap: 10px; align-content: start; }
-.chart-card { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); min-height: 430px; }
+.drawer-body { flex: 1; overflow: auto; padding: 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)); grid-auto-rows: max-content; gap: 26px 20px; align-content: start; }
+.chart-card { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); overflow: hidden; padding-bottom: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
 .chart-card.wide { grid-column: 1 / -1; }
 .chart-empty { color: var(--muted); padding: 14px; }
 
@@ -248,7 +248,7 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
 .report-pfd svg { display: block; }
 .toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--panel); padding: 8px 14px; border-radius: 8px; z-index: 60; font-size: 13px; }
 
-@media (max-width: 1100px) { .work { grid-template-columns: 150px minmax(0, 1fr) 340px; } .pal-items { grid-template-columns: 1fr; } }
+@media (max-width: 1100px) { .work { --pal-w: 150px; --side-w: 340px; } .pal-items { grid-template-columns: 1fr; } }
 @media (max-width: 820px) {
   body { overflow: auto; }
   .work { display: flex; flex-direction: column; }
@@ -333,6 +333,32 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
 .wpick .wbadge { display: inline-block; font: 700 10.5px system-ui, sans-serif; background: #c2334f; color: #fff; border-radius: 99px; padding: 1px 7px; vertical-align: middle; margin-left: 4px; }
 .wpick.wpref { box-shadow: 0 0 0 2px #fff, 0 3px 10px rgba(0,0,0,.18); }
 
+/* divisórias arrastáveis entre as áreas da tela */
+.splitter { position: absolute; z-index: 25; touch-action: none; outline: none; }
+.splitter.sv { top: 0; bottom: 0; width: 10px; cursor: col-resize; }
+#splitL { left: calc(var(--pal-w) - 5px); } #splitR { right: calc(var(--side-w) - 5px); }
+.splitter.sh { left: 0; right: 0; top: -6px; height: 11px; cursor: row-resize; }
+.splitter::after { content: ''; position: absolute; background: var(--accent); border-radius: 3px; opacity: 0; transition: opacity .15s; }
+.splitter.sv::after { top: 0; bottom: 0; left: 3px; width: 4px; }
+.splitter.sh::after { left: 0; right: 0; top: 4px; height: 4px; }
+.splitter.sh::before { content: ''; position: absolute; left: 50%; top: 3px; width: 46px; height: 5px; margin-left: -23px; border-radius: 3px; background: var(--line); }
+.splitter:hover::after, .splitter.active::after, .splitter:focus-visible::after { opacity: .65; }
+body.resizing-v, body.resizing-v * { cursor: col-resize !important; user-select: none; }
+body.resizing-h, body.resizing-h * { cursor: row-resize !important; user-select: none; }
+body.resizing-v .js-plotly-plot, body.resizing-h .js-plotly-plot, body.resizing-v #pfd, body.resizing-h #pfd { pointer-events: none; }
+@media (max-width: 820px) { .splitter { display: none; } }
+.wvis { margin: 6px 0 0; font-size: 14px; color: var(--muted); } .wvis b { color: var(--accent); font-size: 16px; }
+/* aviso para quem abre no celular */
+.mobwarn { position: fixed; inset: 0; z-index: 90; background: rgba(7, 33, 41, .78); display: flex; align-items: center; justify-content: center; padding: 18px; }
+.mobcard { background: var(--panel); color: var(--ink); max-width: 420px; width: 100%; border-radius: 16px; padding: 22px 20px 18px; box-shadow: 0 18px 50px rgba(0,0,0,.35); text-align: center; border-top: 6px solid #f4a261; }
+.mobico { font-size: 44px; line-height: 1; }
+.mobcard h2 { margin: 8px 0 8px; font-size: 21px; }
+.mobcard p { margin: 0 0 10px; font-size: 15px; line-height: 1.45; }
+.mobtip { background: var(--bg); border-radius: 10px; padding: 10px; font-size: 14px !important; }
+.mobtip b { word-break: break-all; color: var(--accent); }
+.mobbtns { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.mobbtns button { font-size: 16px; padding: 11px 14px; border-radius: 10px; justify-content: center; text-align: center; }
+
 </style>
 </head>
 <body>
@@ -376,6 +402,8 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
 
 <main class="work">
   <aside class="palette" id="palette" aria-label="Paleta de equipamentos"></aside>
+  <div class="splitter sv" id="splitL" role="separator" aria-orientation="vertical" aria-label="Largura da paleta" tabindex="0" title="Arraste para mudar a largura · duplo clique volta ao padrão"></div>
+  <div class="splitter sv" id="splitR" role="separator" aria-orientation="vertical" aria-label="Largura do painel lateral" tabindex="0" title="Arraste para mudar a largura · duplo clique volta ao padrão"></div>
 
   <section class="center">
     <div class="canvas-bar">
@@ -395,6 +423,7 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
       </div>
     </div>
     <div class="drawer" id="drawer">
+      <div class="splitter sh" id="splitD" role="separator" aria-orientation="horizontal" aria-label="Altura da área de gráficos" tabindex="0" title="Arraste para cima ou para baixo · duplo clique volta ao padrão"></div>
       <div class="drawer-head">
         <strong id="drawerTitle">Gráficos</strong>
         <span class="muted small">fonte 18 · “Baixar PNG” em cada gráfico</span>
@@ -504,6 +533,7 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
       <span>NRTL · UNIQUAC · UNIFAC · Peng-Robinson</span><span>Colunas rigorosas e McCabe-Thiele</span><span>CSTR e PFR transientes</span><span>Gráficos com fonte 18</span><span>Código MATLAB, Octave e Python</span><span>Fluxograma final em PNG</span>
     </div>
     <p class="wbook">Baseado no livro <i>Modelagem e Simulação de Processos Dinâmicos</i>, de Juan Canellas Bosch Neto (Editora Appris, 2019).</p>
+    <p class="wvis visitas" hidden><span aria-hidden="true">👥</span> <b class="vis-n"></b> visitas ao SIMULA FÁCIL IA</p>
     <label class="wnoshow"><input type="checkbox" id="wNoShow"> Não mostrar esta tela ao abrir</label>
   </div>
 </div>
@@ -515,16 +545,88 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
   </div>
 </div>
 <div class="toast" id="toast" hidden></div>
+<div class="mobwarn" id="mobWarn" role="alertdialog" aria-modal="true" aria-labelledby="mobWarnT" hidden>
+  <div class="mobcard">
+    <div class="mobico" aria-hidden="true">💻</div>
+    <h2 id="mobWarnT">Feito para notebook ou computador</h2>
+    <p>O SIMULA FÁCIL IA foi pensado para telas grandes, com mouse e teclado: montar o fluxograma, arrastar as correntes e ler os gráficos fica muito apertado no celular.</p>
+    <p class="mobtip">Para usar de verdade, abra este endereço no notebook ou no computador:<br><b id="mobUrl"></b></p>
+    <div class="mobbtns"><button type="button" class="primary" id="mobCopy">Copiar o link</button><button type="button" id="mobGo">Continuar mesmo assim</button></div>
+  </div>
+</div>
 
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 <script>/* js/site-config.js */
 /* SIMULA FÁCIL IA — configuração do site.
    claudeUrl: link da versão com o agente de IA (abra o artefato no Claude, clique em Compartilhar/Publicar e cole aqui o link público).
-   siteUrl:   endereço deste site no GitHub Pages (troque juanbosch-cyber pelo seu usuário do GitHub). */
+   siteUrl:   endereço deste site no GitHub Pages (troque juanbosch-cyber pelo seu usuário do GitHub).
+   goatcounter: código da conta em goatcounter.com que conta as visitas (veja js/visitas.js). */
 window.SIMULAFACIL_CONFIG = {
   claudeUrl: 'https://claude.ai/artifact/A8LR4WDCvpfBY9XhF5T3TF',
-  siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/'
+  siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
+  goatcounter: 'simulafacilufsj' // código da conta no GoatCounter (contador de visitas); deixe '' para desligar
 };
+
+</script>
+<script>/* js/visitas.js */
+/* SIMULA FÁCIL IA — contador de visitas.
+   Usa o GoatCounter (gratuito para uso não comercial, sem cookies e sem dados pessoais).
+   Só conta e só mostra o número no site publicado (*.github.io); em testes locais e
+   dentro do Claude o contador fica escondido.
+   Para funcionar, crie a conta em https://www.goatcounter.com com o código definido em
+   site-config.js (goatcounter) e ative, nas configurações da conta, a opção
+   "Allow adding visitor counts on your website". */
+(function () {
+  const SF = window.SF = window.SF || {};
+  const cfg = window.SIMULAFACIL_CONFIG || {};
+  const code = String(cfg.goatcounter || '').trim();
+  const host = location.hostname || '';
+  const online = !!code && (/\.github\.io$/i.test(host) || (cfg.counterHosts || []).indexOf(host) >= 0);
+  const base = 'https://' + code + '.goatcounter.com';
+  let total = null;
+
+  function fmt(v) {
+    const n = parseInt(String(v == null ? '' : v).replace(/[^\d]/g, ''), 10);
+    return isFinite(n) && n >= 0 ? n.toLocaleString('pt-BR') : null;
+  }
+
+  // Preenche todos os elementos com a classe "visitas" (o número vai no filho ".vis-n").
+  function paint(root) {
+    (root || document).querySelectorAll('.visitas').forEach(el => {
+      const n = el.querySelector('.vis-n');
+      if (total == null || !n) { el.hidden = true; return; }
+      n.textContent = total; el.hidden = false;
+    });
+  }
+
+  function count() {
+    if (document.querySelector('script[data-goatcounter]')) return;
+    const s = document.createElement('script');
+    s.async = true; s.src = 'https://gc.zgo.at/count.js';
+    s.setAttribute('data-goatcounter', base + '/count');
+    document.head.appendChild(s);
+  }
+
+  function load() {
+    fetch(base + '/counter/TOTAL.json', { cache: 'no-store' })
+      .then(r => (r.ok ? r.json() : null))
+      .then(j => { total = j ? fmt(j.count) : null; paint(); })
+      .catch(() => { total = null; paint(); });
+  }
+
+  SF.visitas = {
+    online,
+    get total() { return total; },
+    paint,
+    html(prefix, suffix) {
+      return '<span class="visitas"' + (total == null ? ' hidden' : '') + '>' + (prefix || '') +
+        '<b class="vis-n">' + (total || '') + '</b>' + (suffix == null ? ' visitas' : suffix) + '</span>';
+    }
+  };
+
+  function start() { paint(); if (!online) return; count(); load(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
 
 </script>
 <script>/* js/credits.js */
@@ -3103,7 +3205,7 @@ window.SIMULAFACIL_CONFIG = {
 
   function baseLayout(title, xt, yt, extra) {
     const ink = css('--ink'), grid = css('--line');
-    const ax = t => ({ title: { text: t, font: { size: FS } }, tickfont: { size: FS }, gridcolor: grid, zerolinecolor: grid, linecolor: ink, mirror: true, showline: true, ticks: 'outside' });
+    const ax = t => ({ title: { text: t, font: { size: FS }, standoff: 12 }, tickfont: { size: FS }, gridcolor: grid, zerolinecolor: grid, linecolor: ink, mirror: true, showline: true, ticks: 'outside', automargin: true });
     return Object.assign({
       title: { text: title, font: { size: 20 }, x: 0.02, xanchor: 'left' },
       font: { size: FS, color: ink, family: 'IBM Plex Sans, Arial, sans-serif' },
@@ -3127,9 +3229,10 @@ window.SIMULAFACIL_CONFIG = {
         T.push({ x: d.path.x, y: d.path.y, mode: 'lines', name: 'Estágios (N = ' + d.nStages + ')', line: { color: css('--ink'), width: 1.6 } });
         if (d.az) T.push({ x: [d.az.x], y: [d.az.x], mode: 'markers', name: 'Azeótropo (x = ' + d.az.x.toFixed(3).replace('.', ',') + ')', marker: { color: '#e02020', size: 12 } });
         const L = baseLayout(p.title, 'Fração molar na fase líquida (x)', 'Fração molar na fase vapor (y)', { legend: { x: 0.42, y: 0.04, font: { size: 15 }, bgcolor: 'rgba(255,255,255,0.8)' } });
-        L.xaxis.range = [0, 1]; L.yaxis.range = [0, 1]; L.yaxis.scaleanchor = 'x'; L.height = 600;
-        L.annotations = [{ xref: 'paper', yref: 'paper', x: 0.5, y: -0.17, showarrow: false, font: { size: FS }, text: 'Razão de refluxo R = ' + d.R.toFixed(2).replace('.', ',') + (d.Rmin != null && isFinite(d.Rmin) && d.Rmin > 0 ? ' (Rmín ≈ ' + d.Rmin.toFixed(2).replace('.', ',') + ')' : '') }];
-        L.margin.b = 110;
+        L.xaxis.range = [0, 1]; L.yaxis.range = [0, 1]; L.yaxis.scaleanchor = 'x'; L.xaxis.constrain = 'domain'; L.yaxis.constrain = 'domain'; L.height = 640;
+        const rtxt = 'Razão de refluxo R = ' + d.R.toFixed(2).replace('.', ',') + (d.Rmin != null && isFinite(d.Rmin) && d.Rmin > 0 ? ' (Rmín ≈ ' + d.Rmin.toFixed(2).replace('.', ',') + ')' : '');
+        L.title = { text: p.title + '<br><span style="font-size:16px">' + rtxt + '</span>', font: { size: 20 }, x: 0.02, xanchor: 'left', y: 0.97, yanchor: 'top' };
+        L.margin = { l: 86, r: 24, t: 92, b: 80 };
         return { data: T, layout: L, wide: false, tall: true };
       }
       case 'profileT':
@@ -3147,7 +3250,7 @@ window.SIMULAFACIL_CONFIG = {
       case 'pfrSS': {
         const data = d.series.map((s, k) => ({ x: d.V, y: s.v, mode: 'lines', name: s.name, line: { color: PALETTE[k % 8], width: 3 } }));
         const L = baseLayout(p.title, 'Volume V (m³)', 'Vazão molar (kmol/h)');
-        if (d.T) { data.push({ x: d.V, y: d.T, mode: 'lines', name: 'T (°C)', yaxis: 'y2', line: { color: '#d1495b', dash: 'dot', width: 3 } }); L.yaxis2 = { title: { text: 'Temperatura (°C)', font: { size: FS } }, tickfont: { size: FS }, overlaying: 'y', side: 'right' }; L.margin.r = 80; }
+        if (d.T) { data.push({ x: d.V, y: d.T, mode: 'lines', name: 'T (°C)', yaxis: 'y2', line: { color: '#d1495b', dash: 'dot', width: 3 } }); L.yaxis2 = { title: { text: 'Temperatura (°C)', font: { size: FS } }, tickfont: { size: FS }, overlaying: 'y', side: 'right', automargin: true }; L.margin.r = 80; }
         return { data, layout: L };
       }
       case 'curves': { // curvas genéricas com linhas horizontais de referência
@@ -3156,7 +3259,7 @@ window.SIMULAFACIL_CONFIG = {
         (d.hlines || []).forEach(h => data.push({ x: xr, y: [h.y, h.y], mode: 'lines', name: h.name, line: { color: h.color || css('--muted'), width: 2, dash: 'dash' }, hoverinfo: 'name' }));
         const L = baseLayout(p.title, d.xLabel || '', d.yLabel || '');
         if (d.xRange) L.xaxis.range = d.xRange; if (d.yRange) L.yaxis.range = d.yRange;
-        if (d.hlines && d.hlines.length) L.legend = Object.assign(L.legend, { x: 0.99, xanchor: 'right', y: 0.02, yanchor: 'bottom' });
+        if (d.hlines && d.hlines.length) { L.legend = Object.assign(L.legend, { orientation: 'h', xref: 'container', yref: 'container', x: 0.02, xanchor: 'left', y: 0.01, yanchor: 'bottom', bgcolor: 'rgba(0,0,0,0)', borderwidth: 0 }); L.margin = Object.assign({}, L.margin, { b: 150 }); L.height = 560; }
         return { data, layout: L };
       }
       case 'surface': {
@@ -3206,7 +3309,8 @@ window.SIMULAFACIL_CONFIG = {
     head.innerHTML = '<span class="small muted" style="flex:1">' + (opts.source || '') + '</span>';
     const btn = document.createElement('button'); btn.textContent = 'Baixar PNG'; btn.className = 'ghost'; btn.style.fontSize = '12px';
     head.appendChild(btn); card.appendChild(head);
-    const div = document.createElement('div'); div.style.height = (f.layout.height || 430) + 'px'; card.appendChild(div);
+    if (!f.layout.height) f.layout.height = 430; // altura explícita: o gráfico nunca passa do cartão
+    const div = document.createElement('div'); div.style.height = f.layout.height + 'px'; card.appendChild(div);
     container.appendChild(card);
     if (f.rev) f.layout.yaxis.autorange = 'reversed';
     if (!root.Plotly) { div.innerHTML = '<p class="chart-empty">Biblioteca de gráficos não carregou.</p>'; return card; }
@@ -5366,10 +5470,51 @@ def pfr_transiente(P, nome):
     }
     $('#drawerTitle').textContent = ttl;
     if (!plots.length) { el.innerHTML = '<p class="chart-empty">Sem gráficos para mostrar. Simule e selecione uma coluna, reator, trocador ou extrator.</p>'; return; }
-    $('#drawer').classList.remove('closed'); $('#drawerToggle').textContent = '▾';
+    setDrawer(true);
     plots.forEach(p => SF.charts.render(el, p, { save: saveFile, toast, source: title ? '' : blockName(target) }));
   }
-  $('#drawerToggle').onclick = () => { const d = $('#drawer'); d.classList.toggle('closed'); $('#drawerToggle').textContent = d.classList.contains('closed') ? '▴' : '▾'; setTimeout(() => { pfd.render(); window.dispatchEvent(new Event('resize')); }, 50); };
+  /* ------------------------------------------------------------------ divisórias arrastáveis (paleta | fluxograma | painel; fluxograma / gráficos) */
+  const LAYOUT_KEY = 'simulafacil.layout';
+  let layout = {}; try { layout = JSON.parse(localStorage.getItem(LAYOUT_KEY) || '{}') || {}; } catch (e) { layout = {}; }
+  const saveLayout = () => { try { localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout)); } catch (e) { /* sem armazenamento */ } };
+  const clampN = (x, a, b) => Math.max(a, Math.min(b, x));
+  let relayoutPending = false;
+  const relayout = () => { if (relayoutPending) return; relayoutPending = true; requestAnimationFrame(() => { relayoutPending = false; pfd.render(); window.dispatchEvent(new Event('resize')); }); };
+  function setDrawer(open) {
+    const d = $('#drawer'); d.classList.toggle('closed', !open);
+    d.style.height = open && layout.drawer ? layout.drawer + 'px' : '';
+    $('#drawerToggle').textContent = open ? '▾' : '▴';
+  }
+  function applyLayout() {
+    const work = $('.work');
+    if ((layout.pal || 196) + (layout.side || 410) > window.innerWidth - 300) { delete layout.pal; delete layout.side; } // tela menor que a do último ajuste
+    if (layout.pal) work.style.setProperty('--pal-w', layout.pal + 'px'); else work.style.removeProperty('--pal-w');
+    if (layout.side) work.style.setProperty('--side-w', layout.side + 'px'); else work.style.removeProperty('--side-w');
+    if (!$('#drawer').classList.contains('closed')) $('#drawer').style.height = layout.drawer ? layout.drawer + 'px' : '';
+  }
+  function splitter(el, axis, onMove, onReset, onKey) {
+    el.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return; e.preventDefault(); el.setPointerCapture(e.pointerId); el.classList.add('active'); document.body.classList.add(axis === 'v' ? 'resizing-v' : 'resizing-h');
+      const move = ev => { onMove(ev); relayout(); };
+      const up = () => { el.classList.remove('active'); document.body.classList.remove('resizing-v', 'resizing-h'); el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up); saveLayout(); relayout(); };
+      el.addEventListener('pointermove', move); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+    });
+    el.addEventListener('dblclick', () => { onReset(); applyLayout(); saveLayout(); relayout(); });
+    el.addEventListener('keydown', e => { const st = e.shiftKey ? 64 : 16, k = { ArrowLeft: -st, ArrowUp: -st, ArrowRight: st, ArrowDown: st }[e.key]; if (k) { e.preventDefault(); onKey(k); applyLayout(); saveLayout(); relayout(); } });
+  }
+  const workRect = () => $('.work').getBoundingClientRect();
+  const maxDrawer = () => Math.max(160, $('.center').clientHeight - $('.canvas-bar').offsetHeight - 200); // o fluxograma mantém ao menos 200 px
+  splitter($('#splitL'), 'v', ev => { const r = workRect(); layout.pal = clampN(Math.round(ev.clientX - r.left), 110, Math.min(460, r.width - (layout.side || $('.side').offsetWidth) - 320)); applyLayout(); },
+    () => { delete layout.pal; }, d => { layout.pal = clampN(($('#palette').offsetWidth) + d, 110, 460); });
+  splitter($('#splitR'), 'v', ev => { const r = workRect(); layout.side = clampN(Math.round(r.right - ev.clientX), 280, Math.min(1000, r.width - $('#palette').offsetWidth - 320)); applyLayout(); },
+    () => { delete layout.side; }, d => { layout.side = clampN($('.side').offsetWidth - d, 280, 1000); });
+  splitter($('#splitD'), 'h', ev => {
+    const c = $('.center').getBoundingClientRect(), h = Math.round(c.bottom - ev.clientY);
+    if (h < 70) { layout.drawer = layout.drawer || null; setDrawer(false); return; }
+    layout.drawer = clampN(h, 120, maxDrawer()); setDrawer(true);
+  }, () => { delete layout.drawer; setDrawer(true); }, d => { layout.drawer = clampN($('#drawer').offsetHeight - d, 120, maxDrawer()); setDrawer(true); });
+  applyLayout();
+  $('#drawerToggle').onclick = () => { setDrawer($('#drawer').classList.contains('closed')); setTimeout(() => { pfd.render(); window.dispatchEvent(new Event('resize')); }, 50); };
 
   /* ------------------------------------------------------------------ termodinâmica */
   function modelAdvice(ids) {
@@ -5466,7 +5611,8 @@ def pfr_transiente(P, nome):
       '<li>Colunas rigorosas pelo método do ponto de bolha (Wang–Henke + θ) com Newton simultâneo (Naphtali–Sandholm).</li>' +
       '<li>Reatores CSTR e PFR em regime permanente e transiente; trocadores, extratores, vasos e máquinas.</li>' +
       '<li>Fluxograma final, gráficos com fonte 18 e geração de código MATLAB, Octave e Python.</li></ul>' +
-      '<div class="subhead">Referência</div><p class="small">' + esc(C.bookRef) + '</p></div>', []);
+      '<div class="subhead">Referência</div><p class="small">' + esc(C.bookRef) + '</p>' +
+      (SF.visitas && SF.visitas.total ? '<p class="small muted">' + SF.visitas.html('👥 ', ' visitas ao SIMULA FÁCIL IA') + '</p>' : '') + '</div>', []);
   }
   function standaloneReport(svg) {
     const blocks = state.blocks.filter(b => results.blocks[b.id] && (results.blocks[b.id].res || []).length && b.type !== 'feed');
@@ -5599,6 +5745,19 @@ def pfr_transiente(P, nome):
   $('#projName').value = state.name; $('#emptyHint').hidden = state.blocks.length > 0; updateCompSummary();
   requestAnimationFrame(() => { pfd.fit(); runSimulation(true); renderProps(); });
   (function () { let noShow = false; try { noShow = localStorage.getItem('simulafacil.noWelcome') === '1'; } catch (e) { /* */ } if (!noShow) openWelcome(); })();
+  /* aviso: a versão foi feita para notebook/computador — celulares e telas pequenas recebem o alerta (uma vez por sessão) */
+  (function () {
+    const w = Math.min(window.innerWidth, (screen && screen.width) || 9999), coarse = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+    const phone = w < 760 || (coarse && w < 1000 && !matchMedia('(hover: hover)').matches) || /Android.+Mobile|iPhone|iPod/i.test(navigator.userAgent);
+    let seen = false; try { seen = sessionStorage.getItem('simulafacil.mobileOk') === '1'; } catch (e) { /* */ }
+    if (!phone || seen) return;
+    const cfg = window.SIMULAFACIL_CONFIG || {}, here = location.href.split('#')[0];
+    const url = /^https?:/.test(here) && !/claude\.ai|claudeusercontent/.test(here) ? here : ((cfg.siteUrl || '') + 'simulador.html');
+    $('#mobUrl').textContent = url; $('#mobWarn').hidden = false;
+    $('#mobCopy').onclick = () => copyText(url);
+    $('#mobGo').onclick = () => { $('#mobWarn').hidden = true; try { sessionStorage.setItem('simulafacil.mobileOk', '1'); } catch (e) { /* */ } };
+    setTimeout(() => $('#mobGo').focus(), 50);
+  })();
   if (SF.agent) SF.agent.init(SF.app);
 })();
 

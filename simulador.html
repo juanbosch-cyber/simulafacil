@@ -121,7 +121,7 @@ textarea { resize: vertical; width: 100%; }
 
 .center { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 .canvas-bar { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--line); background: var(--panel-2); flex-wrap: wrap; }
-.hint .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; vertical-align: middle; }
+.hint .dot, .hint-m .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; vertical-align: middle; }
 .dot.out { background: var(--stream); } .dot.in { background: var(--panel); border: 2px solid var(--stream); }
 .chip { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; border: 1px solid currentColor; }
 .chip.idle { color: var(--muted); } .chip.ok { color: var(--ok); background: var(--ok-bg); } .chip.warn { color: var(--warn); background: var(--warn-bg); } .chip.err { color: var(--err); background: var(--err-bg); } .chip.run { color: var(--accent); background: var(--accent-weak); }
@@ -354,10 +354,103 @@ body.resizing-v .js-plotly-plot, body.resizing-h .js-plotly-plot, body.resizing-
 .mobico { font-size: 44px; line-height: 1; }
 .mobcard h2 { margin: 8px 0 8px; font-size: 21px; }
 .mobcard p { margin: 0 0 10px; font-size: 15px; line-height: 1.45; }
-.mobtip { background: var(--bg); border-radius: 10px; padding: 10px; font-size: 14px !important; }
+.mobtip { background: var(--bg); border-radius: 10px; padding: 10px; font-size: 13.5px !important; margin-top: 12px !important; }
+.mobtip button { padding: 2px 10px; font-size: 13px; margin-left: 4px; }
 .mobtip b { word-break: break-all; color: var(--accent); }
 .mobbtns { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
 .mobbtns button { font-size: 16px; padding: 11px 14px; border-radius: 10px; justify-content: center; text-align: center; }
+
+/* ================================================================== versão para celular (body.mobile) */
+body:not(.mobile) .m-only { display: none !important; }
+body.mobile { height: 100vh; height: 100dvh; overflow: hidden; }
+body.mobile .top { padding: 6px 10px; gap: 8px; flex-wrap: nowrap; }
+body.mobile.mmenu .top { z-index: 85; }
+body.mobile .brand { padding: 0; min-width: 0; }
+body.mobile .brand .logo { width: 34px; height: 34px; }
+body.mobile .brand-title strong { font-size: 16px; white-space: nowrap; }
+body.mobile .brand-title em, body.mobile .brand-auth, body.mobile .projname { display: none; }
+body.mobile .m-run { margin-left: auto; background: var(--sun); color: #2a1b00; border: 0; border-radius: 99px; font-weight: 800; padding: 9px 14px; font-size: 15px; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+body.mobile .m-menu { background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.4); border-radius: 10px; font-size: 21px; line-height: 1; padding: 7px 11px; }
+body.mobile .tools { position: fixed; left: 0; right: 0; bottom: 0; z-index: 85; margin: 0; background: var(--panel); color: var(--ink); border-radius: 18px 18px 0 0; padding: 14px 14px calc(16px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-height: 82vh; max-height: 82dvh; overflow-y: auto; box-shadow: 0 -10px 30px rgba(0,0,0,.28); transform: translateY(105%); visibility: hidden; transition: transform .22s ease, visibility .22s; }
+body.mobile.mmenu .tools { transform: none; visibility: visible; }
+body.mobile .tools::before { content: 'Menu'; grid-column: 1 / -1; font-weight: 800; font-size: 17px; padding: 0 2px 2px; }
+body.mobile .top .tools button, body.mobile .top .tools select, body.mobile .top .tools a.claude-link { background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 12px 8px; font-size: 15px; justify-content: center; text-align: center; min-height: 46px; }
+body.mobile .top .tools #exampleSel, body.mobile .top .tools a.claude-link, body.mobile .top .tools #btnThermoM, body.mobile .top .tools #btnViewMode { grid-column: 1 / -1; }
+body.mobile .top .tools a.claude-link { background: var(--pop); color: #fff; border-color: var(--pop); display: flex; align-items: center; }
+body.mobile .top .tools #btnRun { display: none; }
+body.mobile .top .tools #btnViewMode { background: var(--accent-weak); border-color: var(--accent); font-weight: 700; }
+.m-backdrop { position: fixed; inset: 0; z-index: 78; background: rgba(7, 33, 41, .45); }
+body.mobile .work { display: block; position: relative; flex: 1; min-height: 0; }
+body.mobile .splitter { display: none; }
+body.mobile .center, body.mobile .side { position: absolute; inset: 0; height: auto; min-height: 0; border: 0; }
+body.mobile .side { display: none; }
+body.mobile[data-mview="props"] .side, body.mobile[data-mview="results"] .side, body.mobile[data-mview="agent"] .side, body.mobile[data-mview="thermo"] .side { display: flex; }
+body.mobile[data-mview="props"] .center, body.mobile[data-mview="results"] .center, body.mobile[data-mview="agent"] .center, body.mobile[data-mview="thermo"] .center { display: none; }
+body.mobile .side .tabs { display: none; }
+body.mobile .pane { overflow-x: auto; }
+body.mobile[data-mview="flow"] .drawer { display: none; }
+body.mobile[data-mview="charts"] .canvas-bar, body.mobile[data-mview="charts"] .canvas-wrap { display: none; }
+body.mobile[data-mview="charts"] .drawer { height: auto !important; flex: 1; min-height: 0; border-top: 0; }
+body.mobile[data-mview="charts"] .drawer.closed .drawer-body { display: grid; }
+body.mobile #drawerToggle, body.mobile .drawer-head .muted { display: none; }
+body.mobile .drawer-body { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 10px 8px 16px; }
+body.mobile .canvas-bar { gap: 6px; padding: 6px 8px; flex-wrap: wrap; }
+body.mobile .canvas-bar .hint, body.mobile #compSummary { display: none; }
+body.mobile .canvas-bar .hint-m { order: 9; flex-basis: 100%; color: var(--muted); }
+body.mobile .canvas-wrap { min-height: 0; }
+body.mobile .canvas-bar button.icon { min-width: 40px; min-height: 36px; font-size: 17px; }
+body.mobile .empty-hint p { font-size: 14px; }
+.m-fab { position: absolute; right: 12px; bottom: 12px; z-index: 6; background: var(--accent); color: #fff; border: 0; border-radius: 99px; padding: 12px 18px; font-size: 15px; font-weight: 800; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+.m-selbar { position: absolute; left: 10px; right: 10px; bottom: 70px; z-index: 6; display: flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 8px 8px 14px; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+.m-selbar[hidden] { display: none !important; }
+.m-selbar span { flex: 1; min-width: 0; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m-selbar button { padding: 9px 14px; font-size: 14px; border-radius: 10px; }
+body.mobile .palette { position: fixed; left: 0; right: 0; bottom: 0; z-index: 80; max-height: 74vh; max-height: 74dvh; border: 0; border-radius: 18px 18px 0 0; padding: 12px 12px calc(16px + env(safe-area-inset-bottom)); box-shadow: 0 -10px 30px rgba(0,0,0,.28); transform: translateY(105%); visibility: hidden; transition: transform .22s ease, visibility .22s; }
+body.mobile.mpal .palette { transform: none; visibility: visible; }
+body.mobile .palette::before { content: 'Toque num equipamento para colocá-lo no fluxograma'; display: block; font-weight: 800; font-size: 15px; margin: 0 2px 8px; }
+body.mobile .pal-items { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+body.mobile .pal-item { min-height: 72px; }
+.m-nav { display: flex; flex: none; background: var(--panel); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); position: relative; z-index: 30; }
+.m-nav button { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; border: 0; border-radius: 0; background: transparent; padding: 7px 2px 7px; font-size: 11.5px; color: var(--muted); position: relative; }
+.m-nav button .mi { font-size: 20px; line-height: 1.1; }
+.m-nav button.on { color: var(--accent); font-weight: 800; }
+.m-nav button.on::before { content: ''; position: absolute; top: 0; left: 22%; right: 22%; height: 3px; border-radius: 0 0 3px 3px; background: var(--accent); }
+.m-nav .mbadge { position: absolute; top: 5px; left: calc(50% + 10px); width: 10px; height: 10px; border-radius: 50%; background: var(--pop); border: 2px solid var(--panel); }
+.m-nav .mbadge[hidden] { display: none; }
+body.mobile .toast { bottom: calc(76px + env(safe-area-inset-bottom)); max-width: 92vw; }
+body.mobile .modal { padding: 0; }
+body.mobile .modal-card { width: 100%; height: 100%; max-height: 100%; border-radius: 0; border: 0; }
+body.mobile .modal-head { flex-wrap: wrap; row-gap: 6px; }
+body.mobile .composer textarea { font-size: 16px; }
+body.mobile input, body.mobile select, body.mobile textarea { font-size: 16px; }
+body.mobile #zoomIn, body.mobile #zoomOut { display: none; }
+body.mobile .canvas-bar { flex-wrap: nowrap; } body.mobile .canvas-bar .hint-m { display: none; }
+body.mobile .canvas-wrap .hint-m-float { display: block; }
+.hint-m-float { display: none; position: absolute; left: 10px; top: 8px; right: 10px; z-index: 4; font-size: 12.5px; color: var(--muted); pointer-events: none; }
+body.mobile .top .tools #exampleSel { max-width: none; width: 100%; }
+/* equações do modelo matemático (aba Propriedades) */
+.model-eq { margin: 10px 0 4px; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; background: var(--panel-2); }
+.model-eq > summary { cursor: pointer; padding: 9px 12px; font-weight: 800; list-style-position: inside; }
+.model-eq > summary .model-name { font-weight: 500; color: var(--muted); }
+.model-eq[open] > summary { border-bottom: 1px solid var(--line); }
+.eq-list { padding: 4px 8px; }
+.eq { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2px 10px; padding: 8px 4px; overflow-x: auto; font-family: 'Cambria Math', 'STIX Two Math', 'Latin Modern Math', Cambria, 'Times New Roman', serif; font-size: 16.5px; line-height: 1.3; border-bottom: 1px dashed var(--line); }
+.eq:last-child { border-bottom: 0; }
+.eq-m { flex: 1 1 auto; text-align: center; white-space: nowrap; line-height: 1.9; }
+.eq-tag { flex: 1 1 100%; font-family: var(--font); font-size: 11.5px; color: var(--muted); text-align: center; white-space: normal; }
+.eq i { font-style: italic; }
+.eq sub, .eq sup { font-size: .68em; }
+.fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; }
+.fr > span:first-child { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+.fr > span:last-child { padding: 1px 3px 0; }
+.eq .sum { font-size: 1.15em; }
+.eq-txt { margin: 6px 4px; font-size: 13px; color: var(--muted); }
+.eq-sym { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 2px 0 6px; }
+.eq-sym td { padding: 3px 10px; border-top: 1px solid var(--line); vertical-align: top; }
+.eq-sym td:first-child { font-family: 'Cambria Math', Cambria, 'Times New Roman', serif; font-size: 14.5px; white-space: nowrap; width: 1%; }
+.model-eq > .small { margin: 0 12px 10px; }
+body.mobile .eq { font-size: 15px; }
+.eq .ovl { text-decoration: overline; }
 
 </style>
 </head>
@@ -384,7 +477,7 @@ body.resizing-v .js-plotly-plot, body.resizing-h .js-plotly-plot, body.resizing-
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
-  <div class="tools">
+  <div class="tools" id="tools">
     <button id="btnNew" title="Novo fluxograma">Novo</button>
     <label class="sr" for="exampleSel">Exemplos</label>
     <select id="exampleSel" title="Carregar exemplo"><option value="">Exemplos…</option></select>
@@ -396,8 +489,12 @@ body.resizing-v .js-plotly-plot, body.resizing-h .js-plotly-plot, body.resizing-
     <button id="btnSave" title="Salvar projeto (.json)">Salvar</button>
     <button id="btnOpen" title="Abrir projeto (.json)">Abrir</button>
     <button id="btnAbout" title="Sobre o SIMULA FÁCIL IA e autoria">Sobre</button>
+    <button id="btnThermoM" class="m-only" type="button">Componentes e termodinâmica</button>
+    <button id="btnViewMode" type="button" hidden>📱 Versão para celular</button>
     <input type="file" id="fileOpen" accept=".json,application/json" hidden>
   </div>
+  <button id="mRun" class="m-only m-run" type="button" aria-label="Simular">▶ Simular</button>
+  <button id="mMenuBtn" class="m-only m-menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="tools">☰</button>
 </header>
 
 <main class="work">
@@ -421,6 +518,9 @@ body.resizing-v .js-plotly-plot, body.resizing-h .js-plotly-plot, body.resizing-
         <h2>Comece pelo agente ou pela paleta</h2>
         <p>Descreva o processo ao agente (pode anexar uma figura do fluxograma), escolha um exemplo pronto ou clique nos equipamentos à esquerda.</p>
       </div>
+      <div class="hint-m hint-m-float m-only">Toque numa saída <b class="dot out"></b> e depois numa entrada <b class="dot in"></b> para ligar · dois dedos: zoom</div>
+      <div class="m-selbar m-only" id="mSel" hidden><span id="mSelName"></span><button type="button" id="mSelEdit" class="primary">Editar</button><button type="button" id="mSelDel">Apagar</button></div>
+      <button type="button" class="m-fab m-only" id="mAdd">＋ Equipamento</button>
     </div>
     <div class="drawer" id="drawer">
       <div class="splitter sh" id="splitD" role="separator" aria-orientation="horizontal" aria-label="Altura da área de gráficos" tabindex="0" title="Arraste para cima ou para baixo · duplo clique volta ao padrão"></div>
@@ -496,6 +596,14 @@ body.resizing-v .js-plotly-plot, body.resizing-h .js-plotly-plot, body.resizing-
     <section class="pane" id="tab-thermo" role="tabpanel"><div id="thermoBody" class="pad"></div></section>
   </aside>
 </main>
+<nav class="m-nav m-only" id="mNav" aria-label="Telas do simulador">
+  <button type="button" data-mview="flow"><span class="mi" aria-hidden="true">🧩</span>Fluxograma</button>
+  <button type="button" data-mview="props"><span class="mi" aria-hidden="true">⚙️</span>Dados</button>
+  <button type="button" data-mview="results"><span class="mi" aria-hidden="true">📋</span>Resultados</button>
+  <button type="button" data-mview="charts"><span class="mi" aria-hidden="true">📊</span>Gráficos<i class="mbadge" hidden></i></button>
+  <button type="button" data-mview="agent"><span class="mi" aria-hidden="true">🤖</span>Agente</button>
+</nav>
+<div class="m-backdrop" id="mBackdrop" hidden></div>
 
 
 <div class="welcome" id="welcome" hidden>
@@ -530,7 +638,7 @@ body.resizing-v .js-plotly-plot, body.resizing-h .js-plotly-plot, body.resizing-
     <h2 class="wh2" id="wExTitle">Exemplos prontos</h2>
     <div class="wex" id="wExGrid"></div>
     <div class="wfeat">
-      <span>NRTL · UNIQUAC · UNIFAC · Peng-Robinson</span><span>Colunas rigorosas e McCabe-Thiele</span><span>CSTR e PFR transientes</span><span>Gráficos com fonte 18</span><span>Código MATLAB, Octave e Python</span><span>Fluxograma final em PNG</span>
+      <span>NRTL · UNIQUAC · UNIFAC · Peng-Robinson</span><span>Colunas rigorosas e McCabe-Thiele</span><span>CSTR e PFR transientes</span><span>Gráficos com fonte 18</span><span>Código MATLAB, Octave e Python</span><span>Fluxograma final em PNG</span><span>Equações de cada modelo</span><span>Versão para celular</span>
     </div>
     <p class="wbook">Baseado no livro <i>Modelagem e Simulação de Processos Dinâmicos</i>, de Juan Canellas Bosch Neto (Editora Appris, 2019).</p>
     <p class="wvis visitas" hidden><span aria-hidden="true">👥</span> <b class="vis-n"></b> visitas ao SIMULA FÁCIL IA</p>
@@ -545,13 +653,13 @@ body.resizing-v .js-plotly-plot, body.resizing-h .js-plotly-plot, body.resizing-
   </div>
 </div>
 <div class="toast" id="toast" hidden></div>
-<div class="mobwarn" id="mobWarn" role="alertdialog" aria-modal="true" aria-labelledby="mobWarnT" hidden>
+<div class="mobwarn" id="mobWarn" role="dialog" aria-modal="true" aria-labelledby="mobWarnT" hidden>
   <div class="mobcard">
-    <div class="mobico" aria-hidden="true">💻</div>
-    <h2 id="mobWarnT">Feito para notebook ou computador</h2>
-    <p>O SIMULA FÁCIL IA foi pensado para telas grandes, com mouse e teclado: montar o fluxograma, arrastar as correntes e ler os gráficos fica muito apertado no celular.</p>
-    <p class="mobtip">Para usar de verdade, abra este endereço no notebook ou no computador:<br><b id="mobUrl"></b></p>
-    <div class="mobbtns"><button type="button" class="primary" id="mobCopy">Copiar o link</button><button type="button" id="mobGo">Continuar mesmo assim</button></div>
+    <div class="mobico" aria-hidden="true">📱</div>
+    <h2 id="mobWarnT">Você está no celular</h2>
+    <p>O SIMULA FÁCIL IA tem uma <b>versão para celular</b>, com abas embaixo e toque para montar o fluxograma. Para projetos grandes, a tela completa no notebook ou no computador é mais confortável.</p>
+    <div class="mobbtns"><button type="button" class="primary" id="mobGo">📱 Usar a versão para celular</button><button type="button" id="mobFull">💻 Abrir a versão completa para notebook</button></div>
+    <p class="mobtip">Dá para trocar quando quiser no menu <b>☰</b>. Para abrir no computador, use este endereço:<br><b id="mobUrl"></b> <button type="button" class="ghost" id="mobCopy">Copiar</button></p>
   </div>
 </div>
 
@@ -2665,6 +2773,228 @@ window.SIMULAFACIL_CONFIG = {
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
+<script>/* js/models.js */
+/* SIMULA FÁCIL IA — equações principais de cada equipamento (mostradas na aba Propriedades).
+   As equações são escritas em HTML (sem bibliotecas externas), para funcionar também sem internet. */
+(function (root) {
+  'use strict';
+  const SF = root.SF = root.SF || {};
+
+  /* ---------------------------------------------------------------- ajudantes de notação */
+  const i = s => '<i>' + s + '</i>';                                   // variável em itálico
+  const fr = (a, b) => '<span class="fr"><span>' + a + '</span><span>' + b + '</span></span>';
+  const pd = (f, x, n) => fr('∂' + (n ? '<sup>' + n + '</sup>' : '') + f, '∂' + x + (n ? '<sup>' + n + '</sup>' : ''));
+  const od = (f, x) => fr('d' + f, 'd' + x);
+  const sub = (s, b) => s + '<sub>' + b + '</sub>';
+  const sup = (s, b) => s + '<sup>' + b + '</sup>';
+  const sum = (b) => '<span class="sum">Σ' + (b ? '<sub>' + b + '</sub>' : '') + '</span>';
+  const C = i('C'), q = i('q'), t = i('t'), z = i('z'), x = i('x'), T = i('T'), P = i('P'), F = i('F'), V = i('V'), L = i('L'), Q = i('Q');
+  const Ci = sub(i('C'), i('i')), Fi = sub(i('F'), i('i')), xi = sub(i('x'), i('i')), yi = sub(i('y'), i('i')), zi = sub(i('z'), i('i')), Ki = sub(i('K'), i('i'));
+  const eq = (h, tag) => '<div class="eq"><span class="eq-m">' + h + '</span>' + (tag ? '<span class="eq-tag">(' + tag + ')</span>' : '') + '</div>';
+  const txt = h => '<p class="eq-txt">' + h + '</p>';
+
+  /* constantes de equilíbrio conforme o modelo termodinâmico */
+  const MODEL_NAME = { IDEAL: 'Ideal', NRTL: 'NRTL', WILSON: 'Wilson', UNIQUAC: 'UNIQUAC', UNIFAC: 'UNIFAC', PR: 'Peng-Robinson', SRK: 'Soave-Redlich-Kwong' };
+  function kModel(model) {
+    const eos = /^(PR|SRK)$|Peng|Soave/i.test(model || '');
+    if (model === 'IDEAL') return eq(Ki + ' = ' + fr(sub(sup(i('P'), 'sat'), i('i')), P), 'lei de Raoult; pressão de vapor por Antoine');
+    model = MODEL_NAME[model] || model;
+    return eos
+      ? eq(Ki + ' = ' + fr(sub(sup('φ̂', 'L'), i('i')), sub(sup('φ̂', 'V'), i('i'))), 'equilíbrio pela equação de estado ' + (model || ''))
+      : eq(Ki + ' = ' + fr(sub(i('γ'), i('i')) + '·' + sub(sup(i('P'), 'sat'), i('i')), P), 'Raoult modificada; γ pelo modelo ' + (model || 'NRTL'));
+  }
+  const rachford = () => eq(sum(i('i')) + ' ' + fr(zi + '(' + Ki + ' − 1)', '1 + ' + i('ψ') + '(' + Ki + ' − 1)') + ' = 0', 'Rachford–Rice');
+  const energyBal = (inl, out) => eq(sum('ent') + ' ' + inl + ' + ' + Q + ' = ' + sum('saí') + ' ' + out);
+
+  /* ---------------------------------------------------------------- reações (CSTR, PFR) */
+  const rate = () => eq(sub(i('r'), i('j')) + ' = ' + sub(i('k'), '0,' + i('j')) + ' ' + sup(i('e'), '−' + sub(i('E'), 'a,' + i('j')) + '/(' + i('R') + T + ')') + ' ∏<sub>' + i('i') + '</sub> ' + sup(Ci, sub(i('n'), i('ij'))), 'lei de velocidade (Arrhenius)');
+
+  /* ---------------------------------------------------------------- modelos por tipo de equipamento */
+  const M = {
+    feed: (p, m) => ({
+      name: 'Corrente de alimentação: flash na condição informada',
+      eqs: [eq(Fi + ' = ' + F + '·' + zi), kModel(m), rachford(), eq(yi + ' = ' + Ki + xi + ',<br>' + xi + ' = ' + fr(zi, '1 + ' + i('ψ') + '(' + Ki + ' − 1)'))],
+      sym: [[F, 'vazão molar total'], [zi, 'fração molar do componente i'], [i('ψ'), 'fração vaporizada (V/F)'], [Ki, 'constante de equilíbrio líquido-vapor']]
+    }),
+    product: () => ({ name: 'Produto: apenas recebe a corrente', eqs: [txt('Não há equações próprias: a corrente que chega é o produto final do processo.')], sym: [] }),
+    mixer: () => ({
+      name: 'Misturador: balanços de massa e energia',
+      eqs: [eq(sum(i('k')) + ' ' + sub(F, i('k')) + sub(i('z'), i('i,k')) + ' = ' + F + '·' + zi, 'componente i'), eq(sum(i('k')) + ' ' + sub(F, i('k')) + sub(i('h'), i('k')) + ' = ' + F + '·' + i('h'), 'energia (adiabático)'), eq(P + ' = mín(' + sub(P, i('k')) + ')')],
+      sym: [[sub(F, i('k')), 'vazão da entrada k'], [i('h'), 'entalpia molar'], [zi, 'fração molar']]
+    }),
+    splitter: () => ({
+      name: 'Divisor de corrente: mesma composição em todas as saídas',
+      eqs: [eq(sub(F, i('k')) + ' = ' + sub(i('α'), i('k')) + '·' + F + ',<br>' + sum(i('k')) + ' ' + sub(i('α'), i('k')) + ' = 1'), eq(sub(i('z'), i('i,k')) + ' = ' + zi + ',<br>' + sub(T, i('k')) + ' = ' + T + ',<br>' + sub(P, i('k')) + ' = ' + P)],
+      sym: [[sub(i('α'), i('k')), 'fração da vazão enviada à saída k']]
+    }),
+    separator: () => ({
+      name: 'Separador de componentes: frações de separação',
+      eqs: [eq(sub(i('F'), i('i') + ',topo') + ' = ' + sub(i('ξ'), i('i')) + '·' + Fi + ',<br>' + sub(i('F'), i('i') + ',fundo') + ' = (1 − ' + sub(i('ξ'), i('i')) + ')·' + Fi)],
+      sym: [[sub(i('ξ'), i('i')), 'fração do componente i que vai para o topo']]
+    }),
+    heater: (p) => ({
+      name: 'Aquecedor: balanço de energia (especificação: ' + (p.mode || 'Temperatura de saída') + ')',
+      eqs: [eq(Q + ' = ' + F + '·[' + sub(i('h'), 'saí') + '(' + sub(T, 'saí') + ', ' + sub(P, 'saí') + ') − ' + sub(i('h'), 'ent') + ']'), eq(sub(P, 'saí') + ' = ' + sub(P, 'ent') + ' − Δ' + P), eq(i('h') + ' = ' + sum(i('i')) + ' ' + zi + sub(i('h'), i('i')) + '(' + T + ')' + ' &nbsp;(com calor latente na fração vaporizada)')],
+      sym: [[Q, 'carga térmica (kW)'], [i('h'), 'entalpia molar da mistura'], ['Δ' + P, 'perda de carga']]
+    }),
+    hx_shell: (p) => ({
+      name: 'Trocador casco e tubo: método LMTD com fator de correção',
+      eqs: [eq(Q + ' = ' + sub(F, 'q') + '(' + sub(i('h'), 'q,ent') + ' − ' + sub(i('h'), 'q,saí') + ')<br>= ' + sub(F, 'f') + '(' + sub(i('h'), 'f,saí') + ' − ' + sub(i('h'), 'f,ent') + ')', 'balanço de energia'),
+        eq(Q + ' = ' + i('U') + i('A') + sub(i('F'), i('T')) + 'Δ' + sub(T, 'ml'), 'equação de projeto'),
+        eq('Δ' + sub(T, 'ml') + ' = ' + fr('Δ' + sub(T, '1') + ' − Δ' + sub(T, '2'), 'ln(Δ' + sub(T, '1') + '/Δ' + sub(T, '2') + ')') + ',<br>Δ' + sub(T, '1') + ' = ' + sub(T, 'q,ent') + ' − ' + sub(T, 'f,saí') + ',&nbsp;Δ' + sub(T, '2') + ' = ' + sub(T, 'q,saí') + ' − ' + sub(T, 'f,ent')),
+        eq(i('A') + ' = ' + sub(i('N'), 't') + 'π' + sub(i('d'), 'o') + sub(L, 't'))],
+      sym: [[i('U'), 'coeficiente global de troca térmica'], [sub(i('F'), i('T')), 'fator de correção do LMTD para ' + (p.shellPasses || 1) + ' passe(s) no casco e ' + (p.tubePasses || 2) + ' nos tubos'], ['q, f', 'fluido quente e fluido frio']]
+    }),
+    hx_plate: () => ({
+      name: 'Trocador de placas: contracorrente (F_T = 1)',
+      eqs: [eq(Q + ' = ' + sub(F, 'q') + '(' + sub(i('h'), 'q,ent') + ' − ' + sub(i('h'), 'q,saí') + ')<br>= ' + sub(F, 'f') + '(' + sub(i('h'), 'f,saí') + ' − ' + sub(i('h'), 'f,ent') + ')'), eq(Q + ' = ' + i('U') + i('A') + 'Δ' + sub(T, 'ml') + ',<br>Δ' + sub(T, 'ml') + ' = ' + fr('Δ' + sub(T, '1') + ' − Δ' + sub(T, '2'), 'ln(Δ' + sub(T, '1') + '/Δ' + sub(T, '2') + ')'))],
+      sym: [[i('U'), 'coeficiente global'], [i('A'), 'área de troca']]
+    }),
+    pump: () => ({
+      name: 'Bomba: trabalho para elevar a pressão do líquido',
+      eqs: [eq(i('Ẇ') + ' = ' + fr(i('V̇') + '(' + sub(P, '2') + ' − ' + sub(P, '1') + ')', i('η'))), eq(sub(i('h'), '2') + ' = ' + sub(i('h'), '1') + ' + ' + fr(i('Ẇ'), F))],
+      sym: [[i('V̇'), 'vazão volumétrica do líquido'], [i('η'), 'eficiência da bomba']]
+    }),
+    compressor: () => ({
+      name: 'Compressor: compressão isentrópica corrigida pela eficiência',
+      eqs: [eq(i('s') + '(' + sub(sup(T, 's'), '2') + ', ' + sub(P, '2') + ') = ' + i('s') + '(' + sub(T, '1') + ', ' + sub(P, '1') + ')', 'processo isentrópico'), eq(i('Ẇ') + ' = ' + F + '·' + fr(sub(i('h'), '2s') + ' − ' + sub(i('h'), '1'), sub(i('η'), 's')) + ',<br>' + sub(i('h'), '2') + ' = ' + sub(i('h'), '1') + ' + ' + fr(i('Ẇ'), F)), eq('gás ideal: ' + sub(sup(T, 's'), '2') + ' = ' + sub(T, '1') + sup('(' + sub(P, '2') + '/' + sub(P, '1') + ')', i('R') + '/' + sub(i('c'), 'p')))],
+      sym: [[sub(i('η'), 's'), 'eficiência isentrópica'], [i('s'), 'entropia molar']]
+    }),
+    valve: () => ({
+      name: 'Válvula: expansão isentálpica (flash adiabático)',
+      eqs: [eq(sub(i('h'), 'saí') + '(' + sub(T, 'saí') + ', ' + sub(P, 'saí') + ') = ' + sub(i('h'), 'ent')), txt('Se a pressão cair abaixo do ponto de bolha, parte do líquido vaporiza (flash) e a temperatura cai.')],
+      sym: []
+    }),
+    flash: (p, m) => ({
+      name: 'Vaso flash: equações MESH de um estágio de equilíbrio (' + (p.mode || 'T e P') + ')',
+      eqs: [eq(F + zi + ' = ' + V + yi + ' + ' + L + xi, 'M: balanço por componente'), eq(yi + ' = ' + Ki + xi, 'E: equilíbrio'), kModel(m), rachford(), eq(sum(i('i')) + ' ' + yi + ' = ' + sum(i('i')) + ' ' + xi + ' = 1', 'S: somatórios'),
+        eq(F + sub(i('h'), 'F') + ' + ' + Q + ' = ' + V + sub(i('H'), 'V') + ' + ' + L + sub(i('h'), 'L'), 'H: energia')],
+      sym: [[i('ψ'), 'fração vaporizada V/F'], [V + ', ' + L, 'vazões de vapor e de líquido'], [Q, 'calor fornecido ao vaso']]
+    }),
+    decanter: () => ({
+      name: 'Decantador: equilíbrio líquido-líquido (ELL)',
+      eqs: [eq(sup(xi, 'I') + sup(sub(i('γ'), i('i')), 'I') + ' = ' + sup(xi, 'II') + sup(sub(i('γ'), i('i')), 'II'), 'isoatividade'), eq(F + zi + ' = ' + sup(L, 'I') + sup(xi, 'I') + ' + ' + sup(L, 'II') + sup(xi, 'II')), eq(sum(i('i')) + ' ' + fr(zi + '(' + Ki + ' − 1)', '1 + ' + i('β') + '(' + Ki + ' − 1)') + ' = 0,<br>' + Ki + ' = ' + fr(sup(sub(i('γ'), i('i')), 'I'), sup(sub(i('γ'), i('i')), 'II')))],
+      sym: [['I, II', 'as duas fases líquidas'], [i('β'), 'fração da alimentação que vai para a fase II'], [sub(i('γ'), i('i')), 'coeficiente de atividade (NRTL, UNIQUAC ou UNIFAC)']]
+    }),
+    column_short: () => ({
+      name: 'Coluna shortcut: Fenske–Underwood–Gilliland (FUG)',
+      eqs: [eq(sub(i('N'), 'mín') + ' = ' + fr('ln[(' + sub(i('d'), 'LK') + '/' + sub(i('b'), 'LK') + ')(' + sub(i('b'), 'HK') + '/' + sub(i('d'), 'HK') + ')]', 'ln ' + sub(i('α'), 'LK,HK')), 'Fenske'),
+        eq(sum(i('i')) + ' ' + fr(sub(i('α'), i('i')) + zi, sub(i('α'), i('i')) + ' − ' + i('θ')) + ' = 1 − ' + i('q') + ',<br>' + sub(i('R'), 'mín') + ' + 1 = ' + sum(i('i')) + ' ' + fr(sub(i('α'), i('i')) + sub(i('x'), i('i') + ',D'), sub(i('α'), i('i')) + ' − ' + i('θ')), 'Underwood'),
+        eq(fr(i('N') + ' − ' + sub(i('N'), 'mín'), i('N') + ' + 1') + ' = 1 − exp[' + fr('1 + 54,4' + i('X'), '11 + 117,2' + i('X')) + '·' + fr(i('X') + ' − 1', '√' + i('X')) + '],<br>' + i('X') + ' = ' + fr(i('R') + ' − ' + sub(i('R'), 'mín'), i('R') + ' + 1'), 'Gilliland–Molokanov')],
+      sym: [['LK, HK', 'chaves leve e pesada'], [i('d') + ', ' + i('b'), 'vazões no destilado e no fundo'], [sub(i('α'), i('i')), 'volatilidade relativa'], [i('q'), 'condição térmica da alimentação']]
+    }),
+    column: (p, m) => ({
+      name: 'Coluna rigorosa: equações MESH em cada estágio j (ponto de bolha + Newton)',
+      eqs: [eq(sub(L, i('j') + '−1') + sub(i('x'), i('i,j') + '−1') + ' + ' + sub(V, i('j') + '+1') + sub(i('y'), i('i,j') + '+1') + ' + ' + sub(F, i('j')) + sub(i('z'), i('i,j')) + '<br>− (' + sub(L, i('j')) + ' + ' + sub(i('U'), i('j')) + ')' + sub(i('x'), i('i,j')) + ' − ' + sub(V, i('j')) + sub(i('y'), i('i,j')) + ' = 0', 'M'),
+        eq(sub(i('y'), i('i,j')) + ' = ' + sub(i('K'), i('i,j')) + sub(i('x'), i('i,j')), 'E'), kModel(m),
+        eq(sum(i('i')) + ' ' + sub(i('y'), i('i,j')) + ' = ' + sum(i('i')) + ' ' + sub(i('x'), i('i,j')) + ' = 1', 'S'),
+        eq(sub(L, i('j') + '−1') + sub(i('h'), i('j') + '−1') + ' + ' + sub(V, i('j') + '+1') + sub(i('H'), i('j') + '+1') + ' + ' + sub(F, i('j')) + sub(i('h'), 'F,' + i('j')) + '<br>− ' + sub(L, i('j')) + sub(i('h'), i('j')) + ' − ' + sub(V, i('j')) + sub(i('H'), i('j')) + ' + ' + sub(Q, i('j')) + ' = 0', 'H'),
+        txt('McCabe-Thiele (binário): retas de operação'),
+        eq(i('y') + ' = ' + fr(i('R'), i('R') + ' + 1') + i('x') + ' + ' + fr(sub(i('x'), 'D'), i('R') + ' + 1'), 'retificação'),
+        eq(i('y') + ' = ' + fr(i('q'), i('q') + ' − 1') + i('x') + ' − ' + fr(sub(i('z'), 'F'), i('q') + ' − 1'), 'reta q')],
+      sym: [[i('j'), 'estágio (1 = condensador, N = refervedor)'], [sub(i('U'), i('j')), 'retirada lateral de líquido'], [i('R'), 'razão de refluxo = ' + (p.R != null ? String(p.R).replace('.', ',') : 'R')], [sub(Q, i('j')), 'calor (condensador e refervedor)']]
+    }),
+    absorber: () => ({
+      name: 'Absorvedora / esgotadora: equação de Kremser',
+      eqs: [eq(sub(i('A'), i('i')) + ' = ' + fr(L, Ki + V), 'fator de absorção'), eq(fr(sub(i('y'), i('i') + ',ent') + ' − ' + sub(i('y'), i('i') + ',saí'), sub(i('y'), i('i') + ',ent') + ' − ' + sub(sup(i('y'), '*'), i('i'))) + ' = ' + fr(sup(sub(i('A'), i('i')), i('N') + '+1') + ' − ' + sub(i('A'), i('i')), sup(sub(i('A'), i('i')), i('N') + '+1') + ' − 1'), 'fração absorvida')],
+      sym: [[i('N'), 'número de estágios teóricos'], [sub(sup(i('y'), '*'), i('i')), 'fração em equilíbrio com o líquido que entra']]
+    }),
+    extractor: () => ({
+      name: 'Extrator líquido-líquido em contracorrente: estágios de equilíbrio',
+      eqs: [eq(sup(sub(i('x'), i('i,j')), 'E') + sup(sub(i('γ'), i('i,j')), 'E') + ' = ' + sup(sub(i('x'), i('i,j')), 'R') + sup(sub(i('γ'), i('i,j')), 'R'), 'equilíbrio em cada estágio'),
+        eq(sub(sup(L, 'R'), i('j') + '−1') + sub(sup(i('x'), 'R'), i('i,j') + '−1') + ' + ' + sub(sup(L, 'E'), i('j') + '+1') + sub(sup(i('x'), 'E'), i('i,j') + '+1') + '<br>= ' + sub(sup(L, 'R'), i('j')) + sub(sup(i('x'), 'R'), i('i,j')) + ' + ' + sub(sup(L, 'E'), i('j')) + sub(sup(i('x'), 'E'), i('i,j')), 'balanço no estágio j'),
+        eq(fr('soluto que fica no rafinado', 'soluto alimentado') + ' = ' + fr(i('ε') + ' − 1', sup(i('ε'), i('N') + '+1') + ' − 1') + ',<br>' + i('ε') + ' = ' + fr(i('K') + i('S'), F), 'Kremser (K constante)')],
+      sym: [['E, R', 'fases extrato e rafinado'], [i('ε'), 'fator de extração'], [i('S'), 'vazão de solvente']]
+    }),
+    leaching: (p) => ({
+      name: 'Extrator sólido-líquido (lixiviação) em contracorrente',
+      eqs: [eq(sub(i('y'), i('j')) + ' = ' + sub(i('x'), i('j')), 'estágio ideal: a solução retida no sólido tem a mesma concentração do extrato'),
+        eq(sub(i('U'), i('j')) + ' = ' + i('r') + '·' + sub(i('B'), 'inerte'), 'retenção de solução no sólido'),
+        eq(fr('soluto que sai com o sólido', 'soluto alimentado') + ' ≈ ' + fr(i('S') + ' − 1', sup(i('S'), i('N') + '+1') + ' − 1') + ',<br>' + i('S') + ' = ' + fr(i('V'), i('U')), 'retenção constante')],
+      sym: [[i('r'), 'retenção (kg de solução/kg de inerte) = ' + (p.r != null ? String(p.r).replace('.', ',') : 'r')], [i('V') + ', ' + i('U'), 'solução no extrato e no sólido (underflow)']]
+    }),
+    cstr: (p) => {
+      const mode = p.mode || 'permanente', th = p.thermal || 'isotérmico';
+      const bal = mode === 'batelada' ? eq(od(Ci, t) + ' = ' + sum(i('j')) + ' ' + sub(i('ν'), i('ij')) + sub(i('r'), i('j')), 'batelada')
+        : mode === 'transiente' ? eq(od(Ci, t) + ' = ' + fr(sub(i('C'), i('i') + ',0') + ' − ' + Ci, i('τ')) + ' + ' + sum(i('j')) + ' ' + sub(i('ν'), i('ij')) + sub(i('r'), i('j')), 'balanço transiente')
+        : eq('0 = ' + fr(sub(i('C'), i('i') + ',0') + ' − ' + Ci, i('τ')) + ' + ' + sum(i('j')) + ' ' + sub(i('ν'), i('ij')) + sub(i('r'), i('j')), 'regime permanente');
+      const en = th === 'isotérmico' ? eq(T + ' = ' + sub(T, 'especificada'), 'isotérmico')
+        : eq(i('ρ') + sub(i('c'), 'p') + od(T, t) + ' = ' + (mode === 'batelada' ? '' : fr(i('ρ') + sub(i('c'), 'p') + '(' + sub(T, '0') + ' − ' + T + ')', i('τ')) + '<br>+ ') + sum(i('j')) + ' (−Δ' + sub(i('H'), i('j')) + ')' + sub(i('r'), i('j')) + (th === 'camisa' ? '<br>− ' + fr(i('UA'), V) + '(' + T + ' − ' + sub(T, 'c') + ')' : ''), th === 'camisa' ? 'energia com camisa' : 'adiabático');
+      return {
+        name: 'Reator CSTR: mistura perfeita (' + mode + ', ' + th + ')',
+        eqs: [bal, eq(i('τ') + ' = ' + fr(V, sub(i('v'), '0'))), en, rate()],
+        sym: [[i('τ'), 'tempo espacial V/v₀'], [sub(i('ν'), i('ij')), 'coeficiente estequiométrico de i na reação j'], [sub(i('r'), i('j')), 'velocidade da reação j'], ['Δ' + sub(i('H'), i('j')), 'calor de reação'], [sub(T, 'c'), 'temperatura da camisa']]
+      };
+    },
+    pfr: (p) => {
+      const mode = p.mode || 'permanente', th = p.thermal || 'isotérmico';
+      const bal = mode === 'transiente'
+        ? eq(pd(Ci, t) + ' = −' + i('u') + pd(Ci, z) + ' + ' + sum(i('j')) + ' ' + sub(i('ν'), i('ij')) + sub(i('r'), i('j')), 'EDP de escoamento pistonado')
+        : eq(od(Fi, V) + ' = ' + sum(i('j')) + ' ' + sub(i('ν'), i('ij')) + sub(i('r'), i('j')), 'regime permanente');
+      const en = th === 'isotérmico' ? eq(T + ' = ' + sub(T, 'especificada'))
+        : eq('(' + sum(i('i')) + ' ' + Fi + sub(i('c'), 'p,' + i('i')) + ')' + od(T, V) + ' = ' + sum(i('j')) + ' (−Δ' + sub(i('H'), i('j')) + ')' + sub(i('r'), i('j')) + (th === 'parede' ? '<br>+ ' + i('U') + i('a') + '(' + sub(T, 'w') + ' − ' + T + '),<br>' + i('a') + ' = 4/' + i('D') : ''), 'energia');
+      const eqs = [bal, en, rate()];
+      if ((p.phase || '') === 'gasosa') eqs.push(eq(Ci + ' = ' + fr(Fi, sub(F, i('T'))) + '·' + fr(P, i('R') + T), 'fase gasosa (gás ideal)'));
+      if (mode === 'transiente') eqs.push(txt('A EDP é resolvida pelo método das linhas: o tubo é dividido em ' + (p.cells || 'N') + ' células, cada uma tratada como um tanque de mistura perfeita.'));
+      return {
+        name: 'Reator PFR: escoamento pistonado (' + mode + ', ' + th + ')',
+        eqs, sym: [[i('u'), 'velocidade média no tubo'], [z, 'posição axial'], [i('U'), 'coeficiente global da parede'], [sub(T, 'w'), 'temperatura da parede'], [i('D'), 'diâmetro do tubo']]
+      };
+    },
+    rconv: (p) => ({
+      name: 'Reator de conversão: estequiometria com conversão especificada',
+      eqs: [eq(Fi + ' = ' + sub(i('F'), i('i') + ',0') + ' + ' + sum(i('j')) + ' ' + sub(i('ν'), i('ij')) + sub(i('ξ'), i('j'))), eq(sub(i('ξ'), i('j')) + ' = ' + fr(sub(i('X'), i('j')) + '·' + sub(i('F'), 'lim,0'), '|' + sub(i('ν'), 'lim,' + i('j')) + '|')),
+        (p.thermal || '') === 'adiabático' ? eq(sum(i('i')) + ' ' + Fi + sub(i('h'), i('i')) + '(' + T + ') = ' + sum(i('i')) + ' ' + sub(i('F'), i('i') + ',0') + sub(i('h'), i('i')) + '(' + sub(T, '0') + ')', 'adiabático (entalpias de formação incluídas)') : eq(Q + ' = ' + sum(i('i')) + ' ' + Fi + sub(i('h'), i('i')) + '(' + T + ') − ' + sum(i('i')) + ' ' + sub(i('F'), i('i') + ',0') + sub(i('h'), i('i')) + '(' + sub(T, '0') + ')', 'calor trocado')],
+      sym: [[sub(i('ξ'), i('j')), 'grau de avanço da reação j'], [sub(i('X'), i('j')), 'conversão do reagente limitante']]
+    }),
+    adsorber: (p) => {
+      const iso = p.isotherm || 'Langmuir';
+      const isoEq = iso === 'Freundlich' ? eq(sup(q, '*') + '(' + C + ') = ' + sub(i('K'), 'F') + sup(C, '1/' + i('n')), 'isoterma de Freundlich')
+        : iso === 'Linear' ? eq(sup(q, '*') + '(' + C + ') = ' + sub(i('K'), 'd') + C, 'isoterma linear')
+          : eq(sup(q, '*') + '(' + C + ') = ' + fr(sub(q, 'm') + sub(i('K'), 'L') + C, '1 + ' + sub(i('K'), 'L') + C), 'isoterma de Langmuir');
+      return {
+        name: 'Coluna de adsorção em leito fixo: curva de ruptura (breakthrough)',
+        eqs: [eq(pd(C, t) + ' = ' + sub(i('D'), 'e') + pd(C, z, 2) + ' − ' + i('u') + pd(C, z) + ' − ' + fr('1 − ' + i('ε'), i('ε')) + sub(i('ρ'), 'p') + pd(q, t), 'EDP: dispersão axial + convecção + adsorção'),
+          eq(pd(q, t) + ' = ' + sub(i('k'), 'f') + '[' + sup(q, '*') + '(' + C + ') − ' + q + ']', 'força motriz linear (LDF)'), isoEq,
+          eq(C + '(0, ' + t + ') = ' + sub(C, '0') + '(1 − ' + sup(i('e'), '−' + t + '/' + sub(i('τ'), 'r')) + '),<br>' + pd(C, z) + '|<sub>' + z + '=' + L + '</sub> = 0', 'condições de contorno'),
+          eq(C + '(' + z + ', 0) = ' + q + '(' + z + ', 0) = 0', 'leito limpo no início'),
+          eq('curva de ruptura: ' + fr(C + '(' + L + ', ' + t + ')', sub(C, '0')) + ' em função de ' + t)],
+        sym: [[C, 'concentração do soluto no fluido (mg/L)'], [q, 'quantidade adsorvida (mg/g)'], [sub(i('D'), 'e'), 'coeficiente de dispersão axial'], [i('u'), 'velocidade intersticial'], [i('ε'), 'porosidade do leito'], [sub(i('ρ'), 'p'), 'densidade aparente do adsorvente'], [sub(i('k'), 'f'), 'coeficiente de transferência de massa (LDF)'], [sub(i('τ'), 'r'), 'rampa de entrada (estabilidade numérica)'], [L, 'altura do leito']],
+        note: 'Solução numérica: diferenças finitas (convecção com ajuste exponencial de Il\'in–Allen–Southwell) e integração implícita BDF2 com Newton.'
+      };
+    },
+    packaging: (p) => {
+      const r = p.reaction || 'Michaelis-Menten';
+      const R = r === 'primeira ordem' ? eq(i('R') + '(' + C + ') = ' + sub(i('k'), '1') + C, 'consumo de 1ª ordem')
+        : r === 'sem reação' ? eq(i('R') + '(' + C + ') = 0', 'só difusão')
+          : eq(i('R') + '(' + C + ') = ' + fr(sub(i('R'), 'máx') + C, sub(i('K'), 'm') + ' + ' + C), 'Michaelis–Menten');
+      return {
+        name: 'Embalagem: 2ª lei de Fick com reação química',
+        eqs: [eq(pd(C, t) + ' = ' + i('D') + pd(C, x, 2) + ' − ' + i('R') + '(' + C + ')', 'EDP: difusão + reação'), R,
+          eq(C + '(0, ' + t + ') = ' + sub(C, 'ext') + ',<br>' + pd(C, x) + '|<sub>' + x + '=' + L + '</sub> = 0', 'condições de contorno'),
+          eq(C + '(' + x + ', 0) = ' + sub(C, '0'), 'condição inicial'),
+          eq(sub(C, 'ext') + ' = ' + fr(sub(i('y'), 'O₂') + P, i('R') + T), 'gás ideal'),
+          eq(i('N') + ' = −' + i('D') + pd(C, x) + '|<sub>' + x + '=0</sub>,<br>' + i('X') + ' = ' + fr(sub(C, '0') + ' − ' + i('<span class="ovl">C</span>'), sub(C, '0')), 'fluxo e conversão média'),
+          eq(i('k') + ' = ' + fr(sub(P, 'atm'), sub(T, 'ref')) + '·' + fr(i('P') + i('A') + T, V + i('e')) + ' = 370,95·' + fr(i('P') + i('A') + T, V + i('e')), 'Eq. 17: constante global')],
+        sym: [[C, 'concentração de O₂ no material (mol/m³)'], [x, 'posição na espessura (x = 0: face externa)'], [i('D'), 'coeficiente de difusão efetivo'], [sub(i('R'), 'máx') + ', ' + sub(i('K'), 'm'), 'parâmetros de Michaelis–Menten'], [sub(C, 'ext'), 'concentração no ambiente'], [i('P'), 'permeabilidade do material'], [i('A') + ', ' + V + ', ' + i('e'), 'área, volume interno e espessura']],
+        note: 'Solução numérica: método das linhas com diferenças finitas centradas e integração implícita BDF2 com Newton (algoritmo de Thomas).'
+      };
+    }
+  };
+  M.cooler = p => Object.assign(M.heater(p), { name: 'Resfriador: balanço de energia (especificação: ' + (p.mode || 'Temperatura de saída') + ')' });
+
+  function get(type, params, model) { const f = M[type]; return f ? f(params || {}, model) : null; }
+  function html(type, params, model, open) {
+    const m = get(type, params, model); if (!m) return '';
+    return '<details class="model-eq"' + (open ? ' open' : '') + '><summary><span aria-hidden="true">📐</span> Modelo matemático <span class="model-name">— ' + m.name + '</span></summary>' +
+      '<div class="eq-list">' + m.eqs.join('') + '</div>' +
+      (m.sym && m.sym.length ? '<table class="eq-sym"><tbody>' + m.sym.map(s => '<tr><td>' + s[0] + '</td><td>' + s[1] + '</td></tr>').join('') + '</tbody></table>' : '') +
+      (m.note ? '<p class="small muted">' + m.note + '</p>' : '') + '</details>';
+  }
+  SF.models = { get, html, types: Object.keys(M) };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
 <script>/* js/flowsheet.js */
 /* SIMULA FÁCIL IA — Solver sequencial-modular do fluxograma (ordem automática, correntes de corte e Wegstein) */
 (function (root) {
@@ -3011,6 +3341,7 @@ window.SIMULAFACIL_CONFIG = {
   }
   PFD.prototype.toWorld = function (e) { const r = this.svg.getBoundingClientRect(); return { x: (e.clientX - r.left - this.tx) / this.s, y: (e.clientY - r.top - this.ty) / this.s }; };
   PFD.prototype.render = function () {
+    const touchUI = typeof document !== 'undefined' && document.body && document.body.classList.contains('mobile');
     const st = this.o.getState(), res = this.o.getResults ? this.o.getResults() : null, self = this;
     const bmap = {}; st.blocks.forEach(b => { bmap[b.id] = b; });
     let h = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--stream)"/></marker>' +
@@ -3054,7 +3385,8 @@ window.SIMULAFACIL_CONFIG = {
       const used = new Set(st.streams.filter(s => s.from === b.id).map(s => s.fromPort).concat(st.streams.filter(s => s.to === b.id).map(s => s.toPort)));
       Object.keys(g.ports).forEach(pn => {
         const p = g.ports[pn], armed = this.arm && this.arm.block === b.id && this.arm.port === pn;
-        h += '<circle class="port ' + p.io + (used.has(pn) ? '' : ' free') + (armed ? ' arm' : '') + '" data-port="' + pn + '" data-io="' + p.io + '" cx="' + p.x + '" cy="' + p.y + '" r="5"><title>' + esc(SF.flowsheet.portLabel(pn)) + '</title></circle>';
+        h += '<circle class="port ' + p.io + (used.has(pn) ? '' : ' free') + (armed ? ' arm' : '') + '" data-port="' + pn + '" data-io="' + p.io + '" cx="' + p.x + '" cy="' + p.y + '" r="' + (touchUI ? 7 : 5) + '"><title>' + esc(SF.flowsheet.portLabel(pn)) + '</title></circle>';
+        if (touchUI) h += '<circle class="port-hit" data-port="' + pn + '" data-io="' + p.io + '" cx="' + p.x + '" cy="' + p.y + '" r="16" fill="transparent"/>';
       });
       h += '</g>';
     });
@@ -3078,8 +3410,20 @@ window.SIMULAFACIL_CONFIG = {
   PFD.prototype.select = function (sel) { this.sel = sel; this.render(); if (this.o.onSelect) this.o.onSelect(sel); };
   PFD.prototype._bind = function () {
     const svg = this.svg, self = this;
-    let pan = null, moved = false;
+    let pan = null, moved = false, pinch = null;
+    const pts = new Map(); // dedos (ou ponteiros) apertados agora
+    const two = () => { const v = [...pts.values()]; return { d: Math.hypot(v[0].x - v[1].x, v[0].y - v[1].y) || 1, x: (v[0].x + v[1].x) / 2, y: (v[0].y + v[1].y) / 2 }; };
     svg.addEventListener('pointerdown', e => {
+      if (e.isPrimary) { pts.clear(); pinch = null; } // primeiro dedo de um gesto novo
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pts.size === 2) { // começa a pinça: cancela arrastes e ligações em curso
+        const t = two(); pinch = { d: t.d, x: t.x, y: t.y, s: self.s, tx: self.tx, ty: self.ty };
+        if (self.drag && self.drag.started && self.o.onChange) self.o.onChange('move');
+        self.drag = null; pan = null; moved = true; if (self.arm) { self.arm = null; self.render(); }
+        try { svg.setPointerCapture(e.pointerId); } catch (err) { /* */ }
+        return;
+      }
+      if (pts.size > 2) return;
       const port = e.target.closest('[data-port]'), blk = e.target.closest('[data-block]'), str = e.target.closest('[data-stream]');
       moved = false;
       if (port && blk) {
@@ -3101,6 +3445,13 @@ window.SIMULAFACIL_CONFIG = {
       pan = { x: e.clientX, y: e.clientY, tx: self.tx, ty: self.ty }; svg.setPointerCapture(e.pointerId);
     });
     svg.addEventListener('pointermove', e => {
+      if (pts.has(e.pointerId)) pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pinch) {
+        if (pts.size < 2) return;
+        const t = two(), r = svg.getBoundingClientRect(), ns = Math.max(0.25, Math.min(3, pinch.s * t.d / pinch.d));
+        const wx = (pinch.x - r.left - pinch.tx) / pinch.s, wy = (pinch.y - r.top - pinch.ty) / pinch.s;
+        self.s = ns; self.tx = t.x - r.left - wx * ns; self.ty = t.y - r.top - wy * ns; self.render(); return;
+      }
       if (self.drag) {
         const w = self.toWorld(e), b = self.o.getState().blocks.find(x => x.id === self.drag.id); if (!b) return;
         if (!self.drag.started) { self.drag.started = true; if (self.o.onBeforeMove) self.o.onBeforeMove(); }
@@ -3109,7 +3460,10 @@ window.SIMULAFACIL_CONFIG = {
       if (pan) { self.tx = pan.tx + e.clientX - pan.x; self.ty = pan.ty + e.clientY - pan.y; if (Math.abs(e.clientX - pan.x) + Math.abs(e.clientY - pan.y) > 3) moved = true; self.render(); return; }
       if (self.arm) { self.arm.cur = self.toWorld(e); self.render(); }
     });
+    const lift = e => { pts.delete(e.pointerId); if (pinch && pts.size < 2) { if (!pts.size) pinch = null; return true; } return false; };
+    svg.addEventListener('pointercancel', e => { lift(e); if (!pts.size) { pinch = null; pan = null; if (self.drag) { const was = self.drag.started; self.drag = null; if (was && self.o.onChange) self.o.onChange('move'); } } });
     svg.addEventListener('pointerup', e => {
+      if (lift(e) || pinch) return;
       if (self.drag) { const was = self.drag.started; self.drag = null; if (was && self.o.onChange) self.o.onChange('move'); return; }
       if (pan) { pan = null; if (!moved) self.select(null); return; }
       if (self.arm) { // soltar sobre uma porta conclui a ligação (arrastar)
@@ -3301,9 +3655,34 @@ window.SIMULAFACIL_CONFIG = {
     }
   }
 
+  /* versão para celular: fontes, margens e altura menores; a legenda vai para baixo do gráfico */
+  function compact(f, width) {
+    const k = 0.72, L = f.layout, w = Math.max(280, width || 360);
+    const walk = (o, key) => {
+      if (!o || typeof o !== 'object') return;
+      if (Array.isArray(o)) { o.forEach(x => walk(x, '')); return; }
+      if (/font$/i.test(key || '') && typeof o.size === 'number') o.size = Math.max(10, Math.round(o.size * k));
+      Object.keys(o).forEach(kk => { if (o[kk] && typeof o[kk] === 'object') walk(o[kk], kk); });
+    };
+    walk(L, ''); walk(f.data, '');
+    if (L.title && typeof L.title.text === 'string') L.title.text = L.title.text.replace(/font-size:\s*(\d+)px/g, (m, n) => 'font-size:' + Math.round(n * k) + 'px');
+    if (L.margin) ['l', 'r', 't', 'b'].forEach(sd => { if (L.margin[sd] > 20) L.margin[sd] = Math.round(L.margin[sd] * 0.7); });
+    let h = Math.round(Math.min(L.height || 430, Math.max(300, w * (L.scene ? 1.05 : 0.95) + 70)));
+    const named = (f.data || []).filter(t => t.name && t.showlegend !== false && t.type !== 'surface').length;
+    if (!L.scene && named > 1 && L.showlegend !== false) {
+      const rows = Math.ceil(named / (w > 460 ? 3 : 2));
+      L.legend = Object.assign({}, L.legend, { orientation: 'h', xref: 'container', yref: 'container', x: 0.01, xanchor: 'left', y: 0.005, yanchor: 'bottom', bgcolor: 'rgba(0,0,0,0)', borderwidth: 0 });
+      const extra = rows * 19 + 8; L.margin = Object.assign({}, L.margin); L.margin.b = Math.max(L.margin.b || 50, 56) + extra; h += extra;
+    }
+    L.height = h;
+    return f;
+  }
+
   function render(container, p, opts) {
     opts = opts || {};
     const f = figure(p); if (!f) return null;
+    const small = !!opts.compact;
+    if (small) compact(f, opts.width || (container && container.clientWidth) || (root.innerWidth - 24));
     const card = document.createElement('div'); card.className = 'chart-card' + (f.wide ? ' wide' : '');
     const head = document.createElement('div'); head.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 8px 0 10px';
     head.innerHTML = '<span class="small muted" style="flex:1">' + (opts.source || '') + '</span>';
@@ -3317,7 +3696,9 @@ window.SIMULAFACIL_CONFIG = {
     Plotly.newPlot(div, f.data, f.layout, CFG);
     btn.onclick = async () => {
       try {
-        const url = await Plotly.toImage(div, { format: 'png', width: 1400, height: Math.round(1400 * (f.layout.height || 430) / Math.max(div.clientWidth, 500)), scale: 1 });
+        let url;
+        if (small) { const full = figure(p); if (full.rev) full.layout.yaxis.autorange = 'reversed'; url = await Plotly.toImage({ data: full.data, layout: full.layout }, { format: 'png', width: 1400, height: Math.round(1400 * (full.layout.height || 430) / 1000), scale: 1 }); } // PNG sempre com fonte 18
+        else url = await Plotly.toImage(div, { format: 'png', width: 1400, height: Math.round(1400 * (f.layout.height || 430) / Math.max(div.clientWidth, 500)), scale: 1 });
         const bin = atob(url.split(',')[1]), arr = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
         const blob = new Blob([arr], { type: 'image/png' });
         if (opts.save) opts.save((p.title || 'grafico').replace(/[^\w\-]+/g, '_').slice(0, 60) + '.png', blob);
@@ -3326,7 +3707,7 @@ window.SIMULAFACIL_CONFIG = {
     return card;
   }
 
-  SF.charts = { render, figure, FS };
+  SF.charts = { render, figure, compact, FS };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -5169,7 +5550,7 @@ def pfr_transiente(P, nome):
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R' };
 
-  let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null;
+  let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false;
   const caps = { downloads: undefined };
 
   function blank() { return { name: 'Novo processo', components: ['ethanol', 'water'], model: 'NRTL', blocks: [], streams: [], binary: {} }; }
@@ -5225,7 +5606,7 @@ def pfr_transiente(P, nome):
   /* ------------------------------------------------------------------ editor de fluxograma */
   const pfd = new SF.PFD($('#pfd'), {
     getState: () => state, getResults: () => results,
-    onSelect: sel => { renderProps(); if (sel) switchTab('props'); if (sel && sel.kind === 'block' && results && results.blocks && results.blocks[sel.id] && (results.blocks[sel.id].plots || []).length) renderCharts(sel.id); },
+    onSelect: sel => { renderProps(); if (sel) switchTab('props'); updateSelBar(); if (sel && sel.kind === 'block' && results && results.blocks && results.blocks[sel.id] && (results.blocks[sel.id].plots || []).length) renderCharts(sel.id); },
     onChange: kind => { if (kind === 'move') { persist(); return; } afterChange(false); }, onBeforeMove: pushUndo,
     onConnect: (a, ap, b, bp) => { pushUndo(); connect(a, ap, b, bp); afterChange(true); },
     onOpen: id => { pfd.select({ kind: 'block', id }); const inp = $('#blkName'); if (inp) inp.focus(); },
@@ -5308,7 +5689,8 @@ def pfr_transiente(P, nome):
   }
 
   /* ------------------------------------------------------------------ abas */
-  function switchTab(t) { document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === 'tab-' + t)); if (t === 'thermo') renderThermo(); if (t === 'results') renderResults(); }
+  function switchTab(t) { if (SF.mobile && SIDE_VIEWS.indexOf(mview) >= 0 && mview !== t && SIDE_VIEWS.indexOf(t) >= 0) { mview = t; document.body.dataset.mview = t; document.querySelectorAll('#mNav button').forEach(b => b.classList.toggle('on', b.dataset.mview === t || (t === 'thermo' && b.dataset.mview === 'props'))); }
+    document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t)); document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === 'tab-' + t)); if (t === 'thermo') renderThermo(); if (t === 'results') renderResults(); }
   document.querySelectorAll('.tabs button').forEach(b => { b.onclick = () => switchTab(b.dataset.tab); });
 
   /* ------------------------------------------------------------------ propriedades */
@@ -5339,13 +5721,16 @@ def pfr_transiente(P, nome):
     const r = results && results.blocks && results.blocks[b.id];
     if (r) h += '<div class="subhead">Resultados</div>' + resTable(r) + ((r.plots || []).length ? '<div class="row-actions"><button id="showCharts">Ver gráficos (' + r.plots.length + ')</button></div>' : '');
     if (results && results.errors) { const e = results.errors.find(x => x.block === b.id); if (e) h += '<div class="note err">' + esc(e.msg) + '</div>'; }
+    let eqOpen = true; try { eqOpen = localStorage.getItem('simulafacil.eqOpen') !== '0'; } catch (e) { /* */ }
+    if (SF.models) h += SF.models.html(b.type, b.params, state.model, eqOpen);
     h += '<div class="subhead">Especificações</div>';
     T.params.forEach(f => { h += fieldHTML(b, f); });
     h += '<div class="row-actions"><button id="runFromProps" class="primary">Simular</button><button id="delBlk">Excluir equipamento</button></div>';
     el.innerHTML = h;
     $('#blkName').onchange = e => { pushUndo(); b.name = e.target.value || b.name; afterChange(false); };
     $('#delBlk').onclick = deleteSelected; $('#runFromProps').onclick = () => runSimulation();
-    if ($('#showCharts')) $('#showCharts').onclick = () => renderCharts(b.id);
+    if ($('#showCharts')) $('#showCharts').onclick = () => { renderCharts(b.id); if (SF.mobile) setMView('charts'); };
+    const md = el.querySelector('.model-eq'); if (md) md.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.eqOpen', md.open ? '1' : '0'); } catch (e) { /* */ } });
     bindFields(b);
   }
   function blockName(id) { const b = state.blocks.find(x => x.id === id); return b ? b.name : id; }
@@ -5461,6 +5846,7 @@ def pfr_transiente(P, nome):
 
   /* ------------------------------------------------------------------ gráficos */
   function renderCharts(target, extraPlots, title) {
+    lastCharts = [target, extraPlots, title];
     const el = $('#charts'); el.innerHTML = '';
     let plots = [], ttl = title || 'Gráficos';
     if (extraPlots) plots = extraPlots;
@@ -5471,7 +5857,9 @@ def pfr_transiente(P, nome):
     $('#drawerTitle').textContent = ttl;
     if (!plots.length) { el.innerHTML = '<p class="chart-empty">Sem gráficos para mostrar. Simule e selecione uma coluna, reator, trocador ou extrator.</p>'; return; }
     setDrawer(true);
-    plots.forEach(p => SF.charts.render(el, p, { save: saveFile, toast, source: title ? '' : blockName(target) }));
+    const cw = SF.mobile ? (el.clientWidth || window.innerWidth) - 18 : 0;
+    plots.forEach(p => SF.charts.render(el, p, { save: saveFile, toast, source: title ? '' : blockName(target), compact: !!SF.mobile, width: cw }));
+    if (SF.mobile && mview !== 'charts') $('#mNav .mbadge').hidden = false;
   }
   /* ------------------------------------------------------------------ divisórias arrastáveis (paleta | fluxograma | painel; fluxograma / gráficos) */
   const LAYOUT_KEY = 'simulafacil.layout';
@@ -5745,17 +6133,67 @@ def pfr_transiente(P, nome):
   $('#projName').value = state.name; $('#emptyHint').hidden = state.blocks.length > 0; updateCompSummary();
   requestAnimationFrame(() => { pfd.fit(); runSimulation(true); renderProps(); });
   (function () { let noShow = false; try { noShow = localStorage.getItem('simulafacil.noWelcome') === '1'; } catch (e) { /* */ } if (!noShow) openWelcome(); })();
-  /* aviso: a versão foi feita para notebook/computador — celulares e telas pequenas recebem o alerta (uma vez por sessão) */
+  /* ------------------------------------------------------------------ versão para celular (mesmo programa, outra arrumação da tela) */
+  const VM_KEY = 'simulafacil.viewMode', SIDE_VIEWS = ['props', 'results', 'agent', 'thermo'];
+  function phoneLike() {
+    const w = Math.min(window.innerWidth, (window.screen && screen.width) || 9999), mm = q => !!(window.matchMedia && matchMedia(q).matches);
+    return w < 760 || (mm('(pointer: coarse)') && !mm('(hover: hover)') && w < 1000) || /Android.+Mobile|iPhone|iPod/i.test(navigator.userAgent || '');
+  }
+  function closeSheets() { document.body.classList.remove('mmenu', 'mpal'); $('#mBackdrop').hidden = true; $('#mMenuBtn').setAttribute('aria-expanded', 'false'); }
+  function openSheet(cls) { closeSheets(); document.body.classList.add(cls); $('#mBackdrop').hidden = false; if (cls === 'mmenu') $('#mMenuBtn').setAttribute('aria-expanded', 'true'); }
+  function setMView(v) {
+    if (SIDE_VIEWS.indexOf(v) < 0 && v !== 'flow' && v !== 'charts') v = 'flow';
+    mview = v; document.body.dataset.mview = v;
+    document.querySelectorAll('#mNav button').forEach(b => b.classList.toggle('on', b.dataset.mview === v || (v === 'thermo' && b.dataset.mview === 'props')));
+    if (SIDE_VIEWS.indexOf(v) >= 0) switchTab(v);
+    if (v === 'charts') $('#mNav .mbadge').hidden = true;
+    closeSheets();
+    requestAnimationFrame(() => { pfd.render(); if (v === 'flow' && !mFitted) { mFitted = true; pfd.fit(); } window.dispatchEvent(new Event('resize')); });
+  }
+  function updateSelBar() {
+    const sel = pfd.sel, bar = $('#mSel');
+    if (!SF.mobile || !sel) { bar.hidden = true; return; }
+    if (sel.kind === 'block') $('#mSelName').textContent = blockName(sel.id);
+    else { const st = state.streams.find(x => x.id === sel.id); $('#mSelName').textContent = 'Corrente ' + (st ? st.name : sel.id); }
+    bar.hidden = false;
+  }
+  function applyView(mode, rerender) {
+    const mob = mode === 'mobile';
+    SF.mobile = mob; document.body.classList.toggle('mobile', mob);
+    const vb = $('#btnViewMode'); vb.hidden = !(mob || phoneLike()); vb.textContent = mob ? '💻 Versão completa para notebook' : '📱 Usar a versão para celular';
+    if (mob) setMView(mview || 'flow'); else { delete document.body.dataset.mview; closeSheets(); }
+    updateSelBar();
+    if (rerender) {
+      if (lastCharts) renderCharts.apply(null, lastCharts);
+      setTimeout(() => { pfd.fit(); window.dispatchEvent(new Event('resize')); }, 80);
+    }
+  }
+  $('#mNav').addEventListener('click', e => { const b = e.target.closest('button[data-mview]'); if (b) setMView(b.dataset.mview); });
+  $('#mMenuBtn').onclick = () => (document.body.classList.contains('mmenu') ? closeSheets() : openSheet('mmenu'));
+  $('#mAdd').onclick = () => openSheet('mpal');
+  $('#mBackdrop').onclick = closeSheets;
+  $('#mRun').onclick = () => $('#btnRun').click();
+  $('#btnThermoM').onclick = () => setMView('thermo');
+  $('#mSelEdit').onclick = () => setMView('props');
+  $('#mSelDel').onclick = () => { deleteSelected(); updateSelBar(); };
+  $('#palette').addEventListener('click', e => { if (SF.mobile && e.target.closest('.pal-item')) { closeSheets(); updateSelBar(); } });
+  $('.tools').addEventListener('click', e => { if (SF.mobile && e.target.closest('button, a') && e.target.closest('button, a').id !== 'btnViewMode') setTimeout(closeSheets, 0); });
+  $('#exampleSel').addEventListener('change', () => { if (SF.mobile) { closeSheets(); setMView('flow'); mFitted = true; setTimeout(() => pfd.fit(), 60); } });
+  $('#btnViewMode').onclick = () => { const m = SF.mobile ? 'desktop' : 'mobile'; try { localStorage.setItem(VM_KEY, m); } catch (e) { /* */ } closeSheets(); applyView(m, true); toast(m === 'mobile' ? 'Versão para celular' : 'Versão completa para notebook'); };
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && SF.mobile) closeSheets(); });
   (function () {
-    const w = Math.min(window.innerWidth, (screen && screen.width) || 9999), coarse = window.matchMedia && matchMedia('(pointer: coarse)').matches;
-    const phone = w < 760 || (coarse && w < 1000 && !matchMedia('(hover: hover)').matches) || /Android.+Mobile|iPhone|iPod/i.test(navigator.userAgent);
-    let seen = false; try { seen = sessionStorage.getItem('simulafacil.mobileOk') === '1'; } catch (e) { /* */ }
-    if (!phone || seen) return;
+    let pref = null; try { pref = localStorage.getItem(VM_KEY); } catch (e) { /* */ }
+    const phone = phoneLike();
+    applyView(pref || (phone ? 'mobile' : 'desktop'));
+    if (pref || !phone) return;
+    // primeira visita pelo celular: o usuário escolhe a versão
     const cfg = window.SIMULAFACIL_CONFIG || {}, here = location.href.split('#')[0];
     const url = /^https?:/.test(here) && !/claude\.ai|claudeusercontent/.test(here) ? here : ((cfg.siteUrl || '') + 'simulador.html');
     $('#mobUrl').textContent = url; $('#mobWarn').hidden = false;
+    const choose = m => { try { localStorage.setItem(VM_KEY, m); } catch (e) { /* */ } $('#mobWarn').hidden = true; if (m !== 'mobile') applyView(m, true); };
+    $('#mobGo').onclick = () => choose('mobile');
+    $('#mobFull').onclick = () => choose('desktop');
     $('#mobCopy').onclick = () => copyText(url);
-    $('#mobGo').onclick = () => { $('#mobWarn').hidden = true; try { sessionStorage.setItem('simulafacil.mobileOk', '1'); } catch (e) { /* */ } };
     setTimeout(() => $('#mobGo').focus(), 50);
   })();
   if (SF.agent) SF.agent.init(SF.app);

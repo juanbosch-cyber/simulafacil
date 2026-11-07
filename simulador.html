@@ -451,6 +451,8 @@ body.mobile .top .tools #exampleSel { max-width: none; width: 100%; }
 .model-eq > .small { margin: 0 12px 10px; }
 body.mobile .eq { font-size: 15px; }
 .eq .ovl { text-decoration: overline; }
+.eq-hint { display: flex; gap: 12px; align-items: flex-start; margin: 4px 0 12px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--accent); border-left: 6px solid var(--accent); background: var(--accent-weak); color: var(--ink); font-size: 14.5px; line-height: 1.45; }
+.eq-hint-ico { font-size: 26px; line-height: 1; flex: none; }
 
 </style>
 </head>
@@ -2721,7 +2723,7 @@ window.SIMULAFACIL_CONFIG = {
         { y: 0.05, name: 'Ruptura (5%)', color: '#d1302b' }, { y: 0.95, name: 'Saturação (95%)', color: '#222222' }] } });
     plots.push({ kind: 'surface', title: 'Leito: concentração no fluido C(z, t)', data: {
       x: r.z.map(z => z * 100), y: r.t.map(t => t / 3600), z: r.C, color: r.C.map(row => row.map(c => c / C0)),
-      xLabel: 'Posição z (cm)', yLabel: 'Tempo (h)', zLabel: 'C (mg/L)', cLabel: 'C/C₀', cmin: 0, cmax: 1, hover: 'z = %{x:.2f} cm<br>t = %{y:.2f} h<br>C = %{z:.3f} mg/L' } });
+      xLabel: 'Posição z (cm)', yLabel: 'Tempo (h)', zLabel: 'C (mg/L)', cLabel: 'C/C₀', cmin: 0, cmax: 1, camera: { x: -1.66, y: 1.17, z: 1.08 } /* view(-125, 28) do MATLAB */, hover: 'z = %{x:.2f} cm<br>t = %{y:.2f} h<br>C = %{z:.3f} mg/L' } });
     const picks = [0.1, 0.25, 0.5, 0.75, 1].map(f => Math.min(r.t.length - 1, Math.round(f * (r.t.length - 1))));
     plots.push({ kind: 'curves', title: 'Perfis no leito: carga do adsorvente q(z)', data: { xLabel: 'Posição z (cm)', yLabel: 'q (mg/g)',
       series: picks.map(k => ({ name: 't = ' + (r.t[k] / 3600).toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' h', x: r.z.map(z => z * 100), y: r.q[k] })) } });
@@ -2758,7 +2760,7 @@ window.SIMULAFACIL_CONFIG = {
     const Cmat = r.x.map((_, j) => r.C.map(row => row[j]));           // linhas = posição, colunas = tempo
     plots.push({ kind: 'surface', title: 'Perfil 3D da concentração de ' + th.c[ig].name + ' na embalagem', data: {
       x: r.t.map(t => t / 3600), y: r.x.map(x => x * 1000), z: Cmat, color: Cmat.map(row => row.map(c => o.C0 > 0 ? (o.C0 - c) / o.C0 * 100 : 0)),
-      xLabel: 'Tempo (h)', yLabel: 'Dimensão x (mm)', zLabel: 'C (mol/m³)', cLabel: 'Conversão (%)', colorscale: 'Turbo',
+      xLabel: 'Tempo (h)', yLabel: 'Dimensão x (mm)', zLabel: 'C (mol/m³)', cLabel: 'Conversão (%)', colorscale: 'Turbo', camera: { x: 1.52, y: 1.28, z: 1.15 } /* view(130, 30) do MATLAB */,
       hover: 't = %{x:.2f} h<br>x = %{y:.3f} mm<br>C = %{z:.3f} mol/m³' } });
     const picks = [0, 0.125, 0.25, 0.5, 1].map(f => Math.min(r.t.length - 1, Math.round(f * (r.t.length - 1))));
     plots.push({ kind: 'curves', title: 'Perfis de concentração no material', data: { xLabel: 'Dimensão x (mm)', yLabel: 'C (mol/m³)',
@@ -3569,6 +3571,11 @@ window.SIMULAFACIL_CONFIG = {
       hoverlabel: { font: { size: 15 } }
     }, extra || {});
   }
+  /* escalas de cores que não existem no Plotly com esse nome (Turbo = a mesma do MATLAB e do Matplotlib) */
+  const NAMED_SCALES = {
+    Turbo: [[0, '#30123b'], [0.1, '#4559cb'], [0.2, '#3e9bfe'], [0.3, '#19d5cd'], [0.4, '#46f884'], [0.5, '#a4fc3c'], [0.6, '#e1dd37'], [0.7, '#fea431'], [0.8, '#f05b12'], [0.9, '#c32503'], [1, '#7a0403']]
+  };
+  const scale = n => NAMED_SCALES[n] || n;
   const CFG = { responsive: true, displaylogo: false, modeBarButtonsToRemove: ['toImage', 'select2d', 'lasso2d', 'autoScale2d'] };
 
   function figure(p) {
@@ -3620,11 +3627,11 @@ window.SIMULAFACIL_CONFIG = {
         const ink = css('--ink');
         if (d.x) { // superfície genérica: x, y, z (linhas = y), cor = color
           const sc2 = t => ({ title: { text: t, font: { size: FS } }, tickfont: { size: 15 }, gridcolor: css('--line'), color: ink });
-          const data2 = [{ type: 'surface', x: d.x, y: d.y, z: d.z, surfacecolor: d.color || d.z, colorscale: d.colorscale || 'Jet', cmin: d.cmin, cmax: d.cmax,
+          const data2 = [{ type: 'surface', x: d.x, y: d.y, z: d.z, surfacecolor: d.color || d.z, colorscale: scale(d.colorscale || 'Jet'), cmin: d.cmin, cmax: d.cmax,
             colorbar: { title: { text: d.cLabel || '', font: { size: FS }, side: 'right' }, tickfont: { size: FS }, len: 0.8 },
             contours: { z: { show: false } }, hovertemplate: (d.hover || 'x = %{x}<br>y = %{y}<br>z = %{z}') + '<extra></extra>' }];
           const L2 = baseLayout(p.title, '', ''); delete L2.xaxis; delete L2.yaxis;
-          L2.scene = { xaxis: sc2(d.xLabel || 'x'), yaxis: sc2(d.yLabel || 'y'), zaxis: sc2(d.zLabel || 'z'), camera: { eye: { x: -1.6, y: -1.6, z: 0.9 } }, aspectmode: 'manual', aspectratio: { x: 1.3, y: 1.1, z: 0.8 } };
+          L2.scene = { xaxis: sc2(d.xLabel || 'x'), yaxis: sc2(d.yLabel || 'y'), zaxis: sc2(d.zLabel || 'z'), camera: { eye: d.camera || { x: -1.6, y: -1.6, z: 0.9 } }, aspectmode: 'manual', aspectratio: { x: 1.3, y: 1.1, z: 0.8 } };
           L2.margin = { l: 0, r: 0, t: 56, b: 0 }; L2.height = 560;
           return { data: data2, layout: L2, wide: true, tall: true };
         }
@@ -3634,7 +3641,7 @@ window.SIMULAFACIL_CONFIG = {
           contours: { z: { show: false } }, hovertemplate: 'V = %{x:.3f} m³<br>t = %{y:.1f} s<br>C = %{z:.3f} mol/L<extra></extra>' }];
         const L = baseLayout(p.title, '', '');
         delete L.xaxis; delete L.yaxis;
-        L.scene = { xaxis: sc('Volume V (m³)'), yaxis: sc('Tempo t (s)'), zaxis: sc('C (mol/L)'), camera: { eye: { x: -1.6, y: -1.6, z: 0.9 } }, aspectmode: 'manual', aspectratio: { x: 1.3, y: 1.1, z: 0.8 } };
+        L.scene = { xaxis: sc('Volume V (m³)'), yaxis: sc('Tempo t (s)'), zaxis: sc('C (mol/L)'), camera: { eye: { x: -1.56, y: 1.31, z: 1.08 } } /* mesma vista do MATLAB: view(-130, 28) */, aspectmode: 'manual', aspectratio: { x: 1.3, y: 1.1, z: 0.8 } };
         L.margin = { l: 0, r: 0, t: 56, b: 0 }; L.height = 560;
         return { data, layout: L, wide: true, tall: true };
       }
@@ -5698,7 +5705,9 @@ def pfr_transiente(P, nome):
   function renderProps() {
     const el = $('#propsBody'), sel = pfd.sel;
     if (!sel) {
-      el.innerHTML = '<p class="muted">Selecione um equipamento ou corrente no fluxograma para editar.</p>' +
+      const verb = SF.mobile ? 'Toque' : 'Clique';
+      el.innerHTML = '<div class="eq-hint"><span class="eq-hint-ico" aria-hidden="true">📐</span><div><b>' + verb + ' em um equipamento no fluxograma</b> para ver aqui as <b>equações do modelo matemático</b> (EDPs, balanços e equilíbrio) e editar as especificações.</div></div>' +
+        '<p class="muted">Ou selecione uma corrente para ver as propriedades dela.</p>' +
         '<div class="subhead">Equipamentos (' + state.blocks.length + ')</div>' +
         (state.blocks.length ? '<table class="grid"><tbody>' + state.blocks.map(b => '<tr><td><a href="#" data-sel="' + esc(b.id) + '">' + esc(b.name) + '</a></td><td>' + esc(U.TYPES[b.type].label) + '</td></tr>').join('') + '</tbody></table>' : '<p class="small muted">Nenhum ainda.</p>') +
         '<div class="subhead">Dicas</div><ul class="small"><li>Ligue correntes clicando numa saída (círculo cheio) e depois numa entrada (círculo vazado).</li><li>Saídas sem ligação viram produtos automaticamente.</li><li>Duplo clique no equipamento para renomear.</li></ul>';

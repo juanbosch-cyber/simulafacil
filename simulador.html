@@ -503,6 +503,19 @@ body:not(.mobile) .work { min-height: 700px; }
 .scroll-fab:hover { opacity: 1; filter: brightness(1.08); }
 .scroll-fab.in-welcome { background: #ffd23f; color: #3a2a00; left: auto; right: 28px; transform: none; }
 body.mobile .scroll-fab { display: none; }
+/* link do programa por extenso, com botão de copiar (para quem está no celular e vai usar no notebook) */
+.wlinkbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 16px 30px 0; padding: 10px 14px; border-radius: 12px; background: #eaf6f8; border: 1.5px dashed #0a6f86; font-size: 14.5px; color: var(--ink); }
+.wl-lbl { flex: 0 1 auto; }
+.wl-box { display: inline-flex; flex-wrap: wrap; flex: 1 1 auto; gap: 6px; align-items: center; min-width: 0; }
+.wl-url { flex: 0 1 auto; min-width: 0; font: 700 13.5px ui-monospace, Consolas, monospace; color: #0a5568; background: #fff; border: 1px solid #b9d8df; border-radius: 8px; padding: 7px 10px; word-break: break-all; user-select: all; -webkit-user-select: all; text-align: left; }
+.wl-btn { flex: 0 0 auto; border: 0; border-radius: 8px; padding: 8px 12px; background: #0a6f86; color: #fff; font-weight: 800; font-size: 14px; cursor: pointer; white-space: nowrap; }
+.wl-btn:hover { filter: brightness(1.1); }
+.wl-btn.alt { background: #ffd23f; color: #3a2a00; }
+.wl-box.mob { display: flex; margin: 4px 0 0; }
+.wl-box.mob { justify-content: center; } .wl-box.mob .wl-url { font-size: 13px; flex-basis: 100%; }
+body.mobile .wlinkbar { margin: 12px 14px 0; }
+@media (max-width: 900px) { .wlinkbar { margin: 14px 16px 0; } .wl-box { flex-basis: 100%; } .wl-url { flex-basis: 100%; } }
+body.mobile .wl-url { flex-basis: 100%; }
 
 </style>
 </head>
@@ -685,6 +698,10 @@ body.mobile .scroll-fab { display: none; }
         <circle cx="190" cy="112" r="6" fill="#ffffff" opacity=".7"/><circle cx="210" cy="126" r="4" fill="#ffffff" opacity=".5"/><circle cx="176" cy="132" r="3" fill="#ffffff" opacity=".5"/>
       </svg>
     </section>
+    <div class="wlinkbar" role="group" aria-label="Link do programa">
+      <span class="wl-lbl"><span aria-hidden="true">🔗</span> <b>Link do programa</b> — está no celular? Copie e abra no notebook:</span>
+      <span class="wl-box"><span id="wLinkUrl" class="wl-url" title="Endereço do programa">https://juanbosch-cyber.github.io/simulafacil/simulador.html</span><button type="button" class="wl-btn" id="wLinkCopy">📋 Copiar link</button><button type="button" class="wl-btn alt" id="wLinkShare" hidden>📤 Enviar</button></span>
+    </div>
     <section class="wactions">
       <div class="wbtn coral wagent" id="wAgent"><span class="wico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1.3" fill="currentColor"/><circle cx="13" cy="10.5" r="1.3" fill="currentColor"/><circle cx="17" cy="10.5" r="1.3" fill="currentColor"/></svg></span><b>Conversar com o agente IA</b><span class="wdesc">Descreva o processo ou envie uma figura. Escolha a IA:</span><div class="wpicks"><button type="button" class="wpick wpref" id="wClaude">Claude <span class="wbadge">preferencial</span><small id="wClaudeNote">usa a sua conta do Claude</small></button><button type="button" class="wpick" id="wGemini">Gemini<small>com o e-mail da UFSJ</small></button></div></div>
       <button class="wbtn sun" id="wExamples"><span class="wico"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 10c-.6 1.3.2 2 1.4 2h11.2c1.2 0 2-.7 1.4-2l-5-10V3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7.5 15h9" stroke="currentColor" stroke-width="2"/></svg></span><b>Abrir um exemplo pronto</b><span>Colunas, reatores, trocadores, extratores, adsorção e embalagens</span></button>
@@ -715,7 +732,8 @@ body.mobile .scroll-fab { display: none; }
     <h2 id="mobWarnT">Você está no celular</h2>
     <p>O SIMULA FÁCIL IA tem uma <b>versão para celular</b>, com abas embaixo e toque para montar o fluxograma. Para projetos grandes, a tela completa no notebook ou no computador é mais confortável.</p>
     <div class="mobbtns"><button type="button" class="primary" id="mobGo">📱 Usar a versão para celular</button><button type="button" id="mobFull">💻 Abrir a versão completa para notebook</button></div>
-    <p class="mobtip">Dá para trocar quando quiser no menu <b>☰</b>. Para abrir no computador, use este endereço:<br><b id="mobUrl"></b> <button type="button" class="ghost" id="mobCopy">Copiar</button></p>
+    <p class="mobtip">Dá para trocar quando quiser no menu <b>☰</b>. Para abrir no notebook, copie o link do programa:</p>
+    <span class="wl-box mob"><span id="mobUrl" class="wl-url" title="Endereço do programa">https://juanbosch-cyber.github.io/simulafacil/simulador.html</span><button type="button" class="wl-btn" id="mobCopy">📋 Copiar link</button><button type="button" class="wl-btn alt" id="mobShare" hidden>📤 Enviar</button></span>
   </div>
 </div>
 
@@ -6852,7 +6870,25 @@ def pfr_transiente(P, nome):
     try { const blob = data instanceof Blob ? data : new Blob([data]); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; document.body.appendChild(a); a.click(); a.remove(); return true; }
     catch (e) { toast('Download indisponível nesta visualização. Use "Copiar".'); return false; }
   }
-  async function copyText(t) { try { await navigator.clipboard.writeText(t); toast('Copiado para a área de transferência'); } catch (e) { toast('Não foi possível copiar automaticamente'); } }
+  async function copyText(t, okMsg, input) {
+    try { await navigator.clipboard.writeText(t); toast(okMsg || 'Copiado para a área de transferência'); return; } catch (e) { /* tenta o modo antigo */ }
+    let ok = false;
+    try { const el = input || Object.assign(document.createElement('textarea'), { value: t }); if (!input) { el.style.cssText = 'position:fixed;left:-9999px'; document.body.appendChild(el); }
+      el.focus(); el.select(); if (el.setSelectionRange) el.setSelectionRange(0, t.length); ok = document.execCommand('copy'); if (!input) el.remove(); } catch (e) { ok = false; }
+    toast(ok ? (okMsg || 'Copiado para a área de transferência') : 'Selecione o endereço e copie (Ctrl+C ou toque longo)');
+  }
+  // link do programa (site), para copiar ou enviar e abrir no notebook
+  function programUrl() {
+    const cfg = window.SIMULAFACIL_CONFIG || {}, site = cfg.siteUrl || '';
+    if (/^https?:/.test(site) && !/SEU-USU[A]RIO/.test(site)) return site.replace(/\/?$/, '/') + 'simulador.html';
+    return location.href.split('#')[0].split('?')[0];
+  }
+  function bindLinkBox(inputSel, copySel, shareSel) {
+    const el = $(inputSel), url = programUrl(); if (!el) return; el.textContent = url;
+    $(copySel).onclick = () => copyText(url, 'Link copiado! Cole no WhatsApp ou no e-mail e abra no notebook');
+    const sh = $(shareSel);
+    if (sh && navigator.share) { sh.hidden = false; sh.onclick = () => navigator.share({ title: 'SIMULA FÁCIL IA', text: 'SIMULA FÁCIL IA — simulador de processos químicos (abra no notebook):', url }).catch(() => { /* cancelado */ }); }
+  }
   function makeZip(files) { // ZIP sem compressão (store) com CRC-32
     const enc = new TextEncoder(), crcT = new Uint32Array(256);
     for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; crcT[n] = c >>> 0; }
@@ -7427,6 +7463,7 @@ def pfr_transiente(P, nome):
   $('#wBlank').onclick = () => { closeWelcome(); pushUndo(); state = blank(); results = null; pfd.sel = null; afterChange(true); pfd.fit(); renderCharts(null, []); switchTab('thermo'); toast('Escolha os componentes e o modelo; depois clique nos equipamentos da paleta'); };
   $('#wNoShow').onchange = e => { try { localStorage.setItem('simulafacil.noWelcome', e.target.checked ? '1' : '0'); } catch (err) { /* */ } };
   $('#btnHome').onclick = openWelcome;
+  bindLinkBox('#wLinkUrl', '#wLinkCopy', '#wLinkShare'); bindLinkBox('#mobUrl', '#mobCopy', '#mobShare');
   // manual em PDF: no site, o arquivo fica na mesma pasta; dentro do Claude, usa o endereço do site
   function manualUrl() {
     const cfg = window.SIMULAFACIL_CONFIG || {}, f = cfg.manual || 'Manual_SIMULA_FACIL_IA.pdf';
@@ -7525,13 +7562,10 @@ def pfr_transiente(P, nome):
     applyView(pref || (phone ? 'mobile' : 'desktop'));
     if (pref || !phone) return;
     // primeira visita pelo celular: o usuário escolhe a versão
-    const cfg = window.SIMULAFACIL_CONFIG || {}, here = location.href.split('#')[0];
-    const url = /^https?:/.test(here) && !/claude\.ai|claudeusercontent/.test(here) ? here : ((cfg.siteUrl || '') + 'simulador.html');
-    $('#mobUrl').textContent = url; $('#mobWarn').hidden = false;
+    $('#mobWarn').hidden = false;
     const choose = m => { try { localStorage.setItem(VM_KEY, m); } catch (e) { /* */ } $('#mobWarn').hidden = true; if (m !== 'mobile') applyView(m, true); };
     $('#mobGo').onclick = () => choose('mobile');
     $('#mobFull').onclick = () => choose('desktop');
-    $('#mobCopy').onclick = () => copyText(url);
     setTimeout(() => $('#mobGo').focus(), 50);
   })();
   if (SF.agent) SF.agent.init(SF.app);

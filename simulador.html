@@ -476,6 +476,8 @@ body.mobile { height: var(--app-h, 100dvh); }
 body.mobile .m-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 75; }
 body.mobile .work { margin-bottom: calc(var(--mnav-h, 58px)); }
 body.mobile .welcome { bottom: var(--mnav-h, 58px); padding: 10px; }
+.field-matrix textarea { width: 100%; font: 13px/1.45 var(--mono, ui-monospace, Consolas, monospace); padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); resize: vertical; }
+.field-matrix label { display: block; margin-bottom: 4px; }
 
 </style>
 </head>
@@ -1292,6 +1294,124 @@ window.SIMULAFACIL_CONFIG = {
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
+<script>/* js/ternary.js */
+/* SIMULA FÁCIL IA — extração líquido-líquido em diagrama ternário: método gráfico de Hunter–Nash.
+   Sistema A (diluente) / B (soluto) / C (solvente), frações mássicas.
+   Dados: ramos da curva binodal (rafinado e extrato) e curva de distribuição do soluto (xB rafinado × yB extrato).
+   Passos: ponto de mistura M, extrato E1 (reta RN–M), polo Δ (retas F–E1 e RN–S) e estágios alternando
+   linhas de amarração (equilíbrio) e linhas de operação (pelo polo). */
+(function (root) {
+  'use strict';
+  const SF = root.SF = root.SF || {};
+
+  /* "0.98 0.007 0.013; 0.85 ..." ou uma linha por ponto → matriz de números */
+  function parseMatrix(txt, cols) {
+    const rows = String(txt == null ? '' : txt).split(/[;\n\r]+/).map(r => r.trim()).filter(Boolean)
+      .map(r => r.replace(/,(?=\d)/g, '.').split(/[\s\t]+|,\s*/).filter(Boolean).map(Number));
+    rows.forEach((r, i) => { if (r.length !== cols || r.some(v => !isFinite(v))) throw new Error('linha ' + (i + 1) + ' dos dados deve ter ' + cols + ' números'); });
+    return rows;
+  }
+
+  /* PCHIP (Fritsch–Carlson, mesmas derivadas do pchip do MATLAB e do SciPy) */
+  function pchip(x, y) {
+    const n = x.length, h = [], d = [], m = new Array(n).fill(0);
+    for (let k = 0; k < n - 1; k++) { h.push(x[k + 1] - x[k]); d.push((y[k + 1] - y[k]) / h[k]); }
+    if (n === 2) { m[0] = m[1] = d[0]; }
+    else {
+      for (let k = 1; k < n - 1; k++) {
+        if (d[k - 1] * d[k] <= 0) m[k] = 0;
+        else { const w1 = 2 * h[k] + h[k - 1], w2 = h[k] + 2 * h[k - 1]; m[k] = (w1 + w2) / (w1 / d[k - 1] + w2 / d[k]); }
+      }
+      const edge = (h0, h1, d0, d1) => {
+        let v = ((2 * h0 + h1) * d0 - h0 * d1) / (h0 + h1);
+        if (Math.sign(v) !== Math.sign(d0)) v = 0;
+        else if (Math.sign(d0) !== Math.sign(d1) && Math.abs(v) > Math.abs(3 * d0)) v = 3 * d0;
+        return v;
+      };
+      m[0] = edge(h[0], h[1], d[0], d[1]); m[n - 1] = edge(h[n - 2], h[n - 3], d[n - 2], d[n - 3]);
+    }
+    return t => {
+      let k = 0; if (t >= x[n - 1]) k = n - 2; else if (t > x[0]) while (k < n - 2 && t > x[k + 1]) k++;
+      const hh = h[k], s = (t - x[k]) / hh, s2 = s * s, s3 = s2 * s;
+      return (2 * s3 - 3 * s2 + 1) * y[k] + (s3 - 2 * s2 + s) * hh * m[k] + (-2 * s3 + 3 * s2) * y[k + 1] + (s3 - s2) * hh * m[k + 1];
+    };
+  }
+  /* mínimos quadrados polinomial (como o polyfit) */
+  function polyfit(x, y, deg) {
+    const n = deg + 1, A = [], b = [];
+    for (let i = 0; i < n; i++) { A.push(new Array(n).fill(0)); b.push(0); }
+    x.forEach((xi, k) => { const pw = []; for (let i = 0; i < 2 * n; i++) pw.push(Math.pow(xi, i)); for (let i = 0; i < n; i++) { b[i] += pw[i] * y[k]; for (let j = 0; j < n; j++) A[i][j] += pw[i + j]; } });
+    for (let c = 0; c < n; c++) {
+      let p = c; for (let r = c + 1; r < n; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+      [A[c], A[p]] = [A[p], A[c]]; [b[c], b[p]] = [b[p], b[c]];
+      for (let r = c + 1; r < n; r++) { const f = A[r][c] / A[c][c]; for (let k = c; k < n; k++) A[r][k] -= f * A[c][k]; b[r] -= f * b[c]; }
+    }
+    const a = new Array(n).fill(0);
+    for (let r = n - 1; r >= 0; r--) { let s = b[r]; for (let k = r + 1; k < n; k++) s -= A[r][k] * a[k]; a[r] = s / A[r][r]; }
+    const coef = a.slice().reverse();            // potências decrescentes, como no MATLAB
+    const f = t => a.reduce((s, ai, i) => s + ai * Math.pow(t, i), 0); f.coef = coef; return f;
+  }
+  /* raiz de g no intervalo [lo, hi]: varredura + bissecção; havendo várias, a mais próxima do chute */
+  function findRoot(g, lo, hi, guess) {
+    const N = 400, xs = [], vs = [];
+    for (let i = 0; i <= N; i++) { const x = lo + (hi - lo) * i / N; xs.push(x); vs.push(g(x)); }
+    const roots = [];
+    for (let i = 0; i < N; i++) {
+      if (vs[i] === 0) roots.push(xs[i]);
+      else if (vs[i] * vs[i + 1] < 0) {
+        let a = xs[i], b = xs[i + 1], fa = vs[i];
+        for (let it = 0; it < 80; it++) { const c = (a + b) / 2, fc = g(c); if (fa * fc <= 0) b = c; else { a = c; fa = fc; } }
+        roots.push((a + b) / 2);
+      }
+    }
+    if (!roots.length) return null;
+    return roots.reduce((best, r) => (Math.abs(r - guess) < Math.abs(best - guess) ? r : best), roots[0]);
+  }
+
+  function hunterNash(o) {
+    const raf = o.raf, ext = o.ext, eq = o.eq, sortB = M => M.slice().sort((p, q) => p[1] - q[1]);
+    const rs = sortB(raf), es = sortB(ext);
+    const usePoly = /polin/i.test(o.fit || '');
+    const fR = usePoly ? polyfit(rs.map(r => r[1]), rs.map(r => r[2]), 3) : pchip(rs.map(r => r[1]), rs.map(r => r[2]));
+    const fE = usePoly ? polyfit(es.map(r => r[1]), es.map(r => r[2]), 3) : pchip(es.map(r => r[1]), es.map(r => r[2]));
+    const fEq = polyfit(eq.map(r => r[1]), eq.map(r => r[0]), 2);            // yB (extrato) → xB (rafinado)
+    const ptR = xB => { const xC = fR(xB); return [1 - xB - xC, xB, xC]; };
+    const ptE = xB => { const xC = fE(xB); return [1 - xB - xC, xB, xC]; };
+    const lo = es[0][1], hi = es[es.length - 1][1];
+    const cross = (A, B, guess) => { const s = (B[2] - A[2]) / (B[1] - A[1]); return findRoot(xB => fE(xB) - (A[2] + s * (xB - A[1])), lo, hi, guess); };
+    const F = o.F, S = o.S, r = o.ratio;
+    const RN = ptR(o.xBRN);
+    const M = F.map((f, i) => (f + r * S[i]) / (1 + r));
+    if (!(M[1] > o.xBRN)) throw new Error('a especificação do rafinado (xB = ' + o.xBRN + ') não é menor que o soluto no ponto de mistura');
+    const xE1 = cross(RN, M, 0.25);
+    if (xE1 == null) throw new Error('a reta RN–M não corta o ramo do extrato: confira os dados ou a razão S/F');
+    const E1 = ptE(xE1);
+    const s1 = (E1[2] - F[2]) / (E1[1] - F[1]), s2 = (S[2] - RN[2]) / (S[1] - RN[1]);
+    if (!isFinite(s1) || !isFinite(s2) || Math.abs(s1 - s2) < 1e-12) throw new Error('as retas F–E1 e RN–S são paralelas: o polo fica no infinito');
+    const xBP = (S[2] - F[2] + s1 * F[1] - s2 * S[1]) / (s1 - s2), xCP = S[2] + s2 * (xBP - S[1]);
+    const P = [1 - xBP - xCP, xBP, xCP];
+    const E = [E1], R = []; let cur = E1, n = 0, ok = true, msg = '';
+    while (true) {
+      n++;
+      const Ri = ptR(fEq(cur[1])); R.push(Ri);
+      if (Ri[1] <= o.xBRN) break;
+      if (n >= (o.maxStages || 50)) { ok = false; msg = 'mais de ' + n + ' estágios: a razão S/F está próxima da mínima'; break; }
+      if (R.length > 1 && Ri[1] >= R[R.length - 2][1] - 1e-9) { ok = false; msg = 'os estágios não avançam (pinch): aumente a razão S/F'; break; }
+      const xn = cross(Ri, P, cur[1] * 0.7);
+      if (xn == null) { ok = false; msg = 'a linha de operação do estágio ' + n + ' não corta o ramo do extrato'; break; }
+      cur = ptE(xn); E.push(cur);
+    }
+    const nFrac = n > 1 && ok ? (n - 1) + (R[n - 2][1] - o.xBRN) / (R[n - 2][1] - R[n - 1][1]) : n;
+    // curvas suaves para o gráfico
+    const curve = (f, a, b) => { const out = []; for (let i = 0; i <= 60; i++) { const x = a + (b - a) * i / 60, c = f(x); out.push([1 - x - c, x, c]); } return out; };
+    return { RN, M, E1, P, E, R, n, nFrac, ok, msg, curveR: curve(fR, rs[0][1], rs[rs.length - 1][1]), curveE: curve(fE, lo, hi),
+      eqCoef: fEq.coef, polyR: fR.coef || null, polyE: fE.coef || null };
+  }
+
+  SF.ternary = { parseMatrix, pchip, polyfit, findRoot, hunterNash };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
 <script>/* js/thermo.js */
 /* SIMULA FÁCIL IA — Termodinâmica
    Banco de componentes, pressão de vapor (Antoine / Lee-Kesler), modelos de coeficiente de atividade
@@ -1316,6 +1436,7 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'ethylene-glycol', name: 'Etilenoglicol', formula: 'C2H6O2', mw: 62.068, tc: 720.0, pc: 82.0e5, w: 0.487, tb: 470.45, rho: 1110, cp: [35.70, 2.483e-1, -1.497e-4, 3.01e-8], dhv: 52500, ant: [8.0908, 2088.9, 203.5], g: { CH2: 2, OH: 2 } },
     { id: 'acetone', name: 'Acetona', formula: 'C3H6O', mw: 58.08, tc: 508.1, pc: 47.0e5, w: 0.307, tb: 329.2, rho: 784, cp: [6.301, 2.606e-1, -1.253e-4, 2.038e-8], dhv: 29100, ant: [7.11714, 1210.595, 229.664], g: { CH3: 1, CH3CO: 1 } },
     { id: 'acetic-acid', name: 'Ácido acético', formula: 'C2H4O2', mw: 60.052, tc: 591.95, pc: 57.86e5, w: 0.467, tb: 391.1, rho: 1045, cp: [4.84, 2.549e-1, -1.753e-4, 4.949e-8], dhv: 23700, ant: [7.38782, 1533.313, 222.309], g: { CH3: 1, COOH: 1 } },
+    { id: 'diisopropyl-ether', name: 'Éter isopropílico (diisopropil éter)', formula: 'C6H14O', mw: 102.177, tc: 500.3, pc: 28.8e5, w: 0.339, tb: 341.6, rho: 724, cp: [19.57, 5.225e-1, -1.98e-4, 4.4e-9], dhv: 29100, ant: [6.84953, 1139.34, 218.742] },
     { id: 'ethyl-acetate', name: 'Acetato de etila', formula: 'C4H8O2', mw: 88.106, tc: 523.3, pc: 38.8e5, w: 0.366, tb: 350.2, rho: 897, cp: [7.235, 4.072e-1, -2.092e-4, 2.855e-8], dhv: 31940, ant: [7.10179, 1244.95, 217.88], g: { CH3: 1, CH2: 1, CH3COO: 1 } },
     { id: 'benzene', name: 'Benzeno', formula: 'C6H6', mw: 78.114, tc: 562.05, pc: 48.95e5, w: 0.210, tb: 353.2, rho: 876, cp: [-33.92, 4.739e-1, -3.017e-4, 7.13e-8], dhv: 30720, ant: [6.90565, 1211.033, 220.790], g: { ACH: 6 } },
     { id: 'toluene', name: 'Tolueno', formula: 'C7H8', mw: 92.141, tc: 591.75, pc: 41.08e5, w: 0.264, tb: 383.8, rho: 867, cp: [-24.35, 5.125e-1, -2.765e-4, 4.911e-8], dhv: 33180, ant: [6.95464, 1344.8, 219.482], g: { ACH: 5, ACCH3: 1 } },
@@ -1948,6 +2069,17 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'lk', label: 'Chave leve', type: 'comp' }, { k: 'hk', label: 'Chave pesada', type: 'comp' },
       { k: 'lkRec', label: 'Recuperação da chave leve no destilado', u: '0–1', def: 0.99 }, { k: 'hkRec', label: 'Recuperação da chave pesada no fundo', u: '0–1', def: 0.99 },
       { k: 'RRmin', label: 'R / Rmín', u: '', def: 1.3 }, Object.assign({ def: 1.01325 }, P_P)] },
+    ponchon: { label: 'Coluna binária Ponchon–Savarit (H–x–y)', cat: 'Colunas', ins: ['feed'], outs: ['distillate', 'bottoms'], params: [
+      { k: 'lk', label: 'A — componente mais volátil', type: 'comp' }, { k: 'hk', label: 'B — componente menos volátil', type: 'comp' },
+      { k: 'xD', label: 'Fração molar de A no destilado xD', u: '0–1', def: 0.90 }, { k: 'xW', label: 'Fração molar de A no resíduo xW', u: '0–1', def: 0.05 },
+      { k: 'R', label: 'Razão de refluxo R = L0/D', u: '', def: 1.8 },
+      { k: 'vle', label: 'Equilíbrio líquido-vapor', type: 'select', options: ['volatilidade relativa constante α (como no código original)', 'modelo termodinâmico do fluxograma (na pressão P)'], def: 'volatilidade relativa constante α (como no código original)' },
+      { k: 'alpha', label: 'Volatilidade relativa α (se constante)', u: '', def: 2.45 },
+      { k: 'enth', label: 'Entalpias h(x) e H(y)', type: 'select', options: ['retas informadas (como no código original)', 'modelo termodinâmico (pontos de bolha e de orvalho)'], def: 'retas informadas (como no código original)' },
+      { k: 'hA', label: 'h do líquido saturado: A puro (x = 1)', u: 'kJ/kmol', def: 4000 }, { k: 'hB', label: 'h do líquido saturado: B puro (x = 0)', u: 'kJ/kmol', def: 2500 },
+      { k: 'HA', label: 'H do vapor saturado: A puro (y = 1)', u: 'kJ/kmol', def: 42000 }, { k: 'HB', label: 'H do vapor saturado: B puro (y = 0)', u: 'kJ/kmol', def: 36000 },
+      { k: 'q', label: 'Condição térmica da alimentação q (1 = líquido saturado; com entalpias do modelo, q vem da corrente)', u: '', def: 1 },
+      Object.assign({ def: 1.01325 }, P_P)] },
     column: { label: 'Coluna de destilação rigorosa', cat: 'Colunas', ins: ['feed', 'feed2', 'feed3'], outs: ['distillate', 'bottoms', 'side'], params: [
       { k: 'N', label: 'Nº de estágios (inclui condensador e refervedor)', u: '', def: 20 }, { k: 'feedStage', label: 'Estágio da alimentação 1', u: '', def: 10 },
       { k: 'feed2Stage', label: 'Estágio da alimentação 2 (solvente/arrastador)', u: '', def: 3 }, { k: 'feed3Stage', label: 'Estágio da alimentação 3', u: '', def: 15 },
@@ -1964,6 +2096,15 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'N', label: 'Nº de estágios teóricos', u: '', def: 8 }, Object.assign({ def: 30 }, P_T), Object.assign({ def: 1.01325 }, P_P)] },
     extractor: { label: 'Extrator líquido-líquido', cat: 'Extratores', ins: ['feed', 'solvent'], outs: ['extract', 'raffinate'], params: [
       { k: 'N', label: 'Nº de estágios (contracorrente)', u: '', def: 5 }, Object.assign({ def: 25 }, P_T), Object.assign({ def: 1.01325 }, P_P)] },
+    lle_ternary: { label: 'Extrator L-L — diagrama ternário (Hunter–Nash)', cat: 'Extratores', ins: ['feed', 'solvent'], outs: ['extract', 'raffinate'], params: [
+      { k: 'compA', label: 'A — diluente (rico no rafinado)', type: 'comp', def: 'water' },
+      { k: 'compB', label: 'B — soluto (o que se quer extrair)', type: 'comp', def: 'acetic-acid' },
+      { k: 'compC', label: 'C — solvente (rico no extrato)', type: 'comp', def: 'diisopropyl-ether' },
+      { k: 'xBRN', label: 'Soluto no rafinado final xB,RN (especificação)', u: 'fração mássica', def: 0.05 },
+      { k: 'fit', label: 'Curva binodal entre os pontos', type: 'select', options: ['interpolação PCHIP (passa pelos pontos)', 'polinômio de 3º grau (como no código original)'], def: 'interpolação PCHIP (passa pelos pontos)' },
+      { k: 'rafData', label: 'Binodal — ramo do rafinado: xA xB xC (uma linha por ponto)', type: 'matrix', def: '0.980 0.007 0.013\n0.850 0.135 0.015\n0.720 0.260 0.020\n0.580 0.380 0.040\n0.450 0.450 0.100\n0.340 0.460 0.200' },
+      { k: 'extData', label: 'Binodal — ramo do extrato: xA xB xC (uma linha por ponto)', type: 'matrix', def: '0.010 0.005 0.985\n0.015 0.080 0.905\n0.030 0.200 0.770\n0.070 0.330 0.600\n0.150 0.420 0.430\n0.340 0.460 0.200' },
+      { k: 'eqData', label: 'Distribuição do soluto: xB no rafinado e yB no extrato (linhas de amarração)', type: 'matrix', def: '0.05 0.025\n0.15 0.095\n0.25 0.185\n0.35 0.290\n0.45 0.420' }] },
     leaching: { label: 'Extrator sólido-líquido (lixiviação)', cat: 'Extratores', ins: ['solids', 'solvent'], outs: ['overflow', 'underflow'], params: [
       { k: 'N', label: 'Nº de estágios (contracorrente)', u: '', def: 4 }, { k: 'r', label: 'Retenção de solução no sólido', u: 'kg solução/kg inerte', def: 0.5 },
       Object.assign({ def: 50 }, P_T), Object.assign({ def: 1.01325 }, P_P)] },
@@ -2819,6 +2960,208 @@ window.SIMULAFACIL_CONFIG = {
   };
 
 
+  /* ------------------------------------------------------------------ extração L-L em diagrama ternário (Hunter–Nash, frações mássicas) */
+  IMPL.lle_ternary = function (th, b, ins) {
+    const p = b.params, TN = SF.ternary, n = th.n, warn = [];
+    if (!TN) throw new Error('módulo do diagrama ternário (ternary.js) não carregado');
+    const iA = th.ids.indexOf(p.compA), iB = th.ids.indexOf(p.compB), iC = th.ids.indexOf(p.compC);
+    if (iA < 0 || iB < 0 || iC < 0) throw new Error('escolha os componentes A, B e C entre os componentes do fluxograma');
+    if (iA === iB || iA === iC || iB === iC) throw new Error('A, B e C devem ser componentes diferentes');
+    const f = ins.feed, sv = ins.solvent;
+    if (!f || !(f.F > 0)) throw new Error('conecte a alimentação (porta de cima, à esquerda)');
+    if (!sv || !(sv.F > 0)) throw new Error('conecte o solvente (porta de baixo, à esquerda)');
+    const mass = s => s.flows.map((v, i) => v * th.c[i].mw / 1000);            // kg/s
+    const mF = mass(f), mS = mass(sv), idx = [iA, iB, iC];
+    [mF, mS].forEach((m, k) => { const other = m.reduce((t, v, i) => t + (idx.indexOf(i) < 0 ? v : 0), 0), tot = m.reduce((t, v) => t + v, 0);
+      if (other > 1e-6 * tot) warn.push((k ? 'solvente' : 'alimentação') + ': componentes fora de A, B e C foram ignorados no diagrama'); });
+    const Fm = idx.reduce((t, i) => t + mF[i], 0), Sm = idx.reduce((t, i) => t + mS[i], 0);
+    const xF = idx.map(i => mF[i] / Fm), xS = idx.map(i => mS[i] / Sm);
+    const raf = TN.parseMatrix(p.rafData, 3), ext = TN.parseMatrix(p.extData, 3), eq = TN.parseMatrix(p.eqData, 2);
+    if (raf.length < 3 || ext.length < 3 || eq.length < 3) throw new Error('são necessários ao menos 3 pontos em cada tabela de equilíbrio');
+    const xBRN = num(p.xBRN, 0.05);
+    const r = TN.hunterNash({ raf, ext, eq, fit: p.fit, F: xF, S: xS, ratio: Sm / Fm, xBRN });
+    if (!r.ok) warn.push(r.msg);
+    // vazões das saídas pela regra da alavanca (balanço do soluto)
+    const Mm = Fm + Sm, E1m = Mm * (r.M[1] - r.RN[1]) / (r.E1[1] - r.RN[1]), RNm = Mm - E1m;
+    const flowsE = new Array(n).fill(0), flowsR = new Array(n).fill(0);
+    idx.forEach((i, k) => { flowsE[i] = E1m * r.E1[k] / th.c[i].mw * 1000; flowsR[i] = RNm * r.RN[k] / th.c[i].mw * 1000; });
+    // componentes fora do sistema ternário seguem com o rafinado (diluente)
+    for (let i = 0; i < n; i++) if (idx.indexOf(i) < 0) flowsR[i] = f.flows[i] + sv.flows[i];
+    if (flowsE.some(v => v < -1e-12) || flowsR.some(v => v < -1e-12)) throw new Error('balanço com vazão negativa: a especificação do rafinado não é atingível com essa razão S/F');
+    const Tout = f.T, Pout = Math.min(f.P, sv.P);
+    const extract = mkStream(th, flowsE, Tout, Pout), raffinate = mkStream(th, flowsR, Tout, Pout);
+    const kgh = v => v * 3600, nmA = th.c[iA].name, nmB = th.c[iB].name, nmC = th.c[iC].name;
+    const res = [{ k: 'Razão solvente/alimentação S/F (mássica)', v: Sm / Fm, u: '' },
+      { k: 'Nº de estágios teóricos (Hunter–Nash)', v: r.n, u: '' }, { k: 'Nº de estágios fracionário', v: r.nFrac, u: '' },
+      { k: 'Extrato E1', v: kgh(E1m), u: 'kg/h' }, { k: 'Rafinado RN', v: kgh(RNm), u: 'kg/h' },
+      { k: 'Recuperação de ' + nmB + ' no extrato', v: E1m * r.E1[1] / (Fm * xF[1]) * 100, u: '%' },
+      { k: 'xB no rafinado final RN', v: r.RN[1], u: 'fração mássica' }, { k: 'yB no extrato E1', v: r.E1[1], u: 'fração mássica' },
+      { k: 'Ponto de mistura M (xA, xB, xC)', v: r.M.map(v => v.toFixed(4)).join(' ; '), u: '' },
+      { k: 'Polo de operação Δ (xA, xB, xC)', v: r.P.map(v => v.toFixed(4)).join(' ; '), u: '' }];
+    r.R.forEach((Ri, k) => res.push({ k: 'Estágio ' + (k + 1) + ': yB no extrato E' + (k + 1) + ' / xB no rafinado R' + (k + 1), v: r.E[k][1].toFixed(4) + ' / ' + Ri[1].toFixed(4), u: '' }));
+    const plots = [{ kind: 'ternary', title: 'Diagrama ternário — estágios de extração L-L (N = ' + r.n + ' estágios)', data: {
+      labels: ['A (' + nmA + ')', 'B (' + nmB + ')', 'C (' + nmC + ')'], raf, ext, curveR: r.curveR, curveE: r.curveE,
+      pts: { F: xF, S: xS, M: r.M, RN: r.RN, P: r.P, E1: r.E1 }, E: r.E, R: r.R } },
+      { kind: 'curves', title: 'Curva de distribuição do soluto (linhas de amarração)', data: { xLabel: 'xB no rafinado (fração mássica)', yLabel: 'yB no extrato (fração mássica)',
+        series: [{ name: 'Dados de equilíbrio', x: eq.map(e => e[0]), y: eq.map(e => e[1]), mode: 'markers' },
+          { name: 'Estágios (Rᵢ, Eᵢ)', x: r.R.map(v => v[1]), y: r.E.slice(0, r.R.length).map(v => v[1]), markers: true, width: 2 },
+          { name: 'yB = xB', x: [0, Math.max.apply(null, eq.map(e => Math.max(e[0], e[1])))], y: [0, Math.max.apply(null, eq.map(e => Math.max(e[0], e[1])))], dash: 'dash', width: 1.5 }] } }];
+    return { out: { extract, raffinate }, res, warn, plots, duty: 0, lle3: { r, xF, xS, Fm, Sm, E1m, RNm, raf, ext, eq, labels: [nmA, nmB, nmC], fit: p.fit, xBRN } };
+  };
+
+  /* ------------------------------------------------------------------ Ponchon–Savarit: destilação binária no diagrama entalpia–composição (H–x–y)
+     o = {zF, hF, q, xD, xW, R, F, h(x), H(y), eqy(x), eqx(y)}; entalpias molares em J/mol (= kJ/kmol); vazões em qualquer unidade molar */
+  function ponchonSavarit(o) {
+    const zF = o.zF, hF = o.hF, xD = o.xD, xW = o.xW, Rr = o.R, F = o.F, h = o.h, H = o.H, eqy = o.eqy, eqx = o.eqx, maxN = o.maxStages || 100;
+    if (!(xW > 0 && xW < zF && zF < xD && xD < 1)) throw new Error('é preciso 0 < xW < zF < xD < 1');
+    if (!(Rr > 0)) throw new Error('razão de refluxo inválida');
+    const D = F * (zF - xW) / (xD - xW), W = F - D, hD = h(xD), HD = H(xD), hW = h(xW);
+    const QD = hD + (Rr + 1) * (HD - hD);               // polo ΔD = (xD, Q′D), Q′D = hD + Qc/D
+    const QW = (F * hF - D * QD) / W;                    // polo ΔW = (xW, Q′W): F, ΔD e ΔW alinhados (balanço global de energia)
+    const sl = (QD - QW) / (xD - xW), line = x => QW + sl * (x - xW);
+    let xq = zF; try { xq = N.brent(x => h(x) - line(x), xW, xD, 1e-13); } catch (e) { /* mantém zF */ }
+    // reta de operação: do líquido (x, h(x)) ao polo, cortando a curva do vapor em y
+    const opY = (x, sec) => {
+      const px = sec ? xW : xD, pQ = sec ? QW : QD;
+      if (Math.abs(px - x) < 1e-12) return x;
+      const hx = h(x), m = (pQ - hx) / (px - x), G = yy => H(yy) - (hx + m * (yy - x));
+      return N.brent(G, x, sec ? 1 : xD, 1e-13);
+    };
+    // refluxo mínimo: amarração que passa por F e amarrações prolongadas até xD (retificação) e até xW (esgotamento)
+    const tie = x => { const y = eqy(x); return { x, y, h: h(x), H: H(y) }; };
+    const extAt = (t, X) => t.h + (t.H - t.h) / (t.y - t.x) * (X - t.x);
+    let xFt = zF;
+    { const cr = x => { const t = tie(x); return (t.y - t.x) * (hF - t.h) - (t.H - t.h) * (zF - t.x); };
+      let best = null, prev = cr(1e-4), xp = 1e-4;
+      for (let k = 1; k <= 400; k++) { const xx = 1e-4 + (1 - 2e-4) * k / 400, v = cr(xx);
+        if (prev * v <= 0) { const r = N.brent(cr, xp, xx, 1e-13); if (best === null || Math.abs(r - zF) < Math.abs(best - zF)) best = r; }
+        prev = v; xp = xx; }
+      if (best !== null) xFt = best; }
+    let QDmin = extAt(tie(xFt), xD);
+    const xTop = eqx(xD);
+    for (let k = 0; k <= 200; k++) { const xx = xFt + (xTop - xFt) * k / 200; QDmin = Math.max(QDmin, extAt(tie(xx), xD)); }
+    let QWb = Infinity;
+    for (let k = 0; k <= 200; k++) { const xx = xW + (xFt - xW) * k / 200; QWb = Math.min(QWb, extAt(tie(xx), xW)); }
+    if (isFinite(QWb)) QDmin = Math.max(QDmin, hF + (hF - QWb) / (zF - xW) * (xD - zF));
+    const Rmin = (QDmin - HD) / (HD - hD);
+    if (Rr <= Rmin * (1 + 1e-6)) throw new Error('R = ' + Rr.toFixed(3) + ' não supera o refluxo mínimo de Ponchon–Savarit (Rmín = ' + Rmin.toFixed(3) + '): aumente R');
+    // construção dos estágios do topo para o fundo: amarração (equilíbrio) e reta de operação pelo polo
+    const st = []; let y = xD, feed = 0, ok = false;
+    for (let n = 1; n <= maxN; n++) {
+      const x = eqx(y); st.push({ x, y });
+      if (!feed && x <= xq) feed = n;
+      if (x <= xW) { ok = true; break; }
+      y = opY(x, !!feed);
+    }
+    const Ns = st.length, nFrac = Ns > 1 ? Ns - 1 + (st[Ns - 2].x - xW) / (st[Ns - 2].x - st[Ns - 1].x) : 1;
+    // vazões internas (não são constantes!) pela regra da alavanca em relação ao polo de cada seção
+    const V = [(Rr + 1) * D], L = [];
+    for (let n = 1; n < Ns; n++) {
+      const hn = h(st[n - 1].x), Hn1 = H(st[n].y);
+      if (!feed || n < feed) { const Vn1 = D * (QD - hn) / (Hn1 - hn); V.push(Vn1); L.push(Vn1 - D); }
+      else { const Ln = W * (Hn1 - QW) / (Hn1 - hn); L.push(Ln); V.push(Ln - W); }
+    }
+    L.push(W);
+    const Qc = D * (QD - hD), QR = W * (hW - QW);
+    // McCabe–Thiele (vazões molares constantes) com o mesmo equilíbrio, R e q, para comparação
+    const q = o.q, mt = { n: null, feed: null, Rmin: null };
+    try {
+      const Lr = Rr * D, Vr = (Rr + 1) * D, Ls = Lr + q * F, Vs = Vr - (1 - q) * F;
+      const xi = Math.abs(q - 1) < 1e-9 ? zF : (zF * (Rr + 1) + xD * (q - 1)) / (Rr + q);
+      if (Vs > 0) {
+        const xp = Math.abs(q - 1) < 1e-9 ? zF : N.brent(x => eqy(x) - (q / (q - 1) * x - zF / (q - 1)), 1e-9, 1 - 1e-9, 1e-12), yp = eqy(xp);
+        mt.Rmin = (xD - yp) / (yp - xp); mt.xi = xi; mt.yi = (Lr / Vr) * xi + D * xD / Vr; mt.Lr = Lr; mt.Vr = Vr; mt.Ls = Ls; mt.Vs = Vs;
+        if (Rr > mt.Rmin) {
+          let yy = xD, f = 0, done = false; const pts = [];
+          for (let n = 1; n <= 150; n++) { const x = eqx(yy); pts.push({ x, y: yy }); if (!f && x <= xi) f = n; if (x <= xW) { done = true; break; } yy = f ? (Ls / Vs) * x - W * xW / Vs : (Lr / Vr) * x + D * xD / Vr; }
+          if (done) { mt.n = pts.length; mt.feed = f; mt.pts = pts; }
+        }
+      }
+    } catch (e) { /* comparação indisponível */ }
+    return { D, W, hD, HD, hW, hF, QD, QW, xq, xFt, QDmin, Rmin, st, feed, ok, n: Ns, nFrac, V, L, Qc, QR, opY, mt };
+  }
+
+  IMPL.ponchon = function (th, b, ins) {
+    const s = ins.feed, p = b.params, n = th.n, warn = [], P = num(p.P, 1.01325) * BAR;
+    if (!s || !(s.F > 0)) throw new Error('conecte a alimentação');
+    const iA = th.ids.indexOf(p.lk), iB = th.ids.indexOf(p.hk);
+    if (iA < 0 || iB < 0 || iA === iB) throw new Error('escolha os componentes A (mais volátil) e B (menos volátil)');
+    const Fb = s.flows[iA] + s.flows[iB]; if (!(Fb > 0)) throw new Error('a alimentação não contém A nem B');
+    const zF = s.flows[iA] / Fb, xD = num(p.xD, 0.9), xW = num(p.xW, 0.05), Rr = num(p.R, 1.8);
+    const others = []; for (let i = 0; i < n; i++) if (i !== iA && i !== iB && s.flows[i] > 1e-9 * s.F) others.push(i);
+    if (others.length) warn.push('método binário: ' + others.map(i => th.c[i].name).join(', ') + ' não entra(m) no diagrama (leves → destilado, pesados → resíduo)');
+    const vec = v => { const a = new Array(n).fill(0); a[iA] = v; a[iB] = 1 - v; return a; };
+    const memo = f => { const m = new Map(); return x => { const k = x.toFixed(13); if (!m.has(k)) m.set(k, f(x)); return m.get(k); }; };
+    const bub = memo(x => th.bubbleT(vec(x), P)), dew = memo(y => th.dewT(vec(y), P));
+    const useTh = /^modelo/.test(p.vle || ''), useHth = /^modelo/.test(p.enth || ''), alpha = num(p.alpha, 2.45);
+    if (!useTh && !(alpha > 1)) throw new Error('α deve ser maior que 1 (A é o mais volátil)');
+    const eqy = useTh ? (x => (x <= 0 ? 0 : x >= 1 ? 1 : bub(x).y[iA])) : (x => alpha * x / (1 + (alpha - 1) * x));
+    const eqx = useTh ? (y => (y <= 0 ? 0 : y >= 1 ? 1 : dew(y).x[iA])) : (y => y / (alpha - (alpha - 1) * y));
+    let h, H, hF, q;
+    if (useHth) {
+      h = memo(x => th.hL(vec(x), bub(Math.min(1, Math.max(0, x))).T, P)); H = memo(y => th.hV(vec(y), dew(Math.min(1, Math.max(0, y))).T, P));
+      hF = s.h; q = (H(zF) - hF) / (H(zF) - h(zF));
+    } else {
+      const hA = num(p.hA, 4000), hB = num(p.hB, 2500), HA = num(p.HA, 42000), HB = num(p.HB, 36000);
+      if (!(HA > hA && HB > hB)) throw new Error('a entalpia do vapor saturado deve superar a do líquido saturado');
+      h = x => hA * x + hB * (1 - x); H = y => HA * y + HB * (1 - y);
+      q = num(p.q, 1); hF = h(zF) + (1 - q) * (H(zF) - h(zF));
+    }
+    const r = ponchonSavarit({ zF, hF, q, xD, xW, R: Rr, F: Fb, h, H, eqy, eqx });
+    if (!r.ok) warn.push('o número máximo de estágios (100) foi atingido sem alcançar xW: R está muito próximo do mínimo');
+    // correntes de saída (líquidos saturados na pressão da coluna)
+    const fD = new Array(n).fill(0), fW = new Array(n).fill(0);
+    fD[iA] = r.D * xD; fD[iB] = r.D * (1 - xD); fW[iA] = r.W * xW; fW[iB] = r.W * (1 - xW);
+    others.forEach(i => { if (th.c[i].nv || th.c[i].solid || th.c[i].tb > th.c[iA].tb) fW[i] = s.flows[i]; else fD[i] = s.flows[i]; });
+    const nz = a => N.normalize(a);
+    let Ttop, Tbot; try { Ttop = th.bubbleT(nz(fD), P).T; } catch (e) { Ttop = s.T; } try { Tbot = th.bubbleT(nz(fW), P).T; } catch (e) { Tbot = s.T; }
+    const dist = mkStream(th, fD, Ttop, P), bot = mkStream(th, fW, Tbot, P);
+    const kmol = v => v / KMOLH, nA = th.c[iA].name, nB = th.c[iB].name, Vtop = r.V[0], Vbot = r.V[r.V.length - 1];
+    const res = [{ k: 'Vazão de destilado D', v: kmol(r.D), u: 'kmol/h' }, { k: 'Vazão de resíduo W', v: kmol(r.W), u: 'kmol/h' },
+      { k: 'Nº de estágios teóricos (inclui o refervedor parcial)', v: r.n, u: '' }, { k: 'Nº de estágios fracionário', v: r.nFrac, u: '' },
+      { k: 'Estágio ótimo de alimentação (do topo)', v: r.feed, u: '' },
+      { k: 'Razão de refluxo R', v: Rr, u: '' }, { k: 'Refluxo mínimo Rmín (Ponchon–Savarit)', v: r.Rmin, u: '' }, { k: 'R / Rmín', v: Rr / r.Rmin, u: '' },
+      { k: 'Condição térmica da alimentação q', v: q, u: '' }, { k: 'zF (A na alimentação)', v: zF, u: 'fração molar' },
+      { k: 'Polo ΔD: abscissa xD / ordenada Q′D', v: xD.toFixed(4) + ' / ' + r.QD.toFixed(0), u: 'kJ/kmol' },
+      { k: 'Polo ΔW: abscissa xW / ordenada Q′W', v: xW.toFixed(4) + ' / ' + r.QW.toFixed(0), u: 'kJ/kmol' },
+      { k: 'Carga do condensador', v: -kW(r.Qc), u: 'kW' }, { k: 'Carga do refervedor', v: kW(r.QR), u: 'kW' },
+      { k: 'Vapor no topo V1 / vapor do refervedor V' + r.n, v: kmol(Vtop).toFixed(2) + ' / ' + kmol(Vbot).toFixed(2), u: 'kmol/h' },
+      { k: 'Variação da vazão de vapor ao longo da coluna (máx/mín − 1)', v: (Math.max.apply(null, r.V) / Math.min.apply(null, r.V) - 1) * 100, u: '%' },
+      { k: 'T topo / T fundo (ponto de bolha na pressão P)', v: K2C(Ttop).toFixed(2) + ' / ' + K2C(Tbot).toFixed(2), u: '°C' }];
+    if (r.mt.n) res.push({ k: 'Comparação McCabe–Thiele (vazões molares constantes): nº de estágios / alimentação', v: r.mt.n + ' / ' + r.mt.feed, u: '' });
+    else if (r.mt.Rmin != null) res.push({ k: 'Comparação McCabe–Thiele (vazões molares constantes)', v: 'inviável: R = ' + Rr.toFixed(3) + ' não supera o Rmín de McCabe–Thiele', u: '' });
+    if (r.mt.Rmin != null) res.push({ k: 'Comparação McCabe–Thiele: refluxo mínimo', v: r.mt.Rmin, u: '' });
+    r.st.forEach((e, k) => res.push({ k: 'Estágio ' + (k + 1) + (k + 1 === r.feed ? ' (alimentação)' : '') + ': x / y / L / V (kmol/h)', v: e.x.toFixed(4) + ' / ' + e.y.toFixed(4) + ' / ' + kmol(r.L[k]).toFixed(2) + ' / ' + kmol(r.V[k]).toFixed(2), u: '' }));
+    // gráficos
+    const g = []; for (let k = 0; k <= 100; k++) g.push(k / 100);
+    const plots = [{ kind: 'ponchon', title: 'Ponchon–Savarit (' + nA + '/' + nB + ') — N = ' + r.n + ' estágios, alimentação no ' + r.feed + 'º', data: {
+      x: g, h: g.map(h), H: g.map(H), xD, xW, zF, hF, hD: r.hD, hW: r.hW, QD: r.QD, QW: r.QW, QDmin: r.QDmin, R: Rr, Rmin: r.Rmin,
+      st: r.st.map(e => ({ x: e.x, y: e.y, hx: h(e.x), Hy: H(e.y) })), feed: r.feed, light: nA } }];
+    const xr = [], yr = [], xs = [], ys = [];
+    for (let k = 0; k <= 60; k++) { const xx = r.xq + (xD - r.xq) * k / 60; xr.push(xx); yr.push(k === 60 ? xD : r.opY(xx, false)); }
+    for (let k = 0; k <= 60; k++) { const xx = xW + (r.xq - xW) * k / 60; xs.push(xx); ys.push(k === 0 ? xW : r.opY(xx, true)); }
+    const path = { x: [xD], y: [xD] };
+    r.st.forEach((e, k) => { path.x.push(e.x); path.y.push(e.y); if (k < r.st.length - 1) { path.x.push(e.x); path.y.push(r.st[k + 1].y); } });
+    const xyS = [{ name: 'Equilíbrio', x: g, y: g.map(eqy), color: '#1f3fbf', width: 3.5 }, { name: 'y = x', x: [0, 1], y: [0, 1], dash: 'dash', width: 1.5, color: '#8a8f98' },
+      { name: 'Operação Ponchon–Savarit (retificação, polo ΔD)', x: xr, y: yr, color: '#d1302b', width: 3 },
+      { name: 'Operação Ponchon–Savarit (esgotamento, polo ΔW)', x: xs, y: ys, color: '#d63dd6', width: 3 }];
+    if (r.mt.Rmin != null) xyS.push({ name: 'Retas de McCabe–Thiele (vazões constantes)', x: [xD, r.mt.xi, xW], y: [xD, r.mt.yi, xW], dash: 'dot', width: 2.2, color: '#2e9e6b' });
+    xyS.push({ name: 'Estágios de Ponchon–Savarit (N = ' + r.n + ')', x: path.x, y: path.y, color: '#222', width: 1.6 });
+    plots.push({ kind: 'curves', title: 'Diagrama x–y: as linhas de operação de Ponchon–Savarit são curvas (vazões variáveis)', data: { xLabel: 'Fração molar de ' + nA + ' no líquido (x)', yLabel: 'Fração molar de ' + nA + ' no vapor (y)', xRange: [0, 1], yRange: [0, 1], series: xyS } });
+    const stg = r.st.map((e, k) => k + 1), fs = [{ name: 'V (vapor) — Ponchon–Savarit', x: stg, y: r.V.map(kmol), markers: true, color: '#d1302b' },
+      { name: 'L (líquido) — Ponchon–Savarit', x: stg, y: r.L.map(kmol), markers: true, color: '#2563c9' }];
+    if (r.mt.n) {
+      const mf = r.mt.feed || r.mt.n;
+      fs.push({ name: 'V — McCabe–Thiele (constante por seção)', x: stg, y: stg.map(k => kmol(k <= mf ? r.mt.Vr : r.mt.Vs)), dash: 'dash', width: 2, color: '#e88b8b' },
+        { name: 'L — McCabe–Thiele (constante por seção)', x: stg, y: stg.map(k => kmol(k === r.n ? r.W : k < mf ? r.mt.Lr : r.mt.Ls)), dash: 'dash', width: 2, color: '#8fb0e8' });
+    }
+    plots.push({ kind: 'curves', title: 'Vazões internas por estágio: variáveis em Ponchon–Savarit × constantes em McCabe–Thiele', data: { xLabel: 'Estágio (do topo para o fundo)', yLabel: 'Vazão molar (kmol/h)', series: fs } });
+    return { out: { distillate: dist, bottoms: bot }, res, warn, plots, duties: { Qc: -r.Qc, Qr: r.QR }, duty: r.QR,
+      ps: { r: { D: r.D, W: r.W, QD: r.QD, QW: r.QW, n: r.n, feed: r.feed, Rmin: r.Rmin, st: r.st }, zF, q, xD, xW, R: Rr, Fkmolh: kmol(Fb), useTh, useHth, alpha,
+        lin: useHth ? null : [num(p.hA, 4000), num(p.hB, 2500), num(p.HA, 42000), num(p.HB, 36000)], labels: [nA, nB], hF,
+        tab: (useTh || useHth) ? { x: g, y: g.map(eqy), h: g.map(h), H: g.map(H) } : null } };
+  };
+
   /* ------------------------------------------------------------------ reator de Gibbs: equilíbrio químico por minimização de G (multiplicadores de Lagrange) */
   IMPL.rgibbs = function (th, b, ins) {
     const s = ins.in, p = b.params, n = th.n, GB = SF.gibbs, warn = [], plots = [];
@@ -2987,7 +3330,7 @@ window.SIMULAFACIL_CONFIG = {
     return { out: { out }, res, warn, plots, pack: { o, kT, ig } };
   };
 
-  SF.units = { TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn };
+  SF.units = { TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn, ponchonSavarit };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -3165,6 +3508,45 @@ window.SIMULAFACIL_CONFIG = {
         (p.thermal || '') === 'adiabático' ? eq(sum(i('i')) + ' ' + Fi + sub(i('h'), i('i')) + '(' + T + ') = ' + sum(i('i')) + ' ' + sub(i('F'), i('i') + ',0') + sub(i('h'), i('i')) + '(' + sub(T, '0') + ')', 'adiabático (entalpias de formação incluídas)') : eq(Q + ' = ' + sum(i('i')) + ' ' + Fi + sub(i('h'), i('i')) + '(' + T + ') − ' + sum(i('i')) + ' ' + sub(i('F'), i('i') + ',0') + sub(i('h'), i('i')) + '(' + sub(T, '0') + ')', 'calor trocado')],
       sym: [[sub(i('ξ'), i('j')), 'grau de avanço da reação j'], [sub(i('X'), i('j')), 'conversão do reagente limitante']]
     }),
+    lle_ternary: (p) => {
+      const xB = sub(i('x'), 'B'), yB = sub(i('y'), 'B'), Ei = sub(i('E'), i('i')), Ri = sub(i('R'), i('i')), Ei1 = sub(i('E'), i('i') + '+1'), RN = sub(i('R'), i('N')), E1 = sub(i('E'), '1');
+      const poly = /polin/i.test(p.fit || '');
+      return {
+        name: 'Extração L-L em diagrama ternário: método gráfico de Hunter–Nash (frações mássicas)',
+        eqs: [eq(i('M') + ' = ' + i('F') + ' + ' + i('S') + ',<br>' + sub(i('x'), 'M') + ' = ' + fr(i('F') + sub(i('x'), 'F') + ' + ' + i('S') + sub(i('x'), 'S'), i('F') + ' + ' + i('S')), 'ponto de mistura (regra da alavanca)'),
+          eq(i('F') + ' + ' + i('S') + ' = ' + E1 + ' + ' + RN + ' = ' + i('M'), 'balanço global: ' + RN + ', M e ' + E1 + ' alinhados'),
+          eq(E1 + ' = ' + i('M') + '·' + fr(sub(xB, 'M') + ' − ' + sub(xB, RN), sub(yB, E1) + ' − ' + sub(xB, RN)), 'balanço do soluto'),
+          eq('Δ = ' + i('F') + ' − ' + E1 + ' = ' + RN + ' − ' + i('S') + ' = ' + Ri + ' − ' + Ei1, 'polo de operação (constante em todos os estágios)'),
+          eq(sub(xB, Ri) + ' = ' + i('f') + '(' + sub(yB, Ei) + ')', 'equilíbrio: linha de amarração ' + Ei + '–' + Ri),
+          eq(sub(i('x'), 'C') + ' = ' + sub(i('g'), i('R')) + '(' + xB + ') ;&nbsp; ' + sub(i('y'), 'C') + ' = ' + sub(i('g'), i('E')) + '(' + yB + ')', 'curva binodal (' + (poly ? 'polinômio de 3º grau' : 'interpolação PCHIP') + ')'),
+          eq(i('X') + ' = ' + sub(i('x'), 'C') + ' + ' + fr(xB, '2') + ',&nbsp; ' + i('Y') + ' = ' + fr('√3', '2') + xB, 'coordenadas no triângulo equilátero')],
+        sym: [[i('F') + ', ' + i('S'), 'alimentação e solvente (kg/h)'], [Ei + ', ' + Ri, 'extrato e rafinado que saem do estágio i'], ['Δ', 'polo de operação (ponto diferença), em geral fora do triângulo'],
+          [xB + ', ' + yB, 'fração mássica do soluto B no rafinado e no extrato'], [i('f'), 'curva de distribuição do soluto (ajuste quadrático das linhas de amarração)'], ['A, B, C', 'diluente, soluto e solvente']],
+        note: 'Construção: R_N, M e E₁ dão o polo Δ; a partir de E₁, alterna-se a linha de amarração (E_i → R_i) e a linha de operação (R_i → Δ → E_{i+1}) até x_B ≤ x_B,RN.'
+      };
+    },
+    ponchon: (p) => {
+      const QD = sub("<i>Q</i>′", 'D'), QW = sub("<i>Q</i>′", 'W'), xD = sub(x, 'D'), xW = sub(x, 'W'), hD = sub(i('h'), 'D'), HD = sub(i('H'), 'D'), hW = sub(i('h'), 'W');
+      const hn = sub(i('h'), i('n')), Hn1 = sub(i('H'), i('n') + '+1'), Vn1 = sub(V, i('n') + '+1'), Ln = sub(L, i('n')), D = i('D'), W = i('W'), R_ = i('R');
+      const thH = /^modelo/.test(p.enth || ''), cte = !/^modelo/.test(p.vle || '');
+      return {
+        name: 'Coluna binária: método de Ponchon–Savarit (balanços de massa e de energia no diagrama entalpia–composição)',
+        eqs: [eq(F + ' = ' + D + ' + ' + W + ',&nbsp; ' + F + sub(z, 'F') + ' = ' + D + xD + ' + ' + W + xW, 'balanços globais'),
+          eq(QD + ' = ' + hD + ' + ' + fr(sub(Q, 'c'), D) + ' = ' + hD + ' + (' + R_ + ' + 1)(' + HD + ' − ' + hD + ')', 'polo de retificação ΔD = (' + xD + ', ' + QD + ')'),
+          eq(QW + ' = ' + hW + ' − ' + fr(sub(Q, 'R'), W) + ',&nbsp; ' + F + sub(i('h'), 'F') + ' = ' + D + QD + ' + ' + W + QW, 'polo de esgotamento ΔW: F, ΔD e ΔW alinhados'),
+          eq(Vn1 + ' − ' + Ln + ' = ' + D + ',&nbsp; ' + Vn1 + ' = ' + D + '·' + fr(QD + ' − ' + hn, Hn1 + ' − ' + hn), 'retificação: ' + Vn1 + ', ' + Ln + ' e ΔD alinhados'),
+          eq(sub(L, i('m')) + ' − ' + sub(V, i('m') + '+1') + ' = ' + W + ',&nbsp; ' + sub(L, i('m')) + ' = ' + W + '·' + fr(sub(i('H'), i('m') + '+1') + ' − ' + QW, sub(i('H'), i('m') + '+1') + ' − ' + sub(i('h'), i('m'))), 'esgotamento: pelo polo ΔW'),
+          cte ? eq(sub(i('y'), i('n')) + ' = ' + fr(i('α') + sub(x, i('n')), '1 + (' + i('α') + ' − 1)' + sub(x, i('n'))), 'linha de amarração (equilíbrio, α constante)')
+              : eq(sub(i('y'), i('n')) + ' = ' + sub(i('K'), 'A') + '(' + sub(T, 'bolha') + ')·' + sub(x, i('n')), 'linha de amarração (equilíbrio pelo modelo termodinâmico)'),
+          thH ? eq(i('h') + '(' + x + ') = ' + sum(i('i')) + ' ' + xi + '[' + sub(sup(i('h'), 'gi'), i('i')) + '(' + sub(T, 'b') + ') − Δ' + sub(i('H'), 'vap,' + i('i')) + '],&nbsp; ' + i('H') + '(' + i('y') + ') = ' + sum(i('i')) + ' ' + yi + sub(sup(i('h'), 'gi'), i('i')) + '(' + sub(T, 'o') + ')', 'curvas de entalpia pelo modelo')
+              : eq(i('h') + '(' + x + ') = ' + sub(i('h'), 'A') + x + ' + ' + sub(i('h'), 'B') + '(1 − ' + x + '),&nbsp; ' + i('H') + '(' + i('y') + ') = ' + sub(i('H'), 'A') + i('y') + ' + ' + sub(i('H'), 'B') + '(1 − ' + i('y') + ')', 'curvas de entalpia (retas informadas)'),
+          eq(sub(R_, 'mín') + ' = ' + fr(sub("<i>Q</i>′", 'D,mín') + ' − ' + HD, HD + ' − ' + hD), 'amarração que passa por F prolongada até ' + xD)],
+        sym: [[QD + ', ' + QW, 'ordenadas dos polos (kJ/kmol): entalpia "líquida" por mol de produto, incluindo o calor do condensador ou do refervedor'],
+          [i('h') + ', ' + i('H'), 'entalpia molar do líquido e do vapor saturados'], [sub(Q, 'c') + ', ' + sub(Q, 'R'), 'calor retirado no condensador e fornecido no refervedor'],
+          [Ln + ', ' + Vn1, 'líquido que desce do estágio n e vapor que sobe do estágio n + 1 (variam de estágio para estágio)'], [i('α'), 'volatilidade relativa']],
+        note: 'Construção: a partir de y₁ = x_D, a linha de amarração dá x₁; a reta de x₁ até ΔD corta a curva do vapor em y₂, e assim por diante. Troca-se de ΔD para ΔW quando a amarração cruza a reta ΔD–F–ΔW (estágio ótimo de alimentação). Se h(x) e H(y) fossem retas paralelas, V e L seriam constantes e o método se reduziria ao de McCabe–Thiele.'
+      };
+    },
     rgibbs: (p) => {
       const mu = sub(i('μ'), i('i')), ni = sub(i('n'), i('i')), aki = sub(i('a'), i('ki')), Ak = sub(i('A'), i('k')), lk = sub(i('λ'), i('k')), Gf = 'Δ' + sub(sup(i('G'), '°'), 'f,' + i('i')), P0 = sup(P, '°');
       const eqs = [eq(sub(i('G'), 't') + ' = ' + sum(i('i')) + ' ' + ni + mu + ',<br>' + mu + ' = ' + Gf + ' + ' + i('R') + T + ' ln' + fr(yi + P, P0), 'energia de Gibbs total (gás ideal)'),
@@ -3314,6 +3696,15 @@ window.SIMULAFACIL_CONFIG = {
       'A lixiviação, ou extração sólido-líquido, dissolve um componente solúvel presente num sólido inerte usando um solvente. Em cada estágio ideal, a solução retida no sólido (underflow) tem a mesma concentração da solução que sai limpa (overflow); a separação é limitada justamente pela solução que o sólido arrasta consigo.',
       'O parâmetro central é a retenção r, em kg de solução por kg de inerte. Em contracorrente, o sólido avança num sentido e o solvente no outro, e cada estágio "lava" o sólido com uma solução mais diluída. A fração de soluto perdida com o sólido diminui rapidamente com o número de estágios e com a razão entre solução no extrato e solução retida.',
       'No exemplo "Lixiviação de óleo de soja com hexano (sólido-líquido)", 1 000 kg/h de soja laminada com 20 % de óleo são extraídos com 1 000 kg/h de hexano em 4 estágios a 50 °C, com r = 0,5. O sólido sai arrastando 400 kg/h de solução, o extrato tem 800 kg/h e a recuperação de óleo é de 98,1 %. É o mesmo princípio usado nas indústrias de óleos vegetais.'] },
+    ponchon: { ex: ex('ponchon-savarit', 'Destilação binária pelo método de Ponchon–Savarit (benzeno/tolueno)'), p: [
+      'O método de Ponchon–Savarit projeta colunas de destilação binárias no diagrama entalpia–composição (H–x–y). Nele aparecem duas curvas: a do líquido saturado, h(x), e a do vapor saturado, H(y); a distância vertical entre elas é o calor latente da mistura. As linhas de amarração ligam o líquido e o vapor em equilíbrio. A grande vantagem do diagrama é que a mistura ou a diferença de duas correntes cai sobre a reta que as une, na posição dada pela regra da alavanca, e isso vale ao mesmo tempo para a massa e para a energia.',
+      'Combinando os balanços de massa e de energia de uma seção da coluna, aparecem dois pontos fixos, os polos. O polo de retificação ΔD fica na abscissa x_D, com ordenada Q′_D = h_D + Q_c/D = h_D + (R + 1)(H_D − h_D): ele representa o fluxo líquido que sobe (o destilado mais o calor retirado no condensador). Toda reta de operação da retificação passa por ΔD, porque V(n+1) − L(n) = D. O polo de esgotamento ΔW fica em x_W, abaixo da curva do líquido, com Q′_W = h_W − Q_R/W, e os pontos F, ΔD e ΔW estão alinhados (balanço global). A construção começa em y₁ = x_D: a amarração dá x₁, a reta de x₁ até o polo corta a curva do vapor em y₂, e assim por diante, trocando de ΔD para ΔW quando a amarração cruza a reta ΔD–F–ΔW. O refluxo mínimo sai da amarração que passa por F, prolongada até x_D.',
+      'Qual é o diferencial em relação a McCabe–Thiele? McCabe–Thiele supõe vazões molares constantes: calores latentes molares iguais, calor sensível e calor de mistura desprezíveis. Com isso, L e V são constantes em cada seção, as retas de operação no diagrama x–y são retas e o balanço de energia nem aparece. Ponchon–Savarit faz o balanço de energia estágio a estágio: L e V variam ao longo da coluna, as "retas" de operação no diagrama x–y viram curvas, e as cargas do condensador e do refervedor saem diretamente das ordenadas dos polos. McCabe–Thiele é o caso particular em que h(x) e H(y) são retas paralelas (calor latente molar constante); Ponchon–Savarit é necessário quando os calores latentes são bem diferentes, quando há calor de mistura forte (como em amônia–água) ou calor sensível importante. Teste no exemplo: troque H do vapor de A puro para 37 500 kJ/kmol, o que deixa as duas retas paralelas, e os resultados passam a coincidir com os de McCabe–Thiele (refluxo mínimo 1,072 e vazões constantes).',
+      'No exemplo "Destilação binária pelo método de Ponchon–Savarit", 100 kmol/h de benzeno/tolueno com 45 % de benzeno entram como líquido saturado, com α = 2,45, x_D = 0,90, x_W = 0,05 e R = 1,8, e com as retas de entalpia h = 4 000x + 2 500(1 − x) e H = 42 000y + 36 000(1 − y) kJ/kmol. Os polos ficam em Q′_D ≈ 108 990 e Q′_W ≈ −90 883 kJ/kmol, e a construção dá 10 estágios teóricos (com o refervedor), alimentação no 4º, D = 47,1 kmol/h e cerca de 1 374 kW no condensador e no refervedor. Como o calor latente cresce de 33 500 para 38 000 kJ/kmol, o vapor aumenta cerca de 11 % do topo ao fundo (de 131,8 para 146,1 kmol/h). McCabe–Thiele, com os mesmos dados, dá 10 estágios com alimentação no 5º, e refluxo mínimo 1,072 contra 1,014 de Ponchon–Savarit. Experimente R = 1,05: Ponchon–Savarit ainda resolve (20 estágios), mas McCabe–Thiele diria que é impossível.'] },
+    lle_ternary: { ex: ex('ell-ternario', 'Extração L-L parcialmente miscível — diagrama ternário (Hunter–Nash)'), p: [
+      'Em muitos sistemas de extração, o diluente A (por exemplo, água) e o solvente C (por exemplo, um éter) são apenas parcialmente miscíveis, e o soluto B se distribui entre as duas fases. Esses sistemas são representados no diagrama ternário equilátero: cada vértice é um componente puro, cada lado é uma mistura binária e cada ponto interno é uma mistura dos três, lida pela distância a cada lado. A curva binodal separa a região de uma fase (fora dela) da região de duas fases (dentro dela): uma mistura que cai dentro da binodal se separa em duas fases conjugadas, nas extremidades de uma linha de amarração. As linhas de amarração encurtam à medida que a concentração de soluto aumenta, até o ponto crítico (plait point), onde as duas fases ficam iguais.',
+      'O método de Hunter–Nash constrói, sobre o diagrama, os estágios ideais de uma extração em contracorrente. Primeiro, o ponto de mistura M fica sobre a reta F–S, na posição dada pela regra da alavanca. O balanço global F + S = E₁ + R_N coloca o extrato E₁ no prolongamento da reta R_N–M até o ramo do extrato. O polo de operação Δ = F − E₁ = R_N − S = Rᵢ − Eᵢ₊₁ é o mesmo para todos os estágios e costuma ficar fora do triângulo. A construção alterna a linha de amarração (equilíbrio dentro do estágio, Eᵢ → Rᵢ) e a linha de operação (balanço entre estágios, Rᵢ → Δ → Eᵢ₊₁) até o rafinado atingir a especificação. Quando uma linha de operação coincide com uma linha de amarração, os estágios deixam de avançar: é a razão mínima de solvente, com infinitos estágios.',
+      'No exemplo "Extração L-L parcialmente miscível — diagrama ternário", 1 000 kg/h de solução com 35 % de ácido acético (60 % de água e 5 % de éter) são extraídos com 1 250 kg/h de éter isopropílico puro (S/F = 1,25), para deixar 5 % de ácido no rafinado. O ponto de mistura é M = (0,267; 0,156; 0,578), o extrato E₁ sai com 19,5 % de ácido e o polo Δ fica fora do triângulo, do lado do solvente. A construção dá 5 estágios teóricos (4,74 em valor fracionário), com 1 635 kg/h de extrato, 615 kg/h de rafinado e 91 % do ácido recuperado. O exemplo usa o polinômio de 3º grau do código original; com a interpolação PCHIP, que passa exatamente pelos pontos da binodal, o resultado continua 5 estágios (4,44). Diminua a razão S/F para 1,0 e depois para 0,8 e veja o número de estágios subir para 8 e para 21, sinal de que se está perto da razão mínima.'] },
     cstr: { ex: ex('cstr', 'CSTR transiente com camisa (A → B exotérmica)'), p: [
       'O reator contínuo de tanque agitado (CSTR) supõe mistura perfeita: a composição e a temperatura são uniformes no tanque e iguais às da corrente de saída. Por isso a reação ocorre na concentração de saída, a mais baixa do processo, o que torna o CSTR menos eficiente que o PFR para reações de ordem positiva, mas muito estável e fácil de controlar.',
       'O modelo dinâmico combina o balanço de massa de cada espécie, dC/dt = (C₀ − C)/τ + Σνr, com o balanço de energia, em que o calor de reação compete com a remoção pela camisa. A velocidade de reação segue a lei de Arrhenius, que cresce exponencialmente com a temperatura; essa realimentação pode levar a múltiplos estados estacionários e ao disparo térmico (runaway) se a troca térmica for insuficiente.',
@@ -3496,6 +3887,7 @@ window.SIMULAFACIL_CONFIG = {
     flash: { w: 54, h: 100, ports: { in: P(0, 52, 'l', 'in'), vapor: P(54, 10, 'r', 'out'), liquid: P(54, 90, 'r', 'out') } },
     decanter: { w: 110, h: 60, ports: { in: P(0, 22, 'l', 'in'), light: P(110, 16, 'r', 'out'), heavy: P(110, 54, 'r', 'out') } },
     column_short: { w: 112, h: 210, ports: { feed: P(0, 105, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), bottoms: P(112, 188, 'r', 'out') } },
+    ponchon: { w: 112, h: 210, ports: { feed: P(0, 105, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), bottoms: P(112, 188, 'r', 'out') } },
     column: { w: 112, h: 230, ports: { feed2: P(0, 55, 'l', 'in'), feed: P(0, 115, 'l', 'in'), feed3: P(0, 170, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), side: P(112, 130, 'r', 'out'), bottoms: P(112, 208, 'r', 'out') } },
     absorber: { w: 54, h: 180, ports: { liq_in: P(0, 22, 'l', 'in'), gas_in: P(0, 158, 'l', 'in'), gas_out: P(54, 22, 'r', 'out'), liq_out: P(54, 158, 'r', 'out') } },
     extractor: { w: 54, h: 180, ports: { feed: P(0, 22, 'l', 'in'), solvent: P(0, 158, 'l', 'in'), extract: P(54, 22, 'r', 'out'), raffinate: P(54, 158, 'r', 'out') } },
@@ -3504,6 +3896,7 @@ window.SIMULAFACIL_CONFIG = {
     pfr: { w: 130, h: 40, ports: { in: P(0, 20, 'l', 'in'), out: P(130, 20, 'r', 'out') } },
     rconv: { w: 64, h: 80, ports: { in: P(0, 22, 'l', 'in'), out: P(64, 64, 'r', 'out') } },
     rgibbs: { w: 64, h: 80, ports: { in: P(0, 22, 'l', 'in'), out: P(64, 64, 'r', 'out') } },
+    lle_ternary: { w: 54, h: 180, ports: { feed: P(0, 22, 'l', 'in'), solvent: P(0, 158, 'l', 'in'), extract: P(54, 22, 'r', 'out'), raffinate: P(54, 158, 'r', 'out') } },
     adsorber: { w: 56, h: 130, ports: { in: P(0, 16, 'l', 'in'), out: P(56, 114, 'r', 'out') } },
     packaging: { w: 84, h: 70, ports: { in: P(0, 35, 'l', 'in'), out: P(84, 35, 'r', 'out') } }
   };
@@ -3553,6 +3946,12 @@ window.SIMULAFACIL_CONFIG = {
     flash: () => [R(6, 4, 42, 92, 21), L([[12, 18], [42, 18]], 'lnd'), L([[10, 62], [44, 62]], 'lnd')],
     decanter: () => [R(6, 6, 98, 40, 20), R(72, 44, 22, 12, 4), L([[14, 28], [96, 28]], 'lnd'), L([[60, 6], [60, 28]])],
     column_short: () => column(210, 'FUG'),
+    ponchon: () => { // coluna com um mini diagrama H–x: curva do vapor (em cima), do líquido (embaixo) e o polo Δ
+      const o = column(210, '');
+      o.push(R(9, 56, 36, 100, 3, 'bodyw'), L([[12, 78], [42, 72]], 'hot'), L([[12, 122], [42, 118]], 'cold'), L([[17, 121], [31, 75]]), L([[31, 75], [37, 64]], 'lnd'),
+        C(37, 64, 2.6), T(27, 150, 'H-x'));
+      return o;
+    },
     column: () => column(230, ''),
     absorber: () => {
       const o = [R(4, 4, 46, 172, 12), L([[8, 34], [46, 34]]), L([[8, 146], [46, 146]])];
@@ -3567,6 +3966,7 @@ window.SIMULAFACIL_CONFIG = {
     pfr: () => { const o = [R(4, 6, 122, 28, 8)]; for (let x = 16; x < 120; x += 16) o.push(L([[x, 34], [x + 10, 6]])); return o; },
     rconv: () => [R(6, 6, 52, 68, 11), T(32, 45, 'X%')],
     rgibbs: () => [R(6, 6, 52, 68, 11), T(32, 38, 'ΔG'), T(32, 56, 'mín')],
+    lle_ternary: () => [R(4, 4, 46, 172, 12), L([[27, 14], [27, 54]]), L([[27, 126], [27, 166]]), L([[11, 108], [43, 108], [27, 80], [11, 108]]), L([[15, 102], [39, 102]]), L([[19, 95], [35, 95]])],
     adsorber: () => { // vaso de leito fixo: grades de suporte e partículas de adsorvente
       const o = [R(6, 4, 44, 122, 20), L([[0, 16], [6, 16]]), L([[50, 114], [56, 114]]), L([[10, 30], [46, 30]]), L([[10, 100], [46, 100]])];
       for (let y = 38; y <= 94; y += 11) for (let x = (((y - 38) / 11) % 2 ? 17 : 13); x <= 44; x += 9) o.push(C(x, y, 3, 'ln'));
@@ -3688,7 +4088,7 @@ window.SIMULAFACIL_CONFIG = {
     if (!r) return [];
     const g = IC.G[b.type], marks = [];
     const add = (x, y, Q, label, up) => marks.push({ x: b.x + x, y: b.y + y, Q, label, up });
-    if (r.duties && (b.type === 'column' || b.type === 'column_short')) { add(82, -4, r.duties.Qc, 'Qc', true); add(82, g.h + 4, r.duties.Qr, 'Qr', false); }
+    if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon')) { add(82, -4, r.duties.Qc, 'Qc', true); add(82, g.h + 4, r.duties.Qr, 'Qr', false); }
     else if (r.duty != null && Math.abs(r.duty) > 1e-3 && b.type !== 'feed') add(g.w - 2, g.h + 4, r.duty, r.power ? 'W' : 'Q', false);
     return marks;
   }
@@ -3971,7 +4371,7 @@ window.SIMULAFACIL_CONFIG = {
         return { data, layout: L };
       }
       case 'curves': { // curvas genéricas com linhas horizontais de referência
-        const data = d.series.map((s, k) => ({ x: s.x, y: s.y, mode: s.markers ? 'lines+markers' : 'lines', name: s.name, line: { color: s.color || PALETTE[k % 8], width: s.width || 3, dash: s.dash || 'solid' }, marker: { size: 6 } }));
+        const data = d.series.map((s, k) => ({ x: s.x, y: s.y, mode: s.mode || (s.markers ? 'lines+markers' : 'lines'), name: s.name, line: { color: s.color || PALETTE[k % 8], width: s.width || 3, dash: s.dash || 'solid' }, marker: { size: 6 } }));
         const xr = d.xRange || [Math.min.apply(null, d.series[0].x), Math.max.apply(null, d.series[0].x)];
         (d.hlines || []).forEach(h => data.push({ x: xr, y: [h.y, h.y], mode: 'lines', name: h.name, line: { color: h.color || css('--muted'), width: 2, dash: 'dash' }, hoverinfo: 'name' }));
         const L = baseLayout(p.title, d.xLabel || '', d.yLabel || '');
@@ -3983,6 +4383,84 @@ window.SIMULAFACIL_CONFIG = {
         const data = d.series.map((s, k) => ({ type: 'bar', x: d.categories, y: s.y, name: s.name, marker: { color: s.color || PALETTE[k % 8] }, hovertemplate: '%{x}<br>' + s.name + ': %{y:.4f}<extra></extra>' }));
         const L = baseLayout(p.title, d.xLabel || '', d.yLabel || '');
         L.barmode = 'group'; L.bargap = 0.25; L.bargroupgap = 0.08;
+        return { data, layout: L };
+      }
+      case 'ponchon': { // diagrama entalpia–composição (H–x–y) com polos ΔD e ΔW, linhas de amarração e de operação
+        const ink = css('--ink'), data = [], fmt = (x, v) => 'x = ' + x.toFixed(4) + '<br>entalpia = ' + Math.round(v).toLocaleString('pt-BR') + ' kJ/kmol';
+        const segs = (pairs, name, color, dash, width) => { const x = [], y = []; pairs.forEach(([a, b]) => { x.push(a[0], b[0], null); y.push(a[1], b[1], null); });
+          data.push({ x, y, mode: 'lines', name, line: { color, dash: dash || 'solid', width: width || 2 }, hoverinfo: 'skip' }); };
+        const mark = (pt, name, color, symbol, size, label) => data.push({ x: [pt[0]], y: [pt[1]], mode: 'markers+text', name, text: [label], textposition: 'middle right', textfont: { size: 15, color },
+          marker: { color, symbol, size: size || 12, line: { color: ink, width: 1 } }, hovertext: [label + '<br>' + fmt(pt[0], pt[1])], hoverinfo: 'text' });
+        data.push({ x: d.x, y: d.h, mode: 'lines', name: 'Líquido saturado h(x)', line: { color: '#2563c9', width: 3.5 }, hovertemplate: 'líquido saturado<br>x = %{x:.3f}<br>h = %{y:.0f} kJ/kmol<extra></extra>' });
+        data.push({ x: d.x, y: d.H, mode: 'lines', name: 'Vapor saturado H(y)', line: { color: '#d1302b', width: 3.5 }, hovertemplate: 'vapor saturado<br>y = %{x:.3f}<br>H = %{y:.0f} kJ/kmol<extra></extra>' });
+        const PD = [d.xD, d.QD], PW = [d.xW, d.QW], st = d.st || [];
+        segs([[PW, PD]], 'Reta ΔW–F–ΔD (balanço global)', ink, 'dash', 1.6);
+        segs(st.map(e => [[e.x, e.hx], [e.y, e.Hy]]), 'Linhas de amarração (equilíbrio)', '#2e9e6b', 'solid', 2.2);
+        segs(st.slice(0, -1).map((e, k) => [[e.x, e.hx], k + 1 < d.feed ? PD : PW]), 'Linhas de operação (até o polo)', '#00a3b4', 'dot', 1.6);
+        if (d.QDmin != null && isFinite(d.QDmin)) mark([d.xD, d.QDmin], 'ΔD no refluxo mínimo', '#8a8f98', 'triangle-up-open', 12, 'ΔD,mín');
+        mark(PD, 'Polo ΔD (retificação)', '#1f9d55', 'triangle-up', 15, 'ΔD');
+        mark(PW, 'Polo ΔW (esgotamento)', '#c2185b', 'triangle-down', 15, 'ΔW');
+        mark([d.zF, d.hF], 'Alimentação F', ink, 'circle', 12, 'F');
+        mark([d.xD, d.hD], 'Destilado D', '#2563c9', 'square', 11, 'D');
+        mark([d.xW, d.hW], 'Resíduo W', '#d1302b', 'square', 11, 'W');
+        const L = baseLayout(p.title, 'Fração molar de ' + (d.light || 'A') + ' (x no líquido, y no vapor)', 'Entalpia molar (kJ/kmol)');
+        L.xaxis.range = [-0.03, 1.03]; L.hovermode = 'closest';
+        L.title = { text: p.title + '<br><span style="font-size:16px">R = ' + d.R.toFixed(2).replace('.', ',') + ' (Rmín = ' + d.Rmin.toFixed(3).replace('.', ',') + ') · polos ΔD e ΔW: as retas de operação partem deles</span>', font: { size: 20 }, x: 0.02, xanchor: 'left', y: 0.97, yanchor: 'top' };
+        L.legend = Object.assign(L.legend, { orientation: 'h', xref: 'container', yref: 'container', x: 0.01, xanchor: 'left', y: 0.005, yanchor: 'bottom', bgcolor: 'rgba(0,0,0,0)', borderwidth: 0, font: { size: 14 } });
+        L.margin = { l: 96, r: 30, t: 96, b: 190 }; L.height = 760;
+        return { data, layout: L };
+      }
+      case 'ternary': { // diagrama ternário equilátero: A embaixo à esquerda, C embaixo à direita, B no vértice de cima
+        const ink = css('--ink'), gridc = css('--line'), R3 = Math.sqrt(3) / 2;
+        const t2c = v => [v[2] + 0.5 * v[1], R3 * v[1]];
+        const fmt = v => 'xA = ' + v[0].toFixed(4) + '<br>xB = ' + v[1].toFixed(4) + '<br>xC = ' + v[2].toFixed(4);
+        const data = [];
+        const segs = (pairs, name, color, dash, width, legend) => {
+          const x = [], y = [];
+          pairs.forEach(([a, b]) => { const p = t2c(a), q = t2c(b); x.push(p[0], q[0], null); y.push(p[1], q[1], null); });
+          data.push({ x, y, mode: 'lines', name, line: { color, dash: dash || 'solid', width: width || 2 }, showlegend: !!legend, hoverinfo: 'skip' });
+        };
+        const curve = (pts, name, color, dash, width) => { const xy = pts.map(t2c); data.push({ x: xy.map(p => p[0]), y: xy.map(p => p[1]), mode: 'lines', name, line: { color, dash: dash || 'solid', width: width || 3 }, hoverinfo: 'skip' }); };
+        const marks = (pts, name, color, symbol, size, labels, legend) => {
+          const xy = pts.map(t2c);
+          data.push({ x: xy.map(p => p[0]), y: xy.map(p => p[1]), mode: labels ? 'markers+text' : 'markers', name, showlegend: legend !== false,
+            text: labels || null, textposition: 'top right', textfont: { size: 15, color },
+            marker: { color, symbol, size: size || 10, line: { color: ink, width: 1 } },
+            hovertext: pts.map((v, k) => (labels ? labels[k] + '<br>' : '') + fmt(v)), hoverinfo: 'text' });
+        };
+        // triângulo e grade a cada 0,1 (as três famílias de linhas)
+        const grid = [];
+        for (let k = 1; k < 10; k++) { const v = k / 10; grid.push([[1 - v, v, 0], [0, v, 1 - v]], [[1 - v, 0, v], [0, 1 - v, v]], [[v, 1 - v, 0], [v, 0, 1 - v]]); }
+        segs(grid, 'Grade', gridc, 'dot', 1, false);
+        segs([[[1, 0, 0], [0, 0, 1]], [[0, 0, 1], [0, 1, 0]], [[0, 1, 0], [1, 0, 0]]], 'Triângulo', ink, 'solid', 2.5, false);
+        curve(d.curveR, 'Binodal — ramo do rafinado', ink, 'solid', 3);
+        curve(d.curveE, 'Binodal — ramo do extrato', ink, 'dash', 3);
+        if (d.raf.length === d.ext.length) segs(d.raf.map((r, k) => [r, d.ext[k]]), 'Linhas de amarração (dados)', '#9aa5ad', 'solid', 1.2, true);
+        marks(d.raf.concat(d.ext), 'Dados de equilíbrio', '#555', 'circle', 6, null);
+        const P = d.pts;
+        segs([[P.F, P.S]], 'Reta F–S (mistura)', '#2563c9', 'dash', 1.6, true);
+        segs([[P.RN, P.E1]], 'Reta RN–M–E1', '#c2185b', 'dash', 1.6, true);
+        segs([[P.F, P.P], [P.S, P.P]], 'Retas até o polo Δ', ink, 'dot', 1.4, true);
+        segs(d.E.slice(0, d.R.length).map((e, k) => [e, d.R[k]]), 'Estágios: linhas de amarração', '#d1495b', 'solid', 2.6, true);
+        segs(d.R.slice(0, -1).map(r => [r, P.P]), 'Estágios: linhas de operação (pelo polo)', '#2e9e6b', 'dot', 1.8, true);
+        marks(d.E.slice(0, d.R.length), 'Extratos Eᵢ', '#d1495b', 'circle', 9, d.E.slice(0, d.R.length).map((e, k) => 'E' + (k + 1)), false);
+        marks(d.R, 'Rafinados Rᵢ', '#2e9e6b', 'circle', 9, d.R.map((e, k) => 'R' + (k + 1)), false);
+        marks([P.F], 'F (alimentação)', '#e53935', 'triangle-up', 14, ['F']);
+        marks([P.S], 'S (solvente)', '#2563c9', 'square', 12, ['S']);
+        marks([P.M], 'M (mistura)', '#c2185b', 'circle', 12, ['M']);
+        marks([P.RN], 'RN (especificação)', '#2e9e6b', 'diamond', 12, ['RN']);
+        marks([P.P], 'Δ (polo de operação)', ink, 'x', 13, ['Δ']);
+        const all = [[1, 0, 0], [0, 0, 1], [0, 1, 0], P.P].map(t2c), xs = all.map(p => p[0]), ys = all.map(p => p[1]);
+        const pad = 0.06, xr = [Math.min.apply(null, xs) - pad, Math.max.apply(null, xs) + pad], yr = [Math.min.apply(null, ys) - pad, Math.max.apply(null, ys) + pad];
+        const L = baseLayout(p.title, '', '');
+        const hid = { visible: false, showgrid: false, zeroline: false, fixedrange: false };
+        L.xaxis = Object.assign({}, hid, { range: xr }); L.yaxis = Object.assign({}, hid, { range: yr, scaleanchor: 'x', scaleratio: 1 });
+        const lab = d.labels || ['A', 'B', 'C'];
+        L.annotations = [{ x: 0, y: 0, text: '<b>' + lab[0] + '</b>', showarrow: false, xanchor: 'right', yanchor: 'top', font: { size: 16 } },
+          { x: 1, y: 0, text: '<b>' + lab[2] + '</b>', showarrow: false, xanchor: 'left', yanchor: 'top', font: { size: 16 } },
+          { x: 0.5, y: R3, text: '<b>' + lab[1] + '</b>', showarrow: false, yanchor: 'bottom', font: { size: 16 } }];
+        L.legend = Object.assign(L.legend, { orientation: 'h', xref: 'container', yref: 'container', x: 0.01, xanchor: 'left', y: 0.005, yanchor: 'bottom', bgcolor: 'rgba(0,0,0,0)', borderwidth: 0, font: { size: 14 } });
+        L.margin = { l: 20, r: 20, t: 70, b: 170 }; L.height = 760; L.hovermode = 'closest';
         return { data, layout: L };
       }
       case 'surface': {
@@ -4250,7 +4728,7 @@ end
       lines.push("desenha_icone(" + str(b.type) + ", " + n2s(b.x) + ", " + n2s(b.y) + ");");
       lines.push("text(" + n2s(b.x + P.nameX(b)) + ", " + n2s(b.y + g.h + 16) + ", " + str(b.name) + ", 'FontSize', FSP, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');");
       const r = res.blocks[b.id]; if (!r) return;
-      if (r.duties && (b.type === 'column' || b.type === 'column_short')) {
+      if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon')) {
         lines.push("text(" + n2s(b.x + 96) + ", " + n2s(b.y - 14) + ", " + str('Qc = ' + (r.duties.Qc / 1000).toFixed(1) + ' kW') + ", 'FontSize', FSP-2, 'Color', amarelo, 'FontWeight', 'bold');");
         lines.push("text(" + n2s(b.x + 74) + ", " + n2s(b.y + g.h + 34) + ", " + str('Qr = ' + (r.duties.Qr / 1000).toFixed(1) + ' kW') + ", 'FontSize', FSP-2, 'Color', amarelo, 'FontWeight', 'bold');");
       } else if (r.duty != null && Math.abs(r.duty) > 1 && b.type !== 'feed') {
@@ -4434,6 +4912,131 @@ end
         "figure('Name', " + str(b.name + ' — perfis') + ", 'Color', 'w', 'Position', [120 120 950 600]); hold on;",
         "for k = round(linspace(1, numel(t), 5)), plot(x*1000, C(k, :), 'LineWidth', 2.5, 'DisplayName', sprintf('t = %.1f h', t(k)/3600)); end",
         "grid on; xlabel('Dimensão x (mm)'); ylabel('C (mol/m^3)'); title('Perfis de concentração no material'); legend('Location', 'best'); set(gca, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'ponchon' && r.ps) {
+      const S_ = r.ps, cte = !S_.useTh, lin = !!S_.lin, T_ = S_.tab, vv = a => '[' + a.map(n2s).join(' ') + ']';
+      out.push('function ' + fname + '(D, FS)', header,
+        '% Destilação binária pelo método de Ponchon–Savarit: balanços de massa E de energia no diagrama entalpia–composição (H–x–y).',
+        '% A = ' + S_.labels[0] + ' (mais volátil), B = ' + S_.labels[1] + '. Entalpias em kJ/kmol, vazões em kmol/h.', printRes.join('\n'),
+        '%% 1. Dados de entrada e termodinâmica',
+        'zF = ' + n2s(S_.zF) + '; xD = ' + n2s(S_.xD) + '; xW = ' + n2s(S_.xW) + '; F = ' + n2s(S_.Fkmolh) + '; R = ' + n2s(S_.R) + ';   % alimentação, especificações e refluxo',
+        cte ? 'alpha = ' + n2s(S_.alpha) + ';   % volatilidade relativa constante\nequil_y = @(x) alpha*x./(1 + (alpha - 1)*x);\nequil_x = @(y) y./(alpha - (alpha - 1)*y);'
+            : "x_tab = " + vv(T_.x) + ";\ny_tab = " + vv(T_.y) + ";   % equilíbrio calculado pelo simulador (modelo termodinâmico)\nequil_y = @(x) interp1(x_tab, y_tab, x, 'pchip');\nequil_x = @(y) interp1(y_tab, x_tab, y, 'pchip');",
+        lin ? 'h_liq = @(x) ' + n2s(S_.lin[0]) + '*x + ' + n2s(S_.lin[1]) + '*(1 - x);   % líquido saturado h(x)\nH_vap = @(y) ' + n2s(S_.lin[2]) + '*y + ' + n2s(S_.lin[3]) + '*(1 - y);   % vapor saturado H(y)'
+            : "h_tab = " + vv(T_.h) + ";\nH_tab = " + vv(T_.H) + ";   % entalpias de saturação calculadas pelo simulador (kJ/kmol)\nh_liq = @(x) interp1(x_tab, h_tab, x, 'pchip');\nH_vap = @(y) interp1(x_tab, H_tab, y, 'pchip');",
+        lin ? 'q = ' + n2s(S_.q) + ';   % condição térmica da alimentação\nhF = h_liq(zF) + (1 - q)*(H_vap(zF) - h_liq(zF));' : 'hF = ' + n2s(S_.hF) + ';   % entalpia da alimentação (kJ/kmol), da corrente do simulador\nq = (H_vap(zF) - hF)/(H_vap(zF) - h_liq(zF));',
+        '%% 2. Balanços globais e polos de operação',
+        'Dk = F*(zF - xW)/(xD - xW); Wk = F - Dk;',
+        'hD = h_liq(xD); HD = H_vap(xD); hW = h_liq(xW);',
+        'QD = hD + (R + 1)*(HD - hD);     % polo ΔD = (xD, QD): QD = hD + Qc/D',
+        'QW = (F*hF - Dk*QD)/Wk;          % polo ΔW = (xW, QW): F, ΔD e ΔW alinhados',
+        'xq = fzero(@(x) h_liq(x) - (QW + (QD - QW)/(xD - xW)*(x - xW)), [xW xD]);   % troca de polo (= zF para líquido saturado)',
+        '%% 3. Construção dos estágios (do topo para o fundo)',
+        'x_st = []; y_st = []; y = xD; feed = 0;',
+        'for n = 1:100',
+        '    x = equil_x(y); x_st(n) = x; y_st(n) = y;          % linha de amarração (equilíbrio)',
+        '    if feed == 0 && x <= xq, feed = n; end',
+        '    if x <= xW, break; end',
+        '    if feed == 0, px = xD; pQ = QD; yhi = xD; else, px = xW; pQ = QW; yhi = 1; end',
+        '    m = (pQ - h_liq(x))/(px - x);                        % reta de operação: líquido -> polo',
+        '    y = fzero(@(yy) H_vap(yy) - (h_liq(x) + m*(yy - x)), [x yhi]);   % corta a curva do vapor',
+        'end',
+        'N = numel(x_st);',
+        '%% 4. Vazões internas (variam de estágio para estágio) e cargas térmicas',
+        'V = zeros(1, N); L = zeros(1, N); V(1) = (R + 1)*Dk; L(N) = Wk;',
+        'for n = 1:N-1',
+        '    hn = h_liq(x_st(n)); Hn1 = H_vap(y_st(n+1));',
+        '    if n < feed, V(n+1) = Dk*(QD - hn)/(Hn1 - hn); L(n) = V(n+1) - Dk;',
+        '    else, L(n) = Wk*(Hn1 - QW)/(Hn1 - hn); V(n+1) = L(n) - Wk; end',
+        'end',
+        'Qc = Dk*(QD - hD)/3600; QR = Wk*(hW - QW)/3600;   % kW',
+        "fprintf('\\nPonchon-Savarit: N = %d estágios (com o refervedor), alimentação no %dº | D = %.2f kmol/h | Qc = %.1f kW | QR = %.1f kW\\n', N, feed, Dk, Qc, QR);",
+        "fprintf('  polo ΔD = (%.3f ; %.0f)   polo ΔW = (%.3f ; %.0f) kJ/kmol\\n', xD, QD, xW, QW);",
+        "for n = 1:N, fprintf('  estágio %2d: x = %.4f  y = %.4f  L = %7.2f  V = %7.2f kmol/h\\n', n, x_st(n), y_st(n), L(n), V(n)); end",
+        '%% 5. Diagrama de Ponchon–Savarit (entalpia–composição)',
+        'xa = linspace(0, 1, 300);',
+        "figure('Name', " + str(b.name + ' — Ponchon–Savarit') + ", 'Color', 'w', 'Position', [80 60 1000 720]); hold on; grid on; box on;",
+        "plot(xa, h_liq(xa), 'b-', 'LineWidth', 2.5, 'DisplayName', 'Líquido saturado h(x)');",
+        "plot(xa, H_vap(xa), 'r-', 'LineWidth', 2.5, 'DisplayName', 'Vapor saturado H(y)');",
+        "plot([xW xD], [QW QD], 'k--', 'LineWidth', 1, 'DisplayName', 'Reta \\Delta_W–F–\\Delta_D');",
+        'for n = 1:N',
+        "    plot([x_st(n) y_st(n)], [h_liq(x_st(n)) H_vap(y_st(n))], 'g-', 'LineWidth', 1.5, 'HandleVisibility', 'off');   % amarração: par em equilíbrio (x_n, y_n)",
+        "    if n < N, if n < feed, pp = [xD QD]; else, pp = [xW QW]; end, plot([x_st(n) pp(1)], [h_liq(x_st(n)) pp(2)], 'c:', 'LineWidth', 1, 'HandleVisibility', 'off'); end",
+        'end',
+        "plot(xD, QD, 'g^', 'MarkerSize', 10, 'MarkerFaceColor', 'g', 'DisplayName', sprintf('Polo \\\\Delta_D (%.2f ; %.0f)', xD, QD));",
+        "plot(xW, QW, 'mv', 'MarkerSize', 10, 'MarkerFaceColor', 'm', 'DisplayName', sprintf('Polo \\\\Delta_W (%.2f ; %.0f)', xW, QW));",
+        "plot(zF, hF, 'ko', 'MarkerSize', 8, 'MarkerFaceColor', 'k', 'DisplayName', 'Alimentação F');",
+        "plot(xD, hD, 'bs', 'MarkerSize', 8, 'MarkerFaceColor', 'b', 'DisplayName', 'Destilado D'); plot(xW, hW, 'rs', 'MarkerSize', 8, 'MarkerFaceColor', 'r', 'DisplayName', 'Resíduo W');",
+        "xlim([-0.05 1.05]); xlabel(" + str('Fração molar de ' + S_.labels[0] + ' (x, y)') + ", 'FontSize', FS); ylabel('Entalpia molar (kJ/kmol)', 'FontSize', FS);",
+        "title(sprintf('Ponchon–Savarit — N = %d estágios, alimentação no %dº', N, feed), 'FontSize', FS); legend('Location', 'northwest');",
+        '%% 6. Diagrama x–y: linhas de operação curvas (Ponchon) × retas de McCabe–Thiele',
+        'opy = @(x, px, pQ, yhi) fzero(@(yy) H_vap(yy) - (h_liq(x) + (pQ - h_liq(x))/(px - x)*(yy - x)), [x yhi]);',
+        'xr = linspace(xq, xD*(1 - 1e-9), 40); yr = arrayfun(@(x) opy(x, xD, QD, xD), xr);',
+        'xs = linspace(xW*(1 + 1e-9), xq, 40); ys = arrayfun(@(x) opy(x, xW, QW, 1), xs);',
+        'Lr = R*Dk; Vr = (R + 1)*Dk; xi = zF; if abs(q - 1) > 1e-9, xi = (zF*(R + 1) + xD*(q - 1))/(R + q); end; yi = Lr/Vr*xi + Dk*xD/Vr;',
+        'px = xD; py = xD; for n = 1:N, px = [px x_st(n)]; py = [py y_st(n)]; if n < N, px = [px x_st(n)]; py = [py y_st(n+1)]; end, end',
+        "figure('Name', " + str(b.name + ' — diagrama x-y') + ", 'Color', 'w', 'Position', [120 80 760 700]); hold on; grid on; box on; axis equal; axis([0 1 0 1]);",
+        "plot(xa, equil_y(xa), 'b-', 'LineWidth', 2.5); plot([0 1], [0 1], 'k--');",
+        "plot(xr, yr, 'r-', 'LineWidth', 2.2); plot(xs, ys, 'm-', 'LineWidth', 2.2); plot([xD xi xW], [xD yi xW], 'g:', 'LineWidth', 2); plot(px, py, 'k-', 'LineWidth', 1.2);",
+        "legend({'Equilíbrio', 'y = x', 'Operação Ponchon (retificação, \\Delta_D)', 'Operação Ponchon (esgotamento, \\Delta_W)', 'Retas de McCabe–Thiele (vazões constantes)', 'Estágios'}, 'Location', 'southeast');",
+        "xlabel('x', 'FontSize', FS); ylabel('y', 'FontSize', FS); title('Diagrama x–y: as linhas de operação de Ponchon–Savarit são curvas', 'FontSize', FS);",
+        '%% 7. Vazões internas por estágio',
+        "figure('Name', " + str(b.name + ' — vazões internas') + ", 'Color', 'w', 'Position', [160 100 900 560]); hold on; grid on; box on;",
+        "plot(1:N, V, 'ro-', 'LineWidth', 2, 'MarkerFaceColor', 'r'); plot(1:N, L, 'bo-', 'LineWidth', 2, 'MarkerFaceColor', 'b');",
+        "xlabel('Estágio (do topo para o fundo)', 'FontSize', FS); ylabel('Vazão molar (kmol/h)', 'FontSize', FS); legend({'V (vapor)', 'L (líquido)'}, 'Location', 'best');",
+        "title('Ponchon–Savarit: L e V não são constantes (em McCabe–Thiele seriam)', 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'lle_ternary' && r.lle3) {
+      const L3 = r.lle3, mat = M => '[' + M.map(row => row.map(n2s).join(' ')).join('; ') + ']', poly = /polin/i.test(L3.fit || '');
+      out.push('function ' + fname + '(D, FS)', header,
+        '% Extração líquido-líquido (sistema parcialmente miscível) — método de Hunter–Nash em diagrama ternário.',
+        '% A = ' + L3.labels[0] + ' (diluente), B = ' + L3.labels[1] + ' (soluto), C = ' + L3.labels[2] + ' (solvente). Frações mássicas.', printRes.join('\n'),
+        '%% 1. Dados de equilíbrio: ramos da binodal [xA xB xC] e distribuição do soluto [xB_rafinado yB_extrato]',
+        'raf_data = ' + mat(L3.raf) + ';', 'ext_data = ' + mat(L3.ext) + ';', 'eq_data = ' + mat(L3.eq) + ';',
+        'p_eq_E2R = polyfit(eq_data(:,2), eq_data(:,1), 2);   % xB no rafinado em função de yB no extrato',
+        'raf_s = sortrows(raf_data, 2); ext_s = sortrows(ext_data, 2);',
+        poly ? "p_raf = polyfit(raf_s(:,2), raf_s(:,3), 3); p_ext = polyfit(ext_s(:,2), ext_s(:,3), 3);\ngR = @(xB) polyval(p_raf, xB); gE = @(xB) polyval(p_ext, xB);   % binodal: polinômio de 3º grau"
+             : "gR = @(xB) interp1(raf_s(:,2), raf_s(:,3), xB, 'pchip', 'extrap'); gE = @(xB) interp1(ext_s(:,2), ext_s(:,3), xB, 'pchip', 'extrap');   % binodal: PCHIP (passa pelos pontos)",
+        'ptR = @(xB) [1 - xB - gR(xB), xB, gR(xB)]; ptE = @(xB) [1 - xB - gE(xB), xB, gE(xB)];',
+        'lo = ext_s(1,2); hi = ext_s(end,2);',
+        '%% 2. Condições do processo',
+        'F_v = [' + L3.xF.map(n2s).join(', ') + '];   % alimentação [xA xB xC]', 'S_v = [' + L3.xS.map(n2s).join(', ') + '];   % solvente [xA xB xC]',
+        'F_kgh = ' + n2s(L3.Fm * 3600) + '; S_kgh = ' + n2s(L3.Sm * 3600) + '; ratio_SF = S_kgh/F_kgh;',
+        'xB_RN = ' + n2s(L3.xBRN) + ';   % especificação do rafinado final', 'RN_v = ptR(xB_RN);',
+        '%% 3. Ponto de mistura, extrato E1 e polo de operação',
+        'M_v = (F_v + ratio_SF*S_v)/(1 + ratio_SF);',
+        'E1_v = ptE(ell_cross(RN_v, M_v, gE, lo, hi, 0.25));',
+        's1 = (E1_v(3) - F_v(3))/(E1_v(2) - F_v(2)); s2 = (S_v(3) - RN_v(3))/(S_v(2) - RN_v(2));',
+        'xB_P = (S_v(3) - F_v(3) + s1*F_v(2) - s2*S_v(2))/(s1 - s2); xC_P = S_v(3) + s2*(xB_P - S_v(2)); P_v = [1 - xB_P - xC_P, xB_P, xC_P];',
+        '%% 4. Construção dos estágios (linha de amarração e linha de operação, alternadas)',
+        'E_st = E1_v; R_st = []; cur = E1_v; n_st = 0;',
+        'while true',
+        '    n_st = n_st + 1;',
+        '    R_i = ptR(polyval(p_eq_E2R, cur(2))); R_st = [R_st; R_i];',
+        '    if R_i(2) <= xB_RN || n_st >= 50, break; end',
+        '    cur = ptE(ell_cross(R_i, P_v, gE, lo, hi, cur(2)*0.7)); E_st = [E_st; cur];',
+        'end',
+        'E1_kgh = (F_kgh + S_kgh)*(M_v(2) - RN_v(2))/(E1_v(2) - RN_v(2)); RN_kgh = F_kgh + S_kgh - E1_kgh;',
+        "fprintf('\\nHunter-Nash: %d estágios teóricos | E1 = %.1f kg/h (yB = %.4f) | RN = %.1f kg/h | recuperação de B = %.2f %%\\n', n_st, E1_kgh, E1_v(2), RN_kgh, 100*E1_kgh*E1_v(2)/(F_kgh*F_v(2)));",
+        "for k = 1:n_st, fprintf('  estágio %d: yB(E%d) = %.4f   xB(R%d) = %.4f\\n', k, k, E_st(k,2), k, R_st(k,2)); end",
+        '%% 5. Diagrama ternário equilátero',
+        "figure('Name', " + str(b.name + ' — diagrama ternário') + ", 'Color', 'w', 'Position', [80 60 1000 820]); hold on; axis equal; axis off;",
+        'ell_grid(' + str('A (' + L3.labels[0] + ')') + ', ' + str('B (' + L3.labels[1] + ')') + ', ' + str('C (' + L3.labels[2] + ')') + ');',
+        'xr = linspace(raf_s(1,2), raf_s(end,2), 80); xe = linspace(lo, hi, 80);',
+        "[X1, Y1] = ell_t2c(1 - xr - gR(xr), xr, gR(xr)); plot(X1, Y1, 'k-', 'LineWidth', 2.5);",
+        "[X2, Y2] = ell_t2c(1 - xe - gE(xe), xe, gE(xe)); plot(X2, Y2, 'k--', 'LineWidth', 2.5);",
+        "[Xd, Yd] = ell_t2c([raf_data(:,1); ext_data(:,1)], [raf_data(:,2); ext_data(:,2)], [raf_data(:,3); ext_data(:,3)]); plot(Xd, Yd, 'ko', 'MarkerSize', 5);",
+        "if size(raf_data,1) == size(ext_data,1), for k = 1:size(raf_data,1), ell_line(raf_data(k,:), ext_data(k,:), '-', [0.6 0.65 0.7], 1); end, end",
+        "ell_line(F_v, S_v, 'b--', [], 1.2); ell_line(RN_v, E1_v, 'm--', [], 1.2); ell_line(F_v, P_v, 'k:', [], 1.2); ell_line(S_v, P_v, 'k:', [], 1.2);",
+        'for k = 1:n_st',
+        "    ell_line(E_st(k,:), R_st(k,:), 'r-', [], 2);",
+        "    if k < n_st, ell_line(R_st(k,:), P_v, 'g:', [], 1.2); end",
+        "    ell_point(E_st(k,:), 'ro', sprintf(' E_%d', k), 6); ell_point(R_st(k,:), 'go', sprintf(' R_%d', k), 6);",
+        'end',
+        "ell_point(F_v, 'r^', ' F', 10); ell_point(S_v, 'bs', ' S', 10); ell_point(M_v, 'mo', ' M', 9); ell_point(RN_v, 'gd', ' R_N', 9); ell_point(P_v, 'kx', ' \\Delta (polo)', 11);",
+        "title(sprintf('Diagrama ternário — extração L-L (Hunter-Nash, N = %d estágios)', n_st), 'FontSize', FS);", 'end');
       return out.join('\n');
     }
     if (b.type === 'rgibbs' && r.gibbs) {
@@ -4622,6 +5225,44 @@ dq = p.kf*(ads_qeq(C, p) - q);
 dy = [p.De*lap - p.u*adv - (1 - p.epsilon)/p.epsilon*p.rho_p*dq; dq];
 end`;
 
+  const ELL_FUNCS = `% --- extração L-L em diagrama ternário: funções auxiliares ---
+function [X, Y] = ell_t2c(A, B, C)
+% frações (A, B, C) -> coordenadas no triângulo: A (0,0), C (1,0), B (0.5, sqrt(3)/2)
+X = C + 0.5*B; Y = (sqrt(3)/2)*B;
+end
+
+function xB = ell_cross(A, B, gE, lo, hi, guess)
+% interseção da reta A-B com o ramo do extrato: varredura + fzero no intervalo (mais robusto que um só chute)
+s = (B(3) - A(3))/(B(2) - A(2)); g = @(x) gE(x) - (A(3) + s*(x - A(2)));
+xs = linspace(lo, hi, 401); v = arrayfun(g, xs); k = find(sign(v(1:end-1)) ~= sign(v(2:end)));
+if isempty(k), error('a reta não corta o ramo do extrato'); end
+r = zeros(size(k)); for j = 1:numel(k), r(j) = fzero(g, [xs(k(j)) xs(k(j)+1)]); end
+[~, j] = min(abs(r - guess)); xB = r(j);
+end
+
+function ell_point(v, style, lbl, sz)
+[X, Y] = ell_t2c(v(1), v(2), v(3));
+plot(X, Y, style, 'MarkerSize', sz, 'LineWidth', 1.5, 'MarkerFaceColor', style(1));
+text(X + 0.012, Y + 0.012, lbl, 'FontSize', 11, 'FontWeight', 'bold');
+end
+
+function ell_line(v1, v2, style, cor, lw)
+[X1, Y1] = ell_t2c(v1(1), v1(2), v1(3)); [X2, Y2] = ell_t2c(v2(1), v2(2), v2(3));
+h = plot([X1 X2], [Y1 Y2], style, 'LineWidth', lw); if ~isempty(cor), set(h, 'Color', cor); end
+end
+
+function ell_grid(lA, lB, lC)
+% triângulo e grade a cada 10 % (as três famílias de linhas)
+plot([0 1 0.5 0], [0 0 sqrt(3)/2 0], 'k-', 'LineWidth', 2);
+for p = 0.1:0.1:0.9
+    [x1, y1] = ell_t2c(1-p, p, 0); [x2, y2] = ell_t2c(0, p, 1-p); plot([x1 x2], [y1 y2], ':', 'Color', [0.75 0.75 0.75]);
+    [x1, y1] = ell_t2c(1-p, 0, p); [x2, y2] = ell_t2c(0, 1-p, p); plot([x1 x2], [y1 y2], ':', 'Color', [0.75 0.75 0.75]);
+    [x1, y1] = ell_t2c(p, 1-p, 0); [x2, y2] = ell_t2c(p, 0, 1-p); plot([x1 x2], [y1 y2], ':', 'Color', [0.75 0.75 0.75]);
+end
+text(-0.04, -0.04, lA, 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'right');
+text(1.04, -0.04, lC, 'FontSize', 12, 'FontWeight', 'bold');
+text(0.5, sqrt(3)/2 + 0.04, lB, 'FontSize', 12, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');
+end`;
   const GIBBS_FUNCS = `% --- reator de Gibbs: método RAND e sistema de Lagrange ---
 function [n, lambda, it] = gibbs_rand(A, g, b, P)
 % Minimiza G = sum n_i (g_i + ln P + ln y_i) com sum_i a_ki n_i = b_k (gás ideal; P em bar, P° = 1 bar)
@@ -4700,7 +5341,7 @@ end`;
     const parts = [head.join('\n'), td.code, streamTableCode(st, res), pfdCode(st, res), PFD_HEAD, iconLibMatlab(types)]
       .concat(blocks.map(x => x.code))
       .concat(needVLE ? [VLE_FUNCS] : []).concat(needFlash ? [FLASH_FUNC] : []).concat(needCSTR ? [CSTR_RHS] : []).concat(needPFR ? [PFR_TRANS] : [])
-      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []).concat(blocks.some(x => /gibbs_rand/.test(x.code)) ? [GIBBS_FUNCS] : []);
+      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []).concat(blocks.some(x => /gibbs_rand/.test(x.code)) ? [GIBBS_FUNCS] : []).concat(blocks.some(x => /ell_cross/.test(x.code)) ? [ELL_FUNCS] : []);
     return parts.join('\n\n') + '\n';
   }
 
@@ -4894,7 +5535,7 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
       L.push('    desenha_icone(ax, ' + str(b.type) + ', ' + n2s(b.x) + ', ' + n2s(b.y) + ')');
       L.push('    ax.text(' + n2s(b.x + P.nameX(b)) + ', ' + n2s(b.y + g.h + 16) + ', ' + str(b.name) + ", fontsize=FSP, fontweight='bold', ha='center', va='center', zorder=6)");
       const r = res.blocks[b.id]; if (!r) return;
-      if (r.duties && (b.type === 'column' || b.type === 'column_short')) {
+      if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon')) {
         L.push('    ax.text(' + n2s(b.x + 96) + ', ' + n2s(b.y - 14) + ', ' + str('Qc = ' + (r.duties.Qc / 1000).toFixed(1) + ' kW') + ", color=AMARELO, fontsize=FSP - 1, fontweight='bold', va='center', zorder=6)");
         L.push('    ax.text(' + n2s(b.x + 74) + ', ' + n2s(b.y + g.h + 34) + ', ' + str('Qr = ' + (r.duties.Qr / 1000).toFixed(1) + ' kW') + ", color=AMARELO, fontsize=FSP - 1, fontweight='bold', va='center', zorder=6)");
       } else if (r.duty != null && Math.abs(r.duty) > 1 && b.type !== 'feed') {
@@ -5094,6 +5735,122 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         "        ax2.plot(xmm, C[:, k], lw=2.5, label=f't = {th[k]:.1f} h')",
         "    ax2.set_xlabel('Dimensão x (mm)'); ax2.set_ylabel('C (mol/m³)'); ax2.set_title('Perfis de concentração no material'); ax2.grid(True, alpha=.4); ax2.legend(); fig2.tight_layout()",
         '    return [fig1, fig2]']).join('\n');
+    }
+    if (b.type === 'ponchon' && r.ps) {
+      const S_ = r.ps, cte = !S_.useTh, lin = !!S_.lin, T_ = S_.tab, vv = a => 'np.array([' + a.map(n2s).join(', ') + '])';
+      return head.concat([
+        '    # Destilação binária pelo método de Ponchon–Savarit (diagrama entalpia–composição). Entalpias em kJ/kmol, vazões em kmol/h.',
+        '    # A = ' + S_.labels[0] + ' (mais volátil), B = ' + S_.labels[1],
+        '    from scipy.interpolate import PchipInterpolator',
+        '    zF, xD, xW, F, R = ' + [S_.zF, S_.xD, S_.xW, S_.Fkmolh, S_.R].map(n2s).join(', '),
+        cte ? '    alpha = ' + n2s(S_.alpha) + '\n    eqy = lambda x: alpha * x / (1 + (alpha - 1) * x); eqx = lambda y: y / (alpha - (alpha - 1) * y)'
+            : '    x_tab = ' + vv(T_.x) + '; y_tab = ' + vv(T_.y) + '   # equilíbrio pelo modelo do simulador\n    eqy = PchipInterpolator(x_tab, y_tab); eqx = PchipInterpolator(y_tab, x_tab)',
+        lin ? '    h = lambda x: ' + n2s(S_.lin[0]) + ' * x + ' + n2s(S_.lin[1]) + ' * (1 - x); H = lambda y: ' + n2s(S_.lin[2]) + ' * y + ' + n2s(S_.lin[3]) + ' * (1 - y)'
+            : '    xg = ' + vv(T_.x) + '; h = PchipInterpolator(xg, ' + vv(T_.h) + '); H = PchipInterpolator(xg, ' + vv(T_.H) + ')',
+        lin ? '    q = ' + n2s(S_.q) + '; hF = h(zF) + (1 - q) * (H(zF) - h(zF))' : '    hF = ' + n2s(S_.hF) + '; q = (H(zF) - hF) / (H(zF) - h(zF))',
+        '    Dk = F * (zF - xW) / (xD - xW); Wk = F - Dk; hD, HD, hW = h(xD), H(xD), h(xW)',
+        '    QD = hD + (R + 1) * (HD - hD)          # polo ΔD = (xD, QD)',
+        '    QW = (F * hF - Dk * QD) / Wk           # polo ΔW = (xW, QW): F, ΔD e ΔW alinhados',
+        '    xq = brentq(lambda x: h(x) - (QW + (QD - QW) / (xD - xW) * (x - xW)), xW, xD)',
+        '    def opy(x, px, pQ, yhi):',
+        '        m = (pQ - h(x)) / (px - x); return brentq(lambda yy: H(yy) - (h(x) + m * (yy - x)), x, yhi)',
+        '    xs_, ys_, y, feed = [], [], xD, 0',
+        '    for n in range(1, 101):',
+        '        x = float(eqx(y)); xs_.append(x); ys_.append(y)',
+        '        if not feed and x <= xq: feed = n',
+        '        if x <= xW: break',
+        '        y = opy(x, xD, QD, xD) if not feed else opy(x, xW, QW, 1.0)',
+        '    N = len(xs_); V = np.zeros(N); L = np.zeros(N); V[0] = (R + 1) * Dk; L[-1] = Wk',
+        '    for n in range(1, N):',
+        '        hn, Hn1 = h(xs_[n - 1]), H(ys_[n])',
+        '        if n < feed: V[n] = Dk * (QD - hn) / (Hn1 - hn); L[n - 1] = V[n] - Dk',
+        '        else: L[n - 1] = Wk * (Hn1 - QW) / (Hn1 - hn); V[n] = L[n - 1] - Wk',
+        '    Qc, QR = Dk * (QD - hD) / 3600, Wk * (hW - QW) / 3600',
+        "    print(f'  Python: N = {N} estágios (com o refervedor), alimentação no {feed}º | D = {Dk:.2f} kmol/h | Qc = {Qc:.1f} kW | QR = {QR:.1f} kW | ΔD = ({xD:.3f}; {QD:.0f}) ΔW = ({xW:.3f}; {QW:.0f})')",
+        "    for n in range(N): print(f'    estágio {n + 1:2d}: x = {xs_[n]:.4f}  y = {ys_[n]:.4f}  L = {L[n]:7.2f}  V = {V[n]:7.2f} kmol/h')",
+        '    xa = np.linspace(0, 1, 300)',
+        '    f1, ax = plt.subplots(figsize=(11, 8))',
+        "    ax.plot(xa, h(xa), 'b-', lw=2.5, label='Líquido saturado h(x)'); ax.plot(xa, H(xa), 'r-', lw=2.5, label='Vapor saturado H(y)')",
+        "    ax.plot([xW, xD], [QW, QD], 'k--', lw=1, label='Reta ΔW–F–ΔD')",
+        '    for n in range(N):',
+        "        ax.plot([xs_[n], ys_[n]], [h(xs_[n]), H(ys_[n])], 'g-', lw=1.5)   # amarração: par em equilíbrio",
+        "        if n < N - 1: pp = (xD, QD) if n + 1 < feed else (xW, QW); ax.plot([xs_[n], pp[0]], [h(xs_[n]), pp[1]], 'c:', lw=1)",
+        "    ax.plot(xD, QD, 'g^', ms=11, label=f'Polo ΔD ({xD:.2f}; {QD:.0f})'); ax.plot(xW, QW, 'mv', ms=11, label=f'Polo ΔW ({xW:.2f}; {QW:.0f})')",
+        "    ax.plot(zF, hF, 'ko', ms=8, label='Alimentação F'); ax.plot(xD, hD, 'bs', ms=8, label='Destilado D'); ax.plot(xW, hW, 'rs', ms=8, label='Resíduo W')",
+        "    ax.set_xlim(-0.05, 1.05); ax.set_xlabel(" + str('Fração molar de ' + S_.labels[0] + ' (x, y)') + "); ax.set_ylabel('Entalpia molar (kJ/kmol)')",
+        "    ax.set_title(f'Ponchon–Savarit — N = {N} estágios, alimentação no {feed}º'); ax.grid(True, alpha=0.4); ax.legend(loc='upper left', fontsize=10); f1.tight_layout()",
+        '    xr = np.linspace(xq, xD * (1 - 1e-9), 40); yr = [opy(x, xD, QD, xD) for x in xr]',
+        '    xs2 = np.linspace(xW * (1 + 1e-9), xq, 40); ys2 = [opy(x, xW, QW, 1.0) for x in xs2]',
+        '    Lr, Vr = R * Dk, (R + 1) * Dk; xi = zF if abs(q - 1) < 1e-9 else (zF * (R + 1) + xD * (q - 1)) / (R + q); yi = Lr / Vr * xi + Dk * xD / Vr',
+        '    px, py = [xD], [xD]',
+        '    for n in range(N):',
+        '        px.append(xs_[n]); py.append(ys_[n])',
+        '        if n < N - 1: px.append(xs_[n]); py.append(ys_[n + 1])',
+        '    f2, a2 = plt.subplots(figsize=(8.5, 8))',
+        "    a2.plot(xa, eqy(xa), 'b-', lw=2.5, label='Equilíbrio'); a2.plot([0, 1], [0, 1], 'k--', lw=1, label='y = x')",
+        "    a2.plot(xr, yr, 'r-', lw=2.2, label='Operação Ponchon (retificação, ΔD)'); a2.plot(xs2, ys2, 'm-', lw=2.2, label='Operação Ponchon (esgotamento, ΔW)')",
+        "    a2.plot([xD, xi, xW], [xD, yi, xW], 'g:', lw=2, label='Retas de McCabe–Thiele (vazões constantes)'); a2.plot(px, py, 'k-', lw=1.2, label='Estágios')",
+        "    a2.set_xlim(0, 1); a2.set_ylim(0, 1); a2.set_aspect('equal'); a2.set_xlabel('x'); a2.set_ylabel('y'); a2.grid(True, alpha=0.4); a2.legend(loc='lower right', fontsize=10)",
+        "    a2.set_title('Diagrama x–y: as linhas de operação de Ponchon–Savarit são curvas', fontsize=12); f2.tight_layout()",
+        '    f3, a3 = plt.subplots(figsize=(10, 6)); st = np.arange(1, N + 1)',
+        "    a3.plot(st, V, 'ro-', lw=2, label='V (vapor)'); a3.plot(st, L, 'bo-', lw=2, label='L (líquido)')",
+        "    a3.set_xlabel('Estágio (do topo para o fundo)'); a3.set_ylabel('Vazão molar (kmol/h)'); a3.grid(True, alpha=0.4); a3.legend()",
+        "    a3.set_title('Ponchon–Savarit: L e V não são constantes (em McCabe–Thiele seriam)'); f3.tight_layout()",
+        '    return [f1, f2, f3]']).join('\n');
+    }
+    if (b.type === 'lle_ternary' && r.lle3) {
+      const L3 = r.lle3, arr = M => 'np.array([' + M.map(row => '[' + row.map(n2s).join(', ') + ']').join(', ') + '])', poly = /polin/i.test(L3.fit || '');
+      return head.concat([
+        '    # Extração L-L (sistema parcialmente miscível): método de Hunter–Nash em diagrama ternário. Frações mássicas.',
+        '    # A = ' + L3.labels[0] + ' (diluente), B = ' + L3.labels[1] + ' (soluto), C = ' + L3.labels[2] + ' (solvente)',
+        '    from scipy.interpolate import PchipInterpolator',
+        '    raf = ' + arr(L3.raf) + '; ext = ' + arr(L3.ext) + '; eqd = ' + arr(L3.eq),
+        '    pE2R = np.polyfit(eqd[:, 1], eqd[:, 0], 2)          # xB no rafinado em função de yB no extrato',
+        '    rs = raf[np.argsort(raf[:, 1])]; es = ext[np.argsort(ext[:, 1])]',
+        poly ? '    cR = np.polyfit(rs[:, 1], rs[:, 2], 3); cE = np.polyfit(es[:, 1], es[:, 2], 3)\n    gR = lambda x: np.polyval(cR, x); gE = lambda x: np.polyval(cE, x)   # binodal: polinômio de 3º grau'
+             : '    gR = PchipInterpolator(rs[:, 1], rs[:, 2]); gE = PchipInterpolator(es[:, 1], es[:, 2])   # binodal: PCHIP (passa pelos pontos)',
+        '    ptR = lambda x: np.array([1 - x - gR(x), x, gR(x)]); ptE = lambda x: np.array([1 - x - gE(x), x, gE(x)])',
+        '    lo, hi = es[0, 1], es[-1, 1]',
+        '    def cross(A, B, guess):',
+        '        s = (B[2] - A[2]) / (B[1] - A[1]); g = lambda x: gE(x) - (A[2] + s * (x - A[1]))',
+        '        xs = np.linspace(lo, hi, 401); v = g(xs); k = np.where(np.sign(v[:-1]) != np.sign(v[1:]))[0]',
+        "        if len(k) == 0: raise ValueError('a reta não corta o ramo do extrato')",
+        '        r = [brentq(g, xs[j], xs[j + 1]) for j in k]; return min(r, key=lambda z: abs(z - guess))',
+        '    F = np.array([' + L3.xF.map(n2s).join(', ') + ']); S = np.array([' + L3.xS.map(n2s).join(', ') + '])',
+        '    F_kgh, S_kgh = ' + n2s(L3.Fm * 3600) + ', ' + n2s(L3.Sm * 3600) + '; rSF = S_kgh / F_kgh',
+        '    xB_RN = ' + n2s(L3.xBRN) + '; RN = ptR(xB_RN)',
+        '    M = (F + rSF * S) / (1 + rSF); E1 = ptE(cross(RN, M, 0.25))',
+        '    s1 = (E1[2] - F[2]) / (E1[1] - F[1]); s2 = (S[2] - RN[2]) / (S[1] - RN[1])',
+        '    xBP = (S[2] - F[2] + s1 * F[1] - s2 * S[1]) / (s1 - s2); xCP = S[2] + s2 * (xBP - S[1]); P = np.array([1 - xBP - xCP, xBP, xCP])',
+        '    E, R, cur = [E1], [], E1',
+        '    while True:',
+        '        Ri = ptR(np.polyval(pE2R, cur[1])); R.append(Ri)',
+        '        if Ri[1] <= xB_RN or len(R) >= 50: break',
+        '        cur = ptE(cross(Ri, P, cur[1] * 0.7)); E.append(cur)',
+        '    n = len(R); E1_kgh = (F_kgh + S_kgh) * (M[1] - RN[1]) / (E1[1] - RN[1]); RN_kgh = F_kgh + S_kgh - E1_kgh',
+        "    print(f'  Python: {n} estágios teóricos | E1 = {E1_kgh:.1f} kg/h (yB = {E1[1]:.4f}) | RN = {RN_kgh:.1f} kg/h | recuperação = {100 * E1_kgh * E1[1] / (F_kgh * F[1]):.2f} %')",
+        '    for k in range(n): print(f\'    estágio {k + 1}: yB(E{k + 1}) = {E[k][1]:.4f}   xB(R{k + 1}) = {R[k][1]:.4f}\')',
+        '    t2c = lambda v: (v[2] + 0.5 * v[1], np.sqrt(3) / 2 * v[1])',
+        '    def seg(ax, a, b, **kw): (x1, y1), (x2, y2) = t2c(a), t2c(b); ax.plot([x1, x2], [y1, y2], **kw)',
+        '    fig, ax = plt.subplots(figsize=(11, 9.5)); ax.set_aspect(\'equal\'); ax.axis(\'off\')',
+        "    for p in np.arange(0.1, 0.95, 0.1):",
+        "        for a, b2 in [([1 - p, p, 0], [0, p, 1 - p]), ([1 - p, 0, p], [0, 1 - p, p]), ([p, 1 - p, 0], [p, 0, 1 - p])]: seg(ax, a, b2, color='0.8', ls=':', lw=1)",
+        "    for a, b2 in [([1, 0, 0], [0, 0, 1]), ([0, 0, 1], [0, 1, 0]), ([0, 1, 0], [1, 0, 0])]: seg(ax, a, b2, color='k', lw=2)",
+        "    ax.text(-0.03, -0.04, " + str('A (' + L3.labels[0] + ')') + ", ha='right', fontsize=12, fontweight='bold'); ax.text(1.03, -0.04, " + str('C (' + L3.labels[2] + ')') + ", fontsize=12, fontweight='bold')",
+        "    ax.text(0.5, np.sqrt(3) / 2 + 0.03, " + str('B (' + L3.labels[1] + ')') + ", ha='center', fontsize=12, fontweight='bold')",
+        '    xr = np.linspace(rs[0, 1], rs[-1, 1], 80); xe = np.linspace(lo, hi, 80)',
+        "    cr = np.array([t2c(ptR(x)) for x in xr]); ce = np.array([t2c(ptE(x)) for x in xe])",
+        "    ax.plot(cr[:, 0], cr[:, 1], 'k-', lw=2.5, label='Binodal (rafinado)'); ax.plot(ce[:, 0], ce[:, 1], 'k--', lw=2.5, label='Binodal (extrato)')",
+        "    if len(raf) == len(ext):",
+        "        for a, b2 in zip(raf, ext): seg(ax, a, b2, color='0.6', lw=1)",
+        "    seg(ax, F, S, color='b', ls='--', lw=1.2); seg(ax, RN, E1, color='m', ls='--', lw=1.2); seg(ax, F, P, color='k', ls=':', lw=1.2); seg(ax, S, P, color='k', ls=':', lw=1.2)",
+        '    for k in range(n):',
+        "        seg(ax, E[k], R[k], color='r', lw=2)",
+        "        if k < n - 1: seg(ax, R[k], P, color='g', ls=':', lw=1.2)",
+        "        for v, c, t in [(E[k], 'r', f'E{k + 1}'), (R[k], 'g', f'R{k + 1}')]: x, y = t2c(v); ax.plot(x, y, 'o', color=c, ms=6); ax.text(x + 0.01, y + 0.01, t, fontsize=10, fontweight='bold')",
+        "    for v, st, t in [(F, 'r^', 'F'), (S, 'bs', 'S'), (M, 'mo', 'M'), (RN, 'gd', 'RN'), (P, 'kx', 'Δ (polo)')]: x, y = t2c(v); ax.plot(x, y, st, ms=10); ax.text(x + 0.015, y + 0.012, t, fontsize=11, fontweight='bold')",
+        "    ax.set_title(f'Diagrama ternário — extração L-L (Hunter–Nash, N = {n} estágios)'); ax.legend(loc='upper right'); fig.tight_layout()",
+        '    return [fig]']).join('\n');
     }
     if (b.type === 'rgibbs' && r.gibbs) {
       const G = r.gibbs, sp = G.act.map(i => th.c[i].formula), nIn = G.nIn.map(v => v * 3.6);
@@ -5393,7 +6150,29 @@ def pfr_transiente(P, nome):
         { id: 'R', type: 'rgibbs', name: 'R-101', params: { T: 726.85, P: 1, dGmode: 'informar na tabela abaixo',
           dG: { methane: 19720, co: -200240, water: -192420, co2: -395790, hydrogen: 0 }, span: 300 } },
         { id: 'P', type: 'product', name: 'Gás de síntese' }],
-      streams: [S('1', 'F', 'out', 'R', 'in'), S('2', 'R', 'out', 'P', 'in')] } }
+      streams: [S('1', 'F', 'out', 'R', 'in'), S('2', 'R', 'out', 'P', 'in')] } },
+    { key: 'ell-ternario', title: 'Extração L-L parcialmente miscível — diagrama ternário (Hunter–Nash): água / ácido acético / éter', fs: {
+      name: 'Extracao L-L - diagrama ternario', components: ['water', 'acetic-acid', 'diisopropyl-ether'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Solução aquosa de ácido acético', params: { T: 25, P: 1.01325, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.60, 'acetic-acid': 0.35, 'diisopropyl-ether': 0.05 } } },
+        { id: 'S', type: 'feed', name: 'Éter isopropílico (solvente)', params: { T: 25, P: 1.01325, vf: '', flow: 1250, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0, 'acetic-acid': 0, 'diisopropyl-ether': 1 } } },
+        { id: 'X', type: 'lle_ternary', name: 'X-101', params: { compA: 'water', compB: 'acetic-acid', compC: 'diisopropyl-ether', xBRN: 0.05, fit: 'polinômio de 3º grau (como no código original)',
+          rafData: '0.980 0.007 0.013\n0.850 0.135 0.015\n0.720 0.260 0.020\n0.580 0.380 0.040\n0.450 0.450 0.100\n0.340 0.460 0.200',
+          extData: '0.010 0.005 0.985\n0.015 0.080 0.905\n0.030 0.200 0.770\n0.070 0.330 0.600\n0.150 0.420 0.430\n0.340 0.460 0.200',
+          eqData: '0.05 0.025\n0.15 0.095\n0.25 0.185\n0.35 0.290\n0.45 0.420' } },
+        { id: 'E', type: 'product', name: 'Extrato E1' },
+        { id: 'R', type: 'product', name: 'Rafinado RN' }],
+      streams: [S('1', 'F', 'out', 'X', 'feed'), S('2', 'S', 'out', 'X', 'solvent'), S('3', 'X', 'extract', 'E', 'in'), S('4', 'X', 'raffinate', 'R', 'in')] } },
+    { key: 'ponchon-savarit', title: 'Destilação binária pelo método de Ponchon–Savarit (diagrama entalpia–composição): benzeno / tolueno', fs: {
+      name: 'Ponchon-Savarit - benzeno tolueno', components: ['benzene', 'toluene'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Alimentação (líquido saturado)', params: { T: 95, vf: 0, P: 1.01325, flow: 100, flowUnit: 'kmol/h', composition: { benzene: 0.45, toluene: 0.55 } } },
+        { id: 'C', type: 'ponchon', name: 'T-101', params: { lk: 'benzene', hk: 'toluene', xD: 0.90, xW: 0.05, R: 1.8,
+          vle: 'volatilidade relativa constante α (como no código original)', alpha: 2.45, enth: 'retas informadas (como no código original)',
+          hA: 4000, hB: 2500, HA: 42000, HB: 36000, q: 1, P: 1.01325 } },
+        { id: 'D', type: 'product', name: 'Destilado D' },
+        { id: 'W', type: 'product', name: 'Resíduo W' }],
+      streams: [S('1', 'F', 'out', 'C', 'feed'), S('2', 'C', 'distillate', 'D', 'in'), S('3', 'C', 'bottoms', 'W', 'in')] } }
   ];
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -5605,7 +6384,7 @@ def pfr_transiente(P, nome):
     const comps = TH.COMPONENTS.map(c => c.id + ' = ' + c.name + (c.tb ? ' (Teb ' + (c.tb - 273.15).toFixed(1) + ' °C)' : c.solid ? ' (sólido inerte)' : ' (não volátil)')).join('\n');
     const types = Object.keys(U.TYPES).map(k => {
       const t = U.TYPES[k];
-      const ps = t.params.map(f => f.k + (f.u ? ' [' + f.u + ']' : '') + (f.options ? ' {' + f.options.join(' | ') + '}' : '') + (f.type === 'composition' ? ' {id: valor}' : f.type === 'compfrac' ? ' {id: fração}' : f.type === 'compval' ? ' {id: valor em ' + (f.u || '') + '}' : f.type === 'reactions' ? ' [lista de reações]' : f.type === 'comp' ? ' (id de componente)' : '') + (f.def !== undefined && f.def !== '' && typeof f.def !== 'object' ? ' = ' + f.def : '')).join('; ');
+      const ps = t.params.map(f => f.k + (f.u ? ' [' + f.u + ']' : '') + (f.options ? ' {' + f.options.join(' | ') + '}' : '') + (f.type === 'composition' ? ' {id: valor}' : f.type === 'compfrac' ? ' {id: fração}' : f.type === 'compval' ? ' {id: valor em ' + (f.u || '') + '}' : f.type === 'matrix' ? ' (texto: uma linha por ponto, números separados por espaço)' : f.type === 'reactions' ? ' [lista de reações]' : f.type === 'comp' ? ' (id de componente)' : '') + (f.def !== undefined && f.def !== '' && typeof f.def !== 'object' ? ' = ' + f.def : '')).join('; ');
       return '- ' + k + ' — ' + t.label + ' | entradas: ' + (t.ins.join(', ') || '—') + ' | saídas: ' + (t.outs.join(', ') || '—') + (ps ? ' | params: ' + ps : '');
     }).join('\n');
     return '## Componentes disponíveis (id = nome)\n' + comps + '\n\n## Tipos de bloco (portas e parâmetros)\n' + types +
@@ -6021,7 +6800,7 @@ def pfr_transiente(P, nome):
   const $ = s => document.querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false;
   const caps = { downloads: undefined };
@@ -6092,7 +6871,7 @@ def pfr_transiente(P, nome):
     const T = U.TYPES[type], p = {};
     (T.params || []).forEach(f => { if (f.def !== undefined) p[f.k] = f.def; });
     if (type === 'feed') { p.composition = {}; state.components.forEach((id, i) => { p.composition[id] = i === 0 ? 1 : 0; }); }
-    if (type === 'column_short') { const sorted = state.components.filter(id => !TH.COMP[id].nv && !TH.COMP[id].solid).sort((a, b) => TH.COMP[a].tb - TH.COMP[b].tb); p.lk = sorted[0] || ''; p.hk = sorted[1] || ''; }
+    if (type === 'column_short' || type === 'ponchon') { const sorted = state.components.filter(id => !TH.COMP[id].nv && !TH.COMP[id].solid).sort((a, b) => TH.COMP[a].tb - TH.COMP[b].tb); p.lk = sorted[0] || ''; p.hk = sorted[1] || ''; }
     if (type === 'separator') { p.splits = {}; state.components.forEach(id => { p.splits[id] = 0.5; }); }
     if (T.params.some(f => f.type === 'reactions')) p.reactions = [];
     return p;
@@ -6138,7 +6917,7 @@ def pfr_transiente(P, nome):
     else if (!results.converged || results.warnings.length) setStatus('warn', (results.converged ? 'Convergido' : 'Não convergiu') + ' · ' + results.warnings.length + ' aviso(s) · ' + results.ms + ' ms');
     else setStatus('ok', 'Convergido · ' + results.ms + ' ms');
     pfd.render(); renderResults(); renderProps();
-    if (results.ok) {
+    if (results && results.ok) { // (results pode ter sido zerado se um campo em edição disparou "change" ao ser redesenhado)
       const sel = pfd.sel && pfd.sel.kind === 'block' && results.blocks[pfd.sel.id] && (results.blocks[pfd.sel.id].plots || []).length ? pfd.sel.id : null;
       renderCharts(sel || chartTarget || 'auto');
     }
@@ -6225,6 +7004,10 @@ def pfr_transiente(P, nome):
         state.components.map(id => '<tr><td>' + esc(TH.COMP[id].name) + '</td><td><input type="number" step="any" min="0" data-ck="' + f.k + '" data-comp="' + id + '" value="' + (obj[id] != null ? obj[id] : 0) + '" aria-label="' + esc(TH.COMP[id].name) + '"></td></tr>').join('') +
         '</tbody></table>' + (f.type === 'composition' && !isConc ? '<p class="small muted">Soma: <span class="num">' + nf(tot, 4) + '</span> (normalizada automaticamente)</p>' : '');
     }
+    if (f.type === 'matrix') { // tabela de números (uma linha por ponto), pode colar do Excel ou do MATLAB
+      const rows = String(v == null ? '' : v).split(/[;\n]+/).filter(x => x.trim()).length;
+      return '<div class="field field-matrix"><label for="f_' + f.k + '">' + esc(f.label) + '</label><textarea id="f_' + f.k + '" data-k="' + f.k + '" rows="' + Math.min(10, Math.max(4, rows + 1)) + '" spellcheck="false">' + esc(String(v == null ? '' : v).replace(/;\s*/g, '\n')) + '</textarea></div>';
+    }
     if (f.type === 'compval') { // um valor por componente (vazio = valor calculado pelo programa)
       const obj = v || {};
       return '<div class="subhead">' + esc(f.label) + (f.u ? ' <span class="muted">(' + esc(f.u) + ')</span>' : '') + '</div><table class="grid"><tbody>' +
@@ -6254,7 +7037,7 @@ def pfr_transiente(P, nome):
     el.querySelectorAll('[data-k]').forEach(inp => {
       inp.onchange = () => {
         pushUndo(); const k = inp.dataset.k, f = U.TYPES[b.type].params.find(x => x.k === k);
-        b.params[k] = (f.type === 'select' || f.type === 'comp') ? inp.value : (inp.value === '' ? '' : +inp.value);
+        b.params[k] = (f.type === 'select' || f.type === 'comp' || f.type === 'matrix') ? inp.value : (inp.value === '' ? '' : +inp.value);
         afterChange(false); if (f.type === 'select') renderProps();
       };
     });

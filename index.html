@@ -150,6 +150,13 @@ footer a { color: var(--sun); }
 :focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
 @media (max-width: 860px) { .hero, .two { grid-template-columns: 1fr; } .author { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn:hover { transform: none; } }
+/* barras de rolagem sempre visíveis no computador (o Edge e o Chrome novos escondem a barra até o mouse passar por cima) */
+@media (hover: hover) and (pointer: fine) {
+  ::-webkit-scrollbar { width: 13px; height: 13px; }
+  ::-webkit-scrollbar-track { background: rgba(10, 60, 75, .07); }
+  ::-webkit-scrollbar-thumb { background: #9fb0ba; border-radius: 8px; border: 3px solid transparent; background-clip: padding-box; min-height: 40px; }
+  ::-webkit-scrollbar-thumb:hover { background: #6d808c; border: 3px solid transparent; background-clip: padding-box; }
+}
 </style>
 </head>
 <body>

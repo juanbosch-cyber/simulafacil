@@ -347,7 +347,7 @@ body.resizing-v, body.resizing-v * { cursor: col-resize !important; user-select:
 body.resizing-h, body.resizing-h * { cursor: row-resize !important; user-select: none; }
 body.resizing-v .js-plotly-plot, body.resizing-h .js-plotly-plot, body.resizing-v #pfd, body.resizing-h #pfd { pointer-events: none; }
 @media (max-width: 820px) { .splitter { display: none; } }
-.wvis { margin: 6px 0 0; font-size: 14px; color: var(--muted); } .wvis b { color: var(--accent); font-size: 16px; }
+.wvis { margin: 6px 30px 0; font-size: 14px; color: var(--muted); } .wvis b { color: var(--accent); font-size: 16px; }
 /* aviso para quem abre no celular */
 .mobwarn { position: fixed; inset: 0; z-index: 90; background: rgba(7, 33, 41, .78); display: flex; align-items: center; justify-content: center; padding: 18px; }
 .mobcard { background: var(--panel); color: var(--ink); max-width: 420px; width: 100%; border-radius: 16px; padding: 22px 20px 18px; box-shadow: 0 18px 50px rgba(0,0,0,.35); text-align: center; border-top: 6px solid #f4a261; }
@@ -457,7 +457,7 @@ body.mobile .eq { font-size: 15px; }
 .top .tools a.manual-link { background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.28); color: #fff; border-radius: 99px; padding: 6px 13px; text-decoration: none; display: inline-flex; align-items: center; font: inherit; }
 .top .tools a.manual-link:hover { background: rgba(255,255,255,.24); border-color: #fff; }
 body.mobile .top .tools a.manual-link { background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 12px 8px; font-size: 15px; justify-content: center; min-height: 46px; }
-.wmanual { margin: 10px 0 0; font-size: 15px; font-weight: 700; } .wmanual a { color: var(--accent); }
+.wmanual { margin: 14px 30px 0; font-size: 15px; font-weight: 700; } .wmanual a { color: var(--accent); }
 @media (max-width: 1400px) { body:not(.mobile) .tools { gap: 5px; } body:not(.mobile) .top .tools button, body:not(.mobile) .top .tools select, body:not(.mobile) .top .tools a.manual-link, body:not(.mobile) .top .tools a.claude-link { padding: 6px 9px; } }
 /* versão do programa e aviso de dispositivo */
 .ver-badge { display: inline-block; vertical-align: middle; margin: 0 8px; padding: 2px 8px; border-radius: 99px; background: var(--sun); color: #2a1b00; font: 900 11px var(--font-fun); letter-spacing: .06em; }
@@ -478,6 +478,26 @@ body.mobile .work { margin-bottom: calc(var(--mnav-h, 58px)); }
 body.mobile .welcome { bottom: var(--mnav-h, 58px); padding: 10px; }
 .field-matrix textarea { width: 100%; font: 13px/1.45 var(--mono, ui-monospace, Consolas, monospace); padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); resize: vertical; }
 .field-matrix label { display: block; margin-bottom: 4px; }
+
+/* manual em destaque no topo da tela inicial (visível sem rolar) */
+.wman-top { display: inline-block; margin: 10px 0 0 8px; padding: 6px 14px; border-radius: 99px; background: #ffd23f; color: #3a2a00; font-weight: 800; font-size: 14px; text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
+.wman-top:hover { background: #ffe27a; }
+body.mobile .wman-top { margin-left: 0; }
+/* barras de rolagem sempre visíveis no computador: o Edge e o Chrome novos escondem a barra até o mouse passar por cima */
+@media (hover: hover) and (pointer: fine) {
+  ::-webkit-scrollbar { width: 13px; height: 13px; }
+  ::-webkit-scrollbar-track { background: rgba(10, 60, 75, .07); }
+  ::-webkit-scrollbar-thumb { background: #9fb0ba; border-radius: 8px; border: 3px solid transparent; background-clip: padding-box; min-height: 40px; }
+  ::-webkit-scrollbar-thumb:hover { background: #6d808c; border: 3px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-corner { background: transparent; }
+  .welcome::-webkit-scrollbar { width: 15px; }
+  .welcome::-webkit-scrollbar-track { background: rgba(255, 255, 255, .12); }
+  .welcome::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .78); border: 3px solid transparent; background-clip: padding-box; }
+  .welcome::-webkit-scrollbar-thumb:hover { background: #ffffff; border: 3px solid transparent; background-clip: padding-box; }
+}
+/* computador: barra de rolagem geral à direita — em janela baixa (notebook) a tela do programa rola como uma página */
+body:not(.mobile) { overflow-x: hidden; overflow-y: auto; }
+body:not(.mobile) .work { min-height: 700px; }
 
 </style>
 </head>
@@ -645,6 +665,7 @@ body.mobile .welcome { bottom: var(--mnav-h, 58px); padding: 10px; }
         <p class="wsub">Simulador de processos químicos</p>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
         <p class="wdevice"><span aria-hidden="true">💻</span> Versão para notebook (preferencial) · <span aria-hidden="true">📱</span> também funciona no celular</p>
+        <a class="wman-top manual-href" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener"><span aria-hidden="true">📘</span> Manual do programa (PDF)</a>
       </div>
       <svg class="wart" viewBox="0 0 260 150" aria-hidden="true">
         <rect x="18" y="18" width="34" height="118" rx="17" fill="#ffffff" stroke="#0a6f86" stroke-width="3"/>

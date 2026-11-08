@@ -459,6 +459,23 @@ body.mobile .eq { font-size: 15px; }
 body.mobile .top .tools a.manual-link { background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 12px 8px; font-size: 15px; justify-content: center; min-height: 46px; }
 .wmanual { margin: 10px 0 0; font-size: 15px; font-weight: 700; } .wmanual a { color: var(--accent); }
 @media (max-width: 1400px) { body:not(.mobile) .tools { gap: 5px; } body:not(.mobile) .top .tools button, body:not(.mobile) .top .tools select, body:not(.mobile) .top .tools a.manual-link, body:not(.mobile) .top .tools a.claude-link { padding: 6px 9px; } }
+/* versão do programa e aviso de dispositivo */
+.ver-badge { display: inline-block; vertical-align: middle; margin: 0 8px; padding: 2px 8px; border-radius: 99px; background: var(--sun); color: #2a1b00; font: 900 11px var(--font-fun); letter-spacing: .06em; }
+.ver-badge.big { font-size: 15px; padding: 4px 12px; margin-left: 10px; position: relative; top: -4px; }
+.brand-title { flex-wrap: wrap; }
+.wdevice { margin: 10px 0 0; display: inline-block; padding: 6px 12px; border-radius: 99px; background: rgba(255,255,255,.14); color: #fff; font-weight: 700; font-size: 14px; }
+body.mobile .ver-badge { font-size: 9.5px; padding: 1px 6px; margin: 0 4px; }
+/* teoria (aba Propriedades) */
+.model-eq.theory { border-left-color: #e0a100; }
+.th-body { padding: 4px 14px 8px; font-size: 14px; line-height: 1.6; }
+.th-body p { margin: 8px 0; text-align: justify; hyphens: auto; }
+.th-ex { text-align: left !important; }
+.th-ex button { font-weight: 700; color: var(--accent); }
+/* celular: as abas de baixo ficam sempre visíveis, inclusive com a tela inicial aberta */
+body.mobile { height: var(--app-h, 100dvh); }
+body.mobile .m-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 75; }
+body.mobile .work { margin-bottom: calc(var(--mnav-h, 58px)); }
+body.mobile .welcome { bottom: var(--mnav-h, 58px); padding: 10px; }
 
 </style>
 </head>
@@ -481,7 +498,7 @@ body.mobile .top .tools a.manual-link { background: var(--bg); color: var(--ink)
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><em>Simulador de processos químicos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa">VERSÃO 2.0</span><em>Simulador de processos químicos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -622,9 +639,10 @@ body.mobile .top .tools a.manual-link { background: var(--bg); color: var(--ink)
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA</h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 2.0</span></h1>
         <p class="wsub">Simulador de processos químicos</p>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
+        <p class="wdevice"><span aria-hidden="true">💻</span> Versão para notebook (preferencial) · <span aria-hidden="true">📱</span> também funciona no celular</p>
       </div>
       <svg class="wart" viewBox="0 0 260 150" aria-hidden="true">
         <rect x="18" y="18" width="34" height="118" rx="17" fill="#ffffff" stroke="#0a6f86" stroke-width="3"/>
@@ -647,7 +665,7 @@ body.mobile .top .tools a.manual-link { background: var(--bg); color: var(--ink)
     <h2 class="wh2" id="wExTitle">Exemplos prontos</h2>
     <div class="wex" id="wExGrid"></div>
     <div class="wfeat">
-      <span>NRTL · UNIQUAC · UNIFAC · Peng-Robinson</span><span>Colunas rigorosas e McCabe-Thiele</span><span>CSTR e PFR transientes</span><span>Gráficos com fonte 18</span><span>Código MATLAB, Octave e Python</span><span>Fluxograma final em PNG</span><span>Equações de cada modelo</span><span>Versão para celular</span>
+      <span>NRTL · UNIQUAC · UNIFAC · Peng-Robinson</span><span>Colunas rigorosas e McCabe-Thiele</span><span>CSTR e PFR transientes</span><span>Gráficos com fonte 18</span><span>Código MATLAB, Octave e Python</span><span>Fluxograma final em PNG</span><span>Equações e teoria de cada modelo</span><span>Reator de Gibbs (Lagrange)</span><span>Versão para celular</span>
     </div>
     <p class="wmanual"><a class="manual-href" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener">📘 Baixar o manual do SIMULA FÁCIL IA (PDF)</a></p>
     <p class="wbook">Baseado no livro <i>Modelagem e Simulação de Processos Dinâmicos</i>, de Juan Canellas Bosch Neto (Editora Appris, 2019).</p>
@@ -756,6 +774,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
+    version: '2.0',
     subtitle: 'Simulador de processos químicos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -1163,6 +1182,116 @@ window.SIMULAFACIL_CONFIG = {
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
+<script>/* js/gibbs.js */
+/* SIMULA FÁCIL IA — equilíbrio químico por minimização da energia de Gibbs (multiplicadores de Lagrange).
+   Método RAND (White, Johnson e Dantzig, 1958; Smith e Missen, 1982) para gás ideal:
+     minimizar G = Σ n_i [ΔG°f,i + RT ln(y_i P/P°)]   sujeito a   Σ_i a_ki n_i = b_k  (conservação dos átomos)
+   A condição de ótimo do Lagrangeano dá  y_i = (P°/P) exp(Σ_k a_ki π_k − ΔG°f,i/RT),  com π_k = −λ_k/RT.
+   ΔG°f(T) é calculado a partir de ΔH°f e ΔG°f a 298,15 K e das capacidades caloríficas (Gibbs–Helmholtz). */
+(function (root) {
+  'use strict';
+  const SF = root.SF = root.SF || {};
+  const R = 8.314462618, T0 = 298.15;
+
+  /* ΔH°f e ΔG°f a 298,15 K (J/mol), gás ideal — Smith, Van Ness e Abbott, Tabela C.4 */
+  const FORMATION = {
+    methane: [-74520, -50460], ethane: [-83820, -31855], propane: [-104680, -24290], 'n-butane': [-125790, -16570],
+    ethylene: [52510, 68460], propylene: [19710, 62205], benzene: [82930, 129665], toluene: [50170, 122050],
+    co: [-110525, -137169], co2: [-393509, -394359], water: [-241818, -228572], ammonia: [-46110, -16450],
+    methanol: [-200660, -161960], ethanol: [-235100, -168490],
+    hydrogen: [0, 0], oxygen: [0, 0], nitrogen: [0, 0]
+  };
+  /* estados de referência dos elementos: C(grafite), H2, O2, N2 (gás) */
+  const REF = { C: { id: null, per: 1 }, H: { id: 'hydrogen', per: 2 }, O: { id: 'oxygen', per: 2 }, N: { id: 'nitrogen', per: 2 } };
+  // Cp do grafite (J/mol·K): Cp/R = 1,771 + 0,771e-3 T − 0,867e5 / T²
+  const cpGraphite = T => R * (1.771 + 0.771e-3 * T - 0.867e5 / (T * T));
+  const intGraphite = (a, b) => R * (1.771 * (b - a) + 0.771e-3 / 2 * (b * b - a * a) + 0.867e5 * (1 / b - 1 / a));
+  const intGraphiteT = (a, b) => R * (1.771 * Math.log(b / a) + 0.771e-3 * (b - a) + 0.867e5 / 2 * (1 / (b * b) - 1 / (a * a)));
+  // integrais do polinômio Cp = c0 + c1 T + c2 T² + c3 T³ (J/mol·K)
+  const intCp = (c, a, b) => c[0] * (b - a) + c[1] / 2 * (b * b - a * a) + c[2] / 3 * (b ** 3 - a ** 3) + c[3] / 4 * (b ** 4 - a ** 4);
+  const intCpT = (c, a, b) => c[0] * Math.log(b / a) + c[1] * (b - a) + c[2] / 2 * (b * b - a * a) + c[3] / 3 * (b ** 3 - a ** 3);
+
+  /* fórmula química → átomos: 'CH4O' → {C:1, H:4, O:1} */
+  function atoms(formula) {
+    const out = {}, f = String(formula || '').replace(/[⁺⁻+\-]+$/, '');
+    if (!/^([A-Z][a-z]?\d*)+$/.test(f)) return null;
+    f.replace(/([A-Z][a-z]?)(\d*)/g, (m, el, n) => { out[el] = (out[el] || 0) + (n ? +n : 1); return m; });
+    return out;
+  }
+  const hasData = id => !!FORMATION[id];
+  function hf298(id) { return FORMATION[id] ? FORMATION[id][0] : null; }
+
+  /* ΔG°f(T) em J/mol (null se faltar dado) */
+  function dGf(comp, T) {
+    const d = FORMATION[comp.id]; if (!d || !comp.cp) return null;
+    const at = atoms(comp.formula); if (!at) return null;
+    const [H0, G0] = d;
+    if (H0 === 0 && G0 === 0) return 0;   // elemento no estado de referência
+    let I1 = intCp(comp.cp, T0, T), I2 = intCpT(comp.cp, T0, T);
+    for (const el in at) {
+      const ref = REF[el]; if (!ref) return null;
+      const nu = at[el] / ref.per;
+      if (el === 'C') { I1 -= nu * intGraphite(T0, T); I2 -= nu * intGraphiteT(T0, T); }
+      else {
+        const rc = SF.thermo && SF.thermo.COMP[ref.id]; if (!rc || !rc.cp) return null;
+        I1 -= nu * intCp(rc.cp, T0, T); I2 -= nu * intCpT(rc.cp, T0, T);
+      }
+    }
+    return (G0 - H0) * T / T0 + H0 + I1 - T * I2;
+  }
+
+  /* solução linear densa (eliminação de Gauss com pivotamento parcial) */
+  function lin(A, b) {
+    const n = b.length, M = A.map((r, i) => r.concat([b[i]]));
+    for (let c = 0; c < n; c++) {
+      let p = c; for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r;
+      if (Math.abs(M[p][c]) < 1e-300) throw new Error('sistema singular');
+      [M[c], M[p]] = [M[p], M[c]];
+      for (let r = c + 1; r < n; r++) { const f = M[r][c] / M[c][c]; for (let k = c; k <= n; k++) M[r][k] -= f * M[c][k]; }
+    }
+    const x = new Array(n).fill(0);
+    for (let r = n - 1; r >= 0; r--) { let s = M[r][n]; for (let k = r + 1; k < n; k++) s -= M[r][k] * x[k]; x[r] = s / M[r][r]; }
+    return x;
+  }
+
+  /* RAND: A[k][i] (elementos × espécies), g[i] = ΔG°f,i/RT, b[k] = átomos alimentados, P em bar (P° = 1 bar) */
+  function solve(A, g, b, P, nStart) {
+    const M = A.length, S = g.length, lnP = Math.log(P);
+    const tot = b.reduce((s, v) => s + v, 0) || 1;
+    let n = (nStart && nStart.every(v => v > 0)) ? nStart.slice() : new Array(S).fill(tot / S);
+    let pi = new Array(M).fill(0), it = 0, ok = false, maxRel = 1;
+    for (it = 1; it <= 300; it++) {
+      const N = n.reduce((s, v) => s + v, 0);
+      const mu = n.map((ni, i) => g[i] + lnP + Math.log(ni / N));
+      const J = [], rhs = [];
+      const bc = A.map(row => row.reduce((s, a, i) => s + a * n[i], 0));
+      for (let k = 0; k < M; k++) {
+        const row = [];
+        for (let j = 0; j < M; j++) { let r = 0; for (let i = 0; i < S; i++) r += A[k][i] * A[j][i] * n[i]; row.push(r); }
+        row.push(bc[k]); J.push(row);
+        let s = 0; for (let i = 0; i < S; i++) s += A[k][i] * n[i] * mu[i];
+        rhs.push(b[k] - bc[k] + s);
+      }
+      J.push(bc.concat([0])); rhs.push(n.reduce((s, ni, i) => s + ni * mu[i], 0));
+      const sol = lin(J, rhs); pi = sol.slice(0, M); const u = sol[M];
+      const dn = n.map((ni, i) => { let s = 0; for (let k = 0; k < M; k++) s += A[k][i] * pi[k]; return ni * (s + u - mu[i]); });
+      let w = 1; dn.forEach((d, i) => { if (d < 0) w = Math.min(w, 0.95 * -n[i] / d); });
+      maxRel = 0;
+      n = n.map((ni, i) => { const v = Math.max(ni + w * dn[i], 1e-300); maxRel = Math.max(maxRel, Math.abs(dn[i]) / Math.max(v, 1e-30 * tot)); return v; });
+      if (w === 1 && maxRel < 1e-11) { ok = true; break; }
+    }
+    // resíduo da forma de Lagrange "do professor": n_i − N·exp(Σ a_ki π_k − g_i)/P  e  A n − b
+    const N = n.reduce((s, v) => s + v, 0);
+    let res = 0;
+    n.forEach((ni, i) => { let s = 0; for (let k = 0; k < M; k++) s += A[k][i] * pi[k]; res = Math.max(res, Math.abs(ni - N * Math.exp(s - g[i]) / P) / N); });
+    A.forEach((row, k) => { res = Math.max(res, Math.abs(row.reduce((s, a, i) => s + a * n[i], 0) - b[k]) / tot); });
+    return { n, pi, iters: it, ok: ok || res < 1e-8, residual: res, G: n.reduce((s, ni, i) => s + ni * (g[i] + lnP + Math.log(ni / N)), 0) };
+  }
+
+  SF.gibbs = { FORMATION, atoms, dGf, hf298, hasData, solve, R, T0 };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
 <script>/* js/thermo.js */
 /* SIMULA FÁCIL IA — Termodinâmica
    Banco de componentes, pressão de vapor (Antoine / Lee-Kesler), modelos de coeficiente de atividade
@@ -1300,7 +1429,10 @@ window.SIMULAFACIL_CONFIG = {
   function psatComp(c, T) {
     if (c.nv || c.solid) return 1e-12;
     if (c.ant && T < c.tc) { const t = T - 273.15; return Math.pow(10, c.ant[0] - c.ant[1] / (c.ant[2] + t)) * 133.322368; }
-    const Tr = T / c.tc; // Lee-Kesler
+    const Tr = T / c.tc;
+    // acima do ponto crítico a correlação de Lee-Kesler explode (termo Tr^6): continuação suave tipo Wilson (igual a Pc em Tr = 1)
+    if (Tr > 1) return c.pc * Math.exp(5.373 * (1 + c.w) * (1 - 1 / Tr));
+    // Lee-Kesler
     const f0 = 5.92714 - 6.09648 / Tr - 1.28862 * Math.log(Tr) + 0.169347 * Math.pow(Tr, 6);
     const f1 = 15.2518 - 15.6875 / Tr - 13.4721 * Math.log(Tr) + 0.43577 * Math.pow(Tr, 6);
     return c.pc * Math.exp(f0 + c.w * f1);
@@ -1849,6 +1981,11 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'tEnd', label: 'Tempo de simulação (transiente)', u: 's', def: 120 }, { k: 'cells', label: 'Células de discretização', u: '', def: 60 }, RXN] },
     rconv: { label: 'Reator de conversão', cat: 'Reatores', ins: ['in'], outs: ['out'], params: [
       { k: 'thermal', label: 'Energia', type: 'select', options: ['isotérmico', 'adiabático'], def: 'isotérmico' }, Object.assign({ def: 60 }, P_T), RXN] },
+    rgibbs: { label: 'Reator de Gibbs (equilíbrio químico – Lagrange)', cat: 'Reatores', ins: ['in'], outs: ['out'], params: [
+      Object.assign({ def: 726.85 }, P_T), Object.assign({ def: 1 }, P_P),
+      { k: 'dGmode', label: 'ΔG°f na temperatura T', type: 'select', options: ['calcular (ΔH°f e ΔG°f a 298 K + Cp)', 'informar na tabela abaixo'], def: 'calcular (ΔH°f e ΔG°f a 298 K + Cp)' },
+      { k: 'dG', label: 'ΔG°f na temperatura T (modo informar; vazio = calcular)', type: 'compval', u: 'J/mol' },
+      { k: 'span', label: 'Faixa do gráfico de temperatura (±)', u: 'K', def: 300 }] },
     adsorber: { label: 'Coluna de adsorção (leito fixo)', cat: 'Adsorção e difusão', ins: ['in'], outs: ['out'], params: [
       { k: 'solute', label: 'Adsorbato (vazio = soluto principal)', type: 'comp', def: '' },
       { k: 'L', label: 'Altura do leito L', u: 'm', def: 0.15 },
@@ -2682,6 +2819,75 @@ window.SIMULAFACIL_CONFIG = {
   };
 
 
+  /* ------------------------------------------------------------------ reator de Gibbs: equilíbrio químico por minimização de G (multiplicadores de Lagrange) */
+  IMPL.rgibbs = function (th, b, ins) {
+    const s = ins.in, p = b.params, n = th.n, GB = SF.gibbs, warn = [], plots = [];
+    if (!GB) throw new Error('módulo de equilíbrio (gibbs.js) não carregado');
+    const T = C2K(num(p.T, 726.85)), Pbar = num(p.P, 1), Pout = Pbar * BAR, RT = GB.R * T;
+    if (!(T > 200)) throw new Error('temperatura inválida');
+    if (!(Pbar > 0)) throw new Error('pressão inválida');
+    const inform = /^informar/.test(p.dGmode || ''), given = p.dG || {};
+    const dGat = (i, TT) => (inform && given[th.ids[i]] !== undefined && given[th.ids[i]] !== '' && isFinite(+given[th.ids[i]]) && TT === T) ? +given[th.ids[i]] : GB.dGf(th.c[i], TT);
+    // espécies que participam: fórmula conhecida e ΔG°f disponível
+    const sp = [], inert = [];
+    for (let i = 0; i < n; i++) {
+      const at = GB.atoms(th.c[i].formula), g = at ? dGat(i, T) : null;
+      if (at && g != null && isFinite(g)) sp.push({ i, at, g }); else inert.push(i);
+    }
+    inert.forEach(i => { if (s.flows[i] > 0) warn.push(th.c[i].name + ' sem dados de formação: passa pelo reator como inerte'); });
+    const elems = Array.from(new Set([].concat.apply([], sp.map(o => Object.keys(o.at))))).sort((a, c) => 'CHONS'.indexOf(a) - 'CHONS'.indexOf(c));
+    const bAll = elems.map(el => sp.reduce((t, o) => t + (o.at[el] || 0) * s.flows[o.i], 0));
+    const E = elems.filter((el, k) => bAll[k] > 1e-14 * (s.F || 1));
+    // espécies que só podem existir se houver todos os seus elementos na alimentação
+    const act = sp.filter(o => Object.keys(o.at).every(el => E.indexOf(el) >= 0));
+    sp.filter(o => act.indexOf(o) < 0).forEach(o => { if (s.flows[o.i] > 0) warn.push(th.c[o.i].name + ' contém elemento ausente'); });
+    if (!act.length || !E.length) throw new Error('não há espécies reativas com dados de formação na alimentação');
+    const A = E.map(el => act.map(o => o.at[el] || 0));
+    const bvec = A.map(row => row.reduce((t, a, j) => t + a * s.flows[act[j].i], 0));
+    const g = act.map(o => o.g / RT);
+    const sol = GB.solve(A, g, bvec, Pbar);
+    if (!sol.ok) warn.push('equilíbrio não convergiu totalmente (resíduo ' + sol.residual.toExponential(1) + ')');
+    const flows = s.flows.slice(); act.forEach((o, j) => { flows[o.i] = sol.n[j]; });
+    sp.filter(o => act.indexOf(o) < 0).forEach(o => { flows[o.i] = 0; });
+    const out = mkStream(th, flows, T, Pout);
+    // energia: entalpia sensível do simulador (referência: gás ideal a 25 °C) + entalpia de formação
+    let dHf = 0, hfOk = true;
+    act.forEach(o => { const h = GB.hf298(th.ids[o.i]); if (h == null) hfOk = false; else dHf += (flows[o.i] - s.flows[o.i]) * h; });
+    const Q = hfOk ? out.H - s.H + dHf : null;
+    if (!hfOk) warn.push('sem ΔH°f para alguma espécie: carga térmica não calculada');
+    // reagente principal: maior consumo relativo
+    let key = -1, best = 0;
+    act.forEach(o => { const f0 = s.flows[o.i]; if (f0 > 0) { const X = (f0 - flows[o.i]) / f0; if (X > best) { best = X; key = o.i; } } });
+    const Nout = sol.n.reduce((t, v) => t + v, 0);
+    const res = [{ k: 'Temperatura', v: K2C(T), u: '°C' }, { k: 'Temperatura (K)', v: T, u: 'K' }, { k: 'Pressão', v: Pbar, u: 'bar' }];
+    if (key >= 0) res.push({ k: 'Conversão de ' + th.c[key].name, v: best * 100, u: '%' });
+    act.forEach((o, j) => res.push({ k: 'y ' + th.c[o.i].name + ' (equilíbrio)', v: sol.n[j] / Nout, u: '' }));
+    act.forEach(o => res.push({ k: 'ΔG°f ' + th.c[o.i].name + ' a ' + Math.round(T) + ' K' + (inform && given[th.ids[o.i]] !== undefined && given[th.ids[o.i]] !== '' ? ' (informado)' : ''), v: o.g / 1000, u: 'kJ/mol' }));
+    E.forEach((el, k) => res.push({ k: 'Multiplicador λ' + el + '/RT (forma y = exp(Σaλ − g))', v: sol.pi[k], u: '' }));
+    E.forEach((el, k) => res.push({ k: 'Multiplicador λ' + el + ' (Lagrangeano: G + Σλ(Σaₖᵢnᵢ − Aₖ))', v: -sol.pi[k] * RT / 1000, u: 'kJ/mol' }));
+    res.push({ k: 'G/RT mínimo (por mol alimentado)', v: sol.G / (s.F || 1), u: '' }, { k: 'Iterações (método RAND)', v: sol.iters, u: '' });
+    if (Q != null) res.push({ k: 'Carga térmica', v: kW(Q), u: 'kW' });
+    // gráfico 1: composição na entrada e no equilíbrio
+    const names = act.map(o => th.c[o.i].name);
+    plots.push({ kind: 'bars', title: 'Composição: alimentação × equilíbrio a ' + Math.round(T) + ' K e ' + Pbar.toLocaleString('pt-BR') + ' bar', data: {
+      categories: names, yLabel: 'Fração molar', xLabel: '',
+      series: [{ name: 'Alimentação', y: act.map(o => s.flows[o.i] / s.F) }, { name: 'Equilíbrio', y: act.map((o, j) => sol.n[j] / Nout) }] } });
+    // gráfico 2: equilíbrio em função da temperatura (ΔG°f(T) pelo banco de dados)
+    const canSweep = act.every(o => GB.dGf(th.c[o.i], T) != null);
+    if (canSweep) {
+      const span = Math.max(50, num(p.span, 300)), Ts = [], Ys = act.map(() => []);
+      let prev = null;
+      for (let k = 0; k <= 40; k++) {
+        const TT = Math.max(300, T - span) + k * (2 * span) / 40;
+        const gg = act.map(o => GB.dGf(th.c[o.i], TT) / (GB.R * TT));
+        try { const r = GB.solve(A, gg, bvec, Pbar, prev); prev = r.n; const NN = r.n.reduce((t, v) => t + v, 0); Ts.push(TT); r.n.forEach((v, j) => Ys[j].push(v / NN)); } catch (e) { /* ponto ignorado */ }
+      }
+      plots.push({ kind: 'curves', title: 'Equilíbrio em função da temperatura (P = ' + Pbar.toLocaleString('pt-BR') + ' bar' + (inform ? '; ΔG°f(T) do banco de dados' : '') + ')', data: {
+        xLabel: 'Temperatura (K)', yLabel: 'Fração molar no equilíbrio', series: names.map((nm, j) => ({ name: nm, x: Ts, y: Ys[j] })) } });
+    }
+    return { out: { out }, res, warn, plots, duty: Q == null ? undefined : Q, gibbs: { E, act: act.map(o => o.i), A, g, b: bvec, n: sol.n, pi: sol.pi, T, P: Pbar, dG: act.map(o => o.g), nIn: act.map(o => s.flows[o.i]) } };
+  };
+
   /* ------------------------------------------------------------------ adsorção em leito fixo (curva de breakthrough) */
   const TR = () => SF.transport;
   const downsample = (t, y, n) => { if (t.length <= n) return { t, y }; const st = (t.length - 1) / (n - 1), T = [], Y = []; for (let i = 0; i < n; i++) { const k = Math.round(i * st); T.push(t[k]); Y.push(y[k]); } return { t: T, y: Y }; };
@@ -2959,6 +3165,22 @@ window.SIMULAFACIL_CONFIG = {
         (p.thermal || '') === 'adiabático' ? eq(sum(i('i')) + ' ' + Fi + sub(i('h'), i('i')) + '(' + T + ') = ' + sum(i('i')) + ' ' + sub(i('F'), i('i') + ',0') + sub(i('h'), i('i')) + '(' + sub(T, '0') + ')', 'adiabático (entalpias de formação incluídas)') : eq(Q + ' = ' + sum(i('i')) + ' ' + Fi + sub(i('h'), i('i')) + '(' + T + ') − ' + sum(i('i')) + ' ' + sub(i('F'), i('i') + ',0') + sub(i('h'), i('i')) + '(' + sub(T, '0') + ')', 'calor trocado')],
       sym: [[sub(i('ξ'), i('j')), 'grau de avanço da reação j'], [sub(i('X'), i('j')), 'conversão do reagente limitante']]
     }),
+    rgibbs: (p) => {
+      const mu = sub(i('μ'), i('i')), ni = sub(i('n'), i('i')), aki = sub(i('a'), i('ki')), Ak = sub(i('A'), i('k')), lk = sub(i('λ'), i('k')), Gf = 'Δ' + sub(sup(i('G'), '°'), 'f,' + i('i')), P0 = sup(P, '°');
+      const eqs = [eq(sub(i('G'), 't') + ' = ' + sum(i('i')) + ' ' + ni + mu + ',<br>' + mu + ' = ' + Gf + ' + ' + i('R') + T + ' ln' + fr(yi + P, P0), 'energia de Gibbs total (gás ideal)'),
+        eq(sum(i('i')) + ' ' + aki + ni + ' = ' + Ak + ',&nbsp; ' + i('k') + ' = C, H, O, …', 'conservação dos átomos (restrições)'),
+        eq('ℒ = ' + sub(i('G'), 't') + ' + ' + sum(i('k')) + ' ' + lk + '(' + sum(i('i')) + ' ' + aki + ni + ' − ' + Ak + ')', 'Lagrangeano químico'),
+        eq(fr('∂ℒ', '∂' + ni) + ' = ' + Gf + ' + ' + i('R') + T + ' ln' + fr(yi + P, P0) + ' + ' + sum(i('k')) + ' ' + lk + aki + ' = 0', 'condição de mínimo'),
+        eq(yi + ' = ' + fr(P0, P) + ' exp[−' + fr(Gf + ' + ' + sum(i('k')) + ' ' + lk + aki, i('R') + T) + '],<br>' + sum(i('i')) + ' ' + yi + ' = 1', 'composição de equilíbrio')];
+      if (!/^informar/.test(p.dGmode || '')) eqs.push(eq(Gf + '(' + T + ') = ' + sub('Δ' + sub(i('H'), 'f'), '0') + ' + (' + sub('Δ' + sub(i('G'), 'f'), '0') + ' − ' + sub('Δ' + sub(i('H'), 'f'), '0') + ')' + fr(T, sub(T, '0')) + '<br>+ ∫Δ' + sub(i('C'), 'p') + 'd' + T + ' − ' + T + '∫' + fr('Δ' + sub(i('C'), 'p'), T) + 'd' + T, 'Gibbs–Helmholtz, T₀ = 298,15 K'));
+      return {
+        name: 'Reator de Gibbs: minimização da energia de Gibbs com multiplicadores de Lagrange',
+        eqs,
+        sym: [[ni + ', ' + yi, 'mols e fração molar da espécie i no equilíbrio'], [aki, 'número de átomos do elemento k na espécie i'], [Ak, 'total de átomos do elemento k alimentados'],
+          [lk, 'multiplicador de Lagrange do elemento k (J/mol)'], [Gf, 'energia de Gibbs padrão de formação na temperatura T'], [P0, 'pressão padrão (1 bar)']],
+        note: 'Solução numérica: método RAND (Newton nas quantidades nᵢ e nos multiplicadores, com passo que mantém nᵢ > 0). Forma usada em códigos com fsolve: yᵢ = exp(Σₖ aₖᵢ λ′ₖ − ΔG°f,ᵢ/RT), com λ′ₖ = −λₖ/RT e P = 1 bar.'
+      };
+    },
     adsorber: (p) => {
       const iso = p.isotherm || 'Langmuir';
       const isoEq = iso === 'Freundlich' ? eq(sup(q, '*') + '(' + C + ') = ' + sub(i('K'), 'F') + sup(C, '1/' + i('n')), 'isoterma de Freundlich')
@@ -3004,6 +3226,128 @@ window.SIMULAFACIL_CONFIG = {
       (m.note ? '<p class="small muted">' + m.note + '</p>' : '') + '</details>';
   }
   SF.models = { get, html, types: Object.keys(M) };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>/* js/theory.js */
+/* SIMULA FÁCIL IA — teoria de cada operação unitária (aba Propriedades, logo após as equações).
+   Três parágrafos por equipamento: o fenômeno, o modelo usado no simulador e o exemplo pronto correspondente. */
+(function (root) {
+  'use strict';
+  const SF = root.SF = root.SF || {};
+  const ex = (key, title) => ({ key, title });
+
+  const TH = {
+    feed: { ex: ex('etoh-mccabe', 'Destilação etanol/água — McCabe-Thiele'), p: [
+      'Toda simulação começa pela especificação das correntes de entrada. Pela regra das fases de Gibbs, uma corrente de composição conhecida fica totalmente definida por duas variáveis intensivas: temperatura e pressão, ou pressão e fração vaporizada. Com isso o simulador resolve um flash na condição informada e calcula a fase, as composições do líquido e do vapor e a entalpia, que serão usadas por todos os equipamentos a jusante.',
+      'A escolha do par de especificações tem consequência física. Informar a fração vaporizada igual a 0 significa líquido saturado (no ponto de bolha); igual a 1, vapor saturado (no ponto de orvalho). Na destilação, essa condição térmica define o parâmetro q da reta de alimentação: q = 1 para líquido saturado e q = 0 para vapor saturado. A vazão pode ser dada em base molar, mássica, volumétrica ou como concentrações, conforme o problema.',
+      'No exemplo "Destilação etanol/água — McCabe-Thiele", a alimentação F tem 100 kmol/h com 10 % de etanol, a 1 atm e fração vaporizada 0. O simulador calcula a temperatura de bolha (cerca de 86 °C) e a coluna recebe a carga como líquido saturado, o que deixa a reta q vertical no diagrama de McCabe-Thiele. Experimente mudar a fração vaporizada para 0,5 e observe como a reta q se inclina e o número de estágios muda.'] },
+    product: { ex: ex('etoh-mccabe', 'Destilação etanol/água — McCabe-Thiele'), p: [
+      'O produto é o ponto em que uma corrente deixa o fluxograma. Ele não tem equações próprias, mas é nele que se conferem os balanços globais do processo: a soma das massas que saem deve ser igual à soma das que entram, e cada componente deve ser conservado quando não há reação química.',
+      'Verificar os balanços nos produtos é um hábito essencial em simulação. O simulador mostra, na aba Resultados, o fechamento do balanço de massa global do fluxograma; valores muito diferentes de zero indicam reciclo não convergido ou especificações inconsistentes. Para destilação, os balanços F = D + W e F·z = D·x_D + W·x_W permitem conferir as purezas obtidas.',
+      'No exemplo "Destilação etanol/água — McCabe-Thiele", os produtos são o destilado D (12,4 kmol/h, rico em etanol) e o fundo W (87,6 kmol/h, praticamente água a 100 °C). Faça a conta: com 10 kmol/h de etanol na alimentação, quanto sai no destilado e quanto se perde no fundo? A recuperação de etanol é a razão D·x_D / F·z.'] },
+    mixer: { ex: ex('flash', 'Flash com reciclo (benzeno/tolueno)'), p: [
+      'O misturador junta duas ou mais correntes. Os balanços são diretos: a vazão de cada componente na saída é a soma das entradas, e, se a mistura é adiabática, a entalpia total também se conserva. A temperatura de saída não é a média simples das temperaturas: ela resulta do balanço de energia, ponderado pelas vazões e capacidades caloríficas, e pode envolver vaporização ou condensação parcial.',
+      'A pressão de saída é tomada como a menor das pressões de entrada, porque o fluido não sobe de pressão sozinho. Em processos reais, essa hipótese lembra que é preciso bombear ou comprimir a corrente de menor pressão antes de misturá-la.',
+      'No exemplo "Flash com reciclo (benzeno/tolueno)", o misturador MIX-101 junta a alimentação fresca (100 kmol/h, 50 % de benzeno, 25 °C) com o líquido reciclado pela bomba, e a mistura sai a cerca de 52,5 °C. Como a corrente de reciclo depende do resultado do flash, o simulador "rasga" o reciclo e itera pelo método de Wegstein até que a corrente calculada e a estimada coincidam.'] },
+    splitter: { ex: ex('flash', 'Flash com reciclo (benzeno/tolueno)'), p: [
+      'O divisor separa uma corrente em duas ou três, todas com a mesma composição, temperatura e pressão da entrada. Ele não separa componentes; apenas reparte a vazão segundo frações especificadas, cuja soma é 1.',
+      'Divisores aparecem sempre que há reciclo com purga: parte da corrente volta ao processo e parte é retirada, o que evita o acúmulo de inertes e de subprodutos. A fração de purga é uma variável de projeto importante, porque equilibra a perda de material útil e o acúmulo de impurezas no laço de reciclo.',
+      'No exemplo "Flash com reciclo (benzeno/tolueno)", o divisor DIV-101 recebe o líquido do flash e envia 40 % para a bomba, que o devolve ao misturador, enquanto 60 % saem como produto líquido. Mude a fração reciclada para 0,8 e veja como aumentam a vazão no laço, a carga do aquecedor e o número de iterações do reciclo.'] },
+    separator: { ex: null, p: [
+      'O separador de componentes é um modelo de "caixa-preta": em vez de calcular o equilíbrio de fases, ele recebe, para cada componente, a fração que vai para a saída de topo. É o modelo usado em balanços de massa preliminares, quando ainda não se escolheu a operação de separação ou quando se quer apenas o efeito global de uma etapa.',
+      'Como não há termodinâmica envolvida, o separador sempre fecha os balanços de massa, mas não garante que a separação seja fisicamente possível. Por isso, depois de definir o fluxograma, é boa prática substituí-lo por um equipamento rigoroso (flash, coluna, extrator) e verificar se as recuperações supostas são alcançáveis.',
+      'Não há exemplo pronto com o separador. Um exercício útil é abrir o exemplo "Coluna shortcut BTX", anotar as recuperações de benzeno e tolueno obtidas e reproduzir o mesmo resultado com um separador, comparando o esforço de cálculo e a informação que cada modelo fornece (o separador não dá estágios, refluxo nem cargas térmicas).'] },
+    heater: { ex: ex('flash', 'Flash com reciclo (benzeno/tolueno)'), p: [
+      'O aquecedor muda a temperatura de uma corrente fornecendo calor. O balanço de energia em regime permanente diz que a carga térmica é a variação de entalpia da corrente, Q = F·(h_saída − h_entrada), incluindo o calor latente quando há mudança de fase. A especificação pode ser a temperatura de saída, a carga térmica ou a fração vaporizada desejada.',
+      'A entalpia da mistura é calculada a partir das capacidades caloríficas de gás ideal e dos calores de vaporização de cada componente. Quando a corrente atravessa o ponto de bolha, uma pequena variação de temperatura exige grande quantidade de calor, porque parte do líquido vaporiza; por isso a curva T × Q de um aquecedor com vaporização tem um "patamar" inclinado.',
+      'No exemplo "Flash com reciclo (benzeno/tolueno)", o aquecedor E-101 leva a mistura de cerca de 52,5 °C a 100 °C, com perda de carga de 0,2 bar, e consome cerca de 355 kW. Como a pressão ainda é de 1,3 bar, a corrente continua líquida; ela vaporiza parcialmente só ao ser expandida no vaso flash.'] },
+    cooler: { ex: ex('gas', 'Compressão, refrigeração e absorção de gás (Peng-Robinson)'), p: [
+      'O resfriador é o inverso do aquecedor: retira calor da corrente, e a carga térmica aparece com sinal negativo. As mesmas equações de balanço de energia se aplicam, e o resfriamento pode provocar condensação parcial ou total, quando a temperatura cai abaixo do ponto de orvalho da mistura.',
+      'Na prática, o resfriamento até temperaturas próximas da ambiente usa água de resfriamento; abaixo disso é preciso refrigeração, cujo custo cresce muito à medida que a temperatura cai. Por isso a temperatura de saída de um resfriador é uma decisão econômica, e não apenas técnica.',
+      'No exemplo "Compressão, refrigeração e absorção de gás (Peng-Robinson)", o resfriador E-101 leva o gás comprimido de cerca de 130 °C a −10 °C, retirando 316 kW. A essa temperatura e 20 bar, cerca de 22 % da corrente condensa (fração vaporizada 0,78), formando um líquido rico em propano e butano que o flash V-101 separa. O exemplo "Destilação extrativa" também usa um resfriador para levar o etilenoglicol recuperado a 80 °C.'] },
+    hx_shell: { ex: ex('hx', 'Trocadores de calor casco e tubo + placas'), p: [
+      'Num trocador casco e tubo, um fluido escoa por dentro dos tubos e o outro pelo casco, e o calor atravessa a parede dos tubos. O projeto combina dois balanços de energia (o calor perdido pelo fluido quente é o ganho pelo frio) com a equação de projeto Q = U·A·F·ΔT_ml, em que ΔT_ml é a média logarítmica das diferenças de temperatura nas extremidades e U é o coeficiente global de troca térmica.',
+      'Quando há mais de um passe nos tubos, o escoamento não é contracorrente puro e a força motriz efetiva é menor: o fator de correção F, sempre menor que 1, corrige o ΔT_ml. Se F fica abaixo de cerca de 0,75, o trocador é ineficiente e convém usar cascos em série; o simulador calcula esse número de cascos e a área necessária.',
+      'No exemplo "Trocadores de calor casco e tubo + placas", o E-101 resfria 10 000 kg/h de condensado de 150 °C para 60 °C aquecendo 15 000 kg/h de mosto de 20 °C a cerca de 87 °C. A carga é de 1 271 kW, o ΔT_ml vale 50,8 °C, F = 0,89 com 2 cascos em série, e a área resulta em cerca de 35 m² para U = 800 W/(m²·K). O gráfico T × Q mostra a aproximação mínima de 40 °C.'] },
+    hx_plate: { ex: ex('hx', 'Trocadores de calor casco e tubo + placas'), p: [
+      'O trocador de placas é formado por placas corrugadas prensadas, com os fluidos escoando em canais alternados. As corrugações geram alta turbulência com pequena perda de carga, o que produz coeficientes globais muito maiores que os do casco e tubo, frequentemente acima de 3 000 W/(m²·K), e permite trocadores compactos.',
+      'Como o escoamento é praticamente contracorrente puro, o fator de correção é F = 1 e a aproximação de temperaturas pode chegar a poucos graus. A limitação é a pressão e a temperatura de operação, restritas pelas juntas de vedação, e a dificuldade com fluidos muito sujos ou com sólidos.',
+      'No exemplo "Trocadores de calor casco e tubo + placas", o E-102 recebe o mosto já pré-aquecido pelo E-101 e o leva a 92 °C com água quente a 120 °C. A carga é de 110 kW e, com U = 3 500 W/(m²·K), basta cerca de 1,2 m² de área. Compare: uma carga cerca de doze vezes menor que a do E-101 exige uma área quase trinta vezes menor, efeito do U elevado.'] },
+    pump: { ex: ex('flash', 'Flash com reciclo (benzeno/tolueno)'), p: [
+      'A bomba eleva a pressão de um líquido. Como os líquidos são praticamente incompressíveis, o trabalho ideal é simplesmente o produto da vazão volumétrica pela diferença de pressão, W = V̇·ΔP, e o trabalho real é esse valor dividido pela eficiência da bomba. A parcela perdida por ineficiência aquece levemente o líquido.',
+      'O trabalho de bombeamento é pequeno quando comparado ao de compressão de gases para a mesma variação de pressão, porque o volume específico do líquido é muito menor. Por isso, sempre que possível, a pressão é elevada com o fluido ainda líquido. Na prática, também é preciso garantir a NPSH disponível para evitar a cavitação.',
+      'No exemplo "Flash com reciclo (benzeno/tolueno)", a bomba P-101 devolve o líquido reciclado (cerca de 6 m³/h) da pressão do flash, 1 atm, a 1,5 bar, com eficiência de 70 %. A potência é de apenas 0,12 kW, enquanto o aquecedor do mesmo fluxograma consome 355 kW: uma comparação que mostra bem a diferença de escala entre trabalho de bombeamento e calor.'] },
+    compressor: { ex: ex('gas', 'Compressão, refrigeração e absorção de gás (Peng-Robinson)'), p: [
+      'O compressor eleva a pressão de um gás. O processo de referência é a compressão adiabática reversível, isto é, isentrópica: a temperatura de saída ideal é aquela em que a entropia da saída iguala a da entrada. O trabalho real é a variação de entalpia isentrópica dividida pela eficiência isentrópica, e a entalpia real de saída define a temperatura real, sempre maior que a isentrópica.',
+      'Para gás ideal, T₂ˢ = T₁·(P₂/P₁)^(R/c_p): a temperatura sobe muito com a razão de compressão. Por isso compressões grandes são feitas em estágios com resfriamento intermediário, o que reduz o trabalho total e evita temperaturas que danificam o equipamento ou o lubrificante.',
+      'No exemplo "Compressão, refrigeração e absorção de gás (Peng-Robinson)", o K-101 comprime 100 kmol/h de gás natural (70 % metano) de 5 para 20 bar, razão 4, com eficiência de 75 %. A temperatura isentrópica seria cerca de 102 °C, mas a real chega a cerca de 130 °C, e a potência é de 144 kW. A equação de Peng-Robinson é usada porque, a 20 bar, o gás já se afasta do comportamento ideal.'] },
+    valve: { ex: ex('gas', 'Compressão, refrigeração e absorção de gás (Peng-Robinson)'), p: [
+      'A válvula reduz a pressão sem trocar calor nem realizar trabalho, de modo que a entalpia se conserva: é uma expansão isentálpica, ou estrangulamento. Se a corrente é líquida e a pressão cai abaixo do ponto de bolha, parte do líquido vaporiza instantaneamente (flash) e a energia para essa vaporização vem do próprio fluido, que esfria.',
+      'Esse resfriamento por expansão é o efeito Joule-Thomson, base dos ciclos de refrigeração e da liquefação de gases. Para gás ideal a entalpia não depende da pressão e a temperatura não muda; o efeito aparece por causa das interações intermoleculares, por isso é bem descrito por equações de estado como a de Peng-Robinson.',
+      'No exemplo "Compressão, refrigeração e absorção de gás (Peng-Robinson)", a válvula VLV-101 expande o líquido do flash V-101 de 20 para 5 bar. Cerca de 16 % do líquido vaporiza e a temperatura cai de −10 °C para cerca de −22,5 °C, sem nenhum equipamento de refrigeração: só pela queda de pressão.'] },
+    flash: { ex: ex('flash', 'Flash com reciclo (benzeno/tolueno)'), p: [
+      'O vaso flash é um único estágio de equilíbrio líquido-vapor. A alimentação entra, as fases se separam e saem em equilíbrio, com yᵢ = Kᵢ·xᵢ. O cálculo combina as equações MESH: balanço de massa por componente, equilíbrio, somatórios das frações e balanço de energia. A equação de Rachford-Rice dá a fração vaporizada ψ que satisfaz os balanços.',
+      'As constantes de equilíbrio dependem do modelo termodinâmico: lei de Raoult para misturas ideais, Raoult modificada com coeficientes de atividade (NRTL, UNIQUAC, UNIFAC) para líquidos não ideais, ou coeficientes de fugacidade de uma equação de estado (Peng-Robinson, SRK) em pressões elevadas. O flash pode ser especificado por T e P, ou ser adiabático, quando a temperatura resulta do balanço de energia.',
+      'No exemplo "Flash com reciclo (benzeno/tolueno)", o V-101 é adiabático a 1 atm: o líquido aquecido a 100 °C sob pressão expande, cerca de 4 % vaporiza e a temperatura cai para 92,5 °C. Os valores de K mostram a separação: benzeno 1,45 (concentra no vapor) e tolueno 0,58 (concentra no líquido). Um único estágio separa pouco, e é por isso que se usam colunas com vários estágios.'] },
+    decanter: { ex: ex('lle', 'Extração líquido-líquido: acetona da água com tolueno'), p: [
+      'O decantador separa duas fases líquidas imiscíveis ou parcialmente miscíveis, como água e um hidrocarboneto. No equilíbrio líquido-líquido, a atividade de cada componente é igual nas duas fases, xᵢᴵγᵢᴵ = xᵢᴵᴵγᵢᴵᴵ; a razão Kᵢ = γᵢᴵ/γᵢᴵᴵ faz o papel da constante de equilíbrio, e uma equação do tipo Rachford-Rice dá a fração da alimentação que vai para cada fase.',
+      'Sem a não idealidade não existiria separação de fases: é o coeficiente de atividade muito grande de um componente numa das fases que provoca a separação. Por isso o decantador exige um modelo de atividade capaz de prever o equilíbrio líquido-líquido (NRTL, UNIQUAC ou UNIFAC), e os resultados são sensíveis aos parâmetros desse modelo.',
+      'Não há exemplo pronto com o decantador, mas o exemplo "Extração líquido-líquido: acetona da água com tolueno" usa a mesma termodinâmica (UNIFAC). Um exercício: misture a solução aquosa com o tolueno num misturador e envie a mistura a um decantador. O resultado equivale a um único estágio de extração; compare a recuperação de acetona com a dos 5 estágios do extrator.'] },
+    column_short: { ex: ex('fug', 'Coluna shortcut BTX (Fenske–Underwood–Gilliland)'), p: [
+      'O método shortcut de Fenske, Underwood e Gilliland (FUG) estima rapidamente o projeto de uma coluna de destilação multicomponente. Fenske dá o número mínimo de estágios, que ocorre com refluxo total; Underwood dá a razão de refluxo mínima, que exigiria infinitos estágios; e a correlação de Gilliland liga as duas e fornece o número de estágios para o refluxo de operação escolhido.',
+      'O método supõe volatilidade relativa constante e vazões molares constantes, por isso é uma estimativa. Seu valor está no projeto conceitual: ele mostra rapidamente o compromisso entre refluxo (custo de energia) e número de estágios (custo de equipamento). Na prática se opera com R entre 1,1 e 1,5 vez o mínimo, e o resultado serve de ponto de partida para a coluna rigorosa.',
+      'No exemplo "Coluna shortcut BTX (Fenske–Underwood–Gilliland)", a alimentação de 100 kmol/h (40 % benzeno, 40 % tolueno, 20 % p-xileno) é separada com 99 % de recuperação das chaves leve (benzeno) e pesada (tolueno). Com α = 2,45, o Fenske dá 10,3 estágios mínimos, o Underwood dá R_mín = 1,40, e com R = 1,3·R_mín = 1,82 o Gilliland indica cerca de 22 estágios, com alimentação no estágio 11 (Kirkbride).'] },
+    column: { ex: ex('etoh-mccabe', 'Destilação etanol/água — McCabe-Thiele'), p: [
+      'A coluna de destilação rigorosa resolve as equações MESH em cada estágio: balanço de massa por componente, equilíbrio líquido-vapor, somatórios das frações e balanço de energia. O vapor sobe enriquecido nos componentes mais voláteis e o líquido desce enriquecido nos mais pesados; o condensador gera o refluxo e o refervedor gera o vapor. O simulador resolve o sistema pelo método do ponto de bolha (Wang–Henke) ou por Newton simultâneo (Naphtali–Sandholm).',
+      'Para misturas binárias, o diagrama de McCabe-Thiele mostra a mesma solução graficamente: a curva de equilíbrio, as retas de operação de retificação e de esgotamento e a reta q; cada degrau entre a curva e as retas é um estágio teórico. Quanto maior a razão de refluxo, mais afastadas as retas ficam da curva e menos estágios são necessários, até o limite do refluxo mínimo, em que as retas tocam a curva.',
+      'No exemplo "Destilação etanol/água — McCabe-Thiele", uma coluna de 20 estágios, com alimentação no estágio 10 e R = 3,15 (R_mín ≈ 1,04), separa 100 kmol/h com 10 % de etanol. O destilado sai a 78,3 °C e o fundo a 100 °C. A curva de equilíbrio do NRTL mostra o azeótropo próximo de 89 % de etanol: nenhuma destilação simples ultrapassa esse limite, o que motiva o exemplo "Destilação extrativa" com etilenoglicol.'] },
+    absorber: { ex: ex('gas', 'Compressão, refrigeração e absorção de gás (Peng-Robinson)'), p: [
+      'Na absorção, um gás entra em contato em contracorrente com um líquido (o solvente ou óleo de absorção), que dissolve preferencialmente alguns componentes. Cada componente tem um fator de absorção A = L/(K·V): se A é maior que 1, o líquido consegue carregar o componente e a absorção pode ser quase completa com poucos estágios; se A é menor que 1, a absorção fica limitada.',
+      'A equação de Kremser relaciona a fração absorvida com o fator de absorção e o número de estágios teóricos, supondo A constante ao longo da coluna. Ela mostra por que a absorção funciona melhor a alta pressão e baixa temperatura: nessas condições K é menor e A é maior. A operação inversa, a esgotadora (stripping), usa o fator S = K·V/L.',
+      'No exemplo "Compressão, refrigeração e absorção de gás (Peng-Robinson)", a T-101 tem 6 estágios e usa 50 kmol/h de n-octano a 20 bar para lavar o vapor do flash. Com L/V médio de 0,83, absorve 96 % do propano e 99,99 % do n-butano, mas só 9 % do metano, cujo K é muito maior que 1. O resultado é um gás tratado rico em metano e um óleo carregado com os hidrocarbonetos mais pesados.'] },
+    extractor: { ex: ex('lle', 'Extração líquido-líquido: acetona da água com tolueno'), p: [
+      'A extração líquido-líquido transfere um soluto de um líquido (a carga ou rafinado) para outro solvente imiscível ou pouco miscível (o extrato). Em cada estágio as duas fases entram em equilíbrio, com atividades iguais, e os estágios em contracorrente permitem que o solvente fresco encontre a carga já empobrecida, o que aumenta muito a recuperação.',
+      'O fator de extração ε = K·S/F, análogo ao fator de absorção, resume o desempenho: K é o coeficiente de distribuição do soluto, S a vazão de solvente e F a de carga. Com ε maior que 1, poucos estágios bastam. A extração é escolhida quando a destilação é difícil ou cara, como em misturas azeotrópicas, componentes sensíveis ao calor ou solutos pouco voláteis.',
+      'No exemplo "Extração líquido-líquido: acetona da água com tolueno", 100 kmol/h de solução aquosa com 10 % de acetona são tratados com 30 kmol/h de tolueno em 5 estágios a 25 °C, com o modelo UNIFAC. A recuperação de acetona no extrato é de 99,5 %, enquanto apenas 0,23 % da água vai para o extrato. Reduza o número de estágios para 1 e veja quanto a recuperação cai.'] },
+    leaching: { ex: ex('leach', 'Lixiviação de óleo de soja com hexano (sólido-líquido)'), p: [
+      'A lixiviação, ou extração sólido-líquido, dissolve um componente solúvel presente num sólido inerte usando um solvente. Em cada estágio ideal, a solução retida no sólido (underflow) tem a mesma concentração da solução que sai limpa (overflow); a separação é limitada justamente pela solução que o sólido arrasta consigo.',
+      'O parâmetro central é a retenção r, em kg de solução por kg de inerte. Em contracorrente, o sólido avança num sentido e o solvente no outro, e cada estágio "lava" o sólido com uma solução mais diluída. A fração de soluto perdida com o sólido diminui rapidamente com o número de estágios e com a razão entre solução no extrato e solução retida.',
+      'No exemplo "Lixiviação de óleo de soja com hexano (sólido-líquido)", 1 000 kg/h de soja laminada com 20 % de óleo são extraídos com 1 000 kg/h de hexano em 4 estágios a 50 °C, com r = 0,5. O sólido sai arrastando 400 kg/h de solução, o extrato tem 800 kg/h e a recuperação de óleo é de 98,1 %. É o mesmo princípio usado nas indústrias de óleos vegetais.'] },
+    cstr: { ex: ex('cstr', 'CSTR transiente com camisa (A → B exotérmica)'), p: [
+      'O reator contínuo de tanque agitado (CSTR) supõe mistura perfeita: a composição e a temperatura são uniformes no tanque e iguais às da corrente de saída. Por isso a reação ocorre na concentração de saída, a mais baixa do processo, o que torna o CSTR menos eficiente que o PFR para reações de ordem positiva, mas muito estável e fácil de controlar.',
+      'O modelo dinâmico combina o balanço de massa de cada espécie, dC/dt = (C₀ − C)/τ + Σνr, com o balanço de energia, em que o calor de reação compete com a remoção pela camisa. A velocidade de reação segue a lei de Arrhenius, que cresce exponencialmente com a temperatura; essa realimentação pode levar a múltiplos estados estacionários e ao disparo térmico (runaway) se a troca térmica for insuficiente.',
+      'No exemplo "CSTR transiente com camisa (A → B exotérmica)", 2 L/s de solução com 2 mol/L de A alimentam um tanque de 1 m³ (τ = 500 s), inicialmente cheio de solvente puro. A reação tem k = 0,005 s⁻¹ a 25 °C, Ea = 50 kJ/mol e ΔH = −80 kJ/mol, com a camisa (UA = 20 kW/K) a 25 °C. A temperatura sobe a cerca de 34 °C e a conversão chega a 82 %; reduza UA e observe o aquecimento e a aceleração da reação.'] },
+    pfr: { ex: ex('pfr', 'PFR transiente (v₀ = 2 L/s, CA0 = 5 mol/L, k = 0,035 s⁻¹)'), p: [
+      'O reator tubular de escoamento pistonado (PFR) supõe que o fluido avança como um êmbolo, sem mistura axial e com perfil uniforme na seção transversal. Cada "fatia" de fluido se comporta como um pequeno reator em batelada que viaja pelo tubo, e a concentração cai ao longo do comprimento.',
+      'Em regime permanente, o balanço é dFᵢ/dV = Σνr. No transiente surge uma equação diferencial parcial, ∂C/∂t = −u·∂C/∂z + Σνr, resolvida pelo método das linhas: o tubo é dividido em células e cada uma vira uma equação diferencial ordinária. Para primeira ordem e isotérmico, a conversão de saída é X = 1 − exp(−kτ), maior que a do CSTR de mesmo volume.',
+      'No exemplo "PFR transiente (v₀ = 2 L/s, CA0 = 5 mol/L, k = 0,035 s⁻¹)", o tubo de 0,1 m³ dá τ = 50 s, e a conversão em regime é 1 − e^(−1,75) = 82,6 %, exatamente o valor calculado. A superfície 3D mostra a frente de concentração avançando pelo tubo até o regime ser atingido; compare com um CSTR de mesmo volume, que daria kτ/(1 + kτ) = 63,6 %.'] },
+    rconv: { ex: null, p: [
+      'O reator de conversão é o modelo mais simples de reator: em vez da cinética, especifica-se a fração convertida do reagente-chave em cada reação. As vazões de saída vêm da estequiometria, Fᵢ = Fᵢ₀ + Σνᵢⱼξⱼ, em que ξⱼ é o grau de avanço da reação j, e o balanço de energia inclui o calor de reação.',
+      'É o modelo adequado para balanços de massa e energia de um processo quando a conversão é conhecida por dados de planta ou de laboratório, mas o reator ainda não foi dimensionado. Ele não diz qual volume ou tempo de residência é necessário; para isso usam-se os modelos cinéticos (CSTR e PFR), e para saber o limite termodinâmico, o reator de Gibbs.',
+      'Não há exemplo pronto com o reator de conversão. Um bom exercício é abrir o exemplo "CSTR transiente com camisa (A → B exotérmica)", anotar a conversão de 82 % e reproduzir as vazões de saída com um reator de conversão com X = 0,82. Os resultados devem coincidir, mostrando que o reator de conversão é útil depois que a conversão já é conhecida.'] },
+    adsorber: { ex: ex('adsorcao-mn', 'Adsorção de Mn²⁺ em leito fixo — curva de breakthrough'), p: [
+      'Na adsorção em leito fixo, o fluido atravessa um leito de partículas adsorventes, e o soluto fica retido na superfície do sólido. A região do leito em que a transferência acontece, a zona de transferência de massa, avança com o tempo: o leito satura a partir da entrada, e a concentração na saída permanece baixa até que essa zona chegue ao fim do leito.',
+      'A curva de ruptura (breakthrough) é o gráfico de C/C₀ na saída em função do tempo. O modelo combina a equação diferencial parcial do fluido (dispersão axial, convecção e acúmulo no sólido), a força motriz linear (LDF) para a velocidade de adsorção e uma isoterma de equilíbrio (Langmuir, Freundlich ou linear). O tempo de ruptura define quando o leito deve ser regenerado ou trocado.',
+      'No exemplo "Adsorção de Mn²⁺ em leito fixo — curva de breakthrough", um efluente com cerca de 10 mg/L de Mn²⁺ escoa a 0,003 m³/h por um leito de 0,15 m, com isoterma de Langmuir (qm = 40 mg/g, KL = 0,15 L/mg) e kf = 0,067 1/h. Em 3 horas, a concentração de saída chega a cerca de 35 % da entrada, ainda abaixo da linha de referência de 37 % (63 % de remoção). Aumente kf e veja a curva ficar mais íngreme.'] },
+    packaging: { ex: ex('embalagem-o2', 'Embalagem com reação interna — difusão de O₂ + Michaelis-Menten'), p: [
+      'Em embalagens de alimentos, o oxigênio do ar se difunde através do material e reage com o produto ou com absorvedores de O₂. O transporte é descrito pela segunda lei de Fick com um termo de consumo: a concentração muda no tempo pela difusão (o termo com a derivada segunda no espaço) e diminui pela reação. É um problema clássico de difusão com reação química.',
+      'A cinética de Michaelis–Menten, R = R_máx·C/(K_m + C), descreve consumos limitados por enzimas ou por sítios ativos: em concentração baixa a reação é de primeira ordem, e em concentração alta tende a uma velocidade máxima constante. A face externa fica em equilíbrio com o ar (C = C_ext, calculada pelo gás ideal) e a face interna não deixa passar O₂ (fluxo nulo).',
+      'No exemplo "Embalagem com reação interna — difusão de O₂ + Michaelis-Menten", o material tem 1 mm de espessura, D = 1,5·10⁻¹¹ m²/s, e o ar a 25 °C impõe C_ext = 8,6 mol/m³. Em 24 horas, o consumo pela reação faz a concentração cair para cerca de 3,4 mol/m³ na face interna, com conversão de até cerca de 60 % (cor vermelho-escuro na superfície 3D). Teste a cinética de primeira ordem e compare.'] },
+    rgibbs: { ex: ex('gibbs-reforma', 'Reator de Gibbs — reforma do metano a vapor (Lagrange, 1000 K)'), p: [
+      'O Lagrangeano é a ferramenta de Joseph-Louis Lagrange para otimizar uma função sujeita a restrições. Em vez de eliminar variáveis, soma-se à função objetivo cada restrição multiplicada por uma nova incógnita, o multiplicador de Lagrange: ℒ = f + Σλₖgₖ. No ponto ótimo, todas as derivadas de ℒ se anulam: as derivadas em relação às variáveis dão a condição de extremo, e as derivadas em relação aos multiplicadores devolvem as próprias restrições.',
+      'O "Lagrangeano químico" aplica essa ideia ao equilíbrio. Pela segunda lei da termodinâmica, a T e P constantes o sistema evolui até o mínimo da energia de Gibbs total, G = Σnᵢμᵢ. As restrições são a conservação dos átomos: cada elemento (C, H, O…) tem a mesma quantidade antes e depois, Σaₖᵢnᵢ = Aₖ. Daí ℒ = G + Σλₖ(Σaₖᵢnᵢ − Aₖ), e ∂ℒ/∂nᵢ = 0 dá ΔG°f,ᵢ + RT·ln(yᵢP/P°) + Σλₖaₖᵢ = 0. A grande vantagem é que não é preciso escrever nenhuma reação: bastam as espécies possíveis e seus ΔG°f.',
+      'Os multiplicadores de Lagrange têm significado físico: −λₖ é o potencial químico do elemento k no equilíbrio, e a condição de mínimo diz que o potencial químico de cada espécie é a soma dos potenciais dos seus átomos, μᵢ = −Σaₖᵢλₖ. Isso equivale a Σνᵢμᵢ = 0 para todas as reações possíveis ao mesmo tempo, que é a condição clássica de equilíbrio químico.',
+      'No exemplo "Reator de Gibbs — reforma do metano a vapor", 1 mol de CH₄ e 4 mol de H₂O (5 kmol/h) reagem a 1000 K e 1 bar entre CH₄, CO, H₂O, CO₂ e H₂, com os ΔG°f a 1000 K de Smith, Van Ness e Abbott (CH₄: +19 720 J/mol). O resultado é 99,4 % de conversão do metano e um gás com cerca de 50 % de H₂, 7 % de CO e 7 % de CO₂, com carga térmica de cerca de 57 kW (reforma endotérmica). O gráfico em função da temperatura mostra por que a reforma exige alta temperatura: com o mesmo excesso de vapor, a conversão do metano cai para cerca de 60 % a 800 K e 30 % a 700 K.'] }
+  };
+
+  function html(type, open) {
+    const t = TH[type]; if (!t) return '';
+    const exBtn = t.ex ? '<p class="th-ex"><button type="button" class="ghost" data-open-example="' + t.ex.key + '">▶ Abrir o exemplo “' + t.ex.title + '”</button></p>' : '';
+    return '<details class="model-eq theory"' + (open ? ' open' : '') + '><summary><span aria-hidden="true">📖</span> Teoria e exemplo</summary><div class="th-body">' +
+      t.p.map(x => '<p>' + x + '</p>').join('') + exBtn + '</div></details>';
+  }
+  SF.theory = { html, get: type => TH[type] || null, types: Object.keys(TH) };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -3159,6 +3503,7 @@ window.SIMULAFACIL_CONFIG = {
     cstr: { w: 70, h: 84, ports: { in: P(0, 24, 'l', 'in'), out: P(70, 72, 'r', 'out') } },
     pfr: { w: 130, h: 40, ports: { in: P(0, 20, 'l', 'in'), out: P(130, 20, 'r', 'out') } },
     rconv: { w: 64, h: 80, ports: { in: P(0, 22, 'l', 'in'), out: P(64, 64, 'r', 'out') } },
+    rgibbs: { w: 64, h: 80, ports: { in: P(0, 22, 'l', 'in'), out: P(64, 64, 'r', 'out') } },
     adsorber: { w: 56, h: 130, ports: { in: P(0, 16, 'l', 'in'), out: P(56, 114, 'r', 'out') } },
     packaging: { w: 84, h: 70, ports: { in: P(0, 35, 'l', 'in'), out: P(84, 35, 'r', 'out') } }
   };
@@ -3221,6 +3566,7 @@ window.SIMULAFACIL_CONFIG = {
       L([[3, 70], [0, 70]], 'hot'), L([[67, 22], [70, 22]], 'hot')],
     pfr: () => { const o = [R(4, 6, 122, 28, 8)]; for (let x = 16; x < 120; x += 16) o.push(L([[x, 34], [x + 10, 6]])); return o; },
     rconv: () => [R(6, 6, 52, 68, 11), T(32, 45, 'X%')],
+    rgibbs: () => [R(6, 6, 52, 68, 11), T(32, 38, 'ΔG'), T(32, 56, 'mín')],
     adsorber: () => { // vaso de leito fixo: grades de suporte e partículas de adsorvente
       const o = [R(6, 4, 44, 122, 20), L([[0, 16], [6, 16]]), L([[50, 114], [56, 114]]), L([[10, 30], [46, 30]]), L([[10, 100], [46, 100]])];
       for (let y = 38; y <= 94; y += 11) for (let x = (((y - 38) / 11) % 2 ? 17 : 13); x <= 44; x += 9) o.push(C(x, y, 3, 'ln'));
@@ -3631,6 +3977,12 @@ window.SIMULAFACIL_CONFIG = {
         const L = baseLayout(p.title, d.xLabel || '', d.yLabel || '');
         if (d.xRange) L.xaxis.range = d.xRange; if (d.yRange) L.yaxis.range = d.yRange;
         if (d.hlines && d.hlines.length) { L.legend = Object.assign(L.legend, { orientation: 'h', xref: 'container', yref: 'container', x: 0.02, xanchor: 'left', y: 0.01, yanchor: 'bottom', bgcolor: 'rgba(0,0,0,0)', borderwidth: 0 }); L.margin = Object.assign({}, L.margin, { b: 150 }); L.height = 560; }
+        return { data, layout: L };
+      }
+      case 'bars': { // barras agrupadas (categorias × séries)
+        const data = d.series.map((s, k) => ({ type: 'bar', x: d.categories, y: s.y, name: s.name, marker: { color: s.color || PALETTE[k % 8] }, hovertemplate: '%{x}<br>' + s.name + ': %{y:.4f}<extra></extra>' }));
+        const L = baseLayout(p.title, d.xLabel || '', d.yLabel || '');
+        L.barmode = 'group'; L.bargap = 0.25; L.bargroupgap = 0.08;
         return { data, layout: L };
       }
       case 'surface': {
@@ -4084,6 +4436,40 @@ end
         "grid on; xlabel('Dimensão x (mm)'); ylabel('C (mol/m^3)'); title('Perfis de concentração no material'); legend('Location', 'best'); set(gca, 'FontSize', FS);", 'end');
       return out.join('\n');
     }
+    if (b.type === 'rgibbs' && r.gibbs) {
+      const G = r.gibbs, sp = G.act.map(i => th.c[i].formula), nIn = G.nIn.map(v => v * 3.6);
+      const mat = M => '[' + M.map(row => row.map(n2s).join(' ')).join('; ') + ']';
+      out.push('function ' + fname + '(D, FS)', header,
+        '% Equilíbrio químico por minimização da energia de Gibbs (Lagrangeano químico, multiplicadores de Lagrange).',
+        '% L = G + sum_k lambda_k (sum_i a_ki n_i - A_k)  ->  y_i = exp(sum_k a_ki lambda_k - dG_f,i/RT)/P   (lambda adimensional = -lambda_k/RT)',
+        '% Solução pelo método RAND (sem toolbox, roda no MATLAB e no Octave) e verificação com fsolve na forma do sistema de Lagrange.', printRes.join('\n'),
+        '%% 1. Parâmetros de entrada', 'T = ' + n2s(G.T) + ';          % temperatura (K)', 'P = ' + n2s(G.P) + ';          % pressão (bar); P° = 1 bar', 'R = 8.31446;     % J/(mol.K)',
+        'especies = {' + sp.map(str).join(', ') + '};',
+        'dG_f = [' + G.dG.map(n2s).join('; ') + '];   % energia de Gibbs padrão de formação na temperatura T (J/mol)',
+        'elementos = {' + G.E.map(str).join(', ') + '};',
+        'A = ' + mat(G.A) + ';   % a_ki: linhas = elementos, colunas = espécies',
+        'n_in = [' + nIn.map(n2s).join('; ') + '];   % alimentação (kmol/h)',
+        'b = A*n_in;      % átomos de cada elemento alimentados', 'g = dG_f/(R*T);',
+        '%% 2. Resolução: método RAND (Newton nas quantidades e nos multiplicadores)',
+        '[n_eq, lambda, it] = gibbs_rand(A, g, b, P);', 'y_eq = n_eq/sum(n_eq);',
+        "fprintf('\\n--- Composição no equilíbrio (%.2f K, %.4g bar), %d iterações ---\\n', T, P, it);",
+        "fprintf('Espécie | mols (kmol/h) | fração molar\\n');",
+        "for i = 1:numel(especies), fprintf('%-7s | %12.5f  | %10.5f\\n', especies{i}, n_eq(i), y_eq(i)); end",
+        "fprintf('Multiplicadores de Lagrange (forma y = exp(sum a*lambda - g)/P):\\n');",
+        "for k = 1:numel(elementos), fprintf('  lambda_%s = %10.4f   (lambda do Lagrangeano = %10.2f kJ/mol)\\n', elementos{k}, lambda(k), -lambda(k)*R*T/1000); end",
+        '%% 3. Verificação: o mesmo sistema de Lagrange resolvido pelo fsolve (chute inicial = solução RAND)',
+        "if exist('fsolve') >= 2",
+        "    opts = optimset('TolFun', 1e-12, 'TolX', 1e-12, 'Display', 'off');",
+        '    [sol, ~, flag] = fsolve(@(x) lagrange_system(x, A, b, g, P), [n_eq; lambda], opts);',
+        "    fprintf('fsolve: flag = %d ; diferença máxima para o RAND = %.2e kmol/h\\n', flag, max(abs(sol(1:numel(n_eq)) - n_eq)));",
+        'end',
+        '%% 4. Gráfico: alimentação x equilíbrio',
+        "figure('Name', " + str(b.name + ' — equilíbrio químico') + ", 'Color', 'w', 'Position', [100 100 950 600]);",
+        "bar([n_in/sum(n_in), y_eq]); set(gca, 'XTickLabel', especies, 'FontSize', FS); grid on;",
+        "legend('Alimentação', 'Equilíbrio', 'Location', 'best'); ylabel('Fração molar');",
+        "title(sprintf('Equilíbrio químico por minimização de G (%.0f K, %.3g bar)', T, P));", 'end');
+      return out.join('\n');
+    }
     if (b.type === 'pfr') {
       const p = b.params, rx = SF.units.compileReactions(th, p.reactions);
       const sId = (st.streams.find(x => x.to === b.id) || {}).id, s = res.streams[sId];
@@ -4236,6 +4622,27 @@ dq = p.kf*(ads_qeq(C, p) - q);
 dy = [p.De*lap - p.u*adv - (1 - p.epsilon)/p.epsilon*p.rho_p*dq; dq];
 end`;
 
+  const GIBBS_FUNCS = `% --- reator de Gibbs: método RAND e sistema de Lagrange ---
+function [n, lambda, it] = gibbs_rand(A, g, b, P)
+% Minimiza G = sum n_i (g_i + ln P + ln y_i) com sum_i a_ki n_i = b_k (gás ideal; P em bar, P° = 1 bar)
+[M, S] = size(A); n = ones(S, 1)*sum(b)/S; lambda = zeros(M, 1);
+for it = 1:300
+    N = sum(n); mu = g + log(P) + log(n/N);
+    r = A*diag(n)*A'; bc = A*n;
+    J = [r, bc; bc', 0]; rhs = [b - bc + A*(n.*mu); n'*mu];
+    sol = J\\rhs; lambda = sol(1:M); u = sol(M+1);
+    dn = n.*(A'*lambda + u - mu);
+    w = 1; neg = dn < 0; if any(neg), w = min(1, 0.95*min(-n(neg)./dn(neg))); end
+    n = max(n + w*dn, 1e-300);
+    if w == 1 && max(abs(dn)./n) < 1e-11, break; end
+end
+end
+
+function F = lagrange_system(x, A, b, g, P)
+% Sistema do Lagrangeano químico: n_i - n_tot*exp(sum_k a_ki lambda_k - g_i)/P = 0 e A*n - b = 0
+S = size(A, 2); n = x(1:S); lambda = x(S+1:end); n_tot = sum(n);
+F = [n - n_tot*exp(A'*lambda - g)/P; A*n - b];
+end`;
   const EMB_FUNCS = `% --- embalagem: difusão com reação (pdepe e método das linhas) ---
 function R = emb_R(C, p)
 C = max(C, 0);
@@ -4293,7 +4700,7 @@ end`;
     const parts = [head.join('\n'), td.code, streamTableCode(st, res), pfdCode(st, res), PFD_HEAD, iconLibMatlab(types)]
       .concat(blocks.map(x => x.code))
       .concat(needVLE ? [VLE_FUNCS] : []).concat(needFlash ? [FLASH_FUNC] : []).concat(needCSTR ? [CSTR_RHS] : []).concat(needPFR ? [PFR_TRANS] : [])
-      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []);
+      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []).concat(blocks.some(x => /gibbs_rand/.test(x.code)) ? [GIBBS_FUNCS] : []);
     return parts.join('\n\n') + '\n';
   }
 
@@ -4688,6 +5095,47 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         "    ax2.set_xlabel('Dimensão x (mm)'); ax2.set_ylabel('C (mol/m³)'); ax2.set_title('Perfis de concentração no material'); ax2.grid(True, alpha=.4); ax2.legend(); fig2.tight_layout()",
         '    return [fig1, fig2]']).join('\n');
     }
+    if (b.type === 'rgibbs' && r.gibbs) {
+      const G = r.gibbs, sp = G.act.map(i => th.c[i].formula), nIn = G.nIn.map(v => v * 3.6);
+      return head.concat([
+        '    # Equilíbrio químico por minimização da energia de Gibbs (Lagrangeano químico):',
+        '    #   L = G + sum_k lambda_k (sum_i a_ki n_i - A_k)  ->  y_i = exp(sum_k a_ki lam_k - dGf_i/RT)/P,  lam = -lambda/RT',
+        '    T, P, R = ' + n2s(G.T) + ', ' + n2s(G.P) + ', 8.31446   # K, bar (P° = 1 bar), J/(mol.K)',
+        '    especies = [' + sp.map(str).join(', ') + ']',
+        '    elementos = [' + G.E.map(str).join(', ') + ']',
+        '    dG_f = np.array([' + G.dG.map(n2s).join(', ') + '])   # J/mol na temperatura T',
+        '    A = np.array([' + G.A.map(row => '[' + row.map(n2s).join(', ') + ']').join(', ') + '], dtype=float)   # linhas: elementos',
+        '    n_in = np.array([' + nIn.map(n2s).join(', ') + '])   # kmol/h',
+        '    b = A @ n_in; g = dG_f / (R * T)',
+        '    # método RAND (Newton nas quantidades e nos multiplicadores, passo que mantém n > 0)',
+        '    M, S = A.shape; n = np.full(S, b.sum() / S); lam = np.zeros(M)',
+        '    for it in range(1, 301):',
+        '        N = n.sum(); mu = g + np.log(P) + np.log(n / N)',
+        '        rmat = (A * n) @ A.T; bc = A @ n',
+        '        J = np.zeros((M + 1, M + 1)); J[:M, :M] = rmat; J[:M, M] = bc; J[M, :M] = bc',
+        '        rhs = np.concatenate([b - bc + (A * n) @ mu, [n @ mu]])',
+        '        sol = np.linalg.solve(J, rhs); lam, u = sol[:M], sol[M]',
+        '        dn = n * (A.T @ lam + u - mu)',
+        '        neg = dn < 0; w = min(1.0, 0.95 * np.min(-n[neg] / dn[neg])) if neg.any() else 1.0',
+        '        n = np.maximum(n + w * dn, 1e-300)',
+        '        if w == 1.0 and np.max(np.abs(dn) / n) < 1e-11: break',
+        '    y = n / n.sum()',
+        "    print(f'\\n--- Composição no equilíbrio ({T:.2f} K, {P:g} bar), {it} iterações ---')",
+        "    for e, ni, yi in zip(especies, n, y): print(f'{e:<7} | {ni:12.5f} kmol/h | y = {yi:.5f}')",
+        "    for el, l in zip(elementos, lam): print(f'  lambda_{el} = {l:10.4f}   (lambda do Lagrangeano = {-l * R * T / 1000:10.2f} kJ/mol)')",
+        '    # verificação: o mesmo sistema de Lagrange resolvido pelo fsolve, a partir da solução RAND',
+        '    from scipy.optimize import fsolve',
+        '    def lagrange_system(x):',
+        '        nn, ll = x[:S], x[S:]',
+        '        return np.concatenate([nn - nn.sum() * np.exp(A.T @ ll - g) / P, A @ nn - b])',
+        '    xs = fsolve(lagrange_system, np.concatenate([n, lam]), xtol=1e-12)',
+        "    print(f'  fsolve: diferença máxima para o RAND = {np.max(np.abs(xs[:S] - n)):.2e} kmol/h')",
+        '    fig, ax = plt.subplots(figsize=(11, 6.5)); xk = np.arange(S); wd = 0.38',
+        "    ax.bar(xk - wd / 2, n_in / n_in.sum(), wd, label='Alimentação'); ax.bar(xk + wd / 2, y, wd, label='Equilíbrio')",
+        "    ax.set_xticks(xk); ax.set_xticklabels(especies); ax.set_ylabel('Fração molar'); ax.grid(True, axis='y', alpha=.4); ax.legend()",
+        "    ax.set_title(f'Equilíbrio químico por minimização de G ({T:.0f} K, {P:g} bar)'); fig.tight_layout()",
+        '    return [fig]']).join('\n');
+    }
     if (b.type === 'pfr') {
       const p = b.params, rx = SF.units.compileReactions(th, p.reactions);
       const s = res.streams[(st.streams.find(x => x.to === b.id) || {}).id];
@@ -4937,7 +5385,15 @@ def pfr_transiente(P, nome):
         { id: 'E', type: 'packaging', name: 'EMB-01', params: { gas: 'oxygen', e: 1, A: 0.05, V: 5e-4, Perm: 2.2e-17, Dif: 1.5e-11, reaction: 'Michaelis-Menten', Rmax: 2e-4, Km: 1, k1: 2e-5,
           C0: 8.6, CextMode: 'informar', Cext: 8.6, tEnd: 24, nodes: 60 } },
         { id: 'S', type: 'product', name: 'Ar (saída)' }],
-      streams: [S('1', 'A', 'out', 'E', 'in'), S('2', 'E', 'out', 'S', 'in')] } }
+      streams: [S('1', 'A', 'out', 'E', 'in'), S('2', 'E', 'out', 'S', 'in')] } },
+    { key: 'gibbs-reforma', title: 'Reator de Gibbs — reforma do metano a vapor (equilíbrio químico, multiplicadores de Lagrange, 1000 K)', fs: {
+      name: 'Equilibrio quimico - Lagrange', components: ['methane', 'co', 'water', 'co2', 'hydrogen'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'CH₄ + H₂O (1 : 4)', params: { T: 726.85, P: 1, vf: '', flow: 5, flowUnit: 'kmol/h', basis: 'molar', composition: { methane: 0.2, co: 0, water: 0.8, co2: 0, hydrogen: 0 } } },
+        { id: 'R', type: 'rgibbs', name: 'R-101', params: { T: 726.85, P: 1, dGmode: 'informar na tabela abaixo',
+          dG: { methane: 19720, co: -200240, water: -192420, co2: -395790, hydrogen: 0 }, span: 300 } },
+        { id: 'P', type: 'product', name: 'Gás de síntese' }],
+      streams: [S('1', 'F', 'out', 'R', 'in'), S('2', 'R', 'out', 'P', 'in')] } }
   ];
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -5149,7 +5605,7 @@ def pfr_transiente(P, nome):
     const comps = TH.COMPONENTS.map(c => c.id + ' = ' + c.name + (c.tb ? ' (Teb ' + (c.tb - 273.15).toFixed(1) + ' °C)' : c.solid ? ' (sólido inerte)' : ' (não volátil)')).join('\n');
     const types = Object.keys(U.TYPES).map(k => {
       const t = U.TYPES[k];
-      const ps = t.params.map(f => f.k + (f.u ? ' [' + f.u + ']' : '') + (f.options ? ' {' + f.options.join(' | ') + '}' : '') + (f.type === 'composition' ? ' {id: valor}' : f.type === 'compfrac' ? ' {id: fração}' : f.type === 'reactions' ? ' [lista de reações]' : f.type === 'comp' ? ' (id de componente)' : '') + (f.def !== undefined && f.def !== '' && typeof f.def !== 'object' ? ' = ' + f.def : '')).join('; ');
+      const ps = t.params.map(f => f.k + (f.u ? ' [' + f.u + ']' : '') + (f.options ? ' {' + f.options.join(' | ') + '}' : '') + (f.type === 'composition' ? ' {id: valor}' : f.type === 'compfrac' ? ' {id: fração}' : f.type === 'compval' ? ' {id: valor em ' + (f.u || '') + '}' : f.type === 'reactions' ? ' [lista de reações]' : f.type === 'comp' ? ' (id de componente)' : '') + (f.def !== undefined && f.def !== '' && typeof f.def !== 'object' ? ' = ' + f.def : '')).join('; ');
       return '- ' + k + ' — ' + t.label + ' | entradas: ' + (t.ins.join(', ') || '—') + ' | saídas: ' + (t.outs.join(', ') || '—') + (ps ? ' | params: ' + ps : '');
     }).join('\n');
     return '## Componentes disponíveis (id = nome)\n' + comps + '\n\n## Tipos de bloco (portas e parâmetros)\n' + types +
@@ -5565,7 +6021,7 @@ def pfr_transiente(P, nome):
   const $ = s => document.querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false;
   const caps = { downloads: undefined };
@@ -5739,6 +6195,8 @@ def pfr_transiente(P, nome):
     let h = '<div class="blk-head">' + IC.paletteIcon(b.type) + '<div style="flex:1"><input id="blkName" value="' + esc(b.name) + '" aria-label="Nome do equipamento"><div class="small muted">' + esc(T.label) + ' · ' + esc(b.id) + '</div></div></div>';
     let eqOpen = true; try { eqOpen = localStorage.getItem('simulafacil.eqOpen') !== '0'; } catch (e) { /* */ }
     if (SF.models) h += SF.models.html(b.type, b.params, state.model, eqOpen); // equações logo abaixo do nome do equipamento
+    let thOpen = true; try { thOpen = localStorage.getItem('simulafacil.thOpen') !== '0'; } catch (e) { /* */ }
+    if (SF.theory) h += SF.theory.html(b.type, thOpen);                          // teoria e exemplo, logo depois das equações
     const r = results && results.blocks && results.blocks[b.id];
     if (r) h += '<div class="subhead">Resultados</div>' + resTable(r) + ((r.plots || []).length ? '<div class="row-actions"><button id="showCharts">Ver gráficos (' + r.plots.length + ')</button></div>' : '');
     if (results && results.errors) { const e = results.errors.find(x => x.block === b.id); if (e) h += '<div class="note err">' + esc(e.msg) + '</div>'; }
@@ -5749,7 +6207,9 @@ def pfr_transiente(P, nome):
     $('#blkName').onchange = e => { pushUndo(); b.name = e.target.value || b.name; afterChange(false); };
     $('#delBlk').onclick = deleteSelected; $('#runFromProps').onclick = () => runSimulation();
     if ($('#showCharts')) $('#showCharts').onclick = () => { renderCharts(b.id); if (SF.mobile) setMView('charts'); };
-    const md = el.querySelector('.model-eq'); if (md) md.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.eqOpen', md.open ? '1' : '0'); } catch (e) { /* */ } });
+    const md = el.querySelector('.model-eq:not(.theory)'); if (md) md.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.eqOpen', md.open ? '1' : '0'); } catch (e) { /* */ } });
+    const tdet = el.querySelector('.model-eq.theory'); if (tdet) tdet.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.thOpen', tdet.open ? '1' : '0'); } catch (e) { /* */ } });
+    el.querySelectorAll('[data-open-example]').forEach(btn => { btn.onclick = () => { const exm = SF.examples.find(x => x.key === btn.dataset.openExample); if (!exm) return; loadFlowsheet(exm.fs); runSimulation(true); toast('Exemplo carregado: ' + exm.title); if (SF.mobile) setMView('flow'); }; });
     bindFields(b);
   }
   function blockName(id) { const b = state.blocks.find(x => x.id === id); return b ? b.name : id; }
@@ -5764,6 +6224,12 @@ def pfr_transiente(P, nome):
       return '<div class="subhead">' + esc(f.label) + ' <span class="muted">(' + unitLbl + ')</span></div><table class="grid"><tbody>' +
         state.components.map(id => '<tr><td>' + esc(TH.COMP[id].name) + '</td><td><input type="number" step="any" min="0" data-ck="' + f.k + '" data-comp="' + id + '" value="' + (obj[id] != null ? obj[id] : 0) + '" aria-label="' + esc(TH.COMP[id].name) + '"></td></tr>').join('') +
         '</tbody></table>' + (f.type === 'composition' && !isConc ? '<p class="small muted">Soma: <span class="num">' + nf(tot, 4) + '</span> (normalizada automaticamente)</p>' : '');
+    }
+    if (f.type === 'compval') { // um valor por componente (vazio = valor calculado pelo programa)
+      const obj = v || {};
+      return '<div class="subhead">' + esc(f.label) + (f.u ? ' <span class="muted">(' + esc(f.u) + ')</span>' : '') + '</div><table class="grid"><tbody>' +
+        state.components.map(id => '<tr><td>' + esc(TH.COMP[id].name) + '</td><td><input type="number" step="any" data-ck="' + f.k + '" data-cval="1" data-comp="' + id + '" value="' + (obj[id] != null && obj[id] !== '' ? obj[id] : '') + '" placeholder="calcular" aria-label="' + esc(TH.COMP[id].name) + '"></td></tr>').join('') +
+        '</tbody></table>';
     }
     if (f.type === 'reactions') return reactionsHTML(b);
     return '<div class="field"><label for="f_' + f.k + '">' + esc(f.label) + (f.u ? '<span class="u">' + esc(f.u) + '</span>' : '') + '</label><input id="f_' + f.k + '" type="number" step="any" data-k="' + f.k + '" value="' + (v == null ? '' : esc(v)) + '"></div>';
@@ -5792,7 +6258,7 @@ def pfr_transiente(P, nome):
         afterChange(false); if (f.type === 'select') renderProps();
       };
     });
-    el.querySelectorAll('[data-ck]').forEach(inp => { inp.onchange = () => { pushUndo(); const k = inp.dataset.ck; b.params[k] = b.params[k] || {}; b.params[k][inp.dataset.comp] = +inp.value || 0; afterChange(false); renderProps(); }; });
+    el.querySelectorAll('[data-ck]').forEach(inp => { inp.onchange = () => { pushUndo(); const k = inp.dataset.ck; b.params[k] = b.params[k] || {}; if (inp.dataset.cval && inp.value === '') delete b.params[k][inp.dataset.comp]; else b.params[k][inp.dataset.comp] = +inp.value || 0; afterChange(false); renderProps(); }; });
     el.querySelectorAll('[data-rx]').forEach(inp => {
       inp.onchange = () => {
         pushUndo(); const r = b.params.reactions[+inp.dataset.rx];
@@ -6010,7 +6476,7 @@ def pfr_transiente(P, nome):
     const C = SF.CREDITS;
     openModal('Sobre o ' + C.title,
       '<div style="max-width:740px">' +
-      '<p style="font-size:16px"><b>' + esc(C.title) + ' – ' + esc(C.subtitle) + '</b><br>Simulador de processos químicos com agente de inteligência artificial, no estilo Aspen Plus e DWSIM.</p>' +
+      '<p style="font-size:16px"><b>' + esc(C.title) + ' – ' + esc(C.subtitle) + '</b> <span class="ver-badge">VERSÃO ' + esc(C.version || '2.0') + '</span><br>Simulador de processos químicos com agente de inteligência artificial, no estilo Aspen Plus e DWSIM.</p>' +
       '<div class="subhead">Autor</div><p><b>' + esc(C.author) + '</b> – ' + esc(C.course) + '<br>' + esc(C.program) + ' &amp; CLAUDE<br><span class="small muted">' + esc(C.role) + ' · ' + esc(C.institution) + '</span></p>' +
       '<p>Autor do livro <i>' + esc(C.book) + '</i> (' + esc(C.publisher) + ', 2019), base dos modelos dinâmicos usados aqui.</p>' +
       '<div class="subhead">Coautor</div><p><b>' + esc(C.coauthor) + '</b> – desenvolvimento do código, do motor numérico e do agente.</p>' +
@@ -6188,6 +6654,7 @@ def pfr_transiente(P, nome):
   function applyView(mode, rerender) {
     const mob = mode === 'mobile';
     SF.mobile = mob; document.body.classList.toggle('mobile', mob);
+    if (mob) requestAnimationFrame(fitPhone);
     const vb = $('#btnViewMode'); vb.hidden = !(mob || phoneLike()); vb.textContent = mob ? '💻 Versão completa para notebook' : '📱 Usar a versão para celular';
     if (mob) setMView(mview || 'flow'); else { delete document.body.dataset.mview; closeSheets(); }
     updateSelBar();
@@ -6196,7 +6663,15 @@ def pfr_transiente(P, nome):
       setTimeout(() => { pfd.fit(); window.dispatchEvent(new Event('resize')); }, 80);
     }
   }
-  $('#mNav').addEventListener('click', e => { const b = e.target.closest('button[data-mview]'); if (b) setMView(b.dataset.mview); });
+  $('#mNav').addEventListener('click', e => { const b = e.target.closest('button[data-mview]'); if (!b) return; if (!$('#welcome').hidden) closeWelcome(); setMView(b.dataset.mview); });
+  // altura real da tela do celular (a barra do navegador muda a altura visível) e altura das abas de baixo
+  function fitPhone() {
+    const h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    document.documentElement.style.setProperty('--app-h', Math.round(h) + 'px');
+    const nav = $('#mNav'); if (nav && nav.offsetHeight) document.documentElement.style.setProperty('--mnav-h', nav.offsetHeight + 'px');
+  }
+  window.addEventListener('resize', fitPhone); if (window.visualViewport) window.visualViewport.addEventListener('resize', fitPhone);
+  window.addEventListener('orientationchange', () => setTimeout(fitPhone, 200));
   $('#mMenuBtn').onclick = () => (document.body.classList.contains('mmenu') ? closeSheets() : openSheet('mmenu'));
   $('#mAdd').onclick = () => openSheet('mpal');
   $('#mBackdrop').onclick = closeSheets;

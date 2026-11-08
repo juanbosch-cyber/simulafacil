@@ -498,6 +498,11 @@ body.mobile .wman-top { margin-left: 0; }
 /* computador: barra de rolagem geral à direita — em janela baixa (notebook) a tela do programa rola como uma página */
 body:not(.mobile) { overflow-x: hidden; overflow-y: auto; }
 body:not(.mobile) .work { min-height: 700px; }
+/* botão "Descer a tela" (notebook sem mouse) */
+.scroll-fab { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 72; border: 0; border-radius: 99px; padding: 11px 20px; background: #0a6f86; color: #fff; font: 800 15px var(--font); box-shadow: 0 6px 18px rgba(0,0,0,.3); cursor: pointer; opacity: .94; }
+.scroll-fab:hover { opacity: 1; filter: brightness(1.08); }
+.scroll-fab.in-welcome { background: #ffd23f; color: #3a2a00; left: auto; right: 28px; transform: none; }
+body.mobile .scroll-fab { display: none; }
 
 </style>
 </head>
@@ -715,6 +720,7 @@ body:not(.mobile) .work { min-height: 700px; }
 </div>
 
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<button id="scrollFab" class="scroll-fab" type="button" hidden title="Rolar a tela (também funciona com as teclas Page Down, Page Up e as setas)">▼ Descer a tela</button>
 <script>/* js/site-config.js */
 /* SIMULA FÁCIL IA — configuração do site.
    claudeUrl:   link da versão com o agente de IA (abra o artefato no Claude, clique em Compartilhar/Publicar e cole aqui o link público).
@@ -7387,12 +7393,37 @@ def pfr_transiente(P, nome):
     $('#welcome').hidden = false; setTimeout(() => $('#wClaude').focus(), 30);
   }
   function closeWelcome() { $('#welcome').hidden = true; setTimeout(() => pfd.fit(), 30); }
+  /* botão "Descer a tela": para quem usa notebook sem mouse (touchpad sem rolagem) — rola a tela inicial ou a página */
+  (function scrollFab() {
+    const fab = $('#scrollFab'); if (!fab) return;
+    const page = () => { const se = document.scrollingElement || document.documentElement; return se.scrollHeight - se.clientHeight > 1 ? se : document.body; };
+    const scroller = () => ($('#welcome').hidden ? page() : $('#welcome'));
+    const update = () => {
+      if (SF.mobile) { fab.hidden = true; return; }
+      const s = scroller(), max = s.scrollHeight - s.clientHeight;
+      if (max < 24) { fab.hidden = true; return; }
+      const up = s.scrollTop >= max - 8;
+      fab.hidden = false; fab.dataset.dir = up ? 'up' : 'down';
+      fab.textContent = up ? '▲ Voltar ao topo' : '▼ Descer a tela';
+      fab.classList.toggle('in-welcome', !$('#welcome').hidden);
+    };
+    fab.onclick = () => { const s = scroller(); if (fab.dataset.dir === 'up') s.scrollTo({ top: 0, behavior: 'smooth' }); else s.scrollBy({ top: Math.round(s.clientHeight * 0.75), behavior: 'smooth' }); setTimeout(update, 450); };
+    $('#welcome').addEventListener('scroll', update, { passive: true });
+    window.addEventListener('scroll', update, { passive: true }); document.body.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    new MutationObserver(update).observe($('#welcome'), { attributes: true, attributeFilter: ['hidden'] });
+    setInterval(update, 1500); setTimeout(update, 300);
+  })();
   $('#wClose').onclick = closeWelcome;
   $('#welcome').onclick = e => { if (e.target.id === 'welcome') closeWelcome(); };
   function talkWith(p) { closeWelcome(); switchTab('agent'); if (SF.agent.choose) SF.agent.choose(p); else setTimeout(() => $('#chatInput').focus(), 50); }
   $('#wGemini').onclick = () => talkWith('gemini');
   $('#wClaude').onclick = () => { const url = window.SIMULAFACIL_CONFIG && window.SIMULAFACIL_CONFIG.claudeUrl; if (!window.claude && url) window.open(url, '_blank', 'noopener'); else talkWith('claude'); };
-  $('#wExamples').onclick = () => { $('#wExTitle').scrollIntoView({ behavior: 'smooth', block: 'start' }); const f = $('#wExGrid button'); if (f) f.focus(); };
+  $('#wExamples').onclick = () => { // rola a tela inicial até os exemplos (sem depender da roda do mouse ou do touchpad)
+    const w = $('#welcome'), t = $('#wExTitle'), top = t.getBoundingClientRect().top - w.getBoundingClientRect().top + w.scrollTop - 12;
+    const f = $('#wExGrid button'); if (f) f.focus({ preventScroll: true });
+    w.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  };
   $('#wBlank').onclick = () => { closeWelcome(); pushUndo(); state = blank(); results = null; pfd.sel = null; afterChange(true); pfd.fit(); renderCharts(null, []); switchTab('thermo'); toast('Escolha os componentes e o modelo; depois clique nos equipamentos da paleta'); };
   $('#wNoShow').onchange = e => { try { localStorage.setItem('simulafacil.noWelcome', e.target.checked ? '1' : '0'); } catch (err) { /* */ } };
   $('#btnHome').onclick = openWelcome;

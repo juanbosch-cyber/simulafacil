@@ -146,6 +146,11 @@ textarea { resize: vertical; width: 100%; }
 .blk.bad .halo { stroke: var(--err); stroke-width: 2; fill: none; }
 .port { fill: var(--panel); stroke: var(--stream); stroke-width: 1.8; cursor: crosshair; }
 .port.out { fill: var(--stream); }
+.port.ein, .port.eout { stroke: var(--energy); } .port.eout { fill: var(--energy); }
+.estr { fill: none; stroke: var(--energy); stroke-width: 2.2; stroke-dasharray: 7 4; }
+.estr.sel { stroke-width: 3.4; }
+.str-lbl.e rect { stroke: var(--energy); } .str-lbl.e text { fill: var(--energy-ink, #8a6400); font-weight: 700; }
+.blk .en { fill: #fff4c7; stroke: #c99a00; stroke-width: 1.5; } .blk .enb { fill: #f2b705; stroke: #a77c00; stroke-width: .8; }
 .port:hover, .port.arm { r: 7; stroke-width: 2.5; }
 .port.free { opacity: .95; }
 .str { fill: none; stroke: var(--stream); stroke-width: 2; }
@@ -504,7 +509,7 @@ body:not(.mobile) .work { min-height: 700px; }
 .scroll-fab.in-welcome { background: #ffd23f; color: #3a2a00; left: auto; right: 28px; transform: none; }
 body.mobile .scroll-fab { display: none; }
 /* link do programa por extenso, com botão de copiar (para quem está no celular e vai usar no notebook) */
-.wlinkbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 16px 30px 0; padding: 10px 14px; border-radius: 12px; background: #eaf6f8; border: 1.5px dashed #0a6f86; font-size: 14.5px; color: var(--ink); }
+.wlinkbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 16px 30px 0; padding: 10px 14px; border-radius: 12px; background: rgba(10, 111, 134, .08); border: 1.5px dashed #0a6f86; font-size: 14.5px; color: var(--ink); }
 .wl-lbl { flex: 0 1 auto; }
 .wl-box { display: inline-flex; flex-wrap: wrap; flex: 1 1 auto; gap: 6px; align-items: center; min-width: 0; }
 .wl-url { flex: 0 1 auto; min-width: 0; font: 700 13.5px ui-monospace, Consolas, monospace; color: #0a5568; background: #fff; border: 1px solid #b9d8df; border-radius: 8px; padding: 7px 10px; word-break: break-all; user-select: all; -webkit-user-select: all; text-align: left; }
@@ -516,6 +521,22 @@ body.mobile .scroll-fab { display: none; }
 body.mobile .wlinkbar { margin: 12px 14px 0; }
 @media (max-width: 900px) { .wlinkbar { margin: 14px 16px 0; } .wl-box { flex-basis: 100%; } .wl-url { flex-basis: 100%; } }
 body.mobile .wl-url { flex-basis: 100%; }
+/* atalhos no topo de Propriedades (dados de entrada primeiro) */
+.props-jump { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 4px 0 8px; font-size: 13px; color: var(--muted); }
+.props-jump button { border: 1px solid var(--line); background: var(--panel-2, #f3f7f8); color: var(--ink); border-radius: 99px; padding: 3px 10px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.props-jump button:hover { border-color: var(--accent); }
+.props-intro { margin: 6px 0 10px; padding: 9px 12px; border-radius: 10px; background: rgba(255, 200, 40, .14); border: 1px solid rgba(220, 170, 30, .55); font-size: 14px; color: var(--ink); }
+.props-intro p { margin: 0 0 6px; }
+.props-intro .props-jump { margin: 0; }
+#pEq, #pTh { scroll-margin-top: 8px; }
+/* explicação da tabela de reações (CSTR, PFR, reator de conversão) */
+.rx-help { margin: 8px 0 10px; border: 1px solid rgba(37, 99, 201, .35); border-left: 4px solid #2563c9; border-radius: 10px; background: rgba(37, 99, 201, .06); font-size: 13.5px; line-height: 1.45; }
+.rx-help summary { cursor: pointer; padding: 8px 12px; }
+.rx-help-body { padding: 0 14px 10px; }
+.rx-help .rh-t { font-weight: 800; margin: 8px 0 4px; }
+.rx-help ul, .rx-help ol { margin: 4px 0 6px; padding-left: 20px; }
+.rx-help li { margin: 2px 0; }
+.rx-help p { margin: 4px 0; }
 
 </style>
 </head>
@@ -2084,13 +2105,15 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'solvent', label: 'Solvente (base concentração)', type: 'comp', def: '' },
       { k: 'composition', label: 'Composição', type: 'composition' }] },
     product: { label: 'Produto (saída)', cat: 'Correntes', ins: ['in'], outs: [], params: [] },
+    energy: { label: 'Corrente de energia', cat: 'Correntes', ins: [], outs: [], eins: ['ei'], eouts: ['eo'], params: [
+      { k: 'Q', label: 'Carga fornecida Q (só para alimentar um aquecedor; vazio = valor calculado pelo equipamento)', u: 'kW', def: '' }] },
     mixer: { label: 'Misturador', cat: 'Misturadores/Divisores', ins: ['in1', 'in2', 'in3', 'in4'], outs: ['out'], params: [{ k: 'P', label: 'Pressão de saída (vazio = menor entrada)', u: 'bar', def: '' }] },
     splitter: { label: 'Divisor de corrente', cat: 'Misturadores/Divisores', ins: ['in'], outs: ['out1', 'out2', 'out3'], params: [{ k: 'f1', label: 'Fração para saída 1', u: '0–1', def: 0.5 }, { k: 'f2', label: 'Fração para saída 2', u: '0–1', def: 0.5 }] },
     separator: { label: 'Separador de componentes', cat: 'Misturadores/Divisores', ins: ['in'], outs: ['out1', 'out2'], params: [{ k: 'splits', label: 'Fração de cada componente para a saída 1', type: 'compfrac' }] },
-    heater: { label: 'Aquecedor', cat: 'Trocadores de calor', ins: ['in'], outs: ['out'], params: [
+    heater: { label: 'Aquecedor', cat: 'Trocadores de calor', ins: ['in'], outs: ['out'], eins: ['q_in'], params: [
       { k: 'mode', label: 'Especificação', type: 'select', options: ['Temperatura de saída', 'Carga térmica', 'Fração vaporizada'], def: 'Temperatura de saída' },
       { k: 'T', label: 'Temperatura de saída', u: '°C', def: 80 }, { k: 'Q', label: 'Carga térmica', u: 'kW', def: 100 }, { k: 'vf', label: 'Fração vaporizada de saída', u: '0–1', def: 1 }, { k: 'dP', label: 'Perda de carga', u: 'bar', def: 0 }] },
-    cooler: { label: 'Resfriador', cat: 'Trocadores de calor', ins: ['in'], outs: ['out'], params: [
+    cooler: { label: 'Resfriador', cat: 'Trocadores de calor', ins: ['in'], outs: ['out'], eouts: ['q_out'], params: [
       { k: 'mode', label: 'Especificação', type: 'select', options: ['Temperatura de saída', 'Carga térmica', 'Fração vaporizada'], def: 'Temperatura de saída' },
       { k: 'T', label: 'Temperatura de saída', u: '°C', def: 30 }, { k: 'Q', label: 'Calor removido', u: 'kW', def: 100 }, { k: 'vf', label: 'Fração vaporizada de saída', u: '0–1', def: 0 }, { k: 'dP', label: 'Perda de carga', u: 'bar', def: 0 }] },
     hx_shell: { label: 'Trocador casco e tubo', cat: 'Trocadores de calor', ins: ['hot_in', 'cold_in'], outs: ['hot_out', 'cold_out'], params: [
@@ -2103,18 +2126,28 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'spec', label: 'Especificação', type: 'select', options: ['T saída quente', 'T saída fria', 'Carga térmica', 'UA (avaliação)'], def: 'T saída quente' },
       { k: 'value', label: 'Valor (°C, kW ou W/K)', u: '', def: 40 }, { k: 'U', label: 'Coef. global U', u: 'W/m²·K', def: 3500 }, { k: 'plateArea', label: 'Área por placa', u: 'm²', def: 0.5 },
       { k: 'dPh', label: 'Perda de carga lado quente', u: 'bar', def: 0 }, { k: 'dPc', label: 'Perda de carga lado frio', u: 'bar', def: 0 }] },
-    pump: { label: 'Bomba', cat: 'Alteradores de pressão', ins: ['in'], outs: ['out'], params: [{ k: 'P', label: 'Pressão de descarga', u: 'bar', def: 5 }, { k: 'eff', label: 'Eficiência', u: '0–1', def: 0.75 }] },
-    compressor: { label: 'Compressor', cat: 'Alteradores de pressão', ins: ['in'], outs: ['out'], params: [{ k: 'P', label: 'Pressão de descarga', u: 'bar', def: 5 }, { k: 'eff', label: 'Eficiência isentrópica', u: '0–1', def: 0.75 }] },
+    evap_multi: { label: 'Evaporador de múltiplo efeito (alimentação para a frente)', cat: 'Evaporadores', ins: ['feed'], outs: ['product', 'vapor', 'condensate'], eins: ['q_in'], params: [
+      { k: 'N', label: 'Número de efeitos', u: '1–6', def: 3 },
+      { k: 'xP', label: 'Fração mássica de soluto no concentrado (último efeito)', u: '0–1', def: 0.5 },
+      { k: 'Ps', label: 'Pressão do vapor de aquecimento (saturado) no 1º efeito', u: 'kPa abs', def: 205.5 },
+      { k: 'PN', label: 'Pressão no último efeito (vácuo)', u: 'kPa abs', def: 13.4 },
+      { k: 'U', label: 'Coeficiente global U de cada efeito (um valor por linha, do 1º ao último)', u: 'W/m²·K', type: 'matrix', def: '3123; 1987; 1136' },
+      { k: 'b1', label: 'Elevação do ponto de ebulição: BPR = b1·x + b2·x² — coeficiente b1', u: '°C', def: 1.78 },
+      { k: 'b2', label: 'Elevação do ponto de ebulição — coeficiente b2 (b1 = b2 = 0 despreza a BPR)', u: '°C', def: 6.22 },
+      { k: 'cp0', label: 'Calor específico da solução: cp = cp0 − cp1·x — cp0', u: 'kJ/kg·K', def: 4.19 },
+      { k: 'cp1', label: 'Calor específico da solução — cp1', u: 'kJ/kg·K', def: 2.35 }] },
+    pump: { label: 'Bomba', cat: 'Alteradores de pressão', ins: ['in'], outs: ['out'], eins: ['q_in'], params: [{ k: 'P', label: 'Pressão de descarga', u: 'bar', def: 5 }, { k: 'eff', label: 'Eficiência', u: '0–1', def: 0.75 }] },
+    compressor: { label: 'Compressor', cat: 'Alteradores de pressão', ins: ['in'], outs: ['out'], eins: ['q_in'], params: [{ k: 'P', label: 'Pressão de descarga', u: 'bar', def: 5 }, { k: 'eff', label: 'Eficiência isentrópica', u: '0–1', def: 0.75 }] },
     valve: { label: 'Válvula', cat: 'Alteradores de pressão', ins: ['in'], outs: ['out'], params: [{ k: 'P', label: 'Pressão de saída', u: 'bar', def: 1.01325 }] },
     flash: { label: 'Vaso flash', cat: 'Separadores/Vasos', ins: ['in'], outs: ['vapor', 'liquid'], params: [
       { k: 'mode', label: 'Especificação', type: 'select', options: ['T e P', 'Adiabático', 'Carga térmica', 'Fração vaporizada'], def: 'T e P' },
       Object.assign({ def: 80 }, P_T), Object.assign({ def: 1.01325 }, P_P), { k: 'Q', label: 'Carga térmica', u: 'kW', def: 0 }, { k: 'vf', label: 'Fração vaporizada', u: '0–1', def: 0.5 }] },
     decanter: { label: 'Decantador (ELL)', cat: 'Separadores/Vasos', ins: ['in'], outs: ['light', 'heavy'], params: [Object.assign({ def: 25 }, P_T), Object.assign({ def: 1.01325 }, P_P)] },
-    column_short: { label: 'Coluna shortcut (FUG)', cat: 'Colunas', ins: ['feed'], outs: ['distillate', 'bottoms'], params: [
+    column_short: { label: 'Coluna shortcut (FUG)', cat: 'Colunas', ins: ['feed'], outs: ['distillate', 'bottoms'], eins: ['qr'], eouts: ['qc'], params: [
       { k: 'lk', label: 'Chave leve', type: 'comp' }, { k: 'hk', label: 'Chave pesada', type: 'comp' },
       { k: 'lkRec', label: 'Recuperação da chave leve no destilado', u: '0–1', def: 0.99 }, { k: 'hkRec', label: 'Recuperação da chave pesada no fundo', u: '0–1', def: 0.99 },
       { k: 'RRmin', label: 'R / Rmín', u: '', def: 1.3 }, Object.assign({ def: 1.01325 }, P_P)] },
-    ponchon: { label: 'Coluna binária Ponchon–Savarit (H–x–y)', cat: 'Colunas', ins: ['feed'], outs: ['distillate', 'bottoms'], params: [
+    ponchon: { label: 'Coluna binária Ponchon–Savarit (H–x–y)', cat: 'Colunas', ins: ['feed'], outs: ['distillate', 'bottoms'], eins: ['qr'], eouts: ['qc'], params: [
       { k: 'lk', label: 'A — componente mais volátil', type: 'comp' }, { k: 'hk', label: 'B — componente menos volátil', type: 'comp' },
       { k: 'xD', label: 'Fração molar de A no destilado xD', u: '0–1', def: 0.90 }, { k: 'xW', label: 'Fração molar de A no resíduo xW', u: '0–1', def: 0.05 },
       { k: 'R', label: 'Razão de refluxo R = L0/D', u: '', def: 1.8 },
@@ -2125,7 +2158,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'HA', label: 'H do vapor saturado: A puro (y = 1)', u: 'kJ/kmol', def: 42000 }, { k: 'HB', label: 'H do vapor saturado: B puro (y = 0)', u: 'kJ/kmol', def: 36000 },
       { k: 'q', label: 'Condição térmica da alimentação q (1 = líquido saturado; com entalpias do modelo, q vem da corrente)', u: '', def: 1 },
       Object.assign({ def: 1.01325 }, P_P)] },
-    column: { label: 'Coluna de destilação rigorosa', cat: 'Colunas', ins: ['feed', 'feed2', 'feed3'], outs: ['distillate', 'bottoms', 'side'], params: [
+    column: { label: 'Coluna de destilação rigorosa', cat: 'Colunas', ins: ['feed', 'feed2', 'feed3'], eins: ['qr'], eouts: ['qc'], outs: ['distillate', 'bottoms', 'side'], params: [
       { k: 'N', label: 'Nº de estágios (inclui condensador e refervedor)', u: '', def: 20 }, { k: 'feedStage', label: 'Estágio da alimentação 1', u: '', def: 10 },
       { k: 'feed2Stage', label: 'Estágio da alimentação 2 (solvente/arrastador)', u: '', def: 3 }, { k: 'feed3Stage', label: 'Estágio da alimentação 3', u: '', def: 15 },
       { k: 'R', label: 'Razão de refluxo', u: '', def: 3 }, { k: 'Dmode', label: 'Especificação do destilado', type: 'select', options: ['Vazão D', 'D/F'], def: 'D/F' },
@@ -2271,13 +2304,21 @@ window.SIMULAFACIL_CONFIG = {
   };
 
   function heaterLike(th, b, ins, sign) {
-    const s = ins.in, p = b.params, P = s.P - num(p.dP, 0) * BAR; let out;
-    if (p.mode === 'Carga térmica') out = streamPH(th, s.flows, P, s.H + sign * num(p.Q, 0) * 1000, s.T);
+    const s = ins.in, p = b.params, P = s.P - num(p.dP, 0) * BAR, eIn = ins.q_in && ins.q_in.spec ? ins.q_in : null; let out;
+    if (eIn) out = streamPH(th, s.flows, P, s.H + eIn.Q, s.T);   // carga vinda da corrente de energia ligada ao aquecedor
+    else if (p.mode === 'Carga térmica') out = streamPH(th, s.flows, P, s.H + sign * num(p.Q, 0) * 1000, s.T);
     else if (p.mode === 'Fração vaporizada') { const fl = th.flashPVF(s.z, P, clamp(num(p.vf, 1), 0, 1)); out = mkStream(th, s.flows, fl.T, P, fl); }
     else out = mkStream(th, s.flows, C2K(num(p.T, 25)), P);
     const Q = out.H - s.H;
-    return { out: { out }, res: [{ k: 'Carga térmica', v: kW(Q), u: 'kW' }, { k: 'Temperatura de saída', v: K2C(out.T), u: '°C' }, { k: 'Fração vaporizada de saída', v: out.beta, u: '' }], duty: Q };
+    const res = [{ k: 'Carga térmica' + (eIn ? ' (da corrente de energia)' : ''), v: kW(Q), u: 'kW' }, { k: 'Temperatura de saída', v: K2C(out.T), u: '°C' }, { k: 'Fração vaporizada de saída', v: out.beta, u: '' }];
+    return { out: { out }, res, duty: Q, warn: eIn && p.mode !== 'Carga térmica' ? ['a carga vem da corrente de energia ligada; a especificação "' + (p.mode || 'Temperatura de saída') + '" não é usada'] : [] };
   }
+  // corrente de energia (como no DWSIM): fonte com Q informado para um aquecedor, ou mostrador do calor trocado por um equipamento
+  IMPL.energy = function (th, b, ins) {
+    const raw = b.params.Q, spec = raw !== '' && raw != null && isFinite(+raw);
+    if (ins.ei) return { out: {}, res: [{ k: 'Carga térmica', v: ins.ei.Q != null ? kW(ins.ei.Q) : '—', u: 'kW' }] };
+    return { out: { eo: { energy: true, Q: spec ? +raw * 1000 : null, spec } }, res: spec ? [{ k: 'Carga fornecida', v: +raw, u: 'kW' }] : [] };
+  };
   IMPL.heater = (th, b, ins) => heaterLike(th, b, ins, 1);
   IMPL.cooler = (th, b, ins) => heaterLike(th, b, ins, -1);
 
@@ -3006,6 +3047,111 @@ window.SIMULAFACIL_CONFIG = {
 
 
   /* ------------------------------------------------------------------ extração L-L em diagrama ternário (Hunter–Nash, frações mássicas) */
+  /* ------------------------------------------------------------------ vapor d'água saturado (equações auxiliares da IAPWS, Wagner e Pruss)
+     T em K, p em Pa, entalpias em kJ/kg (referência: líquido no ponto triplo, como nas tabelas de vapor) */
+  const STEAM = (function () {
+    const Tc = 647.096, pc = 22.064e6, rc = 322;
+    const a = [-7.85951783, 1.84408259, -11.7866497, 22.6807411, -15.9618719, 1.80122502];
+    const bb = [1.99274064, 1.09965342, -0.510839303, -1.75493479, -45.5170352, -6.74694450e5];
+    const cc = [-2.03150240, -2.68302940, -5.38626492, -17.2991605, -44.7586581, -63.9201063];
+    const d = [-5.65134998e-8, 2690.66631, 127.287297, -135.003439, 0.981825814], da = -1135.905627715;
+    const psat = T => { const t = 1 - T / Tc; return pc * Math.exp(Tc / T * (a[0] * t + a[1] * Math.pow(t, 1.5) + a[2] * t * t * t + a[3] * Math.pow(t, 3.5) + a[4] * Math.pow(t, 4) + a[5] * Math.pow(t, 7.5))); };
+    const dpdT = T => { const t = 1 - T / Tc, p = psat(T); return -p / T * (Math.log(p / pc) + a[0] + 1.5 * a[1] * Math.sqrt(t) + 3 * a[2] * t * t + 3.5 * a[3] * Math.pow(t, 2.5) + 4 * a[4] * t * t * t + 7.5 * a[5] * Math.pow(t, 6.5)); };
+    const rhoL = T => { const t = 1 - T / Tc; return rc * (1 + bb[0] * Math.pow(t, 1 / 3) + bb[1] * Math.pow(t, 2 / 3) + bb[2] * Math.pow(t, 5 / 3) + bb[3] * Math.pow(t, 16 / 3) + bb[4] * Math.pow(t, 43 / 3) + bb[5] * Math.pow(t, 110 / 3)); };
+    const rhoV = T => { const t = 1 - T / Tc; return rc * Math.exp(cc[0] * Math.pow(t, 2 / 6) + cc[1] * Math.pow(t, 4 / 6) + cc[2] * Math.pow(t, 8 / 6) + cc[3] * Math.pow(t, 18 / 6) + cc[4] * Math.pow(t, 37 / 6) + cc[5] * Math.pow(t, 71 / 6)); };
+    const alpha = T => { const th = T / Tc; return 1000 * (da + d[0] * Math.pow(th, -19) + d[1] * th + d[2] * Math.pow(th, 4.5) + d[3] * Math.pow(th, 5) + d[4] * Math.pow(th, 54.5)); };
+    const hL = T => (alpha(T) + T / rhoL(T) * dpdT(T)) / 1000, hV = T => (alpha(T) + T / rhoV(T) * dpdT(T)) / 1000;
+    const Tsat = p => { let lo = 273.16, hi = 645; for (let k = 0; k < 80; k++) { const m = 0.5 * (lo + hi); if (psat(m) < p) lo = m; else hi = m; } return 0.5 * (lo + hi); };
+    return { psat, Tsat, hL, hV };
+  })();
+
+  /* ------------------------------------------------------------------ evaporador de múltiplo efeito, alimentação para a frente (método das áreas iguais)
+     o = {F (kg/h), xF, TF (°C), xP, Ps (Pa), PN (Pa), U [W/m²K], b1, b2, cp0, cp1}; temperaturas em °C, entalpias em kJ/kg */
+  function multiEffect(o) {
+    const Ne = o.U.length, U = o.U, F = o.F, xF = o.xF, b1 = o.b1, b2 = o.b2, cp = x => o.cp0 - o.cp1 * x, bprOf = x => b1 * x + b2 * x * x;
+    if (!(o.xP > xF && o.xP < 1)) throw new Error('a fração de soluto no concentrado (' + o.xP + ') deve ser maior que a da alimentação (' + xF.toFixed(4) + ') e menor que 1');
+    const Ts = K2C(STEAM.Tsat(o.Ps)), TNs = K2C(STEAM.Tsat(o.PN)), lamS = STEAM.hV(C2K(Ts)) - STEAM.hL(C2K(Ts));
+    const LN = F * xF / o.xP, Vt = F - LN, hF = cp(xF) * o.TF;
+    let V = new Array(Ne).fill(Vt / Ne), L, x, bpr, dT, T, Tv, S = 0, A = [], q = [], H, hc, it = 0;
+    const flows = () => { L = []; let acc = F; V.forEach(v => { acc -= v; L.push(acc); }); x = L.map(l => F * xF / l); };
+    flows(); bpr = x.map(bprOf);
+    const avail = () => Ts - TNs - bpr.reduce((s, v) => s + v, 0);
+    if (avail() <= 0) throw new Error('não há diferença de temperatura disponível: o vapor de aquecimento (' + Ts.toFixed(1) + ' °C) precisa estar acima da saturação no último efeito (' + TNs.toFixed(1) + ' °C) mais a soma das BPR');
+    const sInv = U.reduce((s, u) => s + 1 / u, 0); dT = U.map(u => avail() * (1 / u) / sInv);
+    for (it = 1; it <= 100; it++) {
+      T = []; Tv = []; let prev = Ts;
+      for (let i = 0; i < Ne; i++) { T.push(prev - dT[i]); Tv.push(T[i] - bpr[i]); prev = Tv[i]; }
+      const h = x.map((xi, i) => cp(xi) * T[i]);
+      H = Tv.map((tv, i) => STEAM.hV(C2K(tv)) + 1.884 * bpr[i]); hc = Tv.map(tv => STEAM.hL(C2K(tv)));
+      // sistema linear nas incógnitas [S, V1..VN]: balanços de energia de cada efeito + vapor total
+      const M = [], r = [];
+      let row = new Array(Ne + 1).fill(0); row[0] = lamS; row[1] = -(H[0] - h[0]); M.push(row); r.push(F * (h[0] - hF));
+      for (let i = 1; i < Ne; i++) {
+        row = new Array(Ne + 1).fill(0);
+        for (let k = 0; k < i; k++) row[1 + k] -= h[i - 1];
+        row[i] += H[i - 1] - hc[i - 1];
+        for (let k = 0; k <= i; k++) row[1 + k] += h[i];
+        row[1 + i] -= H[i]; M.push(row); r.push(F * (h[i] - h[i - 1]));
+      }
+      row = new Array(Ne + 1).fill(0); for (let k = 1; k <= Ne; k++) row[k] = 1; M.push(row); r.push(Vt);
+      const sol = N.solveLinear(M, r); S = sol[0]; V = sol.slice(1);
+      if (V.some(v => !(v > 0)) || !(S > 0)) throw new Error('balanço sem solução física (vazões negativas): reveja pressões, U e concentrações');
+      flows();
+      q = V.map((v, i) => (i === 0 ? S * lamS : V[i - 1] * (H[i - 1] - hc[i - 1])));
+      A = q.map((qi, i) => qi / 3.6 / (U[i] * dT[i]));
+      const Am = A.reduce((s, v) => s + v, 0) / Ne;
+      if (Math.max.apply(null, A.map(a => Math.abs(a - Am))) / Am < 1e-5) break;
+      bpr = x.map(bprOf); const av = avail(); if (av <= 0) throw new Error('as BPR consomem toda a diferença de temperatura disponível');
+      dT = dT.map((t, i) => t * A[i] / Am); const sd = dT.reduce((s, v) => s + v, 0); dT = dT.map(t => t * av / sd);
+    }
+    const Am = A.reduce((s, v) => s + v, 0) / Ne;
+    return { N: Ne, Ts, TNs, lamS, S, V, L, x, bpr, dT, T, Tv, A, Am, q, Vt, LN, economy: Vt / S, it, P: Tv.map(tv => STEAM.psat(C2K(tv))) };
+  }
+
+  IMPL.evap_multi = function (th, b, ins) {
+    const s = ins.feed, p = b.params, warn = [];
+    if (!s || !(s.F > 0)) throw new Error('conecte a alimentação');
+    const iw = th.ids.indexOf('water'); if (iw < 0) throw new Error('inclua a água entre os componentes (o solvente evaporado)');
+    const mw = th.c.map(c => c.mw), mass = s.flows.map((f, i) => f * mw[i] * 3.6);   // kg/h
+    const F = mass.reduce((a, v) => a + v, 0), xF = 1 - mass[iw] / F;
+    if (!(xF > 0)) throw new Error('a alimentação não tem soluto (só água)');
+    th.ids.forEach((id, i) => { if (i !== iw && mass[i] > 1e-9 && !th.c[i].nv && !th.c[i].solid) warn.push(th.c[i].name + ' foi tratado como soluto não volátil'); });
+    let Nf = Math.round(num(p.N, 3)); Nf = Math.max(1, Math.min(6, Nf));
+    let Us = String(p.U == null ? '' : p.U).split(/[;\n\s]+/).map(t => parseFloat(t.replace(',', '.'))).filter(v => isFinite(v) && v > 0);
+    if (!Us.length) throw new Error('informe o coeficiente U de cada efeito');
+    if (Us.length < Nf) { warn.push('foram informados ' + Us.length + ' valores de U para ' + Nf + ' efeitos: o último valor foi repetido'); while (Us.length < Nf) Us.push(Us[Us.length - 1]); }
+    if (Us.length > Nf) Us = Us.slice(0, Nf);
+    const r = multiEffect({ F, xF, TF: K2C(s.T), xP: num(p.xP, 0.5), Ps: num(p.Ps, 205.5) * 1000, PN: num(p.PN, 13.4) * 1000, U: Us,
+      b1: num(p.b1, 1.78), b2: num(p.b2, 6.22), cp0: num(p.cp0, 4.19), cp1: num(p.cp1, 2.35) });
+    if (r.it > 100) warn.push('as áreas não ficaram iguais em 100 iterações');
+    // correntes de saída (vazões molares a partir das mássicas)
+    const kmolOfWater = kgph => kgph / 3.6 / mw[iw];
+    const fP = s.flows.map((f, i) => (i === iw ? kmolOfWater(r.LN * (1 - r.x[r.N - 1])) : f));
+    const fV = new Array(th.n).fill(0); fV[iw] = kmolOfWater(r.V[r.N - 1]);
+    const PNpa = num(p.PN, 13.4) * 1000, out = {};
+    out.product = mkStream(th, fP, C2K(r.T[r.N - 1]), Math.max(PNpa, 101325));   // concentrado retirado por bomba (1 atm)
+    out.vapor = mkStream(th, fV, C2K(r.T[r.N - 1] + (r.bpr[r.N - 1] > 0.01 ? 0 : 0.05)), PNpa);
+    if (r.N > 1) {
+      const Vc = r.V.slice(0, -1), Vcs = Vc.reduce((a, v) => a + v, 0), Tc = Vc.reduce((a, v, i) => a + v * r.Tv[i], 0) / Vcs;
+      const fC = new Array(th.n).fill(0); fC[iw] = kmolOfWater(Vcs); out.condensate = mkStream(th, fC, C2K(Tc), r.P[0]);
+    }
+    const res = [{ k: 'Vapor de aquecimento consumido S', v: +r.S.toFixed(1), u: 'kg/h' }, { k: 'Economia de vapor (água evaporada / vapor)', v: +r.economy.toFixed(3), u: 'kg/kg' },
+      { k: 'Área de cada efeito (áreas iguais)', v: +r.Am.toFixed(2), u: 'm²' }, { k: 'Área total', v: +(r.Am * r.N).toFixed(2), u: 'm²' },
+      { k: 'Água evaporada total', v: +r.Vt.toFixed(1), u: 'kg/h' }, { k: 'Concentrado (produto, bombeado a 1 atm)', v: +r.LN.toFixed(1), u: 'kg/h' },
+      { k: 'Vapor de aquecimento: T de saturação / calor latente', v: r.Ts.toFixed(2) + ' °C / ' + r.lamS.toFixed(1) + ' kJ/kg', u: '' },
+      { k: 'Calor fornecido no 1º efeito', v: +(r.q[0] / 3600).toFixed(1), u: 'kW' }, { k: 'Iterações (ajuste das áreas)', v: r.it, u: '' }];
+    for (let i = 0; i < r.N; i++) res.push({ k: 'Efeito ' + (i + 1) + ': P / T ebulição / BPR / ΔT / x / V / A', v: (r.P[i] / 1000).toFixed(2) + ' kPa / ' + r.T[i].toFixed(2) + ' °C / ' + r.bpr[i].toFixed(2) + ' / ' + r.dT[i].toFixed(2) + ' / ' + r.x[i].toFixed(4) + ' / ' + r.V[i].toFixed(0) + ' kg/h / ' + r.A[i].toFixed(2) + ' m²', u: '' });
+    const eff = r.T.map((t, i) => i + 1), lab = ['vapor'].concat(eff.map(i => i + 'º'));
+    const plots = [{ kind: 'curves', title: 'Temperaturas ao longo dos efeitos (o ΔT de cada efeito é a força motriz)', data: { xLabel: 'Efeito (0 = vapor de aquecimento)', yLabel: 'Temperatura (°C)', series: [
+        { name: 'Vapor que aquece o efeito (saturação)', x: [0].concat(eff.slice(0, -1)).map((v, k) => k), y: [r.Ts].concat(r.Tv.slice(0, -1)), markers: true, color: '#d1302b' },
+        { name: 'Solução em ebulição', x: eff, y: r.T, markers: true, color: '#2563c9' },
+        { name: 'Saturação na pressão do efeito (T − BPR)', x: eff, y: r.Tv, markers: true, dash: 'dot', color: '#8a8f98' }] } },
+      { kind: 'bars', title: 'Por efeito: água evaporada (kg/h ÷ 100) e área (m²)', data: { categories: eff.map(i => i + 'º efeito'), xLabel: '', yLabel: '', series: [
+        { name: 'Água evaporada (kg/h ÷ 100)', y: r.V.map(v => v / 100), color: '#2563c9' }, { name: 'Área (m²)', y: r.A, color: '#d1302b' }] } }];
+    return { out, res, warn, plots, duty: r.q[0] / 3.6, evap: { r: { S: r.S, V: r.V, T: r.T, Tv: r.Tv, A: r.A, Am: r.Am, x: r.x, dT: r.dT, bpr: r.bpr, it: r.it, economy: r.economy },
+      F, xF, TF: K2C(s.T), xP: num(p.xP, 0.5), Ps: num(p.Ps, 205.5), PN: num(p.PN, 13.4), U: Us, b1: num(p.b1, 1.78), b2: num(p.b2, 6.22), cp0: num(p.cp0, 4.19), cp1: num(p.cp1, 2.35) } };
+  };
+
   IMPL.lle_ternary = function (th, b, ins) {
     const p = b.params, TN = SF.ternary, n = th.n, warn = [];
     if (!TN) throw new Error('módulo do diagrama ternário (ternary.js) não carregado');
@@ -3375,7 +3521,7 @@ window.SIMULAFACIL_CONFIG = {
     return { out: { out }, res, warn, plots, pack: { o, kT, ig } };
   };
 
-  SF.units = { TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn, ponchonSavarit };
+  SF.units = { TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn, ponchonSavarit, STEAM, multiEffect };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -3437,6 +3583,29 @@ window.SIMULAFACIL_CONFIG = {
       name: 'Separador de componentes: frações de separação',
       eqs: [eq(sub(i('F'), i('i') + ',topo') + ' = ' + sub(i('ξ'), i('i')) + '·' + Fi + ',<br>' + sub(i('F'), i('i') + ',fundo') + ' = (1 − ' + sub(i('ξ'), i('i')) + ')·' + Fi)],
       sym: [[sub(i('ξ'), i('i')), 'fração do componente i que vai para o topo']]
+    }),
+    evap_multi: () => {
+      const Li = sub(L, i('i')), Vi = sub(V, i('i')), hi = sub(i('h'), i('i')), Hi = sub(i('H'), i('i')), Si = i('S'), lam = sub(i('λ'), 'S');
+      return {
+        name: 'Evaporador de múltiplo efeito, alimentação para a frente: balanços de massa e energia e projeto com áreas iguais',
+        eqs: [eq(F + '·' + sub(x, 'F') + ' = ' + sub(L, 'N') + '·' + sub(x, 'P') + ',&nbsp; ' + V + ' = ' + F + ' − ' + sub(L, 'N') + ' = ' + sum(i('i')) + ' ' + Vi, 'balanço de soluto e de massa'),
+          eq(F + sub(i('h'), 'F') + ' + ' + Si + lam + ' = ' + sub(L, '1') + sub(i('h'), '1') + ' + ' + sub(V, '1') + sub(i('H'), '1'), '1º efeito, aquecido pelo vapor S'),
+          eq(sub(L, i('i') + '−1') + sub(i('h'), i('i') + '−1') + ' + ' + sub(V, i('i') + '−1') + '(' + sub(i('H'), i('i') + '−1') + ' − ' + sub(i('h'), 'c,' + i('i') + '−1') + ') = ' + Li + hi + ' + ' + Vi + Hi, 'efeito i, aquecido pelo vapor do efeito anterior'),
+          eq(sub(i('q'), i('i')) + ' = ' + sub(i('U'), i('i')) + sub(i('A'), i('i')) + 'Δ' + sub(T, i('i')) + ',&nbsp; ' + sub(i('A'), '1') + ' = … = ' + sub(i('A'), 'N'), 'projeto: áreas iguais'),
+          eq(sum(i('i')) + ' Δ' + sub(T, i('i')) + ' = ' + sub(T, 'S') + ' − ' + sub(T, 'sat,N') + ' − ' + sum(i('i')) + ' ' + sub('BPR', i('i')), 'diferença de temperatura disponível'),
+          eq('BPR = ' + sub(i('b'), '1') + x + ' + ' + sub(i('b'), '2') + sup(x, '2') + ',&nbsp; ' + hi + ' = (' + sub(i('c'), 'p0') + ' − ' + sub(i('c'), 'p1') + sub(x, i('i')) + ')' + sub(T, i('i')) + ',&nbsp; ' + Hi + ' = ' + sub(i('H'), 'g') + '(' + sub(T, 'sat,' + i('i')) + ') + 1,884·' + sub('BPR', i('i')), 'propriedades (tabelas de vapor IAPWS)'),
+          eq('Economia = ' + fr(V, Si), 'kg de água evaporada por kg de vapor')],
+        sym: [[Si, 'vapor de aquecimento (kg/h)'], [lam, 'calor latente do vapor de aquecimento'], [Vi + ', ' + Li, 'vapor gerado e solução que sai do efeito i'], ['BPR', 'elevação do ponto de ebulição'], [sub(i('U'), i('i')), 'coeficiente global de troca térmica']],
+        note: 'Algoritmo: começa com ΔTᵢ proporcional a 1/Uᵢ, resolve o sistema linear dos balanços em S e Vᵢ, calcula Aᵢ = qᵢ/(UᵢΔTᵢ) e corrige ΔTᵢ ← ΔTᵢ·Aᵢ/Ā até as áreas ficarem iguais.'
+      };
+    },
+    energy: () => ({
+      name: 'Corrente de energia: calor ou trabalho trocado com um equipamento, sem matéria (como no DWSIM)',
+      eqs: [eq(sum('ent') + ' ' + F + '·' + i('h') + ' + ' + sum('') + ' ' + sub(Q, 'ent') + ' = ' + sum('saí') + ' ' + F + '·' + i('h') + ' + ' + sum('') + ' ' + sub(Q, 'saí'), 'balanço global de energia: o calor entra e sai pelas correntes de energia'),
+        eq(sub(Q, 'E') + ' = ' + F + '·(' + sub(i('h'), 'saí') + ' − ' + sub(i('h'), 'ent') + ')', 'aquecedor alimentado pela corrente: a temperatura de saída vem do balanço'),
+        eq(sub(Q, 'E') + ' &gt; 0 no sentido da seta', 'entrada: aquecedor, bomba, compressor, refervedor · saída: resfriador, condensador')],
+      sym: [[sub(Q, 'E'), 'carga térmica da corrente de energia (kW)'], [i('h'), 'entalpia molar da corrente'], [F, 'vazão molar']],
+      note: 'Com um valor informado, a corrente alimenta o aquecedor ligado a ela; sem valor, ela só mostra o calor calculado pelo equipamento (por exemplo, Qc e Qr de uma coluna).'
     }),
     heater: (p) => ({
       name: 'Aquecedor: balanço de energia (especificação: ' + (p.mode || 'Temperatura de saída') + ')',
@@ -3685,6 +3854,15 @@ window.SIMULAFACIL_CONFIG = {
       'O separador de componentes é um modelo de "caixa-preta": em vez de calcular o equilíbrio de fases, ele recebe, para cada componente, a fração que vai para a saída de topo. É o modelo usado em balanços de massa preliminares, quando ainda não se escolheu a operação de separação ou quando se quer apenas o efeito global de uma etapa.',
       'Como não há termodinâmica envolvida, o separador sempre fecha os balanços de massa, mas não garante que a separação seja fisicamente possível. Por isso, depois de definir o fluxograma, é boa prática substituí-lo por um equipamento rigoroso (flash, coluna, extrator) e verificar se as recuperações supostas são alcançáveis.',
       'Não há exemplo pronto com o separador. Um exercício útil é abrir o exemplo "Coluna shortcut BTX", anotar as recuperações de benzeno e tolueno obtidas e reproduzir o mesmo resultado com um separador, comparando o esforço de cálculo e a informação que cada modelo fornece (o separador não dá estágios, refluxo nem cargas térmicas).'] },
+    evap_multi: { ex: ex('evaporador-triplo', 'Evaporador de triplo efeito: solução de açúcar'), p: [
+      'Um evaporador concentra uma solução fervendo parte do solvente, quase sempre a água. No múltiplo efeito, o vapor gerado em um corpo de evaporação é usado para aquecer o corpo seguinte, que trabalha a uma pressão menor (vácuo crescente) para que a solução ferva a uma temperatura mais baixa. Assim, cada quilo de vapor de caldeira evapora aproximadamente N quilos de água. Na alimentação para a frente, a solução e o vapor seguem no mesmo sentido, e a queda de pressão leva a solução de um efeito ao outro sem bombas.',
+      'O modelo faz os balanços de soluto, de massa e de energia em cada efeito. As entalpias do vapor e do condensado vêm das tabelas de vapor (equações da IAPWS) e a da solução é h = cp·T, com cp que diminui com a concentração. A elevação do ponto de ebulição (BPR) faz a solução ferver acima da saturação da água na mesma pressão: ela consome parte da diferença de temperatura disponível, e o vapor sai superaquecido pela BPR. No projeto com áreas iguais, o programa começa com ΔTᵢ proporcional a 1/Uᵢ, resolve os balanços (um sistema linear em S e Vᵢ), calcula Aᵢ = qᵢ/(UᵢΔTᵢ) e redistribui os ΔTᵢ até as áreas ficarem iguais.',
+      'No exemplo "Evaporador de triplo efeito", 22 680 kg/h de solução de açúcar a 10 % e 26,7 °C são concentrados a 50 %. O vapor de aquecimento é saturado a 205,5 kPa (121,1 °C), o último efeito trabalha a 13,4 kPa (51,7 °C) e U = 3 123, 1 987 e 1 136 W/m²·K (dados do exemplo clássico de Geankoplis). Em 5 iterações, as áreas ficam iguais a 105,0 m², a solução ferve a 104,4, 87,1 e 54,1 °C e o consumo é de 8 954 kg/h de vapor para evaporar 18 144 kg/h de água: economia de 2,03.',
+      'Mude o número de efeitos e compare. Com 1 efeito, o vapor sobe para 20 687 kg/h (economia 0,88) e a área é de 60 m²; com 2 efeitos, 11 780 kg/h e 2 × 77 m²; com 4 efeitos, 7 473 kg/h e 4 × 120 m². Cada efeito a mais economiza vapor, mas exige mais área: o número ótimo de efeitos vem do equilíbrio entre o custo do vapor e o custo do equipamento.'] },
+    energy: { ex: ex('energia-coluna', 'Pré-aquecimento com corrente de energia + destilação etanol/água'), p: [
+      'Uma corrente de energia representa calor ou trabalho trocado entre o processo e o exterior, sem matéria, como as correntes de energia do DWSIM e do Aspen. No SIMULA FÁCIL IA, ela é a caixa amarela com um raio, ligada por uma linha tracejada às portas de energia dos equipamentos (os círculos amarelos): entrada no aquecedor, na bomba, no compressor e no refervedor; saída no resfriador e no condensador.',
+      'Ela tem dois usos. Com um valor informado em kW e ligada a um aquecedor, essa passa a ser a carga do aquecedor, e a temperatura de saída resulta do balanço de energia Q = F·(h_saída − h_entrada). Sem valor informado, ela apenas mostra o calor calculado pelo equipamento, como Qc e Qr de uma coluna. O valor é positivo no sentido da seta, e o balanço global fecha somando todas as correntes de matéria e de energia.',
+      'No exemplo "Pré-aquecimento com corrente de energia", 100 kmol/h de etanol/água (10 % de etanol) a 25 °C recebem E1 = 100 kW e saem a 64,7 °C, ainda como líquido subresfriado. A coluna, com 20 estágios e R = 3,15, retira 560 kW no condensador e pede 643 kW no refervedor. Se a alimentação chegasse no ponto de bolha (86,3 °C, com 157 kW de pré-aquecimento), o refervedor cairia para 586 kW; sem pré-aquecimento, subiria para 743 kW. O calor total fornecido é sempre 743 kW: o pré-aquecedor apenas tira carga do refervedor e permite usar uma fonte de calor mais barata, como vapor de baixa pressão ou integração energética.'] },
     heater: { ex: ex('flash', 'Flash com reciclo (benzeno/tolueno)'), p: [
       'O aquecedor muda a temperatura de uma corrente fornecendo calor. O balanço de energia em regime permanente diz que a carga térmica é a variação de entalpia da corrente, Q = F·(h_saída − h_entrada), incluindo o calor latente quando há mudança de fase. A especificação pode ser a temperatura de saída, a carga térmica ou a fração vaporizada desejada.',
       'A entalpia da mistura é calculada a partir das capacidades caloríficas de gás ideal e dos calores de vaporização de cada componente. Quando a corrente atravessa o ponto de bolha, uma pequena variação de temperatura exige grande quantidade de calor, porque parte do líquido vaporiza; por isso a curva T × Q de um aquecedor com vaporização tem um "patamar" inclinado.',
@@ -3794,6 +3972,19 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   const U = SF.units, N = SF.num;
   const OPTIONAL_IN = { mixer: ['in2', 'in3', 'in4'], column: ['feed2', 'feed3'] };
+  // portas de energia (correntes de energia, como no DWSIM): não carregam matéria
+  const ENERGY_PORTS = { ei: 1, eo: 1, q_in: 1, q_out: 1, qc: 1, qr: 1 };
+  const isEnergyPort = p => !!ENERGY_PORTS[p];
+  const isEnergyStream = s => !!s && (isEnergyPort(s.fromPort) || isEnergyPort(s.toPort));
+  // calor que o equipamento troca por uma porta de energia (W; positivo no sentido da corrente)
+  function energyAt(b, r, port) {
+    if (!r) return null;
+    if (port === 'qc') return r.duties && r.duties.Qc != null ? -r.duties.Qc : null;
+    if (port === 'qr') return r.duties && r.duties.Qr != null ? r.duties.Qr : null;
+    if (port === 'q_out') return r.duty != null ? -r.duty : null;
+    if (port === 'q_in') return r.duty != null ? r.duty : null;
+    return null;
+  }
 
   function solve(fs, opts) {
     opts = opts || {};
@@ -3814,6 +4005,7 @@ window.SIMULAFACIL_CONFIG = {
       T.ins.forEach(port => { if (!inOf[b.id][port] && (OPTIONAL_IN[b.type] || []).indexOf(port) < 0 && !(b.type === 'mixer') && !(b.type === 'column' && port !== 'feed')) errors.push({ block: b.id, msg: (b.name || b.id) + ': entrada "' + port + '" não conectada' }); });
       if (b.type === 'mixer' && !Object.keys(inOf[b.id]).length) errors.push({ block: b.id, msg: (b.name || b.id) + ': misturador sem entradas' });
     });
+    conns.forEach(c => { if (isEnergyPort(c.fromPort) !== isEnergyPort(c.toPort)) errors.push({ block: c.to, msg: 'Corrente ' + (c.name || c.id) + ': liga uma porta de energia a uma porta de matéria' }); });
     if (errors.length) return { ok: false, errors, th, streams: {}, blocks: {}, log };
     // ordem de cálculo com seleção de correntes de corte
     const known = {}, order = [], tears = [];
@@ -3850,6 +4042,14 @@ window.SIMULAFACIL_CONFIG = {
         try { r = U.IMPL[b.type](th, b, ins, { fs }); }
         catch (e) { return { ok: false, errors: [{ block: id, msg: (b.name || id) + ': ' + e.message }], th, streams: S, blocks: blockRes, log, order }; }
         blockRes[id] = r;
+        // correntes de energia: saídas de calor do equipamento e valor calculado nas entradas de energia
+        Object.keys(outOf[id]).forEach(port => { if (isEnergyPort(port) && port !== 'eo') S[outOf[id][port].id] = { energy: true, Q: energyAt(b, r, port) }; });
+        Object.keys(inOf[id]).forEach(port => {
+          if (!isEnergyPort(port) || port === 'ei') return;
+          const c = inOf[id][port], prev = S[c.id] || {};
+          if (prev.spec && b.type !== 'heater' && it === 0) r.warn = (r.warn || []).concat('o valor informado na corrente de energia ' + (c.name || c.id) + ' não é usado: a carga é calculada pelo equipamento');
+          S[c.id] = { energy: true, Q: energyAt(b, r, port), spec: !!prev.spec };
+        });
         Object.keys(r.out || {}).forEach(port => {
           const c = outOf[id][port];
           if (c) { if (tears.indexOf(c.id) < 0) S[c.id] = r.out[port]; else r._tearOut = Object.assign(r._tearOut || {}, { [c.id]: r.out[port] }); }
@@ -3886,6 +4086,18 @@ window.SIMULAFACIL_CONFIG = {
         }
       });
     });
+    // separa as correntes de energia das de matéria e mostra o valor nas caixas de energia
+    const energy = {};
+    conns.forEach(c => { if (isEnergyStream(c)) { energy[c.id] = S[c.id] || { energy: true, Q: null }; delete S[c.id]; } });
+    Object.values(blocks).forEach(b => {
+      if (b.type !== 'energy' || !blockRes[b.id]) return;
+      const c = outOf[b.id].eo || inOf[b.id].ei;
+      if (!c) { blockRes[b.id].warn = (blockRes[b.id].warn || []).concat('corrente de energia sem ligação'); return; }
+      const e = energy[c.id], other = blocks[c.from === b.id ? c.to : c.from];
+      blockRes[b.id].res = [{ k: 'Carga térmica', v: e && e.Q != null ? e.Q / 1000 : '—', u: 'kW' },
+        { k: c.from === b.id ? 'Fornece energia para' : 'Recebe energia de', v: (other && (other.name || other.id)) + ' (' + portLabel(c.from === b.id ? c.toPort : c.fromPort) + ')', u: '' },
+        { k: 'Valor', v: e && e.spec ? 'informado pelo usuário' : 'calculado pelo equipamento', u: '' }];
+    });
     const warnings = th.warnings.slice();
     Object.keys(blockRes).forEach(id => (blockRes[id].warn || []).forEach(w => warnings.push((blocks[id].name || id) + ': ' + w)));
     if (tears.length && !converged) warnings.push('Reciclo não convergiu em ' + maxIt + ' iterações (erro ' + tearErr.toExponential(2) + ').');
@@ -3893,15 +4105,15 @@ window.SIMULAFACIL_CONFIG = {
     let mIn = 0, mOut = 0;
     Object.values(blocks).forEach(b => { if (b.type === 'feed' && blockRes[b.id]) mIn += blockRes[b.id].out.out.mass; });
     conns.concat(extra).forEach(c => { const to = c.to ? blocks[c.to] : null; if ((!to || to.type === 'product') && S[c.id]) mOut += S[c.id].mass; });
-    return { ok: true, th, streams: S, blocks: blockRes, order, tears, iterations: it + 1, converged, warnings, log, extraStreams: extra, conns, massIn: mIn, massOut: mOut, ms: Date.now() - t0 };
+    return { ok: true, th, streams: S, energy, blocks: blockRes, order, tears, iterations: it + 1, converged, warnings, log, extraStreams: extra, conns, massIn: mIn, massOut: mOut, ms: Date.now() - t0 };
   }
 
   const PORT_LABELS = { out: 'saída', in: 'entrada', vapor: 'vapor', liquid: 'líquido', light: 'fase leve', heavy: 'fase pesada', distillate: 'destilado', bottoms: 'fundo', side: 'lateral',
     gas_out: 'gás tratado', liq_out: 'líquido rico', extract: 'extrato', raffinate: 'rafinado', overflow: 'extrato', underflow: 'torta', hot_out: 'saída quente', cold_out: 'saída fria',
-    out1: 'saída 1', out2: 'saída 2', out3: 'saída 3', hot_in: 'entrada quente', cold_in: 'entrada fria', feed: 'alimentação', feed2: 'alimentação 2', feed3: 'alimentação 3', solvent: 'solvente', solids: 'sólidos', gas_in: 'gás', liq_in: 'líquido', in1: 'entrada 1', in2: 'entrada 2', in3: 'entrada 3', in4: 'entrada 4' };
+    out1: 'saída 1', out2: 'saída 2', out3: 'saída 3', hot_in: 'entrada quente', cold_in: 'entrada fria', ei: 'entrada de energia', eo: 'saída de energia', q_in: 'entrada de energia', q_out: 'saída de energia (calor retirado)', qc: 'calor do condensador', qr: 'calor do refervedor', feed: 'alimentação', feed2: 'alimentação 2', feed3: 'alimentação 3', solvent: 'solvente', solids: 'sólidos', gas_in: 'gás', liq_in: 'líquido', in1: 'entrada 1', in2: 'entrada 2', in3: 'entrada 3', in4: 'entrada 4' };
   function portLabel(p) { return PORT_LABELS[p] || p; }
 
-  SF.flowsheet = { solve, portLabel, PORT_LABELS };
+  SF.flowsheet = { solve, portLabel, PORT_LABELS, isEnergyPort, isEnergyStream };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -3919,21 +4131,23 @@ window.SIMULAFACIL_CONFIG = {
   const G = {
     feed: { w: 54, h: 30, ports: { out: P(54, 15, 'r', 'out') } },
     product: { w: 54, h: 30, ports: { in: P(0, 15, 'l', 'in') } },
+    energy: { w: 54, h: 30, ports: { ei: P(0, 15, 'l', 'ein'), eo: P(54, 15, 'r', 'eout') } },
     mixer: { w: 56, h: 64, ports: { in1: P(0, 10, 'l', 'in'), in2: P(0, 25, 'l', 'in'), in3: P(0, 40, 'l', 'in'), in4: P(0, 54, 'l', 'in'), out: P(56, 32, 'r', 'out') } },
     splitter: { w: 56, h: 64, ports: { in: P(0, 32, 'l', 'in'), out1: P(56, 10, 'r', 'out'), out2: P(56, 32, 'r', 'out'), out3: P(56, 54, 'r', 'out') } },
     separator: { w: 60, h: 64, ports: { in: P(0, 32, 'l', 'in'), out1: P(60, 14, 'r', 'out'), out2: P(60, 50, 'r', 'out') } },
-    heater: { w: 56, h: 56, ports: { in: P(0, 28, 'l', 'in'), out: P(56, 28, 'r', 'out') } },
-    cooler: { w: 56, h: 56, ports: { in: P(0, 28, 'l', 'in'), out: P(56, 28, 'r', 'out') } },
+    heater: { w: 56, h: 56, ports: { in: P(0, 28, 'l', 'in'), out: P(56, 28, 'r', 'out'), q_in: P(28, 56, 'd', 'ein') } },
+    cooler: { w: 56, h: 56, ports: { in: P(0, 28, 'l', 'in'), out: P(56, 28, 'r', 'out'), q_out: P(28, 56, 'd', 'eout') } },
     hx_shell: { w: 120, h: 56, ports: { hot_in: P(30, 0, 'u', 'in'), hot_out: P(92, 56, 'd', 'out'), cold_in: P(0, 28, 'l', 'in'), cold_out: P(120, 28, 'r', 'out') } },
     hx_plate: { w: 64, h: 90, ports: { hot_in: P(0, 14, 'l', 'in'), hot_out: P(64, 76, 'r', 'out'), cold_in: P(0, 76, 'l', 'in'), cold_out: P(64, 14, 'r', 'out') } },
-    pump: { w: 56, h: 52, ports: { in: P(0, 30, 'l', 'in'), out: P(56, 12, 'r', 'out') } },
-    compressor: { w: 60, h: 56, ports: { in: P(0, 28, 'l', 'in'), out: P(60, 28, 'r', 'out') } },
+    evap_multi: { w: 160, h: 96, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 62, 'l', 'in'), vapor: P(160, 10, 'r', 'out'), product: P(160, 88, 'r', 'out'), condensate: P(124, 96, 'd', 'out') } },
+    pump: { w: 56, h: 52, ports: { in: P(0, 30, 'l', 'in'), out: P(56, 12, 'r', 'out'), q_in: P(26, 52, 'd', 'ein') } },
+    compressor: { w: 60, h: 56, ports: { in: P(0, 28, 'l', 'in'), out: P(60, 28, 'r', 'out'), q_in: P(30, 56, 'd', 'ein') } },
     valve: { w: 50, h: 34, ports: { in: P(0, 20, 'l', 'in'), out: P(50, 20, 'r', 'out') } },
     flash: { w: 54, h: 100, ports: { in: P(0, 52, 'l', 'in'), vapor: P(54, 10, 'r', 'out'), liquid: P(54, 90, 'r', 'out') } },
     decanter: { w: 110, h: 60, ports: { in: P(0, 22, 'l', 'in'), light: P(110, 16, 'r', 'out'), heavy: P(110, 54, 'r', 'out') } },
-    column_short: { w: 112, h: 210, ports: { feed: P(0, 105, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), bottoms: P(112, 188, 'r', 'out') } },
-    ponchon: { w: 112, h: 210, ports: { feed: P(0, 105, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), bottoms: P(112, 188, 'r', 'out') } },
-    column: { w: 112, h: 230, ports: { feed2: P(0, 55, 'l', 'in'), feed: P(0, 115, 'l', 'in'), feed3: P(0, 170, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), side: P(112, 130, 'r', 'out'), bottoms: P(112, 208, 'r', 'out') } },
+    column_short: { w: 112, h: 210, ports: { feed: P(0, 105, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), bottoms: P(112, 188, 'r', 'out'), qc: P(100, 10, 'u', 'eout'), qr: P(100, 198, 'd', 'ein') } },
+    ponchon: { w: 112, h: 210, ports: { feed: P(0, 105, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), bottoms: P(112, 188, 'r', 'out'), qc: P(100, 10, 'u', 'eout'), qr: P(100, 198, 'd', 'ein') } },
+    column: { w: 112, h: 230, ports: { feed2: P(0, 55, 'l', 'in'), feed: P(0, 115, 'l', 'in'), feed3: P(0, 170, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), side: P(112, 130, 'r', 'out'), bottoms: P(112, 208, 'r', 'out'), qc: P(100, 10, 'u', 'eout'), qr: P(100, 218, 'd', 'ein') } },
     absorber: { w: 54, h: 180, ports: { liq_in: P(0, 22, 'l', 'in'), gas_in: P(0, 158, 'l', 'in'), gas_out: P(54, 22, 'r', 'out'), liq_out: P(54, 158, 'r', 'out') } },
     extractor: { w: 54, h: 180, ports: { feed: P(0, 22, 'l', 'in'), solvent: P(0, 158, 'l', 'in'), extract: P(54, 22, 'r', 'out'), raffinate: P(54, 158, 'r', 'out') } },
     leaching: { w: 130, h: 70, ports: { solvent: P(0, 18, 'l', 'in'), solids: P(0, 52, 'l', 'in'), overflow: P(130, 18, 'r', 'out'), underflow: P(130, 52, 'r', 'out') } },
@@ -3979,6 +4193,18 @@ window.SIMULAFACIL_CONFIG = {
     mixer: () => [Pg([[4, 4], [52, 26], [52, 38], [4, 60]])],
     splitter: () => [Pg([[52, 4], [4, 26], [4, 38], [52, 60]])],
     separator: () => [R(4, 4, 52, 56, 4), L([[14, 32], [26, 32], [36, 18], [46, 18]]), L([[26, 32], [36, 46], [46, 46]])],
+    energy: () => [Pg([[2, 7], [38, 7], [38, 1], [52, 15], [38, 29], [38, 23], [2, 23]], 'en'), Pg([[22, 4], [14, 17], [20, 17], [16, 27], [27, 12], [21, 12], [25, 4]], 'enb')],
+    evap_multi: () => { // três corpos de evaporação: o vapor de um efeito aquece o seguinte
+      const o = [L([[6, 0], [6, 56], [12, 56]], 'hot'), L([[0, 62], [12, 62]])];
+      for (let k = 0; k < 3; k++) {
+        const x0 = 12 + k * 48;
+        o.push(R(x0, 18, 30, 58, 7), L([[x0 + 3, 52], [x0 + 27, 52]], 'hot'), L([[x0 + 3, 60], [x0 + 27, 60]], 'hot'));
+        if (k < 2) o.push(L([[x0 + 15, 18], [x0 + 15, 9], [x0 + 42, 9], [x0 + 42, 56], [x0 + 48, 56]], 'lnd'), L([[x0 + 15, 76], [x0 + 15, 84], [x0 + 45, 84], [x0 + 45, 66], [x0 + 48, 66]]));
+        else o.push(L([[x0 + 15, 18], [x0 + 15, 10], [160, 10]], 'lnd'), L([[x0 + 15, 76], [x0 + 15, 88], [160, 88]]));
+      }
+      o.push(L([[60, 92], [124, 92], [124, 96]], 'cold'), T(27, 42, '1'), T(75, 42, '2'), T(123, 42, '3'));
+      return o;
+    },
     heater: () => [C(28, 28, 24), zig(8, 28, 40, 'hot')],
     cooler: () => [C(28, 28, 24), zig(8, 28, 40, 'cold')],
     hx_shell: () => [R(10, 10, 100, 36, 18), L([[24, 10], [24, 46]]), L([[24, 20], [100, 20]]), L([[24, 28], [100, 28]]), L([[24, 36], [100, 36]]),
@@ -4027,7 +4253,7 @@ window.SIMULAFACIL_CONFIG = {
     body: { fill: '#ffe6dc', stroke: '#ec6a4c', lw: 1.6 }, bodyb: { fill: '#e6f0fb', stroke: '#1f6feb', lw: 1.4 }, bodyw: { fill: '#ffffff', stroke: '#1f6feb', lw: 1.4 },
     ln: { fill: 'none', stroke: '#ec6a4c', lw: 1.2 }, lnd: { fill: 'none', stroke: '#ec6a4c', lw: 1.2, dash: true },
     hot: { fill: 'none', stroke: '#d24a35', lw: 1.8 }, cold: { fill: 'none', stroke: '#2f74d0', lw: 1.8 },
-    lbl: { text: '#ec6a4c' }, lblb: { text: '#1f6feb' }
+    lbl: { text: '#ec6a4c' }, lblb: { text: '#1f6feb' }, en: { fill: '#fff4c7', stroke: '#c99a00', lw: 1.5 }, enb: { fill: '#f2b705', stroke: '#a77c00', lw: 0.8 }
   };
 
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -4098,7 +4324,28 @@ window.SIMULAFACIL_CONFIG = {
   const pathD = pts => 'M' + pts.map(p => p[0] + ' ' + p[1]).join(' L');
 
   /* posições automáticas por camadas (fontes à esquerda) */
-  function autoLayout(state, force) {
+  function autoLayout(state0, force) {
+    // correntes de energia ficam fora do arranjo principal e são postas junto da porta do equipamento (como no DWSIM)
+    const isEn = s => SF.flowsheet && SF.flowsheet.isEnergyStream(s);
+    const state = { blocks: state0.blocks.filter(b => b.type !== 'energy'), streams: state0.streams.filter(s => !isEn(s)) };
+    layoutMain(state, force); placeEnergy(state0, force);
+  }
+  function placeEnergy(state, force) {
+    const bmap = {}; state.blocks.forEach(b => { bmap[b.id] = b; });
+    const g = IC.G.energy;
+    state.blocks.forEach(e => {
+      if (e.type !== 'energy' || (!force && isFinite(e.x) && isFinite(e.y))) return;
+      const s = state.streams.find(q => q.from === e.id || q.to === e.id), u = s && bmap[s.from === e.id ? s.to : s.from];
+      const p = u && isFinite(u.x) ? portPos(u, s.from === e.id ? s.toPort : s.fromPort) : null;
+      if (!p) { if (!isFinite(e.x)) { e.x = 0; e.y = 0; } return; }
+      const src = s.from === e.id, vy = p.dir[1];
+      if (vy > 0) { e.x = src ? p.x - g.w - 140 : p.x + 140; e.y = p.y + 50; }
+      else if (vy < 0) { e.x = src ? p.x - g.w - 140 : p.x + 140; e.y = p.y - 50 - g.h; }
+      else { e.x = src ? p.x - g.w - 60 : p.x + 60; e.y = p.y - g.h / 2; }
+      e.x = Math.round(e.x / 10) * 10; e.y = Math.round(e.y / 10) * 10;
+    });
+  }
+  function layoutMain(state, force) {
     const blocks = state.blocks; if (!blocks.length) return;
     if (!force && blocks.every(b => isFinite(b.x) && isFinite(b.y))) return;
     const out = {}, indeg = {}; blocks.forEach(b => { out[b.id] = []; indeg[b.id] = 0; });
@@ -4129,14 +4376,17 @@ window.SIMULAFACIL_CONFIG = {
     for (let pass = 0; pass < 2; pass++) { keys.forEach(k => { const ys = {}; layers[k].forEach(b => { ys[b.id] = keyY(b); }); layers[k].sort((a, b) => ys[a.id] - ys[b.id]); }); place(); }
   }
 
-  function energyMarks(b, r) {
+  function energyMarks(b, r, streams) {
     if (!r) return [];
-    const g = IC.G[b.type], marks = [];
+    const g = IC.G[b.type], marks = [], wired = p => (streams || []).some(s => (s.from === b.id && s.fromPort === p) || (s.to === b.id && s.toPort === p));
     const add = (x, y, Q, label, up) => marks.push({ x: b.x + x, y: b.y + y, Q, label, up });
-    if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon')) { add(82, -4, r.duties.Qc, 'Qc', true); add(82, g.h + 4, r.duties.Qr, 'Qr', false); }
-    else if (r.duty != null && Math.abs(r.duty) > 1e-3 && b.type !== 'feed') add(g.w - 2, g.h + 4, r.duty, r.power ? 'W' : 'Q', false);
+    if (b.type === 'energy') return marks;
+    if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon')) { if (!wired('qc')) add(82, -4, r.duties.Qc, 'Qc', true); if (!wired('qr')) add(82, g.h + 4, r.duties.Qr, 'Qr', false); }
+    else if (r.duty != null && Math.abs(r.duty) > 1e-3 && b.type !== 'feed' && !wired('q_in') && !wired('q_out')) add(g.w - 2, g.h + 4, r.duty, r.power ? 'W' : 'Q', false);
     return marks;
   }
+  const isE = s => SF.flowsheet && SF.flowsheet.isEnergyStream(s);
+  const eLabel = (s, res) => { const e = res && res.energy && res.energy[s.id]; return s.name + (e && e.Q != null && isFinite(e.Q) ? ' · ' + fmt(e.Q / 1000, 1) + ' kW' : ''); };
 
   function PFD(svg, opts) {
     this.svg = svg; this.o = opts; this.tx = 20; this.ty = 20; this.s = 1; this.sel = null; this.arm = null; this.drag = null;
@@ -4155,11 +4405,12 @@ window.SIMULAFACIL_CONFIG = {
       const a = bmap[s.from], b = bmap[s.to]; if (!a || !b) return;
       const p1 = portPos(a, s.fromPort), p2 = portPos(b, s.toPort); if (!p1 || !p2) return;
       const pts = route(p1, p2, st.blocks, portOffset(st, s)), d = pathD(pts), sel = this.sel && this.sel.kind === 'stream' && this.sel.id === s.id;
-      const ss = res && res.streams && res.streams[s.id];
-      const tip = ss ? esc(s.name) + ': ' + fmt(ss.T - 273.15, 1) + ' °C, ' + fmt(ss.P / 1e5, 3) + ' bar, ' + fmt(ss.F * 3.6, 3) + ' kmol/h, vf ' + fmt(ss.beta, 3) : esc(s.name);
-      h += '<g data-stream="' + esc(s.id) + '"><title>' + tip + '</title><path class="str' + (sel ? ' sel' : '') + '" d="' + d + '" marker-end="url(#arr)"/><path class="str-hit" d="' + d + '"/>';
-      const m = longestSeg(pts), w = Math.max(22, String(s.name).length * 7 + 10);
-      h += '<g class="str-lbl"><rect x="' + (m.x - w / 2) + '" y="' + (m.y - 9) + '" width="' + w + '" height="18" rx="4"/><text x="' + m.x + '" y="' + (m.y + 4) + '">' + esc(s.name) + '</text></g></g>';
+      const ss = res && res.streams && res.streams[s.id], en = isE(s);
+      const tip = en ? 'Corrente de energia ' + esc(eLabel(s, res)) : ss ? esc(s.name) + ': ' + fmt(ss.T - 273.15, 1) + ' °C, ' + fmt(ss.P / 1e5, 3) + ' bar, ' + fmt(ss.F * 3.6, 3) + ' kmol/h, vf ' + fmt(ss.beta, 3) : esc(s.name);
+      const lab = en ? eLabel(s, res) : String(s.name);
+      h += '<g data-stream="' + esc(s.id) + '"><title>' + tip + '</title><path class="' + (en ? 'estr' : 'str') + (sel ? ' sel' : '') + '" d="' + d + '" marker-end="url(#' + (en ? 'arrE' : 'arr') + ')"/><path class="str-hit" d="' + d + '"/>';
+      const m = longestSeg(pts), w = Math.max(22, lab.length * 7 + 10);
+      h += '<g class="str-lbl' + (en ? ' e' : '') + '"><rect x="' + (m.x - w / 2) + '" y="' + (m.y - 9) + '" width="' + w + '" height="18" rx="4"/><text x="' + m.x + '" y="' + (m.y + 4) + '">' + esc(lab) + '</text></g></g>';
     });
     // saídas não conectadas após simulação
     if (res && res.extraStreams) res.extraStreams.forEach(x => {
@@ -4170,7 +4421,7 @@ window.SIMULAFACIL_CONFIG = {
         '<text class="energy-lbl" style="fill:var(--stream)" x="' + (e.x + (p.dir[0] >= 0 ? 4 : -4)) + '" y="' + (e.y + 4) + '" text-anchor="' + (p.dir[0] >= 0 ? 'start' : 'end') + '">' + esc(x.name) + '</text></g>';
     });
     // energia
-    if (res && res.blocks) st.blocks.forEach(b => energyMarks(b, res.blocks[b.id]).forEach(m => {
+    if (res && res.blocks) st.blocks.forEach(b => energyMarks(b, res.blocks[b.id], st.streams).forEach(m => {
       if (m.Q == null || !isFinite(m.Q)) return;
       const into = m.Q > 0, y0 = m.up ? m.y - 30 : m.y + 30, y1 = m.y;
       const d = into ? 'M' + m.x + ' ' + y0 + ' L' + m.x + ' ' + y1 : 'M' + m.x + ' ' + y1 + ' L' + m.x + ' ' + y0;
@@ -4281,8 +4532,10 @@ window.SIMULAFACIL_CONFIG = {
   };
   PFD.prototype._finishArm = function (bid, pn, io) {
     const a = this.arm; this.arm = null;
-    if (!a || a.block === bid || a.io === io) { this.render(); return; }
-    const from = a.io === 'out' ? a : { block: bid, port: pn }, to = a.io === 'out' ? { block: bid, port: pn } : a;
+    const ek = v => v === 'ein' || v === 'eout', outish = v => v === 'out' || v === 'eout';
+    if (a && a.block !== bid && ek(a.io) !== ek(io)) { this.render(); if (this.o.onInvalid) this.o.onInvalid('Porta de energia (amarela) só liga com porta de energia; de matéria (azul), só com matéria.'); return; }
+    if (!a || a.block === bid || outish(a.io) === outish(io)) { this.render(); return; }
+    const from = outish(a.io) ? a : { block: bid, port: pn }, to = outish(a.io) ? { block: bid, port: pn } : a;
     if (this.o.onConnect) this.o.onConnect(from.block, from.port, to.block, to.port);
     this.render();
   };
@@ -4299,13 +4552,15 @@ window.SIMULAFACIL_CONFIG = {
     let body = '';
     st.streams.forEach(s => {
       const a = bmap[s.from], b = bmap[s.to]; if (!a || !b) return;
-      const pts = route(portPos(a, s.fromPort), portPos(b, s.toPort), st.blocks, portOffset(st, s)), m = longestSeg(pts), w = Math.max(24, String(s.name).length * 8 + 12);
-      body += '<path d="' + pathD(pts) + '" fill="none" stroke="' + C.stream + '" stroke-width="2" marker-end="url(#xa)"/>';
+      const en = isE(s), col = en ? C.energy : C.stream, lab = en ? eLabel(s, res) : String(s.name);
+      const pts = route(portPos(a, s.fromPort), portPos(b, s.toPort), st.blocks, portOffset(st, s)), m = longestSeg(pts), w = Math.max(24, lab.length * 8 + 12);
+      body += '<path d="' + pathD(pts) + '" fill="none" stroke="' + col + '" stroke-width="2"' + (en ? ' stroke-dasharray="7 4"' : '') + ' marker-end="url(#' + (en ? 'xe' : 'xa') + ')"/>';
+      if (en) { body += '<rect x="' + (m.x - w / 2) + '" y="' + (m.y - 10) + '" width="' + w + '" height="20" rx="10" fill="#fff" stroke="' + col + '"/><text x="' + m.x + '" y="' + (m.y + 5) + '" font-size="13" font-weight="700" fill="' + col + '" text-anchor="middle">' + esc(lab) + '</text>'; return; }
       body += '<rect x="' + (m.x - w / 2) + '" y="' + (m.y - 10) + '" width="' + w + '" height="20" rx="10" fill="#fff" stroke="' + C.stream + '"/><text x="' + m.x + '" y="' + (m.y + 5) + '" font-size="13" font-weight="700" fill="' + C.stream + '" text-anchor="middle">' + esc(s.name) + '</text>';
     });
     if (res && res.extraStreams) res.extraStreams.forEach(x => { const b = bmap[x.from]; if (!b) return; const p = portPos(b, x.fromPort); const e = { x: p.x + p.dir[0] * 50, y: p.y + p.dir[1] * 50 };
       body += '<path d="M' + p.x + ' ' + p.y + 'L' + e.x + ' ' + e.y + '" stroke="' + C.stream + '" stroke-width="2" marker-end="url(#xa)"/><text x="' + (e.x + 5) + '" y="' + (e.y + 5) + '" font-size="13" font-weight="700" fill="' + C.stream + '">' + esc(x.name) + '</text>'; });
-    if (res && res.blocks) st.blocks.forEach(b => energyMarks(b, res.blocks[b.id]).forEach(m => {
+    if (res && res.blocks) st.blocks.forEach(b => energyMarks(b, res.blocks[b.id], st.streams).forEach(m => {
       if (m.Q == null || !isFinite(m.Q)) return; const into = m.Q > 0, ya = m.up ? m.y - 32 : m.y + 32;
       body += '<path d="' + (into ? 'M' + m.x + ' ' + ya + 'L' + m.x + ' ' + m.y : 'M' + m.x + ' ' + m.y + 'L' + m.x + ' ' + ya) + '" stroke="' + C.energy + '" stroke-width="2.2" marker-end="url(#xe)"/><text x="' + (m.x + 7) + '" y="' + ((ya + m.y) / 2 + 5) + '" font-size="12.5" font-weight="700" fill="' + C.energy + '">' + m.label + ' = ' + fmt(m.Q / 1000, 1) + ' kW</text>';
     }));
@@ -4760,8 +5015,9 @@ end
       const pts = P.route(P.portPos(a, s.fromPort), P.portPos(b, s.toPort), st.blocks, P.portOffset(st, s));
       const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
       const n = pts.length, m = Math.floor((n - 1) / 2);
-      lines.push("plot(" + vec(xs) + ", " + vec(ys) + ", 'Color', azul, 'LineWidth', 2); seta(" + n2s(xs[n - 1]) + ", " + n2s(ys[n - 1]) + ", " + n2s(xs[n - 1] - xs[n - 2]) + ", " + n2s(ys[n - 1] - ys[n - 2]) + ", azul);");
-      lines.push("text(" + n2s((xs[m] + xs[m + 1]) / 2) + ", " + n2s((ys[m] + ys[m + 1]) / 2) + ", " + str(s.name) + ", 'FontSize', FSP, 'Color', azul, 'FontWeight', 'bold', 'BackgroundColor', 'w', 'EdgeColor', azul, 'HorizontalAlignment', 'center');");
+      const en = SF.flowsheet.isEnergyStream(s), cor = en ? 'amarelo' : 'azul', e = en && res.energy && res.energy[s.id], lab = en && e && e.Q != null ? s.name + ' = ' + (e.Q / 1000).toFixed(1) + ' kW' : s.name;
+      lines.push("plot(" + vec(xs) + ", " + vec(ys) + ", 'Color', " + cor + ", 'LineWidth', 2" + (en ? ", 'LineStyle', '--'" : '') + "); seta(" + n2s(xs[n - 1]) + ", " + n2s(ys[n - 1]) + ", " + n2s(xs[n - 1] - xs[n - 2]) + ", " + n2s(ys[n - 1] - ys[n - 2]) + ", " + cor + ");");
+      lines.push("text(" + n2s((xs[m] + xs[m + 1]) / 2) + ", " + n2s((ys[m] + ys[m + 1]) / 2) + ", " + str(lab) + ", 'FontSize', FSP, 'Color', " + cor + ", 'FontWeight', 'bold', 'BackgroundColor', 'w', 'EdgeColor', " + cor + ", 'HorizontalAlignment', 'center');");
     });
     (res.extraStreams || []).forEach(x => {
       const b = bmap[x.from]; if (!b) return; const p = P.portPos(b, x.fromPort); const ex = p.x + p.dir[0] * 46, ey = p.y + p.dir[1] * 46;
@@ -4865,7 +5121,7 @@ end
     }
     if (b.type === 'cstr' && r.cstr) {
       const p = b.params, rx = SF.units.compileReactions(th, p.reactions), c = r.cstr;
-      const s = res.streams[(st.streams.find(x => x.to === b.id) || {}).id];
+      const s = res.streams[(st.streams.find(x => x.to === b.id && !SF.flowsheet.isEnergyStream(x)) || {}).id];
       const cpL = (th.hL(s.z, s.T + 0.5, 101325) - th.hL(s.z, s.T - 0.5, 101325));
       const Cin = c.Cin, sv = Cin.indexOf(Math.max.apply(null, Cin));
       const C0 = p.mode === 'batelada' || p.init === 'igual à alimentação' ? Cin : Cin.map((v, i) => (i === sv ? v : 0));
@@ -4928,7 +5184,7 @@ end
       return out.join('\n');
     }
     if (b.type === 'packaging' && r.pack) {
-      const o = r.pack.o, pm = b.params, Tk = res.streams[(st.streams.find(x => x.to === b.id) || {}).id].T;
+      const o = r.pack.o, pm = b.params, Tk = res.streams[(st.streams.find(x => x.to === b.id && !SF.flowsheet.isEnergyStream(x)) || {}).id].T;
       out.push('function ' + fname + '(D, FS)', header,
         '% Difusão de O2 na embalagem (EDP 1D): dC/dt = D*d2C/dx2 - R(C). No MATLAB usa pdepe; no GNU Octave, método das linhas com ode15s.', printRes.join('\n'),
         '% 1. PARÂMETROS FÍSICOS E GEOMÉTRICOS',
@@ -4957,6 +5213,55 @@ end
         "figure('Name', " + str(b.name + ' — perfis') + ", 'Color', 'w', 'Position', [120 120 950 600]); hold on;",
         "for k = round(linspace(1, numel(t), 5)), plot(x*1000, C(k, :), 'LineWidth', 2.5, 'DisplayName', sprintf('t = %.1f h', t(k)/3600)); end",
         "grid on; xlabel('Dimensão x (mm)'); ylabel('C (mol/m^3)'); title('Perfis de concentração no material'); legend('Location', 'best'); set(gca, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'evap_multi' && r.evap) {
+      const E = r.evap;
+      out.push('function ' + fname + '(D, FS)', header,
+        '% Evaporador de múltiplo efeito com alimentação para a frente: balanços de massa e energia e projeto com áreas iguais.',
+        '% Propriedades do vapor saturado pelas equações auxiliares da IAPWS (funções steam_* no fim do arquivo).', printRes.join('\n'),
+        '%% 1. Dados',
+        'F = ' + n2s(E.F) + '; xF = ' + n2s(E.xF) + '; TF = ' + n2s(E.TF) + '; xP = ' + n2s(E.xP) + ';   % kg/h, fração mássica de soluto, °C',
+        'Ps = ' + n2s(E.Ps * 1000) + '; PN = ' + n2s(E.PN * 1000) + ';   % Pa: vapor de aquecimento e último efeito',
+        'U = [' + E.U.map(n2s).join(' ') + '];   % W/(m2.K), um por efeito',
+        'b1 = ' + n2s(E.b1) + '; b2 = ' + n2s(E.b2) + '; cp0 = ' + n2s(E.cp0) + '; cp1 = ' + n2s(E.cp1) + ';',
+        'N = numel(U); cp = @(x) cp0 - cp1*x; bprf = @(x) b1*x + b2*x.^2;   % kJ/(kg.K) e elevação do ponto de ebulição (°C)',
+        '%% 2. Vapor de aquecimento, balanço de soluto e estimativa inicial (ΔT proporcional a 1/U)',
+        'Ts = steam_Tsat(Ps) - 273.15; TNs = steam_Tsat(PN) - 273.15; lamS = steam_hV(Ts + 273.15) - steam_hL(Ts + 273.15);',
+        'LN = F*xF/xP; Vt = F - LN; hF = cp(xF)*TF;',
+        'V = Vt/N*ones(1, N); L = F - cumsum(V); x = F*xF./L; bpr = bprf(x);',
+        'dT = (Ts - TNs - sum(bpr))*(1./U)/sum(1./U);',
+        '%% 3. Iterações: balanços de energia (sistema linear em S e V) e correção dos ΔT até as áreas ficarem iguais',
+        'for it = 1:100',
+        '    T = zeros(1, N); Tv = zeros(1, N); prev = Ts;',
+        '    for i = 1:N, T(i) = prev - dT(i); Tv(i) = T(i) - bpr(i); prev = Tv(i); end',
+        '    h = cp(x).*T; H = steam_hV(Tv + 273.15) + 1.884*bpr; hc = steam_hL(Tv + 273.15);',
+        '    M = zeros(N + 1); rhs = zeros(N + 1, 1);',
+        '    M(1, 1) = lamS; M(1, 2) = -(H(1) - h(1)); rhs(1) = F*(h(1) - hF);',
+        '    for i = 2:N',
+        '        M(i, 2:i) = M(i, 2:i) - h(i-1);          % L(i-1)*h(i-1)',
+        '        M(i, i) = M(i, i) + H(i-1) - hc(i-1);    % calor cedido pelo vapor do efeito anterior',
+        '        M(i, 2:i+1) = M(i, 2:i+1) + h(i);        % - L(i)*h(i)',
+        '        M(i, i+1) = M(i, i+1) - H(i);            % - V(i)*H(i)',
+        '        rhs(i) = F*(h(i) - h(i-1));',
+        '    end',
+        '    M(N+1, 2:N+1) = 1; rhs(N+1) = Vt;',
+        '    sol = M\\rhs; S = sol(1); V = sol(2:end).\';',
+        '    L = F - cumsum(V); x = F*xF./L;',
+        '    q = [S*lamS, V(1:N-1).*(H(1:N-1) - hc(1:N-1))];   % kJ/h',
+        '    A = q/3.6./(U.*dT); Am = mean(A);',
+        '    if max(abs(A - Am))/Am < 1e-5, break; end',
+        '    bpr = bprf(x); dT = dT.*A/Am; dT = dT*(Ts - TNs - sum(bpr))/sum(dT);',
+        'end',
+        "fprintf('\\nEvaporador de %d efeitos: S = %.1f kg/h | economia = %.3f | área de cada efeito = %.2f m2 (%d iterações)\\n', N, S, Vt/S, Am, it);",
+        "for i = 1:N, fprintf('  efeito %d: P = %.2f kPa  T = %.2f °C  BPR = %.2f  dT = %.2f  x = %.4f  V = %.0f kg/h  A = %.2f m2\\n', i, steam_psat(Tv(i) + 273.15)/1000, T(i), bpr(i), dT(i), x(i), V(i), A(i)); end",
+        '%% 4. Gráficos',
+        "figure('Name', " + str(b.name + ' — temperaturas') + ", 'Color', 'w'); hold on; grid on; box on;",
+        "plot(0:N-1, [Ts Tv(1:N-1)], 'ro-', 'LineWidth', 2, 'MarkerFaceColor', 'r'); plot(1:N, T, 'bo-', 'LineWidth', 2, 'MarkerFaceColor', 'b'); plot(1:N, Tv, 'k:o', 'LineWidth', 1.5);",
+        "xlabel('Efeito (0 = vapor de aquecimento)', 'FontSize', FS); ylabel('Temperatura (°C)', 'FontSize', FS); legend({'Vapor que aquece o efeito', 'Solução em ebulição', 'Saturação (T - BPR)'}, 'Location', 'northeast');",
+        "title('Temperaturas ao longo dos efeitos', 'FontSize', FS);",
+        "figure('Name', " + str(b.name + ' — áreas e vapor') + ", 'Color', 'w'); bar([V/100; A]'); grid on;",
+        "xlabel('Efeito', 'FontSize', FS); legend({'Água evaporada (kg/h ÷ 100)', 'Área (m2)'}, 'Location', 'northwest'); title('Por efeito: água evaporada e área', 'FontSize', FS);", 'end');
       return out.join('\n');
     }
     if (b.type === 'ponchon' && r.ps) {
@@ -5120,7 +5425,7 @@ end
     }
     if (b.type === 'pfr') {
       const p = b.params, rx = SF.units.compileReactions(th, p.reactions);
-      const sId = (st.streams.find(x => x.to === b.id) || {}).id, s = res.streams[sId];
+      const sId = (st.streams.find(x => x.to === b.id && !SF.flowsheet.isEnergyStream(x)) || {}).id, s = res.streams[sId];
       const gas = p.phase === 'gasosa';
       const v0 = gas ? s.F * 8.314462618 * s.T / s.P * 1000 : s.F * th.vL(s.z) * 1000;
       const Cin = s.flows.map(f => f / v0), key = rx.length && rx[0].key >= 0 ? rx[0].key : Cin.indexOf(Math.max.apply(null, Cin));
@@ -5150,7 +5455,7 @@ end
       return out.join('\n');
     }
     if (b.type === 'flash' && td.act && (b.params.mode === 'T e P' || !b.params.mode)) {
-      const sId = (st.streams.find(x => x.to === b.id) || {}).id, s = res.streams[sId];
+      const sId = (st.streams.find(x => x.to === b.id && !SF.flowsheet.isEnergyStream(x)) || {}).id, s = res.streams[sId];
       out.push('function ' + fname + '(D, FS)', header, '% Flash TP recalculado (Rachford-Rice + NRTL/Antoine).', printRes.join('\n'),
         'z = ' + vec(s.z) + '; T = ' + n2s(SF.units.C2K(+b.params.T)) + '; P = ' + n2s((+b.params.P) * 1e5) + ';',
         '[beta, x, y] = flash_TP(D, z, T, P);', "fprintf('  MATLAB: fração vaporizada = %.5f\\n', beta);",
@@ -5270,6 +5575,36 @@ dq = p.kf*(ads_qeq(C, p) - q);
 dy = [p.De*lap - p.u*adv - (1 - p.epsilon)/p.epsilon*p.rho_p*dq; dq];
 end`;
 
+  const EVAP_FUNCS = `% --- vapor d'água saturado: equações auxiliares da IAPWS (Wagner e Pruss), T em K, p em Pa, h em kJ/kg ---
+function p = steam_psat(T)
+a = [-7.85951783 1.84408259 -11.7866497 22.6807411 -15.9618719 1.80122502]; t = 1 - T/647.096;
+p = 22.064e6*exp(647.096./T.*(a(1)*t + a(2)*t.^1.5 + a(3)*t.^3 + a(4)*t.^3.5 + a(5)*t.^4 + a(6)*t.^7.5));
+end
+
+function T = steam_Tsat(p)
+T = fzero(@(TT) steam_psat(TT) - p, [273.16 645]);
+end
+
+function h = steam_hL(T)
+[al, dp, t] = steam_aux(T);
+b = [1.99274064 1.09965342 -0.510839303 -1.75493479 -45.5170352 -6.74694450e5];
+rho = 322*(1 + b(1)*t.^(1/3) + b(2)*t.^(2/3) + b(3)*t.^(5/3) + b(4)*t.^(16/3) + b(5)*t.^(43/3) + b(6)*t.^(110/3));
+h = (al + T./rho.*dp)/1000;
+end
+
+function h = steam_hV(T)
+[al, dp, t] = steam_aux(T);
+c = [-2.03150240 -2.68302940 -5.38626492 -17.2991605 -44.7586581 -63.9201063];
+rho = 322*exp(c(1)*t.^(2/6) + c(2)*t.^(4/6) + c(3)*t.^(8/6) + c(4)*t.^(18/6) + c(5)*t.^(37/6) + c(6)*t.^(71/6));
+h = (al + T./rho.*dp)/1000;
+end
+
+function [al, dp, t] = steam_aux(T)
+a = [-7.85951783 1.84408259 -11.7866497 22.6807411 -15.9618719 1.80122502]; t = 1 - T/647.096; p = steam_psat(T);
+dp = -p./T.*(log(p/22.064e6) + a(1) + 1.5*a(2)*t.^0.5 + 3*a(3)*t.^2 + 3.5*a(4)*t.^2.5 + 4*a(5)*t.^3 + 7.5*a(6)*t.^6.5);
+th = T/647.096; d = [-5.65134998e-8 2690.66631 127.287297 -135.003439 0.981825814];
+al = 1000*(-1135.905627715 + d(1)*th.^-19 + d(2)*th + d(3)*th.^4.5 + d(4)*th.^5 + d(5)*th.^54.5);
+end`;
   const ELL_FUNCS = `% --- extração L-L em diagrama ternário: funções auxiliares ---
 function [X, Y] = ell_t2c(A, B, C)
 % frações (A, B, C) -> coordenadas no triângulo: A (0,0), C (1,0), B (0.5, sqrt(3)/2)
@@ -5386,7 +5721,7 @@ end`;
     const parts = [head.join('\n'), td.code, streamTableCode(st, res), pfdCode(st, res), PFD_HEAD, iconLibMatlab(types)]
       .concat(blocks.map(x => x.code))
       .concat(needVLE ? [VLE_FUNCS] : []).concat(needFlash ? [FLASH_FUNC] : []).concat(needCSTR ? [CSTR_RHS] : []).concat(needPFR ? [PFR_TRANS] : [])
-      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []).concat(blocks.some(x => /gibbs_rand/.test(x.code)) ? [GIBBS_FUNCS] : []).concat(blocks.some(x => /ell_cross/.test(x.code)) ? [ELL_FUNCS] : []);
+      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []).concat(blocks.some(x => /gibbs_rand/.test(x.code)) ? [GIBBS_FUNCS] : []).concat(blocks.some(x => /ell_cross/.test(x.code)) ? [ELL_FUNCS] : []).concat(blocks.some(x => /steam_Tsat/.test(x.code)) ? [EVAP_FUNCS] : []);
     return parts.join('\n\n') + '\n';
   }
 
@@ -5566,9 +5901,10 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
       const a = bmap[s.from], b = bmap[s.to]; if (!a || !b) return;
       const pts = P.route(P.portPos(a, s.fromPort), P.portPos(b, s.toPort), st.blocks, P.portOffset(st, s));
       const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), n = pts.length, m = Math.floor((n - 1) / 2);
-      L.push('    ax.plot([' + xs.map(n2s).join(', ') + '], [' + ys.map(n2s).join(', ') + '], color=AZUL, lw=2, zorder=1)');
-      L.push('    seta(ax, ' + [xs[n - 2], ys[n - 2], xs[n - 1], ys[n - 1]].map(n2s).join(', ') + ')');
-      L.push('    ax.text(' + n2s((xs[m] + xs[m + 1]) / 2) + ', ' + n2s((ys[m] + ys[m + 1]) / 2) + ', ' + str(s.name) + ", color=AZUL, fontsize=FSP, fontweight='bold', ha='center', va='center', bbox=dict(boxstyle='round,pad=0.25', fc='white', ec=AZUL), zorder=6)");
+      const en = SF.flowsheet.isEnergyStream(s), cor = en ? 'AMARELO' : 'AZUL', e = en && res.energy && res.energy[s.id], lab = en && e && e.Q != null ? s.name + ' = ' + (e.Q / 1000).toFixed(1) + ' kW' : s.name;
+      L.push('    ax.plot([' + xs.map(n2s).join(', ') + '], [' + ys.map(n2s).join(', ') + '], color=' + cor + ', lw=2' + (en ? ", ls='--'" : '') + ', zorder=1)');
+      L.push('    seta(ax, ' + [xs[n - 2], ys[n - 2], xs[n - 1], ys[n - 1]].map(n2s).join(', ') + (en ? ', cor=AMARELO' : '') + ')');
+      L.push('    ax.text(' + n2s((xs[m] + xs[m + 1]) / 2) + ', ' + n2s((ys[m] + ys[m + 1]) / 2) + ', ' + str(lab) + ", color=" + cor + ", fontsize=FSP, fontweight='bold', ha='center', va='center', bbox=dict(boxstyle='round,pad=0.25', fc='white', ec=" + cor + "), zorder=6)");
     });
     (res.extraStreams || []).forEach(x => {
       const b = bmap[x.from]; if (!b) return; const p = P.portPos(b, x.fromPort); const ex = p.x + p.dir[0] * 46, ey = p.y + p.dir[1] * 46;
@@ -5659,7 +5995,7 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
     }
     if (b.type === 'cstr' && r.cstr) {
       const p = b.params, rx = SF.units.compileReactions(th, p.reactions), c = r.cstr;
-      const s = res.streams[(st.streams.find(x => x.to === b.id) || {}).id];
+      const s = res.streams[(st.streams.find(x => x.to === b.id && !SF.flowsheet.isEnergyStream(x)) || {}).id];
       const cpL = th.hL(s.z, s.T + 0.5, 101325) - th.hL(s.z, s.T - 0.5, 101325);
       const Cin = c.Cin, sv = Cin.indexOf(Math.max.apply(null, Cin));
       const C0 = p.mode === 'batelada' || p.init === 'igual à alimentação' ? Cin : Cin.map((v, i) => (i === sv ? v : 0));
@@ -5742,7 +6078,7 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         '    return [fig1, fig2]']).join('\n');
     }
     if (b.type === 'packaging' && r.pack) {
-      const o = r.pack.o, pm = b.params, Tk = res.streams[(st.streams.find(x => x.to === b.id) || {}).id].T;
+      const o = r.pack.o, pm = b.params, Tk = res.streams[(st.streams.find(x => x.to === b.id && !SF.flowsheet.isEnergyStream(x)) || {}).id].T;
       return head.concat([
         '    # Difusão de O2 através da embalagem (2ª lei de Fick com consumo): dC/dt = D d2C/dx2 - R(C)',
         '    # x = 0: face externa, C = Cext (Dirichlet) ; x = L: face interna, dC/dx = 0 (Neumann) ; C(x,0) = C0',
@@ -5780,6 +6116,64 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         "        ax2.plot(xmm, C[:, k], lw=2.5, label=f't = {th[k]:.1f} h')",
         "    ax2.set_xlabel('Dimensão x (mm)'); ax2.set_ylabel('C (mol/m³)'); ax2.set_title('Perfis de concentração no material'); ax2.grid(True, alpha=.4); ax2.legend(); fig2.tight_layout()",
         '    return [fig1, fig2]']).join('\n');
+    }
+    if (b.type === 'evap_multi' && r.evap) {
+      const E = r.evap;
+      return head.concat([
+        '    # Evaporador de múltiplo efeito com alimentação para a frente: balanços de massa e energia e projeto com áreas iguais.',
+        '    # Vapor saturado pelas equações auxiliares da IAPWS (Wagner e Pruss): T em K, p em Pa, h em kJ/kg.',
+        '    Tc, pc = 647.096, 22.064e6',
+        '    a = [-7.85951783, 1.84408259, -11.7866497, 22.6807411, -15.9618719, 1.80122502]',
+        '    psat = lambda T: pc * np.exp(Tc / T * sum(ak * (1 - T / Tc) ** e for ak, e in zip(a, [1, 1.5, 3, 3.5, 4, 7.5])))',
+        '    def aux(T):',
+        '        t = 1 - T / Tc; p = psat(T)',
+        '        dp = -p / T * (np.log(p / pc) + a[0] + 1.5 * a[1] * t ** 0.5 + 3 * a[2] * t ** 2 + 3.5 * a[3] * t ** 2.5 + 4 * a[4] * t ** 3 + 7.5 * a[5] * t ** 6.5)',
+        '        th = T / Tc; d = [-5.65134998e-8, 2690.66631, 127.287297, -135.003439, 0.981825814]',
+        '        al = 1000 * (-1135.905627715 + d[0] * th ** -19 + d[1] * th + d[2] * th ** 4.5 + d[3] * th ** 5 + d[4] * th ** 54.5)',
+        '        return al, dp, t',
+        '    def hL(T):',
+        '        al, dp, t = aux(T); b = [1.99274064, 1.09965342, -0.510839303, -1.75493479, -45.5170352, -6.74694450e5]',
+        '        rho = 322 * (1 + sum(bk * t ** e for bk, e in zip(b, [1/3, 2/3, 5/3, 16/3, 43/3, 110/3])))',
+        '        return (al + T / rho * dp) / 1000',
+        '    def hV(T):',
+        '        al, dp, t = aux(T); c = [-2.03150240, -2.68302940, -5.38626492, -17.2991605, -44.7586581, -63.9201063]',
+        '        rho = 322 * np.exp(sum(ck * t ** e for ck, e in zip(c, [2/6, 4/6, 8/6, 18/6, 37/6, 71/6])))',
+        '        return (al + T / rho * dp) / 1000',
+        '    Tsat = lambda p: brentq(lambda T: psat(T) - p, 273.16, 645)',
+        '    F, xF, TF, xP = ' + [E.F, E.xF, E.TF, E.xP].map(n2s).join(', ') + '   # kg/h, fração mássica de soluto, °C',
+        '    Ps, PN = ' + n2s(E.Ps * 1000) + ', ' + n2s(E.PN * 1000) + '   # Pa',
+        '    U = np.array([' + E.U.map(n2s).join(', ') + '])   # W/(m2.K)',
+        '    b1, b2, cp0, cp1 = ' + [E.b1, E.b2, E.cp0, E.cp1].map(n2s).join(', '),
+        '    N = len(U); cp = lambda x: cp0 - cp1 * x; bprf = lambda x: b1 * x + b2 * x ** 2',
+        '    Ts = Tsat(Ps) - 273.15; TNs = Tsat(PN) - 273.15; lamS = hV(Ts + 273.15) - hL(Ts + 273.15)',
+        '    LN = F * xF / xP; Vt = F - LN; hF = cp(xF) * TF',
+        '    V = np.full(N, Vt / N); L = F - np.cumsum(V); x = F * xF / L; bpr = bprf(x)',
+        '    dT = (Ts - TNs - bpr.sum()) * (1 / U) / np.sum(1 / U)',
+        '    for it in range(1, 101):',
+        '        T = np.zeros(N); Tv = np.zeros(N); prev = Ts',
+        '        for i in range(N): T[i] = prev - dT[i]; Tv[i] = T[i] - bpr[i]; prev = Tv[i]',
+        '        h = cp(x) * T; H = np.array([hV(t + 273.15) for t in Tv]) + 1.884 * bpr; hc = np.array([hL(t + 273.15) for t in Tv])',
+        '        M = np.zeros((N + 1, N + 1)); rhs = np.zeros(N + 1)',
+        '        M[0, 0] = lamS; M[0, 1] = -(H[0] - h[0]); rhs[0] = F * (h[0] - hF)',
+        '        for i in range(1, N):',
+        '            M[i, 1:i + 1] -= h[i - 1]; M[i, i] += H[i - 1] - hc[i - 1]; M[i, 1:i + 2] += h[i]; M[i, i + 1] -= H[i]',
+        '            rhs[i] = F * (h[i] - h[i - 1])',
+        '        M[N, 1:] = 1; rhs[N] = Vt',
+        '        sol = np.linalg.solve(M, rhs); S, V = sol[0], sol[1:]',
+        '        L = F - np.cumsum(V); x = F * xF / L',
+        '        q = np.concatenate(([S * lamS], V[:-1] * (H[:-1] - hc[:-1])))',
+        '        A = q / 3.6 / (U * dT); Am = A.mean()',
+        '        if np.max(np.abs(A - Am)) / Am < 1e-5: break',
+        '        bpr = bprf(x); dT = dT * A / Am; dT = dT * (Ts - TNs - bpr.sum()) / dT.sum()',
+        "    print(f'  Python: {N} efeitos | S = {S:.1f} kg/h | economia = {Vt / S:.3f} | área de cada efeito = {Am:.2f} m2 ({it} iterações)')",
+        "    for i in range(N): print(f'    efeito {i + 1}: P = {psat(Tv[i] + 273.15) / 1000:.2f} kPa  T = {T[i]:.2f} °C  BPR = {bpr[i]:.2f}  dT = {dT[i]:.2f}  x = {x[i]:.4f}  V = {V[i]:.0f} kg/h  A = {A[i]:.2f} m2')",
+        '    f1, a1 = plt.subplots(figsize=(9, 6)); e = np.arange(1, N + 1)',
+        "    a1.plot(np.arange(N), np.concatenate(([Ts], Tv[:-1])), 'ro-', lw=2, label='Vapor que aquece o efeito'); a1.plot(e, T, 'bo-', lw=2, label='Solução em ebulição'); a1.plot(e, Tv, 'k:o', lw=1.5, label='Saturação (T − BPR)')",
+        "    a1.set_xlabel('Efeito (0 = vapor de aquecimento)'); a1.set_ylabel('Temperatura (°C)'); a1.set_title('Temperaturas ao longo dos efeitos'); a1.grid(True, alpha=0.4); a1.legend(); f1.tight_layout()",
+        '    f2, a2 = plt.subplots(figsize=(9, 6)); w = 0.38',
+        "    a2.bar(e - w / 2, V / 100, w, label='Água evaporada (kg/h ÷ 100)'); a2.bar(e + w / 2, A, w, label='Área (m²)')",
+        "    a2.set_xticks(e); a2.set_xlabel('Efeito'); a2.set_title('Por efeito: água evaporada e área'); a2.grid(True, axis='y', alpha=0.4); a2.legend(); f2.tight_layout()",
+        '    return [f1, f2]']).join('\n');
     }
     if (b.type === 'ponchon' && r.ps) {
       const S_ = r.ps, cte = !S_.useTh, lin = !!S_.lin, T_ = S_.tab, vv = a => 'np.array([' + a.map(n2s).join(', ') + '])';
@@ -5940,7 +6334,7 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
     }
     if (b.type === 'pfr') {
       const p = b.params, rx = SF.units.compileReactions(th, p.reactions);
-      const s = res.streams[(st.streams.find(x => x.to === b.id) || {}).id];
+      const s = res.streams[(st.streams.find(x => x.to === b.id && !SF.flowsheet.isEnergyStream(x)) || {}).id];
       const gas = p.phase === 'gasosa';
       const v0 = gas ? s.F * 8.314462618 * s.T / s.P * 1000 : s.F * th.vL(s.z) * 1000;
       const Cin = s.flows.map(f => f / v0), key = rx.length && rx[0].key >= 0 ? rx[0].key : Cin.indexOf(Math.max.apply(null, Cin));
@@ -5973,7 +6367,7 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         '    fig.tight_layout()', '    return [fig]']).join('\n');
     }
     if (b.type === 'flash' && td.act && (b.params.mode === 'T e P' || !b.params.mode)) {
-      const s = res.streams[(st.streams.find(x => x.to === b.id) || {}).id];
+      const s = res.streams[(st.streams.find(x => x.to === b.id && !SF.flowsheet.isEnergyStream(x)) || {}).id];
       return head.concat(['    z, T, P = ' + vec(s.z) + ', ' + n2s(SF.units.C2K(+b.params.T)) + ', ' + n2s(+b.params.P * 1e5),
         '    beta, x, y = flash_TP(z, T, P)', "    print(f'  Python: fração vaporizada = {beta:.5f}')",
         '    fig, ax = plt.subplots(figsize=(11, 6.5)); pos = np.arange(len(NOMES))',
@@ -6099,6 +6493,27 @@ def pfr_transiente(P, nome):
         { id: 'T101', type: 'column', name: 'DC-01', params: { N: 20, feedStage: 10, R: 3.15, Dmode: 'Vazão D', D: 12.4, condenser: 'total', P: 1.01325, dP: 0 } },
         { id: 'D', type: 'product', name: 'Destilado D' }, { id: 'W', type: 'product', name: 'Fundo W' }],
       streams: [S('1', 'F', 'out', 'T101', 'feed', 'F'), S('2', 'T101', 'distillate', 'D', 'in', 'D'), S('3', 'T101', 'bottoms', 'W', 'in', 'W')] } },
+    { key: 'energia-coluna', title: 'Pré-aquecimento com corrente de energia (100 kW) + destilação etanol/água', fs: {
+      name: 'Pré-aquecedor com corrente de energia', components: ['ethanol', 'water'], model: 'NRTL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Alimentação a 25 °C', params: { T: 25, P: 1.01325, vf: '', flow: 100, flowUnit: 'kmol/h', basis: 'molar', composition: { ethanol: 0.10, water: 0.90 } } },
+        { id: 'E1', type: 'energy', name: 'E1', params: { Q: 100 } },
+        { id: 'H', type: 'heater', name: 'HT-1', params: { mode: 'Carga térmica', T: 80, Q: 100, vf: 1, dP: 0 } },
+        { id: 'T101', type: 'column', name: 'DC-01', params: { N: 20, feedStage: 10, R: 3.15, Dmode: 'Vazão D', D: 12.4, condenser: 'total', P: 1.01325, dP: 0 } },
+        { id: 'EC', type: 'energy', name: 'Qc', params: { Q: '' } },
+        { id: 'ER', type: 'energy', name: 'Qr', params: { Q: '' } },
+        { id: 'D', type: 'product', name: 'Destilado D' }, { id: 'W', type: 'product', name: 'Fundo W' }],
+      streams: [S('1', 'F', 'out', 'H', 'in', '1'), S('2', 'H', 'out', 'T101', 'feed', '2'), S('E1', 'E1', 'eo', 'H', 'q_in', 'E1'),
+        S('E2', 'T101', 'qc', 'EC', 'ei', 'E2'), S('E3', 'ER', 'eo', 'T101', 'qr', 'E3'),
+        S('3', 'T101', 'distillate', 'D', 'in', 'D'), S('4', 'T101', 'bottoms', 'W', 'in', 'W')] } },
+    { key: 'evaporador-triplo', title: 'Evaporador de triplo efeito: solução de açúcar de 10 % a 50 % (alimentação para a frente)', fs: {
+      name: 'Evaporador de triplo efeito', components: ['water', 'sucrose'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Solução de açúcar', params: { T: 26.7, P: 2.5, vf: '', flow: 22680, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.90, sucrose: 0.10 } } },
+        { id: 'ES', type: 'energy', name: 'Vapor S', params: { Q: '' } },
+        { id: 'EV', type: 'evap_multi', name: 'EV-101', params: { N: 3, xP: 0.5, Ps: 205.5, PN: 13.4, U: '3123; 1987; 1136', b1: 1.78, b2: 6.22, cp0: 4.19, cp1: 2.35 } },
+        { id: 'P', type: 'product', name: 'Concentrado (50 %)' }, { id: 'VC', type: 'product', name: 'Vapor ao condensador' }, { id: 'C', type: 'product', name: 'Condensados' }],
+      streams: [S('1', 'F', 'out', 'EV', 'feed', '1'), S('E1', 'ES', 'eo', 'EV', 'q_in', 'E1'), S('2', 'EV', 'product', 'P', 'in', '2'), S('3', 'EV', 'vapor', 'VC', 'in', '3'), S('4', 'EV', 'condensate', 'C', 'in', '4')] } },
     { key: 'extractive', title: 'Destilação extrativa etanol/água com etilenoglicol', fs: {
       name: 'Desidratação de etanol por destilação extrativa', components: ['ethanol', 'water', 'ethylene-glycol'], model: 'NRTL',
       blocks: [
@@ -6430,7 +6845,7 @@ def pfr_transiente(P, nome):
     const types = Object.keys(U.TYPES).map(k => {
       const t = U.TYPES[k];
       const ps = t.params.map(f => f.k + (f.u ? ' [' + f.u + ']' : '') + (f.options ? ' {' + f.options.join(' | ') + '}' : '') + (f.type === 'composition' ? ' {id: valor}' : f.type === 'compfrac' ? ' {id: fração}' : f.type === 'compval' ? ' {id: valor em ' + (f.u || '') + '}' : f.type === 'matrix' ? ' (texto: uma linha por ponto, números separados por espaço)' : f.type === 'reactions' ? ' [lista de reações]' : f.type === 'comp' ? ' (id de componente)' : '') + (f.def !== undefined && f.def !== '' && typeof f.def !== 'object' ? ' = ' + f.def : '')).join('; ');
-      return '- ' + k + ' — ' + t.label + ' | entradas: ' + (t.ins.join(', ') || '—') + ' | saídas: ' + (t.outs.join(', ') || '—') + (ps ? ' | params: ' + ps : '');
+      return '- ' + k + ' — ' + t.label + ' | entradas: ' + (t.ins.join(', ') || '—') + ' | saídas: ' + (t.outs.join(', ') || '—') + ((t.eins || t.eouts) ? ' | energia (opcional): ' + (t.eins || []).map(x => x + ' (entra)').concat((t.eouts || []).map(x => x + ' (sai)')).join(', ') : '') + (ps ? ' | params: ' + ps : '');
     }).join('\n');
     return '## Componentes disponíveis (id = nome)\n' + comps + '\n\n## Tipos de bloco (portas e parâmetros)\n' + types +
       '\n\n## Modelos termodinâmicos\n' + Object.keys(TH.MODELS).map(k => k + ' = ' + TH.MODELS[k]).join('; ') +
@@ -6506,9 +6921,9 @@ def pfr_transiente(P, nome):
     fs.streams.forEach(s => {
       const a = fs.blocks.find(b => b.id === s.from), b = fs.blocks.find(x => x.id === s.to);
       if (!a) errs.push('corrente ' + s.name + ': origem ' + s.from + ' não existe');
-      else if (U.TYPES[a.type].outs.indexOf(s.fromPort) < 0) errs.push('corrente ' + s.name + ': ' + a.type + ' não tem saída "' + s.fromPort + '" (saídas: ' + U.TYPES[a.type].outs.join(', ') + ')');
+      else if (U.TYPES[a.type].outs.concat(U.TYPES[a.type].eouts || []).indexOf(s.fromPort) < 0) errs.push('corrente ' + s.name + ': ' + a.type + ' não tem saída "' + s.fromPort + '" (saídas: ' + U.TYPES[a.type].outs.concat(U.TYPES[a.type].eouts || []).join(', ') + ')');
       if (!b) errs.push('corrente ' + s.name + ': destino ' + s.to + ' não existe');
-      else if (U.TYPES[b.type].ins.indexOf(s.toPort) < 0) errs.push('corrente ' + s.name + ': ' + b.type + ' não tem entrada "' + s.toPort + '" (entradas: ' + U.TYPES[b.type].ins.join(', ') + ')');
+      else if (U.TYPES[b.type].ins.concat(U.TYPES[b.type].eins || []).indexOf(s.toPort) < 0) errs.push('corrente ' + s.name + ': ' + b.type + ' não tem entrada "' + s.toPort + '" (entradas: ' + U.TYPES[b.type].ins.concat(U.TYPES[b.type].eins || []).join(', ') + ')');
     });
     if (ids.size !== fs.blocks.length) errs.push('ids de bloco repetidos');
     if (errs.length) throw new Error('Fluxograma inválido: ' + errs.join('; '));
@@ -6845,7 +7260,7 @@ def pfr_transiente(P, nome):
   const $ = s => document.querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false;
   const caps = { downloads: undefined };
@@ -6924,12 +7339,13 @@ def pfr_transiente(P, nome):
     onSelect: sel => { renderProps(); if (sel) switchTab('props'); updateSelBar(); if (sel && sel.kind === 'block' && results && results.blocks && results.blocks[sel.id] && (results.blocks[sel.id].plots || []).length) renderCharts(sel.id); },
     onChange: kind => { if (kind === 'move') { persist(); return; } afterChange(false); }, onBeforeMove: pushUndo,
     onConnect: (a, ap, b, bp) => { pushUndo(); connect(a, ap, b, bp); afterChange(true); },
+    onInvalid: msg => toast(msg),
     onOpen: id => { pfd.select({ kind: 'block', id }); const inp = $('#blkName'); if (inp) inp.focus(); },
     onDropType: (t, x, y) => addBlock(t, x, y)
   });
 
   function nextBlockId(type) { const p = PREFIX[type] || 'B'; let k = 101; while (state.blocks.some(b => b.id === p + '-' + k)) k++; return p + '-' + k; }
-  function nextStreamName() { let k = 1; const names = new Set(state.streams.map(s => String(s.name))); while (names.has(String(k))) k++; return String(k); }
+  function nextStreamName(energy) { let k = 1; const names = new Set(state.streams.map(s => String(s.name))), pre = energy ? 'E' : ''; while (names.has(pre + k)) k++; return pre + k; }
   function defaultParams(type) {
     const T = U.TYPES[type], p = {};
     (T.params || []).forEach(f => { if (f.def !== undefined) p[f.k] = f.def; });
@@ -6950,7 +7366,7 @@ def pfr_transiente(P, nome):
   }
   function connect(from, fromPort, to, toPort, name) {
     state.streams = state.streams.filter(s => !(s.to === to && s.toPort === toPort) && !(s.from === from && s.fromPort === fromPort));
-    const nm = name || nextStreamName(); let id = 'S' + nm.replace(/\W/g, ''); while (state.streams.some(s => s.id === id)) id += 'x';
+    const nm = name || nextStreamName(SF.flowsheet.isEnergyPort(fromPort) || SF.flowsheet.isEnergyPort(toPort)); let id = 'S' + nm.replace(/\W/g, ''); while (state.streams.some(s => s.id === id)) id += 'x';
     state.streams.push({ id, name: nm, from, fromPort, to, toPort });
   }
   function deleteSelected() {
@@ -7014,7 +7430,7 @@ def pfr_transiente(P, nome):
     const el = $('#propsBody'), sel = pfd.sel;
     if (!sel) {
       const verb = SF.mobile ? 'Toque' : 'Clique';
-      el.innerHTML = '<div class="eq-hint"><span class="eq-hint-ico" aria-hidden="true">📐</span><div><b>' + verb + ' em um equipamento no fluxograma</b> para ver aqui as <b>equações do modelo matemático</b> (EDPs, balanços e equilíbrio) e editar as especificações.</div></div>' +
+      el.innerHTML = '<div class="eq-hint"><span class="eq-hint-ico" aria-hidden="true">📐</span><div><b>' + verb + ' em um equipamento no fluxograma</b> para editar aqui os <b>dados de entrada</b> (já vêm preenchidos com valores que funcionam) e ver as <b>equações do modelo matemático</b> (EDPs, balanços e equilíbrio) e a teoria.</div></div>' +
         '<p class="muted">Ou selecione uma corrente para ver as propriedades dela.</p>' +
         '<div class="subhead">Equipamentos (' + state.blocks.length + ')</div>' +
         (state.blocks.length ? '<table class="grid"><tbody>' + state.blocks.map(b => '<tr><td><a href="#" data-sel="' + esc(b.id) + '">' + esc(b.name) + '</a></td><td>' + esc(U.TYPES[b.type].label) + '</td></tr>').join('') + '</tbody></table>' : '<p class="small muted">Nenhum ainda.</p>') +
@@ -7024,10 +7440,12 @@ def pfr_transiente(P, nome):
     }
     if (sel.kind === 'stream') {
       const s = state.streams.find(x => x.id === sel.id); if (!s) { el.innerHTML = ''; return; }
-      const r = results && results.streams && results.streams[s.id];
-      el.innerHTML = '<div class="blk-head"><input id="strName" value="' + esc(s.name) + '" aria-label="Nome da corrente"></div>' +
-        '<p class="small muted">' + esc(blockName(s.from)) + ' (' + esc(SF.flowsheet.portLabel(s.fromPort)) + ') → ' + esc(blockName(s.to)) + ' (' + esc(SF.flowsheet.portLabel(s.toPort)) + ')</p>' +
-        (r ? streamDetail(r) : '<p class="muted small">Simule para ver as propriedades.</p>') +
+      const r = results && results.streams && results.streams[s.id], en = SF.flowsheet.isEnergyStream(s), e = en && results && results.energy && results.energy[s.id];
+      el.innerHTML = '<div class="blk-head">' + (en ? IC.paletteIcon('energy') : '') + '<input id="strName" value="' + esc(s.name) + '" aria-label="Nome da corrente"></div>' +
+        '<p class="small muted">' + (en ? '⚡ Corrente de energia: ' : '') + esc(blockName(s.from)) + ' (' + esc(SF.flowsheet.portLabel(s.fromPort)) + ') → ' + esc(blockName(s.to)) + ' (' + esc(SF.flowsheet.portLabel(s.toPort)) + ')</p>' +
+        (en ? (e && e.Q != null ? '<table class="grid"><tbody><tr><td>Carga térmica</td><td class="num">' + nf(e.Q / 1000, 2) + ' kW</td></tr><tr><td>Valor</td><td>' + (e.spec ? 'informado na corrente de energia' : 'calculado pelo equipamento') + '</td></tr></tbody></table>'
+          : '<p class="muted small">Simule para ver a carga térmica.</p>') :
+        (r ? streamDetail(r) : '<p class="muted small">Simule para ver as propriedades.</p>')) +
         '<div class="row-actions"><button id="delStr">Excluir corrente</button></div>';
       $('#strName').onchange = e => { pushUndo(); s.name = e.target.value || s.name; afterChange(false); };
       $('#delStr').onclick = deleteSelected; return;
@@ -7035,21 +7453,32 @@ def pfr_transiente(P, nome):
     const b = state.blocks.find(x => x.id === sel.id); if (!b) { el.innerHTML = ''; return; }
     const T = U.TYPES[b.type];
     let h = '<div class="blk-head">' + IC.paletteIcon(b.type) + '<div style="flex:1"><input id="blkName" value="' + esc(b.name) + '" aria-label="Nome do equipamento"><div class="small muted">' + esc(T.label) + ' · ' + esc(b.id) + '</div></div></div>';
-    let eqOpen = true; try { eqOpen = localStorage.getItem('simulafacil.eqOpen') !== '0'; } catch (e) { /* */ }
-    if (SF.models) h += SF.models.html(b.type, b.params, state.model, eqOpen); // equações logo abaixo do nome do equipamento
-    let thOpen = true; try { thOpen = localStorage.getItem('simulafacil.thOpen') !== '0'; } catch (e) { /* */ }
-    if (SF.theory) h += SF.theory.html(b.type, thOpen);                          // teoria e exemplo, logo depois das equações
-    const r = results && results.blocks && results.blocks[b.id];
-    if (r) h += '<div class="subhead">Resultados</div>' + resTable(r) + ((r.plots || []).length ? '<div class="row-actions"><button id="showCharts">Ver gráficos (' + r.plots.length + ')</button></div>' : '');
-    if (results && results.errors) { const e = results.errors.find(x => x.block === b.id); if (e) h += '<div class="note err">' + esc(e.msg) + '</div>'; }
-    h += '<div class="subhead">Especificações</div>';
-    T.params.forEach(f => { h += fieldHTML(b, f); });
+    const r = results && results.blocks && results.blocks[b.id], hasM = SF.models && SF.models.get && SF.models.get(b.type, b.params), hasT = SF.theory && SF.theory.get && SF.theory.get(b.type);
+    // atalhos: dados de entrada primeiro; resultados, equações e teoria logo abaixo
+    h += '<div class="props-intro"><p><span aria-hidden="true">✏️</span> <b>Modifique os valores das variáveis</b>, se assim desejar: os valores estão pré-setados para ajudá-lo(a).</p>' +
+      '<nav class="props-jump" aria-label="Seções das propriedades"><span>Leia:</span>' + (hasM ? '<button type="button" data-jump="pEq">📐 as equações</button>' : '') + (hasT ? '<button type="button" data-jump="pTh">📖 a modelagem</button>' : '') +
+      (r ? '<button type="button" data-jump="pRes">📊 os resultados do exemplo</button>' : '<button type="button" data-runjump="1">📊 os resultados do exemplo</button>') + '</nav></div>';
+    h += '<div class="subhead" id="pDados">Dados de entrada</div>';
+    if (T.params.length) T.params.forEach(f => { h += fieldHTML(b, f); });
+    if (T.params.some(f => f.type === 'reactions')) h += rxHelpHTML(b.type);   // explicação da tabela de reações, logo depois das variáveis de entrada
+    else h += '<p class="small muted">Este equipamento não tem dados para informar: basta ligar as correntes.</p>';
     h += '<div class="row-actions"><button id="runFromProps" class="primary">Simular</button><button id="delBlk">Excluir equipamento</button></div>';
+    if (results && results.errors) { const e = results.errors.find(x => x.block === b.id); if (e) h += '<div class="note err">' + esc(e.msg) + '</div>'; }
+    if (r) h += '<div class="subhead" id="pRes">Resultados</div>' + resTable(r) + ((r.plots || []).length ? '<div class="row-actions"><button id="showCharts">Ver gráficos (' + r.plots.length + ')</button></div>' : '');
+    let eqOpen = true; try { eqOpen = localStorage.getItem('simulafacil.eqOpen') !== '0'; } catch (e) { /* */ }
+    if (SF.models) h += '<div id="pEq"></div>' + SF.models.html(b.type, b.params, state.model, eqOpen); // equações do modelo matemático
+    let thOpen = true; try { thOpen = localStorage.getItem('simulafacil.thOpen') !== '0'; } catch (e) { /* */ }
+    if (SF.theory) h += '<div id="pTh"></div>' + SF.theory.html(b.type, thOpen);                          // teoria e exemplo
     el.innerHTML = h;
     $('#blkName').onchange = e => { pushUndo(); b.name = e.target.value || b.name; afterChange(false); };
     $('#delBlk').onclick = deleteSelected; $('#runFromProps').onclick = () => runSimulation();
+    el.querySelectorAll('[data-runjump]').forEach(bt => { bt.onclick = () => { runSimulation(); setTimeout(() => { const t = $('#pRes'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 120); }; });
+    el.querySelectorAll('[data-jump]').forEach(bt => { bt.onclick = () => { const t = el.querySelector('#' + bt.dataset.jump); if (!t) return;
+      const d = t.nextElementSibling && t.nextElementSibling.tagName === 'DETAILS' ? t.nextElementSibling : null; if (d) d.open = true;
+      t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }; });
     if ($('#showCharts')) $('#showCharts').onclick = () => { renderCharts(b.id); if (SF.mobile) setMView('charts'); };
     const md = el.querySelector('.model-eq:not(.theory)'); if (md) md.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.eqOpen', md.open ? '1' : '0'); } catch (e) { /* */ } });
+    const rxh = el.querySelector('.rx-help'); if (rxh) rxh.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.rxHelpOpen', rxh.open ? '1' : '0'); } catch (e) { /* */ } });
     const tdet = el.querySelector('.model-eq.theory'); if (tdet) tdet.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.thOpen', tdet.open ? '1' : '0'); } catch (e) { /* */ } });
     el.querySelectorAll('[data-open-example]').forEach(btn => { btn.onclick = () => { const exm = SF.examples.find(x => x.key === btn.dataset.openExample); if (!exm) return; loadFlowsheet(exm.fs); runSimulation(true); toast('Exemplo carregado: ' + exm.title); if (SF.mobile) setMView('flow'); }; });
     bindFields(b);
@@ -7079,6 +7508,30 @@ def pfr_transiente(P, nome):
     }
     if (f.type === 'reactions') return reactionsHTML(b);
     return '<div class="field"><label for="f_' + f.k + '">' + esc(f.label) + (f.u ? '<span class="u">' + esc(f.u) + '</span>' : '') + '</label><input id="f_' + f.k + '" type="number" step="any" data-k="' + f.k + '" value="' + (v == null ? '' : esc(v)) + '"></div>';
+  }
+  // explicação da tabela de reações (texto do Prof. Juan): componente, ν, ordem e os três módulos de dados
+  function rxHelpHTML(type) {
+    const conv = type === 'rconv', sub = (a, b2) => a + '<sub>' + b2 + '</sub>', sup = (a, b2) => a + '<sup>' + b2 + '</sup>';
+    let open = true; try { open = localStorage.getItem('simulafacil.rxHelpOpen') !== '0'; } catch (e) { /* */ }
+    return '<details class="rx-help"' + (open ? ' open' : '') + '><summary><span aria-hidden="true">💡</span> <b>Como preencher a tabela de reações</b></summary><div class="rx-help-body">' +
+      '<p class="rh-t">1. Parâmetros da tabela de componentes</p><ul>' +
+      '<li><b>Componente:</b> identifica os reagentes, os produtos e os inertes do sistema.</li>' +
+      '<li><b>ν (estequiometria):</b> coeficiente estequiométrico da reação.<ul>' +
+        '<li><b>negativo</b> (−1 para A): reagente, consumido;</li><li><b>positivo</b> (+1 para B): produto, formado;</li>' +
+        '<li><b>zero</b> (0 para a água): inerte, não reage e atua apenas como solvente ou meio reacional.</li></ul></li>' +
+      (conv ? '<li><b>Componente-chave e conversão:</b> no reator de conversão não há cinética; informa-se a fração do componente-chave que reage (0 a 1), e a estequiometria distribui o consumo e a formação dos demais.</li></ul>'
+        : '<li><b>Ordem (' + sub('n', 'i') + '):</b> expoente da concentração do componente na lei de velocidade, r = k·' + sup(sub('C', 'A'), sub('n', 'A')) + '·' + sup(sub('C', 'B'), sub('n', 'B')) + '.<ul>' +
+          '<li><b>A com ordem 1:</b> a velocidade depende linearmente da concentração de A (' + sub('r', 'A') + ' = −k·' + sub('C', 'A') + ');</li>' +
+          '<li><b>B e água com ordem 0:</b> as concentrações de B e da água não afetam a velocidade.</li></ul></li></ul>' +
+        '<p class="rh-t">2. Por que a ordem é informada separadamente da estequiometria?</p>' +
+        '<p>A estequiometria (ν) informa apenas a proporção de matéria consumida e formada pela equação química balanceada (balanço de massa). A ordem de reação (n) é um parâmetro cinético experimental, que determina a dependência real da velocidade com a concentração.</p><ul>' +
+        '<li>Duas reações podem ter a mesma estequiometria (A → B) e leis de velocidade bem diferentes: ordem 1 (r = k·' + sub('C', 'A') + '), ordem 2 (r = k·' + sup(sub('C', 'A'), '2') + '), ordem fracionária ou dependência de catalisadores.</li>' +
+        '<li>Só nas reações elementares a ordem coincide com os coeficientes estequiométricos. Por isso os simuladores pedem que o usuário informe a ordem.</li></ul>') +
+      '<p class="rh-t">' + (conv ? '2' : '3') + '. Onde fica cada dado: três módulos</p><ol>' +
+      '<li><b>Reação</b> (esta tabela): define como a reação ocorre, independentemente do reator: ' + (conv ? 'estequiometria, componente-chave, conversão' : 'estequiometria, ordem de reação, constante de velocidade k, energia de ativação ' + sub('E', 'a')) + ' e calor de reação ΔH.</li>' +
+      '<li><b>Corrente de alimentação</b> (o bloco F do fluxograma): concentração inicial de A (' + sub('C', 'A0') + ') ou fração molar ou mássica, vazão (' + sub('v', '0') + ' ou ' + sub('F', '0') + ') e temperatura de entrada (' + sub('T', '0') + ').</li>' +
+      '<li><b>Reator</b> (os campos acima): ' + (type === 'pfr' ? 'volume V, diâmetro e condição térmica' : type === 'cstr' ? 'volume V (o tempo de residência τ = V/' + sub('v', '0') + ' aparece nos resultados), regime e condição térmica' : 'condição térmica e temperatura') + '.</li></ol>' +
+      '<p>Essa separação permite usar a mesma reação com outras alimentações ou em outros reatores sem redefinir os dados cinéticos. Para mudar a concentração de A, clique na corrente de alimentação no fluxograma.</p></div></details>';
   }
   function reactionsHTML(b) {
     const rx = b.params.reactions || []; const conv = b.type === 'rconv';

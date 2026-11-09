@@ -2202,18 +2202,25 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'specType', label: 'Tipo de especificação', type: 'select', options: ['nenhuma', 'pureza no destilado', 'pureza no fundo', 'recuperação no destilado'], def: 'nenhuma' },
       { k: 'specValue', label: 'Valor alvo da especificação', u: '0–1', def: 0.85 },
       { k: 'specVary', label: 'Variável manipulada', type: 'select', options: ['R', 'D'], def: 'R' }] },
-    column_reflux: { label: 'Coluna McCabe–Thiele com refluxo ajustável (barra deslizante de R)', cat: 'Colunas', ins: ['feed'], outs: ['distillate', 'bottoms'], eins: ['qr'], eouts: ['qc'], params: [
+    column_reflux: { label: 'Coluna McCabe–Thiele com refluxo ajustável e pré-aquecedor (barra deslizante de R, otimização de energia)', cat: 'Colunas', ins: ['feed'], outs: ['distillate', 'bottoms'], eins: ['q_pre', 'qr'], eouts: ['qc'], params: [
       { k: 'R', label: 'Razão de refluxo R = L/D', u: '', type: 'range', min: 1, max: 4, step: 0.01, def: 2.5 },
+      { k: 'Qpre', label: 'Q_pré: energia injetada na alimentação pelo pré-aquecedor acoplado', u: 'kW', type: 'range', min: 0, max: 300, step: 1, def: 0 },
       { k: 'lk', label: 'Componente 1 — mais volátil', type: 'comp', def: 'ethanol' }, { k: 'hk', label: 'Componente 2 — menos volátil', type: 'comp', def: 'water' },
       { k: 'xD', label: 'Fração molar do componente 1 no destilado xD', u: '0–1', def: 0.80 },
       { k: 'xB', label: 'Fração molar do componente 1 no fundo xB', u: '0–1', def: 0.01 },
-      { k: 'q', label: 'Condição térmica da alimentação q (1 = líquido saturado)', u: '', def: 1 },
+      { k: 'q', label: 'Condição térmica da alimentação antes do pré-aquecedor q (1 = líquido saturado)', u: '', def: 1 },
       { k: 'N', label: 'Nº total de estágios (o último é o refervedor)', u: '', def: 20 }, { k: 'Nf', label: 'Estágio da alimentação', u: '', def: 10 },
       { k: 'vle', label: 'Equilíbrio líquido-vapor', type: 'select', options: ['Margules + Antoine (como no código original)', 'modelo termodinâmico do fluxograma'], def: 'Margules + Antoine (como no código original)' },
       { k: 'A12', label: 'Margules A12', u: '', def: 1.6022 }, { k: 'A21', label: 'Margules A21', u: '', def: 0.7947 },
       { k: 'ant1', label: 'Antoine do componente 1: A  B  C (log10 P[mmHg] = A − B/(T[°C] + C))', type: 'matrix', def: '8.04494 1554.3 222.65' },
       { k: 'ant2', label: 'Antoine do componente 2: A  B  C', type: 'matrix', def: '8.07131 1730.63 233.426' },
-      Object.assign({ def: 1.01325 }, P_P)] },
+      Object.assign({ def: 1.01325 }, P_P),
+      { k: 'cS', label: 'Otimização — custo do vapor do refervedor', u: 'R$/GJ', def: 70 },
+      { k: 'cP', label: 'Otimização — custo da energia do pré-aquecedor (vapor de baixa pressão ou calor recuperado)', u: 'R$/GJ', def: 25 },
+      { k: 'cW', label: 'Otimização — custo da água de resfriamento do condensador', u: 'R$/GJ', def: 2 },
+      { k: 'cSt', label: 'Otimização — custo anualizado de um estágio (coluna com 100 kmol/h de vapor; cresce com √V)', u: 'R$/ano', def: 20000 },
+      { k: 'cHx', label: 'Otimização — custo anualizado dos trocadores (refervedor + condensador) por kW', u: 'R$/(kW·ano)', def: 100 },
+      { k: 'hrs', label: 'Otimização — horas de operação por ano', u: 'h', def: 8000 }] },
     column_mt: { label: 'Coluna McCabe–Thiele com pré-aquecedor embutido (sem heater externo)', cat: 'Colunas', ins: ['feed'], outs: ['distillate', 'bottoms'], eins: ['q_pre', 'qr'], eouts: ['qc'], params: [
       { k: 'pre', label: 'Pré-aquecedor da alimentação (embutido na coluna)', type: 'select', options: ['carga térmica Q_pré informada', 'aquecer até líquido saturado (q = 1)', 'temperatura de saída do pré-aquecedor', 'sem pré-aquecimento'], def: 'carga térmica Q_pré informada' },
       { k: 'Qpre', label: 'Q_pré: calor adicionado à alimentação', u: 'kW', def: 100 },
@@ -3401,12 +3408,12 @@ window.SIMULAFACIL_CONFIG = {
     if (i1 < 0 || i2 < 0 || i1 === i2) throw new Error('escolha os componentes 1 (mais volátil) e 2 (menos volátil)');
     const Fb = s.flows[i1] + s.flows[i2]; if (!(Fb > 0)) throw new Error('a alimentação não contém os componentes escolhidos');
     for (let i = 0; i < n; i++) if (i !== i1 && i !== i2 && s.flows[i] > 1e-6 * s.F) throw new Error('coluna binária: a alimentação tem ' + th.c[i].name);
-    const xF = s.flows[i1] / Fb, xD = num(p.xD, 0.8), xB = num(p.xB, 0.01), q = num(p.q, 1), R_ = num(p.R, 2), P = num(p.P, 1.01325) * BAR;
+    const xF = s.flows[i1] / Fb, xD = num(p.xD, 0.8), xB = num(p.xB, 0.01), q0 = num(p.q, 1), R_ = num(p.R, 2), P = num(p.P, 1.01325) * BAR;
     const Ntot = Math.max(2, Math.round(num(p.N, 20))), Nf = clamp(Math.round(num(p.Nf, 10)), 1, Ntot);
     if (!(xB < xF && xF < xD && xD < 1 && xB > 0)) throw new Error('as frações devem obedecer 0 < xB < xF < xD < 1 (xF = ' + xF.toFixed(4) + ')');
     const marg = !/^modelo/.test(p.vle || ''), vec = v => { const a = new Array(n).fill(0); a[i1] = v; a[i2] = 1 - v; return a; };
-    // curva de equilíbrio (400 pontos) e temperatura de bolha
-    let eqx = N.linspace(0, 1, 401), eqy, eqT;
+    // curva de equilíbrio (401 pontos) e temperatura de bolha
+    const eqx = N.linspace(0, 1, 401); let eqy, eqT;
     if (marg) {
       const parse = (t, nm) => { const r = SF.ternary.parseMatrix(t, 3)[0]; if (!r || !r.every(isFinite)) throw new Error('constantes de Antoine do ' + nm + ': informe A B C'); return r; };
       const a1 = parse(p.ant1, 'componente 1'), a2 = parse(p.ant2, 'componente 2'), A12 = num(p.A12, 1.6022), A21 = num(p.A21, 0.7947), Pmm = P / 133.322368;
@@ -3421,63 +3428,114 @@ window.SIMULAFACIL_CONFIG = {
     } else {
       eqy = eqx.map(x => (x <= 0 ? 0 : x >= 1 ? 1 : th.bubbleT(vec(x), P).y[i1])); eqT = eqx.map(x => K2C(th.bubbleT(vec(Math.min(1 - 1e-9, Math.max(1e-9, x))), P).T));
     }
-    // azeótropo (y = x) e trecho monotônico usado nos degraus
     let az = null; for (let k = 40; k < eqx.length - 2; k++) { const d0 = eqy[k] - eqx[k], d1 = eqy[k + 1] - eqx[k + 1]; if (d0 > 0 && d1 < -1e-9) { az = { x: eqx[k] + d0 / (d0 - d1) * (eqx[k + 1] - eqx[k]) }; break; } }
     const kmax = az ? Math.max(2, eqx.findIndex(x => x > az.x)) : eqx.length; const ex = eqx.slice(0, kmax), ey = eqy.slice(0, kmax);
     if (az && xD >= az.x) throw new Error('xD = ' + xD + ' está acima do azeótropo (x = ' + az.x.toFixed(3) + '): a destilação simples não chega lá');
     const lin = (xs, ys, v) => { if (v <= xs[0]) return ys[0]; for (let k = 1; k < xs.length; k++) if (xs[k] >= v) return ys[k - 1] + (v - xs[k - 1]) / (xs[k] - xs[k - 1]) * (ys[k] - ys[k - 1]); return ys[ys.length - 1]; };
     const yEq = x => lin(ex, ey, x), xEq = y => lin(ey, ex, y), Teq = x => lin(eqx, eqT, x);
-    // retas: retificação, q e esgotamento; refluxo mínimo no ponto de estrangulamento da reta q
-    const ops = R => { const a = R / (R + 1), c = xD / (R + 1); let xi, yi;
-      if (Math.abs(q - 1) < 1e-9) { xi = xF; yi = a * xF + c; } else { const m = q / (q - 1), c0 = -xF / (q - 1); xi = (c0 - c) / (a - m); yi = a * xi + c; }
-      const as = (yi - xB) / (xi - xB); return { a, c, xi, yi, as, bs: xB - as * xB }; };
-    let xp; if (Math.abs(q - 1) < 1e-9) xp = xF; else { const m = q / (q - 1), c0 = -xF / (q - 1); xp = N.brent(x => yEq(x) - (m * x + c0), 1e-9, ex[ex.length - 1] - 1e-9, 1e-12); }
-    const yp = yEq(xp); let Rmin = (xD - yp) / (yp - xp);
-    // ponto de tangência (etanol/água): a reta de retificação não pode cortar a curva de equilíbrio
-    for (let k = 1; k < ex.length; k++) if (ex[k] > xp && ex[k] < xD) { const r = (xD - ey[k]) / (ey[k] - ex[k]); if (r > Rmin) Rmin = r; }
-    // degraus como no código original: N estágios a partir do topo, troca de reta no estágio da alimentação
-    const stepFixed = R => { const o = ops(R), path = { x: [xD], y: [xD] }, xs = []; let y = xD, pinch = null, reach = null;
-      for (let i = 1; i <= Ntot; i++) { const x = Math.max(0, xEq(y)); xs.push(x); path.x.push(x); path.y.push(y);
-        if (x <= xB + 1e-12) { reach = i; break; }
-        if (i === Ntot || x <= 1e-7) break;
-        const yn = i < Nf ? o.a * x + o.c : o.as * x + o.bs;
-        if (yn >= yEq(x) - 1e-9 || yn >= y - 1e-12) { pinch = { stage: i, x }; break; }   // reta de operação encostou na curva: estrangulamento
-        y = Math.max(0, yn); path.x.push(x); path.y.push(y); }
-      return { o, path, xs, pinch, reach }; };
-    // nº de estágios necessários para chegar a xB (alimentação ótima) e refluxo total
-    const stepNeed = R => { if (R <= Rmin * 1.0005) return { N: Infinity }; const o = ops(R); let y = xD, x, k = 0, feed = null;
-      while (k < 200) { x = xEq(y); k++; if (x <= xB) { const xprev = k > 1 ? xEq(y) : xD; return { N: k, feed: feed || k }; } if (feed === null && x < o.xi) feed = k; y = (feed !== null ? o.as * x + o.bs : o.a * x + o.c); if (y <= x + 1e-12) return { N: Infinity }; }
-      return { N: Infinity }; };
-    const stepFrac = R => { if (R <= Rmin * 1.0005) return Infinity; const o = ops(R); let y = xD, xprev = xD, k = 0, sw = false;
-      while (k < 300) { const x = xEq(y); k++; if (x <= xB) return k - 1 + (xprev - xB) / (xprev - x); if (!sw && x < o.xi) sw = true; y = sw ? o.as * x + o.bs : o.a * x + o.c; if (y <= x + 1e-12) return Infinity; xprev = x; } return Infinity; };
+    // energia: calor de vaporização da mistura e pré-aquecedor acoplado (q efetivo = q − Q_pré/(F·λ_F))
+    const lam = (x, T) => x * SF.thermo.dHvapComp(th.c[i1], C2K(T)) + (1 - x) * SF.thermo.dHvapComp(th.c[i2], C2K(T));
+    const F = Fb, D = F * (xF - xB) / (xD - xB), B = F - D, TD = Teq(xD), TB = Teq(xB), TF = Teq(xF);
+    const lD = lam(xD, TD), lB = lam(xB, TB), lF = lam(xF, TF);
+    const ePre = ins.q_pre && ins.q_pre.spec ? ins.q_pre : null, Qpre = ePre ? ePre.Q : num(p.Qpre, 0) * 1000;
+    const qOf = Qp => q0 - Qp / (F * lF);
+    const design = qv => {                                                   // retas, refluxo mínimo e degraus para um dado q
+      const ops = R => { const a = R / (R + 1), c = xD / (R + 1); let xi, yi;
+        if (Math.abs(qv - 1) < 1e-9) { xi = xF; yi = a * xF + c; } else { const m = qv / (qv - 1), c0 = -xF / (qv - 1); xi = (c0 - c) / (a - m); yi = a * xi + c; }
+        const as = (yi - xB) / (xi - xB); return { a, c, xi, yi, as, bs: xB - as * xB }; };
+      let xp; if (Math.abs(qv - 1) < 1e-9) xp = xF; else { const m = qv / (qv - 1), c0 = -xF / (qv - 1); try { xp = N.brent(x => yEq(x) - (m * x + c0), 1e-9, ex[ex.length - 1] - 1e-9, 1e-12); } catch (e) { xp = xF; } }
+      const yp = yEq(xp); let Rmin = (xD - yp) / (yp - xp);
+      for (let k = 1; k < ex.length; k++) if (ex[k] > xp && ex[k] < xD) { const r = (xD - ey[k]) / (ey[k] - ex[k]); if (r > Rmin) Rmin = r; }
+      const stepFrac = R => { if (R <= Rmin * 1.0005) return Infinity; const o = ops(R); let y = xD, xprev = xD, k = 0, sw = false;
+        while (k < 300) { const x = xEq(y); k++; if (x <= xB) return k - 1 + (xprev - xB) / (xprev - x); if (!sw && x < o.xi) sw = true; y = sw ? o.as * x + o.bs : o.a * x + o.c; if (y <= x + 1e-12) return Infinity; xprev = x; } return Infinity; };
+      const stepNeed = R => { if (R <= Rmin * 1.0005) return { N: Infinity }; const o = ops(R); let y = xD, x, k = 0, feed = null;
+        while (k < 300) { x = xEq(y); k++; if (x <= xB) return { N: k, feed: feed || k }; if (feed === null && x < o.xi) feed = k; y = (feed !== null ? o.as * x + o.bs : o.a * x + o.c); if (y <= x + 1e-12) return { N: Infinity }; }
+        return { N: Infinity }; };
+      const stepFixed = R => { const o = ops(R), path = { x: [xD], y: [xD] }, xs = []; let y = xD, pinch = null, reach = null;
+        for (let i = 1; i <= Ntot; i++) { const x = Math.max(0, xEq(y)); xs.push(x); path.x.push(x); path.y.push(y);
+          if (x <= xB + 1e-12) { reach = i; break; }
+          if (i === Ntot || x <= 1e-7) break;
+          const yn = i < Nf ? o.a * x + o.c : o.as * x + o.bs;
+          if (yn >= yEq(x) - 1e-9 || yn >= y - 1e-12) { pinch = { stage: i, x }; break; }
+          y = Math.max(0, yn); path.x.push(x); path.y.push(y); }
+        return { o, path, xs, pinch, reach }; };
+      return { ops, Rmin, stepFrac, stepNeed, stepFixed };
+    };
+    // cargas e custo anual (vazões molares constantes)
+    const loads = (R, qv, Qp) => { const V = (R + 1) * D, Vs = V - (1 - qv) * F; return { V, Vs, L: R * D, Ls: R * D + qv * F, Qc: -V * lD, Qr: Vs * lB, Qp }; };
+    const cS = num(p.cS, 70), cP = num(p.cP, 25), cW = num(p.cW, 2), cSt = num(p.cSt, 20000), cHx = num(p.cHx, 100), hrs = num(p.hrs, 8000), GJ = hrs * 3600 / 1e9;
+    const cost = (R, Qp) => { const qv = qOf(Qp), d = design(qv), Nn = d.stepFrac(R), l = loads(R, qv, Qp);
+      if (!isFinite(Nn) || l.Vs <= 0) return null;
+      const energy = GJ * (Math.max(0, l.Qr) * cS + Math.max(0, Qp) * cP + Math.abs(l.Qc) * cW), capital = Nn * cSt * Math.sqrt(l.V / (100 * KMOLH)) + cHx * (Math.abs(l.Qr) + Math.abs(l.Qc)) / 1000;
+      return { energy, capital, total: energy + capital, N: Nn, l }; };
+    const qe = qOf(Qpre);
+    if (qe < 0) throw new Error('Q_pré = ' + (Qpre / 1000).toFixed(1) + ' kW vaporiza toda a alimentação (q efetivo = ' + qe.toFixed(3) + '): reduza o pré-aquecimento');
+    const dz = design(qe), Rmin = dz.Rmin, need = dz.stepNeed(R_), fx = dz.stepFixed(R_), Nfrac = dz.stepFrac(R_), xLast = fx.xs[fx.xs.length - 1], Ld = loads(R_, qe, Qpre);
     let Nmin = 0; { let x = xD; while (Nmin < 300 && x > xB) { const xn = xEq(x); Nmin++; if (xn <= xB) { Nmin = Nmin - 1 + (x - xB) / (x - xn); break; } x = xn; } }
-    const need = stepNeed(R_), fx = stepFixed(R_), Nfrac = stepFrac(R_), xLast = fx.xs[fx.xs.length - 1];
     if (R_ <= Rmin) warn.push('R = ' + R_.toFixed(2) + ' está abaixo do refluxo mínimo (Rmín = ' + Rmin.toFixed(3) + '): estrangulamento, a separação pedida é impossível');
     else if (fx.pinch) warn.push('com alimentação no estágio ' + Nf + ', a reta de operação encosta na curva de equilíbrio no estágio ' + fx.pinch.stage + ' (x = ' + fx.pinch.x.toFixed(4) + '): aumente R ou mude o estágio de alimentação (ótimo: ' + need.feed + ')');
     else if (!fx.reach) warn.push('com ' + Ntot + ' estágios e alimentação no ' + Nf + ', o último estágio chega a x = ' + xLast.toFixed(4) + ', acima de xB = ' + xB + ': aumente R ou o nº de estágios');
-    // balanços (vazões molares constantes)
-    const F = Fb, D = F * (xF - xB) / (xD - xB), B = F - D, L = R_ * D, V = L + D, Ls = L + q * F, Vs = V - (1 - q) * F;
-    const TD = Teq(xD), TB = Teq(xB), lam = (x, T) => x * SF.thermo.dHvapComp(th.c[i1], C2K(T)) + (1 - x) * SF.thermo.dHvapComp(th.c[i2], C2K(T));
-    const Qc = -V * lam(xD, TD), Qr = Vs * lam(xB, TB);
-    const satL = z => { const fl = th.flashPVF(z, P, 0); return fl; };
-    const dz = vec(xD), bz = vec(xB), fD = satL(dz), fB = satL(bz);
-    const dist = mkStream(th, dz.map(v => v * D), fD.T, P, fD), bot = mkStream(th, bz.map(v => v * B), fB.T, P, fB);
-    const nm1 = th.c[i1].name, nm2 = th.c[i2].name, f2 = (v, k) => (+v).toFixed(k).replace('.', ',');
+    if (Ld.Vs <= 0) warn.push('o pré-aquecimento é tão grande que o vapor do esgotamento V′ ficou ≤ 0: reduza Q_pré ou aumente R');
+    // otimização: custo anual × R (com o Q_pré atual) e para vários Q_pré
+    const Rhi = Math.max(4, R_ * 1.3, Rmin * 3.5), Rgrid = R0 => N.linspace(Math.max(R0 * 1.01, 0.05), Rhi, 120);
+    const Rs = Rgrid(Rmin), C = Rs.map(R => cost(R, Qpre));
+    let iopt = -1; C.forEach((c, k) => { if (c && (iopt < 0 || c.total < C[iopt].total)) iopt = k; });
+    let Ropt = iopt >= 0 ? Rs[iopt] : null;
+    if (iopt > 0 && iopt < Rs.length - 1) { // refina o mínimo por seção áurea entre os vizinhos da grade
+      let a0 = Rs[iopt - 1], b1 = Rs[iopt + 1]; const g = (Math.sqrt(5) - 1) / 2, tc = R => { const c = cost(R, Qpre); return c ? c.total : Infinity; };
+      for (let it = 0; it < 40; it++) { const c1 = b1 - g * (b1 - a0), c2 = a0 + g * (b1 - a0); if (tc(c1) < tc(c2)) b1 = c2; else a0 = c1; }
+      Ropt = 0.5 * (a0 + b1); }
+    // coluna existente: menor R que atinge xB com N estágios e a alimentação no estágio informado (ótimo de operação)
+    const reaches = R => !!dz.stepFixed(R).reach; let Rop = null;
+    if (reaches(Rhi)) { let lo = Rmin * 1.0005, hi = Rhi; if (reaches(lo)) Rop = lo; else { for (let it = 0; it < 50; it++) { const mid = 0.5 * (lo + hi); if (reaches(mid)) hi = mid; else lo = mid; } Rop = hi; } }
+    const Lop = Rop != null ? loads(Rop, qe, Qpre) : null;
+    const cNow = cost(R_, Qpre), cOpt = Ropt != null ? cost(Ropt, Qpre) : null;
+    const nm1 = th.c[i1].name, nm2 = th.c[i2].name, f2 = (v, k) => (+v).toFixed(k).replace('.', ','), kW1 = v => f2(v / 1000, 1), brl = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR').replace(/\./g, ' ');
+    const dzD = vec(xD), bz = vec(xB), fD = th.flashPVF(dzD, P, 0), fB = th.flashPVF(bz, P, 0);
+    const dist = mkStream(th, dzD.map(v => v * D), fD.T, P, fD), bot = mkStream(th, bz.map(v => v * B), fB.T, P, fB);
     const res = [{ k: 'Razão de refluxo R (barra deslizante)', v: +R_.toFixed(3), u: '' },
+      { k: 'Pré-aquecedor acoplado: Q_pré' + (ePre ? ' (da corrente de energia)' : '') + ' e q efetivo da alimentação', v: kW1(Qpre) + ' kW / q = ' + f2(qe, 3), u: '' },
       { k: 'Refluxo mínimo Rmín e R/Rmín', v: f2(Rmin, 3) + ' / ' + (Rmin > 0 ? f2(R_ / Rmin, 2) : '—'), u: '' },
-      { k: 'Fração de ' + nm1 + ' na alimentação xF e condição q', v: f2(xF, 4) + ' / ' + f2(q, 3), u: '' },
+      { k: 'Fração de ' + nm1 + ' na alimentação xF', v: +xF.toFixed(4), u: '' },
       { k: 'Vazões D / B', v: f2(D / KMOLH, 3) + ' / ' + f2(B / KMOLH, 3), u: 'kmol/h' },
-      { k: 'Vazões internas L / V (retificação) e L′ / V′ (esgotamento)', v: f2(L / KMOLH, 2) + ' / ' + f2(V / KMOLH, 2) + ' e ' + f2(Ls / KMOLH, 2) + ' / ' + f2(Vs / KMOLH, 2), u: 'kmol/h' },
-      { k: 'Estágios mínimos (refluxo total, Fenske gráfico)', v: +Nmin.toFixed(2), u: '' },
+      { k: 'Vazões internas L / V (retificação) e L′ / V′ (esgotamento)', v: f2(Ld.L / KMOLH, 2) + ' / ' + f2(Ld.V / KMOLH, 2) + ' e ' + f2(Ld.Ls / KMOLH, 2) + ' / ' + f2(Ld.Vs / KMOLH, 2), u: 'kmol/h' },
+      { k: 'Estágios mínimos (refluxo total)', v: +Nmin.toFixed(2), u: '' },
       { k: 'Estágios necessários para xD e xB com este R (alimentação ótima)', v: isFinite(Nfrac) ? f2(Nfrac, 2) + ' (' + need.N + ' inteiros, alimentação no ' + need.feed + ')' : 'infinitos (R ≤ Rmín)', u: '' },
       { k: 'Coluna com ' + Ntot + ' estágios e alimentação no ' + Nf, v: fx.pinch ? 'estrangula no estágio ' + fx.pinch.stage + ' (x = ' + fx.pinch.x.toFixed(4) + ')' : fx.reach ? 'atinge xB no estágio ' + fx.reach + (fx.reach < Ntot ? ' (sobram ' + (Ntot - fx.reach) + ' estágios)' : '') : 'não atinge xB (x no estágio ' + Ntot + ' = ' + xLast.toFixed(4) + ')', u: '' },
       { k: 'T do topo / T do fundo (pontos de bolha)', v: f2(TD, 2) + ' / ' + f2(TB, 2), u: '°C' },
-      { k: 'Carga do condensador / do refervedor', v: f2(Qc / 1000, 1) + ' / ' + f2(Qr / 1000, 1), u: 'kW' },
+      { k: 'Cargas: pré-aquecedor / refervedor / condensador', v: kW1(Qpre) + ' / ' + kW1(Ld.Qr) + ' / ' + kW1(Ld.Qc), u: 'kW' },
+      { k: 'Energia total adicionada (Q_pré + Q_r)', v: +((Qpre + Ld.Qr) / 1000).toFixed(1), u: 'kW' },
+      { k: 'Custo anual com este R: energia + equipamento', v: cNow ? brl(cNow.energy) + ' + ' + brl(cNow.capital) + ' = ' + brl(cNow.total) : '—', u: '' },
+      { k: 'Coluna existente (' + Ntot + ' estágios, alimentação no ' + Nf + '): menor R que atinge xB e Q_r nesse R', v: Rop != null ? f2(Rop, 3) + ' / ' + kW1(Lop.Qr) + ' kW' : 'não atinge xB até R = ' + f2(Rhi, 1), u: '' },
+      { k: 'Projeto de coluna nova (N livre): refluxo ótimo de menor custo anual e R_ót/Rmín', v: cOpt ? f2(Ropt, 3) + ' / ' + f2(Ropt / Rmin, 2) : '—', u: '' },
+      { k: 'No ótimo: estágios, Q_r e custo anual', v: cOpt ? f2(cOpt.N, 1) + ' / ' + kW1(cOpt.l.Qr) + ' kW / ' + brl(cOpt.total) : '—', u: '' },
       { k: 'Equilíbrio usado', v: marg ? 'Margules (A12 = ' + f2(num(p.A12, 1.6022), 4) + ', A21 = ' + f2(num(p.A21, 0.7947), 4) + ') + Antoine' : 'modelo termodinâmico do fluxograma', u: '' }];
     if (az) res.push({ k: 'Azeótropo (y = x)', v: +az.x.toFixed(4), u: 'fração de ' + nm1 });
-    const o = fx.o;
-    const plots = [{ kind: 'mccabe', title: 'McCabe-Thiele (' + nm1 + '/' + nm2 + ') | R = ' + R_.toFixed(2), data: { eq: { x: eqx, y: eqy }, path: fx.path, xD, xB, zF: xF, q, xi: o.xi, yi: o.yi, R: R_, Rmin, nStages: fx.xs.length, az, light: nm1, heavy: nm2 } }];
-    const Rs = N.linspace(Math.max(Rmin * 1.02, 0.05), Math.max(4, R_ * 1.5, Rmin * 3), 80), Ns = Rs.map(stepFrac);
+    if (cNow && cOpt && Math.abs(R_ - Ropt) > 0.02) res.splice(16, 0, { k: 'Diferença de custo entre o R atual e o R ótimo do projeto', v: brl(cNow.total - cOpt.total) + ' por ano', u: '' });
+    // gráficos
+    const o = fx.o, plots = [{ kind: 'mccabe', title: 'McCabe-Thiele (' + nm1 + '/' + nm2 + ') | R = ' + R_.toFixed(2) + (Qpre ? ' | Q_pré = ' + (Qpre / 1000).toFixed(0) + ' kW' : ''), data: { eq: { x: eqx, y: eqy }, path: fx.path, xD, xB, zF: xF, q: qe, xi: o.xi, yi: o.yi, R: R_, Rmin, nStages: fx.xs.length, az, light: nm1, heavy: nm2 } }];
+    const Rl = N.linspace(1, Rhi, 80), Lr = Rl.map(R => loads(R, qe, Qpre)), mk = (name, y, color, dash, w) => ({ name, x: Rl, y, color, dash: dash || 'solid', width: w || 2.6 });
+    plots.push({ kind: 'curves', title: 'Energia × razão de refluxo (com Q_pré = ' + (Qpre / 1000).toFixed(0) + ' kW no pré-aquecedor)', data: { xLabel: 'Razão de refluxo R', yLabel: 'Carga térmica (kW)', series: [
+      mk('Refervedor Q_r', Lr.map(l => l.Qr / 1000), '#d1302b'), mk('Condensador |Q_c|', Lr.map(l => -l.Qc / 1000), '#2563c9'), mk('Pré-aquecedor Q_pré', Lr.map(() => Qpre / 1000), '#e88b2e', 'dot'),
+      mk('Total adicionado Q_pré + Q_r', Lr.map(l => (l.Qr + Qpre) / 1000), '#222', 'dash', 3),
+      { name: 'Rmín', x: [Rmin, Rmin], y: [0, Math.max.apply(null, Lr.map(l => (l.Qr + Qpre) / 1000)) * 1.05], color: '#8a8f98', dash: 'dot', width: 1.6 },
+      { name: 'R atual', x: [R_], y: [(Ld.Qr + Qpre) / 1000], mode: 'markers', color: '#111', size: 13 }].concat(Rop != null ? [{ name: 'Menor R que atinge xB nesta coluna (' + f2(Rop, 2) + ')', x: [Rop], y: [(Lop.Qr + Qpre) / 1000], mode: 'markers', color: '#2e9e6b', size: 14, symbol: 'diamond' }] : []) } });
+    const ok = C.map(c => !!c), sel = (fn) => Rs.map((R, k) => (ok[k] ? fn(C[k]) / 1000 : null));
+    const cs = [{ name: 'Custo total', x: Rs, y: sel(c => c.total), color: '#222', width: 3.4 }, { name: 'Energia (vapor + pré-aquecedor + água)', x: Rs, y: sel(c => c.energy), color: '#d1302b', width: 2.4 },
+      { name: 'Equipamento (estágios + trocadores)', x: Rs, y: sel(c => c.capital), color: '#2563c9', width: 2.4 }];
+    if (cOpt) cs.push({ name: 'Ótimo: R = ' + f2(Ropt, 2), x: [Ropt], y: [cOpt.total / 1000], mode: 'markers', color: '#2e9e6b', size: 15, symbol: 'star' });
+    if (cNow) cs.push({ name: 'R atual', x: [R_], y: [cNow.total / 1000], mode: 'markers', color: '#111', size: 12 });
+    const ymax = Math.max.apply(null, cs[0].y.filter(v => v != null).slice(Math.floor(Rs.length * 0.08)));
+    plots.push({ kind: 'curves', title: 'Otimização do refluxo: custo anual × R (o mínimo é o ponto ótimo)', data: { xLabel: 'Razão de refluxo R', yLabel: 'Custo anual (mil R$/ano)', yRange: [0, ymax * 1.15], series: cs } });
+    const Qset = [0, 50, 100, 150, 200].filter((v, k, a) => a.indexOf(v) === k && qOf(v * 1000) > 0.02), pal = ['#2563c9', '#2e9e6b', '#e88b2e', '#d1302b', '#7a3db8'], opts = [];
+    const qs = Qset.map((Qk, k) => { const dq = design(qOf(Qk * 1000)), R2 = Rgrid(dq.Rmin), Ck = R2.map(R => cost(R, Qk * 1000)); let j = -1; Ck.forEach((c, m) => { if (c && (j < 0 || c.total < Ck[j].total)) j = m; });
+      if (j >= 0) opts.push({ Q: Qk, R: R2[j], total: Ck[j].total, Rmin: dq.Rmin, N: Ck[j].N, Qr: Ck[j].l.Qr });
+      return { name: 'Q_pré = ' + Qk + ' kW', x: R2, y: Ck.map(c => (c ? c.total / 1000 : null)), color: pal[k % 5], width: Qk === Math.round(Qpre / 1000) ? 3.6 : 2.2 }; });
+    if (opts.length) qs.push({ name: 'Ótimo de cada curva', x: opts.map(v => v.R), y: opts.map(v => v.total / 1000), mode: 'lines+markers', color: '#111', dash: 'dot', width: 1.6, size: 9 });
+    plots.push({ kind: 'curves', title: 'Efeito do pré-aquecedor no custo e no refluxo ótimo', data: { xLabel: 'Razão de refluxo R', yLabel: 'Custo anual total (mil R$/ano)', yRange: [Math.min.apply(null, opts.map(v => v.total / 1000)) * 0.9, ymax * 1.15], series: qs } });
+    if (opts.length > 1) plots.push({ kind: 'bars', title: 'No refluxo ótimo de cada pré-aquecimento: energia e custo', data: { categories: opts.map(v => 'Q_pré = ' + v.Q + ' kW'), yLabel: 'kW  e  mil R$/ano', series: [
+      { name: 'Q_r no ótimo (kW)', y: opts.map(v => v.Qr / 1000), color: '#d1302b' }, { name: 'Q_pré + Q_r (kW)', y: opts.map(v => v.Qr / 1000 + v.Q), color: '#222' }, { name: 'Custo total (mil R$/ano)', y: opts.map(v => v.total / 1000), color: '#2e9e6b' }] } });
+    const Ns = Rs.map(R => dz.stepFrac(R));
     plots.push({ kind: 'curves', title: 'Estágios necessários × razão de refluxo (Rmín e Nmín são as assíntotas)', data: { xLabel: 'Razão de refluxo R', yLabel: 'Estágios teóricos necessários', yRange: [0, Math.max(Ntot * 1.6, Nmin * 3)], series: [
       { name: 'N(R) para xD = ' + xD + ' e xB = ' + xB, x: Rs, y: Ns.map(v => (isFinite(v) ? v : null)), color: '#2563c9', width: 3 },
       { name: 'Nmín (refluxo total)', x: [Rs[0], Rs[Rs.length - 1]], y: [Nmin, Nmin], color: '#2e9e6b', dash: 'dash', width: 2 },
@@ -3486,9 +3544,9 @@ window.SIMULAFACIL_CONFIG = {
       { name: 'R atual', x: [R_], y: [isFinite(Nfrac) ? Nfrac : Ntot], mode: 'markers', color: '#111', size: 13 }] } });
     plots.push({ kind: 'curves', title: 'Diagrama T–x–y (' + nm1 + '/' + nm2 + (marg ? ', Margules' : '') + ')', data: { xLabel: 'Fração molar de ' + nm1 + ' (x ou y)', yLabel: 'Temperatura (°C)', xRange: [0, 1], series: [
       { name: 'Líquido saturado (bolha)', x: eqx, y: eqT, color: '#2563c9', width: 3 }, { name: 'Vapor saturado (orvalho)', x: eqy, y: eqT, color: '#d1302b', width: 3 }] } });
-    return { out: { distillate: dist, bottoms: bot }, res, warn, plots, duties: { Qc, Qr }, duty: Qr,
+    return { out: { distillate: dist, bottoms: bot }, res: decBR(res), warn: decW(warn), plots, duties: { Qc: Ld.Qc, Qr: Ld.Qr, Qpre }, duty: Ld.Qr,
       mtr: { marg, A12: num(p.A12, 1.6022), A21: num(p.A21, 0.7947), ant1: marg ? SF.ternary.parseMatrix(p.ant1, 3)[0] : null, ant2: marg ? SF.ternary.parseMatrix(p.ant2, 3)[0] : null,
-        Pmm: P / 133.322368, xF, xD, xB, q, N: Ntot, Nf, R: R_, Rmin, eqx, eqy, nm1, nm2, F: F / KMOLH, az } };
+        Pmm: P / 133.322368, xF, xD, xB, q: qe, q0, Qpre, N: Ntot, Nf, R: R_, Rmin, eqx, eqy, nm1, nm2, F: F / KMOLH, az, D: D / KMOLH, lD, lB, lF, Ropt, Rop, cost: { cS, cP, cW, cSt, cHx, hrs }, opts, cc: { R: Rs, tot: C.map(c => (c ? c.total : null)), en: C.map(c => (c ? c.energy : null)), cap: C.map(c => (c ? c.capital : null)) } } };
   };
 
   /* ------------------------------------------------------------------ controle PID de um CSTR isotérmico (A → B, 1ª ordem)
@@ -4016,14 +4074,17 @@ window.SIMULAFACIL_CONFIG = {
     column_reflux: (p, m) => {
       const marg = !/^modelo/.test((p && p.vle) || ''), x1 = sub(x, '1'), x2 = sub(x, '2'), g1 = sub(i('γ'), '1'), g2 = sub(i('γ'), '2'), A12 = sub(i('A'), '12'), A21 = sub(i('A'), '21'), Rr = i('R');
       return {
-        name: 'Coluna binária pelo método de McCabe–Thiele com razão de refluxo ajustável (barra deslizante)',
+        name: 'Coluna binária pelo método de McCabe–Thiele com refluxo e pré-aquecedor ajustáveis (barras deslizantes) e otimização de energia',
         eqs: (marg ? [eq('ln ' + g1 + ' = ' + sup(x2, '2') + '[' + A12 + ' + 2(' + A21 + ' − ' + A12 + ')' + x1 + '],&nbsp; ln ' + g2 + ' = ' + sup(x1, '2') + '[' + A21 + ' + 2(' + A12 + ' − ' + A21 + ')' + x2 + ']', 'Margules de dois parâmetros'),
           eq('log' + sub('', '10') + ' ' + sub(sup(P, 'sat'), i('i')) + ' = ' + sub(i('A'), i('i')) + ' − ' + fr(sub(i('B'), i('i')), T + ' + ' + sub(C, i('i'))) + ',&nbsp; ' + x1 + g1 + sub(sup(P, 'sat'), '1') + ' + ' + x2 + g2 + sub(sup(P, 'sat'), '2') + ' = ' + P + ',&nbsp; ' + sub(i('y'), '1') + ' = ' + fr(x1 + g1 + sub(sup(P, 'sat'), '1'), P), 'Antoine (mmHg, °C), ponto de bolha e Raoult modificada')] : [kModel(m)])
           .concat([eq(i('y') + ' = ' + fr(Rr, Rr + ' + 1') + x + ' + ' + fr(sub(x, 'D'), Rr + ' + 1'), 'reta de operação da retificação'),
-            eq(i('y') + ' = ' + fr(q, q + ' − 1') + x + ' − ' + fr(sub(x, 'F'), q + ' − 1') + ',&nbsp; reta de esgotamento por (' + sub(x, 'B') + ', ' + sub(x, 'B') + ') e pela interseção', 'reta q e esgotamento'),
+            eq(sub(q, 'ef') + ' = ' + sub(q, '0') + ' − ' + fr(sub(i('Q'), 'pré'), F + sub(i('λ'), 'F')) + ',&nbsp; ' + i('y') + ' = ' + fr(sub(q, 'ef'), sub(q, 'ef') + ' − 1') + x + ' − ' + fr(sub(x, 'F'), sub(q, 'ef') + ' − 1'), 'pré-aquecedor acoplado e reta q'),
+            eq('reta de esgotamento por (' + sub(x, 'B') + ', ' + sub(x, 'B') + ') e pela interseção da reta q com a de retificação', ''),
             eq(sub(Rr, 'mín') + ' = ' + fr(sub(x, 'D') + ' − ' + sub(i('y'), '*'), sub(i('y'), '*') + ' − ' + sub(x, '*')), 'estrangulamento (pinch) na reta q ou ponto de tangência'),
-            eq(i('D') + ' = ' + F + fr(sub(x, 'F') + ' − ' + sub(x, 'B'), sub(x, 'D') + ' − ' + sub(x, 'B')) + ',&nbsp; ' + V + ' = (' + Rr + ' + 1)' + i('D') + ',&nbsp; ' + sub(i('Q'), 'c') + ' = ' + V + i('λ'), 'balanços com vazões molares constantes')]),
-        sym: [[Rr, 'razão de refluxo L/D (barra deslizante de 1 a 4)'], [q, 'condição térmica da alimentação'], [A12 + ', ' + A21, 'parâmetros de Margules'], [i('λ'), 'calor de vaporização da mistura']],
+            eq(i('D') + ' = ' + F + fr(sub(x, 'F') + ' − ' + sub(x, 'B'), sub(x, 'D') + ' − ' + sub(x, 'B')) + ',&nbsp; ' + V + ' = (' + Rr + ' + 1)' + i('D') + ',&nbsp; ' + sub(V, '′') + ' = ' + V + ' − (1 − ' + sub(q, 'ef') + ')' + F, 'balanços com vazões molares constantes'),
+            eq(sub(i('Q'), 'c') + ' = ' + V + sub(i('λ'), 'D') + ',&nbsp; ' + sub(i('Q'), 'r') + ' = ' + sub(V, '′') + sub(i('λ'), 'B') + ' ≈ ' + V + sub(i('λ'), 'B') + ' − ' + sub(i('Q'), 'pré'), 'o pré-aquecedor tira carga do refervedor'),
+            eq('Custo anual = ' + i('h') + '·(' + sub(i('c'), 'S') + sub(i('Q'), 'r') + ' + ' + sub(i('c'), 'P') + sub(i('Q'), 'pré') + ' + ' + sub(i('c'), 'W') + '|' + sub(i('Q'), 'c') + '|) + ' + sub(i('c'), 'est') + i('N') + '(' + Rr + ')·' + '√(' + V + '/' + sub(V, 'ref') + ') + ' + sub(i('c'), 'tc') + '(' + sub(i('Q'), 'r') + ' + |' + sub(i('Q'), 'c') + '|)', 'energia + equipamento: o mínimo dá o refluxo ótimo')]),
+        sym: [[Rr, 'razão de refluxo L/D (barra deslizante de 1 a 4)'], [sub(i('Q'), 'pré'), 'energia do pré-aquecedor (barra deslizante de 0 a 300 kW)'], [sub(q, 'ef'), 'condição térmica da carga após o pré-aquecedor'], [A12 + ', ' + A21, 'parâmetros de Margules'], [i('λ'), 'calor de vaporização da mistura']],
         note: 'Os degraus partem do topo (x_D) e trocam da reta de retificação para a de esgotamento no estágio de alimentação informado, como no código MATLAB original. Se a reta de operação encostar na curva de equilíbrio, a coluna estrangula e o programa avisa.'
       };
     },
@@ -4318,11 +4379,12 @@ window.SIMULAFACIL_CONFIG = {
       'As perdas distribuídas nos tubos usam a equação de Darcy–Weisbach com o fator de atrito de Colebrook–White, que depende do número de Reynolds e da rugosidade relativa ε/D. O aço comercial (ε = 0,046 mm) é mais rugoso que o PVC (ε = 0,0015 mm), por isso o PVC dá menos perda no mesmo diâmetro. As perdas localizadas de cada acessório são K·V²/2g, com K da tabela clássica de Azevedo Netto: entrada normal 0,5; válvula de pé com crivo 2,5; gaveta aberta 0,2; globo aberta 10; retenção 2,5; borboleta 0,3; cotovelo 90° 0,9; curva 90° 0,4; tê direto 0,6; saída 1,0. A válvula de retenção no recalque impede o retorno do líquido quando a bomba para; a gaveta serve para isolar a bomba na manutenção; a globo serve para regular a vazão.',
       'A bomba está afogada quando o nível do líquido na sucção fica acima do eixo da bomba (z_s > 0): ela já está sempre cheia de líquido (escorvada), dispensa a válvula de pé e tem mais NPSH disponível. O NPSH disponível, NPSHd = P_s/ρg + z_s − h_f,s − P_v/ρg, precisa superar o NPSH requerido pela bomba com folga (≥ 0,5 m); caso contrário, o líquido vaporiza na entrada do rotor e ocorre cavitação, com ruído, vibração e erosão. Água quente, sucção longa ou sucção negativa reduzem o NPSHd.',
       'No exemplo "Projeto de bombeamento", 30 m³/h de água a 25 °C saem de um reservatório 2,5 m acima do eixo da bomba (bomba afogada) para outro 28 m acima, com sucção de 4" (102,3 mm, 5 m) e recalque de 3" (77,9 mm, 80 m) em aço. A altura estática é 25,5 m e as perdas somam 4,71 m, logo H_sis = 30,2 m. A bomba fornece 34,5 m nessa vazão, então com as válvulas abertas ela iria para o ponto de operação de 35,1 m³/h e 31,9 m. Para trabalhar em 30 m³/h, estrangula-se a válvula do recalque (K extra de cerca de 27). O NPSHd é de 12,4 m contra 2,5 m requeridos, sem risco de cavitação, e a potência no eixo é de 3,8 kW com η = 74 %. Troque o material para PVC e compare: H_sis cai para 29,7 m e o ponto de operação sobe para 36,0 m³/h.'] },
-    column_reflux: { ex: ex('mccabe-refluxo', 'McCabe–Thiele com barra deslizante da razão de refluxo'), p: [
+    column_reflux: { ex: ex('mccabe-refluxo', 'McCabe–Thiele com barras deslizantes do refluxo e do pré-aquecedor'), p: [
       'A razão de refluxo R = L/D é a principal variável de operação de uma coluna de destilação. Mais refluxo aproxima as retas de operação da diagonal: cada degrau separa mais e são necessários menos estágios, mas o vapor gerado no refervedor, V = (R + 1)·D, cresce, e com ele as cargas do refervedor e do condensador. No limite inferior está o refluxo mínimo Rmín, em que a reta de operação toca a curva de equilíbrio e seriam necessários infinitos estágios; no limite superior está o refluxo total, que dá o número mínimo de estágios Nmín.',
       'Este equipamento reproduz o código MATLAB do Prof. Juan: o equilíbrio etanol/água vem do modelo de Margules de dois parâmetros (A12 = 1,6022 e A21 = 0,7947) com as pressões de vapor de Antoine, e os degraus partem do topo com N estágios e troca de reta no estágio de alimentação. A barra deslizante de R (de 1 a 4) recalcula o diagrama na hora. O programa também calcula Rmín, Nmín, os estágios necessários com a alimentação ótima, a curva N × R, o diagrama T–x–y, as vazões internas e as cargas térmicas. Com esses parâmetros de Margules, a curva fica acima da diagonal até x = 1 e não forma azeótropo; com o modelo termodinâmico do fluxograma (NRTL), aparece o azeótropo em x ≈ 0,897.',
-      'No exemplo "McCabe–Thiele com barra deslizante", 100 kmol/h de alimentação com 10 % de etanol, líquido saturado, são separados em xD = 0,80 e xB = 0,01. O refluxo mínimo é 1,163, definido pelo ponto de tangência perto do topo, típico do etanol/água (o código original calcula 1,05 só pela interseção com a reta q), e o mínimo de estágios é 6,8. Com R = 2,5 são necessários 11,5 estágios, com a alimentação ótima no estágio 10; a coluna de 20 estágios atinge xB no 12º, com cargas de 434 kW no condensador e 452 kW no refervedor.',
-      'Arraste a barra para R = 2: com a alimentação fixa no estágio 10, a reta de esgotamento encosta na curva de equilíbrio e a coluna estrangula (no código original, os degraus perdem o sentido nesse caso). A partir de R ≈ 2,15 a separação volta a ser possível. Em R = 4, bastam 9,2 estágios, mas o refervedor sobe para 645 kW: é a troca clássica entre custo de equipamento (estágios) e custo de energia (refluxo).'] },
+      'No exemplo "McCabe–Thiele com barras deslizantes do refluxo e do pré-aquecedor", 100 kmol/h com 10 % de etanol, líquido saturado, são separados em xD = 0,80 e xB = 0,01 numa coluna de 20 estágios com alimentação no 10, e o pré-aquecedor acoplado injeta 100 kW na carga. Esse calor vaporiza parte da alimentação: q passa de 1 para 0,912, a reta q inclina e o refluxo mínimo sobe de 1,163 para 1,326. Com R = 2,5 o refervedor cai de 452 kW (sem pré-aquecimento) para 352 kW, mas a energia total adicionada continua em 452 kW: o pré-aquecedor apenas transfere carga do refervedor.',
+      'Existem dois pontos ótimos. Na coluna existente, o menor refluxo que ainda atinge xB com 20 estágios e alimentação no 10 é R = 2,20 (Q_r = 314 kW); sem pré-aquecimento seria 2,14 (406 kW). No projeto de uma coluna nova, o custo anual soma a energia, que cresce com R, e o equipamento, que explode perto de Rmín (infinitos estágios) e volta a crescer com o diâmetro: o mínimo fica em R ≈ 1,50 (1,13·Rmín), com 21,6 estágios e R$ 823 mil por ano, contra R$ 1,03 milhão com R = 2,5. Vale a regra prática R_ót ≈ 1,1 a 1,5·Rmín.',
+      'O pré-aquecimento só compensa se a energia dele for mais barata que o vapor do refervedor. Com 25 R$/GJ no pré-aquecedor e 70 R$/GJ no refervedor, o custo mínimo cai de R$ 942 mil (0 kW) para R$ 823 mil (100 kW) e R$ 758 mil (200 kW), e o refluxo ótimo sobe junto. Com o mesmo preço nos dois, o pré-aquecimento piora o custo (R$ 953 mil com 100 kW), porque eleva o refluxo mínimo sem economizar energia. Arraste as duas barras e veja as curvas de energia e de custo mudarem; em R = 2 com alimentação no estágio 10, a coluna estrangula.'] },
     column_mt: { ex: ex('coluna-mccabe-preaquecida', 'Coluna McCabe–Thiele com pré-aquecedor embutido'), p: [
       'Em simuladores como o DWSIM, é comum colocar um aquecedor (heater) antes da coluna para levar a carga até perto do ponto de bolha. Essa coluna já traz o pré-aquecedor embutido na linha de alimentação: basta informar a carga térmica Q_pré (kW), ou pedir que a carga entre como líquido saturado, ou fixar a temperatura de saída. O calor do refervedor (Q_r) e do condensador (Q_c) é calculado pelos balanços de massa e de energia de cada estágio (equações MESH) e aparece nas Propriedades e no fluxograma, sem nenhum equipamento externo.',
       'A carga aquecida chega à coluna com a condição térmica q = (H_V − h_F)/(H_V − h_L), calculada com as entalpias de orvalho e de bolha da própria carga na pressão da coluna. Para q > 1, o líquido está sub-resfriado; para q = 1, saturado; entre 0 e 1, parcialmente vaporizado. É esse q que define a inclinação da reta q no diagrama de McCabe–Thiele, onde também aparecem a curva de equilíbrio (modelo termodinâmico do fluxograma), as retas de operação, os degraus dos estágios calculados e o refluxo mínimo no ponto de estrangulamento (pinch).',
@@ -4522,7 +4584,7 @@ window.SIMULAFACIL_CONFIG = {
         Object.keys(inOf[id]).forEach(port => {
           if (!isEnergyPort(port) || port === 'ei') return;
           const c = inOf[id][port], prev = S[c.id] || {};
-          if (prev.spec && b.type !== 'heater' && b.type !== 'column_mt' && it === 0) r.warn = (r.warn || []).concat('o valor informado na corrente de energia ' + (c.name || c.id) + ' não é usado: a carga é calculada pelo equipamento');
+          if (prev.spec && b.type !== 'heater' && b.type !== 'column_mt' && b.type !== 'column_reflux' && it === 0) r.warn = (r.warn || []).concat('o valor informado na corrente de energia ' + (c.name || c.id) + ' não é usado: a carga é calculada pelo equipamento');
           S[c.id] = { energy: true, Q: energyAt(b, r, port), spec: !!prev.spec };
         });
         Object.keys(r.out || {}).forEach(port => {
@@ -4623,7 +4685,7 @@ window.SIMULAFACIL_CONFIG = {
     decanter: { w: 110, h: 60, ports: { in: P(0, 22, 'l', 'in'), light: P(110, 16, 'r', 'out'), heavy: P(110, 54, 'r', 'out') } },
     column_short: { w: 112, h: 210, ports: { feed: P(0, 105, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), bottoms: P(112, 188, 'r', 'out'), qc: P(100, 10, 'u', 'eout'), qr: P(100, 198, 'd', 'ein') } },
     ponchon: { w: 112, h: 210, ports: { feed: P(0, 105, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), bottoms: P(112, 188, 'r', 'out'), qc: P(100, 10, 'u', 'eout'), qr: P(100, 198, 'd', 'ein') } },
-    column_reflux: { w: 112, h: 210, ports: { feed: P(0, 105, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), bottoms: P(112, 188, 'r', 'out'), qc: P(100, 10, 'u', 'eout'), qr: P(100, 198, 'd', 'ein') } },
+    column_reflux: { w: 150, h: 210, ports: { feed: P(0, 105, 'l', 'in'), q_pre: P(20, 119, 'd', 'ein'), distillate: P(150, 46, 'r', 'out'), bottoms: P(150, 188, 'r', 'out'), qc: P(138, 10, 'u', 'eout'), qr: P(138, 198, 'd', 'ein') } },
     column_mt: { w: 150, h: 230, ports: { feed: P(0, 115, 'l', 'in'), q_pre: P(20, 129, 'd', 'ein'), distillate: P(150, 46, 'r', 'out'), bottoms: P(150, 208, 'r', 'out'), qc: P(138, 10, 'u', 'eout'), qr: P(138, 218, 'd', 'ein') } },
     pid_cstr: { w: 120, h: 100, ports: {} },
     column: { w: 112, h: 230, ports: { feed2: P(0, 55, 'l', 'in'), feed: P(0, 115, 'l', 'in'), feed3: P(0, 170, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), side: P(112, 130, 'r', 'out'), bottoms: P(112, 208, 'r', 'out'), qc: P(100, 10, 'u', 'eout'), qr: P(100, 218, 'd', 'ein') } },
@@ -4713,12 +4775,12 @@ window.SIMULAFACIL_CONFIG = {
       return o;
     },
     column: () => column(230, ''),
-    column_reflux: () => { // coluna com o refluxo em destaque, mini diagrama x–y e uma barra deslizante "R"
-      const o = column(210, '');
-      o.push(L([[70, 54], [70, 62], [50, 62]], 'hot'), T(83, 72, 'R'),
+    column_reflux: () => { // pré-aquecedor acoplado na carga + coluna com o refluxo em destaque, mini diagrama x–y e uma barra deslizante "R"
+      const o = shift(column(210, '').concat([L([[70, 54], [70, 62], [50, 62]], 'hot'), T(83, 72, 'R'),
         R(9, 70, 36, 36, 2, 'bodyw'), L([[11, 104], [43, 72]], 'lnd'), L([[11, 104], [14, 90], [19, 81], [27, 75], [43, 72]], 'cold'),
         L([[40, 73], [29, 73], [29, 78], [21, 78], [21, 85], [16, 85], [16, 94], [13, 94], [13, 101]]),
-        L([[58, 128], [106, 128]]), C(84, 128, 5, 'hot'), T(82, 146, 'R'));
+        L([[58, 128], [106, 128]]), C(84, 128, 5, 'hot'), T(82, 146, 'R')]), 38);
+      o.push(L([[0, 105], [7, 105]]), C(20, 105, 13), zig(9, 105, 22, 'hot'), L([[33, 105], [42, 105]]), T(20, 86, 'Q'));
       return o;
     },
     column_mt: () => { // pré-aquecedor embutido na linha de carga + coluna com um mini diagrama x–y (degraus de McCabe–Thiele)
@@ -4890,8 +4952,8 @@ window.SIMULAFACIL_CONFIG = {
     const g = IC.G[b.type], marks = [], wired = p => (streams || []).some(s => (s.from === b.id && s.fromPort === p) || (s.to === b.id && s.toPort === p));
     const add = (x, y, Q, label, up, left) => marks.push({ x: b.x + x, y: b.y + y, Q, label, up, left });
     if (b.type === 'energy') return marks;
-    if (r.duties && b.type === 'column_mt') { if (!wired('qc')) add(120, -4, r.duties.Qc, 'Qc', true); if (!wired('qr')) add(120, g.h + 4, r.duties.Qr, 'Qr', false); if (!wired('q_pre')) add(20, 130, r.duties.Qpre, 'Qpré', false, true); }
-    else if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon' || b.type === 'column_reflux')) { if (!wired('qc')) add(82, -4, r.duties.Qc, 'Qc', true); if (!wired('qr')) add(82, g.h + 4, r.duties.Qr, 'Qr', false); }
+    if (r.duties && (b.type === 'column_mt' || b.type === 'column_reflux')) { if (!wired('qc')) add(120, -4, r.duties.Qc, 'Qc', true); if (!wired('qr')) add(120, g.h + 4, r.duties.Qr, 'Qr', false); if (!wired('q_pre') && Math.abs(r.duties.Qpre || 0) > 1e-3) add(20, b.type === 'column_reflux' ? 120 : 130, r.duties.Qpre, 'Qpré', false, true); }
+    else if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon')) { if (!wired('qc')) add(82, -4, r.duties.Qc, 'Qc', true); if (!wired('qr')) add(82, g.h + 4, r.duties.Qr, 'Qr', false); }
     else if (r.duty != null && Math.abs(r.duty) > 1e-3 && b.type !== 'feed' && !wired('q_in') && !wired('q_out')) add(g.w - 2, g.h + 4, r.duty, r.power ? 'W' : 'Q', false);
     return marks;
   }
@@ -5775,17 +5837,39 @@ end
       return out.join('\n');
     }
     if (b.type === 'column_reflux' && r.mtr) {
-      const m = r.mtr, ds = (a, k) => a.filter((v, i) => i % k === 0 || i === a.length - 1);
+      const m = r.mtr, ds = (a, k) => a.filter((v, i) => i % k === 0 || i === a.length - 1), cc = m.cc, okc = cc.R.map((v, k) => cc.tot[k] != null);
+      const pick = a => a.filter((v, k) => okc[k]);
       out.push('function ' + fname + '(D, FS)', header,
-        '% Destilação binária pelo método de McCabe-Thiele com barra deslizante da razão de refluxo',
+        '% Destilação binária pelo método de McCabe-Thiele com barras deslizantes da razão de refluxo e do pré-aquecedor acoplado',
         '% (adaptado do código destilacao_etanol_agua do Prof. Juan: Margules + Antoine, degraus e PFD estilo DWSIM).', printRes.join('\n'),
-        'P = struct(\'xF\', ' + n2s(m.xF) + ', \'xD\', ' + n2s(m.xD) + ', \'xB\', ' + n2s(m.xB) + ', \'q\', ' + n2s(m.q) + ', \'N_total\', ' + m.N + ', \'N_feed\', ' + m.Nf + ', ...',
-        '    \'R\', ' + n2s(m.R) + ', \'Rmin\', ' + n2s(m.Rmin) + ', \'Pmm\', ' + n2s(m.Pmm) + ', \'margules\', ' + (m.marg ? 'true' : 'false') + ', ...',
+        'P = struct(\'xF\', ' + n2s(m.xF) + ', \'xD\', ' + n2s(m.xD) + ', \'xB\', ' + n2s(m.xB) + ', \'q0\', ' + n2s(m.q0) + ', \'N_total\', ' + m.N + ', \'N_feed\', ' + m.Nf + ', ...',
+        '    \'R\', ' + n2s(m.R) + ', \'Qpre\', ' + n2s(m.Qpre / 1000) + ', \'Pmm\', ' + n2s(m.Pmm) + ', \'margules\', ' + (m.marg ? 'true' : 'false') + ', ...',
         '    \'A12\', ' + n2s(m.A12) + ', \'A21\', ' + n2s(m.A21) + ', \'ant1\', ' + (m.ant1 ? vec(m.ant1) : '[]') + ', \'ant2\', ' + (m.ant2 ? vec(m.ant2) : '[]') + ', ...',
-        '    \'nome1\', ' + str(m.nm1) + ', \'nome2\', ' + str(m.nm2) + ', \'F\', ' + n2s(m.F) + ');',
-        '% Rmin inclui o ponto de tangência (etanol/água); o código original usava só a interseção com a reta q.',
+        '    \'F\', ' + n2s(m.F) + ', \'D\', ' + n2s(m.D) + ', \'lF\', ' + n2s(m.lF) + ', \'lD\', ' + n2s(m.lD) + ', \'lB\', ' + n2s(m.lB) + ', ...',
+        '    \'nome1\', ' + str(m.nm1) + ', \'nome2\', ' + str(m.nm2) + ');',
+        '% F e D em kmol/h; lF, lD e lB = calor de vaporização da alimentação, do topo e do fundo (J/mol); Qpre em kW.',
+        '% q efetivo = q0 - Qpre/(F*lF): o pré-aquecedor vaporiza parte da carga e inclina a reta q.',
         m.marg ? '% Equilíbrio: Margules (A12, A21) + Antoine (log10 P[mmHg] = A - B/(T[°C] + C)).' : '% Equilíbrio: curva calculada pelo simulador com o modelo termodinâmico do fluxograma.',
         m.marg ? '' : 'P.eqx = ' + vec(ds(m.eqx, 4)) + ';\nP.eqy = ' + vec(ds(m.eqy, 4)) + ';',
+        '%% 1. Energia x razão de refluxo (vazões molares constantes)',
+        'Rg = linspace(1, 4, 80); q = P.q0 - P.Qpre*1000/(P.F/3.6*P.lF);',
+        'V = (Rg + 1)*P.D/3.6; Vs = V - (1 - q)*P.F/3.6;          % mol/s',
+        'Qr = Vs*P.lB/1000; Qc = V*P.lD/1000;                     % kW',
+        "figure('Name', " + str(b.name + ' — energia x R') + ", 'Color', 'w'); hold on; grid on; box on;",
+        "plot(Rg, Qr, 'r', 'LineWidth', 2.5); plot(Rg, Qc, 'b', 'LineWidth', 2.5); plot(Rg, P.Qpre*ones(size(Rg)), ':', 'Color', [0.91 0.55 0.18], 'LineWidth', 2); plot(Rg, Qr + P.Qpre, 'k--', 'LineWidth', 3);",
+        "xlabel('Razão de refluxo R', 'FontSize', FS); ylabel('Carga térmica (kW)', 'FontSize', FS); set(gca, 'FontSize', FS);",
+        "legend({'Refervedor Q_r', 'Condensador |Q_c|', 'Pré-aquecedor Q_{pré}', 'Total Q_{pré} + Q_r'}, 'Location', 'northwest'); title(sprintf('Energia x R (Q_{pré} = %.0f kW)', P.Qpre), 'FontSize', FS);",
+        '%% 2. Otimização: custo anual x R (curvas calculadas pelo simulador com os custos informados)',
+        'Rc = ' + vec(pick(cc.R)) + ';',
+        'Ct = ' + vec(pick(cc.tot).map(v => v / 1000)) + ';   % mil R$/ano',
+        'Ce = ' + vec(pick(cc.en).map(v => v / 1000)) + ';',
+        'Ck = ' + vec(pick(cc.cap).map(v => v / 1000)) + ';',
+        '[Cmin, k] = min(Ct);',
+        "figure('Name', " + str(b.name + ' — otimização do refluxo') + ", 'Color', 'w'); hold on; grid on; box on;",
+        "plot(Rc, Ct, 'k', 'LineWidth', 3); plot(Rc, Ce, 'r', 'LineWidth', 2); plot(Rc, Ck, 'b', 'LineWidth', 2); plot(Rc(k), Cmin, 'p', 'Color', [0.18 0.62 0.42], 'MarkerFaceColor', [0.18 0.62 0.42], 'MarkerSize', 18);",
+        "ylim([0 1.15*max(Ct(ceil(0.08*numel(Ct)):end))]); xlabel('Razão de refluxo R', 'FontSize', FS); ylabel('Custo anual (mil R$/ano)', 'FontSize', FS); set(gca, 'FontSize', FS);",
+        "legend({'Custo total', 'Energia', 'Equipamento', sprintf('Ótimo: R = %.2f', Rc(k))}, 'Location', 'north'); title('Otimização do refluxo: o mínimo do custo total', 'FontSize', FS);",
+        '%% 3. Janela interativa: barras deslizantes de R e de Q_pré',
         'mccabe_refluxo_gui(P, FS, ' + str(b.name) + ');', 'end');
       return out.join('\n');
     }
@@ -6224,26 +6308,36 @@ end
 
 function mccabe_refluxo_gui(P, FS, nome)
 [x_eq, y_eq] = mr_equilibrio(P);
-fig = figure('Name', [nome ' — McCabe-Thiele com refluxo ajustável'], 'Units', 'normalized', 'Position', [0.05 0.05 0.9 0.85], 'Color', [0.95 0.95 0.95]);
-ax1 = subplot(1, 2, 1, 'Parent', fig); ax2 = subplot(1, 2, 2, 'Parent', fig);
+fig = figure('Name', [nome ' — McCabe-Thiele com refluxo e pré-aquecedor ajustáveis'], 'Units', 'normalized', 'Position', [0.05 0.05 0.9 0.85], 'Color', [0.95 0.95 0.95]);
+ax1 = axes('Parent', fig, 'Position', [0.06 0.22 0.42 0.7]); ax2 = axes('Parent', fig, 'Position', [0.53 0.22 0.44 0.7]);
 setappdata(fig, 'P', P); setappdata(fig, 'FS', FS); setappdata(fig, 'eq', [x_eq(:)'; y_eq(:)']);
 uicontrol('Parent', fig, 'Style', 'slider', 'Min', 1.0, 'Max', 4.0, 'Value', min(4, max(1, P.R)), 'Units', 'normalized', ...
-    'Position', [0.15 0.02 0.3 0.03], 'Tag', 'sl_R', 'Callback', @(src, evt) mr_desenha(fig, ax1, ax2));
-uicontrol('Parent', fig, 'Style', 'text', 'Units', 'normalized', 'Position', [0.12 0.055 0.36 0.03], 'Tag', 'lbl_R', ...
-    'FontSize', 16, 'FontWeight', 'bold', 'BackgroundColor', [0.95 0.95 0.95]);
+    'Position', [0.08 0.03 0.36 0.03], 'Tag', 'sl_R', 'Callback', @(src, evt) mr_desenha(fig, ax1, ax2));
+uicontrol('Parent', fig, 'Style', 'text', 'Units', 'normalized', 'Position', [0.06 0.065 0.40 0.035], 'Tag', 'lbl_R', ...
+    'FontSize', 15, 'FontWeight', 'bold', 'BackgroundColor', [0.95 0.95 0.95]);
+uicontrol('Parent', fig, 'Style', 'slider', 'Min', 0, 'Max', 300, 'Value', min(300, max(0, P.Qpre)), 'Units', 'normalized', ...
+    'Position', [0.56 0.03 0.36 0.03], 'Tag', 'sl_Q', 'Callback', @(src, evt) mr_desenha(fig, ax1, ax2));
+uicontrol('Parent', fig, 'Style', 'text', 'Units', 'normalized', 'Position', [0.54 0.065 0.40 0.035], 'Tag', 'lbl_Q', ...
+    'FontSize', 15, 'FontWeight', 'bold', 'BackgroundColor', [0.95 0.95 0.95]);
 mr_desenha(fig, ax1, ax2);
 end
 
 function mr_desenha(fig, ax1, ax2)
 P = getappdata(fig, 'P'); FS = getappdata(fig, 'FS'); E = getappdata(fig, 'eq'); x_eq = E(1, :); y_eq = E(2, :);
-R = get(findobj(fig, 'Tag', 'sl_R'), 'Value');
-set(findobj(fig, 'Tag', 'lbl_R'), 'String', sprintf('Razão de refluxo R: %.2f (Rmin = %.2f)', R, P.Rmin));
+R = get(findobj(fig, 'Tag', 'sl_R'), 'Value'); Qp = get(findobj(fig, 'Tag', 'sl_Q'), 'Value');
+q = P.q0 - Qp*1000/(P.F/3.6*P.lF);                          % q efetivo após o pré-aquecedor
 % trecho monotônico da curva (até o azeótropo, se houver)
 k = find(y_eq(2:end) - x_eq(2:end) <= 0 & x_eq(2:end) < 0.999, 1); if isempty(k), k = numel(x_eq) - 1; end
 xm = x_eq(1:k+1); ym = y_eq(1:k+1);
+% refluxo mínimo: interseção da reta q com a curva e ponto de tangência
+if abs(q - 1) < 1e-9, xp = P.xF; else, xp = fzero(@(x) interp1(xm, ym, x, 'pchip') - (q/(q - 1)*x - P.xF/(q - 1)), [1e-6, max(xm) - 1e-6]); end
+yp = interp1(xm, ym, xp, 'pchip'); Rmin = (P.xD - yp)/(yp - xp);
+ii = xm > xp & xm < P.xD; if any(ii), Rmin = max(Rmin, max((P.xD - ym(ii))./(ym(ii) - xm(ii)))); end
+set(findobj(fig, 'Tag', 'lbl_R'), 'String', sprintf('Razão de refluxo R: %.2f (Rmin = %.2f)', R, Rmin));
+set(findobj(fig, 'Tag', 'lbl_Q'), 'String', sprintf('Pré-aquecedor: %.0f kW (q = %.3f)', Qp, q));
 % retas de operação: retificação, reta q e esgotamento
 a_rol = R/(R + 1); b_rol = P.xD/(R + 1);
-if abs(P.q - 1) < 1e-9, x_int = P.xF; else, x_int = (-P.xF/(P.q - 1) - b_rol)/(a_rol - P.q/(P.q - 1)); end
+if abs(q - 1) < 1e-9, x_int = P.xF; else, x_int = (-P.xF/(q - 1) - b_rol)/(a_rol - q/(q - 1)); end
 y_int = a_rol*x_int + b_rol;
 a_sol = (y_int - P.xB)/(x_int - P.xB); b_sol = P.xB - a_sol*P.xB;
 % degraus a partir do topo, troca de reta no estágio de alimentação; para em xB ou no estrangulamento
@@ -6257,6 +6351,8 @@ for i = 1:P.N_total
     if y_next >= interp1(xm, ym, x_next, 'pchip') || y_next >= y_curr, msg = sprintf('estrangula no estágio %d', i); break; end
     sx = [sx, x_next]; sy = [sy, y_next]; y_curr = y_next;
 end
+% energia (vazões molares constantes)
+V = (R + 1)*P.D/3.6; Vs = V - (1 - q)*P.F/3.6; Qr = Vs*P.lB/1000; Qc = V*P.lD/1000;
 % PLOT 1: diagrama de McCabe-Thiele
 cla(ax1); hold(ax1, 'on'); grid(ax1, 'on'); box(ax1, 'on');
 plot(ax1, [0 1], [0 1], 'k--', 'LineWidth', 1.5);
@@ -6265,31 +6361,35 @@ xr = linspace(x_int, P.xD, 50); plot(ax1, xr, a_rol*xr + b_rol, 'r-', 'LineWidth
 xs = linspace(P.xB, x_int, 50); plot(ax1, xs, a_sol*xs + b_sol, 'm-', 'LineWidth', 2);
 line(ax1, [P.xF x_int], [P.xF y_int], 'Color', [0 0.5 0], 'LineWidth', 2, 'LineStyle', '-.');
 plot(ax1, sx, sy, 'k-', 'LineWidth', 1.5);
-legend(ax1, {'Linha 45°', 'Equilíbrio ELV', 'Reta de retificação', 'Reta de esgotamento', sprintf('Reta q (q = %.2f)', P.q), 'Estágios'}, 'Location', 'southeast', 'FontSize', 12);
+legend(ax1, {'Linha 45°', 'Equilíbrio ELV', 'Reta de retificação', 'Reta de esgotamento', sprintf('Reta q (q = %.3f)', q), 'Estágios'}, 'Location', 'southeast', 'FontSize', 12);
 xlabel(ax1, ['Fração molar de ' P.nome1 ' no líquido (x)'], 'FontSize', FS, 'FontWeight', 'bold');
 ylabel(ax1, ['Fração molar de ' P.nome1 ' no vapor (y)'], 'FontSize', FS, 'FontWeight', 'bold');
 title(ax1, sprintf('McCabe-Thiele | R = %.2f | %s', R, msg), 'FontSize', FS, 'FontWeight', 'bold');
 set(ax1, 'FontSize', FS, 'XLim', [0 1], 'YLim', [0 1]);
-% PLOT 2: fluxograma do processo (estilo DWSIM)
+% PLOT 2: fluxograma do processo (estilo DWSIM) com o pré-aquecedor acoplado e as cargas térmicas
 cla(ax2); hold(ax2, 'on'); axis(ax2, 'equal'); axis(ax2, [0 10 0 10]); axis(ax2, 'off');
 rectangle(ax2, 'Position', [4, 2.5, 2, 5], 'Curvature', [0.2, 0.05], 'FaceColor', [0.85 0.9 0.95], 'EdgeColor', 'b', 'LineWidth', 2.5);
 for y_p = linspace(2.8, 7.2, 8), line(ax2, [4.2 5.8], [y_p y_p], 'Color', [0.4 0.4 0.4], 'LineWidth', 1.5, 'LineStyle', ':'); end
 rectangle(ax2, 'Position', [7, 8, 1.2, 1], 'Curvature', 1, 'FaceColor', [0.8 0.95 0.8], 'EdgeColor', [0 0.5 0], 'LineWidth', 2);
-text(ax2, 7.6, 8.5, 'Condensador', 'FontSize', 12, 'HorizontalAlignment', 'center', 'FontWeight', 'bold');
+text(ax2, 7.6, 8.5, 'Condensador', 'FontSize', 11, 'HorizontalAlignment', 'center', 'FontWeight', 'bold');
+text(ax2, 7.6, 7.65, sprintf('Q_c = %.0f kW', Qc), 'FontSize', 12, 'HorizontalAlignment', 'center', 'Color', [0 0.4 0.8], 'FontWeight', 'bold');
 rectangle(ax2, 'Position', [7, 1, 1.2, 1], 'Curvature', 1, 'FaceColor', [0.95 0.8 0.8], 'EdgeColor', [0.7 0 0], 'LineWidth', 2);
-text(ax2, 7.6, 1.5, 'Refervedor', 'FontSize', 12, 'HorizontalAlignment', 'center', 'FontWeight', 'bold');
-mr_seta(ax2, [1, 4], [5, 5], [0 0.4 0.8]);
-text(ax2, 1.2, 5.6, sprintf('ALIMENTAÇÃO (F)\\nx_F = %.2f\\nEstágio: %d', P.xF, P.N_feed), 'FontSize', 14, 'FontWeight', 'bold', 'Color', [0 0.2 0.6]);
+text(ax2, 7.6, 1.5, 'Refervedor', 'FontSize', 11, 'HorizontalAlignment', 'center', 'FontWeight', 'bold');
+text(ax2, 7.6, 2.35, sprintf('Q_r = %.0f kW', Qr), 'FontSize', 12, 'HorizontalAlignment', 'center', 'Color', [0.8 0 0], 'FontWeight', 'bold');
+rectangle(ax2, 'Position', [2.0, 4.5, 1, 1], 'Curvature', 1, 'FaceColor', [1 0.9 0.8], 'EdgeColor', [0.9 0.4 0], 'LineWidth', 2);
+text(ax2, 2.5, 4.1, sprintf('Pré-aquecedor\\n%.0f kW', Qp), 'FontSize', 11, 'HorizontalAlignment', 'center', 'Color', [0.8 0.35 0], 'FontWeight', 'bold');
+mr_seta(ax2, [0.2, 2.0], [5, 5], [0 0.4 0.8]); mr_seta(ax2, [3.0, 4], [5, 5], [0 0.4 0.8]);
+text(ax2, 0.2, 6.3, sprintf('ALIMENTAÇÃO (F)\\nx_F = %.2f, q = %.2f\\nEstágio: %d', P.xF, q, P.N_feed), 'FontSize', 13, 'FontWeight', 'bold', 'Color', [0 0.2 0.6]);
 plot(ax2, [5, 5, 7], [7.5, 8.5, 8.5], 'k-', 'LineWidth', 2);
 mr_seta(ax2, [8.2, 9], [8.5, 8.5], [0 0.6 0]);
-text(ax2, 8.3, 9.3, sprintf('DESTILADO (D)\\nx_D = %.2f', P.xD), 'FontSize', 14, 'FontWeight', 'bold', 'Color', [0 0.5 0]);
-plot(ax2, [7.6, 7.6, 5.5, 5.5], [8.0, 7.8, 7.8, 7.5], 'r-', 'LineWidth', 2);
-text(ax2, 6.2, 7.5, sprintf('Refluxo (R = %.2f)', R), 'FontSize', 13, 'Color', 'r', 'FontWeight', 'bold');
+text(ax2, 8.3, 9.3, sprintf('DESTILADO (D)\\nx_D = %.2f', P.xD), 'FontSize', 13, 'FontWeight', 'bold', 'Color', [0 0.5 0]);
+plot(ax2, [7.6, 7.6, 5.5, 5.5], [8.0, 7.9, 7.9, 7.5], 'r-', 'LineWidth', 2);
+text(ax2, 5.6, 7.15, sprintf('Refluxo (R = %.2f)', R), 'FontSize', 12, 'Color', 'r', 'FontWeight', 'bold');
 plot(ax2, [5, 5, 7], [2.5, 1.5, 1.5], 'k-', 'LineWidth', 2);
-plot(ax2, [7.6, 7.6, 5.5, 5.5], [2.0, 2.2, 2.2, 2.5], 'b-', 'LineWidth', 2);
+plot(ax2, [7.6, 7.6, 5.5, 5.5], [2.0, 2.1, 2.1, 2.5], 'b-', 'LineWidth', 2);
 mr_seta(ax2, [8.2, 9.5], [1.5, 1.5], [0.7 0 0]);
-text(ax2, 8.1, 0.8, sprintf('FUNDO (B)\\nx_B = %.2f', P.xB), 'FontSize', 14, 'FontWeight', 'bold', 'Color', [0.6 0 0]);
-title(ax2, 'Fluxograma do processo (estilo DWSIM)', 'FontSize', FS, 'FontWeight', 'bold');
+text(ax2, 8.1, 0.6, sprintf('FUNDO (B)\\nx_B = %.2f', P.xB), 'FontSize', 13, 'FontWeight', 'bold', 'Color', [0.6 0 0]);
+title(ax2, sprintf('Fluxograma (estilo DWSIM) | Q_{pré} + Q_r = %.0f kW', Qp + Qr), 'FontSize', FS, 'FontWeight', 'bold');
 drawnow;
 end
 
@@ -6949,15 +7049,30 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         '    return [f1, f2]']).join('\n');
     }
     if (b.type === 'column_reflux' && r.mtr) {
-      const m = r.mtr, ds = (a, k) => a.filter((v, i) => i % k === 0 || i === a.length - 1), B = v => (v ? 'True' : 'False');
+      const m = r.mtr, ds = (a, k) => a.filter((v, i) => i % k === 0 || i === a.length - 1), B = v => (v ? 'True' : 'False'), cc = m.cc, okc = cc.R.map((v, k) => cc.tot[k] != null), pick = a => a.filter((v, k) => okc[k]);
       return head.concat([
-        '    # McCabe-Thiele com barra deslizante da razão de refluxo (adaptado do código destilacao_etanol_agua do Prof. Juan).',
-        '    P = dict(xF=' + n2s(m.xF) + ', xD=' + n2s(m.xD) + ', xB=' + n2s(m.xB) + ', q=' + n2s(m.q) + ', N_total=' + m.N + ', N_feed=' + m.Nf + ', R=' + n2s(m.R) + ', Rmin=' + n2s(m.Rmin) + ',',
+        '    # McCabe-Thiele com barras deslizantes do refluxo e do pré-aquecedor acoplado (adaptado do código destilacao_etanol_agua do Prof. Juan).',
+        '    P = dict(xF=' + n2s(m.xF) + ', xD=' + n2s(m.xD) + ', xB=' + n2s(m.xB) + ', q0=' + n2s(m.q0) + ', N_total=' + m.N + ', N_feed=' + m.Nf + ', R=' + n2s(m.R) + ', Qpre=' + n2s(m.Qpre / 1000) + ',',
         '             Pmm=' + n2s(m.Pmm) + ', margules=' + B(m.marg) + ', A12=' + n2s(m.A12) + ', A21=' + n2s(m.A21) + ', ant1=' + (m.ant1 ? '[' + m.ant1.map(n2s).join(', ') + ']' : 'None') + ', ant2=' + (m.ant2 ? '[' + m.ant2.map(n2s).join(', ') + ']' : 'None') + ',',
-        '             nome1=' + str(m.nm1) + ', nome2=' + str(m.nm2) + ')',
-        '    # Rmin inclui o ponto de tangência (etanol/água); o código original usava só a interseção com a reta q.',
+        '             F=' + n2s(m.F) + ', D=' + n2s(m.D) + ', lF=' + n2s(m.lF) + ', lD=' + n2s(m.lD) + ', lB=' + n2s(m.lB) + ', nome1=' + str(m.nm1) + ', nome2=' + str(m.nm2) + ')',
+        '    # F e D em kmol/h; lF, lD, lB = calor de vaporização (J/mol); Qpre em kW; q efetivo = q0 - Qpre/(F*lF)',
         m.marg ? '' : "    P['eqx'] = " + vec(ds(m.eqx, 4)) + "\n    P['eqy'] = " + vec(ds(m.eqy, 4)),
-        '    return [mccabe_refluxo_gui(P, ' + str(b.name) + ')]']).filter(x => x !== '').join('\n');
+        "    Rg = np.linspace(1, 4, 80); q = P['q0'] - P['Qpre'] * 1000 / (P['F'] / 3.6 * P['lF'])",
+        "    V = (Rg + 1) * P['D'] / 3.6; Vs = V - (1 - q) * P['F'] / 3.6; Qr = Vs * P['lB'] / 1000; Qc = V * P['lD'] / 1000   # kW",
+        '    f1, a1 = plt.subplots(figsize=(10, 6.5))',
+        "    a1.plot(Rg, Qr, 'r', lw=2.5, label='Refervedor $Q_r$'); a1.plot(Rg, Qc, 'b', lw=2.5, label='Condensador $|Q_c|$'); a1.plot(Rg, np.full_like(Rg, P['Qpre']), ':', color='#e88b2e', lw=2, label='Pré-aquecedor')",
+        "    a1.plot(Rg, Qr + P['Qpre'], 'k--', lw=3, label='Total $Q_{pré} + Q_r$'); a1.set_xlabel('Razão de refluxo R'); a1.set_ylabel('Carga térmica (kW)'); a1.grid(True); a1.legend(fontsize=13)",
+        "    a1.set_title(f\"Energia x R (Q_pré = {P['Qpre']:.0f} kW)\"); f1.tight_layout()",
+        '    # curvas de custo calculadas pelo simulador com os custos informados (mil R$/ano)',
+        '    Rc = ' + vec(pick(cc.R)),
+        '    Ct = ' + vec(pick(cc.tot).map(v => v / 1000)),
+        '    Ce = ' + vec(pick(cc.en).map(v => v / 1000)),
+        '    Ck = ' + vec(pick(cc.cap).map(v => v / 1000)),
+        '    k = int(np.argmin(Ct)); f2, a2 = plt.subplots(figsize=(10, 6.5))',
+        "    a2.plot(Rc, Ct, 'k', lw=3, label='Custo total'); a2.plot(Rc, Ce, 'r', lw=2, label='Energia'); a2.plot(Rc, Ck, 'b', lw=2, label='Equipamento')",
+        "    a2.plot(Rc[k], Ct[k], '*', color='#2e9e6b', ms=20, label=f'Ótimo: R = {Rc[k]:.2f}'); a2.set_ylim(0, 1.15 * Ct[int(0.08 * len(Ct)):].max())",
+        "    a2.set_xlabel('Razão de refluxo R'); a2.set_ylabel('Custo anual (mil R$/ano)'); a2.grid(True); a2.legend(fontsize=13); a2.set_title('Otimização do refluxo: o mínimo do custo total'); f2.tight_layout()",
+        '    return [f1, f2, mccabe_refluxo_gui(P, ' + str(b.name) + ')]']).filter(x => x !== '').join('\n');
     }
     if (b.type === 'pid_cstr' && r.pid) {
       const p = r.pid, B = v => (v ? 'True' : 'False');
@@ -7255,16 +7370,27 @@ def mr_equilibrio(P):
 
 
 def mccabe_refluxo_gui(P, nome):
-    """Diagrama de McCabe-Thiele e fluxograma com barra deslizante da razão de refluxo R (de 1 a 4)."""
+    """McCabe-Thiele e fluxograma com barras deslizantes da razão de refluxo R (1 a 4) e do pré-aquecedor (0 a 300 kW)."""
     x_eq, y_eq = mr_equilibrio(P)
     k = np.where((y_eq[1:] - x_eq[1:] <= 0) & (x_eq[1:] < 0.999))[0]; k = k[0] if len(k) else len(x_eq) - 1
     xm, ym = x_eq[:k + 1], y_eq[:k + 1]
-    fig = plt.figure(figsize=(17, 9)); a1 = fig.add_axes([0.06, 0.2, 0.42, 0.72]); a2 = fig.add_axes([0.53, 0.2, 0.44, 0.72])
-    sl = Slider(fig.add_axes([0.2, 0.06, 0.5, 0.035]), 'R', 1.0, 4.0, valinit=min(4, max(1, P['R'])))
-    sl.label.set_fontsize(16); sl.valtext.set_fontsize(16)
+    fig = plt.figure(figsize=(17, 9.5)); a1 = fig.add_axes([0.06, 0.24, 0.42, 0.68]); a2 = fig.add_axes([0.53, 0.24, 0.44, 0.68])
+    sl = Slider(fig.add_axes([0.2, 0.09, 0.5, 0.03]), 'R', 1.0, 4.0, valinit=min(4, max(1, P['R'])))
+    sq = Slider(fig.add_axes([0.2, 0.04, 0.5, 0.03]), 'Q_pré (kW)', 0.0, 300.0, valinit=min(300, max(0, P['Qpre'])))
+    for s_ in (sl, sq):
+        s_.label.set_fontsize(15); s_.valtext.set_fontsize(15)
 
     def desenha(_=None):
-        R = sl.val; a = R / (R + 1); b = P['xD'] / (R + 1); q = P['q']
+        R, Qp = sl.val, sq.val; q = P['q0'] - Qp * 1000 / (P['F'] / 3.6 * P['lF'])
+        a = R / (R + 1); b = P['xD'] / (R + 1)
+        if abs(q - 1) < 1e-9:
+            xp = P['xF']
+        else:
+            xp = brentq(lambda x: np.interp(x, xm, ym) - (q / (q - 1) * x - P['xF'] / (q - 1)), 1e-6, xm[-1] - 1e-6)
+        yp = np.interp(xp, xm, ym); Rmin = (P['xD'] - yp) / (yp - xp)
+        ii = (xm > xp) & (xm < P['xD'])
+        if ii.any():
+            Rmin = max(Rmin, np.max((P['xD'] - ym[ii]) / (ym[ii] - xm[ii])))
         xi = P['xF'] if abs(q - 1) < 1e-9 else (-P['xF'] / (q - 1) - b) / (a - q / (q - 1)); yi = a * xi + b
         As = (yi - P['xB']) / (xi - P['xB']); Bs = P['xB'] - As * P['xB']
         sx, sy, y, msg = [P['xD']], [P['xD']], P['xD'], ''
@@ -7278,32 +7404,37 @@ def mccabe_refluxo_gui(P, nome):
             if yn >= np.interp(x, xm, ym) or yn >= y:
                 msg = f'estrangula no estágio {i}'; break
             sx.append(x); sy.append(yn); y = yn
+        V = (R + 1) * P['D'] / 3.6; Vs = V - (1 - q) * P['F'] / 3.6; Qr = Vs * P['lB'] / 1000; Qc = V * P['lD'] / 1000
         a1.clear(); a1.plot([0, 1], [0, 1], 'k--', lw=1.5, label='Linha 45°'); a1.plot(x_eq, y_eq, 'b-', lw=2.5, label='Equilíbrio ELV')
         xr = np.linspace(xi, P['xD'], 50); a1.plot(xr, a * xr + b, 'r-', lw=2, label='Reta de retificação')
         xs = np.linspace(P['xB'], xi, 50); a1.plot(xs, As * xs + Bs, 'm-', lw=2, label='Reta de esgotamento')
-        a1.plot([P['xF'], xi], [P['xF'], yi], '-.', color='green', lw=2, label=f"Reta q (q = {q:.2f})"); a1.plot(sx, sy, 'k-', lw=1.5, label='Estágios')
+        a1.plot([P['xF'], xi], [P['xF'], yi], '-.', color='green', lw=2, label=f'Reta q (q = {q:.3f})'); a1.plot(sx, sy, 'k-', lw=1.5, label='Estágios')
         a1.set_xlim(0, 1); a1.set_ylim(0, 1); a1.grid(True); a1.legend(loc='lower right', fontsize=12)
         a1.set_xlabel(f"Fração molar de {P['nome1']} no líquido (x)"); a1.set_ylabel(f"Fração molar de {P['nome1']} no vapor (y)")
-        a1.set_title(f"McCabe-Thiele | R = {R:.2f} (Rmin = {P['Rmin']:.2f}) | {msg}", fontsize=15)
+        a1.set_title(f'R = {R:.2f} (Rmin = {Rmin:.2f}) | {msg}', fontsize=15)
         a2.clear(); a2.set_xlim(0, 10); a2.set_ylim(0, 10); a2.set_aspect('equal'); a2.axis('off')
         a2.add_patch(FancyBboxPatch((4, 2.5), 2, 5, boxstyle='round,pad=0.05,rounding_size=0.3', fc='#d9e6f2', ec='b', lw=2.5))
-        for yp in np.linspace(2.8, 7.2, 8):
-            a2.plot([4.2, 5.8], [yp, yp], ':', color='0.4', lw=1.5)
+        for yp_ in np.linspace(2.8, 7.2, 8):
+            a2.plot([4.2, 5.8], [yp_, yp_], ':', color='0.4', lw=1.5)
         a2.add_patch(Circle((7.6, 8.5), 0.8, fc='#ccf2cc', ec='green', lw=2)); a2.text(7.6, 8.5, 'Conden-\\nsador', ha='center', va='center', fontsize=9, weight='bold')
+        a2.text(7.6, 7.35, f'Qc = {Qc:.0f} kW', ha='center', fontsize=11, color='#2563c9', weight='bold')
         a2.add_patch(Circle((7.6, 1.5), 0.8, fc='#f2cccc', ec='darkred', lw=2)); a2.text(7.6, 1.5, 'Refer-\\nvedor', ha='center', va='center', fontsize=9, weight='bold')
-        a2.annotate('', xy=(4, 5), xytext=(1, 5), arrowprops=dict(arrowstyle='-|>', color='#0066cc', lw=2.5))
-        a2.text(1.0, 5.4, f"ALIMENTAÇÃO (F)\\nx_F = {P['xF']:.2f}\\nEstágio: {P['N_feed']}", fontsize=12, weight='bold', color='#003399')
+        a2.text(7.6, 2.55, f'Qr = {Qr:.0f} kW', ha='center', fontsize=11, color='#d1302b', weight='bold')
+        a2.add_patch(Circle((2.5, 5), 0.55, fc='#ffe6cc', ec='#e07b00', lw=2)); a2.text(2.5, 3.9, f'Pré-aquecedor\\n{Qp:.0f} kW', ha='center', fontsize=10, color='#c25e00', weight='bold')
+        a2.annotate('', xy=(1.95, 5), xytext=(0.2, 5), arrowprops=dict(arrowstyle='-|>', color='#0066cc', lw=2.5))
+        a2.annotate('', xy=(4, 5), xytext=(3.05, 5), arrowprops=dict(arrowstyle='-|>', color='#0066cc', lw=2.5))
+        a2.text(0.1, 6.0, f"ALIMENTAÇÃO (F)\\nx_F = {P['xF']:.2f}, q = {q:.2f}\\nEstágio: {P['N_feed']}", fontsize=11, weight='bold', color='#003399')
         a2.plot([5, 5, 6.8], [7.5, 8.5, 8.5], 'k-', lw=2); a2.annotate('', xy=(9.6, 8.5), xytext=(8.4, 8.5), arrowprops=dict(arrowstyle='-|>', color='green', lw=2.5))
-        a2.text(8.0, 9.2, f"DESTILADO (D)\\nx_D = {P['xD']:.2f}", fontsize=12, weight='bold', color='darkgreen')
-        a2.plot([7.6, 7.6, 5.5, 5.5], [7.7, 7.6, 7.6, 7.5], 'r-', lw=2); a2.text(6.0, 7.2, f'Refluxo (R = {R:.2f})', fontsize=12, color='r', weight='bold')
+        a2.text(8.0, 9.4, f"DESTILADO (D)\\nx_D = {P['xD']:.2f}", fontsize=11, weight='bold', color='darkgreen')
+        a2.plot([7.6, 7.6, 5.5, 5.5], [7.7, 7.6, 7.6, 7.5], 'r-', lw=2); a2.text(5.3, 6.9, f'Refluxo (R = {R:.2f})', fontsize=11, color='r', weight='bold')
         a2.plot([5, 5, 6.8], [2.5, 1.5, 1.5], 'k-', lw=2); a2.plot([7.6, 7.6, 5.5, 5.5], [2.3, 2.4, 2.4, 2.5], 'b-', lw=2)
         a2.annotate('', xy=(9.7, 1.5), xytext=(8.4, 1.5), arrowprops=dict(arrowstyle='-|>', color='darkred', lw=2.5))
-        a2.text(8.0, 0.3, f"FUNDO (B)\\nx_B = {P['xB']:.2f}", fontsize=12, weight='bold', color='darkred')
-        a2.set_title('Fluxograma do processo (estilo DWSIM)', fontsize=15)
+        a2.text(8.0, 0.2, f"FUNDO (B)\\nx_B = {P['xB']:.2f}", fontsize=11, weight='bold', color='darkred')
+        a2.set_title(f'Fluxograma (estilo DWSIM) | Q_pré + Q_r = {Qp + Qr:.0f} kW', fontsize=15)
         fig.canvas.draw_idle()
-    sl.on_changed(desenha)
+    sl.on_changed(desenha); sq.on_changed(desenha)
     desenha()
-    fig._sliders = [sl]   # mantém referência ao controle
+    fig._sliders = [sl, sq]   # mantém referência aos controles
     return fig
 `;
   const PID_FUNCS = `
@@ -7509,11 +7640,11 @@ def pfr_transiente(P, nome):
       streams: [S('1', 'F', 'out', 'H', 'in', '1'), S('2', 'H', 'out', 'T101', 'feed', '2'), S('E1', 'E1', 'eo', 'H', 'q_in', 'E1'),
         S('E2', 'T101', 'qc', 'EC', 'ei', 'E2'), S('E3', 'ER', 'eo', 'T101', 'qr', 'E3'),
         S('3', 'T101', 'distillate', 'D', 'in', 'D'), S('4', 'T101', 'bottoms', 'W', 'in', 'W')] } },
-    { key: 'mccabe-refluxo', title: 'McCabe–Thiele com barra deslizante da razão de refluxo: etanol/água (Margules + Antoine)', fs: {
+    { key: 'mccabe-refluxo', title: 'McCabe–Thiele com barras deslizantes do refluxo e do pré-aquecedor (100 kW): energia e refluxo ótimo, etanol/água', fs: {
       name: 'McCabe–Thiele com refluxo ajustável', components: ['ethanol', 'water'], model: 'NRTL',
       blocks: [
-        { id: 'F', type: 'feed', name: 'Alimentação (líquido saturado)', params: { T: '', P: 1.01325, vf: 0, flow: 100, flowUnit: 'kmol/h', basis: 'molar', composition: { ethanol: 0.10, water: 0.90 } } },
-        { id: 'T1', type: 'column_reflux', name: 'DC-03', params: { R: 2.5, lk: 'ethanol', hk: 'water', xD: 0.80, xB: 0.01, q: 1, N: 20, Nf: 10, vle: 'Margules + Antoine (como no código original)', A12: 1.6022, A21: 0.7947, ant1: '8.04494 1554.3 222.65', ant2: '8.07131 1730.63 233.426', P: 1.01325 } },
+        { id: 'F', type: 'feed', name: 'Alimentação', params: { T: '', P: 1.01325, vf: 0, flow: 100, flowUnit: 'kmol/h', basis: 'molar', composition: { ethanol: 0.10, water: 0.90 } } },
+        { id: 'T1', type: 'column_reflux', name: 'DC-03', params: { R: 2.5, Qpre: 100, lk: 'ethanol', hk: 'water', xD: 0.80, xB: 0.01, q: 1, N: 20, Nf: 10, vle: 'Margules + Antoine (como no código original)', A12: 1.6022, A21: 0.7947, ant1: '8.04494 1554.3 222.65', ant2: '8.07131 1730.63 233.426', P: 1.01325, cS: 70, cP: 25, cW: 2, cSt: 20000, cHx: 100, hrs: 8000 } },
         { id: 'D', type: 'product', name: 'Destilado D' }, { id: 'W', type: 'product', name: 'Fundo B' }],
       streams: [S('1', 'F', 'out', 'T1', 'feed', '1'), S('2', 'T1', 'distillate', 'D', 'in', 'D'), S('3', 'T1', 'bottoms', 'W', 'in', 'W')] } },
     { key: 'coluna-mccabe-preaquecida', title: 'Coluna McCabe–Thiele com pré-aquecedor embutido (100 kW na carga, sem heater externo): etanol/água', fs: {
@@ -8592,15 +8723,18 @@ def pfr_transiente(P, nome):
       ['Nível da descarga z_d (m)', 'altura do nível de chegada acima do eixo da bomba (28 m). A altura estática é z_d − z_s + (P_d − P_s)/ρg = 25,5 m.'],
       ['Curva da bomba', 'pontos do catálogo do fabricante, um por linha: vazão (m³/h), altura (m), rendimento (%) e NPSH requerido (m). Pode colar do Excel. O programa ajusta polinômios a esses pontos.'],
       ['Viscosidade (cP)', 'vazio = água, com a viscosidade calculada pela temperatura da corrente (0,89 cP a 25 °C). Para outro líquido, informe o valor.']] },
-    column_reflux: { ex: 'McCabe–Thiele com barra deslizante da razão de refluxo', items: [
-      ['Razão de refluxo R (barra deslizante)', 'L/D, de 1 a 4 como no código original. Arraste a barra para ver o diagrama mudar ao vivo; no exemplo, R = 2,5 (2,15 vezes o mínimo).'],
+    column_reflux: { ex: 'McCabe–Thiele com barras deslizantes do refluxo e do pré-aquecedor', items: [
+      ['Razão de refluxo R (barra deslizante)', 'L/D, de 1 a 4 como no código original. Arraste a barra para ver o diagrama, as cargas e os custos mudarem ao vivo; no exemplo, R = 2,5.'],
+      ['Q_pré (barra deslizante)', 'energia injetada na alimentação pelo pré-aquecedor acoplado à coluna, de 0 a 300 kW (100 kW no exemplo). Ela vaporiza parte da carga: q efetivo = q − Q_pré/(F·λ_F) = 0,912, e a reta q inclina.'],
       ['Componentes 1 e 2', 'o mais volátil (etanol) e o menos volátil (água). A alimentação ligada à coluna fornece a vazão e x_F = 0,10.'],
       ['xD e xB', 'frações molares do componente 1 no destilado (0,80, abaixo do azeótropo) e no fundo (0,01).'],
-      ['q', 'condição térmica da alimentação: 1 = líquido saturado (reta q vertical em x_F); 0 = vapor saturado.'],
+      ['q', 'condição térmica da alimentação antes do pré-aquecedor: 1 = líquido saturado; 0 = vapor saturado. O pré-aquecedor reduz esse valor.'],
       ['Nº de estágios e estágio da alimentação', '20 estágios teóricos, o último é o refervedor; a troca da reta de retificação para a de esgotamento acontece no estágio 10.'],
       ['Equilíbrio líquido-vapor', '<b>Margules + Antoine</b>: o modelo do código original, com os parâmetros A12, A21 e as constantes de Antoine abaixo; <b>modelo termodinâmico do fluxograma</b>: usa o NRTL escolhido na aba Termodinâmica.'],
       ['A12 e A21', 'parâmetros de Margules do par etanol(1)–água(2) a 1 atm: 1,6022 e 0,7947.'],
-      ['Antoine', 'A, B e C de cada componente, com P em mmHg e T em °C: etanol 8,04494, 1554,3 e 222,65; água 8,07131, 1730,63 e 233,426.']] },
+      ['Antoine', 'A, B e C de cada componente, com P em mmHg e T em °C: etanol 8,04494, 1554,3 e 222,65; água 8,07131, 1730,63 e 233,426.'],
+      ['Custos da energia (R$/GJ)', 'vapor do refervedor (70), energia do pré-aquecedor (25, vapor de baixa pressão ou calor recuperado, mais barato) e água de resfriamento (2). Com 8 000 h/ano, 1 kW contínuo equivale a 28,8 GJ/ano.'],
+      ['Custos de equipamento (R$/ano)', 'custo anualizado de um estágio (20 000 para uma coluna com 100 kmol/h de vapor; cresce com √V porque o diâmetro aumenta) e dos trocadores (100 por kW de refervedor e condensador). O custo total anual = energia + equipamento tem um mínimo: o refluxo ótimo.']] },
     column_mt: { ex: 'Coluna McCabe–Thiele com pré-aquecedor embutido', items: [
       ['Pré-aquecedor da alimentação', '<b>carga térmica Q_pré</b>: informa o calor adicionado à carga (100 kW no exemplo); <b>aquecer até líquido saturado</b>: o programa calcula o calor para q = 1; <b>temperatura de saída</b>: aquece até a temperatura informada; <b>sem pré-aquecimento</b>: a carga entra como chega.'],
       ['Q_pré (kW)', 'calor adicionado à carga no pré-aquecedor embutido. Substitui o heater externo e a corrente de energia: 100 kW levam a carga de 25 °C a 64,7 °C.'],

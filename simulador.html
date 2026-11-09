@@ -537,6 +537,12 @@ body.mobile .wl-url { flex-basis: 100%; }
 .rx-help ul, .rx-help ol { margin: 4px 0 6px; padding-left: 20px; }
 .rx-help li { margin: 2px 0; }
 .rx-help p { margin: 4px 0; }
+/* barra deslizante (sintonia ao vivo do PID) */
+.field.field-range { grid-template-columns: 1fr; gap: 4px; }
+.field-range .rng-row { display: flex; align-items: center; gap: 10px; }
+.field-range input[type=range] { flex: 1 1 auto; width: auto; min-width: 0; accent-color: #2563c9; height: 26px; cursor: pointer; padding: 0; border: 0; background: transparent; }
+.field-range .rng-num { width: 84px; flex: 0 0 auto; }
+.field-range .rng-val { color: #2563c9; }
 
 </style>
 </head>
@@ -2139,6 +2145,32 @@ window.SIMULAFACIL_CONFIG = {
     pump: { label: 'Bomba', cat: 'Alteradores de pressão', ins: ['in'], outs: ['out'], eins: ['q_in'], params: [{ k: 'P', label: 'Pressão de descarga', u: 'bar', def: 5 }, { k: 'eff', label: 'Eficiência', u: '0–1', def: 0.75 }] },
     compressor: { label: 'Compressor', cat: 'Alteradores de pressão', ins: ['in'], outs: ['out'], eins: ['q_in'], params: [{ k: 'P', label: 'Pressão de descarga', u: 'bar', def: 5 }, { k: 'eff', label: 'Eficiência isentrópica', u: '0–1', def: 0.75 }] },
     valve: { label: 'Válvula', cat: 'Alteradores de pressão', ins: ['in'], outs: ['out'], params: [{ k: 'P', label: 'Pressão de saída', u: 'bar', def: 1.01325 }] },
+    pump_system: { label: 'Sistema de bombeamento: tubulação (aço ou PVC), válvulas, curvas da bomba e NPSH', cat: 'Bombeamento', ins: ['in'], outs: ['out'], eins: ['q_in'], params: [
+      { k: 'mat', label: 'Material da tubulação', type: 'select', options: ['aço comercial (ε = 0,046 mm)', 'PVC (ε = 0,0015 mm)'], def: 'aço comercial (ε = 0,046 mm)' },
+      { k: 'Ps', label: 'Sucção: pressão na superfície do reservatório', u: 'bar abs', def: 1.01325 },
+      { k: 'zs', label: 'Sucção: nível do líquido em relação ao eixo da bomba (+ acima = bomba afogada; − abaixo = sucção negativa)', u: 'm', def: 2.5 },
+      { k: 'Ls', label: 'Sucção: comprimento reto da tubulação', u: 'm', def: 5 },
+      { k: 'Ds', label: 'Sucção: diâmetro interno', u: 'mm', def: 102.3 },
+      { k: 's_ent', label: 'Sucção: entrada normal na tubulação (K = 0,5)', u: 'unid.', def: 1 },
+      { k: 's_pe', label: 'Sucção: válvula de pé com crivo (K = 1,75 + 0,75; usada quando a bomba NÃO é afogada)', u: 'unid.', def: 0 },
+      { k: 's_gav', label: 'Sucção: válvula gaveta aberta (K = 0,2)', u: 'unid.', def: 1 },
+      { k: 's_cot', label: 'Sucção: cotovelo 90° (K = 0,9)', u: 'unid.', def: 1 },
+      { k: 's_red', label: 'Sucção: redução excêntrica na entrada da bomba (K = 0,15)', u: 'unid.', def: 1 },
+      { k: 'Pd', label: 'Recalque: pressão no reservatório de descarga', u: 'bar abs', def: 1.01325 },
+      { k: 'zd', label: 'Recalque: nível de descarga acima do eixo da bomba', u: 'm', def: 28 },
+      { k: 'Ld', label: 'Recalque: comprimento reto da tubulação', u: 'm', def: 80 },
+      { k: 'Dd', label: 'Recalque: diâmetro interno', u: 'mm', def: 77.9 },
+      { k: 'd_amp', label: 'Recalque: ampliação na saída da bomba (K = 0,3)', u: 'unid.', def: 1 },
+      { k: 'd_ret', label: 'Recalque: válvula de retenção (K = 2,5)', u: 'unid.', def: 1 },
+      { k: 'd_gav', label: 'Recalque: válvula gaveta aberta (K = 0,2)', u: 'unid.', def: 1 },
+      { k: 'd_glo', label: 'Recalque: válvula globo aberta (K = 10)', u: 'unid.', def: 0 },
+      { k: 'd_bor', label: 'Recalque: válvula borboleta aberta (K = 0,3)', u: 'unid.', def: 0 },
+      { k: 'd_cot', label: 'Recalque: cotovelo 90° (K = 0,9)', u: 'unid.', def: 4 },
+      { k: 'd_cur', label: 'Recalque: curva 90° (K = 0,4)', u: 'unid.', def: 2 },
+      { k: 'd_te', label: 'Recalque: tê de passagem direta (K = 0,6)', u: 'unid.', def: 1 },
+      { k: 'd_sai', label: 'Recalque: saída da tubulação no reservatório (K = 1,0)', u: 'unid.', def: 1 },
+      { k: 'curve', label: 'Curva da bomba (catálogo do fabricante): Q (m³/h)  H (m)  η (%)  NPSHr (m) — uma linha por ponto', type: 'matrix', def: '0 42 0 1.0\n10 41 45 1.3\n20 38.5 64 1.8\n30 34.5 74 2.5\n40 29 73 3.5\n50 22 64 4.8' },
+      { k: 'mu', label: 'Viscosidade do líquido (vazio = água: correlação de Vogel com a temperatura da corrente)', u: 'cP', def: '' }] },
     flash: { label: 'Vaso flash', cat: 'Separadores/Vasos', ins: ['in'], outs: ['vapor', 'liquid'], params: [
       { k: 'mode', label: 'Especificação', type: 'select', options: ['T e P', 'Adiabático', 'Carga térmica', 'Fração vaporizada'], def: 'T e P' },
       Object.assign({ def: 80 }, P_T), Object.assign({ def: 1.01325 }, P_P), { k: 'Q', label: 'Carga térmica', u: 'kW', def: 0 }, { k: 'vf', label: 'Fração vaporizada', u: '0–1', def: 0.5 }] },
@@ -2170,6 +2202,17 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'specType', label: 'Tipo de especificação', type: 'select', options: ['nenhuma', 'pureza no destilado', 'pureza no fundo', 'recuperação no destilado'], def: 'nenhuma' },
       { k: 'specValue', label: 'Valor alvo da especificação', u: '0–1', def: 0.85 },
       { k: 'specVary', label: 'Variável manipulada', type: 'select', options: ['R', 'D'], def: 'R' }] },
+    column_mt: { label: 'Coluna McCabe–Thiele com pré-aquecedor embutido (sem heater externo)', cat: 'Colunas', ins: ['feed'], outs: ['distillate', 'bottoms'], eins: ['q_pre', 'qr'], eouts: ['qc'], params: [
+      { k: 'pre', label: 'Pré-aquecedor da alimentação (embutido na coluna)', type: 'select', options: ['carga térmica Q_pré informada', 'aquecer até líquido saturado (q = 1)', 'temperatura de saída do pré-aquecedor', 'sem pré-aquecimento'], def: 'carga térmica Q_pré informada' },
+      { k: 'Qpre', label: 'Q_pré: calor adicionado à alimentação', u: 'kW', def: 100 },
+      { k: 'Tpre', label: 'Temperatura da alimentação após o pré-aquecedor (se escolhida)', u: '°C', def: 80 },
+      { k: 'N', label: 'Nº de estágios (inclui condensador e refervedor)', u: '', def: 20 }, { k: 'feedStage', label: 'Estágio da alimentação', u: '', def: 10 },
+      { k: 'R', label: 'Razão de refluxo R = L0/D', u: '', def: 3.15 },
+      { k: 'spec2', label: 'Segunda especificação da coluna', type: 'select', options: ['vazão de destilado D', 'carga do refervedor Q_r'], def: 'vazão de destilado D' },
+      { k: 'D', label: 'Vazão de destilado D', u: 'kmol/h', def: 12.4 },
+      { k: 'Qr', label: 'Q_r: calor adicionado no refervedor (se escolhido)', u: 'kW', def: 643 },
+      { k: 'condenser', label: 'Condensador', type: 'select', options: ['total', 'parcial'], def: 'total' },
+      Object.assign({ def: 1.01325 }, P_P)] },
     absorber: { label: 'Absorvedora / esgotadora (Kremser)', cat: 'Colunas', ins: ['gas_in', 'liq_in'], outs: ['gas_out', 'liq_out'], params: [
       { k: 'N', label: 'Nº de estágios teóricos', u: '', def: 8 }, Object.assign({ def: 30 }, P_T), Object.assign({ def: 1.01325 }, P_P)] },
     extractor: { label: 'Extrator líquido-líquido', cat: 'Extratores', ins: ['feed', 'solvent'], outs: ['extract', 'raffinate'], params: [
@@ -2205,6 +2248,19 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'dGmode', label: 'ΔG°f na temperatura T', type: 'select', options: ['calcular (ΔH°f e ΔG°f a 298 K + Cp)', 'informar na tabela abaixo'], def: 'calcular (ΔH°f e ΔG°f a 298 K + Cp)' },
       { k: 'dG', label: 'ΔG°f na temperatura T (modo informar; vazio = calcular)', type: 'compval', u: 'J/mol' },
       { k: 'span', label: 'Faixa do gráfico de temperatura (±)', u: 'K', def: 300 }] },
+    pid_cstr: { label: 'Controle PID de CSTR (não linear) — sintonia com barras deslizantes', cat: 'Controle', ins: [], outs: [], params: [
+      { k: 'mv', label: 'Variável manipulada', type: 'select', options: ['vazão de alimentação F (não linear, como no código)', 'concentração de alimentação C_A0 (linear, como na figura)'], def: 'vazão de alimentação F (não linear, como no código)' },
+      { k: 'Kp', label: 'Ganho proporcional Kp', u: '', type: 'range', min: 0, max: 30, step: 0.1, def: 5 },
+      { k: 'Ki', label: 'Ganho integral Ki', u: '1/min', type: 'range', min: 0, max: 10, step: 0.05, def: 1 },
+      { k: 'Kd', label: 'Ganho derivativo Kd', u: 'min', type: 'range', min: 0, max: 10, step: 0.05, def: 2 },
+      { k: 'Cref', label: 'Referência (set-point) C_A,ref', u: 'mol/L', def: 5 },
+      { k: 'V', label: 'Volume do reator V', u: 'L', def: 100 },
+      { k: 'k', label: 'Constante de velocidade k (A → B, 1ª ordem)', u: '1/min', def: 0.2 },
+      { k: 'CA0', label: 'C_A0 da alimentação (quando a vazão F é a manipulada)', u: 'mol/L', def: 10 },
+      { k: 'Fb', label: 'Vazão: F_bias do controlador (ou vazão fixa, quando C_A0 é a manipulada)', u: 'L/min', def: 10 },
+      { k: 'C0', label: 'Concentração inicial no reator', u: 'mol/L', def: 0 },
+      { k: 'tEnd', label: 'Tempo de simulação', u: 'min', def: 30 },
+      { k: 'sat', label: 'Saturação da variável manipulada (não negativa)', type: 'select', options: ['só no gráfico (como no código original)', 'no modelo (fisicamente: F ≥ 0 ou C_A0 ≥ 0)'], def: 'só no gráfico (como no código original)' }] },
     adsorber: { label: 'Coluna de adsorção (leito fixo)', cat: 'Adsorção e difusão', ins: ['in'], outs: ['out'], params: [
       { k: 'solute', label: 'Adsorbato (vazio = soluto principal)', type: 'comp', def: '' },
       { k: 'L', label: 'Altura do leito L', u: 'm', def: 0.15 },
@@ -2775,7 +2831,7 @@ window.SIMULAFACIL_CONFIG = {
     const xD = sol.partial ? ys[0] : xs[0], xB = xs[Ns - 1];
     const path = { x: [xD], y: [xD] };
     for (let j = 1; j < Ns; j++) { path.x.push(xs[j]); path.y.push(path.y[path.y.length - 1]); path.x.push(xs[j]); path.y.push(j < Ns - 1 ? ys[j + 1] : xs[j]); }
-    const f = feeds[0].s; const zF = f.z[i1] / (f.z[i1] + f.z[i2]), q = 1 - f.beta;
+    const f = feeds[0].s; const zF = f.z[i1] / (f.z[i1] + f.z[i2]), q = f.qTrue != null ? f.qTrue : 1 - f.beta;
     const slope = R_ / (R_ + 1), icp = xD / (R_ + 1);
     let xi, yi; if (Math.abs(q - 1) < 1e-6) { xi = zF; yi = slope * zF + icp; } else { const m = q / (q - 1), c0 = -zF / (q - 1); xi = (c0 - icp) / (slope - m); yi = slope * xi + icp; }
     // refluxo mínimo (pinch na interseção da reta q com a curva de equilíbrio)
@@ -3150,6 +3206,241 @@ window.SIMULAFACIL_CONFIG = {
         { name: 'Água evaporada (kg/h ÷ 100)', y: r.V.map(v => v / 100), color: '#2563c9' }, { name: 'Área (m²)', y: r.A, color: '#d1302b' }] } }];
     return { out, res, warn, plots, duty: r.q[0] / 3.6, evap: { r: { S: r.S, V: r.V, T: r.T, Tv: r.Tv, A: r.A, Am: r.Am, x: r.x, dT: r.dT, bpr: r.bpr, it: r.it, economy: r.economy },
       F, xF, TF: K2C(s.T), xP: num(p.xP, 0.5), Ps: num(p.Ps, 205.5), PN: num(p.PN, 13.4), U: Us, b1: num(p.b1, 1.78), b2: num(p.b2, 6.22), cp0: num(p.cp0, 4.19), cp1: num(p.cp1, 2.35) } };
+  };
+
+  /* ---------------- coluna com pré-aquecedor embutido: aquece a carga (como um heater) e resolve a coluna rigorosa;
+     o diagrama McCabe–Thiele usa a condição térmica q da carga já aquecida */
+  const decBR = res => { res.forEach(x => { if (typeof x.v === 'string' && !/Reynolds/.test(x.k)) x.v = x.v.replace(/(\d)\.(\d)/g, '$1,$2'); }); return res; }; // vírgula decimal nos textos
+  const decW = w => w.map(t => String(t).replace(/(\d)\.(\d)/g, '$1,$2'));
+  IMPL.column_mt = function (th, b, ins) {
+    const s = ins.feed, p = b.params; if (!s || !(s.F > 0)) throw new Error('Coluna sem alimentação');
+    const P = num(p.P, 1.01325) * BAR, mode = p.pre || 'carga térmica Q_pré informada', warn = [];
+    const ePre = ins.q_pre && ins.q_pre.spec ? ins.q_pre : null, eR = ins.qr && ins.qr.spec ? ins.qr : null;
+    let f;
+    if (ePre) f = streamPH(th, s.flows, P, s.H + ePre.Q, s.T);
+    else if (/^carga/.test(mode)) f = streamPH(th, s.flows, P, s.H + num(p.Qpre, 0) * 1000, s.T);
+    else if (/^aquecer/.test(mode)) { const fl = th.flashPVF(s.z, P, 0); f = mkStream(th, s.flows, fl.T, P, fl); }
+    else if (/^temperatura/.test(mode)) f = mkStream(th, s.flows, C2K(num(p.Tpre, 80)), P);
+    else f = s;
+    const Qpre = f.H - s.H;
+    // condição térmica pela definição q = (H_V,sat − H_F)/(H_V,sat − H_L,sat): q > 1 líquido sub-resfriado, 0 < q < 1 parcialmente vaporizado
+    let qF = 1 - f.beta, Tb = null, Td = null;
+    try { const fb = th.flashPVF(f.z, P, 0), fd = th.flashPVF(f.z, P, 1), HL = mkStream(th, f.flows, fb.T, P, fb).H, HV = mkStream(th, f.flows, fd.T, P, fd).H;
+      Tb = fb.T; Td = fd.T; if (Math.abs(HV - HL) > 1e-9) qF = (HV - f.H) / (HV - HL); } catch (e) { /* mantém q = 1 − β */ }
+    f = Object.assign({}, f, { qTrue: qF });
+    if (Qpre < -1) warn.push('o "pré-aquecedor" está retirando calor (Q_pré < 0): a alimentação chega mais quente que a condição pedida');
+    const base = { N: p.N, feedStage: p.feedStage, R: p.R, Dmode: 'Vazão D', D: num(p.D, 12.4), condenser: p.condenser || 'total', P: p.P, dP: 0, sideStage: 0, sideFlow: 0, specType: 'nenhuma' };
+    const run = D => IMPL.column(th, { params: Object.assign({}, base, { D }) }, { feed: f });
+    const QrSpec = eR ? eR.Q : (/refervedor/.test(p.spec2 || '') ? num(p.Qr, 643) * 1000 : null);
+    let r, D = base.D, specMsg = null;
+    if (QrSpec != null) { // procura D que dá a carga do refervedor pedida (secante; Q_r é quase linear em D com R fixo)
+      const Fk = f.F / KMOLH, lo = 0.01 * Fk, hi = 0.99 * Fk, g = d => { const rr = run(d); return [rr.duties.Qr - QrSpec, rr]; };
+      let d0 = Math.min(hi, Math.max(lo, D)), g0 = g(d0), d1 = Math.min(hi, Math.max(lo, d0 * 1.08 + 0.01)), g1 = g(d1), ok = false;
+      for (let it = 0; it < 25; it++) {
+        if (Math.abs(g1[0]) < Math.max(1, 1e-5 * Math.abs(QrSpec))) { ok = true; break; }
+        const den = g1[0] - g0[0]; let d2 = Math.abs(den) > 1e-12 ? d1 - g1[0] * (d1 - d0) / den : d1 * 1.1;
+        d2 = Math.min(hi, Math.max(lo, d2)); d0 = d1; g0 = g1; d1 = d2; g1 = g(d1);
+      }
+      r = g1[1]; D = d1; specMsg = ok ? null : 'carga do refervedor pedida não foi atingida (resultado mais próximo: D = ' + d1.toFixed(3) + ' kmol/h)';
+      if (specMsg) warn.push(specMsg);
+    } else r = run(D);
+    const Qr = r.duties.Qr, Qc = r.duties.Qc, Rv = num(p.R, 3.15);
+    const mc = (r.plots || []).find(x => x.kind === 'mccabe');
+    const res = [{ k: 'Pré-aquecedor embutido: Q_pré' + (ePre ? ' (da corrente de energia)' : ''), v: kW(Qpre), u: 'kW' },
+      { k: 'Alimentação: T antes → depois do pré-aquecedor', v: K2C(s.T).toFixed(2) + ' → ' + K2C(f.T).toFixed(2), u: '°C' },
+      { k: 'Fração vaporizada da carga após o pré-aquecedor', v: +f.beta.toFixed(4), u: '' },
+      { k: 'Condição térmica da carga q = (H_V − H_F)/(H_V − H_L)', v: +qF.toFixed(4), u: qF > 1.0005 ? 'líquido sub-resfriado' : qF < -0.0005 ? 'vapor superaquecido' : qF > 0.9995 ? 'líquido saturado' : qF < 0.0005 ? 'vapor saturado' : 'parcialmente vaporizada' }];
+    if (Tb != null) res.push({ k: 'Ponto de bolha / de orvalho da carga na pressão da coluna', v: K2C(Tb).toFixed(2) + ' / ' + K2C(Td).toFixed(2), u: '°C' });
+    if (QrSpec != null) res.push({ k: 'D calculado para a carga do refervedor pedida', v: D, u: 'kmol/h' });
+    const out = res.concat(r.res.filter(x => x.k !== 'Método' && x.k !== 'Iterações'));
+    out.push({ k: 'Calor total adicionado (Q_pré + Q_r)', v: kW(Qpre + Qr), u: 'kW' }, { k: 'Calor retirado no condensador (|Q_c|)', v: kW(Math.abs(Qc)), u: 'kW' });
+    if (mc && mc.data.Rmin != null && isFinite(mc.data.Rmin)) out.push({ k: 'Refluxo mínimo (pinch na reta q) Rmín e R/Rmín', v: mc.data.Rmin.toFixed(3) + ' / ' + (Rv / mc.data.Rmin).toFixed(2), u: '' });
+    const plots = (r.plots || []).slice();
+    if (mc) mc.title = 'McCabe-Thiele com a carga pré-aquecida (q = ' + qF.toFixed(3) + ') | R = ' + Rv.toFixed(2);
+    plots.splice(mc ? 1 : 0, 0, { kind: 'bars', title: 'Balanço de energia da coluna: calor adicionado e retirado', data: { categories: ['Q_pré (pré-aquecedor)', 'Q_r (refervedor)', '|Q_c| (condensador)'], yLabel: 'kW',
+      series: [{ name: 'Carga térmica (kW)', y: [Qpre / 1000, Qr / 1000, Math.abs(Qc) / 1000], color: '#e07b39' }] } });
+    return { out: r.out, res: decBR(out), warn: decW(warn.concat(r.warn || [])), plots, duties: { Qc, Qr, Qpre }, duty: Qr, profile: r.profile, feedHeated: { T: f.T, beta: f.beta } };
+  };
+
+  /* ------------------------------------------------------------------ sistema de bombeamento
+     curva do sistema H_sis(Q) = ΔP/(ρg) + Δz + Σ[(f L/D + ΣK) V²/2g] (sucção + recalque), fator de atrito de Colebrook,
+     curva da bomba ajustada por mínimos quadrados, ponto de operação, NPSH disponível × requerido e potência */
+  const PIPE_MAT = { aco: { name: 'aço comercial', eps: 0.046e-3 }, pvc: { name: 'PVC', eps: 0.0015e-3 } };
+  const ACC = { s_ent: ['Entrada normal', 0.5], s_pe: ['Válvula de pé com crivo', 2.5], s_gav: ['Válvula gaveta (sucção)', 0.2], s_cot: ['Cotovelo 90° (sucção)', 0.9], s_red: ['Redução excêntrica', 0.15],
+    d_amp: ['Ampliação', 0.3], d_ret: ['Válvula de retenção', 2.5], d_gav: ['Válvula gaveta (recalque)', 0.2], d_glo: ['Válvula globo', 10], d_bor: ['Válvula borboleta', 0.3],
+    d_cot: ['Cotovelos 90° (recalque)', 0.9], d_cur: ['Curvas 90°', 0.4], d_te: ['Tê de passagem direta', 0.6], d_sai: ['Saída no reservatório', 1.0] };
+  function frictionF(Re, rel) { // Colebrook–White (iterado a partir de Swamee–Jain); laminar: 64/Re
+    if (!(Re > 0)) return 0; if (Re < 2300) return 64 / Re;
+    let f = 0.25 / Math.pow(Math.log10(rel / 3.7 + 5.74 / Math.pow(Re, 0.9)), 2);
+    for (let k = 0; k < 30; k++) { const fn = Math.pow(-2 * Math.log10(rel / 3.7 + 2.51 / (Re * Math.sqrt(f))), -2); if (Math.abs(fn - f) < 1e-12) { f = fn; break; } f = fn; }
+    if (Re < 4000) { const fl = 64 / 2300, w = (Re - 2300) / 1700; f = fl + w * (f - fl); } // transição: interpolação
+    return f;
+  }
+  function polyfit(x, y, deg) {
+    const m = deg + 1, A = []; for (let i = 0; i < m; i++) A.push(new Array(m).fill(0)); const bb = new Array(m).fill(0);
+    x.forEach((xi, k) => { for (let i = 0; i < m; i++) { bb[i] += y[k] * Math.pow(xi, i); for (let j = 0; j < m; j++) A[i][j] += Math.pow(xi, i + j); } });
+    return N.solveLinear(A, bb);
+  }
+  const polyval = (c, x) => c.reduce((s, ci, i) => s + ci * Math.pow(x, i), 0);
+  function pumpSystem(o) {
+    const g = 9.80665, rho = o.rho, mu = o.mu, mats = ['aco', 'pvc'];
+    const sideLoss = (Qh, L, Dmm, Ksum, eps) => { const D = Dmm / 1000, A = Math.PI * D * D / 4, V = Qh / 3600 / A, Re = rho * V * D / mu, f = frictionF(Re, eps / D), hv = V * V / (2 * g);
+      return { V, Re, f, hv, pipe: f * L / D * hv, acc: Ksum * hv }; };
+    const Ks = Object.keys(ACC).filter(k => k[0] === 's').reduce((s, k) => s + o.n[k] * ACC[k][1], 0), Kd = Object.keys(ACC).filter(k => k[0] === 'd').reduce((s, k) => s + o.n[k] * ACC[k][1], 0);
+    const Hstat = (o.Pd - o.Ps) / (rho * g) + (o.zd - o.zs);
+    const sys = (Qh, mat, dK) => { const e = PIPE_MAT[mat].eps, s = sideLoss(Qh, o.Ls, o.Ds, Ks, e), d = sideLoss(Qh, o.Ld, o.Dd, Kd + (dK || 0), e);
+      return { H: Hstat + s.pipe + s.acc + d.pipe + d.acc, s, d, NPSHa: o.Ps / (rho * g) + o.zs - s.pipe - s.acc - o.Pv / (rho * g) }; };
+    const c = o.curve, Qc = c.map(r => r[0]), cH = polyfit(Qc, c.map(r => r[1]), Math.min(2, c.length - 1)),
+      cE = polyfit(Qc, c.map(r => r[2]), Math.min(3, c.length - 1)), cN = polyfit(Qc, c.map(r => r[3]), Math.min(2, c.length - 1));
+    const Hp = Q => polyval(cH, Q), Ep = Q => Math.max(0, polyval(cE, Q)), Np = Q => Math.max(0, polyval(cN, Q));
+    const Qmax = Math.max.apply(null, Qc), qs = N.linspace(0, Qmax, 81);
+    const opPoint = (mat, dK) => { const fn = Q => Hp(Q) - sys(Q, mat, dK).H; if (fn(1e-6) < 0) return null; let hi = Qmax * 1.5; if (fn(hi) > 0) return null; const Q = N.brent(fn, 1e-6, hi, 1e-9); return { Q, H: Hp(Q) }; };
+    const res = {}; mats.forEach(m => { res[m] = { curve: qs.map(q => sys(q, m).H), npsh: qs.map(q => sys(q, m).NPSHa), op: opPoint(m), des: sys(o.Q, m) }; });
+    return { Hstat, Ks, Kd, sys, Hp, Ep, Np, cH, cE, cN, qs, Qmax, res, opPoint, rho, mu, g };
+  }
+
+  IMPL.pump_system = function (th, b, ins) {
+    const s = ins.in, p = b.params; if (!s || !(s.F > 0)) throw new Error('Conecte a corrente de líquido que chega ao reservatório de sucção');
+    if (s.beta > 1e-4) throw new Error('a corrente que chega à sucção tem vapor (fração vaporizada ' + s.beta.toFixed(3) + '): a bomba só recebe líquido');
+    const rho = th.rhoL(s.z), T = s.T;
+    const muIn = p.mu === '' || p.mu == null ? null : num(p.mu, 1);
+    const mu = muIn != null ? muIn / 1000 : 2.414e-5 * Math.pow(10, 247.8 / (T - 140));       // Pa·s (Vogel para água)
+    const Pv = th.ids.reduce((acc, id, i) => acc + s.z[i] * th.psat(i, T), 0);                   // pressão de vapor (Raoult)
+    const Q = s.F * th.vL(s.z) * 3600;                                                          // m³/h de projeto
+    const nfix = k => Math.max(0, Math.round(num(p[k], 0))), n = {}; Object.keys(ACC).forEach(k => { n[k] = nfix(k); });
+    let curve = []; try { curve = SF.ternary.parseMatrix(p.curve, 4); } catch (e) { throw new Error('Curva da bomba: ' + e.message); }
+    curve = curve.filter(r => r.every(isFinite)).sort((a, c) => a[0] - c[0]);
+    if (curve.length < 3) throw new Error('informe ao menos 3 pontos da curva da bomba (Q H η NPSHr por linha)');
+    const mat = /^PVC/i.test(p.mat || '') ? 'pvc' : 'aco', other = mat === 'aco' ? 'pvc' : 'aco';
+    const o = { rho, mu, Pv, Q, n, curve, Ps: num(p.Ps, 1.01325) * BAR, Pd: num(p.Pd, 1.01325) * BAR, zs: num(p.zs, 2.5), zd: num(p.zd, 28),
+      Ls: num(p.Ls, 5), Ds: num(p.Ds, 102.3), Ld: num(p.Ld, 80), Dd: num(p.Dd, 77.9) };
+    if (!(o.Ds > 0 && o.Dd > 0)) throw new Error('os diâmetros internos devem ser positivos');
+    const S = pumpSystem(o), g = S.g, R0 = S.res[mat], R1 = S.res[other], d = R0.des, warn = [];
+    const Hpd = S.Hp(Q), eta = S.Ep(Q) / 100, NPSHr = S.Np(Q);
+    // estrangulamento no recalque para operar exatamente na vazão de projeto
+    const dH = Hpd - d.H, dK = dH > 0 ? dH / d.d.hv : 0;
+    const Phid = rho * g * (Q / 3600) * Hpd, Pshaft = eta > 0 ? Phid / eta : NaN;
+    const op = R0.op, opE = op ? S.Ep(op.Q) / 100 : null;
+    if (Q > S.Qmax) warn.push('a vazão de projeto (' + Q.toFixed(2) + ' m³/h) está além do último ponto da curva da bomba: escolha uma bomba maior');
+    if (dH < 0) warn.push('a bomba não vence o sistema na vazão de projeto: falta ' + (-dH).toFixed(2) + ' m de altura (troque a bomba, aumente o diâmetro ou reduza a vazão)');
+    if (d.NPSHa < NPSHr + 0.5) warn.push('NPSH disponível (' + d.NPSHa.toFixed(2) + ' m) menor que o requerido + 0,5 m de margem (' + (NPSHr + 0.5).toFixed(2) + ' m): risco de CAVITAÇÃO');
+    if (o.zs < 0 && n.s_pe === 0) warn.push('sucção negativa (nível abaixo da bomba) sem válvula de pé: a bomba perde a escorva quando para');
+    if (o.zs > 0 && n.s_pe > 0) warn.push('bomba afogada não precisa de válvula de pé (ela só adiciona perda de carga)');
+    if (d.s.V < 0.5 || d.s.V > 1.8) warn.push('velocidade na sucção ' + d.s.V.toFixed(2) + ' m/s fora da faixa usual (0,5–1,8 m/s)');
+    if (d.d.V < 1 || d.d.V > 3) warn.push('velocidade no recalque ' + d.d.V.toFixed(2) + ' m/s fora da faixa usual (1–3 m/s)');
+    if (n.d_ret === 0) warn.push('sem válvula de retenção no recalque: na parada, a coluna de líquido retorna e pode girar a bomba ao contrário (golpe de aríete)');
+    const W = isFinite(Pshaft) ? Pshaft : Phid;
+    const out = streamPH(th, s.flows, o.Pd, s.H + W - s.mass * g * (o.zd - o.zs), s.T);
+    const fx = (v, k) => (+v).toFixed(k);
+    const res = [{ k: 'Material da tubulação', v: PIPE_MAT[mat].name + ' (ε = ' + String(PIPE_MAT[mat].eps * 1000).replace('.', ',') + ' mm)', u: '' },
+      { k: 'Vazão de projeto (da corrente de entrada)', v: +Q.toFixed(3), u: 'm³/h' },
+      { k: 'Líquido: ρ / μ / pressão de vapor P_v', v: rho.toFixed(1) + ' kg/m³ / ' + (mu * 1000).toFixed(3) + ' cP / ' + (Pv / 1000).toFixed(3) + ' kPa', u: '' },
+      { k: 'Velocidade na sucção / no recalque', v: fx(d.s.V, 3) + ' / ' + fx(d.d.V, 3), u: 'm/s' },
+      { k: 'Reynolds na sucção / no recalque', v: Math.round(d.s.Re).toLocaleString('pt-BR') + ' / ' + Math.round(d.d.Re).toLocaleString('pt-BR'), u: '' },
+      { k: 'Fator de atrito f (Colebrook) sucção / recalque', v: fx(d.s.f, 5) + ' / ' + fx(d.d.f, 5), u: '' },
+      { k: 'ΣK dos acessórios: sucção / recalque', v: fx(S.Ks, 2) + ' / ' + fx(S.Kd, 2), u: '' },
+      { k: 'Altura estática ΔP/(ρg) + Δz', v: +S.Hstat.toFixed(3), u: 'm' },
+      { k: 'Perda de carga na sucção (tubo + acessórios)', v: fx(d.s.pipe, 3) + ' + ' + fx(d.s.acc, 3) + ' = ' + fx(d.s.pipe + d.s.acc, 3), u: 'm' },
+      { k: 'Perda de carga no recalque (tubo + acessórios)', v: fx(d.d.pipe, 3) + ' + ' + fx(d.d.acc, 3) + ' = ' + fx(d.d.pipe + d.d.acc, 3), u: 'm' },
+      { k: 'Altura manométrica do sistema H_sis na vazão de projeto', v: +d.H.toFixed(3), u: 'm' },
+      { k: 'Altura da bomba H_b na vazão de projeto', v: +Hpd.toFixed(3), u: 'm' },
+      { k: 'Ponto de operação com as válvulas abertas: Q / H', v: op ? fx(op.Q, 2) + ' m³/h / ' + fx(op.H, 2) + ' m' : 'não há interseção', u: '' },
+      { k: 'Excesso de altura a estrangular (H_b − H_sis) e K extra na válvula do recalque', v: dH > 0 ? fx(dH, 3) + ' m / K = ' + fx(dK, 1) : '—', u: '' },
+      { k: 'NPSH disponível / requerido (margem)', v: fx(d.NPSHa, 2) + ' / ' + fx(NPSHr, 2) + ' (' + fx(d.NPSHa - NPSHr, 2) + ')', u: 'm' },
+      { k: 'Rendimento da bomba na vazão de projeto', v: +(eta * 100).toFixed(1), u: '%' },
+      { k: 'Potência hidráulica / no eixo', v: fx(Phid / 1000, 3) + ' / ' + (isFinite(Pshaft) ? fx(Pshaft / 1000, 3) : '—'), u: 'kW' },
+      { k: 'Comparação: H_sis com ' + PIPE_MAT[other].name + ' na mesma vazão', v: +R1.des.H.toFixed(3), u: 'm' },
+      { k: 'Comparação: ponto de operação com ' + PIPE_MAT[other].name, v: R1.op ? fx(R1.op.Q, 2) + ' m³/h / ' + fx(R1.op.H, 2) + ' m' : 'não há interseção', u: '' }];
+    if (op && opE != null) res.splice(13, 0, { k: 'No ponto de operação: rendimento / potência no eixo', v: fx(opE * 100, 1) + ' % / ' + (opE > 0 ? fx(rho * g * op.Q / 3600 * op.H / opE / 1000, 3) : '—') + ' kW', u: '' });
+    // gráficos
+    const qs = S.qs, nm = PIPE_MAT[mat].name, nmo = PIPE_MAT[other].name;
+    const thr = qs.map(q => S.sys(q, mat, dK).H);
+    const hq = [{ name: 'Curva da bomba (ajuste)', x: qs, y: qs.map(S.Hp), color: '#2563c9', width: 3.2 },
+      { name: 'Curva da bomba (catálogo)', x: curve.map(r => r[0]), y: curve.map(r => r[1]), mode: 'markers', color: '#2563c9', size: 8 },
+      { name: 'Sistema — ' + nm + ' (válvulas abertas)', x: qs, y: R0.curve, color: '#d1302b', width: 3 },
+      { name: 'Sistema — ' + nmo, x: qs, y: R1.curve, color: '#e88b2e', width: 2, dash: 'dash' }];
+    if (dH > 0) hq.push({ name: 'Sistema com a válvula estrangulada (K + ' + dK.toFixed(1) + ')', x: qs, y: thr, color: '#7a3db8', width: 2, dash: 'dot' });
+    if (op) hq.push({ name: 'Ponto de operação (' + nm + ')', x: [op.Q], y: [op.H], mode: 'markers', color: '#111', size: 14, symbol: 'circle' });
+    if (R1.op) hq.push({ name: 'Ponto de operação (' + nmo + ')', x: [R1.op.Q], y: [R1.op.H], mode: 'markers', color: '#e88b2e', size: 11, symbol: 'diamond' });
+    hq.push({ name: 'Ponto de projeto (Q da corrente)', x: [Q], y: [Hpd], mode: 'markers', color: '#2e9e6b', size: 13, symbol: 'star' });
+    const nmax = Math.max.apply(null, R0.npsh.concat(qs.map(S.Np)));
+    const plots = [
+      { kind: 'curves', title: 'Curvas H × Q: bomba e sistema (' + nm + ' × ' + nmo + ')', data: { xLabel: 'Vazão Q (m³/h)', yLabel: 'Altura manométrica H (m)', series: hq, yRange: [0, Math.max(S.Hp(0), R0.curve[R0.curve.length - 1]) * 1.1] } },
+      { kind: 'curves', title: 'NPSH disponível × NPSH requerido (cavitação quando NPSHd < NPSHr)', data: { xLabel: 'Vazão Q (m³/h)', yLabel: 'NPSH (m)', series: [
+        { name: 'NPSH disponível — ' + nm, x: qs, y: R0.npsh, color: '#2e9e6b', width: 3 }, { name: 'NPSH disponível — ' + nmo, x: qs, y: R1.npsh, color: '#2e9e6b', width: 2, dash: 'dash' },
+        { name: 'NPSH requerido (bomba)', x: qs, y: qs.map(S.Np), color: '#d1302b', width: 3 }, { name: 'NPSHr (catálogo)', x: curve.map(r => r[0]), y: curve.map(r => r[3]), mode: 'markers', color: '#d1302b', size: 8 },
+        { name: 'Vazão de projeto', x: [Q, Q], y: [0, nmax * 1.05], color: '#8a8f98', width: 1.6, dash: 'dot' }] } },
+      { kind: 'curves', title: 'Rendimento e potência no eixo da bomba', data: { xLabel: 'Vazão Q (m³/h)', yLabel: 'η (%)  e  potência (kW × 10)', series: [
+        { name: 'Rendimento η (ajuste)', x: qs, y: qs.map(S.Ep), color: '#2563c9', width: 3 }, { name: 'η (catálogo)', x: curve.map(r => r[0]), y: curve.map(r => r[2]), mode: 'markers', color: '#2563c9', size: 8 },
+        { name: 'Potência no eixo × 10 (kW)', x: qs.slice(1), y: qs.slice(1).map(q => { const e = S.Ep(q) / 100; return e > 0.02 ? 10 * rho * g * q / 3600 * S.Hp(q) / e / 1000 : null; }), color: '#222', width: 2.4, dash: 'dash' },
+        { name: 'Projeto', x: [Q], y: [eta * 100], mode: 'markers', color: '#2e9e6b', size: 13, symbol: 'star' }] } },
+      { kind: 'bars', title: 'Composição da altura do sistema na vazão de projeto: ' + nm + ' × ' + nmo, data: { categories: ['Estática (ΔP/ρg + Δz)', 'Tubo da sucção', 'Acessórios da sucção', 'Tubo do recalque', 'Acessórios do recalque'], yLabel: 'm de coluna de líquido',
+        series: [R0, R1].map((R, k) => ({ name: k ? nmo : nm, y: [S.Hstat, R.des.s.pipe, R.des.s.acc, R.des.d.pipe, R.des.d.acc], color: k ? '#e88b2e' : '#d1302b' })) } },
+      { kind: 'bars', title: 'Perda de carga em cada acessório (válvulas, curvas, entrada e saída)', data: { categories: Object.keys(ACC).filter(k => n[k] > 0).map(k => n[k] + '× ' + ACC[k][0]), yLabel: 'm',
+        series: [{ name: 'h = n·K·V²/2g', y: Object.keys(ACC).filter(k => n[k] > 0).map(k => n[k] * ACC[k][1] * (k[0] === 's' ? d.s.hv : d.d.hv)), color: '#7a3db8' }] } }];
+    return { out: { out }, res: decBR(res), warn: decW(warn), plots, duty: W, power: true, pumpSys: { o, mat, Q, Hpd, eta, NPSHr, dK, op, H: d.H, NPSHa: d.NPSHa, Hstat: S.Hstat, cH: S.cH, cE: S.cE, cN: S.cN, Ks: S.Ks, Kd: S.Kd } };
+  };
+
+  /* ------------------------------------------------------------------ controle PID de um CSTR isotérmico (A → B, 1ª ordem)
+     estados: x1 = C_A, x2 = ∫(C_ref − C_A)dt; o termo derivativo usa dC_A/dt, isolado algebricamente (sem laço algébrico) */
+  function pidCstr(o) {
+    const V = o.V, k = o.k, CA0 = o.CA0, Fb = o.Fb, Cr = o.Cref, flowMV = o.flowMV, satIn = o.satIn;
+    const Kp = o.Kp, Ki = o.Ki, Kd = o.Kd, tau = V / Fb;
+    const rhs = (t, y) => {
+      const e = Cr - y[0];
+      let d;
+      if (flowMV) { // V dC/dt = F (C_A0 − C) − V k C, com F = F_bias + Kp e + Ki ∫e − Kd dC/dt
+        d = ((Fb + Kp * e + Ki * y[1]) * (CA0 - y[0]) - V * k * y[0]) / (V + Kd * (CA0 - y[0]));
+        if (satIn && Fb + Kp * e + Ki * y[1] - Kd * d < 0) d = -k * y[0];
+      } else {      // dC/dt = (C_A0 − C)/τ − k C, com C_A0 = Kp e + Ki ∫e − Kd dC/dt
+        d = (Kp / tau * e + Ki / tau * y[1] - (1 / tau + k) * y[0]) / (1 + Kd / tau);
+        if (satIn && Kp * e + Ki * y[1] - Kd * d < 0) d = -(1 / tau + k) * y[0];
+      }
+      return [d, e];
+    };
+    const sol = N.integrate(rhs, 0, [o.C0, 0], o.tEnd, { nOut: 300, rtol: 1e-8, atol: 1e-10 });
+    const t = sol.t, C = sol.y.map(y => y[0]), u = sol.y.map((y, i) => { const d = rhs(t[i], y)[0], e = Cr - y[0]; const raw = (flowMV ? Fb : 0) + Kp * e + Ki * y[1] - Kd * d; return Math.max(0, raw); });
+    // indicadores de desempenho
+    let iae = 0, ise = 0; for (let i = 1; i < t.length; i++) { const dt = t[i] - t[i - 1], e0 = Cr - C[i - 1], e1 = Cr - C[i]; iae += dt * (Math.abs(e0) + Math.abs(e1)) / 2; ise += dt * (e0 * e0 + e1 * e1) / 2; }
+    const up = Cr >= o.C0, peak = up ? Math.max.apply(null, C) : Math.min.apply(null, C);
+    const over = Math.abs(Cr - o.C0) > 1e-12 ? Math.max(0, (up ? peak - Cr : Cr - peak) / Math.abs(Cr - o.C0) * 100) : 0;
+    let ts = null; for (let i = t.length - 1; i >= 0; i--) if (Math.abs(C[i] - Cr) > 0.02 * Math.abs(Cr)) { ts = i < t.length - 1 ? t[i + 1] : null; break; } if (ts === null && Math.abs(C[C.length - 1] - Cr) <= 0.02 * Math.abs(Cr)) ts = ts === null ? 0 : ts;
+    let tr = null; const c10 = o.C0 + 0.1 * (Cr - o.C0), c90 = o.C0 + 0.9 * (Cr - o.C0); let t10 = null; for (let i = 0; i < t.length; i++) { if (t10 === null && (up ? C[i] >= c10 : C[i] <= c10)) t10 = t[i]; if (up ? C[i] >= c90 : C[i] <= c90) { tr = t10 !== null ? t[i] - t10 : null; break; } }
+    // estado estacionário com controle P puro (desvio permanente), para comparação
+    return { t, C, u, iae, ise, over, ts, tr, Cf: C[C.length - 1], uf: u[u.length - 1], umin: Math.min.apply(null, u), umax: Math.max.apply(null, u), tau };
+  }
+
+  IMPL.pid_cstr = function (th, b) {
+    const p = b.params, flowMV = !/^concentra/.test(p.mv || ''), satIn = /^no modelo/.test(p.sat || '');
+    const o = { V: num(p.V, 100), k: num(p.k, 0.2), CA0: num(p.CA0, 10), Fb: num(p.Fb, 10), Cref: num(p.Cref, 5), C0: num(p.C0, 0), tEnd: num(p.tEnd, 30),
+      Kp: num(p.Kp, 5), Ki: num(p.Ki, 1), Kd: num(p.Kd, 2), flowMV, satIn };
+    if (!(o.V > 0 && o.Fb > 0 && o.tEnd > 0)) throw new Error('V, a vazão e o tempo de simulação devem ser positivos');
+    if (flowMV && !(o.Cref < o.CA0)) throw new Error('com a vazão manipulada, a referência precisa ser menor que C_A0 = ' + o.CA0 + ' mol/L');
+    const r = pidCstr(o), warn = [];
+    const uName = flowMV ? 'Vazão F' : 'C_A0', uUnit = flowMV ? 'L/min' : 'mol/L';
+    // valor de regime da variável manipulada para C_A = C_ref
+    const uSS = flowMV ? o.V * o.k * o.Cref / (o.CA0 - o.Cref) : o.Cref * (1 + o.k * o.V / o.Fb);
+    const P = pidCstr(Object.assign({}, o, { Ki: 0, Kd: 0 })), PI = pidCstr(Object.assign({}, o, { Kd: 0 }));
+    if (r.umin <= 0 && !satIn) warn.push('a ação de controle ficou negativa no modelo (só o gráfico satura em zero): escolha "no modelo" para impor ' + uName + ' ≥ 0');
+    const res = [{ k: 'Ganhos Kp / Ki / Kd', v: o.Kp.toFixed(2) + ' / ' + o.Ki.toFixed(2) + ' / ' + o.Kd.toFixed(2), u: '' },
+      { k: 'C_A no fim da simulação', v: +r.Cf.toFixed(4), u: 'mol/L' }, { k: 'Erro final (C_ref − C_A)', v: +(o.Cref - r.Cf).toFixed(4), u: 'mol/L' },
+      { k: 'Sobressinal (overshoot)', v: +r.over.toFixed(2), u: '%' }, { k: 'Tempo de subida (10 % → 90 %)', v: r.tr != null ? +r.tr.toFixed(2) : '—', u: 'min' },
+      { k: 'Tempo de acomodação (faixa de 2 %)', v: r.ts != null ? +r.ts.toFixed(2) : 'não acomodou', u: r.ts != null ? 'min' : '' },
+      { k: 'IAE = ∫|e|dt / ISE = ∫e²dt', v: r.iae.toFixed(3) + ' / ' + r.ise.toFixed(3), u: '' },
+      { k: uName + ': mínimo / máximo / final', v: r.umin.toFixed(2) + ' / ' + r.umax.toFixed(2) + ' / ' + r.uf.toFixed(2), u: uUnit },
+      { k: uName + ' de regime para C_A = C_ref', v: +uSS.toFixed(3), u: uUnit },
+      { k: 'Só P (Ki = Kd = 0): C_A final e desvio permanente', v: P.Cf.toFixed(4) + ' / ' + (o.Cref - P.Cf).toFixed(4), u: 'mol/L' },
+      { k: 'PI (Kd = 0): C_A final / IAE', v: PI.Cf.toFixed(4) + ' / ' + PI.iae.toFixed(3), u: '' }];
+    if (!flowMV) res.splice(1, 0, { k: 'Tempo de residência τ = V/F', v: +r.tau.toFixed(3), u: 'min' });
+    const plots = [
+      { kind: 'curves', title: 'Controle ' + (flowMV ? 'não linear' : 'linear') + ' do CSTR via PID (manipulando ' + (flowMV ? 'a vazão F' : 'C_A0') + ')', data: { xLabel: 'Tempo (min)', yLabel: 'Concentração C_A (mol/L)', series: [
+        { name: 'C_A(t)', x: r.t, y: r.C, color: '#2563c9', width: 3 }, { name: 'Referência', x: [0, o.tEnd], y: [o.Cref, o.Cref], dash: 'dash', color: '#d1302b', width: 2 }] } },
+      { kind: 'curves', title: 'Sinal de controle (esforço do PID): ' + uName + '(t)', data: { xLabel: 'Tempo (min)', yLabel: uName + ' (' + uUnit + ')', series: [
+        { name: uName + '(t)', x: r.t, y: r.u, color: '#222', width: 2.4 }, { name: 'Valor de regime', x: [0, o.tEnd], y: [uSS, uSS], dash: 'dot', color: '#8a8f98', width: 1.6 }] } },
+      { kind: 'curves', title: 'Comparação: P, PI e PID com os mesmos ganhos', data: { xLabel: 'Tempo (min)', yLabel: 'C_A (mol/L)', series: [
+        { name: 'P (Kp)', x: P.t, y: P.C, color: '#e88b2e', width: 2 }, { name: 'PI (Kp, Ki)', x: PI.t, y: PI.C, color: '#2e9e6b', width: 2 },
+        { name: 'PID (Kp, Ki, Kd)', x: r.t, y: r.C, color: '#2563c9', width: 3 }, { name: 'Referência', x: [0, o.tEnd], y: [o.Cref, o.Cref], dash: 'dash', color: '#d1302b', width: 1.6 }] } }];
+    return { out: {}, res: decBR(res), warn: decW(warn), plots, pid: Object.assign({}, o, { uSS, Cf: r.Cf, over: r.over, ts: r.ts }) };
   };
 
   IMPL.lle_ternary = function (th, b, ins) {
@@ -3584,6 +3875,45 @@ window.SIMULAFACIL_CONFIG = {
       eqs: [eq(sub(i('F'), i('i') + ',topo') + ' = ' + sub(i('ξ'), i('i')) + '·' + Fi + ',<br>' + sub(i('F'), i('i') + ',fundo') + ' = (1 − ' + sub(i('ξ'), i('i')) + ')·' + Fi)],
       sym: [[sub(i('ξ'), i('i')), 'fração do componente i que vai para o topo']]
     }),
+    pid_cstr: (p) => {
+      const flow = !/^concentra/.test((p && p.mv) || ''), CA = sub(C, 'A'), e = i('e'), Kp = sub(i('K'), 'p'), Ki_ = sub(i('K'), 'i'), Kd = sub(i('K'), 'd'), tau = i('τ'), Cr = sub(C, 'A,ref'), x2 = sub(x, '2');
+      const law = (flow ? F + '(' + t + ')' : sub(C, 'A0') + '(' + t + ')') + ' = ' + (flow ? sub(F, 'bias') + ' + ' : '') + Kp + e + ' + ' + Ki_ + '∫' + e + ' d' + t + ' + ' + Kd + od(e, t) + ',&nbsp; ' + e + ' = ' + Cr + ' − ' + CA;
+      return {
+        name: 'Controle PID de um CSTR isotérmico (A → B, 1ª ordem), manipulando ' + (flow ? 'a vazão F: modelo NÃO LINEAR' : 'a concentração de alimentação C_A0: modelo LINEAR'),
+        eqs: [eq(V + od(CA, t) + ' = ' + F + '(' + sub(C, 'A0') + ' − ' + CA + ') − ' + V + i('k') + CA, 'balanço de A no reator'),
+          eq(law, 'lei de controle PID (paralela)'),
+          flow ? eq(od(CA, t) + ' = ' + fr('(' + sub(F, 'bias') + ' + ' + Kp + e + ' + ' + Ki_ + x2 + ')(' + sub(C, 'A0') + ' − ' + CA + ') − ' + V + i('k') + CA, V + ' + ' + Kd + '(' + sub(C, 'A0') + ' − ' + CA + ')') + ',&nbsp; ' + od(x2, t) + ' = ' + e, 'derivada isolada: o produto F·C_A torna o modelo não linear')
+            : eq(od(CA, t) + ' = ' + fr(fr(Kp, tau) + '(' + Cr + ' − ' + CA + ') + ' + fr(Ki_, tau) + x2 + ' − (' + fr('1', tau) + ' + ' + i('k') + ')' + CA, '1 + ' + fr(Kd, tau)) + ',&nbsp; ' + od(x2, t) + ' = ' + e, 'com τ = V/F: sistema linear de 2 estados (figura)'),
+          eq(sub(x, '1') + ' = ' + CA + ',&nbsp; ' + x2 + ' = ∫' + sub('', '0') + sup('', t) + '(' + Cr + ' − ' + CA + ') d' + t, 'estados do sistema aumentado'),
+          eq('IAE = ∫|' + e + '| d' + t + ',&nbsp; ISE = ∫' + sup(e, '2') + ' d' + t, 'índices de desempenho da sintonia')],
+        sym: [[Kp + ', ' + Ki_ + ', ' + Kd, 'ganhos proporcional, integral e derivativo'], [Cr, 'referência (set-point)'], [sub(F, 'bias'), 'vazão de base do controlador'], [tau, 'tempo de residência V/F']],
+        note: 'O termo derivativo usa dC_A/dt, que aparece dos dois lados da equação; o simulador o isola algebricamente (sem laço algébrico) e integra com Runge–Kutta 4/5 adaptativo. Arraste as barras de Kp, Ki e Kd: os gráficos são recalculados ao vivo.'
+      };
+    },
+    pump_system: () => {
+      const H = i('H'), g = i('g'), rho = i('ρ'), hv = fr(sup(V, '2'), '2' + g), f = i('f'), D = i('D'), K = i('K'), Re = 'Re', eps = i('ε');
+      return {
+        name: 'Sistema de bombeamento: curva do sistema, curva da bomba, ponto de operação e NPSH',
+        eqs: [eq(sub(H, 'sis') + '(' + Q + ') = ' + fr(sub(P, 'd') + ' − ' + sub(P, 's'), rho + g) + ' + (' + sub(z, 'd') + ' − ' + sub(z, 's') + ') + ' + sum('suc, rec') + ' (' + f + fr(L, D) + ' + ' + sum('') + K + ')' + hv, 'altura manométrica do sistema (Bernoulli + perdas)'),
+          eq(fr('1', '√' + f) + ' = −2 log' + sub('', '10') + '(' + fr(eps + '/' + D, '3,7') + ' + ' + fr('2,51', Re + '√' + f) + '),&nbsp; ' + Re + ' = ' + fr(rho + V + D, i('μ')), 'Colebrook–White (laminar: f = 64/Re)'),
+          eq(sub(H, 'b') + '(' + Q + ') = ' + sub(i('a'), '0') + ' + ' + sub(i('a'), '1') + Q + ' + ' + sub(i('a'), '2') + sup(Q, '2') + ',&nbsp; ' + sub(H, 'b') + '(' + sub(Q, 'op') + ') = ' + sub(H, 'sis') + '(' + sub(Q, 'op') + ')', 'curva da bomba ajustada e ponto de operação'),
+          eq(sub('NPSH', 'd') + ' = ' + fr(sub(P, 's'), rho + g) + ' + ' + sub(z, 's') + ' − ' + sub(i('h'), 'f,s') + ' − ' + fr(sub(P, 'v'), rho + g) + ' &gt; ' + sub('NPSH', 'r') + ' + 0,5 m', 'cavitação: z_s &gt; 0 = bomba afogada'),
+          eq(sub(i('Ẇ'), 'eixo') + ' = ' + fr(rho + g + Q + sub(H, 'b'), i('η')) + ',&nbsp; Δ' + K + ' = ' + fr('2' + g + '(' + sub(H, 'b') + ' − ' + sub(H, 'sis') + ')', sup(sub(V, 'rec'), '2')), 'potência no eixo e estrangulamento para operar na vazão de projeto')],
+        sym: [[sub(z, 's') + ', ' + sub(z, 'd'), 'níveis da sucção e da descarga em relação ao eixo da bomba'], [K, 'coeficiente de perda do acessório (tabela de Azevedo Netto)'], [eps, 'rugosidade: aço 0,046 mm; PVC 0,0015 mm'], [sub(P, 'v'), 'pressão de vapor do líquido na temperatura de bombeamento']],
+        note: 'Os pontos de catálogo da bomba (Q, H, η, NPSHr) são ajustados por mínimos quadrados: H e NPSHr por polinômio de 2º grau e η de 3º grau. A curva do sistema é calculada para os dois materiais (aço e PVC) para comparação; a vazão de projeto é a da corrente que entra.'
+      };
+    },
+    column_mt: (p, m) => ({
+      name: 'Coluna com pré-aquecedor da carga embutido + McCabe–Thiele (estágios de equilíbrio rigorosos)',
+      eqs: [eq(sub(Q, 'pré') + ' = ' + F + '(' + sub(i('h'), 'F,quente') + ' − ' + sub(i('h'), 'F') + ')', 'pré-aquecedor embutido: substitui o heater externo'),
+        eq(q + ' = ' + fr(sub(i('H'), 'V') + ' − ' + sub(i('h'), 'F,quente'), sub(i('H'), 'V') + ' − ' + sub(i('h'), 'L')) + ',&nbsp; ' + i('y') + ' = ' + fr(q, q + ' − 1') + x + ' − ' + fr(sub(z, 'F'), q + ' − 1'), 'condição térmica e reta q'),
+        eq(i('y') + ' = ' + fr(i('R'), i('R') + ' + 1') + x + ' + ' + fr(sub(x, 'D'), i('R') + ' + 1'), 'reta de operação da retificação'),
+        eq(sub(i('L'), 'j') + sub(x, 'i,j') + ' + ' + sub(V, 'j') + sub(i('y'), 'i,j') + ' = …,&nbsp; ' + sub(i('y'), 'i,j') + ' = ' + sub(i('K'), 'i,j') + sub(x, 'i,j'), 'equações MESH em cada estágio (Naphtali–Sandholm)'),
+        kModel(m),
+        eq(sub(Q, 'pré') + ' + ' + sub(Q, 'r') + ' = |' + sub(Q, 'c') + '| + ' + sum('') + sub(F, 'saí') + sub(i('h'), 'saí') + ' − ' + F + sub(i('h'), 'F'), 'balanço de energia: o calor total adicionado não muda')],
+      sym: [[sub(Q, 'pré'), 'calor adicionado à carga no pré-aquecedor (kW)'], [sub(Q, 'r') + ', ' + sub(Q, 'c'), 'refervedor e condensador'], [q, 'q &gt; 1 líquido sub-resfriado; q = 1 líquido saturado; 0 &lt; q &lt; 1 parcialmente vaporizado']],
+      note: 'Com a 2ª especificação "carga do refervedor Q_r", o programa procura a vazão de destilado D que dá aquele Q_r (método da secante). Uma corrente de energia com valor informado ligada a q_pre ou qr tem prioridade sobre os campos.'
+    }),
     evap_multi: () => {
       const Li = sub(L, i('i')), Vi = sub(V, i('i')), hi = sub(i('h'), i('i')), Hi = sub(i('H'), i('i')), Si = i('S'), lam = sub(i('λ'), 'S');
       return {
@@ -3854,6 +4184,21 @@ window.SIMULAFACIL_CONFIG = {
       'O separador de componentes é um modelo de "caixa-preta": em vez de calcular o equilíbrio de fases, ele recebe, para cada componente, a fração que vai para a saída de topo. É o modelo usado em balanços de massa preliminares, quando ainda não se escolheu a operação de separação ou quando se quer apenas o efeito global de uma etapa.',
       'Como não há termodinâmica envolvida, o separador sempre fecha os balanços de massa, mas não garante que a separação seja fisicamente possível. Por isso, depois de definir o fluxograma, é boa prática substituí-lo por um equipamento rigoroso (flash, coluna, extrator) e verificar se as recuperações supostas são alcançáveis.',
       'Não há exemplo pronto com o separador. Um exercício útil é abrir o exemplo "Coluna shortcut BTX", anotar as recuperações de benzeno e tolueno obtidas e reproduzir o mesmo resultado com um separador, comparando o esforço de cálculo e a informação que cada modelo fornece (o separador não dá estágios, refluxo nem cargas térmicas).'] },
+    pid_cstr: { ex: ex('pid-cstr', 'Controle PID não linear de um CSTR'), p: [
+      'Um controlador PID mede a variável controlada (aqui, a concentração C_A no reator), compara com a referência C_A,ref e calcula a ação sobre a variável manipulada com três termos. O proporcional (Kp·e) reage ao erro atual; o integral (Ki·∫e dt) acumula o erro passado e elimina o desvio permanente (offset); o derivativo (Kd·de/dt) antecipa a tendência e amortece a resposta. Os estados do sistema aumentado são x1 = C_A e x2 = ∫(C_A,ref − C_A)dt, como na figura de referência.',
+      'O tipo de variável manipulada muda a natureza do problema. Manipulando a concentração de alimentação C_A0 (como na figura), o balanço dC_A/dt = (C_A0 − C_A)/τ − k·C_A é linear nos estados, e o termo derivativo apenas divide a equação por (1 + Kd/τ). Manipulando a vazão F (como no código MATLAB), o balanço V·dC_A/dt = F·(C_A0 − C_A) − V·k·C_A tem o produto F·C_A: o ganho do processo muda com o ponto de operação e o modelo é não linear. Em regime, C_A = C_ref exige F = V·k·C_ref/(C_A0 − C_ref) = 20 L/min com os dados do exemplo.',
+      'No exemplo "Controle PID não linear de um CSTR" (V = 100 L, k = 0,2 min⁻¹, C_A0 = 10 mol/L, F_bias = 10 L/min, C_ref = 5 mol/L, partida com o reator vazio de A), Kp = 5, Ki = 1 e Kd = 2 levam C_A a 4,994 mol/L em 30 min, sem sobressinal, com tempo de acomodação de 8,6 min (faixa de 2 %) e IAE = 9,95. A vazão começa em 29,2 L/min e se acomoda em 20 L/min. Com o controle só proporcional (Ki = Kd = 0), a resposta para em 4,156 mol/L: o desvio permanente de 0,84 mol/L é a raiz de C_A² − 21·C_A + 70 = 0, que vem do balanço com F = F_bias + Kp·(C_ref − C_A).',
+      'Arraste as barras deslizantes de Kp, Ki e Kd e observe ao vivo: Ki elimina o offset, mas valores altos causam oscilação; Kd suaviza a resposta; Kp grande acelera e aumenta o esforço de controle. Com Kp = 20, Ki = 5 e Kd = 2, o sobressinal é de 2,7 % e a acomodação ocorre em 6,9 min. A opção de saturação "no modelo" impede vazão (ou C_A0) negativa durante a simulação; no código original, a saturação só aparece no gráfico.'] },
+    pump_system: { ex: ex('bomba-afogada', 'Projeto de bombeamento: bomba afogada, válvulas e curvas'), p: [
+      'Para escolher uma bomba, compara-se a curva da bomba (altura H que ela fornece em cada vazão Q, dada pelo fabricante) com a curva do sistema: a altura que a instalação pede. Pela equação de Bernoulli, a curva do sistema é a soma da altura estática (desnível entre os níveis de líquido mais a diferença de pressão dividida por ρg) com as perdas de carga na sucção e no recalque, que crescem com o quadrado da vazão. A bomba opera onde as duas curvas se cruzam: o ponto de operação.',
+      'As perdas distribuídas nos tubos usam a equação de Darcy–Weisbach com o fator de atrito de Colebrook–White, que depende do número de Reynolds e da rugosidade relativa ε/D. O aço comercial (ε = 0,046 mm) é mais rugoso que o PVC (ε = 0,0015 mm), por isso o PVC dá menos perda no mesmo diâmetro. As perdas localizadas de cada acessório são K·V²/2g, com K da tabela clássica de Azevedo Netto: entrada normal 0,5; válvula de pé com crivo 2,5; gaveta aberta 0,2; globo aberta 10; retenção 2,5; borboleta 0,3; cotovelo 90° 0,9; curva 90° 0,4; tê direto 0,6; saída 1,0. A válvula de retenção no recalque impede o retorno do líquido quando a bomba para; a gaveta serve para isolar a bomba na manutenção; a globo serve para regular a vazão.',
+      'A bomba está afogada quando o nível do líquido na sucção fica acima do eixo da bomba (z_s > 0): ela já está sempre cheia de líquido (escorvada), dispensa a válvula de pé e tem mais NPSH disponível. O NPSH disponível, NPSHd = P_s/ρg + z_s − h_f,s − P_v/ρg, precisa superar o NPSH requerido pela bomba com folga (≥ 0,5 m); caso contrário, o líquido vaporiza na entrada do rotor e ocorre cavitação, com ruído, vibração e erosão. Água quente, sucção longa ou sucção negativa reduzem o NPSHd.',
+      'No exemplo "Projeto de bombeamento", 30 m³/h de água a 25 °C saem de um reservatório 2,5 m acima do eixo da bomba (bomba afogada) para outro 28 m acima, com sucção de 4" (102,3 mm, 5 m) e recalque de 3" (77,9 mm, 80 m) em aço. A altura estática é 25,5 m e as perdas somam 4,71 m, logo H_sis = 30,2 m. A bomba fornece 34,5 m nessa vazão, então com as válvulas abertas ela iria para o ponto de operação de 35,1 m³/h e 31,9 m. Para trabalhar em 30 m³/h, estrangula-se a válvula do recalque (K extra de cerca de 27). O NPSHd é de 12,4 m contra 2,5 m requeridos, sem risco de cavitação, e a potência no eixo é de 3,8 kW com η = 74 %. Troque o material para PVC e compare: H_sis cai para 29,7 m e o ponto de operação sobe para 36,0 m³/h.'] },
+    column_mt: { ex: ex('coluna-mccabe-preaquecida', 'Coluna McCabe–Thiele com pré-aquecedor embutido'), p: [
+      'Em simuladores como o DWSIM, é comum colocar um aquecedor (heater) antes da coluna para levar a carga até perto do ponto de bolha. Essa coluna já traz o pré-aquecedor embutido na linha de alimentação: basta informar a carga térmica Q_pré (kW), ou pedir que a carga entre como líquido saturado, ou fixar a temperatura de saída. O calor do refervedor (Q_r) e do condensador (Q_c) é calculado pelos balanços de massa e de energia de cada estágio (equações MESH) e aparece nas Propriedades e no fluxograma, sem nenhum equipamento externo.',
+      'A carga aquecida chega à coluna com a condição térmica q = (H_V − h_F)/(H_V − h_L), calculada com as entalpias de orvalho e de bolha da própria carga na pressão da coluna. Para q > 1, o líquido está sub-resfriado; para q = 1, saturado; entre 0 e 1, parcialmente vaporizado. É esse q que define a inclinação da reta q no diagrama de McCabe–Thiele, onde também aparecem a curva de equilíbrio (modelo termodinâmico do fluxograma), as retas de operação, os degraus dos estágios calculados e o refluxo mínimo no ponto de estrangulamento (pinch).',
+      'No exemplo "Coluna McCabe–Thiele com pré-aquecedor embutido", 100 kmol/h de etanol/água (10 % de etanol) a 25 °C recebem Q_pré = 100 kW e entram a 64,7 °C, ainda sub-resfriados (q = 1,049; bolha a 86,3 °C). Com 20 estágios, alimentação no 10, R = 3,15 e D = 12,4 kmol/h, o destilado tem 80,7 % de etanol, o refervedor pede 643 kW e o condensador retira 560 kW: os mesmos números do exemplo com corrente de energia e heater externo, agora com um ícone só. Mude o pré-aquecedor para "aquecer até líquido saturado" (157 kW, q = 1): o refervedor cai para 586 kW, e o calor total adicionado continua em 743 kW.',
+      'A segunda especificação também pode ser a carga do refervedor: escolha "carga do refervedor Q_r" e informe o calor disponível (por exemplo, 700 kW). O programa ajusta a vazão de destilado D até atingir esse Q_r. Assim, as duas correntes de adição de calor da coluna (pré-aquecedor e refervedor) ficam especificadas diretamente nas Propriedades, como no DWSIM.'] },
     evap_multi: { ex: ex('evaporador-triplo', 'Evaporador de triplo efeito: solução de açúcar'), p: [
       'Um evaporador concentra uma solução fervendo parte do solvente, quase sempre a água. No múltiplo efeito, o vapor gerado em um corpo de evaporação é usado para aquecer o corpo seguinte, que trabalha a uma pressão menor (vácuo crescente) para que a solução ferva a uma temperatura mais baixa. Assim, cada quilo de vapor de caldeira evapora aproximadamente N quilos de água. Na alimentação para a frente, a solução e o vapor seguem no mesmo sentido, e a queda de pressão leva a solução de um efeito ao outro sem bombas.',
       'O modelo faz os balanços de soluto, de massa e de energia em cada efeito. As entalpias do vapor e do condensado vêm das tabelas de vapor (equações da IAPWS) e a da solução é h = cp·T, com cp que diminui com a concentração. A elevação do ponto de ebulição (BPR) faz a solução ferver acima da saturação da água na mesma pressão: ela consome parte da diferença de temperatura disponível, e o vapor sai superaquecido pela BPR. No projeto com áreas iguais, o programa começa com ΔTᵢ proporcional a 1/Uᵢ, resolve os balanços (um sistema linear em S e Vᵢ), calcula Aᵢ = qᵢ/(UᵢΔTᵢ) e redistribui os ΔTᵢ até as áreas ficarem iguais.',
@@ -3973,7 +4318,7 @@ window.SIMULAFACIL_CONFIG = {
   const U = SF.units, N = SF.num;
   const OPTIONAL_IN = { mixer: ['in2', 'in3', 'in4'], column: ['feed2', 'feed3'] };
   // portas de energia (correntes de energia, como no DWSIM): não carregam matéria
-  const ENERGY_PORTS = { ei: 1, eo: 1, q_in: 1, q_out: 1, qc: 1, qr: 1 };
+  const ENERGY_PORTS = { ei: 1, eo: 1, q_in: 1, q_out: 1, qc: 1, qr: 1, q_pre: 1 };
   const isEnergyPort = p => !!ENERGY_PORTS[p];
   const isEnergyStream = s => !!s && (isEnergyPort(s.fromPort) || isEnergyPort(s.toPort));
   // calor que o equipamento troca por uma porta de energia (W; positivo no sentido da corrente)
@@ -3981,6 +4326,7 @@ window.SIMULAFACIL_CONFIG = {
     if (!r) return null;
     if (port === 'qc') return r.duties && r.duties.Qc != null ? -r.duties.Qc : null;
     if (port === 'qr') return r.duties && r.duties.Qr != null ? r.duties.Qr : null;
+    if (port === 'q_pre') return r.duties && r.duties.Qpre != null ? r.duties.Qpre : null;
     if (port === 'q_out') return r.duty != null ? -r.duty : null;
     if (port === 'q_in') return r.duty != null ? r.duty : null;
     return null;
@@ -4047,7 +4393,7 @@ window.SIMULAFACIL_CONFIG = {
         Object.keys(inOf[id]).forEach(port => {
           if (!isEnergyPort(port) || port === 'ei') return;
           const c = inOf[id][port], prev = S[c.id] || {};
-          if (prev.spec && b.type !== 'heater' && it === 0) r.warn = (r.warn || []).concat('o valor informado na corrente de energia ' + (c.name || c.id) + ' não é usado: a carga é calculada pelo equipamento');
+          if (prev.spec && b.type !== 'heater' && b.type !== 'column_mt' && it === 0) r.warn = (r.warn || []).concat('o valor informado na corrente de energia ' + (c.name || c.id) + ' não é usado: a carga é calculada pelo equipamento');
           S[c.id] = { energy: true, Q: energyAt(b, r, port), spec: !!prev.spec };
         });
         Object.keys(r.out || {}).forEach(port => {
@@ -4110,7 +4456,7 @@ window.SIMULAFACIL_CONFIG = {
 
   const PORT_LABELS = { out: 'saída', in: 'entrada', vapor: 'vapor', liquid: 'líquido', light: 'fase leve', heavy: 'fase pesada', distillate: 'destilado', bottoms: 'fundo', side: 'lateral',
     gas_out: 'gás tratado', liq_out: 'líquido rico', extract: 'extrato', raffinate: 'rafinado', overflow: 'extrato', underflow: 'torta', hot_out: 'saída quente', cold_out: 'saída fria',
-    out1: 'saída 1', out2: 'saída 2', out3: 'saída 3', hot_in: 'entrada quente', cold_in: 'entrada fria', ei: 'entrada de energia', eo: 'saída de energia', q_in: 'entrada de energia', q_out: 'saída de energia (calor retirado)', qc: 'calor do condensador', qr: 'calor do refervedor', feed: 'alimentação', feed2: 'alimentação 2', feed3: 'alimentação 3', solvent: 'solvente', solids: 'sólidos', gas_in: 'gás', liq_in: 'líquido', in1: 'entrada 1', in2: 'entrada 2', in3: 'entrada 3', in4: 'entrada 4' };
+    out1: 'saída 1', out2: 'saída 2', out3: 'saída 3', hot_in: 'entrada quente', cold_in: 'entrada fria', ei: 'entrada de energia', eo: 'saída de energia', q_in: 'entrada de energia', q_out: 'saída de energia (calor retirado)', qc: 'calor do condensador', qr: 'calor do refervedor', q_pre: 'calor do pré-aquecedor da carga', feed: 'alimentação', feed2: 'alimentação 2', feed3: 'alimentação 3', solvent: 'solvente', solids: 'sólidos', gas_in: 'gás', liq_in: 'líquido', in1: 'entrada 1', in2: 'entrada 2', in3: 'entrada 3', in4: 'entrada 4' };
   function portLabel(p) { return PORT_LABELS[p] || p; }
 
   SF.flowsheet = { solve, portLabel, PORT_LABELS, isEnergyPort, isEnergyStream };
@@ -4140,6 +4486,7 @@ window.SIMULAFACIL_CONFIG = {
     hx_shell: { w: 120, h: 56, ports: { hot_in: P(30, 0, 'u', 'in'), hot_out: P(92, 56, 'd', 'out'), cold_in: P(0, 28, 'l', 'in'), cold_out: P(120, 28, 'r', 'out') } },
     hx_plate: { w: 64, h: 90, ports: { hot_in: P(0, 14, 'l', 'in'), hot_out: P(64, 76, 'r', 'out'), cold_in: P(0, 76, 'l', 'in'), cold_out: P(64, 14, 'r', 'out') } },
     evap_multi: { w: 160, h: 96, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 62, 'l', 'in'), vapor: P(160, 10, 'r', 'out'), product: P(160, 88, 'r', 'out'), condensate: P(124, 96, 'd', 'out') } },
+    pump_system: { w: 170, h: 112, ports: { in: P(0, 40, 'l', 'in'), out: P(170, 32, 'r', 'out'), q_in: P(98, 112, 'd', 'ein') } },
     pump: { w: 56, h: 52, ports: { in: P(0, 30, 'l', 'in'), out: P(56, 12, 'r', 'out'), q_in: P(26, 52, 'd', 'ein') } },
     compressor: { w: 60, h: 56, ports: { in: P(0, 28, 'l', 'in'), out: P(60, 28, 'r', 'out'), q_in: P(30, 56, 'd', 'ein') } },
     valve: { w: 50, h: 34, ports: { in: P(0, 20, 'l', 'in'), out: P(50, 20, 'r', 'out') } },
@@ -4147,6 +4494,8 @@ window.SIMULAFACIL_CONFIG = {
     decanter: { w: 110, h: 60, ports: { in: P(0, 22, 'l', 'in'), light: P(110, 16, 'r', 'out'), heavy: P(110, 54, 'r', 'out') } },
     column_short: { w: 112, h: 210, ports: { feed: P(0, 105, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), bottoms: P(112, 188, 'r', 'out'), qc: P(100, 10, 'u', 'eout'), qr: P(100, 198, 'd', 'ein') } },
     ponchon: { w: 112, h: 210, ports: { feed: P(0, 105, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), bottoms: P(112, 188, 'r', 'out'), qc: P(100, 10, 'u', 'eout'), qr: P(100, 198, 'd', 'ein') } },
+    column_mt: { w: 150, h: 230, ports: { feed: P(0, 115, 'l', 'in'), q_pre: P(20, 129, 'd', 'ein'), distillate: P(150, 46, 'r', 'out'), bottoms: P(150, 208, 'r', 'out'), qc: P(138, 10, 'u', 'eout'), qr: P(138, 218, 'd', 'ein') } },
+    pid_cstr: { w: 120, h: 100, ports: {} },
     column: { w: 112, h: 230, ports: { feed2: P(0, 55, 'l', 'in'), feed: P(0, 115, 'l', 'in'), feed3: P(0, 170, 'l', 'in'), distillate: P(112, 46, 'r', 'out'), side: P(112, 130, 'r', 'out'), bottoms: P(112, 208, 'r', 'out'), qc: P(100, 10, 'u', 'eout'), qr: P(100, 218, 'd', 'ein') } },
     absorber: { w: 54, h: 180, ports: { liq_in: P(0, 22, 'l', 'in'), gas_in: P(0, 158, 'l', 'in'), gas_out: P(54, 22, 'r', 'out'), liq_out: P(54, 158, 'r', 'out') } },
     extractor: { w: 54, h: 180, ports: { feed: P(0, 22, 'l', 'in'), solvent: P(0, 158, 'l', 'in'), extract: P(54, 22, 'r', 'out'), raffinate: P(54, 158, 'r', 'out') } },
@@ -4169,6 +4518,7 @@ window.SIMULAFACIL_CONFIG = {
   const T = (x, y, s, c) => ({ t: 'text', x, y, s, c: c || 'lbl' });
   const zig = (x, y, w, c) => { const pts = [[x, y]], n = 6, dx = w / n; for (let k = 1; k <= n; k++) pts.push([x + k * dx, k === n ? y : y + (k % 2 ? -7 : 7)]); return L(pts, c); };
 
+  const shift = (list, dx) => list.map(p => p.t === 'rect' || p.t === 'text' ? Object.assign({}, p, { x: p.x + dx }) : p.t === 'circ' ? Object.assign({}, p, { cx: p.cx + dx }) : Object.assign({}, p, { pts: p.pts.map(q => [q[0] + dx, q[1]]) }));
   function column(h, label) {
     const out = [R(4, 6, 46, h - 12, 12)];
     for (let y = 30; y < h - 30; y += 14) out.push(L([[9, y], [45, y]]));
@@ -4212,6 +4562,15 @@ window.SIMULAFACIL_CONFIG = {
     hx_plate: () => [R(6, 4, 52, 82, 4), L([[16, 8], [16, 82]]), L([[24, 8], [24, 82]]), L([[32, 8], [32, 82]]), L([[40, 8], [40, 82]]), L([[48, 8], [48, 82]]),
       L([[0, 14], [6, 14]], 'hot'), L([[58, 76], [64, 76]], 'hot'), L([[0, 76], [6, 76]], 'cold'), L([[58, 14], [64, 14]], 'cold')],
     pump: () => [Pg([[12, 44], [40, 44], [46, 51], [6, 51]]), R(26, 8, 30, 9, 0), C(26, 28, 18), Pg([[17, 28], [33, 20], [33, 36]], 'ln')],
+    pump_system: () => [ // reservatório de sucção acima do eixo (bomba afogada) → gaveta → bomba → retenção → gaveta → reservatório elevado
+      R(4, 22, 34, 44, 3), L([[6, 32], [36, 32]], 'cold'), T(21, 52, 'z+'),
+      L([[38, 58], [48, 58], [48, 82], [85, 82]]),
+      Pg([[57, 76], [63, 82], [57, 88]]), Pg([[69, 76], [63, 82], [69, 88]]), L([[63, 82], [63, 72]]), R(59, 68, 8, 4, 1),
+      C(98, 82, 13), Pg([[92, 82], [104, 76], [104, 88]], 'ln'), Pg([[86, 98], [110, 98], [114, 106], [82, 106]]),
+      L([[98, 69], [98, 12], [134, 12]]),
+      Pg([[92, 54], [98, 60], [104, 54]]), Pg([[92, 66], [98, 60], [104, 66]]), L([[92, 60], [104, 60]], 'ln'), T(113, 64, 'R'),
+      Pg([[92, 28], [98, 34], [104, 28]]), Pg([[92, 40], [98, 34], [104, 40]]), L([[98, 34], [109, 34]]), L([[109, 29], [109, 39]]), T(119, 38, 'G'),
+      R(134, 2, 32, 40, 3), L([[136, 12], [164, 12]], 'cold'), L([[166, 32], [170, 32]])],
     compressor: () => [Pg([[6, 8], [54, 18], [54, 38], [6, 48]]), C(30, 28, 5, 'ln')],
     valve: () => [Pg([[4, 9], [25, 20], [4, 31]]), Pg([[46, 9], [25, 20], [46, 31]]), L([[25, 20], [25, 6]]), R(17, 1, 16, 5, 1)],
     flash: () => [R(6, 4, 42, 92, 21), L([[12, 18], [42, 18]], 'lnd'), L([[10, 62], [44, 62]], 'lnd')],
@@ -4224,6 +4583,18 @@ window.SIMULAFACIL_CONFIG = {
       return o;
     },
     column: () => column(230, ''),
+    column_mt: () => { // pré-aquecedor embutido na linha de carga + coluna com um mini diagrama x–y (degraus de McCabe–Thiele)
+      const o = shift(column(230, ''), 38);
+      o.push(L([[0, 115], [7, 115]]), C(20, 115, 13), zig(9, 115, 22, 'hot'), L([[33, 115], [42, 115]]), T(20, 96, 'Q'),
+        R(47, 62, 36, 36, 2, 'bodyw'), L([[49, 96], [81, 64]], 'lnd'), L([[49, 96], [52, 82], [57, 73], [65, 67], [81, 64]], 'hot'),
+        L([[78, 65], [67, 65], [67, 70], [59, 70], [59, 77], [54, 77], [54, 86], [51, 86], [51, 93]]), T(65, 150, 'M-T'));
+      return o;
+    },
+    pid_cstr: () => [ // malha de controle: válvula na alimentação, reator agitado, transmissor de concentração (AT) e controlador PID
+      L([[2, 42], [40, 42]]), Pg([[18, 35], [26, 42], [18, 49]]), Pg([[34, 35], [26, 42], [34, 49]]), L([[26, 42], [26, 32]]), R(20, 26, 12, 6, 1),
+      R(40, 34, 46, 64, 10), L([[63, 28], [63, 70]]), L([[54, 70], [72, 70]]), L([[86, 86], [116, 86]]),
+      L([[104, 55], [104, 86]], 'lnd'), C(104, 44, 11, 'bodyw'), T(104, 48, 'AT'),
+      R(46, 2, 40, 18, 4, 'bodyw'), T(66, 15, 'PID'), L([[86, 11], [104, 11], [104, 33]], 'lnd'), L([[46, 11], [26, 11], [26, 26]], 'lnd')],
     absorber: () => {
       const o = [R(4, 4, 46, 172, 12), L([[8, 34], [46, 34]]), L([[8, 146], [46, 146]])];
       for (let y = 40; y < 140; y += 20) { o.push(L([[8, y], [46, y + 20]])); o.push(L([[46, y], [8, y + 20]])); }
@@ -4379,9 +4750,10 @@ window.SIMULAFACIL_CONFIG = {
   function energyMarks(b, r, streams) {
     if (!r) return [];
     const g = IC.G[b.type], marks = [], wired = p => (streams || []).some(s => (s.from === b.id && s.fromPort === p) || (s.to === b.id && s.toPort === p));
-    const add = (x, y, Q, label, up) => marks.push({ x: b.x + x, y: b.y + y, Q, label, up });
+    const add = (x, y, Q, label, up, left) => marks.push({ x: b.x + x, y: b.y + y, Q, label, up, left });
     if (b.type === 'energy') return marks;
-    if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon')) { if (!wired('qc')) add(82, -4, r.duties.Qc, 'Qc', true); if (!wired('qr')) add(82, g.h + 4, r.duties.Qr, 'Qr', false); }
+    if (r.duties && b.type === 'column_mt') { if (!wired('qc')) add(120, -4, r.duties.Qc, 'Qc', true); if (!wired('qr')) add(120, g.h + 4, r.duties.Qr, 'Qr', false); if (!wired('q_pre')) add(20, 130, r.duties.Qpre, 'Qpré', false, true); }
+    else if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon')) { if (!wired('qc')) add(82, -4, r.duties.Qc, 'Qc', true); if (!wired('qr')) add(82, g.h + 4, r.duties.Qr, 'Qr', false); }
     else if (r.duty != null && Math.abs(r.duty) > 1e-3 && b.type !== 'feed' && !wired('q_in') && !wired('q_out')) add(g.w - 2, g.h + 4, r.duty, r.power ? 'W' : 'Q', false);
     return marks;
   }
@@ -4425,7 +4797,7 @@ window.SIMULAFACIL_CONFIG = {
       if (m.Q == null || !isFinite(m.Q)) return;
       const into = m.Q > 0, y0 = m.up ? m.y - 30 : m.y + 30, y1 = m.y;
       const d = into ? 'M' + m.x + ' ' + y0 + ' L' + m.x + ' ' + y1 : 'M' + m.x + ' ' + y1 + ' L' + m.x + ' ' + y0;
-      h += '<path class="energy" d="' + d + '" marker-end="url(#arrE)"/><text class="energy-lbl" x="' + (m.x + 6) + '" y="' + ((y0 + y1) / 2 + 4) + '">' + m.label + ' = ' + fmt(m.Q / 1000, 1) + ' kW</text>';
+      h += '<path class="energy" d="' + d + '" marker-end="url(#arrE)"/><text class="energy-lbl" x="' + (m.left ? m.x - 6 : m.x + 6) + '" y="' + ((y0 + y1) / 2 + 4) + '"' + (m.left ? ' style="text-anchor:end"' : '') + '>' + m.label + ' = ' + fmt(m.Q / 1000, 1) + ' kW</text>';
     }));
     // blocos
     const bad = res && res.errors ? new Set(res.errors.map(e => e.block)) : new Set();
@@ -4562,7 +4934,7 @@ window.SIMULAFACIL_CONFIG = {
       body += '<path d="M' + p.x + ' ' + p.y + 'L' + e.x + ' ' + e.y + '" stroke="' + C.stream + '" stroke-width="2" marker-end="url(#xa)"/><text x="' + (e.x + 5) + '" y="' + (e.y + 5) + '" font-size="13" font-weight="700" fill="' + C.stream + '">' + esc(x.name) + '</text>'; });
     if (res && res.blocks) st.blocks.forEach(b => energyMarks(b, res.blocks[b.id], st.streams).forEach(m => {
       if (m.Q == null || !isFinite(m.Q)) return; const into = m.Q > 0, ya = m.up ? m.y - 32 : m.y + 32;
-      body += '<path d="' + (into ? 'M' + m.x + ' ' + ya + 'L' + m.x + ' ' + m.y : 'M' + m.x + ' ' + m.y + 'L' + m.x + ' ' + ya) + '" stroke="' + C.energy + '" stroke-width="2.2" marker-end="url(#xe)"/><text x="' + (m.x + 7) + '" y="' + ((ya + m.y) / 2 + 5) + '" font-size="12.5" font-weight="700" fill="' + C.energy + '">' + m.label + ' = ' + fmt(m.Q / 1000, 1) + ' kW</text>';
+      body += '<path d="' + (into ? 'M' + m.x + ' ' + ya + 'L' + m.x + ' ' + m.y : 'M' + m.x + ' ' + m.y + 'L' + m.x + ' ' + ya) + '" stroke="' + C.energy + '" stroke-width="2.2" marker-end="url(#xe)"/><text x="' + (m.left ? m.x - 7 : m.x + 7) + '" y="' + ((ya + m.y) / 2 + 5) + '"' + (m.left ? ' text-anchor="end"' : '') + ' font-size="12.5" font-weight="700" fill="' + C.energy + '">' + m.label + ' = ' + fmt(m.Q / 1000, 1) + ' kW</text>';
     }));
     st.blocks.forEach(b => {
       const g = IC.G[b.type];
@@ -4671,7 +5043,7 @@ window.SIMULAFACIL_CONFIG = {
         return { data, layout: L };
       }
       case 'curves': { // curvas genéricas com linhas horizontais de referência
-        const data = d.series.map((s, k) => ({ x: s.x, y: s.y, mode: s.mode || (s.markers ? 'lines+markers' : 'lines'), name: s.name, line: { color: s.color || PALETTE[k % 8], width: s.width || 3, dash: s.dash || 'solid' }, marker: { size: 6 } }));
+        const data = d.series.map((s, k) => ({ x: s.x, y: s.y, mode: s.mode || (s.markers ? 'lines+markers' : 'lines'), name: s.name, line: { color: s.color || PALETTE[k % 8], width: s.width || 3, dash: s.dash || 'solid' }, marker: { size: s.size || 6, symbol: s.symbol || 'circle', color: s.color || PALETTE[k % 8], line: { color: '#111', width: s.size > 9 ? 1 : 0 } } }));
         const xr = d.xRange || [Math.min.apply(null, d.series[0].x), Math.max.apply(null, d.series[0].x)];
         (d.hlines || []).forEach(h => data.push({ x: xr, y: [h.y, h.y], mode: 'lines', name: h.name, line: { color: h.color || css('--muted'), width: 2, dash: 'dash' }, hoverinfo: 'name' }));
         const L = baseLayout(p.title, d.xLabel || '', d.yLabel || '');
@@ -5029,7 +5401,7 @@ end
       lines.push("desenha_icone(" + str(b.type) + ", " + n2s(b.x) + ", " + n2s(b.y) + ");");
       lines.push("text(" + n2s(b.x + P.nameX(b)) + ", " + n2s(b.y + g.h + 16) + ", " + str(b.name) + ", 'FontSize', FSP, 'FontWeight', 'bold', 'HorizontalAlignment', 'center');");
       const r = res.blocks[b.id]; if (!r) return;
-      if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon')) {
+      if (r.duties && (b.type === 'column' || b.type === 'column_mt' || b.type === 'column_short' || b.type === 'ponchon')) {
         lines.push("text(" + n2s(b.x + 96) + ", " + n2s(b.y - 14) + ", " + str('Qc = ' + (r.duties.Qc / 1000).toFixed(1) + ' kW') + ", 'FontSize', FSP-2, 'Color', amarelo, 'FontWeight', 'bold');");
         lines.push("text(" + n2s(b.x + 74) + ", " + n2s(b.y + g.h + 34) + ", " + str('Qr = ' + (r.duties.Qr / 1000).toFixed(1) + ' kW') + ", 'FontSize', FSP-2, 'Color', amarelo, 'FontWeight', 'bold');");
       } else if (r.duty != null && Math.abs(r.duty) > 1 && b.type !== 'feed') {
@@ -5074,7 +5446,7 @@ end
     const header = '% ' + b.name + ' — ' + SF.units.TYPES[b.type].label;
     const resLines = (r.res || []).map(x => "fprintf('  %-48s %s\\n', " + str(x.k) + ", " + str((typeof x.v === 'number' ? (+x.v.toPrecision(6)).toString() : x.v) + ' ' + (x.u || '')) + ");");
     const printRes = ["fprintf('\\n== %s (resultados do simulador) ==\\n', " + str(b.name) + ");"].concat(resLines);
-    if ((b.type === 'column') && r.plots && r.plots.find(p => p.kind === 'mccabe') && td.act) {
+    if ((b.type === 'column' || b.type === 'column_mt') && r.plots && r.plots.find(p => p.kind === 'mccabe') && td.act) {
       const m = r.plots.find(p => p.kind === 'mccabe').data;
       const i1 = th.c.findIndex(c => c.name === m.light), i2 = th.c.findIndex(c => c.name === m.heavy);
       out.push('function ' + fname + '(D, FS)', header, '% McCabe-Thiele recalculado com o modelo de atividade (equilíbrio por ponto de bolha) e PFD da coluna.', printRes.join('\n'),
@@ -5262,6 +5634,77 @@ end
         "title('Temperaturas ao longo dos efeitos', 'FontSize', FS);",
         "figure('Name', " + str(b.name + ' — áreas e vapor') + ", 'Color', 'w'); bar([V/100; A]'); grid on;",
         "xlabel('Efeito', 'FontSize', FS); legend({'Água evaporada (kg/h ÷ 100)', 'Área (m2)'}, 'Location', 'northwest'); title('Por efeito: água evaporada e área', 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'pid_cstr' && r.pid) {
+      const p = r.pid;
+      out.push('function ' + fname + '(D, FS)', header,
+        '% Controle PID de um CSTR isotérmico (A -> B, 1ª ordem): o mesmo modelo do simulador, a comparação P / PI / PID',
+        '% e uma janela de sintonia com barras deslizantes de Kp, Ki e Kd (baseada no código cstr_nl_gui do Prof. Juan).', printRes.join('\n'),
+        '%% 1. Parâmetros (V em L, k em 1/min, concentrações em mol/L, vazão em L/min, tempo em min)',
+        'P = struct(\'V\', ' + n2s(p.V) + ', \'k\', ' + n2s(p.k) + ', \'CA0\', ' + n2s(p.CA0) + ', \'Fb\', ' + n2s(p.Fb) + ', \'Cref\', ' + n2s(p.Cref) + ', \'C0\', ' + n2s(p.C0) + ', \'tf\', ' + n2s(p.tEnd) + ', ...',
+        '    \'modoF\', ' + (p.flowMV ? 'true' : 'false') + ', \'satModelo\', ' + (p.satIn ? 'true' : 'false') + ', \'Kp\', ' + n2s(p.Kp) + ', \'Ki\', ' + n2s(p.Ki) + ', \'Kd\', ' + n2s(p.Kd) + ');',
+        '% modoF = true: o PID manipula a vazão F (não linear); false: manipula C_A0 com F = Fb fixa (linear, como na figura)',
+        '%% 2. Simulação com os ganhos do simulador e comparação P, PI e PID',
+        '[t, C, u] = pid_simula(P, P.Kp, P.Ki, P.Kd);',
+        '[tP, CP] = pid_simula(P, P.Kp, 0, 0); [tPI, CPI] = pid_simula(P, P.Kp, P.Ki, 0);',
+        'IAE = trapz(t, abs(P.Cref - C));',
+        "fprintf('  MATLAB: C_A final = %.4f mol/L | IAE = %.3f | só P: C_A final = %.4f mol/L (desvio permanente %.4f)\\n', C(end), IAE, CP(end), P.Cref - CP(end));",
+        "figure('Name', " + str(b.name + ' — P, PI e PID') + ", 'Color', 'w'); hold on; grid on; box on;",
+        "plot(tP, CP, 'LineWidth', 2); plot(tPI, CPI, 'LineWidth', 2); plot(t, C, 'b', 'LineWidth', 3); plot([0 P.tf], [P.Cref P.Cref], 'r--', 'LineWidth', 2);",
+        "xlabel('Tempo (min)', 'FontSize', FS); ylabel('C_A (mol/L)', 'FontSize', FS); legend({'P', 'PI', 'PID', 'Referência'}, 'Location', 'southeast'); set(gca, 'FontSize', FS);",
+        "title('Comparação: P, PI e PID com os mesmos ganhos', 'FontSize', FS); ylim([0 2*P.Cref]);",
+        '%% 3. Janela de sintonia: arraste as barras e veja a resposta mudar',
+        'pid_cstr_gui(P, FS, ' + str(b.name) + ');', 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'pump_system' && r.pumpSys) {
+      const p = r.pumpSys, o = p.o;
+      out.push('function ' + fname + '(D, FS)', header,
+        '% Sistema de bombeamento: curva do sistema (Darcy-Weisbach + Colebrook + K dos acessórios), curva da bomba,',
+        '% ponto de operação, NPSH disponível x requerido e potência, para tubulação de aço e de PVC.', printRes.join('\n'),
+        '%% 1. Dados (SI; vazões em m3/h; diâmetros em mm)',
+        'S = struct(\'rho\', ' + n2s(o.rho) + ', \'mu\', ' + n2s(o.mu) + ', \'Pv\', ' + n2s(o.Pv) + ', \'g\', 9.80665, ...',
+        '    \'Ps\', ' + n2s(o.Ps) + ', \'Pd\', ' + n2s(o.Pd) + ', \'zs\', ' + n2s(o.zs) + ', \'zd\', ' + n2s(o.zd) + ', ...',
+        '    \'Ls\', ' + n2s(o.Ls) + ', \'Ds\', ' + n2s(o.Ds) + ', \'Ld\', ' + n2s(o.Ld) + ', \'Dd\', ' + n2s(o.Dd) + ', \'Ks\', ' + n2s(p.Ks) + ', \'Kd\', ' + n2s(p.Kd) + ');',
+        '% zs > 0: nível da sucção acima do eixo (bomba afogada). Ks e Kd: soma dos K dos acessórios (Azevedo Netto).',
+        'Qp = ' + n2s(p.Q) + ';   % vazão de projeto (m3/h)',
+        'eps = struct(\'aco\', 0.046e-3, \'pvc\', 0.0015e-3); mat = ' + str(p.mat) + '; outro = ' + str(p.mat === 'aco' ? 'pvc' : 'aco') + ';',
+        'curva = ' + mat(o.curve) + ';   % Q (m3/h)  H (m)  eta (%)  NPSHr (m)',
+        '%% 2. Ajuste da curva da bomba (mínimos quadrados)',
+        'cH = polyfit(curva(:,1), curva(:,2), 2); cE = polyfit(curva(:,1), curva(:,3), 3); cN = polyfit(curva(:,1), curva(:,4), 2);',
+        'Hb = @(Q) polyval(cH, Q); Eb = @(Q) max(0, polyval(cE, Q)); Nr = @(Q) max(0, polyval(cN, Q));',
+        '%% 3. Curvas do sistema, ponto de operação e NPSH',
+        'Q = linspace(0, max(curva(:,1)), 81);',
+        '[H1, N1] = bomba_sistema(Q, S, eps.(mat)); [H2, N2] = bomba_sistema(Q, S, eps.(outro));',
+        'g1 = @(q) Hb(q) - bomba_sistema(q, S, eps.(mat)); g2 = @(q) Hb(q) - bomba_sistema(q, S, eps.(outro));',
+        'Qop1 = fzero(g1, [1e-6 1.5*max(curva(:,1))]); Qop2 = fzero(g2, [1e-6 1.5*max(curva(:,1))]);',
+        '[Hs, Nd, hs, hd] = bomba_sistema(Qp, S, eps.(mat));',
+        'Pe = S.rho*S.g*Qp/3600*Hb(Qp)/(Eb(Qp)/100);',
+        "fprintf('  MATLAB: Hsis(Qp) = %.3f m | Hbomba(Qp) = %.3f m | operação: Q = %.2f m3/h, H = %.2f m | NPSHd = %.2f m, NPSHr = %.2f m | potência no eixo = %.3f kW\\n', Hs, Hb(Qp), Qop1, Hb(Qop1), Nd, Nr(Qp), Pe/1000);",
+        '%% 4. Gráficos',
+        "nomes = struct('aco', 'aço', 'pvc', 'PVC');",
+        "figure('Name', " + str(b.name + ' — curvas H x Q') + ", 'Color', 'w'); hold on; grid on; box on;",
+        "plot(Q, Hb(Q), 'b', 'LineWidth', 3); plot(curva(:,1), curva(:,2), 'bo', 'MarkerFaceColor', 'b');",
+        "plot(Q, H1, 'r', 'LineWidth', 3); plot(Q, H2, '--', 'Color', [0.91 0.55 0.18], 'LineWidth', 2);",
+        "plot(Qop1, Hb(Qop1), 'ko', 'MarkerFaceColor', 'k', 'MarkerSize', 11); plot(Qop2, Hb(Qop2), 'd', 'Color', [0.91 0.55 0.18], 'MarkerFaceColor', [0.91 0.55 0.18], 'MarkerSize', 10);",
+        "plot(Qp, Hb(Qp), 'p', 'Color', [0.18 0.62 0.42], 'MarkerFaceColor', [0.18 0.62 0.42], 'MarkerSize', 16);",
+        "xlabel('Vazão Q (m^3/h)', 'FontSize', FS); ylabel('Altura manométrica H (m)', 'FontSize', FS); set(gca, 'FontSize', FS); ylim([0 1.1*max([Hb(0) H1(end)])]);",
+        "legend({'Bomba (ajuste)', 'Bomba (catálogo)', ['Sistema - ' nomes.(mat)], ['Sistema - ' nomes.(outro)], 'Operação', ['Operação - ' nomes.(outro)], 'Projeto'}, 'Location', 'southwest');",
+        "title('Curvas da bomba e do sistema', 'FontSize', FS);",
+        "figure('Name', " + str(b.name + ' — NPSH') + ", 'Color', 'w'); hold on; grid on; box on;",
+        "plot(Q, N1, 'Color', [0.18 0.62 0.42], 'LineWidth', 3); plot(Q, N2, '--', 'Color', [0.18 0.62 0.42], 'LineWidth', 2); plot(Q, Nr(Q), 'r', 'LineWidth', 3); plot(curva(:,1), curva(:,4), 'ro', 'MarkerFaceColor', 'r');",
+        "plot([Qp Qp], [0 1.05*max([N1 Nr(Q)])], 'k:', 'LineWidth', 1.5); xlabel('Vazão Q (m^3/h)', 'FontSize', FS); ylabel('NPSH (m)', 'FontSize', FS); set(gca, 'FontSize', FS);",
+        "legend({['NPSH disponível - ' nomes.(mat)], ['NPSH disponível - ' nomes.(outro)], 'NPSH requerido', 'NPSHr (catálogo)', 'Projeto'}, 'Location', 'best'); title('NPSH: cavitação quando NPSHd < NPSHr', 'FontSize', FS);",
+        "figure('Name', " + str(b.name + ' — rendimento e potência') + ", 'Color', 'w', 'Position', [80 80 1300 520]);",
+        "subplot(1, 2, 1); plot(Q, Eb(Q), 'b', 'LineWidth', 3); hold on; plot(curva(:,1), curva(:,3), 'bo', 'MarkerFaceColor', 'b'); grid on;",
+        "xlabel('Vazão Q (m^3/h)', 'FontSize', FS); ylabel('Rendimento \\eta (%)', 'FontSize', FS); set(gca, 'FontSize', FS); title('Rendimento', 'FontSize', FS);",
+        "Qq = Q(2:end); subplot(1, 2, 2); plot(Qq, S.rho*S.g*Qq/3600.*Hb(Qq)./max(Eb(Qq)/100, 0.02)/1000, 'k', 'LineWidth', 2.5); grid on;",
+        "xlabel('Vazão Q (m^3/h)', 'FontSize', FS); ylabel('Potência no eixo (kW)', 'FontSize', FS); set(gca, 'FontSize', FS); title('Potência no eixo', 'FontSize', FS);",
+        "figure('Name', " + str(b.name + ' — composição da altura') + ", 'Color', 'w');",
+        "[~, ~, hs2, hd2] = bomba_sistema(Qp, S, eps.(outro)); Hst = (S.Pd - S.Ps)/(S.rho*S.g) + S.zd - S.zs;",
+        "bar([Hst hs hd; Hst hs2 hd2]'); set(gca, 'XTickLabel', {'Estática', 'Perda na sucção', 'Perda no recalque'}, 'FontSize', FS); grid on;",
+        "ylabel('m de coluna de líquido', 'FontSize', FS); legend({nomes.(mat), nomes.(outro)}); title(sprintf('Altura do sistema em Q = %.1f m^3/h', Qp), 'FontSize', FS);", 'end');
       return out.join('\n');
     }
     if (b.type === 'ponchon' && r.ps) {
@@ -5462,7 +5905,7 @@ end
         "figure('Name', " + str(b.name + ' — flash') + ", 'Color', 'w'); bar([x(:) y(:)]); set(gca, 'XTickLabel', D.nomes, 'FontSize', FS); legend('Líquido x', 'Vapor y'); ylabel('Fração molar'); title(sprintf('Flash: \\\\beta = %.3f', beta)); grid on;", 'end');
       return out.join('\n');
     }
-    if (b.type === 'column' && r.profile) {
+    if ((b.type === 'column' || b.type === 'column_mt') && r.profile) {
       const pr = r.profile;
       out.push('function ' + fname + '(D, FS)', header, '% Perfis da coluna rigorosa (método MESH do simulador).', printRes.join('\n'),
         'estagio = 1:' + pr.T.length + ';', 'T = ' + vec(pr.T.map(t => t - 273.15)) + ';', 'X = ' + mat(pr.x) + ';',
@@ -5605,6 +6048,85 @@ dp = -p./T.*(log(p/22.064e6) + a(1) + 1.5*a(2)*t.^0.5 + 3*a(3)*t.^2 + 3.5*a(4)*t
 th = T/647.096; d = [-5.65134998e-8 2690.66631 127.287297 -135.003439 0.981825814];
 al = 1000*(-1135.905627715 + d(1)*th.^-19 + d(2)*th + d(3)*th.^4.5 + d(4)*th.^5 + d(5)*th.^54.5);
 end`;
+  const PID_FUNCS = `% --- controle PID do CSTR: modelo, simulação e janela de sintonia ---
+function [dy, u] = pid_rhs(y, P, Kp, Ki, Kd)
+% x1 = C_A e x2 = integral do erro; o termo derivativo usa dC_A/dt isolado algebricamente
+e = P.Cref - y(1);
+if P.modoF   % vazão manipulada: V dC_A/dt = F (C_A0 - C_A) - V k C_A, com F = Fb + Kp e + Ki x2 - Kd dC_A/dt
+    d = ((P.Fb + Kp*e + Ki*y(2))*(P.CA0 - y(1)) - P.V*P.k*y(1))/(P.V + Kd*(P.CA0 - y(1)));
+    u = P.Fb + Kp*e + Ki*y(2) - Kd*d;
+    if P.satModelo && u < 0, d = -P.k*y(1); u = 0; end
+else         % C_A0 manipulada (linear): dC_A/dt = (C_A0 - C_A)/tau - k C_A
+    tau = P.V/P.Fb;
+    d = (Kp/tau*e + Ki/tau*y(2) - (1/tau + P.k)*y(1))/(1 + Kd/tau);
+    u = Kp*e + Ki*y(2) - Kd*d;
+    if P.satModelo && u < 0, d = -(1/tau + P.k)*y(1); u = 0; end
+end
+dy = [d; e];
+end
+
+function [t, C, u] = pid_simula(P, Kp, Ki, Kd)
+[t, Y] = ode45(@(t, y) pid_rhs(y, P, Kp, Ki, Kd), linspace(0, P.tf, 301), [P.C0; 0], odeset('RelTol', 1e-8, 'AbsTol', 1e-10));
+C = Y(:, 1); u = zeros(size(t));
+for j = 1:numel(t), [~, u(j)] = pid_rhs(Y(j, :).', P, Kp, Ki, Kd); end
+u = max(0, u);   % saturação no gráfico (como no código original)
+end
+
+function pid_cstr_gui(P, FS, nome)
+% Sintonia do PID com barras deslizantes (adaptada do cstr_nl_gui do Prof. Juan; funciona no MATLAB e no Octave).
+fig = figure('Name', [nome ' — sintonia do PID'], 'Color', 'w', 'Position', [60 40 1250 780]);
+ax1 = axes('Parent', fig, 'Position', [0.07 0.40 0.40 0.52]); ax2 = axes('Parent', fig, 'Position', [0.56 0.40 0.40 0.52]);
+setappdata(fig, 'P', P); setappdata(fig, 'FS', FS);
+g = {'Kp', 'Ki', 'Kd'}; lim = [0 30; 0 10; 0 10];
+for i = 1:3
+    uicontrol(fig, 'Style', 'text', 'Units', 'normalized', 'Position', [0.06 0.25-0.08*(i-1) 0.16 0.05], 'String', sprintf('%s = %.2f', g{i}, P.(g{i})), 'FontSize', 15, 'HorizontalAlignment', 'left', 'BackgroundColor', 'w', 'Tag', ['lbl_' g{i}]);
+    uicontrol(fig, 'Style', 'slider', 'Units', 'normalized', 'Position', [0.23 0.255-0.08*(i-1) 0.62 0.045], 'Min', lim(i, 1), 'Max', lim(i, 2), 'Value', P.(g{i}), 'Tag', ['sl_' g{i}], 'Callback', @(src, evt) pid_atualiza(fig, ax1, ax2));
+end
+pid_atualiza(fig, ax1, ax2);
+end
+
+function pid_atualiza(fig, ax1, ax2)
+P = getappdata(fig, 'P'); FS = getappdata(fig, 'FS'); g = {'Kp', 'Ki', 'Kd'};
+for i = 1:3
+    P.(g{i}) = get(findobj(fig, 'Tag', ['sl_' g{i}]), 'Value');
+    set(findobj(fig, 'Tag', ['lbl_' g{i}]), 'String', sprintf('%s = %.2f', g{i}, P.(g{i})));
+end
+[t, C, u] = pid_simula(P, P.Kp, P.Ki, P.Kd);
+cla(ax1); plot(ax1, t, C, 'b', 'LineWidth', 2.5); hold(ax1, 'on'); plot(ax1, [0 P.tf], [P.Cref P.Cref], 'r--', 'LineWidth', 2); hold(ax1, 'off');
+grid(ax1, 'on'); ylim(ax1, [0 2*P.Cref]); xlabel(ax1, 'Tempo (min)'); ylabel(ax1, 'C_A (mol/L)'); legend(ax1, {'C_A(t)', 'Referência'}, 'Location', 'southeast');
+title(ax1, sprintf('Kp = %.2f, Ki = %.2f, Kd = %.2f', P.Kp, P.Ki, P.Kd)); set(ax1, 'FontSize', FS);
+cla(ax2); plot(ax2, t, u, 'k', 'LineWidth', 2.5); grid(ax2, 'on'); xlabel(ax2, 'Tempo (min)');
+if P.modoF, ylabel(ax2, 'Vazão F (L/min)'); ylim(ax2, [0 max(60, 1.1*max(u))]); else, ylabel(ax2, 'C_{A0} (mol/L)'); end
+title(ax2, 'Sinal de controle'); set(ax2, 'FontSize', FS); drawnow;
+end
+`;
+
+  const PUMP_FUNCS = `% --- sistema de bombeamento: curva do sistema, perdas de carga e fator de atrito ---
+function [H, NPSHd, hs, hd] = bomba_sistema(Q, S, eps)
+H = zeros(size(Q)); NPSHd = H; hs = H; hd = H;
+for j = 1:numel(Q)
+    hs(j) = bomba_perda(Q(j), S.Ls, S.Ds, S.Ks, eps, S);   % sucção: tubo + acessórios
+    hd(j) = bomba_perda(Q(j), S.Ld, S.Dd, S.Kd, eps, S);   % recalque
+    H(j) = (S.Pd - S.Ps)/(S.rho*S.g) + (S.zd - S.zs) + hs(j) + hd(j);
+    NPSHd(j) = S.Ps/(S.rho*S.g) + S.zs - hs(j) - S.Pv/(S.rho*S.g);
+end
+end
+
+function h = bomba_perda(Qh, L, Dmm, K, eps, S)
+D = Dmm/1000; A = pi*D^2/4; V = Qh/3600/A; Re = S.rho*V*D/S.mu;
+h = (bomba_atrito(Re, eps/D)*L/D + K)*V^2/(2*S.g);   % Darcy-Weisbach + perdas localizadas
+end
+
+function f = bomba_atrito(Re, rel)
+% fator de atrito de Colebrook-White (iterado a partir de Swamee-Jain); laminar: 64/Re
+if Re <= 0, f = 0; return; end
+if Re < 2300, f = 64/Re; return; end
+f = 0.25/log10(rel/3.7 + 5.74/Re^0.9)^2;
+for k = 1:30, f = (-2*log10(rel/3.7 + 2.51/(Re*sqrt(f))))^-2; end
+if Re < 4000, fl = 64/2300; f = fl + (Re - 2300)/1700*(f - fl); end
+end
+`;
+
   const ELL_FUNCS = `% --- extração L-L em diagrama ternário: funções auxiliares ---
 function [X, Y] = ell_t2c(A, B, C)
 % frações (A, B, C) -> coordenadas no triângulo: A (0,0), C (1,0), B (0.5, sqrt(3)/2)
@@ -5721,7 +6243,7 @@ end`;
     const parts = [head.join('\n'), td.code, streamTableCode(st, res), pfdCode(st, res), PFD_HEAD, iconLibMatlab(types)]
       .concat(blocks.map(x => x.code))
       .concat(needVLE ? [VLE_FUNCS] : []).concat(needFlash ? [FLASH_FUNC] : []).concat(needCSTR ? [CSTR_RHS] : []).concat(needPFR ? [PFR_TRANS] : [])
-      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []).concat(blocks.some(x => /gibbs_rand/.test(x.code)) ? [GIBBS_FUNCS] : []).concat(blocks.some(x => /ell_cross/.test(x.code)) ? [ELL_FUNCS] : []).concat(blocks.some(x => /steam_Tsat/.test(x.code)) ? [EVAP_FUNCS] : []);
+      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []).concat(blocks.some(x => /gibbs_rand/.test(x.code)) ? [GIBBS_FUNCS] : []).concat(blocks.some(x => /ell_cross/.test(x.code)) ? [ELL_FUNCS] : []).concat(blocks.some(x => /steam_Tsat/.test(x.code)) ? [EVAP_FUNCS] : []).concat(blocks.some(x => /pid_simula/.test(x.code)) ? [PID_FUNCS] : []).concat(blocks.some(x => /bomba_sistema/.test(x.code)) ? [PUMP_FUNCS] : []);
     return parts.join('\n\n') + '\n';
   }
 
@@ -5916,7 +6438,7 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
       L.push('    desenha_icone(ax, ' + str(b.type) + ', ' + n2s(b.x) + ', ' + n2s(b.y) + ')');
       L.push('    ax.text(' + n2s(b.x + P.nameX(b)) + ', ' + n2s(b.y + g.h + 16) + ', ' + str(b.name) + ", fontsize=FSP, fontweight='bold', ha='center', va='center', zorder=6)");
       const r = res.blocks[b.id]; if (!r) return;
-      if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon')) {
+      if (r.duties && (b.type === 'column' || b.type === 'column_mt' || b.type === 'column_short' || b.type === 'ponchon')) {
         L.push('    ax.text(' + n2s(b.x + 96) + ', ' + n2s(b.y - 14) + ', ' + str('Qc = ' + (r.duties.Qc / 1000).toFixed(1) + ' kW') + ", color=AMARELO, fontsize=FSP - 1, fontweight='bold', va='center', zorder=6)");
         L.push('    ax.text(' + n2s(b.x + 74) + ', ' + n2s(b.y + g.h + 34) + ', ' + str('Qr = ' + (r.duties.Qr / 1000).toFixed(1) + ' kW') + ", color=AMARELO, fontsize=FSP - 1, fontweight='bold', va='center', zorder=6)");
       } else if (r.duty != null && Math.abs(r.duty) > 1 && b.type !== 'feed') {
@@ -5956,7 +6478,7 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
   function blockCode(st, res, b, td) {
     const r = res.blocks[b.id]; if (!r) return null;
     const fn = blockFn(st, b), th = res.th, head = ['def ' + fn + '():', '    """' + b.name + ' — ' + SF.units.TYPES[b.type].label + '."""'].concat(pr(b, r));
-    if (b.type === 'column' && r.plots && r.plots.find(p => p.kind === 'mccabe') && td.act) {
+    if ((b.type === 'column' || b.type === 'column_mt') && r.plots && r.plots.find(p => p.kind === 'mccabe') && td.act) {
       const m = r.plots.find(p => p.kind === 'mccabe').data;
       const i1 = th.c.findIndex(c => c.name === m.light), i2 = th.c.findIndex(c => c.name === m.heavy);
       return head.concat([
@@ -6175,6 +6697,66 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         "    a2.set_xticks(e); a2.set_xlabel('Efeito'); a2.set_title('Por efeito: água evaporada e área'); a2.grid(True, axis='y', alpha=0.4); a2.legend(); f2.tight_layout()",
         '    return [f1, f2]']).join('\n');
     }
+    if (b.type === 'pid_cstr' && r.pid) {
+      const p = r.pid, B = v => (v ? 'True' : 'False');
+      return head.concat([
+        '    # Controle PID de um CSTR isotérmico (A -> B, 1ª ordem): o mesmo modelo do simulador, a comparação P / PI / PID',
+        '    # e uma janela de sintonia com barras deslizantes (baseada no código cstr_nl_gui do Prof. Juan).',
+        '    P = dict(V=' + n2s(p.V) + ', k=' + n2s(p.k) + ', CA0=' + n2s(p.CA0) + ', Fb=' + n2s(p.Fb) + ', Cref=' + n2s(p.Cref) + ', C0=' + n2s(p.C0) + ', tf=' + n2s(p.tEnd) + ',',
+        '             modoF=' + B(p.flowMV) + ', satModelo=' + B(p.satIn) + ', Kp=' + n2s(p.Kp) + ', Ki=' + n2s(p.Ki) + ', Kd=' + n2s(p.Kd) + ')',
+        '    # modoF=True: o PID manipula a vazão F (não linear); False: manipula C_A0 com F = Fb fixa (linear, como na figura)',
+        "    t, C, u = pid_simula(P, P['Kp'], P['Ki'], P['Kd'])",
+        "    tP, CP, _ = pid_simula(P, P['Kp'], 0, 0); tPI, CPI, _ = pid_simula(P, P['Kp'], P['Ki'], 0)",
+        "    IAE = np.trapezoid(np.abs(P['Cref'] - C), t) if hasattr(np, 'trapezoid') else np.trapz(np.abs(P['Cref'] - C), t)",
+        "    print(f'  Python: C_A final = {C[-1]:.4f} mol/L | IAE = {IAE:.3f} | só P: C_A final = {CP[-1]:.4f} mol/L')",
+        '    f1, a1 = plt.subplots(figsize=(10, 6.5))',
+        "    a1.plot(tP, CP, lw=2, label='P'); a1.plot(tPI, CPI, lw=2, label='PI'); a1.plot(t, C, 'b', lw=3, label='PID'); a1.axhline(P['Cref'], color='r', ls='--', lw=2, label='Referência')",
+        "    a1.set_xlabel('Tempo (min)'); a1.set_ylabel('$C_A$ (mol/L)'); a1.set_ylim(0, 2 * P['Cref']); a1.grid(True); a1.legend(loc='lower right')",
+        "    a1.set_title('Comparação: P, PI e PID com os mesmos ganhos'); f1.tight_layout()",
+        '    f2 = pid_gui(P, ' + str(b.name) + ')',
+        '    return [f1, f2]']).join('\n');
+    }
+    if (b.type === 'pump_system' && r.pumpSys) {
+      const p = r.pumpSys, o = p.o;
+      return head.concat([
+        '    # Sistema de bombeamento: curva do sistema (Darcy-Weisbach + Colebrook + K dos acessórios), curva da bomba,',
+        '    # ponto de operação, NPSH disponível x requerido e potência, para tubulação de aço e de PVC.',
+        '    S = dict(rho=' + n2s(o.rho) + ', mu=' + n2s(o.mu) + ', Pv=' + n2s(o.Pv) + ', g=9.80665, Ps=' + n2s(o.Ps) + ', Pd=' + n2s(o.Pd) + ', zs=' + n2s(o.zs) + ', zd=' + n2s(o.zd) + ',',
+        '             Ls=' + n2s(o.Ls) + ', Ds=' + n2s(o.Ds) + ', Ld=' + n2s(o.Ld) + ', Dd=' + n2s(o.Dd) + ', Ks=' + n2s(p.Ks) + ', Kd=' + n2s(p.Kd) + ')',
+        '    # zs > 0: nível da sucção acima do eixo (bomba afogada); Ks e Kd: soma dos K dos acessórios (Azevedo Netto)',
+        '    Qp = ' + n2s(p.Q) + '   # vazão de projeto (m3/h)',
+        "    eps = {'aco': 0.046e-3, 'pvc': 0.0015e-3}; nomes = {'aco': 'aço', 'pvc': 'PVC'}; mat, outro = " + str(p.mat) + ', ' + str(p.mat === 'aco' ? 'pvc' : 'aco'),
+        '    curva = ' + mat(o.curve) + '   # Q (m3/h), H (m), eta (%), NPSHr (m)',
+        '    cH = np.polyfit(curva[:, 0], curva[:, 1], 2); cE = np.polyfit(curva[:, 0], curva[:, 2], 3); cN = np.polyfit(curva[:, 0], curva[:, 3], 2)',
+        '    Hb = lambda Q: np.polyval(cH, Q); Eb = lambda Q: np.maximum(0, np.polyval(cE, Q)); Nr = lambda Q: np.maximum(0, np.polyval(cN, Q))',
+        '    Q = np.linspace(0, curva[:, 0].max(), 81)',
+        '    H1, N1, _, _ = bomba_sistema(Q, S, eps[mat]); H2, N2, _, _ = bomba_sistema(Q, S, eps[outro])',
+        '    op = lambda e: brentq(lambda q: Hb(q) - bomba_sistema(np.array([q]), S, e)[0][0], 1e-6, 1.5 * curva[:, 0].max())',
+        '    Qop1, Qop2 = op(eps[mat]), op(eps[outro])',
+        '    Hs, Nd, hs, hd = [v[0] for v in bomba_sistema(np.array([Qp]), S, eps[mat])]',
+        "    Pe = S['rho'] * S['g'] * Qp / 3600 * Hb(Qp) / (Eb(Qp) / 100)",
+        "    print(f'  Python: Hsis(Qp) = {Hs:.3f} m | Hbomba(Qp) = {Hb(Qp):.3f} m | operação: Q = {Qop1:.2f} m3/h, H = {Hb(Qop1):.2f} m | NPSHd = {Nd:.2f} m, NPSHr = {Nr(Qp):.2f} m | potência no eixo = {Pe / 1000:.3f} kW')",
+        '    f1, a1 = plt.subplots(figsize=(11, 7))',
+        "    a1.plot(Q, Hb(Q), 'b', lw=3, label='Bomba (ajuste)'); a1.plot(curva[:, 0], curva[:, 1], 'bo', label='Bomba (catálogo)')",
+        "    a1.plot(Q, H1, 'r', lw=3, label='Sistema - ' + nomes[mat]); a1.plot(Q, H2, '--', color='#e88b2e', lw=2, label='Sistema - ' + nomes[outro])",
+        "    a1.plot(Qop1, Hb(Qop1), 'ko', ms=12, label='Operação'); a1.plot(Qop2, Hb(Qop2), 'd', color='#e88b2e', ms=10, label='Operação - ' + nomes[outro])",
+        "    a1.plot(Qp, Hb(Qp), '*', color='#2e9e6b', ms=18, label='Projeto'); a1.set_ylim(0, 1.1 * max(Hb(0), H1[-1]))",
+        "    a1.set_xlabel('Vazão Q (m³/h)'); a1.set_ylabel('Altura manométrica H (m)'); a1.grid(True); a1.legend(loc='lower left', fontsize=13); a1.set_title('Curvas da bomba e do sistema'); f1.tight_layout()",
+        '    f2, a2 = plt.subplots(figsize=(11, 7))',
+        "    a2.plot(Q, N1, color='#2e9e6b', lw=3, label='NPSH disponível - ' + nomes[mat]); a2.plot(Q, N2, '--', color='#2e9e6b', lw=2, label='NPSH disponível - ' + nomes[outro])",
+        "    a2.plot(Q, Nr(Q), 'r', lw=3, label='NPSH requerido'); a2.plot(curva[:, 0], curva[:, 3], 'ro', label='NPSHr (catálogo)'); a2.axvline(Qp, color='k', ls=':', lw=1.5, label='Projeto')",
+        "    a2.set_xlabel('Vazão Q (m³/h)'); a2.set_ylabel('NPSH (m)'); a2.grid(True); a2.legend(fontsize=13); a2.set_title('NPSH: cavitação quando NPSHd < NPSHr'); f2.tight_layout()",
+        '    f3, a3 = plt.subplots(figsize=(11, 7)); a3b = a3.twinx(); Qq = Q[1:]',
+        "    a3.plot(Q, Eb(Q), 'b', lw=3, label='Rendimento'); a3.plot(curva[:, 0], curva[:, 2], 'bo'); a3.set_ylabel('Rendimento η (%)', color='b')",
+        "    a3b.plot(Qq, S['rho'] * S['g'] * Qq / 3600 * Hb(Qq) / np.maximum(Eb(Qq) / 100, 0.02) / 1000, 'k--', lw=2.5); a3b.set_ylabel('Potência no eixo (kW)')",
+        "    a3.set_xlabel('Vazão Q (m³/h)'); a3.grid(True); a3.set_title('Rendimento e potência da bomba'); f3.tight_layout()",
+        "    _, _, hs2, hd2 = [v[0] for v in bomba_sistema(np.array([Qp]), S, eps[outro])]; Hst = (S['Pd'] - S['Ps']) / (S['rho'] * S['g']) + S['zd'] - S['zs']",
+        '    f4, a4 = plt.subplots(figsize=(10, 6.5)); xx = np.arange(3)',
+        "    a4.bar(xx - 0.2, [Hst, hs, hd], 0.4, color='#d1302b', label=nomes[mat]); a4.bar(xx + 0.2, [Hst, hs2, hd2], 0.4, color='#e88b2e', label=nomes[outro])",
+        "    a4.set_xticks(xx); a4.set_xticklabels(['Estática', 'Perda na sucção', 'Perda no recalque']); a4.set_ylabel('m de coluna de líquido'); a4.grid(True, axis='y'); a4.legend()",
+        "    a4.set_title(f'Altura do sistema em Q = {Qp:.1f} m³/h'); f4.tight_layout()",
+        '    return [f1, f2, f3, f4]']).join('\n');
+    }
     if (b.type === 'ponchon' && r.ps) {
       const S_ = r.ps, cte = !S_.useTh, lin = !!S_.lin, T_ = S_.tab, vv = a => 'np.array([' + a.map(n2s).join(', ') + '])';
       return head.concat([
@@ -6375,7 +6957,7 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         "    ax.set_xticks(pos); ax.set_xticklabels(NOMES); ax.set_ylabel('Fração molar'); ax.set_title(f'Flash: β = {beta:.3f}'); ax.legend(); ax.grid(True, axis='y', alpha=.4)",
         '    fig.tight_layout()', '    return [fig]']).join('\n');
     }
-    if (b.type === 'column' && r.profile) {
+    if ((b.type === 'column' || b.type === 'column_mt') && r.profile) {
       const p = r.profile;
       return head.concat(['    estagio = np.arange(1, ' + (p.T.length + 1) + ')', '    T = ' + vec(p.T.map(t => t - 273.15)), '    X = ' + mat(p.x),
         '    fig, (a1, a2) = plt.subplots(1, 2, figsize=(16, 6.5))', "    a1.plot(T, estagio, 'r-o', lw=3); a1.invert_yaxis(); a1.set_xlabel('Temperatura (°C)'); a1.set_ylabel('Estágio (1 = condensador)'); a1.set_title('Perfil de temperatura'); a1.grid(True, alpha=.4)",
@@ -6386,6 +6968,90 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
     if (b.type === 'feed' || b.type === 'product') return null;
     return head.concat(['    return []']).join('\n');
   }
+
+  const PID_FUNCS = `
+
+def pid_rhs(y, P, Kp, Ki, Kd):
+    """Modelo do CSTR com PID: x1 = C_A, x2 = integral do erro; dC_A/dt do termo derivativo isolado algebricamente."""
+    e = P['Cref'] - y[0]
+    if P['modoF']:   # vazão manipulada (não linear)
+        d = ((P['Fb'] + Kp * e + Ki * y[1]) * (P['CA0'] - y[0]) - P['V'] * P['k'] * y[0]) / (P['V'] + Kd * (P['CA0'] - y[0]))
+        u = P['Fb'] + Kp * e + Ki * y[1] - Kd * d
+        if P['satModelo'] and u < 0:
+            d, u = -P['k'] * y[0], 0.0
+    else:            # C_A0 manipulada (linear)
+        tau = P['V'] / P['Fb']
+        d = (Kp / tau * e + Ki / tau * y[1] - (1 / tau + P['k']) * y[0]) / (1 + Kd / tau)
+        u = Kp * e + Ki * y[1] - Kd * d
+        if P['satModelo'] and u < 0:
+            d, u = -(1 / tau + P['k']) * y[0], 0.0
+    return [d, e], u
+
+
+def pid_simula(P, Kp, Ki, Kd):
+    t = np.linspace(0, P['tf'], 301)
+    s = solve_ivp(lambda t_, y: pid_rhs(y, P, Kp, Ki, Kd)[0], [0, P['tf']], [P['C0'], 0.0], t_eval=t, rtol=1e-8, atol=1e-10)
+    u = np.array([pid_rhs(s.y[:, j], P, Kp, Ki, Kd)[1] for j in range(s.y.shape[1])])
+    return s.t, s.y[0], np.maximum(0, u)   # saturação no gráfico, como no código original
+
+
+def pid_gui(P, nome):
+    """Sintonia do PID com barras deslizantes (adaptada do cstr_nl_gui do Prof. Juan)."""
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(15, 8.5)); fig.subplots_adjust(bottom=0.34, wspace=0.28)
+    fig.canvas.manager.set_window_title(nome + ' — sintonia do PID') if fig.canvas.manager else None
+    sls = {}
+    for i, (g, lo, hi) in enumerate([('Kp', 0, 30), ('Ki', 0, 10), ('Kd', 0, 10)]):
+        ax = fig.add_axes([0.2, 0.2 - 0.065 * i, 0.6, 0.035])
+        sls[g] = Slider(ax, g, lo, hi, valinit=P[g]); sls[g].label.set_fontsize(16); sls[g].valtext.set_fontsize(16)
+
+    def desenha(_=None):
+        Kp, Ki, Kd = sls['Kp'].val, sls['Ki'].val, sls['Kd'].val
+        t, C, u = pid_simula(P, Kp, Ki, Kd)
+        a1.clear(); a1.plot(t, C, 'b', lw=3, label='$C_A(t)$'); a1.axhline(P['Cref'], color='r', ls='--', lw=2, label='Referência')
+        a1.set_ylim(0, 2 * P['Cref']); a1.set_xlabel('Tempo (min)'); a1.set_ylabel('$C_A$ (mol/L)'); a1.grid(True); a1.legend(loc='lower right')
+        a1.set_title(f'Kp = {Kp:.2f}, Ki = {Ki:.2f}, Kd = {Kd:.2f}')
+        a2.clear(); a2.plot(t, u, 'k', lw=3); a2.set_xlabel('Tempo (min)'); a2.grid(True); a2.set_title('Sinal de controle')
+        if P['modoF']:
+            a2.set_ylabel('Vazão F (L/min)'); a2.set_ylim(0, max(60, 1.1 * u.max()))
+        else:
+            a2.set_ylabel('$C_{A0}$ (mol/L)')
+        fig.canvas.draw_idle()
+    for s_ in sls.values():
+        s_.on_changed(desenha)
+    desenha()
+    fig._sliders = sls   # mantém referência aos controles
+    return fig
+`;
+  const PUMP_FUNCS = `
+
+def bomba_atrito(Re, rel):
+    """Fator de atrito de Colebrook-White (iterado a partir de Swamee-Jain); laminar: 64/Re."""
+    if Re <= 0:
+        return 0.0
+    if Re < 2300:
+        return 64 / Re
+    f = 0.25 / np.log10(rel / 3.7 + 5.74 / Re ** 0.9) ** 2
+    for _ in range(30):
+        f = (-2 * np.log10(rel / 3.7 + 2.51 / (Re * np.sqrt(f)))) ** -2
+    if Re < 4000:
+        fl = 64 / 2300; f = fl + (Re - 2300) / 1700 * (f - fl)
+    return f
+
+
+def bomba_perda(Qh, L, Dmm, K, eps, S):
+    D = Dmm / 1000; A = np.pi * D ** 2 / 4; V = Qh / 3600 / A; Re = S['rho'] * V * D / S['mu']
+    return (bomba_atrito(Re, eps / D) * L / D + K) * V ** 2 / (2 * S['g'])   # Darcy-Weisbach + perdas localizadas
+
+
+def bomba_sistema(Q, S, eps):
+    """Curva do sistema H(Q), NPSH disponível e perdas na sucção e no recalque."""
+    Q = np.atleast_1d(Q).astype(float)
+    hs = np.array([bomba_perda(q, S['Ls'], S['Ds'], S['Ks'], eps, S) for q in Q])
+    hd = np.array([bomba_perda(q, S['Ld'], S['Dd'], S['Kd'], eps, S) for q in Q])
+    H = (S['Pd'] - S['Ps']) / (S['rho'] * S['g']) + (S['zd'] - S['zs']) + hs + hd
+    N = S['Ps'] / (S['rho'] * S['g']) + S['zs'] - hs - S['Pv'] / (S['rho'] * S['g'])
+    return H, N, hs, hd
+`;
 
   const PFR_TRANS = `
 def pfr_transiente(P, nome):
@@ -6461,7 +7127,7 @@ def pfr_transiente(P, nome):
       .concat(["    if os.environ.get('SIMULA_SALVAR') == '1':", '        for k, f in enumerate(figs):', "            f.savefig(f'" + fn + "_fig{k + 1}.png', dpi=130)", '        print(f"{len(figs)} figuras salvas em PNG.")', '    plt.show()', '', '', "if __name__ == '__main__':", '    main()']).join('\n');
     const types = Array.from(new Set(st.blocks.map(b => b.type)));
     return [head, td.code, needVLE ? VLE : '', needFlash ? FLASH : '', '', streamsCode(st, res), PFD_HELPERS, iconLibPy(types), pfdCode(st, res), '']
-      .concat(blocks.map(x => x.code + '\n')).concat(needPFR ? [PFR_TRANS] : []).concat(['', main]).filter(s => s !== null).join('\n\n').replace(/\n{4,}/g, '\n\n\n') + '\n';
+      .concat(blocks.map(x => x.code + '\n')).concat(needPFR ? [PFR_TRANS] : []).concat(blocks.some(x => /pid_simula/.test(x.code)) ? [PID_FUNCS] : []).concat(blocks.some(x => /bomba_sistema/.test(x.code)) ? [PUMP_FUNCS] : []).concat(['', main]).filter(s => s !== null).join('\n\n').replace(/\n{4,}/g, '\n\n\n') + '\n';
   }
 
   function readme(st, fn) {
@@ -6506,6 +7172,27 @@ def pfr_transiente(P, nome):
       streams: [S('1', 'F', 'out', 'H', 'in', '1'), S('2', 'H', 'out', 'T101', 'feed', '2'), S('E1', 'E1', 'eo', 'H', 'q_in', 'E1'),
         S('E2', 'T101', 'qc', 'EC', 'ei', 'E2'), S('E3', 'ER', 'eo', 'T101', 'qr', 'E3'),
         S('3', 'T101', 'distillate', 'D', 'in', 'D'), S('4', 'T101', 'bottoms', 'W', 'in', 'W')] } },
+    { key: 'coluna-mccabe-preaquecida', title: 'Coluna McCabe–Thiele com pré-aquecedor embutido (100 kW na carga, sem heater externo): etanol/água', fs: {
+      name: 'Coluna com pré-aquecedor embutido', components: ['ethanol', 'water'], model: 'NRTL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Alimentação a 25 °C', params: { T: 25, P: 1.01325, vf: '', flow: 100, flowUnit: 'kmol/h', basis: 'molar', composition: { ethanol: 0.10, water: 0.90 } } },
+        { id: 'T1', type: 'column_mt', name: 'DC-02', params: { pre: 'carga térmica Q_pré informada', Qpre: 100, Tpre: 80, N: 20, feedStage: 10, R: 3.15, spec2: 'vazão de destilado D', D: 12.4, Qr: 643, condenser: 'total', P: 1.01325 } },
+        { id: 'D', type: 'product', name: 'Destilado D' }, { id: 'W', type: 'product', name: 'Fundo W' }],
+      streams: [S('1', 'F', 'out', 'T1', 'feed', '1'), S('2', 'T1', 'distillate', 'D', 'in', 'D'), S('3', 'T1', 'bottoms', 'W', 'in', 'W')] } },
+    { key: 'bomba-afogada', title: 'Projeto de bombeamento: bomba afogada, válvulas (retenção, gaveta), aço × PVC, curvas H–Q e NPSH', fs: {
+      name: 'Bombeamento de água com bomba afogada', components: ['water'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Água a 25 °C (30 m³/h)', params: { T: 25, P: 1.01325, vf: '', flow: 29910, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'B1', type: 'pump_system', name: 'B-101', params: { mat: 'aço comercial (ε = 0,046 mm)', Ps: 1.01325, zs: 2.5, Ls: 5, Ds: 102.3, s_ent: 1, s_pe: 0, s_gav: 1, s_cot: 1, s_red: 1,
+          Pd: 1.01325, zd: 28, Ld: 80, Dd: 77.9, d_amp: 1, d_ret: 1, d_gav: 1, d_glo: 0, d_bor: 0, d_cot: 4, d_cur: 2, d_te: 1, d_sai: 1,
+          curve: '0 42 0 1.0\n10 41 45 1.3\n20 38.5 64 1.8\n30 34.5 74 2.5\n40 29 73 3.5\n50 22 64 4.8', mu: '' } },
+        { id: 'P', type: 'product', name: 'Reservatório elevado' }],
+      streams: [S('1', 'F', 'out', 'B1', 'in', '1'), S('2', 'B1', 'out', 'P', 'in', '2')] } },
+    { key: 'pid-cstr', title: 'Controle PID não linear de um CSTR (sintonia ao vivo de Kp, Ki e Kd com barras deslizantes)', fs: {
+      name: 'Controle PID de CSTR', components: ['water'], model: 'IDEAL',
+      blocks: [
+        { id: 'C1', type: 'pid_cstr', name: 'PID-CSTR', params: { mv: 'vazão de alimentação F (não linear, como no código)', Kp: 5, Ki: 1, Kd: 2, Cref: 5, V: 100, k: 0.2, CA0: 10, Fb: 10, C0: 0, tEnd: 30, sat: 'só no gráfico (como no código original)' } }],
+      streams: [] } },
     { key: 'evaporador-triplo', title: 'Evaporador de triplo efeito: solução de açúcar de 10 % a 50 % (alimentação para a frente)', fs: {
       name: 'Evaporador de triplo efeito', components: ['water', 'sucrose'], model: 'IDEAL',
       blocks: [
@@ -7260,7 +7947,7 @@ def pfr_transiente(P, nome):
   const $ = s => document.querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false;
   const caps = { downloads: undefined };
@@ -7387,6 +8074,15 @@ def pfr_transiente(P, nome):
 
   /* ------------------------------------------------------------------ simulação */
   function setStatus(kind, text) { const c = $('#simStatus'); c.className = 'chip ' + kind; c.textContent = text; }
+  // simulação rápida durante o arraste de uma barra: atualiza gráficos e a tabela de resultados sem redesenhar os campos
+  function liveSimulate(bid) {
+    let r; try { r = SF.flowsheet.solve(JSON.parse(JSON.stringify(state))); } catch (e) { return; }
+    if (!r || !r.ok) { setStatus('err', 'Erro: ' + ((r && r.errors && r.errors[0] && r.errors[0].msg) || '').slice(0, 70)); return; }
+    results = r; setStatus(r.warnings.length ? 'warn' : 'ok', 'Sintonia ao vivo · ' + r.ms + ' ms' + (r.warnings.length ? ' · ' + r.warnings.length + ' aviso(s)' : ''));
+    const br = r.blocks[bid], tb = document.querySelector('#pRes + table');
+    if (br && tb) tb.outerHTML = resTable(br);
+    renderCharts(bid);
+  }
   function runSimulation(quiet) {
     if (!state.blocks.length) { if (!quiet) toast('Monte o fluxograma primeiro'); return null; }
     setStatus('run', 'Simulando…');
@@ -7455,11 +8151,12 @@ def pfr_transiente(P, nome):
     let h = '<div class="blk-head">' + IC.paletteIcon(b.type) + '<div style="flex:1"><input id="blkName" value="' + esc(b.name) + '" aria-label="Nome do equipamento"><div class="small muted">' + esc(T.label) + ' · ' + esc(b.id) + '</div></div></div>';
     const r = results && results.blocks && results.blocks[b.id], hasM = SF.models && SF.models.get && SF.models.get(b.type, b.params), hasT = SF.theory && SF.theory.get && SF.theory.get(b.type);
     // atalhos: dados de entrada primeiro; resultados, equações e teoria logo abaixo
-    h += '<div class="props-intro"><p><span aria-hidden="true">✏️</span> <b>Modifique os valores das variáveis</b>, se assim desejar: os valores estão pré-setados para ajudá-lo(a).</p>' +
+    h += '<div class="props-intro"><p><span aria-hidden="true">✏️</span> Você pode <b>começar do zero</b> ou <b>modificar os valores das variáveis</b>, se assim desejar: os valores estão pré-setados para ajudá-lo(a).</p>' +
       '<nav class="props-jump" aria-label="Seções das propriedades"><span>Leia:</span>' + (hasM ? '<button type="button" data-jump="pEq">📐 as equações</button>' : '') + (hasT ? '<button type="button" data-jump="pTh">📖 a modelagem</button>' : '') +
       (r ? '<button type="button" data-jump="pRes">📊 os resultados do exemplo</button>' : '<button type="button" data-runjump="1">📊 os resultados do exemplo</button>') + '</nav></div>';
     h += '<div class="subhead" id="pDados">Dados de entrada</div>';
     if (T.params.length) T.params.forEach(f => { h += fieldHTML(b, f); });
+    if (FIELD_HELP[b.type]) h += fieldHelpHTML(b.type);                         // o que significa cada campo (CSTR, PFR...)
     if (T.params.some(f => f.type === 'reactions')) h += rxHelpHTML(b.type);   // explicação da tabela de reações, logo depois das variáveis de entrada
     else h += '<p class="small muted">Este equipamento não tem dados para informar: basta ligar as correntes.</p>';
     h += '<div class="row-actions"><button id="runFromProps" class="primary">Simular</button><button id="delBlk">Excluir equipamento</button></div>';
@@ -7478,7 +8175,8 @@ def pfr_transiente(P, nome):
       t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }; });
     if ($('#showCharts')) $('#showCharts').onclick = () => { renderCharts(b.id); if (SF.mobile) setMView('charts'); };
     const md = el.querySelector('.model-eq:not(.theory)'); if (md) md.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.eqOpen', md.open ? '1' : '0'); } catch (e) { /* */ } });
-    const rxh = el.querySelector('.rx-help'); if (rxh) rxh.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.rxHelpOpen', rxh.open ? '1' : '0'); } catch (e) { /* */ } });
+    const rxh = el.querySelector('.rx-help:not(.field-help)'); if (rxh) rxh.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.rxHelpOpen', rxh.open ? '1' : '0'); } catch (e) { /* */ } });
+    const fh = el.querySelector('.field-help'); if (fh) fh.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.fieldHelpOpen', fh.open ? '1' : '0'); } catch (e) { /* */ } });
     const tdet = el.querySelector('.model-eq.theory'); if (tdet) tdet.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.thOpen', tdet.open ? '1' : '0'); } catch (e) { /* */ } });
     el.querySelectorAll('[data-open-example]').forEach(btn => { btn.onclick = () => { const exm = SF.examples.find(x => x.key === btn.dataset.openExample); if (!exm) return; loadFlowsheet(exm.fs); runSimulation(true); toast('Exemplo carregado: ' + exm.title); if (SF.mobile) setMView('flow'); }; });
     bindFields(b);
@@ -7496,6 +8194,10 @@ def pfr_transiente(P, nome):
         state.components.map(id => '<tr><td>' + esc(TH.COMP[id].name) + '</td><td><input type="number" step="any" min="0" data-ck="' + f.k + '" data-comp="' + id + '" value="' + (obj[id] != null ? obj[id] : 0) + '" aria-label="' + esc(TH.COMP[id].name) + '"></td></tr>').join('') +
         '</tbody></table>' + (f.type === 'composition' && !isConc ? '<p class="small muted">Soma: <span class="num">' + nf(tot, 4) + '</span> (normalizada automaticamente)</p>' : '');
     }
+    if (f.type === 'range') // barra deslizante (sintonia ao vivo) + campo numérico
+      return '<div class="field field-range"><label for="f_' + f.k + '">' + esc(f.label) + (f.u ? ' <span class="muted">(' + esc(f.u) + ')</span>' : '') + ': <b class="rng-val" data-rv="' + f.k + '">' + nf(+v, 2) + '</b></label>' +
+        '<div class="rng-row"><input type="range" id="f_' + f.k + '" data-range="' + f.k + '" min="' + f.min + '" max="' + f.max + '" step="' + (f.step || 'any') + '" value="' + v + '" aria-label="' + esc(f.label) + '">' +
+        '<input type="number" step="any" class="rng-num" data-k="' + f.k + '" value="' + v + '" aria-label="' + esc(f.label) + ' (valor)"></div></div>';
     if (f.type === 'matrix') { // tabela de números (uma linha por ponto), pode colar do Excel ou do MATLAB
       const rows = String(v == null ? '' : v).split(/[;\n]+/).filter(x => x.trim()).length;
       return '<div class="field field-matrix"><label for="f_' + f.k + '">' + esc(f.label) + '</label><textarea id="f_' + f.k + '" data-k="' + f.k + '" rows="' + Math.min(10, Math.max(4, rows + 1)) + '" spellcheck="false">' + esc(String(v == null ? '' : v).replace(/;\s*/g, '\n')) + '</textarea></div>';
@@ -7508,6 +8210,57 @@ def pfr_transiente(P, nome):
     }
     if (f.type === 'reactions') return reactionsHTML(b);
     return '<div class="field"><label for="f_' + f.k + '">' + esc(f.label) + (f.u ? '<span class="u">' + esc(f.u) + '</span>' : '') + '</label><input id="f_' + f.k + '" type="number" step="any" data-k="' + f.k + '" value="' + (v == null ? '' : esc(v)) + '"></div>';
+  }
+  // o que significa cada campo de dados de entrada, com os valores do exemplo pronto
+  const FIELD_HELP = {
+    cstr: { ex: 'CSTR transiente com camisa', items: [
+      ['Volume V (m³)', 'volume de líquido no tanque. Com a vazão volumétrica v₀ da alimentação dá o tempo de residência τ = V/v₀: no exemplo, 1 m³ e 2 L/s, τ = 500 s.'],
+      ['Regime', '<b>permanente</b> resolve os balanços algébricos (dC/dt = 0); <b>transiente</b> integra as EDOs de massa e energia no tempo, com alimentação contínua; <b>batelada</b> é o tanque fechado, sem entrada nem saída.'],
+      ['Energia', '<b>isotérmico</b>: T fixa, e o programa calcula o calor para mantê-la; <b>adiabático</b>: sem troca de calor, a temperatura muda com o calor de reação ΔH; <b>camisa</b>: troca com a camisa, Q = UA·(Tj − T).'],
+      ['Temperatura (°C)', 'temperatura de operação no modo isotérmico e temperatura inicial do tanque no transiente.'],
+      ['UA da camisa (W/K) e temperatura da camisa (°C)', 'produto do coeficiente global pela área de troca e temperatura do fluido da camisa; usados só no modo camisa. No exemplo, UA = 20 000 W/K e Tj = 25 °C retiram cerca de 187 kW e o reator estabiliza em 34,4 °C.'],
+      ['Tempo de simulação (s)', 'duração do transiente. Use várias vezes τ para ver o estado estacionário: no exemplo, 3 000 s = 6τ.'],
+      ['Conteúdo inicial', '<b>solvente puro</b>: o tanque começa só com o solvente (partida do reator); <b>igual à alimentação</b>: começa com a composição da entrada.']] },
+    pfr: { ex: 'PFR transiente (v₀ = 2 L/s, CA0 = 5 mol/L, k = 0,035 s⁻¹)', items: [
+      ['Volume V (m³)', 'volume do tubo. Com a vazão volumétrica v₀ dá o tempo espacial τ = V/v₀: no exemplo, 0,1 m³ e 2 L/s, τ = 50 s, e a conversão no estado estacionário é X = 1 − e^(−kτ) = 1 − e^(−1,75) = 82,6 %.'],
+      ['Diâmetro D (m)', 'define o comprimento L = 4V/(πD²), 3,18 m no exemplo, e a área de troca com a parede. No escoamento pistonado ideal, o diâmetro não muda a conversão.'],
+      ['Regime', '<b>permanente</b> integra dF/dV = r ao longo do volume; <b>transiente</b> resolve a EDP ∂C/∂t = −u·∂C/∂z + r, com o tubo começando cheio de solvente.'],
+      ['Fase reacional', '<b>líquida</b>: vazão volumétrica constante; <b>gasosa</b>: a vazão volumétrica muda com o número de mols, a temperatura e a pressão.'],
+      ['Energia', '<b>isotérmico</b>: T fixa, e o programa calcula o calor para mantê-la; <b>adiabático</b>: sem troca de calor; <b>parede</b>: troca com a parede, a temperatura Tw e com o coeficiente U.'],
+      ['Temperatura (°C)', 'temperatura de operação no modo isotérmico e de entrada nos demais.'],
+      ['Coef. U (W/m²·K) e temperatura da parede (°C)', 'usados só no modo parede; a área de troca é π·D·L.'],
+      ['Tempo de simulação (s)', 'duração do transiente. Use algumas vezes τ: no exemplo, 80 s ≈ 1,6τ, quando a saída já está estável.'],
+      ['Células de discretização', 'número de trechos em que o tubo é dividido para o transiente (método das linhas); cada célula funciona como um pequeno CSTR. Mais células aproximam o PFR ideal: com 60 células, a saída fica em C_A = 0,891 mol/L, contra 0,869 mol/L do PFR ideal; com 200 células, 0,880 mol/L.']] },
+    pid_cstr: { ex: 'Controle PID não linear de um CSTR', items: [
+      ['Variável manipulada', '<b>vazão F</b>: o PID muda a vazão de alimentação, e o produto F·C_A deixa o modelo não linear (como no código MATLAB); <b>C_A0</b>: o PID muda a concentração da alimentação com F fixa, e o modelo é linear (como na figura).'],
+      ['Kp, Ki e Kd (barras deslizantes)', 'ganhos do PID. Arraste a barra para ver a resposta mudar ao vivo, ou digite o valor no campo ao lado. Faixas do código original: Kp de 0 a 30, Ki de 0 a 10 e Kd de 0 a 10; no exemplo, 5, 1 e 2.'],
+      ['Referência C_A,ref (mol/L)', 'concentração desejada no reator (set-point): 5 mol/L. Com a vazão manipulada, precisa ser menor que C_A0.'],
+      ['Volume V (L) e k (1/min)', 'volume do reator (100 L) e constante de velocidade da reação A → B de 1ª ordem (0,2 min⁻¹).'],
+      ['C_A0 (mol/L) e F_bias (L/min)', 'concentração da alimentação (10 mol/L) e vazão de base do controlador (10 L/min). Quando C_A0 é a manipulada, F_bias é a vazão fixa e τ = V/F = 10 min.'],
+      ['Concentração inicial e tempo de simulação', 'o reator começa sem A (0 mol/L) e a resposta é calculada por 30 min.'],
+      ['Saturação', '<b>só no gráfico</b>: como no código original, max(0, F) só é aplicado ao desenhar o esforço de controle; <b>no modelo</b>: a vazão (ou C_A0) não pode ficar negativa durante a simulação.']] },
+    pump_system: { ex: 'Projeto de bombeamento com bomba afogada', items: [
+      ['Material da tubulação', '<b>aço comercial</b> (rugosidade ε = 0,046 mm) ou <b>PVC</b> (ε = 0,0015 mm). O outro material é sempre calculado também, para comparação nos gráficos.'],
+      ['Nível da sucção z_s (m)', 'altura do nível do líquido no reservatório de sucção em relação ao eixo da bomba. <b>Positivo = bomba afogada</b> (2,5 m no exemplo); negativo = sucção negativa, que exige válvula de pé com crivo.'],
+      ['Pressões P_s e P_d (bar abs)', 'pressão sobre os níveis de líquido da sucção e da descarga: 1,01325 bar para reservatórios abertos.'],
+      ['Comprimentos e diâmetros', 'trechos retos e diâmetros internos da sucção (5 m, 102,3 mm = 4" sch 40) e do recalque (80 m, 77,9 mm = 3" sch 40). A sucção costuma ter diâmetro maior para reduzir a perda de carga e aumentar o NPSH disponível.'],
+      ['Acessórios (unidades)', 'quantidade de cada válvula ou conexão; o K de cada uma aparece no nome do campo (tabela de Azevedo Netto). Use 0 para os que não existem. No exemplo: gaveta na sucção para manutenção; retenção e gaveta no recalque; 4 cotovelos e 2 curvas.'],
+      ['Nível da descarga z_d (m)', 'altura do nível de chegada acima do eixo da bomba (28 m). A altura estática é z_d − z_s + (P_d − P_s)/ρg = 25,5 m.'],
+      ['Curva da bomba', 'pontos do catálogo do fabricante, um por linha: vazão (m³/h), altura (m), rendimento (%) e NPSH requerido (m). Pode colar do Excel. O programa ajusta polinômios a esses pontos.'],
+      ['Viscosidade (cP)', 'vazio = água, com a viscosidade calculada pela temperatura da corrente (0,89 cP a 25 °C). Para outro líquido, informe o valor.']] },
+    column_mt: { ex: 'Coluna McCabe–Thiele com pré-aquecedor embutido', items: [
+      ['Pré-aquecedor da alimentação', '<b>carga térmica Q_pré</b>: informa o calor adicionado à carga (100 kW no exemplo); <b>aquecer até líquido saturado</b>: o programa calcula o calor para q = 1; <b>temperatura de saída</b>: aquece até a temperatura informada; <b>sem pré-aquecimento</b>: a carga entra como chega.'],
+      ['Q_pré (kW)', 'calor adicionado à carga no pré-aquecedor embutido. Substitui o heater externo e a corrente de energia: 100 kW levam a carga de 25 °C a 64,7 °C.'],
+      ['Nº de estágios e estágio da alimentação', '20 estágios teóricos (o 1 é o condensador e o 20 é o refervedor) e a carga no estágio 10.'],
+      ['Razão de refluxo R', 'L₀/D = 3,15; define a inclinação R/(R + 1) da reta de operação da retificação no McCabe–Thiele.'],
+      ['Segunda especificação', '<b>vazão de destilado D</b> (12,4 kmol/h) ou <b>carga do refervedor Q_r</b>: informe o calor adicionado no refervedor, e o programa calcula o D correspondente.'],
+      ['Q_r (kW)', 'calor adicionado no refervedor, usado quando a segunda especificação é a carga do refervedor (643 kW reproduz o exemplo).'],
+      ['Condensador e pressão', 'condensador total (destilado líquido) e pressão de 1,01325 bar em toda a coluna.']] }
+  };
+  function fieldHelpHTML(type) {
+    const H = FIELD_HELP[type]; let open = true; try { open = localStorage.getItem('simulafacil.fieldHelpOpen') !== '0'; } catch (e) { /* */ }
+    return '<details class="rx-help field-help"' + (open ? ' open' : '') + '><summary><span aria-hidden="true">💡</span> <b>O que significa cada campo</b> <span class="muted small">(valores do exemplo "' + esc(H.ex) + '")</span></summary><div class="rx-help-body"><ul>' +
+      H.items.map(it => '<li><b>' + it[0] + ':</b> ' + it[1] + '</li>').join('') + '</ul></div></details>';
   }
   // explicação da tabela de reações (texto do Prof. Juan): componente, ν, ordem e os três módulos de dados
   function rxHelpHTML(type) {
@@ -7556,6 +8309,16 @@ def pfr_transiente(P, nome):
         b.params[k] = (f.type === 'select' || f.type === 'comp' || f.type === 'matrix') ? inp.value : (inp.value === '' ? '' : +inp.value);
         afterChange(false); if (f.type === 'select') renderProps();
       };
+    });
+    el.querySelectorAll('[data-range]').forEach(inp => { // arrastar = simula ao vivo; soltar = atualiza tudo
+      const k = inp.dataset.range; let tmr = null;
+      inp.addEventListener('input', () => {
+        const v = +inp.value; b.params[k] = v;
+        const lab = el.querySelector('[data-rv="' + k + '"]'); if (lab) lab.textContent = nf(v, 2);
+        const n = el.querySelector('input[data-k="' + k + '"]'); if (n) n.value = v;
+        if (!tmr) tmr = setTimeout(() => { tmr = null; liveSimulate(b.id); }, 60);
+      });
+      inp.addEventListener('change', () => { pushUndo(); b.params[k] = +inp.value; persist(); runSimulation(true); });
     });
     el.querySelectorAll('[data-ck]').forEach(inp => { inp.onchange = () => { pushUndo(); const k = inp.dataset.ck; b.params[k] = b.params[k] || {}; if (inp.dataset.cval && inp.value === '') delete b.params[k][inp.dataset.comp]; else b.params[k][inp.dataset.comp] = +inp.value || 0; afterChange(false); renderProps(); }; });
     el.querySelectorAll('[data-rx]').forEach(inp => {

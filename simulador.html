@@ -1273,7 +1273,8 @@ window.SIMULAFACIL_CONFIG = {
     ethylene: [52510, 68460], propylene: [19710, 62205], benzene: [82930, 129665], toluene: [50170, 122050],
     co: [-110525, -137169], co2: [-393509, -394359], water: [-241818, -228572], ammonia: [-46110, -16450],
     methanol: [-200660, -161960], ethanol: [-235100, -168490],
-    hydrogen: [0, 0], oxygen: [0, 0], nitrogen: [0, 0]
+    hydrogen: [0, 0], oxygen: [0, 0], nitrogen: [0, 0],
+    'nitric-acid': [-134306, -73941], no: [90291, 86600], no2: [33095, 51258], n2o4: [9079, 97787]   // gás ideal, JANAF/NIST
   };
   /* estados de referência dos elementos: C(grafite), H2, O2, N2 (gás) */
   const REF = { C: { id: null, per: 1 }, H: { id: 'hydrogen', per: 2 }, O: { id: 'oxygen', per: 2 }, N: { id: 'nitrogen', per: 2 } };
@@ -1529,6 +1530,10 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'propylene', name: 'Propeno', formula: 'C3H6', mw: 42.081, tc: 364.9, pc: 46.0e5, w: 0.142, tb: 225.5, rho: 505, cp: [3.71, 2.345e-1, -1.16e-4, 2.205e-8], dhv: 18420 },
     { id: 'hydrogen', name: 'Hidrogênio', formula: 'H2', mw: 2.016, tc: 33.19, pc: 13.13e5, w: -0.216, tb: 20.3, rho: 71, cp: [27.14, 9.274e-3, -1.381e-5, 7.645e-9], dhv: 904 },
     { id: 'nitrogen', name: 'Nitrogênio', formula: 'N2', mw: 28.014, tc: 126.2, pc: 33.98e5, w: 0.037, tb: 77.35, rho: 806, cp: [31.15, -1.357e-2, 2.68e-5, -1.168e-8], dhv: 5580 },
+    { id: 'nitric-acid', name: 'Ácido nítrico', formula: 'HNO3', mw: 63.013, tc: 520, pc: 68.9e5, w: 0.714, tb: 356.1, rho: 1512, cp: [9.432, 1.91538e-1, -1.64526e-4, 5.39863e-8], dhv: 37200, ant: [7.56453, 1431.74, 222.69] },
+    { id: 'no', name: 'Óxido nítrico (NO)', formula: 'NO', mw: 30.006, tc: 180, pc: 64.8e5, w: 0.583, tb: 121.4, rho: 1280, cp: [30.977, -1.01925e-2, 2.3882e-5, -1.05838e-8], dhv: 13830 },
+    { id: 'no2', name: 'Dióxido de nitrogênio (NO2)', formula: 'NO2', mw: 46.006, tc: 431.4, pc: 101.3e5, w: 0.85, tb: 294.3, rho: 1443, cp: [24.081, 5.05123e-2, -2.65127e-5, 4.16834e-9], dhv: 19100 },
+    { id: 'n2o4', name: 'Tetróxido de dinitrogênio (N2O4)', formula: 'N2O4', mw: 92.011, tc: 431.4, pc: 101.3e5, w: 0.85, tb: 294.3, rho: 1443, cp: [28.07, 2.12899e-1, -1.76845e-4, 5.51126e-8], dhv: 38120 },
     { id: 'oxygen', name: 'Oxigênio', formula: 'O2', mw: 31.999, tc: 154.6, pc: 50.43e5, w: 0.022, tb: 90.2, rho: 1141, cp: [28.11, -3.68e-6, 1.746e-5, -1.065e-8], dhv: 6820 },
     { id: 'co2', name: 'Dióxido de carbono', formula: 'CO2', mw: 44.01, tc: 304.1, pc: 73.83e5, w: 0.224, tb: 194.7, rho: 770, cp: [19.80, 7.344e-2, -5.602e-5, 1.715e-8], dhv: 16700 },
     { id: 'co', name: 'Monóxido de carbono', formula: 'CO', mw: 28.01, tc: 132.9, pc: 34.99e5, w: 0.045, tb: 81.7, rho: 789, cp: [30.87, -1.285e-2, 2.789e-5, -1.272e-8], dhv: 6040 },
@@ -1615,7 +1620,11 @@ window.SIMULAFACIL_CONFIG = {
     'acetone|water': { a12: 6.3981, a21: 0.0544, b12: -1808.991, b21: 419.9716, c: 0.3, src: 'Banco NRTL (APV)' },
     // estimativas a partir de γ∞ típicos da literatura (o UNIFAC original não capta o desvio negativo água/etilenoglicol)
     'ethylene-glycol|water': { a12: 0, a21: 0, b12: -546.5, b21: 765.0, c: 0.3, src: 'Estimativa NRTL (γ∞ de literatura)' },
-    'ethanol|ethylene-glycol': { a12: 0, a21: 0, b12: 17.4, b21: 261.2, c: 0.3, src: 'Estimativa NRTL (γ∞ de literatura)' }
+    'ethanol|ethylene-glycol': { a12: 0, a21: 0, b12: 17.4, b21: 261.2, c: 0.3, src: 'Estimativa NRTL (γ∞ de literatura)' },
+    // HNO3–água como componentes aparentes (sem eletrólitos): NRTL ajustado ao azeótropo de máxima ebulição (≈ 67–69 % em massa, ≈ 121 °C a 1 atm) e às
+    // atividades da água a 25 °C. heRK: calor de mistura H^E = x1·x2·[A + B(x1 − x2)] (J/mol, 1 = ácido), ajustado aos calores de diluição a 25 °C
+    // (−33,35 kJ/mol HNO3 até a diluição infinita; 19,73 kJ/mol de HNO3·H2O até a diluição infinita, tabela CRC/NBS)
+    'nitric-acid|water': { a12: 0.2914, a21: -5.1592, b12: -844.5476, b21: 1690.5487, c: 0.47, heRK: [-27240, 6110], src: 'NRTL aparente ajustado (azeótropo 67,3 % a 121,8 °C) + calor de mistura de Redlich–Kister — sem eletrólitos' }
   };
   const KIJ_DB = { 'co2|methane': 0.0919, 'co2|ethane': 0.1322, 'co2|propane': 0.1241, 'co2|n-butane': 0.1333, 'methane|nitrogen': 0.0311, 'nitrogen|ethane': 0.0515, 'nitrogen|co2': -0.017, 'hydrogen|methane': 0.0156, 'methane|water': 0.4850, 'ethane|water': 0.4920, 'propane|water': 0.5525, 'co2|water': 0.1896 };
   function pairKey(a, b) { return a < b ? a + '|' + b : b + '|' + a; }
@@ -1750,6 +1759,11 @@ window.SIMULAFACIL_CONFIG = {
   }
   Thermo.prototype._setup = function () {
     const act = this.act.map(i => this.c[i]), na = act.length, self = this;
+    // calor de mistura empírico (pares do banco com heRK), usado em qualquer modelo de atividade
+    if (!this.isEOS && this.model !== 'IDEAL') for (let i = 0; i < this.n; i++) for (let j = i + 1; j < this.n; j++) {
+      const k = pairKey(this.ids[i], this.ids[j]), db = NRTL_DB[k];
+      if (db && db.heRK) { const first = k.split('|')[0], ii = this.ids[i] === first ? i : j, jj = ii === i ? j : i; (this.heRK = this.heRK || []).push({ i: ii, j: jj, A: db.heRK[0], B: db.heRK[1] }); }
+    }
     if (this.isEOS) {
       this.kij = act.map((ci, i) => act.map((cj, j) => { if (i === j) return 0; const k = pairKey(ci.id, cj.id); return this.kijUser[k] != null ? this.kijUser[k] : (KIJ_DB[k] || 0); }));
       for (let i = 0; i < na; i++) for (let j = i + 1; j < na; j++) this.pairInfo.push({ i: act[i].id, j: act[j].id, src: this.kij[i][j] ? 'kij do banco' : 'kij = 0', kij: this.kij[i][j] });
@@ -1888,6 +1902,12 @@ window.SIMULAFACIL_CONFIG = {
       const e = this._eos(x, T, P || PATM, 'L'); h += e.frac * e.Hres; return h;
     }
     for (let i = 0; i < this.n; i++) h += x[i] * (hIGcomp(c[i], T) - dHvapComp(c[i], T));
+    if (this.heRK) h += this.hExcess(x, T);
+    return h;
+  };
+  // entalpia de excesso do líquido (calor de mistura) para os pares do banco com correlação de Redlich–Kister (independe do modelo de atividade)
+  Thermo.prototype.hExcess = function (x) {
+    let h = 0; (this.heRK || []).forEach(p => { const a = x[p.i], b = x[p.j]; if (a > 0 && b > 0) h += a * b * (p.A + p.B * (a - b)); });
     return h;
   };
   Thermo.prototype.hV = function (y, T, P) {
@@ -3041,7 +3061,9 @@ window.SIMULAFACIL_CONFIG = {
     plots.push({ kind: 'profileF', title: 'Vazões internas', data: { stage: stages, L: sol.L.map(v => v / KMOLH), V: sol.V.map(v => v / KMOLH) } });
     // McCabe-Thiele para sistemas binários
     if (active.length === 2) {
-      const lt = active.slice().sort((a, c) => th.c[a].tb - th.c[c].tb), i1 = lt[0], i2 = lt[1];
+      // chave leve = a que se concentra no destilado (com azeótropo de máxima, como HNO3/água, pode não ser a de menor Tb)
+      let lt = active.slice().sort((a, c) => th.c[a].tb - th.c[c].tb); if (sol.x[0][lt[0]] < sol.x[Ns - 1][lt[0]]) lt = [lt[1], lt[0]];
+      const i1 = lt[0], i2 = lt[1];
       try { plots.unshift(mccabeData(th, sol, feeds, i1, i2, R_, D)); } catch (e) { warn.push('Diagrama McCabe-Thiele: ' + e.message); }
     }
     return { out: { distillate: dist, bottoms: bot, side }, res, warn, plots, duties: { Qc: sol.Qc, Qr: sol.Qr }, duty: sol.Qr, profile: sol };
@@ -5344,7 +5366,8 @@ window.SIMULAFACIL_CONFIG = {
     column: { ex: ex('etoh-mccabe', 'Destilação etanol/água — McCabe-Thiele'), p: [
       'A coluna de destilação rigorosa resolve as equações MESH em cada estágio: balanço de massa por componente, equilíbrio líquido-vapor, somatórios das frações e balanço de energia. O vapor sobe enriquecido nos componentes mais voláteis e o líquido desce enriquecido nos mais pesados; o condensador gera o refluxo e o refervedor gera o vapor. O simulador resolve o sistema pelo método do ponto de bolha (Wang–Henke) ou por Newton simultâneo (Naphtali–Sandholm).',
       'Para misturas binárias, o diagrama de McCabe-Thiele mostra a mesma solução graficamente: a curva de equilíbrio, as retas de operação de retificação e de esgotamento e a reta q; cada degrau entre a curva e as retas é um estágio teórico. Quanto maior a razão de refluxo, mais afastadas as retas ficam da curva e menos estágios são necessários, até o limite do refluxo mínimo, em que as retas tocam a curva.',
-      'No exemplo "Destilação etanol/água — McCabe-Thiele", uma coluna de 20 estágios, com alimentação no estágio 10 e R = 3,15 (R_mín ≈ 1,04), separa 100 kmol/h com 10 % de etanol. O destilado sai a 78,3 °C e o fundo a 100 °C. A curva de equilíbrio do NRTL mostra o azeótropo próximo de 89 % de etanol: nenhuma destilação simples ultrapassa esse limite, o que motiva o exemplo "Destilação extrativa" com etilenoglicol.'] },
+      'No exemplo "Destilação etanol/água — McCabe-Thiele", uma coluna de 20 estágios, com alimentação no estágio 10 e R = 3,15 (R_mín ≈ 1,04), separa 100 kmol/h com 10 % de etanol. O destilado sai a 78,3 °C e o fundo a 100 °C. A curva de equilíbrio do NRTL mostra o azeótropo próximo de 89 % de etanol: nenhuma destilação simples ultrapassa esse limite, o que motiva o exemplo "Destilação extrativa" com etilenoglicol.',
+      'O exemplo "Ácido nítrico: destilação de solução diluída" mostra um azeótropo de máxima ebulição: com 28 % de HNO₃ na carga, o topo sai como água pura e o fundo não passa de cerca de 66–68 % (121–122 °C), por mais estágios que se use. A concentração acima disso exige outro processo, como a destilação extrativa com ácido sulfúrico ou nitrato de magnésio. O par HNO₃–água usa NRTL com componentes aparentes, ajustado ao azeótropo e às atividades da água: não é o modelo eletrolítico (e-NRTL) do Aspen, mas reproduz bem o equilíbrio líquido–vapor. O calor de mistura vem de uma correlação de Redlich–Kister ajustada aos calores de diluição a 25 °C: no exemplo de diluição, levar o ácido de 68 % a 30 % aquece a mistura de 25 a 38 °C.'] },
     absorber: { ex: ex('gas', 'Compressão, refrigeração e absorção de gás (Peng-Robinson)'), p: [
       'Na absorção, um gás entra em contato em contracorrente com um líquido (o solvente ou óleo de absorção), que dissolve preferencialmente alguns componentes. Cada componente tem um fator de absorção A = L/(K·V): se A é maior que 1, o líquido consegue carregar o componente e a absorção pode ser quase completa com poucos estágios; se A é menor que 1, a absorção fica limitada.',
       'A equação de Kremser relaciona a fração absorvida com o fator de absorção e o número de estágios teóricos, supondo A constante ao longo da coluna. Ela mostra por que a absorção funciona melhor a alta pressão e baixa temperatura: nessas condições K é menor e A é maior. A operação inversa, a esgotadora (stripping), usa o fator S = K·V/L.',
@@ -5390,7 +5413,8 @@ window.SIMULAFACIL_CONFIG = {
       'O Lagrangeano é a ferramenta de Joseph-Louis Lagrange para otimizar uma função sujeita a restrições. Em vez de eliminar variáveis, soma-se à função objetivo cada restrição multiplicada por uma nova incógnita, o multiplicador de Lagrange: ℒ = f + Σλₖgₖ. No ponto ótimo, todas as derivadas de ℒ se anulam: as derivadas em relação às variáveis dão a condição de extremo, e as derivadas em relação aos multiplicadores devolvem as próprias restrições.',
       'O "Lagrangeano químico" aplica essa ideia ao equilíbrio. Pela segunda lei da termodinâmica, a T e P constantes o sistema evolui até o mínimo da energia de Gibbs total, G = Σnᵢμᵢ. As restrições são a conservação dos átomos: cada elemento (C, H, O…) tem a mesma quantidade antes e depois, Σaₖᵢnᵢ = Aₖ. Daí ℒ = G + Σλₖ(Σaₖᵢnᵢ − Aₖ), e ∂ℒ/∂nᵢ = 0 dá ΔG°f,ᵢ + RT·ln(yᵢP/P°) + Σλₖaₖᵢ = 0. A grande vantagem é que não é preciso escrever nenhuma reação: bastam as espécies possíveis e seus ΔG°f.',
       'Os multiplicadores de Lagrange têm significado físico: −λₖ é o potencial químico do elemento k no equilíbrio, e a condição de mínimo diz que o potencial químico de cada espécie é a soma dos potenciais dos seus átomos, μᵢ = −Σaₖᵢλₖ. Isso equivale a Σνᵢμᵢ = 0 para todas as reações possíveis ao mesmo tempo, que é a condição clássica de equilíbrio químico.',
-      'No exemplo "Reator de Gibbs — reforma do metano a vapor", 1 mol de CH₄ e 4 mol de H₂O (5 kmol/h) reagem a 1000 K e 1 bar entre CH₄, CO, H₂O, CO₂ e H₂, com os ΔG°f a 1000 K de Smith, Van Ness e Abbott (CH₄: +19 720 J/mol). O resultado é 99,4 % de conversão do metano e um gás com cerca de 50 % de H₂, 7 % de CO e 7 % de CO₂, com carga térmica de cerca de 57 kW (reforma endotérmica). O gráfico em função da temperatura mostra por que a reforma exige alta temperatura: com o mesmo excesso de vapor, a conversão do metano cai para cerca de 60 % a 800 K e 30 % a 700 K.'] }
+      'No exemplo "Reator de Gibbs — reforma do metano a vapor", 1 mol de CH₄ e 4 mol de H₂O (5 kmol/h) reagem a 1000 K e 1 bar entre CH₄, CO, H₂O, CO₂ e H₂, com os ΔG°f a 1000 K de Smith, Van Ness e Abbott (CH₄: +19 720 J/mol). O resultado é 99,4 % de conversão do metano e um gás com cerca de 50 % de H₂, 7 % de CO e 7 % de CO₂, com carga térmica de cerca de 57 kW (reforma endotérmica). O gráfico em função da temperatura mostra por que a reforma exige alta temperatura: com o mesmo excesso de vapor, a conversão do metano cai para cerca de 60 % a 800 K e 30 % a 700 K.',
+      'O exemplo "NOx: oxidação 2 NO + O₂ → 2 NO₂ e dimerização" mostra a química da fábrica de ácido nítrico (ΔH°f e ΔG°f das tabelas JANAF). A 25 °C e 1 bar o NO oxida por completo e 65 % do NO₂ forma o dímero N₂O₄ (K = 6,7 bar⁻¹), por isso o gás fica quase incolor no frio; a 150 °C quase só resta NO₂, castanho. Um alerta importante: se o N₂ entrar na lista de componentes, o mínimo de G decompõe o NO em N₂ e O₂ (ΔG = −173 kJ por 2 mol de NO). Essa é a resposta termodinâmica correta, mas a decomposição é cineticamente bloqueada; por isso, inertes que não reagem na prática ficam fora do reator de Gibbs.'] }
   };
 
   function html(type, open) {
@@ -6615,6 +6639,7 @@ end
       out.push('function ' + fname + '(D, FS)', header, '% McCabe-Thiele recalculado com o modelo de atividade (equilíbrio por ponto de bolha) e PFD da coluna.', printRes.join('\n'),
         'i1 = ' + (i1 + 1) + '; i2 = ' + (i2 + 1) + ';   % chave leve e pesada', 'P  = ' + n2s(res.blocks[b.id].profile.P[0]) + ';   % Pa',
         'xD = ' + n2s(m.xD) + '; xB = ' + n2s(m.xB) + '; zF = ' + n2s(m.zF) + '; q = ' + n2s(m.q) + '; R = ' + n2s(m.R) + ';',
+        'xD = min(xD, 0.9999); xB = max(xB, 1e-4);   % produtos praticamente puros: os degraus não chegariam a 1 nem a 0',
         'xe = linspace(0, 1, 101); ye = zeros(size(xe)); Te = ye;',
         'for k = 1:numel(xe)', '    x = zeros(numel(D.ids),1); x(i1) = xe(k); x(i2) = 1 - xe(k);', '    [Te(k), yv] = ponto_bolha(D, x, P); ye(k) = yv(i1)/(yv(i1) + yv(i2));', 'end',
         '% retas de operação e reta q', 'ROL = @(x) R/(R+1)*x + xD/(R+1);',
@@ -6623,7 +6648,9 @@ end
         '% degraus (método gráfico, vazões molares constantes)',
         'dd = ye - xe; kaz = []; for k = 2:numel(xe)-2, if dd(k)*dd(k+1) < 0, kaz = k; break; end, end',
         'xmax = 1; if ~isempty(kaz), xmax = xe(kaz+1); end',
-        'sel = xe <= xmax; xs = [xD]; ys = [xD]; yv = xD; N = 0;',
+        '% azeótropo de mínima (etanol/água): opera abaixo dele; de máxima (HNO3/água): o destilado fica acima e opera acima dele',
+        'if ~isempty(kaz) && xD > xmax, sel = xe >= xe(kaz); else, sel = xe <= xmax; end',
+        'xs = [xD]; ys = [xD]; yv = xD; N = 0;',
         'while N < 200', '    xn = interp1(ye(sel), xe(sel), min(yv, max(ye(sel))));', '    xs(end+1) = xn; ys(end+1) = yv; N = N + 1;',
         '    if xn <= xB, break; end', '    if xn > xi, yv = ROL(xn); else, yv = SOL(xn); end', '    xs(end+1) = xn; ys(end+1) = yv;',
         '    if abs(xs(end) - xs(end-2)) < 1e-7, warning(\'Pinch: refluxo insuficiente para a separação.\'); break; end', 'end',
@@ -8073,6 +8100,7 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         '    # McCabe-Thiele recalculado com o modelo de atividade (equilíbrio por ponto de bolha)',
         '    i1, i2 = ' + i1 + ', ' + i2 + '   # chave leve e pesada', '    P = ' + n2s(r.profile.P[0]) + '   # Pa',
         '    xD, xB, zF, q, R = ' + [m.xD, m.xB, m.zF, m.q, m.R].map(n2s).join(', '),
+        '    xD = min(xD, 0.9999); xB = max(xB, 1e-4)   # produtos praticamente puros: os degraus não chegariam a 1 nem a 0',
         '    xe = np.linspace(0, 1, 101)', '    ye = np.zeros_like(xe)',
         '    for k, xx in enumerate(xe):', '        x = np.zeros(len(IDS)); x[i1] = xx; x[i2] = 1 - xx',
         '        _, yv = ponto_bolha(x, P)', '        ye[k] = yv[i1] / (yv[i1] + yv[i2])',
@@ -8080,7 +8108,9 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         '    xi = zF if abs(q - 1) < 1e-6 else (-zF / (q - 1) - xD / (R + 1)) / (R / (R + 1) - q / (q - 1))', '    yi = rol(xi)',
         '    sol = lambda x: xB + (yi - xB) / (xi - xB) * (x - xB)',
         '    d = ye - xe', '    kaz = next((k for k in range(1, len(xe) - 2) if d[k] * d[k + 1] < 0), None)',
-        '    xmax = xe[kaz + 1] if kaz is not None else 1.0', '    sel = xe <= xmax',
+        '    xmax = xe[kaz + 1] if kaz is not None else 1.0',
+        '    # azeótropo de mínima (etanol/água): opera abaixo dele; de máxima (HNO3/água): o destilado fica acima e opera acima dele',
+        '    sel = (xe >= xe[kaz]) if (kaz is not None and xD > xmax) else (xe <= xmax)',
         '    xs, ys, yv, N = [xD], [xD], xD, 0',
         '    while N < 200:', '        xn = float(np.interp(min(yv, ye[sel].max()), ye[sel], xe[sel]))', '        xs.append(xn); ys.append(yv); N += 1',
         '        if xn <= xB:', '            break', '        yv = rol(xn) if xn > xi else sol(xn)', '        xs.append(xn); ys.append(yv)',
@@ -9358,6 +9388,28 @@ def pfr_transiente(P, nome):
         { id: 'R', type: 'rgibbs', name: 'R-101', params: { T: 726.85, P: 1, dGmode: 'informar na tabela abaixo',
           dG: { methane: 19720, co: -200240, water: -192420, co2: -395790, hydrogen: 0 }, span: 300 } },
         { id: 'P', type: 'product', name: 'Gás de síntese' }],
+      streams: [S('1', 'F', 'out', 'R', 'in'), S('2', 'R', 'out', 'P', 'in')] } },
+    { key: 'acido-nitrico-diluicao', title: 'Ácido nítrico: diluição de 68 % a 30 % e o calor de mistura (temperatura de saída)', fs: {
+      name: 'Diluição do ácido nítrico', components: ['nitric-acid', 'water'], model: 'NRTL',
+      blocks: [
+        { id: 'F1', type: 'feed', name: 'Ácido 68 %', params: { T: 25, P: 1.5, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica', composition: { 'nitric-acid': 0.68, water: 0.32 } } },
+        { id: 'F2', type: 'feed', name: 'Água de diluição', params: { T: 25, P: 1.5, vf: '', flow: 1267, flowUnit: 'kg/h', basis: 'mássica', composition: { 'nitric-acid': 0, water: 1 } } },
+        { id: 'M', type: 'mixer', name: 'MIX-101', params: { P: '' } },
+        { id: 'P', type: 'product', name: 'Ácido 30 % (aquecido)' }],
+      streams: [S('1', 'F1', 'out', 'M', 'in1', '1'), S('2', 'F2', 'out', 'M', 'in2', '2'), S('3', 'M', 'out', 'P', 'in', '3')] } },
+    { key: 'acido-nitrico-azeotropo', title: 'Ácido nítrico: destilação de solução diluída esbarra no azeótropo de máxima ebulição (~68 %)', fs: {
+      name: 'Concentração do ácido nítrico por destilação', components: ['nitric-acid', 'water'], model: 'NRTL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Ácido diluído (≈ 28 %)', params: { T: 25, P: 1.01325, vf: 0, flow: 100, flowUnit: 'kmol/h', basis: 'molar', composition: { 'nitric-acid': 0.10, water: 0.90 } } },
+        { id: 'T101', type: 'column', name: 'T-101', params: { N: 15, feedStage: 8, R: 1, Dmode: 'Vazão D', D: 72, condenser: 'total', P: 1.01325, dP: 0 } },
+        { id: 'D', type: 'product', name: 'Água (topo)' }, { id: 'W', type: 'product', name: 'Ácido concentrado (fundo)' }],
+      streams: [S('1', 'F', 'out', 'T101', 'feed', 'F'), S('2', 'T101', 'distillate', 'D', 'in', 'D'), S('3', 'T101', 'bottoms', 'W', 'in', 'W')] } },
+    { key: 'nox-oxidacao', title: 'NOx: oxidação 2 NO + O₂ → 2 NO₂ e dimerização 2 NO₂ ⇌ N₂O₄ (reator de Gibbs, fábrica de ácido nítrico)', fs: {
+      name: 'Oxidação do NO e equilíbrio NO2/N2O4', components: ['no', 'oxygen', 'no2', 'n2o4'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'NO + O₂ (N₂ fora: ver teoria)', params: { T: 25, P: 1, vf: '', flow: 10, flowUnit: 'kmol/h', basis: 'molar', composition: { no: 0.6, oxygen: 0.4, no2: 0, n2o4: 0 } } },
+        { id: 'R', type: 'rgibbs', name: 'R-101', params: { T: 25, P: 1, dGmode: 'calcular (ΔH°f e ΔG°f a 298 K + Cp)', span: 150 } },
+        { id: 'P', type: 'product', name: 'Gás nitroso' }],
       streams: [S('1', 'F', 'out', 'R', 'in'), S('2', 'R', 'out', 'P', 'in')] } },
     { key: 'ell-ternario', title: 'Extração L-L parcialmente miscível — diagrama ternário (Hunter–Nash): água / ácido acético / éter', fs: {
       name: 'Extracao L-L - diagrama ternario', components: ['water', 'acetic-acid', 'diisopropyl-ether'], model: 'IDEAL',

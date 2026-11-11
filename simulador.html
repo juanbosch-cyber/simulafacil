@@ -1565,7 +1565,24 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'inert-solid', name: 'Sólido inerte (farelo/torta)', formula: '(C6H10O5)n', mw: 162.14, rho: 1500, solid: true, cpl: 210 },
     { id: 'glucose', name: 'Glicose (soluto não volátil)', formula: 'C6H12O6', mw: 180.156, rho: 1540, nv: true, cpl: 219 },
     { id: 'biomass', name: 'Biomassa: células (CH1,8O0,5N0,2)', formula: 'CH1.8O0.5N0.2', mw: 24.62, rho: 1100, solid: true, cpl: 37 },
-    { id: 'dry-solids', name: 'Sólidos secos do produto (alimento, leite etc.; genérico)', formula: 'SS', mw: 100, rho: 1500, solid: true, cpl: 150 }
+    { id: 'dry-solids', name: 'Sólidos secos do produto (alimento, leite etc.; genérico)', formula: 'SS', mw: 100, rho: 1500, solid: true, cpl: 150 },
+    // sólidos minerais e metalúrgicos (alto-forno, forno de cimento, silo, sedimentador): massas molares pelos pesos atômicos e c_p médios (J/(mol·K))
+    { id: 'hematite', name: 'Hematita: óxido de ferro (minério)', formula: 'Fe2O3', mw: 159.687, rho: 5240, solid: true, cpl: 105 },
+    { id: 'silica', name: 'Sílica: dióxido de silício (ganga, areia, quartzo)', formula: 'SiO2', mw: 60.083, rho: 2650, solid: true, cpl: 45 },
+    { id: 'caco3', name: 'Carbonato de cálcio (calcário)', formula: 'CaCO3', mw: 100.086, rho: 2710, solid: true, cpl: 90 },
+    { id: 'cao', name: 'Óxido de cálcio (cal)', formula: 'CaO', mw: 56.077, rho: 3340, solid: true, cpl: 50 },
+    { id: 'alumina', name: 'Alumina: óxido de alumínio', formula: 'Al2O3', mw: 101.961, rho: 3950, solid: true, cpl: 115 },
+    { id: 'iron', name: 'Ferro (gusa, metal)', formula: 'Fe', mw: 55.845, rho: 7000, solid: true, cpl: 46 },
+    { id: 'carbon', name: 'Carbono (coque, carvão, grafite)', formula: 'C', mw: 12.011, rho: 1800, solid: true, cpl: 16 },
+    // papel e celulose (digestor kraft): madeira, polpa e licores; c_p de 1,5 kJ/(kg·K) para os componentes da madeira, como no código de referência
+    { id: 'cellulose', name: 'Celulose (madeira e polpa)', formula: '(C6H10O5)n', mw: 162.141, rho: 1500, solid: true, cpl: 243 },
+    { id: 'hemicellulose', name: 'Hemicelulose (xilana)', formula: '(C5H8O4)n', mw: 132.115, rho: 1500, solid: true, cpl: 198 },
+    { id: 'lignin', name: 'Lignina (unidade fenilpropano)', formula: 'C10H12O3', mw: 180.203, rho: 1350, solid: true, cpl: 270 },
+    { id: 'wood-extractives', name: 'Extrativos e cinzas da madeira', formula: 'EXT', mw: 300, rho: 1200, solid: true, cpl: 450 },
+    { id: 'naoh', name: 'Hidróxido de sódio (soluto não volátil)', formula: 'NaOH', mw: 39.997, rho: 2130, nv: true, cpl: 59.5 },
+    { id: 'na2s', name: 'Sulfeto de sódio (soluto não volátil)', formula: 'Na2S', mw: 78.045, rho: 1856, nv: true, cpl: 82.3 },
+    { id: 'na2co3', name: 'Carbonato de sódio (carga morta do licor, soluto não volátil)', formula: 'Na2CO3', mw: 105.988, rho: 2540, nv: true, cpl: 112.3 },
+    { id: 'bl-organics', name: 'Sólidos orgânicos do licor negro (lignina e carboidratos dissolvidos)', formula: 'ORG', mw: 180, rho: 1300, nv: true, cpl: 252 }
   ];
   // banco ChemSep (js/chemsep.js, carregado antes): 518 compostos extras, buscáveis na aba Termodinâmica; CAS dos embutidos para os pares do banco
   const CS = root.SF && root.SF.CHEMSEP;
@@ -2190,7 +2207,7 @@ window.SIMULAFACIL_CONFIG = {
     feed: { label: 'Corrente de alimentação', cat: 'Correntes', ins: [], outs: ['out'], params: [
       Object.assign({ def: 25 }, P_T), Object.assign({ def: 1.01325 }, P_P),
       { k: 'vf', label: 'Fração vaporizada (opcional; substitui T)', u: '0–1', def: '' },
-      { k: 'flow', label: 'Vazão total', u: '', def: 100 }, { k: 'flowUnit', label: 'Unidade da vazão', type: 'select', options: ['kmol/h', 'kg/h', 'mol/s', 'L/s', 'm³/h'], def: 'kmol/h' },
+      { k: 'flow', label: 'Vazão total', u: '', def: 100 }, { k: 'flowUnit', label: 'Unidade da vazão', type: 'select', options: ['kmol/h', 'kg/h', 'kg/s', 't/h', 'mol/s', 'L/s', 'm³/h'], def: 'kmol/h' },
       { k: 'basis', label: 'Base da composição', type: 'select', options: ['molar', 'mássica', 'concentração (mol/L)'], def: 'molar' },
       { k: 'solvent', label: 'Solvente (base concentração)', type: 'comp', def: '' },
       { k: 'composition', label: 'Composição', type: 'composition' }] },
@@ -2626,7 +2643,105 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'CextMode', label: 'Concentração externa', type: 'select', options: ['da corrente de entrada', 'informar'], def: 'da corrente de entrada' },
       { k: 'Cext', label: 'Concentração externa Cext (se informar)', u: 'mol/m³', def: 8.6 },
       { k: 'tEnd', label: 'Tempo de simulação', u: 'h', def: 24 },
-      { k: 'nodes', label: 'Pontos da malha espacial', u: '', def: 60 }] }
+      { k: 'nodes', label: 'Pontos da malha espacial', u: '', def: 60 }] },
+    blast_furnace: { label: 'Alto-forno contínuo (siderurgia): minério + coque + fundente + ar de sopro → gusa, escória e gás de topo; balanços de massa e energia', cat: 'Siderurgia e cimento', ins: ['ore', 'coke', 'flux', 'blast'], outs: ['gas', 'slag', 'pig_iron'], params: [
+      { k: 'mOre', label: 'Vazão de minério' + SEMC, u: 'kg/s', def: 100 },
+      { k: 'wFe2O3', label: 'Fração mássica de Fe₂O₃ no minério (o restante é ganga, SiO₂)' + SEMC, u: '0–1', def: 0.90 },
+      { k: 'mCoke', label: 'Vazão de coque' + SEMC, u: 'kg/s', def: 30 },
+      { k: 'wC', label: 'Carbono fixo no coque (o restante são cinzas, como SiO₂)' + SEMC, u: '0–1', def: 0.88 },
+      { k: 'mFlux', label: 'Vazão de fundente: calcário CaCO₃' + SEMC, u: 'kg/s', def: 10 },
+      { k: 'Tch', label: 'Temperatura da carga: minério, coque e fundente' + SEMC, u: '°C', def: 25 },
+      { k: 'mBlast', label: 'Vazão de ar de sopro nas ventaneiras' + SEMC, u: 'kg/s', def: 62 },
+      { k: 'wO2', label: 'Fração mássica de O₂ no ar de sopro' + SEMC, u: '0–1', def: 0.23 },
+      { k: 'Tbl', label: 'Temperatura do ar de sopro (aquecido nos regeneradores)' + SEMC, u: '°C', def: 1100 },
+      { k: 'Cg', label: 'Carbono dissolvido no gusa', u: '% massa', def: 4.5 },
+      { k: 'Tg', label: 'Temperatura do gusa líquido', u: '°C', def: 1500 },
+      { k: 'Ts', label: 'Temperatura da escória', u: '°C', def: 1550 },
+      { k: 'Tgas', label: 'Temperatura do gás de topo', u: '°C', def: 200 },
+      { k: 'Qloss', label: 'Perdas térmicas pelas paredes', u: 'kW', def: 15000 }] },
+    cement_kiln: { label: 'Forno de cimento contínuo (calcinação e clinquerização): farinha crua + combustível + ar → clínquer e gases; balanços de massa e energia', cat: 'Siderurgia e cimento', ins: ['meal', 'fuel', 'air'], outs: ['gas', 'clinker'], params: [
+      { k: 'mMeal', label: 'Vazão de farinha crua' + SEMC, u: 'kg/s', def: 100 },
+      { k: 'xCaCO3', label: 'Farinha: fração mássica de CaCO₃' + SEMC, u: '0–1', def: 0.78 },
+      { k: 'xSiO2', label: 'Farinha: fração mássica de SiO₂' + SEMC, u: '0–1', def: 0.14 },
+      { k: 'xAl2O3', label: 'Farinha: fração mássica de Al₂O₃' + SEMC, u: '0–1', def: 0.04 },
+      { k: 'xFe2O3', label: 'Farinha: fração mássica de Fe₂O₃' + SEMC, u: '0–1', def: 0.02 },
+      { k: 'xH2O', label: 'Farinha: umidade residual (H₂O)' + SEMC, u: '0–1', def: 0.02 },
+      { k: 'Tmeal', label: 'Temperatura da farinha (após os pré-aquecedores)' + SEMC, u: '°C', def: 70 },
+      { k: 'mFuel', label: 'Vazão de combustível (coque de petróleo ou carvão)' + SEMC, u: 'kg/s', def: 6.5 },
+      { k: 'fC', label: 'Combustível: carbono fixo' + SEMC, u: '0–1', def: 0.85 },
+      { k: 'fH', label: 'Combustível: hidrogênio' + SEMC, u: '0–1', def: 0.04 },
+      { k: 'fAsh', label: 'Combustível: cinzas (como SiO₂)' + SEMC, u: '0–1', def: 0.11 },
+      { k: 'Tfuel', label: 'Temperatura do combustível' + SEMC, u: '°C', def: 25 },
+      { k: 'LHV', label: 'Poder calorífico inferior do combustível (para o consumo específico)', u: 'kJ/kg', def: 32000 },
+      { k: 'mAir', label: 'Vazão de ar de combustão (secundário e terciário)' + SEMC, u: 'kg/s', def: 75 },
+      { k: 'wO2a', label: 'Fração mássica de O₂ no ar' + SEMC, u: '0–1', def: 0.233 },
+      { k: 'Tair', label: 'Temperatura do ar (pré-aquecido no resfriador de clínquer)' + SEMC, u: '°C', def: 800 },
+      { k: 'Tcl', label: 'Temperatura do clínquer', u: '°C', def: 1450 },
+      { k: 'Tgk', label: 'Temperatura dos gases de exaustão', u: '°C', def: 350 },
+      { k: 'QlossK', label: 'Perdas térmicas pelas paredes (radiação e convecção)', u: 'kW', def: 5000 }] },
+    silo: { label: 'Silo com tremonha cônica, descarga contínua por gravidade: vazão de Beverloo, regime de Jenike e efeito do ângulo da tremonha', cat: 'Sólidos particulados', ins: ['feed'], outs: ['product'], params: [
+      { k: 'Fs', label: 'Vazão de sólidos na alimentação' + SEMC, u: 'kg/s', def: 30 },
+      { k: 'Ds', label: 'Diâmetro do silo (seção cilíndrica)', u: 'm', def: 1.0 },
+      { k: 'Do', label: 'Diâmetro do orifício de descarga', u: 'm', def: 0.20 },
+      { k: 'Hc', label: 'Altura da seção cilíndrica', u: 'm', def: 3.0 },
+      { k: 'dp', label: 'Diâmetro médio das partículas', u: 'mm', def: 3 },
+      { k: 'rhob', label: 'Massa específica aparente do leito (bulk)', u: 'kg/m³', def: 1400 },
+      { k: 'phiw', label: 'Ângulo de atrito partícula–parede φw', u: '°', def: 25 },
+      { k: 'theta', label: 'Semiângulo da tremonha θ, medido a partir da vertical (90° = fundo plano)', u: '°', type: 'range', min: 5, max: 90, step: 1, def: 15 },
+      { k: 'angles', label: 'Ângulos θ a comparar nos gráficos (graus, separados por espaço)', type: 'matrix', def: '90 45 30 15' },
+      { k: 'Cb', label: 'Constante de Beverloo C', u: '', def: 0.58 },
+      { k: 'kb', label: 'Fator do anel vazio k (Beverloo)', u: '', def: 1.5 },
+      { k: 'chi', label: 'Ângulo da fronteira da zona estagnada χ, a partir da horizontal (Rose e Tanaka)', u: '°', def: 45 },
+      { k: 'level', label: 'Nível de operação (fração da capacidade ocupada)', u: '%', def: 70 }] },
+    thickener: { label: 'Sedimentador contínuo (espessador): área pelo método de Talmadge e Fitch, underflow e overflow, balanço de energia', cat: 'Sólidos particulados', ins: ['feed'], outs: ['overflow', 'underflow'], params: [
+      { k: 'QF', label: 'Vazão volumétrica de polpa' + SEMC, u: 'm³/h', def: 180 },
+      { k: 'wF', label: 'Fração mássica de sólidos na polpa' + SEMC, u: '0–1', def: 0.10 },
+      { k: 'TF', label: 'Temperatura da polpa' + SEMC, u: '°C', def: 25 },
+      { k: 'rhos', label: 'Massa específica dos sólidos', u: 'kg/m³', def: 2650 },
+      { k: 'rhof', label: 'Massa específica do líquido', u: 'kg/m³', def: 1000 },
+      { k: 'H0', label: 'Ensaio em proveta: altura inicial da suspensão H₀', u: 'm', def: 1.0 },
+      { k: 'C0', label: 'Ensaio: concentração inicial C₀ (vazio = a da alimentação)', u: 'kg/m³', def: '' },
+      { k: 'v0', label: 'Ensaio: velocidade de sedimentação livre v₀ (trecho reto)', u: 'mm/s', def: 1.5 },
+      { k: 'tL', label: 'Ensaio: fim do trecho reto t_L', u: 's', def: 350 },
+      { k: 'kc', label: 'Ensaio: constante de compressão do leito k', u: '1/s', def: 0.0015 },
+      { k: 'CU', label: 'Concentração desejada no underflow C_U', u: 'kg/m³', type: 'range', min: 150, max: 900, step: 5, def: 450 },
+      { k: 'eta', label: 'Recuperação de sólidos no underflow', u: '0–1', def: 0.995 },
+      { k: 'tang', label: 'Tangente no ponto de compressão', type: 'select', options: ['numérica no ponto de máxima curvatura (como no código MATLAB)', 'do ramo de compressão (mais conservadora)'], def: 'numérica no ponto de máxima curvatura (como no código MATLAB)' },
+      { k: 'Hs', label: 'Altura do sedimentador (para o volume e o tempo de residência)', u: 'm', def: 3.5 },
+      { k: 'cps', label: 'Calor específico dos sólidos', u: 'kJ/(kg·K)', def: 0.85 },
+      { k: 'cpf', label: 'Calor específico do líquido', u: 'kJ/(kg·K)', def: 4.184 },
+      { k: 'QlT', label: 'Perda térmica para o ambiente', u: 'kW', def: 25 }] },
+    kraft_digester: { label: 'Digestor contínuo kraft (cavacos de eucalipto): polpa marrom, licor negro, consumo de vapor e balanço de energia', cat: 'Papel e celulose', ins: ['chips', 'white_liquor'], outs: ['pulp', 'black_liquor', 'condensate'], params: [
+      { k: 'mWood', label: 'Vazão de cavacos úmidos' + SEMC, u: 'kg/s', def: 100 },
+      { k: 'moist', label: 'Umidade dos cavacos (base úmida)' + SEMC, u: '0–1', def: 0.45 },
+      { k: 'wCel', label: 'Celulose na madeira seca' + SEMC, u: '0–1', def: 0.45 },
+      { k: 'wHem', label: 'Hemicelulose na madeira seca' + SEMC, u: '0–1', def: 0.27 },
+      { k: 'wLig', label: 'Lignina na madeira seca' + SEMC, u: '0–1', def: 0.27 },
+      { k: 'wExt', label: 'Extrativos e cinzas na madeira seca' + SEMC, u: '0–1', def: 0.01 },
+      { k: 'Twood', label: 'Temperatura dos cavacos (após a pré-vaporização)' + SEMC, u: '°C', def: 70 },
+      { k: 'EA', label: 'Carga de álcali efetivo (EA como NaOH, base madeira seca)' + SEMC, u: '0–1', def: 0.18 },
+      { k: 'EAc', label: 'Concentração de álcali efetivo no licor branco (como NaOH)' + SEMC, u: 'g/L', def: 115 },
+      { k: 'sulf', label: 'Sulfidez do licor branco: Na₂S/(NaOH + Na₂S), como NaOH' + SEMC, u: '0–1', def: 0.30 },
+      { k: 'inorg', label: 'Sais totais do licor por kg de álcali efetivo (NaOH, Na₂S e carga morta)' + SEMC, u: 'kg/kg', def: 1.45 },
+      { k: 'TWL', label: 'Temperatura do licor branco' + SEMC, u: '°C', def: 80 },
+      { k: 'rhoWL', label: 'Massa específica do licor branco', u: 'kg/m³', def: 1150 },
+      { k: 'kappa', label: 'Número kappa alvo da polpa (eucalipto: 16 a 18)', type: 'range', min: 10, max: 30, step: 0.5, def: 17 },
+      { k: 'yA', label: 'Rendimento bruto Y = a + b·κ: coeficiente a', u: '%', def: 47.5 },
+      { k: 'yB', label: 'Rendimento bruto Y = a + b·κ: coeficiente b', u: '% por unidade de κ', def: 0.38 },
+      { k: 'ligK', label: 'Lignina residual na polpa por unidade de κ', u: '% da polpa', def: 0.147 },
+      { k: 'celRet', label: 'Fração da celulose da madeira que fica na polpa', u: '0–1', def: 0.95 },
+      { k: 'Tcook', label: 'Temperatura de cozimento', u: '°C', def: 165 },
+      { k: 'Tblow', label: 'Temperatura de descarga (blow) da polpa e do licor negro', u: '°C', def: 90 },
+      { k: 'Psteam', label: 'Pressão do vapor saturado de aquecimento', u: 'bar', def: 8 },
+      { k: 'hfg', label: 'Calor latente do vapor (vazio = IAPWS na pressão informada)', u: 'kJ/kg', def: 2048 },
+      { k: 'dHr', label: 'Calor liberado pelas reações kraft por kg de madeira dissolvida', u: 'kJ/kg', def: 150 },
+      { k: 'QlD', label: 'Perdas térmicas pelas paredes', u: 'kW', def: 3000 },
+      { k: 'wPulp', label: 'Água que sai com a polpa (kg por kg de polpa seca; 0 = toda a água no licor negro)', u: 'kg/kg', def: 0 },
+      { k: 'cpWood', label: 'c_p da madeira seca', u: 'kJ/(kg·K)', def: 1.50 },
+      { k: 'cpW', label: 'c_p da água', u: 'kJ/(kg·K)', def: 4.184 },
+      { k: 'cpWL', label: 'c_p do licor branco', u: 'kJ/(kg·K)', def: 3.80 },
+      { k: 'cpPulp', label: 'c_p da polpa seca', u: 'kJ/(kg·K)', def: 1.60 },
+      { k: 'cpBLs', label: 'c_p dos sólidos do licor negro', u: 'kJ/(kg·K)', def: 1.40 }] }
   };
   Object.keys(TYPES).forEach(k => { TYPES[k].type = k; });
 
@@ -2920,7 +3035,8 @@ window.SIMULAFACIL_CONFIG = {
     if (p.basis === 'mássica') { const m = w.map((v, i) => v / th.c[i].mw); z = N.normalize(m); }
     const mw = th.mw(z), flow = num(p.flow, 0);
     let F; // mol/s
-    if (p.flowUnit === 'kg/h') F = flow / 3600 / (mw / 1000); else if (p.flowUnit === 'mol/s') F = flow; else F = flow * KMOLH;
+    const kgh = p.flowUnit === 'kg/h' ? flow : p.flowUnit === 'kg/s' ? flow * 3600 : p.flowUnit === 't/h' ? flow * 1000 : null;
+    if (kgh != null) F = kgh / 3600 / (mw / 1000); else if (p.flowUnit === 'mol/s') F = flow; else F = flow * KMOLH;
     const P = num(p.P, 1.01325) * BAR, flows = z.map(v => v * F);
     if (p.vf !== '' && p.vf !== null && p.vf !== undefined && !isNaN(+p.vf)) {
       const fl = th.flashPVF(z, P, clamp(+p.vf, 0, 1)); return { out: { out: mkStream(th, flows, fl.T, P, fl) }, res: [{ k: 'Temperatura calculada', v: K2C(fl.T), u: '°C' }] };
@@ -5206,6 +5322,471 @@ window.SIMULAFACIL_CONFIG = {
     return { out: { out }, res, warn, plots, pack: { o, kT, ig } };
   };
 
+  /* ------------------------------------------------------------------ alto-forno e forno de cimento: estequiometria global (balanço de massa)
+     e balanço de energia com entalpias de formação a 298,15 K e c_p médios, como nos códigos MATLAB de referência.
+     Cada corrente de entrada pode vir do fluxograma (só com as espécies previstas para ela) ou dos campos. */
+  const MET = {
+    MWbf: (() => { const Fe = 55.845, O = 15.999, C = 12.011, Si = 28.085, Ca = 40.078;
+      return { Fe, C, Fe2O3: 2 * Fe + 3 * O, SiO2: Si + 2 * O, CaCO3: Ca + C + 3 * O, CaO: Ca + O, CO: C + O, CO2: C + 2 * O, O2: 2 * O, N2: 28.013 }; })(),
+    MWk: { CaCO3: 100.086, CaO: 56.077, CO2: 44.010, SiO2: 60.084, Al2O3: 101.960, Fe2O3: 159.690, H2O: 18.015, C: 12.011, H2: 2.016, O2: 31.998, N2: 28.013 },
+    Hf: { Fe2O3: -824200, SiO2: -910700, CaCO3: -1206920, CaO: -635090, CO: -110530, CO2: -393510, Al2O3: -1675700, H2Ol: -285830, H2Og: -241820 },  // kJ/kmol
+    cpBF: { Fe2O3: 105, SiO2: 45, C: 16, CaCO3: 90, O2: 30, N2: 30, CO: 31, CO2: 45, Fe: 46, CaO: 50 },                                              // kJ/(kmol·K)
+    cpK: { CaCO3: 90, CaO: 52, CO2: 45, SiO2: 55, Al2O3: 115, Fe2O3: 110, H2Ol: 75.3, H2Og: 38, C: 16, H2: 29, O2: 31, N2: 30 },
+    Tr: 298.15, LfusFe: 13800 };
+  /* lê uma entrada do forno: com corrente, as massas (kg/s) das espécies previstas para a porta; sem corrente, os campos.
+     spec = { id do componente: chave da espécie }, fields(): { massas por espécie, T em °C } */
+  function furnaceIn(th, s, portName, spec, fields) {
+    if (connected(s)) {
+      const kg = {}, extra = [];
+      Object.keys(spec).forEach(id => { kg[spec[id]] = 0; });
+      s.flows.forEach((f, i) => { const m = f * th.c[i].mw / 1000; if (!(m > 1e-12)) return; const key = spec[th.ids[i]]; if (key) kg[key] += m; else extra.push(th.c[i].name); });
+      if (extra.length) throw new Error('a corrente "' + portName + '" só pode ter ' + Object.keys(spec).map(id => { const i = th.ids.indexOf(id); return i >= 0 ? th.c[i].name : id; }).join(', ') + ' (encontrado: ' + extra.join(', ') + ')');
+      return { kg, T: s.T, P: s.P, m: sum(Object.values(kg)), conn: true };
+    }
+    const f = fields(); return { kg: f.kg, T: C2K(f.T), P: 101325, m: sum(Object.values(f.kg)), conn: false };
+  }
+  // corrente de saída a partir de massas (kg/s) por id de componente; null (com aviso) se faltar algum componente na lista
+  function massStream(th, kgById, T, P, warn, what, needConn) {
+    const miss = Object.keys(kgById).filter(id => kgById[id] > 0 && th.ids.indexOf(id) < 0);
+    if (miss.length) {
+      const msg = 'inclua na lista de componentes ' + miss.map(id => ({ iron: 'Ferro', carbon: 'Carbono', cao: 'Óxido de cálcio', silica: 'Sílica', co: 'Monóxido de carbono', co2: 'Dióxido de carbono', nitrogen: 'Nitrogênio', oxygen: 'Oxigênio', water: 'Água', alumina: 'Alumina', hematite: 'Hematita', cellulose: 'Celulose', hemicellulose: 'Hemicelulose', lignin: 'Lignina', naoh: 'Hidróxido de sódio', na2s: 'Sulfeto de sódio', na2co3: 'Carbonato de sódio', 'bl-organics': 'Sólidos orgânicos do licor negro' }[id] || id)).join(', ') + ' para gerar a corrente de ' + what;
+      if (needConn) throw new Error(msg); warn.push(msg); return null;
+    }
+    const kgh = new Array(th.n).fill(0); Object.keys(kgById).forEach(id => { kgh[th.ids.indexOf(id)] += kgById[id] * 3600; });
+    return mkStream(th, flowsOfKg(th, kgh), T, P);
+  }
+
+  /* alto-forno: Fe₂O₃ → 2 Fe (todo o oxigênio do minério vai para o gás); C dissolvido no gusa; CaCO₃ → CaO + CO₂; escória CaO + SiO₂;
+     CO e CO₂ do topo pelos balanços de C e O: n_CO₂ = O − C, n_CO = 2C − O */
+  function bfCalc(I, o) {
+    const MW = MET.MWbf, Hf = MET.Hf, cp = MET.cpBF, Tr = MET.Tr;
+    const nFe2O3 = I.ore.kg.Fe2O3 / MW.Fe2O3, nSiO2o = I.ore.kg.SiO2 / MW.SiO2, nC = I.coke.kg.C / MW.C, nSiO2c = I.coke.kg.SiO2 / MW.SiO2;
+    const nCaCO3 = I.flux.kg.CaCO3 / MW.CaCO3, nO2 = I.blast.kg.O2 / MW.O2, nN2 = I.blast.kg.N2 / MW.N2;
+    const nFe = 2 * nFe2O3, nOore = 3 * nFe2O3, mFe = nFe * MW.Fe, mg = mFe / (1 - o.Cg), mCg = mg * o.Cg, nCg = mCg / MW.C, nCgas = nC - nCg;
+    const nCaO = nCaCO3, nSiO2 = nSiO2o + nSiO2c, mslag = nCaO * MW.CaO + nSiO2 * MW.SiO2;
+    const Ct = nCgas + nCaCO3, Ot = 2 * nO2 + nOore + 2 * nCaCO3, nCO2 = Ot - Ct, nCO = 2 * Ct - Ot, ngas = nCO + nCO2 + nN2;
+    const mbfg = nCO * MW.CO + nCO2 * MW.CO2 + nN2 * MW.N2;
+    const Hin = nFe2O3 * (Hf.Fe2O3 + cp.Fe2O3 * (I.ore.T - Tr)) + nSiO2o * (Hf.SiO2 + cp.SiO2 * (I.ore.T - Tr)) + nC * cp.C * (I.coke.T - Tr) + nSiO2c * (Hf.SiO2 + cp.SiO2 * (I.coke.T - Tr))
+      + nCaCO3 * (Hf.CaCO3 + cp.CaCO3 * (I.flux.T - Tr)) + nO2 * cp.O2 * (I.blast.T - Tr) + nN2 * cp.N2 * (I.blast.T - Tr);
+    const Hout = nFe * (MET.LfusFe + cp.Fe * (o.Tg - Tr)) + nCg * cp.C * (o.Tg - Tr) + nCaO * (Hf.CaO + cp.CaO * (o.Ts - Tr)) + nSiO2 * (Hf.SiO2 + cp.SiO2 * (o.Ts - Tr))
+      + nCO * (Hf.CO + cp.CO * (o.Tgas - Tr)) + nCO2 * (Hf.CO2 + cp.CO2 * (o.Tgas - Tr)) + nN2 * cp.N2 * (o.Tgas - Tr);
+    return { nFe2O3, nSiO2o, nC, nSiO2c, nCaCO3, nO2, nN2, nFe, mFe, mg, mCg, nCg, nCgas, nCaO, nSiO2, mslag, nCO, nCO2, ngas, mbfg, Hin, Hout,
+      Qr: Hin - Hout, resid: Hin - Hout - o.Qloss, eta: nCO2 / (nCO + nCO2) };
+  }
+  IMPL.blast_furnace = function (th, b, ins) {
+    const p = b.params, warn = [], i = ins || {};
+    const Tch = num(p.Tch, 25);
+    const I = {
+      ore: furnaceIn(th, i.ore, 'minério', { hematite: 'Fe2O3', silica: 'SiO2' }, () => { const m = num(p.mOre, 100), w = num(p.wFe2O3, 0.9); return { kg: { Fe2O3: m * w, SiO2: m * (1 - w) }, T: Tch }; }),
+      coke: furnaceIn(th, i.coke, 'coque', { carbon: 'C', silica: 'SiO2' }, () => { const m = num(p.mCoke, 30), w = num(p.wC, 0.88); return { kg: { C: m * w, SiO2: m * (1 - w) }, T: Tch }; }),
+      flux: furnaceIn(th, i.flux, 'fundente', { caco3: 'CaCO3' }, () => ({ kg: { CaCO3: num(p.mFlux, 10) }, T: Tch })),
+      blast: furnaceIn(th, i.blast, 'ar de sopro', { oxygen: 'O2', nitrogen: 'N2' }, () => { const m = num(p.mBlast, 62), w = num(p.wO2, 0.23); return { kg: { O2: m * w, N2: m * (1 - w) }, T: num(p.Tbl, 1100) }; }) };
+    const o = { Cg: num(p.Cg, 4.5) / 100, Tg: C2K(num(p.Tg, 1500)), Ts: C2K(num(p.Ts, 1550)), Tgas: C2K(num(p.Tgas, 200)), Qloss: num(p.Qloss, 15000) };
+    if (!(I.ore.kg.Fe2O3 > 0)) throw new Error('o minério precisa de Fe₂O₃ (Hematita)');
+    if (!(I.coke.kg.C > 0)) throw new Error('o coque precisa de carbono');
+    if (!(I.blast.kg.O2 > 0)) throw new Error('o ar de sopro precisa de oxigênio');
+    if (!(o.Cg >= 0 && o.Cg < 0.2)) throw new Error('o carbono no gusa deve ficar entre 0 e 20 %');
+    const r = bfCalc(I, o);
+    if (r.nCgas < 0) throw new Error('coque insuficiente para carburar o gusa: aumente o coque ou reduza o carbono no gusa');
+    if (r.nCO < 0 || r.nCO2 < 0) throw new Error('relação sopro/coque fora da faixa: com esse ' + (r.nCO < 0 ? 'excesso de ar, todo o carbono vira CO₂ e ainda sobra oxigênio (CO = ' : 'pouco ar, faltaria oxigênio até para formar só CO (CO₂ = ') + (r.nCO < 0 ? r.nCO : r.nCO2).toFixed(4) + ' kmol/s)');
+    // sopro (mesma composição e temperatura) que zera o resíduo térmico, dentro da faixa em que CO ≥ 0 e CO₂ ≥ 0
+    const mB = I.blast.m, wO2 = I.blast.kg.O2 / mB;
+    const atBlast = m => bfCalc(Object.assign({}, I, { blast: { kg: { O2: m * wO2, N2: m * (1 - wO2) }, T: I.blast.T } }), o);
+    const MW = MET.MWbf, Ct = r.nCgas + r.nCaCO3, Oo = 3 * r.nFe2O3 + 2 * r.nCaCO3;
+    const mLo = Math.max(1e-6, (Ct - Oo) / 2 * MW.O2 / wO2), mHi = (2 * Ct - Oo) / 2 * MW.O2 / wO2;   // CO₂ = 0 e CO = 0
+    let mClose = null;
+    if (mHi > mLo && atBlast(mLo).resid < 0 && atBlast(mHi * (1 - 1e-9)).resid > 0) { let a = mLo, c = mHi * (1 - 1e-9); for (let k = 0; k < 200; k++) { const mm = 0.5 * (a + c); if (atBlast(mm).resid < 0) a = mm; else c = mm; } mClose = 0.5 * (a + c); }
+    const rc = mClose != null ? atBlast(mClose) : null;
+    const mIn = I.ore.m + I.coke.m + I.flux.m + I.blast.m, mOut = r.mg + r.mslag + r.mbfg, P = Math.min.apply(null, [101325].concat(['ore', 'coke', 'flux', 'blast'].filter(k => I[k].conn).map(k => I[k].P)));
+    const pct = (a, bb) => (100 * a / bb).toFixed(2);
+    const res = [{ k: 'Entradas: minério / coque / fundente / ar de sopro', v: [I.ore.m, I.coke.m, I.flux.m, I.blast.m].map(v => v.toFixed(2)).join(' / ') + ' kg/s (total ' + mIn.toFixed(2) + ')', u: '' },
+      { k: 'Gusa líquido produzido', v: r.mg.toFixed(3) + ' kg/s (' + (r.mg * 3.6).toFixed(2) + ' t/h)', u: '' },
+      { k: 'Composição do gusa: Fe / C', v: pct(r.mFe, r.mg) + ' / ' + pct(r.mCg, r.mg), u: '% massa' },
+      { k: 'Escória produzida', v: +r.mslag.toFixed(3), u: 'kg/s' },
+      { k: 'Composição da escória: CaO / SiO₂ (basicidade ' + br((r.nCaO * MW.CaO / (r.nSiO2 * MW.SiO2)).toFixed(3)) + ')', v: pct(r.nCaO * MW.CaO, r.mslag) + ' / ' + pct(r.nSiO2 * MW.SiO2, r.mslag), u: '% massa' },
+      { k: 'Gás de topo (BFG)', v: +r.mbfg.toFixed(3), u: 'kg/s' },
+      { k: 'Composição molar do gás de topo: CO / CO₂ / N₂', v: pct(r.nCO, r.ngas) + ' / ' + pct(r.nCO2, r.ngas) + ' / ' + pct(r.nN2, r.ngas), u: '%' },
+      { k: 'Taxa de coque', v: +(I.coke.m / r.mg * 1000).toFixed(1), u: 'kg/t de gusa' },
+      { k: 'Utilização do gás η_CO = CO₂/(CO + CO₂)', v: +r.eta.toFixed(3), u: '' },
+      { k: 'Entalpia das entradas H_e', v: +r.Hin.toFixed(2), u: 'kW' },
+      { k: 'Entalpia das saídas H_s', v: +r.Hout.toFixed(2), u: 'kW' },
+      { k: 'H_e − H_s (reações e aquecimentos)', v: +r.Qr.toFixed(2), u: 'kW' },
+      { k: 'Perdas térmicas', v: +o.Qloss.toFixed(2), u: 'kW' },
+      { k: 'Resíduo térmico H_e − H_s − Q_perdas', v: +r.resid.toFixed(2), u: 'kW' },
+      { k: 'Ar de sopro que fecharia o balanço de energia (resíduo = 0)', v: rc ? mClose.toFixed(2) + ' kg/s (η_CO = ' + rc.eta.toFixed(3) + ', CO = ' + pct(rc.nCO, rc.ngas) + ' %)' : 'fora da faixa (CO e CO₂ ≥ 0)', u: '' },
+      { k: 'Balanço de massa: entradas / saídas', v: mIn.toFixed(4) + ' / ' + mOut.toFixed(4), u: 'kg/s' }];
+    if (Math.abs(r.resid) > 0.02 * Math.abs(r.Hin)) warn.push('o balanço de energia não fecha: resíduo de ' + (r.resid / 1000).toFixed(1) + ' MW. ' + (r.resid < 0 ? 'Falta energia para as temperaturas de saída fixadas' : 'Sobra energia') + (rc ? ': com ' + mClose.toFixed(1) + ' kg/s de ar de sopro (em vez de ' + mB.toFixed(1) + ') o resíduo seria zero.' : '.'));
+    // gráficos: balanço de massa e efeito do ar de sopro
+    const cats = ['Minério', 'Coque', 'Fundente', 'Ar de sopro', 'Gusa', 'Escória', 'Gás de topo'];
+    const plots = [{ kind: 'bars', title: 'Balanço de massa do alto-forno (kg/s)', data: { categories: cats, yLabel: 'Vazão (kg/s)', series: [
+      { name: 'Entradas', y: [I.ore.m, I.coke.m, I.flux.m, I.blast.m, 0, 0, 0], color: '#2563c9' }, { name: 'Saídas', y: [0, 0, 0, 0, r.mg, r.mslag, r.mbfg], color: '#d1302b' }] } }];
+    const xs = [], R = [], yCO = [], yCO2 = [], eta = [], m1 = Math.max(mLo * 1.001, 0.4 * mB), m2 = Math.min(mHi * 0.999, Math.max(2 * mB, (mClose || 0) * 1.3));
+    for (let k = 0; k <= 160; k++) { const m = m1 + (m2 - m1) * k / 160, q = atBlast(m); xs.push(m); R.push(q.resid / 1000); yCO.push(100 * q.nCO / q.ngas); yCO2.push(100 * q.nCO2 / q.ngas); eta.push(100 * q.eta); }
+    plots.push({ kind: 'curves', title: 'Efeito do ar de sopro no resíduo térmico', data: { xLabel: 'Ar de sopro (kg/s)', yLabel: 'Resíduo térmico (MW)', series: [
+      { name: 'Resíduo H_e − H_s − Q_perdas', x: xs, y: R, color: '#7a3db8', width: 3.2 }, { name: 'Zero (balanço fechado)', x: [m1, m2], y: [0, 0], color: '#111', dash: 'dash', width: 1.4 },
+      { name: 'Operação atual (' + br(mB.toFixed(1)) + ' kg/s)', x: [mB], y: [r.resid / 1000], mode: 'markers', size: 12, symbol: 'circle', color: '#d1302b' }]
+      .concat(rc ? [{ name: 'Balanço fechado (' + br(mClose.toFixed(1)) + ' kg/s)', x: [mClose], y: [0], mode: 'markers', size: 12, symbol: 'diamond', color: '#2e9e6b' }] : []) } });
+    plots.push({ kind: 'curves', title: 'Gás de topo × ar de sopro', data: { xLabel: 'Ar de sopro (kg/s)', yLabel: '% molar e η_CO (%)', series: [
+      { name: 'CO', x: xs, y: yCO, color: '#d1302b', width: 2.8 }, { name: 'CO₂', x: xs, y: yCO2, color: '#2563c9', width: 2.8 }, { name: 'η_CO', x: xs, y: eta, color: '#2e9e6b', width: 2.4, dash: 'dash' }] } });
+    const out = {};
+    const need = ['ore', 'coke', 'flux', 'blast'].some(k => I[k].conn);
+    const sg = massStream(th, { co: r.nCO * MW.CO, co2: r.nCO2 * MW.CO2, nitrogen: r.nN2 * MW.N2 }, o.Tgas, P, warn, 'gás de topo', need);
+    const ss = massStream(th, { cao: r.nCaO * MW.CaO, silica: r.nSiO2 * MW.SiO2 }, o.Ts, P, warn, 'escória', need);
+    const sp = massStream(th, { iron: r.mFe, carbon: r.mCg }, o.Tg, P, warn, 'gusa', need);
+    if (sg) out.gas = sg; if (ss) out.slag = ss; if (sp) out.pig_iron = sp;
+    const util = ['ore', 'coke', 'flux', 'blast'].reduce((a, k) => a + (I[k].conn ? 0 : I[k].m), 0);
+    const gen = k => ({ m: I[k].m, kg: I[k].kg, T: I[k].T });
+    return { out, massUtil: sg && ss && sp ? util : 0, res: decBR(res), warn: decW(warn), plots,
+      bf: { ore: gen('ore'), coke: gen('coke'), flux: gen('flux'), blast: gen('blast'), Cg: o.Cg, Tg: o.Tg, Ts: o.Ts, Tgas: o.Tgas, Qloss: o.Qloss, mClose, m1, m2 } };
+  };
+
+  /* forno de cimento: CaCO₃ → CaO + CO₂ (calcinação completa); combustão completa C + O₂ → CO₂ e H₂ + ½O₂ → H₂O;
+     cinzas do combustível (SiO₂) e óxidos da farinha vão para o clínquer; a umidade da farinha sai como vapor */
+  function kilnCalc(I, o) {
+    const MW = MET.MWk, Hf = MET.Hf, cp = MET.cpK, Tr = MET.Tr;
+    const n = { CaCO3: I.meal.kg.CaCO3 / MW.CaCO3, SiO2: I.meal.kg.SiO2 / MW.SiO2, Al2O3: I.meal.kg.Al2O3 / MW.Al2O3, Fe2O3: I.meal.kg.Fe2O3 / MW.Fe2O3, H2O: I.meal.kg.H2O / MW.H2O };
+    const nC = I.fuel.kg.C / MW.C, nH2 = I.fuel.kg.H2 / MW.H2, nAsh = I.fuel.kg.ash / MW.SiO2, nO2 = I.air.kg.O2 / MW.O2, nN2 = I.air.kg.N2 / MW.N2;
+    const nCaO = n.CaCO3, nCO2c = n.CaCO3, nO2req = nC + 0.5 * nH2, nO2ex = nO2 - nO2req;
+    const m = { CaO: nCaO * MW.CaO, SiO2: (n.SiO2 + nAsh) * MW.SiO2, Al2O3: n.Al2O3 * MW.Al2O3, Fe2O3: n.Fe2O3 * MW.Fe2O3 };
+    const mcl = m.CaO + m.SiO2 + m.Al2O3 + m.Fe2O3;
+    const g = { CO2: nCO2c + nC, H2O: n.H2O + nH2, O2: Math.max(0, nO2ex), N2: nN2 }, ng = g.CO2 + g.H2O + g.O2 + g.N2;
+    const mg = g.CO2 * MW.CO2 + g.H2O * MW.H2O + g.O2 * MW.O2 + g.N2 * MW.N2;
+    const Tm = I.meal.T, Tf = I.fuel.T, Ta = I.air.T;
+    const Hin = n.CaCO3 * (Hf.CaCO3 + cp.CaCO3 * (Tm - Tr)) + n.SiO2 * (Hf.SiO2 + cp.SiO2 * (Tm - Tr)) + n.Al2O3 * (Hf.Al2O3 + cp.Al2O3 * (Tm - Tr)) + n.Fe2O3 * (Hf.Fe2O3 + cp.Fe2O3 * (Tm - Tr))
+      + n.H2O * (Hf.H2Ol + cp.H2Ol * (Tm - Tr)) + nC * cp.C * (Tf - Tr) + nH2 * cp.H2 * (Tf - Tr) + nAsh * (Hf.SiO2 + cp.SiO2 * (Tf - Tr)) + nO2 * cp.O2 * (Ta - Tr) + nN2 * cp.N2 * (Ta - Tr);
+    const Hout = nCaO * (Hf.CaO + cp.CaO * (o.Tcl - Tr)) + (n.SiO2 + nAsh) * (Hf.SiO2 + cp.SiO2 * (o.Tcl - Tr)) + n.Al2O3 * (Hf.Al2O3 + cp.Al2O3 * (o.Tcl - Tr)) + n.Fe2O3 * (Hf.Fe2O3 + cp.Fe2O3 * (o.Tcl - Tr))
+      + g.CO2 * (Hf.CO2 + cp.CO2 * (o.Tg - Tr)) + g.H2O * (Hf.H2Og + cp.H2Og * (o.Tg - Tr)) + g.O2 * cp.O2 * (o.Tg - Tr) + g.N2 * cp.N2 * (o.Tg - Tr);
+    return { n, nC, nH2, nAsh, nO2, nN2, nCaO, nCO2c, nO2req, nO2ex, m, mcl, g, ng, mg, Hin, Hout, resid: Hin - Hout - o.Qloss };
+  }
+  IMPL.cement_kiln = function (th, b, ins) {
+    const p = b.params, warn = [], i = ins || {};
+    const I = {
+      meal: furnaceIn(th, i.meal, 'farinha', { caco3: 'CaCO3', silica: 'SiO2', alumina: 'Al2O3', hematite: 'Fe2O3', water: 'H2O' }, () => { const m = num(p.mMeal, 100);
+        return { kg: { CaCO3: m * num(p.xCaCO3, 0.78), SiO2: m * num(p.xSiO2, 0.14), Al2O3: m * num(p.xAl2O3, 0.04), Fe2O3: m * num(p.xFe2O3, 0.02), H2O: m * num(p.xH2O, 0.02) }, T: num(p.Tmeal, 70) }; }),
+      fuel: furnaceIn(th, i.fuel, 'combustível', { carbon: 'C', hydrogen: 'H2', silica: 'ash' }, () => { const m = num(p.mFuel, 6.5); return { kg: { C: m * num(p.fC, 0.85), H2: m * num(p.fH, 0.04), ash: m * num(p.fAsh, 0.11) }, T: num(p.Tfuel, 25) }; }),
+      air: furnaceIn(th, i.air, 'ar de combustão', { oxygen: 'O2', nitrogen: 'N2' }, () => { const m = num(p.mAir, 75), w = num(p.wO2a, 0.233); return { kg: { O2: m * w, N2: m * (1 - w) }, T: num(p.Tair, 800) }; }) };
+    ['CaCO3', 'SiO2', 'Al2O3', 'Fe2O3', 'H2O'].forEach(k => { if (I.meal.kg[k] == null) I.meal.kg[k] = 0; });
+    ['C', 'H2', 'ash'].forEach(k => { if (I.fuel.kg[k] == null) I.fuel.kg[k] = 0; });
+    const o = { Tcl: C2K(num(p.Tcl, 1450)), Tg: C2K(num(p.Tgk, 350)), Qloss: num(p.QlossK, 5000), LHV: num(p.LHV, 32000) };
+    if (!(I.meal.kg.CaCO3 > 0)) throw new Error('a farinha crua precisa de CaCO₃ (calcário)');
+    if (!(I.fuel.m > 0 && I.air.kg.O2 > 0)) throw new Error('informe o combustível e o ar de combustão');
+    const r = kilnCalc(I, o), MW = MET.MWk;
+    if (r.nO2ex < 0) throw new Error('ar de combustão insuficiente para a combustão completa: faltam ' + (-r.nO2ex * MW.O2 / (I.air.kg.O2 / I.air.m)).toFixed(2) + ' kg/s de ar (a combustão seria incompleta, com CO)');
+    const cl = r.m, pc = k => 100 * cl[k] / r.mcl, C = pc('CaO'), S = pc('SiO2'), A = pc('Al2O3'), F = pc('Fe2O3');
+    const C3S = 4.071 * C - 7.600 * S - 6.718 * A - 1.430 * F, C2S = 2.867 * S - 0.7544 * C3S, C3A = 2.650 * A - 1.692 * F, C4AF = 3.043 * F;
+    const LSF = 100 * C / (2.8 * S + 1.18 * A + 0.65 * F), SM = S / (A + F), AM = A / F;
+    const Qf = I.fuel.m * o.LHV, spec = Qf / r.mcl, exc = 100 * r.nO2ex / r.nO2req;
+    const co2c = r.nCO2c * MW.CO2 / r.mcl, co2f = r.nC * MW.CO2 / r.mcl;
+    // combustível (mesma composição e temperatura, ar fixo) que zera o resíduo térmico, com O₂ em excesso ≥ 0
+    const fz = I.fuel.kg, mF = I.fuel.m, atFuel = mf => kilnCalc(Object.assign({}, I, { fuel: { kg: { C: fz.C * mf / mF, H2: fz.H2 * mf / mF, ash: fz.ash * mf / mF }, T: I.fuel.T, m: mf } }), o);
+    const mFmax = r.nO2 / ((fz.C / MW.C + 0.5 * fz.H2 / MW.H2) / mF);
+    let mClose = null; if (atFuel(1e-6).resid < 0 && atFuel(mFmax).resid > 0) { let a = 1e-6, c = mFmax; for (let k = 0; k < 200; k++) { const mm = 0.5 * (a + c); if (atFuel(mm).resid < 0) a = mm; else c = mm; } mClose = 0.5 * (a + c); }
+    const mIn = I.meal.m + I.fuel.m + I.air.m, mOut = r.mcl + r.mg;
+    const P = Math.min.apply(null, [101325].concat(['meal', 'fuel', 'air'].filter(k => I[k].conn).map(k => I[k].P)));
+    const f2 = v => v.toFixed(2);
+    const res = [{ k: 'Entradas: farinha / combustível / ar', v: [I.meal.m, I.fuel.m, I.air.m].map(f2).join(' / ') + ' kg/s (total ' + f2(mIn) + ')', u: '' },
+      { k: 'Clínquer produzido', v: r.mcl.toFixed(3) + ' kg/s (' + (r.mcl * 3.6).toFixed(2) + ' t/h)', u: '' },
+      { k: 'Gases de exaustão', v: +r.mg.toFixed(3), u: 'kg/s' },
+      { k: 'Clínquer: CaO / SiO₂ / Al₂O₃ / Fe₂O₃', v: [C, S, A, F].map(f2).join(' / '), u: '% massa' },
+      { k: 'Gases (molar): CO₂ / H₂O / O₂ / N₂', v: ['CO2', 'H2O', 'O2', 'N2'].map(k => f2(100 * r.g[k] / r.ng)).join(' / '), u: '%' },
+      { k: 'Rendimento farinha → clínquer', v: +(100 * r.mcl / I.meal.m).toFixed(2), u: '%' },
+      { k: 'Consumo específico térmico', v: spec.toFixed(0) + ' kJ/kg (' + (spec / 4.184).toFixed(0) + ' kcal/kg de clínquer)', u: '' },
+      { k: 'Excesso de ar de combustão', v: +exc.toFixed(2), u: '%' },
+      { k: 'Fases de Bogue: C₃S / C₂S / C₃A / C₄AF', v: [C3S, C2S, C3A, C4AF].map(f2).join(' / '), u: '% massa' },
+      { k: 'Módulos: saturação de cal FSC / sílica MS / alumina MA', v: LSF.toFixed(1) + ' / ' + SM.toFixed(2) + ' / ' + AM.toFixed(2), u: '' },
+      { k: 'CO₂ emitido: calcinação + combustível', v: f2(co2c) + ' + ' + f2(co2f) + ' = ' + f2(co2c + co2f), u: 'kg/kg de clínquer' },
+      { k: 'Entalpia de entrada H_e', v: +r.Hin.toFixed(2), u: 'kW' },
+      { k: 'Entalpia de saída H_s', v: +r.Hout.toFixed(2), u: 'kW' },
+      { k: 'Perdas térmicas', v: +o.Qloss.toFixed(2), u: 'kW' },
+      { k: 'Resíduo térmico H_e − H_s − Q_perdas', v: +r.resid.toFixed(2), u: 'kW' },
+      { k: 'Combustível que fecharia o balanço (ar fixo)', v: mClose != null ? mClose.toFixed(3) + ' kg/s (' + (mClose * o.LHV / atFuel(mClose).mcl).toFixed(0) + ' kJ/kg de clínquer)' : 'fora da faixa', u: '' },
+      { k: 'Balanço de massa: entradas / saídas', v: mIn.toFixed(4) + ' / ' + mOut.toFixed(4), u: 'kg/s' }];
+    if (Math.abs(r.resid) > 0.5 * o.Qloss) warn.push('o balanço de energia deixa um resíduo de ' + (r.resid / 1000).toFixed(2) + ' MW (' + (r.resid > 0 ? 'sobra' : 'falta') + ' energia)' + (mClose != null ? ': com ' + mClose.toFixed(3) + ' kg/s de combustível o resíduo seria zero.' : '.'));
+    if (AM < 0.64) warn.push('módulo de alumina < 0,64: as fórmulas de Bogue usadas valem para Al₂O₃/Fe₂O₃ ≥ 0,64');
+    const plots = [{ kind: 'bars', title: 'Clínquer: óxidos e fases de Bogue (% massa)', data: { categories: ['CaO', 'SiO₂', 'Al₂O₃', 'Fe₂O₃', 'C₃S', 'C₂S', 'C₃A', 'C₄AF'], yLabel: '% massa', series: [
+      { name: 'Óxidos', y: [C, S, A, F, 0, 0, 0, 0], color: '#e07b39' }, { name: 'Fases (Bogue)', y: [0, 0, 0, 0, C3S, C2S, C3A, C4AF], color: '#2563c9' }] } },
+      { kind: 'bars', title: 'Balanço de massa do forno (kg/s)', data: { categories: ['Farinha', 'Combustível', 'Ar', 'Clínquer', 'Gases'], yLabel: 'Vazão (kg/s)', series: [
+        { name: 'Entradas', y: [I.meal.m, I.fuel.m, I.air.m, 0, 0], color: '#2563c9' }, { name: 'Saídas', y: [0, 0, 0, r.mcl, r.mg], color: '#d1302b' }] } }];
+    const xs = [], R = [], EX = [], SP = [], f1 = 0.5 * mF, f2m = Math.min(mFmax * 0.999, 1.4 * mF);
+    for (let k = 0; k <= 120; k++) { const mf = f1 + (f2m - f1) * k / 120, q = atFuel(mf); xs.push(mf); R.push(q.resid / 1000); EX.push(100 * q.nO2ex / q.nO2req); SP.push(mf * o.LHV / q.mcl / 4.184); }
+    plots.push({ kind: 'curves', title: 'Efeito da vazão de combustível (ar fixo)', data: { xLabel: 'Combustível (kg/s)', yLabel: 'Resíduo térmico (MW) e excesso de ar (%)', series: [
+      { name: 'Resíduo térmico (MW)', x: xs, y: R, color: '#7a3db8', width: 3.2 }, { name: 'Excesso de ar (%)', x: xs, y: EX, color: '#2e9e6b', width: 2.4, dash: 'dash' },
+      { name: 'Zero', x: [f1, f2m], y: [0, 0], color: '#111', dash: 'dot', width: 1.2 },
+      { name: 'Operação atual (' + br(mF.toFixed(2)) + ' kg/s)', x: [mF], y: [r.resid / 1000], mode: 'markers', size: 12, symbol: 'circle', color: '#d1302b' }] } });
+    plots.push({ kind: 'curves', title: 'Consumo específico × combustível', data: { xLabel: 'Combustível (kg/s)', yLabel: 'kcal/kg de clínquer', series: [{ name: 'Consumo específico', x: xs, y: SP, color: '#e07b39', width: 3 }] } });
+    const out = {}, need = ['meal', 'fuel', 'air'].some(k => I[k].conn);
+    const sg = massStream(th, { co2: r.g.CO2 * MW.CO2, water: r.g.H2O * MW.H2O, oxygen: r.g.O2 * MW.O2, nitrogen: r.g.N2 * MW.N2 }, o.Tg, P, warn, 'gases de exaustão', need);
+    const sc = massStream(th, { cao: cl.CaO, silica: cl.SiO2, alumina: cl.Al2O3, hematite: cl.Fe2O3 }, o.Tcl, P, warn, 'clínquer', need);
+    if (sg) out.gas = sg; if (sc) out.clinker = sc;
+    const util = ['meal', 'fuel', 'air'].reduce((a, k) => a + (I[k].conn ? 0 : I[k].m), 0);
+    const gen = k => ({ m: I[k].m, kg: I[k].kg, T: I[k].T });
+    return { out, massUtil: sg && sc ? util : 0, res: decBR(res), warn: decW(warn), plots,
+      kiln: { meal: gen('meal'), fuel: gen('fuel'), air: gen('air'), Tcl: o.Tcl, Tg: o.Tg, Qloss: o.Qloss, LHV: o.LHV, mClose, f1, f2: f2m } };
+  };
+
+  /* silo com tremonha cônica: vazão de Beverloo W = C ρ_b √g (D_o − k d_p)^2,5, corrigida pelo fator de Rose e Tanaka (tg θ · tg χ)^−0,35
+     (θ = semiângulo da tremonha a partir da vertical, χ = fronteira da zona estagnada a partir da horizontal; fator 1 se tg θ · tg χ ≥ 1);
+     regime de massa (Jenike, aproximação) se θ ≤ 40° − φw/2; no fim do esvaziamento a vazão cai com √(M/M_lim) (funil residual) */
+  function siloGeo(o, th) {
+    const Rs = o.Ds / 2, Ro = o.Do / 2, flat = th >= 89.999, t = th * Math.PI / 180;
+    const Hk = flat ? 0 : (Rs - Ro) / Math.tan(t), Vcyl = Math.PI * Rs * Rs * o.Hc, Vk = flat ? 0 : Math.PI * Hk / 3 * (Rs * Rs + Rs * Ro + Ro * Ro);
+    const x = flat ? Infinity : Math.tan(t) * Math.tan(o.chi * Math.PI / 180), F = x < 1 ? Math.pow(x, -0.35) : 1;
+    const W0 = o.C * o.rhob * Math.sqrt(9.81) * Math.pow(o.Do - o.k * o.dp, 2.5), W = W0 * F, M = (Vcyl + Vk) * o.rhob, Mth = 0.08 * Math.PI * Rs * Rs * o.rhob;
+    const thc = 40 - o.phiw / 2, mass = !flat && th <= thc;
+    const t1 = Math.max(0, (M - Mth) / W), Ml = Math.min(M, Mth), td = t1 + 2 * (Ml - Math.sqrt(Ml * 1e-3)) / (W * Math.sqrt(Ml / Mth));
+    const Mat = tt => { if (tt <= t1) return M - W * tt; const s = Math.sqrt(Ml) - W * (tt - t1) / (2 * Math.sqrt(Mth)); return s > Math.sqrt(1e-3) ? s * s : 0; };
+    return { th, Hk, Vcyl, Vk, M, F, W0, W, Mth, mass, thc, td, Mat, Wat: m => (m <= 1e-3 ? 0 : W * (m < Mth ? Math.sqrt(m / Mth) : 1)) };
+  }
+  IMPL.silo = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed;
+    const o = { Ds: num(p.Ds, 1), Do: num(p.Do, 0.2), Hc: num(p.Hc, 3), dp: num(p.dp, 3) / 1000, rhob: num(p.rhob, 1400), phiw: num(p.phiw, 25), C: num(p.Cb, 0.58), k: num(p.kb, 1.5), chi: num(p.chi, 45) };
+    const theta = clamp(num(p.theta, 15), 1, 90), level = clamp(num(p.level, 70), 1, 100) / 100;
+    if (!(o.Ds > o.Do && o.Do > 0 && o.Hc > 0 && o.rhob > 0)) throw new Error('confira a geometria: o diâmetro do silo deve ser maior que o do orifício e as dimensões, positivas');
+    if (!(o.Do - o.k * o.dp > 0)) throw new Error('orifício pequeno demais para as partículas: D_o deve ser maior que k·d_p');
+    let angles = String(p.angles == null ? '' : p.angles).split(/[\s;,]+/).map(Number).filter(v => v > 0 && v <= 90);
+    if (!angles.length) angles = [90, 45, 30, 15];
+    const conn = connected(s), F = conn ? s.mass : num(p.Fs, 30);
+    if (!(F >= 0)) throw new Error('a vazão de alimentação deve ser positiva');
+    const g = siloGeo(o, theta), Ao = Math.PI * o.Do * o.Do / 4, v = g.W / (o.rhob * Ao), Mop = level * g.M, tau = F > 0 ? Mop / F : Infinity;
+    if (o.Do < 6 * o.dp) warn.push('D_o < 6 d_p: risco de arco (entupimento) e a correlação de Beverloo perde a validade');
+    if (F > g.W) warn.push('a alimentação (' + F.toFixed(2) + ' kg/s) passa da capacidade de descarga (' + g.W.toFixed(2) + ' kg/s): o silo não fica em regime permanente e enche em ' + ((g.M - Mop) / (F - g.W) / 60).toFixed(1) + ' min a partir do nível de operação; aumente o orifício ou use uma tremonha mais íngreme');
+    if (!g.mass) warn.push('escoamento em funil (θ = ' + theta + '° > θ_crít = ' + g.thc.toFixed(1) + '°): o material junto à parede fica parado, há risco de segregação e de "primeiro a entrar, último a sair"');
+    const util = F / g.W;
+    const res = [{ k: 'Alimentação de sólidos', v: F.toFixed(3) + ' kg/s (' + (F * 3.6).toFixed(2) + ' t/h)' + (conn ? '' : ' (pelos campos)'), u: '' },
+      { k: 'Tremonha: semiângulo θ (da vertical) / altura do cone', v: theta + '° / ' + (g.th >= 89.999 ? 'fundo plano' : g.Hk.toFixed(3) + ' m'), u: '' },
+      { k: 'Volumes: cilindro + cone', v: g.Vcyl.toFixed(3) + ' + ' + g.Vk.toFixed(3) + ' = ' + (g.Vcyl + g.Vk).toFixed(3), u: 'm³' },
+      { k: 'Capacidade do silo cheio', v: g.M.toFixed(1) + ' kg (' + (g.M / 1000).toFixed(2) + ' t)', u: '' },
+      { k: 'Vazão de Beverloo, fundo plano W₀', v: +g.W0.toFixed(3), u: 'kg/s' },
+      { k: 'Fator da tremonha (Rose e Tanaka)', v: +g.F.toFixed(4), u: '' },
+      { k: 'Capacidade de descarga W = W₀·fator', v: g.W.toFixed(3) + ' kg/s (' + (g.W * 3.6).toFixed(1) + ' t/h)', u: '' },
+      { k: 'Velocidade média no orifício', v: +v.toFixed(3), u: 'm/s' },
+      { k: 'Regime de escoamento (Jenike, θ_crít = 40° − φw/2 = ' + br(g.thc.toFixed(1)) + '°)', v: g.mass ? 'escoamento em massa' : 'escoamento em funil', u: '' },
+      { k: 'Utilização da capacidade de descarga', v: +(100 * util).toFixed(1), u: '%' },
+      { k: 'Massa retida no nível de operação (' + Math.round(level * 100) + ' %)', v: +Mop.toFixed(1), u: 'kg' },
+      { k: 'Tempo de residência médio τ = M/F', v: isFinite(tau) ? (tau / 60).toFixed(2) + ' min (' + tau.toFixed(1) + ' s)' : '—', u: '' },
+      { k: 'Esvaziamento do silo cheio (sem alimentação)', v: g.td.toFixed(1) + ' s (vazão média ' + (g.M / g.td).toFixed(2) + ' kg/s)', u: '' },
+      { k: 'Enchimento do vazio com a descarga fechada', v: F > 0 ? (g.M / F / 60).toFixed(2) + ' min' : '—', u: '' }];
+    // comparação dos ângulos (como no código MATLAB): esvaziamento do silo cheio
+    const pal = ['#111', '#2563c9', '#e07b39', '#2e9e6b', '#7a3db8', '#d1302b', '#b5a100'];
+    const G = angles.map(a => siloGeo(o, a)), tmax = Math.max.apply(null, G.map(q => q.td)) * 1.05;
+    const lbl = q => 'θ = ' + q.th + '°' + (q.th >= 89.999 ? ' (fundo plano)' : '') + ' — ' + (q.mass ? 'massa' : 'funil');
+    const curve = (q, f) => { const t = [], y = []; for (let k = 0; k <= 300; k++) { const tt = tmax * k / 300; t.push(tt); const m = q.Mat(tt); y.push(f === 'M' ? m : q.Wat(m)); } return { t, y }; };
+    const plots = [{ kind: 'curves', title: 'Massa no silo durante o esvaziamento (silo cheio, sem alimentação)', data: { xLabel: 'Tempo (s)', yLabel: 'Massa restante M(t) (kg)', series: G.map((q, j) => { const c = curve(q, 'M'); return { name: lbl(q), x: c.t, y: c.y, color: pal[j % pal.length], width: q.th === theta ? 3.6 : 2.2 }; }) } },
+      { kind: 'curves', title: 'Vazão de descarga Q(t)', data: { xLabel: 'Tempo (s)', yLabel: 'Vazão mássica Q(t) (kg/s)', series: G.map((q, j) => { const c = curve(q, 'Q'); return { name: 'θ = ' + q.th + '°', x: c.t, y: c.y, color: pal[j % pal.length], width: q.th === theta ? 3.6 : 2.2 }; })
+        .concat(F > 0 ? [{ name: 'Alimentação contínua (' + br(F.toFixed(1)) + ' kg/s)', x: [0, tmax], y: [F, F], color: '#d1302b', dash: 'dash', width: 1.6 }] : []) } }];
+    const ths = []; for (let a = 5; a <= 90; a += 1) ths.push(a);
+    plots.push({ kind: 'curves', title: 'Capacidade de descarga × semiângulo da tremonha', data: { xLabel: 'Semiângulo θ a partir da vertical (°)', yLabel: 'W (kg/s)', series: [
+      { name: 'W = W₀·fator de Rose e Tanaka', x: ths, y: ths.map(a => siloGeo(o, a).W), color: '#2563c9', width: 3 },
+      { name: 'Limite do escoamento em massa θ_crít', x: [g.thc, g.thc], y: [0, 1.05 * siloGeo(o, 5).W], color: '#7a3db8', dash: 'dash', width: 1.6 },
+      { name: 'Projeto (θ = ' + theta + '°)', x: [theta], y: [g.W], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }]
+      .concat(F > 0 ? [{ name: 'Alimentação', x: [5, 90], y: [F, F], color: '#d1302b', dash: 'dot', width: 1.4 }] : []) } });
+    const out = {};
+    if (conn) out.product = mkStream(th, s.flows.slice(), s.T, s.P);
+    else {
+      let is = -1; for (let k = 0; k < th.n; k++) if (th.c[k].solid) { is = k; break; }
+      if (is >= 0) { const kg = new Array(th.n).fill(0); kg[is] = F * 3600; out.product = mkStream(th, flowsOfKg(th, kg), C2K(25), 101325); }
+      else warn.push('sem corrente de alimentação e sem um componente sólido na lista (por exemplo, Sílica): a corrente de descarga não é gerada');
+    }
+    return { out, massUtil: !conn && out.product ? F : 0, res: decBR(res), warn: decW(warn), plots, silo: { o, theta, angles, F, level, W: g.W, M: g.M, td: g.td } };
+  };
+
+  /* sedimentador contínuo — método de Talmadge e Fitch (1955): curva de batelada H(t) (trecho reto até t_L e compressão exponencial),
+     H_u = H₀C₀/C_U, ponto de compressão (máxima curvatura), tangente nele até H_u → t_u; A_mín = Ṁ_s·t_u/(C₀H₀) */
+  function tfCurve(o) {
+    const tEnd = Math.max(7200, o.tL + 8 / o.kc), N = 2000, t = [], H = [], Hle = o.H0 - o.v0 * o.tL;
+    for (let k = 0; k < N; k++) { const tt = tEnd * k / (N - 1); t.push(tt); H.push(tt <= o.tL ? o.H0 - o.v0 * tt : o.Hu + (Hle - o.Hu) * Math.exp(-o.kc * (tt - o.tL))); }
+    const grad = (y, x) => y.map((_, k) => (k === 0 ? (y[1] - y[0]) / (x[1] - x[0]) : k === y.length - 1 ? (y[k] - y[k - 1]) / (x[k] - x[k - 1]) : (y[k + 1] - y[k - 1]) / (x[k + 1] - x[k - 1])));
+    const dH = grad(H, t), d2 = grad(dH, t); let ic = 0; for (let k = 1; k < N; k++) if (d2[k] > d2[ic]) ic = k;
+    return { t, H, dH, ic, Hle, tEnd };
+  }
+  IMPL.thickener = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed;
+    const rhos = num(p.rhos, 2650), rhof = num(p.rhof, 1000), iw = th.ids.indexOf('water');
+    let mF, wF, TF, P = 101325, solFrac = null, conn = false;
+    if (connected(s)) {
+      conn = true; if (iw < 0) throw new Error('inclua a água entre os componentes (é o líquido da polpa)');
+      const kg = s.flows.map((f, k) => f * th.c[k].mw / 1000); mF = sum(kg); const ms = mF - kg[iw];
+      th.c.forEach((c, k) => { if (k !== iw && kg[k] > 1e-12 && !(c.solid || c.nv)) throw new Error('a polpa deve ter só água e sólidos (encontrado: ' + c.name + ')'); });
+      if (!(ms > 0)) throw new Error('a polpa não tem sólidos'); wF = ms / mF; TF = s.T; P = s.P; solFrac = kg.map((m, k) => (k === iw ? 0 : m / ms));
+    } else {
+      wF = num(p.wF, 0.1); TF = C2K(num(p.TF, 25)); const rho = 1 / (wF / rhos + (1 - wF) / rhof); mF = num(p.QF, 180) / 3600 * rho;
+      let is = -1; for (let k = 0; k < th.n; k++) if (th.c[k].solid) { is = k; break; }
+      if (iw >= 0 && is >= 0) solFrac = th.ids.map((_, k) => (k === is ? 1 : 0)); else warn.push('sem corrente de alimentação e sem água + um componente sólido na lista: o cálculo usa os campos, mas as correntes de saída não são geradas');
+    }
+    if (!(wF > 0 && wF < 1)) throw new Error('a fração de sólidos deve ficar entre 0 e 1');
+    const rhoF = 1 / (wF / rhos + (1 - wF) / rhof), QF = mF / rhoF, ms = mF * wF, ml = mF * (1 - wF);
+    const C0 = p.C0 === '' || p.C0 == null ? wF * rhoF : num(p.C0, wF * rhoF), H0 = num(p.H0, 1), v0 = num(p.v0, 1.5) / 1000, tL = num(p.tL, 350), kc = num(p.kc, 0.0015);
+    const Cu = num(p.CU, 450), eta = num(p.eta, 0.995), Hs = num(p.Hs, 3.5), cps = num(p.cps, 0.85), cpf = num(p.cpf, 4.184), Ql = num(p.QlT, 25), cons = /^do ramo/.test(p.tang || '');
+    if (!(H0 > 0 && C0 > 0 && v0 > 0 && tL > 0 && kc > 0)) throw new Error('os dados do ensaio de proveta devem ser positivos');
+    if (!(Cu > C0)) throw new Error('a concentração do underflow deve ser maior que a do ensaio (C₀ = ' + C0.toFixed(2) + ' kg/m³)');
+    if (!(Cu < rhos)) throw new Error('a concentração do underflow não pode passar da massa específica do sólido');
+    if (!(eta > 0 && eta <= 1)) throw new Error('a recuperação deve ficar entre 0 e 1');
+    const Hu = H0 * C0 / Cu, Hle = H0 - v0 * tL;
+    if (!(Hle > 0)) throw new Error('o trecho reto termina abaixo do fundo da proveta: reduza v₀ ou t_L');
+    const cv = tfCurve({ H0, v0, tL, kc, Hu });
+    let tc, Hc, dHc, tu;
+    if (Hu >= Hle) { tc = tL; Hc = Hle; dHc = -v0; tu = (H0 - Hu) / v0; warn.push('H_u fica no trecho de sedimentação livre: t_u vem da reta inicial'); }
+    else if (cons) { tc = tL; Hc = Hle; dHc = -kc * (Hle - Hu); tu = tc + (Hu - Hc) / dHc; }
+    else { tc = cv.t[cv.ic]; Hc = cv.H[cv.ic]; dHc = cv.dH[cv.ic]; tu = tc + (Hu - Hc) / dHc; }
+    const A = ms * tu / (C0 * H0), D = Math.sqrt(4 * A / Math.PI), V = A * Hs;
+    const msU = ms * eta, msO = ms * (1 - eta), QU = msU / Cu, QlU = QU - msU / rhos, mlU = QlU * rhof, mU = msU + mlU, mlO = ml - mlU, mO = msO + mlO, QO = msO / rhos + mlO / rhof;
+    if (!(mlU >= 0 && mlO >= 0)) throw new Error('balanço impossível: o underflow levaria mais líquido do que entra (aumente C_U)');
+    const cpF = wF * cps + (1 - wF) * cpf, Hin = mF * cpF * TF, wU = msU / mU, wO = msO / mO, cpU = wU * cps + (1 - wU) * cpf, cpO = wO * cps + (1 - wO) * cpf;
+    const Tout = (Hin - Ql) / (mU * cpU + mO * cpO), Hout = (mU * cpU + mO * cpO) * Tout;
+    const res = [{ k: 'Alimentação (polpa)', v: mF.toFixed(3) + ' kg/s (' + (QF * 3600).toFixed(1) + ' m³/h; sólidos ' + ms.toFixed(3) + ' kg/s; ρ = ' + rhoF.toFixed(1) + ' kg/m³)', u: '' },
+      { k: 'Underflow (lama adensada)', v: mU.toFixed(3) + ' kg/s (' + (QU * 3600).toFixed(2) + ' m³/h; C = ' + (msU / QU).toFixed(1) + ' kg/m³; ' + (100 * wU).toFixed(1) + ' % sólidos)', u: '' },
+      { k: 'Overflow (líquido clarificado)', v: mO.toFixed(3) + ' kg/s (' + (QO * 3600).toFixed(2) + ' m³/h; C = ' + (msO / QO).toFixed(3) + ' kg/m³)', u: '' },
+      { k: 'Altura equivalente H_u = H₀C₀/C_U', v: +Hu.toFixed(4), u: 'm' },
+      { k: 'Ponto de compressão: t_c / H_c', v: tc.toFixed(1) + ' s (' + (tc / 60).toFixed(2) + ' min) / ' + Hc.toFixed(4) + ' m', u: '' },
+      { k: 'Inclinação da tangente em (t_c, H_c)', v: dHc.toExponential(4), u: 'm/s' },
+      { k: 'Tempo crítico de projeto t_u', v: tu.toFixed(1) + ' s (' + (tu / 60).toFixed(2) + ' min)', u: '' },
+      { k: 'Área mínima A = Ṁ_s·t_u/(C₀H₀)', v: +A.toFixed(2), u: 'm²' },
+      { k: 'Diâmetro mínimo do sedimentador', v: +D.toFixed(2), u: 'm' },
+      { k: 'Carga de sólidos', v: +(ms * 3600 / A).toFixed(2), u: 'kg/(m²·h)' },
+      { k: 'Taxa de overflow (velocidade ascensional)', v: +(QO * 3600 / A).toFixed(3), u: 'm³/(m²·h)' },
+      { k: 'Volume (H = ' + br(Hs) + ' m) e tempo de residência da polpa', v: V.toFixed(1) + ' m³ e ' + (V / QF / 3600).toFixed(2) + ' h', u: '' },
+      { k: 'Temperatura de saída', v: Tout.toFixed(2) + ' K (' + K2C(Tout).toFixed(2) + ' °C)', u: '' },
+      { k: 'Entalpia de entrada / saída (base 0 K)', v: Hin.toFixed(2) + ' / ' + Hout.toFixed(2), u: 'kW' },
+      { k: 'Resíduo térmico H_e − H_s − Q_perdas', v: (Hin - Hout - Ql).toExponential(2), u: 'kW' }];
+    if (Cu > 0.6 * rhos) warn.push('C_U muito alta para uma polpa (mais de 60 % do sólido em volume): confira se o leito chega a essa compactação');
+    // construção gráfica (minutos)
+    const tm = cv.t.map(t => t / 60), xMax = Math.min(cv.tEnd, Math.max(2.2 * tu, 1.5 * tL)) / 60;
+    const tan1 = [0, tc * 1.2].map(t => [t / 60, H0 - v0 * t]), tanC = [Math.max(0, tc * 0.5), tu * 1.2].map(t => [t / 60, Hc + dHc * (t - tc)]);
+    const plots = [{ kind: 'curves', title: 'Construção gráfica de Talmadge e Fitch', data: { xLabel: 'Tempo de ensaio t (min)', yLabel: 'Altura da interface H (m)', xRange: [0, xMax], yRange: [0, H0 * 1.1], series: [
+      { name: 'Curva de batelada H(t)', x: tm, y: cv.H, color: '#2563c9', width: 3.2 },
+      { name: 'H_u = ' + br(Hu.toFixed(3)) + ' m (C_U = ' + br(Cu) + ' kg/m³)', x: [0, xMax], y: [Hu, Hu], color: '#111', dash: 'dash', width: 1.6 },
+      { name: 'Tangente inicial (v₀)', x: tan1.map(q => q[0]), y: tan1.map(q => q[1]), color: '#2e9e6b', dash: 'dash', width: 1.4 },
+      { name: 'Tangente no ponto de compressão', x: tanC.map(q => q[0]), y: tanC.map(q => q[1]), color: '#c0398a', dash: 'dashdot', width: 2 },
+      { name: 'Ponto de compressão (t_c, H_c)', x: [tc / 60], y: [Hc], mode: 'markers', size: 11, symbol: 'circle', color: '#d1302b' },
+      { name: 't_u = ' + br((tu / 60).toFixed(1)) + ' min', x: [tu / 60], y: [Hu], mode: 'markers', size: 13, symbol: 'square', color: '#e0b000' },
+      { name: 'Linha de t_u', x: [tu / 60, tu / 60], y: [0, H0 * 1.1], color: '#d1302b', dash: 'dot', width: 1.4 }] } }];
+    const Cs = [], As = []; for (let c = Math.max(C0 * 1.3, 120); c <= Math.min(0.55 * rhos, 1200); c += 5) {
+      const hu = H0 * C0 / c; let t2; if (hu >= Hle) t2 = (H0 - hu) / v0; else if (cons) t2 = tL + (hu - Hle) / (-kc * (Hle - hu)); else { const q = tfCurve({ H0, v0, tL, kc, Hu: hu }); t2 = q.t[q.ic] + (hu - q.H[q.ic]) / q.dH[q.ic]; }
+      Cs.push(c); As.push(ms * t2 / (C0 * H0)); }
+    plots.push({ kind: 'curves', title: 'Área mínima × concentração do underflow', data: { xLabel: 'C_U (kg/m³)', yLabel: 'Área mínima (m²)', series: [{ name: 'A_mín(C_U)', x: Cs, y: As, color: '#7a3db8', width: 3 }, { name: 'Projeto', x: [Cu], y: [A], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }] } });
+    plots.push({ kind: 'bars', title: 'Balanço de massa (kg/s)', data: { categories: ['Alimentação', 'Underflow', 'Overflow'], yLabel: 'kg/s', series: [
+      { name: 'Sólidos', y: [ms, msU, msO], color: '#e07b39' }, { name: 'Líquido', y: [ml, mlU, mlO], color: '#2563c9' }] } });
+    const out = {};
+    if (solFrac) {
+      const kU = solFrac.map(f => f * msU * 3600), kO = solFrac.map(f => f * msO * 3600); kU[iw] = mlU * 3600; kO[iw] = mlO * 3600;
+      out.underflow = mkStream(th, flowsOfKg(th, kU), Tout, P); out.overflow = mkStream(th, flowsOfKg(th, kO), Tout, P);
+    }
+    return { out, massUtil: !conn && solFrac ? mF : 0, res: decBR(res), warn: decW(warn), plots,
+      tf: { QF, wF, rhos, rhof, TF, H0, C0, v0, tL, kc, Cu, eta, Hs, cps, cpf, Ql, cons } };
+  };
+
+  /* digestor contínuo kraft (cavacos de eucalipto), como no código de referência: rendimento Y = a + b·κ, lignina residual = c·κ,
+     licor branco pela carga de álcali efetivo, vapor para aquecer cavacos e licor até T_cook; a polpa e o licor negro saem a T_blow,
+     e o calor retirado entre o cozimento e a descarga (zona de lavagem, tanques de flash) fecha o balanço de energia */
+  const KRAFT = { MW: { NaOH: 39.997, Na2S: 78.045 }, Tr: 298.15 };
+  function kraftCalc(I, o) {
+    const wd = I.wood.kg, wl = I.wl.kg, cp = o.cp, Tr = KRAFT.Tr;
+    const dry = wd.cel + wd.hem + wd.lig + wd.ext, ww = wd.w, mWL = I.wl.m;
+    const Na2SasNaOH = wl.Na2S * 2 * KRAFT.MW.NaOH / KRAFT.MW.Na2S, EA = wl.NaOH + Na2SasNaOH / 2, AA = wl.NaOH + Na2SasNaOH;
+    const inorg = wl.NaOH + wl.Na2S + wl.Na2CO3, wwl = wl.w;
+    const Y = o.yA + o.yB * o.kappa, pulp = dry * Y / 100, diss = dry - pulp;
+    const ligP = pulp * o.ligK * o.kappa / 100, carbP = pulp - ligP;
+    let celP = Math.min(o.celRet * wd.cel, carbP), hemP = carbP - celP;
+    if (hemP > wd.hem) { hemP = wd.hem; celP = carbP - hemP; }
+    const ligD = wd.lig - ligP, carbD = wd.cel + wd.hem - carbP, waterIn = ww + wwl, pulpW = Math.min(o.wPulp * pulp, waterIn);
+    const blW = waterIn - pulpW, blS = diss + inorg, mBL = blW + blS;
+    const cWood = dry * cp.wood + ww * cp.w;
+    const Qwood = cWood * (o.Tcook - I.wood.T), Qwl = mWL * cp.wl * (o.Tcook - I.wl.T), Qrx = diss * o.dHr, Qreq = Qwood + Qwl - Qrx + o.Qloss, steam = Qreq / o.hfg;
+    const Hin = cWood * (I.wood.T - Tr) + mWL * cp.wl * (I.wl.T - Tr) + steam * o.hfg;
+    const Hout = (pulp * cp.pulp + pulpW * cp.w) * (o.Tblow - Tr) + (blS * cp.bls + blW * cp.w) * (o.Tblow - Tr);
+    const Qcool = Hin + Qrx - o.Qloss - Hout;
+    return { dry, ww, mWL, EA, AA, Na2SasNaOH, sulf: Na2SasNaOH / AA, inorg, wwl, Y, pulp, diss, ligP, carbP, celP, hemP, ligD, carbD, waterIn, pulpW, blW, blS, mBL,
+      TS: 100 * blS / mBL, LW: waterIn / dry, Qwood, Qwl, Qrx, Qreq, steam, Hin, Hout, Qcool, ok: ligP <= wd.lig + 1e-12 && carbP <= wd.cel + wd.hem + 1e-12 && celP <= wd.cel + 1e-12 && pulp > 0 && diss >= 0 };
+  }
+  IMPL.kraft_digester = function (th, b, ins) {
+    const p = b.params, warn = [], i = ins || {};
+    const I = {};
+    I.wood = furnaceIn(th, i.chips, 'cavacos', { cellulose: 'cel', hemicellulose: 'hem', lignin: 'lig', 'wood-extractives': 'ext', water: 'w' }, () => {
+      const m = num(p.mWood, 100), x = num(p.moist, 0.45), fr = [num(p.wCel, 0.45), num(p.wHem, 0.27), num(p.wLig, 0.27), num(p.wExt, 0.01)], sf = fr.reduce((a, v) => a + v, 0);
+      if (!(m > 0)) throw new Error('informe a vazão de cavacos'); if (!(x >= 0 && x < 1)) throw new Error('a umidade dos cavacos deve ficar entre 0 e 1');
+      if (Math.abs(sf - 1) > 1e-6) throw new Error('as frações da madeira seca (celulose, hemicelulose, lignina e extrativos) devem somar 1 (somam ' + sf.toFixed(4) + ')');
+      const d = m * (1 - x); return { kg: { cel: d * fr[0], hem: d * fr[1], lig: d * fr[2], ext: d * fr[3], w: m * x }, T: num(p.Twood, 70) }; });
+    ['cel', 'hem', 'lig', 'ext', 'w'].forEach(k => { if (I.wood.kg[k] == null) I.wood.kg[k] = 0; });
+    const dry0 = I.wood.kg.cel + I.wood.kg.hem + I.wood.kg.lig + I.wood.kg.ext, rhoWL = num(p.rhoWL, 1150);
+    if (!(dry0 > 0)) throw new Error('os cavacos não têm madeira seca (celulose, hemicelulose, lignina ou extrativos)');
+    I.wl = furnaceIn(th, i.white_liquor, 'licor branco', { naoh: 'NaOH', na2s: 'Na2S', na2co3: 'Na2CO3', water: 'w' }, () => {
+      const EAm = dry0 * num(p.EA, 0.18), c = num(p.EAc, 115), S = num(p.sulf, 0.30), fi = num(p.inorg, 1.45);
+      if (!(EAm > 0 && c > 0)) throw new Error('a carga e a concentração de álcali efetivo devem ser positivas'); if (!(S >= 0 && S < 1)) throw new Error('a sulfidez deve ficar entre 0 e 1');
+      const V = EAm / c, mWL = V * rhoWL, AA = EAm / (1 - S / 2), NaOH = (1 - S) * AA, Na2S = S * AA * KRAFT.MW.Na2S / (2 * KRAFT.MW.NaOH), dead = fi * EAm - NaOH - Na2S;
+      if (dead < -1e-9) throw new Error('os sais totais do licor (' + (fi * EAm).toFixed(3) + ' kg/s) são menores que NaOH + Na₂S (' + (NaOH + Na2S).toFixed(3) + ' kg/s): aumente a razão sais/álcali efetivo');
+      if (!(mWL > fi * EAm)) throw new Error('licor branco concentrado demais: a massa de sais passa da massa do licor');
+      return { kg: { NaOH, Na2S, Na2CO3: Math.max(0, dead), w: mWL - fi * EAm }, T: num(p.TWL, 80) }; });
+    ['NaOH', 'Na2S', 'Na2CO3', 'w'].forEach(k => { if (I.wl.kg[k] == null) I.wl.kg[k] = 0; });
+    I.wl.m = I.wl.kg.NaOH + I.wl.kg.Na2S + I.wl.kg.Na2CO3 + I.wl.kg.w; I.wood.m = dry0 + I.wood.kg.w;
+    const Ps = num(p.Psteam, 8), Tsat = STEAM.Tsat(Ps * BAR), hfgI = STEAM.hV(Tsat) - STEAM.hL(Tsat), hfgBlank = p.hfg === '' || p.hfg == null;
+    const o = { kappa: num(p.kappa, 17), yA: num(p.yA, 47.5), yB: num(p.yB, 0.38), ligK: num(p.ligK, 0.147), celRet: num(p.celRet, 0.95), Tcook: C2K(num(p.Tcook, 165)), Tblow: C2K(num(p.Tblow, 90)),
+      hfg: hfgBlank ? hfgI : num(p.hfg, 2048), dHr: num(p.dHr, 150), Qloss: num(p.QlD, 3000), wPulp: Math.max(0, num(p.wPulp, 0)),
+      cp: { wood: num(p.cpWood, 1.5), w: num(p.cpW, 4.184), wl: num(p.cpWL, 3.8), pulp: num(p.cpPulp, 1.6), bls: num(p.cpBLs, 1.4) } };
+    if (!(Ps > 0)) throw new Error('a pressão do vapor deve ser positiva'); if (!(o.hfg > 0)) throw new Error('o calor latente do vapor deve ser positivo');
+    if (!(o.celRet >= 0 && o.celRet <= 1)) throw new Error('a fração da celulose que fica na polpa deve ficar entre 0 e 1');
+    const r = kraftCalc(I, o);
+    if (!(r.EA > 0)) throw new Error('o licor branco não tem álcali (NaOH ou Na₂S)');
+    if (!r.ok) throw new Error('rendimento ou lignina residual impossíveis para essa madeira: com κ = ' + br(o.kappa) + ' a polpa teria ' + r.ligP.toFixed(3) + ' kg/s de lignina e ' + r.carbP.toFixed(3) + ' kg/s de carboidratos (a madeira tem ' + I.wood.kg.lig.toFixed(3) + ' e ' + (I.wood.kg.cel + I.wood.kg.hem).toFixed(3) + ')');
+    if (o.wPulp * r.pulp > r.waterIn + 1e-9) warn.push('a água pedida para a polpa passa da água disponível: a polpa leva toda a água e o licor negro sai só com os sólidos');
+    if (Tsat < o.Tcook) warn.push('o vapor saturado a ' + br(Ps) + ' bar condensa a ' + br(K2C(Tsat).toFixed(1)) + ' °C, abaixo da temperatura de cozimento (' + br(K2C(o.Tcook).toFixed(1)) + ' °C): aumente a pressão do vapor');
+    if (o.Tblow > o.Tcook) warn.push('a descarga está mais quente que o cozimento');
+    if (r.steam < 0) warn.push('a carga térmica é negativa: as entradas já chegam acima da temperatura de cozimento');
+    const t = v => (v * 3.6).toFixed(2), pc = (a, bb) => (100 * a / bb).toFixed(2), mIn = I.wood.m + I.wl.m + Math.max(r.steam, 0), mOut = r.pulp + r.pulpW + r.mBL + Math.max(r.steam, 0);
+    const VWL = I.wl.m / rhoWL, wd = I.wood.kg, wl = I.wl.kg;
+    const res = [{ k: 'Entradas: cavacos / licor branco / vapor', v: [I.wood.m, I.wl.m, r.steam].map(v => v.toFixed(2)).join(' / ') + ' kg/s', u: '' },
+      { k: 'Cavacos: madeira seca / água', v: r.dry.toFixed(2) + ' / ' + r.ww.toFixed(2) + ' kg/s (' + t(I.wood.m) + ' t/h úmido; ' + t(r.dry) + ' t/h seco)', u: '' },
+      { k: 'Licor branco', v: I.wl.m.toFixed(2) + ' kg/s (' + (VWL * 3600).toFixed(1) + ' m³/h)', u: '' },
+      { k: 'Álcali efetivo (como NaOH): vazão / carga na madeira seca / concentração', v: r.EA.toFixed(3) + ' kg/s / ' + (100 * r.EA / r.dry).toFixed(2) + ' % / ' + (r.EA / VWL).toFixed(1) + ' g/L', u: '' },
+      { k: 'Sais do licor branco: NaOH / Na₂S / carga morta (Na₂CO₃) — sulfidez ' + br((100 * r.sulf).toFixed(1)) + ' %', v: [wl.NaOH, wl.Na2S, wl.Na2CO3].map(v => v.toFixed(3)).join(' / '), u: 'kg/s' },
+      { k: 'Relação líquido/madeira (água/madeira seca)', v: +r.LW.toFixed(3), u: 'kg/kg' },
+      { k: 'Rendimento bruto Y = ' + br(o.yA) + ' + ' + br(o.yB) + '·κ', v: +r.Y.toFixed(2), u: '% da madeira seca' },
+      { k: 'Polpa marrom (seca)', v: r.pulp.toFixed(3) + ' kg/s (' + t(r.pulp) + ' t/h)', u: '' },
+      { k: 'Composição da polpa: celulose / hemicelulose / lignina', v: pc(r.celP, r.pulp) + ' / ' + pc(r.hemP, r.pulp) + ' / ' + pc(r.ligP, r.pulp), u: '% massa' },
+      { k: 'Número kappa / lignina residual na polpa', v: br(o.kappa) + ' / ' + br((o.ligK * o.kappa).toFixed(3)) + ' %', u: '' },
+      { k: 'Madeira dissolvida: lignina / carboidratos / extrativos', v: [r.ligD, r.carbD, wd.ext].map(v => v.toFixed(3)).join(' / ') + ' kg/s (total ' + r.diss.toFixed(3) + ')', u: '' },
+      { k: 'Deslignificação (lignina da madeira que foi dissolvida)', v: +(100 * r.ligD / wd.lig).toFixed(2), u: '%' },
+      { k: 'Licor negro fraco', v: r.mBL.toFixed(2) + ' kg/s (' + (r.mBL * 3.6).toFixed(1) + ' t/h)', u: '' },
+      { k: 'Sólidos do licor negro: orgânicos / inorgânicos', v: r.diss.toFixed(3) + ' / ' + r.inorg.toFixed(3), u: 'kg/s' },
+      { k: 'Teor de sólidos do licor negro', v: +r.TS.toFixed(2), u: '% massa' },
+      { k: 'Vapor saturado a ' + br(Ps) + ' bar: T_sat (IAPWS) / calor latente usado', v: br(K2C(Tsat).toFixed(2)) + ' °C / ' + br(o.hfg.toFixed(1)) + ' kJ/kg' + (hfgBlank ? ' (IAPWS)' : ' (IAPWS: ' + br(hfgI.toFixed(1)) + ')'), u: '' },
+      { k: 'Aquecimento até T_cook: cavacos / licor branco', v: r.Qwood.toFixed(1) + ' / ' + r.Qwl.toFixed(1), u: 'kW' },
+      { k: 'Calor das reações kraft (exotérmicas) / perdas pelas paredes', v: r.Qrx.toFixed(1) + ' / ' + o.Qloss.toFixed(1), u: 'kW' },
+      { k: 'Potência térmica do vapor', v: r.Qreq.toFixed(1) + ' kW (' + (r.Qreq / 1000).toFixed(2) + ' MW)', u: '' },
+      { k: 'Consumo de vapor', v: r.steam.toFixed(3) + ' kg/s (' + t(r.steam) + ' t/h; ' + (r.steam / r.pulp).toFixed(3) + ' t por t de polpa seca)', u: '' },
+      { k: 'Entalpia de entrada (com o vapor) / de saída, base 25 °C', v: r.Hin.toFixed(1) + ' / ' + r.Hout.toFixed(1), u: 'kW' },
+      { k: 'Calor retirado entre o cozimento e a descarga (zona de lavagem, tanques de flash)', v: r.Qcool.toFixed(1) + ' kW (' + (r.Qcool / 1000).toFixed(2) + ' MW)', u: '' },
+      { k: 'Resíduo do balanço de energia com esse calor', v: (r.Hin + r.Qrx - o.Qloss - r.Hout - r.Qcool).toExponential(2), u: 'kW' },
+      { k: 'Balanço de massa: entradas / saídas (vapor = condensado)', v: mIn.toFixed(4) + ' / ' + mOut.toFixed(4), u: 'kg/s' }];
+    // gráficos
+    const ks = [], Ys = [], Ds = [], kmin = 10, kmax = 30;
+    for (let k = 0; k <= 80; k++) { const kk = kmin + (kmax - kmin) * k / 80; ks.push(kk); Ys.push(o.yA + o.yB * kk); Ds.push(100 - o.yA - o.yB * kk); }
+    const plots = [{ kind: 'curves', title: 'Rendimento × número kappa (eucalipto)', data: { xLabel: 'Número kappa da polpa', yLabel: '% da madeira seca', series: [
+      { name: 'Polpa: Y = ' + br(o.yA) + ' + ' + br(o.yB) + '·κ', x: ks, y: Ys, color: '#2563c9', width: 3.2 }, { name: 'Madeira dissolvida no licor negro', x: ks, y: Ds, color: '#7a4a1f', width: 2.6, dash: 'dash' },
+      { name: 'Operação (κ = ' + br(o.kappa) + ')', x: [o.kappa, o.kappa], y: [r.Y, 100 - r.Y], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }] } }];
+    const T1 = 140, T2 = Math.max(K2C(o.Tcook) + 5, 175), Tc = [], St = [], Qc = [];
+    for (let k = 0; k <= 70; k++) { const TT = T1 + (T2 - T1) * k / 70, q = kraftCalc(I, Object.assign({}, o, { Tcook: C2K(TT) })); Tc.push(TT); St.push(q.steam * 3.6); Qc.push(q.Qcool / 1000); }
+    plots.push({ kind: 'curves', title: 'Consumo de vapor × temperatura de cozimento', data: { xLabel: 'Temperatura de cozimento (°C)', yLabel: 'Vapor (t/h)', series: [
+      { name: 'Vapor a ' + br(Ps) + ' bar', x: Tc, y: St, color: '#d1302b', width: 3.2 }, { name: 'T_sat do vapor (' + br(K2C(Tsat).toFixed(1)) + ' °C)', x: [K2C(Tsat), K2C(Tsat)], y: [Math.min.apply(null, St), Math.max.apply(null, St)], color: '#7a3db8', dash: 'dash', width: 1.4 },
+      { name: 'Operação (' + br(K2C(o.Tcook).toFixed(0)) + ' °C)', x: [K2C(o.Tcook)], y: [r.steam * 3.6], mode: 'markers', size: 12, symbol: 'circle', color: '#111' }] } });
+    plots.push({ kind: 'bars', title: 'Destino da madeira seca (kg/s)', data: { categories: ['Celulose', 'Hemicelulose', 'Lignina', 'Extrativos'], yLabel: 'kg/s', series: [
+      { name: 'Na polpa marrom', y: [r.celP, r.hemP, r.ligP, 0], color: '#c98a3d' }, { name: 'Dissolvida no licor negro', y: [wd.cel - r.celP, wd.hem - r.hemP, r.ligD, wd.ext], color: '#3a2a1a' }] } });
+    plots.push({ kind: 'bars', title: 'Balanço de energia do digestor (MW)', data: { categories: ['Aquecer cavacos', 'Aquecer licor branco', 'Perdas', 'Reações kraft', 'Vapor', 'Retirado na descarga'], yLabel: 'MW', series: [
+      { name: 'Consumo', y: [r.Qwood, r.Qwl, o.Qloss, 0, 0, 0].map(v => v / 1000), color: '#2563c9' }, { name: 'Fornecimento', y: [0, 0, 0, r.Qrx, r.Qreq, 0].map(v => v / 1000), color: '#d1302b' },
+      { name: 'Calor retirado (lavagem e flash)', y: [0, 0, 0, 0, 0, r.Qcool / 1000], color: '#2e9e6b' }] } });
+    const out = {}, need = I.wood.conn || I.wl.conn;
+    const sp = massStream(th, { cellulose: r.celP, hemicellulose: r.hemP, lignin: r.ligP, water: r.pulpW }, o.Tblow, 101325, warn, 'polpa marrom', need);
+    const sb = massStream(th, { 'bl-organics': r.diss, naoh: wl.NaOH, na2s: wl.Na2S, na2co3: wl.Na2CO3, water: r.blW }, o.Tblow, 101325, warn, 'licor negro', need);
+    let Tcond = Tsat - 0.01; const iw = th.ids.indexOf('water');   // condensado: líquido saturado (limitado à ebulição do modelo termodinâmico, para sair líquido)
+    if (iw >= 0) try { const z = th.ids.map((_, k) => (k === iw ? 1 : 0)); Tcond = Math.min(Tcond, th.flashPVF(z, Ps * BAR, 0).T - 0.01); } catch (e) { /* mantém T_sat */ }
+    const sc = r.steam > 0 ? massStream(th, { water: r.steam }, Tcond, Ps * BAR, warn, 'condensado', need) : null;
+    if (sp) out.pulp = sp; if (sb) out.black_liquor = sb; if (sc) out.condensate = sc;
+    const util = (I.wood.conn ? 0 : I.wood.m) + (I.wl.conn ? 0 : I.wl.m) + (sc ? r.steam : 0);
+    const gen = k => ({ m: I[k].m, kg: I[k].kg, T: I[k].T });
+    return { out, duty: r.Qreq * 1000, massUtil: sp && sb ? util : 0, res: decBR(res), warn: decW(warn), plots,
+      kraft: { wood: gen('wood'), wl: gen('wl'), rhoWL, EA: r.EA, EAc: r.EA / VWL, sulf: r.sulf, inorgR: r.inorg / r.EA, kappa: o.kappa, yA: o.yA, yB: o.yB, ligK: o.ligK, celRet: o.celRet,
+        Tcook: o.Tcook, Tblow: o.Tblow, Ps, hfg: o.hfg, dHr: o.dHr, Qloss: o.Qloss, wPulp: o.wPulp, cp: o.cp, T1, T2 } };
+  };
+
   SF.units = { MICROBES, TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn, ponchonSavarit, STEAM, multiEffect };
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -5690,6 +6271,73 @@ window.SIMULAFACIL_CONFIG = {
         sym: [[C, 'concentração de O₂ no material (mol/m³)'], [x, 'posição na espessura (x = 0: face externa)'], [i('D'), 'coeficiente de difusão efetivo'], [sub(i('R'), 'máx') + ', ' + sub(i('K'), 'm'), 'parâmetros de Michaelis–Menten'], [sub(C, 'ext'), 'concentração no ambiente'], [i('P'), 'permeabilidade do material'], [i('A') + ', ' + V + ', ' + i('e'), 'área, volume interno e espessura']],
         note: 'Solução numérica: método das linhas com diferenças finitas centradas e integração implícita BDF2 com Newton (algoritmo de Thomas).'
       };
+    },
+    blast_furnace: () => {
+      const n = s2 => sub(i('ṅ'), s2), H = i('H'), Hf = sub(i('H'), 'f'), cp = sub(i('c'), 'p');
+      return {
+        name: 'Alto-forno: estequiometria global e balanço de energia com entalpias de formação',
+        eqs: [eq('Fe₂O₃ → 2 Fe + 3 O (para o gás),&nbsp; ' + n('Fe') + ' = 2' + n('Fe₂O₃') + ',&nbsp; ' + sub(i('ṁ'), 'gusa') + ' = ' + fr(n('Fe') + sub(i('M'), 'Fe'), '1 − ' + sub(i('w'), 'C')), 'redução e carburação do gusa'),
+          eq('CaCO₃ → CaO + CO₂,&nbsp; ' + sub(i('ṁ'), 'escória') + ' = ' + n('CaO') + sub(i('M'), 'CaO') + ' + ' + n('SiO₂') + sub(i('M'), 'SiO₂'), 'calcinação do fundente e escória'),
+          eq(sub(i('C'), 'gás') + ' = ' + n('C,coque') + ' − ' + n('C,gusa') + ' + ' + n('CaCO₃') + ',&nbsp; ' + sub(i('O'), 'gás') + ' = 2' + n('O₂') + ' + 3' + n('Fe₂O₃') + ' + 2' + n('CaCO₃'), 'balanços de C e de O no gás'),
+          eq(n('CO₂') + ' = ' + sub(i('O'), 'gás') + ' − ' + sub(i('C'), 'gás') + ',&nbsp; ' + n('CO') + ' = 2' + sub(i('C'), 'gás') + ' − ' + sub(i('O'), 'gás') + ',&nbsp; ' + sub(i('η'), 'CO') + ' = ' + fr(n('CO₂'), n('CO') + ' + ' + n('CO₂')), 'gás de topo e utilização do CO'),
+          eq(H + ' = ' + sum(i('j')) + ' ' + sub(i('ṅ'), i('j')) + '[' + sub(Hf, i('j')) + ' + ' + sub(cp, i('j')) + '(' + T + ' − 298,15)],&nbsp; resíduo = ' + sub(H, 'e') + ' − ' + sub(H, 's') + ' − ' + sub(Q, 'perdas'), 'balanço de energia (o gusa inclui o calor de fusão do Fe)')],
+        sym: [[n('j'), 'vazão molar da espécie j (kmol/s)'], [sub(i('w'), 'C'), 'fração mássica de carbono dissolvido no gusa'], [sub(Hf, i('j')) + ', ' + sub(cp, i('j')), 'entalpia de formação a 298,15 K e c_p médio (kJ/kmol, kJ/(kmol·K))']],
+        note: 'Modelo de balanço global (sem zonas): todo o oxigênio do minério sai no gás, a ganga e as cinzas vão para a escória e não há perda de ferro na escória. As temperaturas de saída são fixadas; por isso o balanço de energia deixa um resíduo, que mostra se falta ou sobra energia. O programa calcula também o ar de sopro que zeraria esse resíduo.'
+      };
+    },
+    cement_kiln: () => {
+      const n = s2 => sub(i('ṅ'), s2), H = i('H'), Hf = sub(i('H'), 'f'), cp = sub(i('c'), 'p');
+      return {
+        name: 'Forno de cimento: calcinação, combustão, clínquer e balanço de energia',
+        eqs: [eq('CaCO₃ → CaO + CO₂,&nbsp; C + O₂ → CO₂,&nbsp; H₂ + ½ O₂ → H₂O', 'calcinação completa e combustão completa'),
+          eq(sub(i('ṁ'), 'clínquer') + ' = ' + sub(i('ṁ'), 'CaO') + ' + ' + sub(i('ṁ'), 'SiO₂') + ' + ' + sub(i('ṁ'), 'Al₂O₃') + ' + ' + sub(i('ṁ'), 'Fe₂O₃') + ' (cinzas como SiO₂)', 'clínquer'),
+          eq(n('O₂,exc') + ' = ' + n('O₂,ar') + ' − (' + n('C') + ' + ½' + n('H₂') + '),&nbsp; excesso = ' + fr(n('O₂,exc'), n('O₂,req')), 'oxigênio em excesso'),
+          eq('C₃S = 4,071C − 7,600S − 6,718A − 1,430F,&nbsp; C₂S = 2,867S − 0,7544C₃S,<br>C₃A = 2,650A − 1,692F,&nbsp; C₄AF = 3,043F', 'fases de Bogue (% dos óxidos C, S, A, F)'),
+          eq('FSC = ' + fr('100 C', '2,8S + 1,18A + 0,65F') + ',&nbsp; MS = ' + fr('S', 'A + F') + ',&nbsp; MA = ' + fr('A', 'F'), 'módulos químicos'),
+          eq(H + ' = ' + sum(i('j')) + ' ' + sub(i('ṅ'), i('j')) + '[' + sub(Hf, i('j')) + ' + ' + sub(cp, i('j')) + '(' + T + ' − 298,15)],&nbsp; consumo = ' + fr(sub(i('ṁ'), 'comb') + '·PCI', sub(i('ṁ'), 'clínquer')), 'energia e consumo específico')],
+        sym: [['C, S, A, F', '% em massa de CaO, SiO₂, Al₂O₃ e Fe₂O₃ no clínquer'], ['PCI', 'poder calorífico inferior do combustível (kJ/kg)'], [sub(Hf, i('j')) + ', ' + sub(cp, i('j')), 'entalpia de formação e c_p médio de cada espécie']],
+        note: 'A água da farinha entra líquida e sai como vapor. O resíduo do balanço de energia mostra a coerência entre combustível, ar, temperaturas e perdas; o programa calcula também o combustível que zeraria o resíduo com o ar fixo. Bogue vale para MA ≥ 0,64.'
+      };
+    },
+    silo: () => {
+      const W = i('W'), th = i('θ'), chi = i('χ'), rb = sub(i('ρ'), 'b'), Do = sub(i('D'), 'o'), dp = sub(i('d'), 'p');
+      return {
+        name: 'Silo com tremonha: Beverloo, Rose e Tanaka, Jenike e esvaziamento',
+        eqs: [eq(sub(W, '0') + ' = ' + i('C') + rb + '√' + i('g') + sup('(' + Do + ' − ' + i('k') + dp + ')', '2,5'), 'Beverloo (fundo plano)'),
+          eq(W + ' = ' + sub(W, '0') + sup('(tg ' + th + ' · tg ' + chi + ')', '−0,35') + ' se tg ' + th + ' · tg ' + chi + ' < 1; senão ' + W + ' = ' + sub(W, '0'), 'fator de Rose e Tanaka'),
+          eq(th + ' ≤ ' + sub(th, 'crít') + ' = 40° − ' + sub(i('φ'), 'w') + '/2 → escoamento em massa; acima: em funil', 'regime (aproximação de Jenike para tremonha cônica)'),
+          eq(sub(i('H'), 'cone') + ' = ' + fr(sub(i('R'), 's') + ' − ' + sub(i('R'), 'o'), 'tg ' + th) + ',&nbsp; ' + sub(V, 'cone') + ' = ' + fr('π' + sub(i('H'), 'cone'), '3') + '(' + sup(sub(i('R'), 's'), '2') + ' + ' + sub(i('R'), 's') + sub(i('R'), 'o') + ' + ' + sup(sub(i('R'), 'o'), '2') + ')', 'geometria'),
+          eq(od(i('M'), t) + ' = ' + i('F') + ' − ' + W + '·min(1, √(' + i('M') + '/' + sub(i('M'), 'lim') + ')),&nbsp; ' + i('τ') + ' = ' + fr(sub(i('M'), 'op'), i('F')), 'balanço de massa e tempo de residência')],
+        sym: [[th, 'semiângulo da tremonha, a partir da vertical (90° = fundo plano)'], [chi, 'ângulo da fronteira da zona estagnada com a horizontal'], [sub(i('M'), 'lim'), 'massa de uma camada de 8 cm: abaixo dela a vazão cai (funil residual)']],
+        note: 'A vazão de um sólido granular quase não depende da altura do leito (efeito Janssen), ao contrário de um líquido. Em operação contínua, a descarga acompanha a alimentação desde que ela não passe da capacidade W.'
+      };
+    },
+    thickener: () => {
+      const Hu = sub(i('H'), 'u'), tu = sub(i('t'), 'u'), C0 = sub(C, '0'), H0 = sub(i('H'), '0');
+      return {
+        name: 'Sedimentador contínuo: método de Talmadge e Fitch',
+        eqs: [eq(i('H') + '(' + t + ') = ' + H0 + ' − ' + sub(i('v'), '0') + t + ' (' + t + ' ≤ ' + sub(t, 'L') + '),&nbsp; ' + i('H') + ' = ' + Hu + ' + (' + sub(i('H'), 'L') + ' − ' + Hu + ')' + sup(i('e'), '−' + i('k') + '(' + t + ' − ' + sub(t, 'L') + ')'), 'curva de batelada'),
+          eq(Hu + ' = ' + fr(H0 + C0, sub(C, 'U')), 'altura equivalente ao underflow'),
+          eq(tu + ' = ' + sub(t, 'c') + ' + ' + fr(Hu + ' − ' + sub(i('H'), 'c'), '(d' + i('H') + '/d' + t + ')<sub>c</sub>'), 'tangente no ponto de compressão (máxima curvatura)'),
+          eq(sub(i('A'), 'mín') + ' = ' + fr(sub(i('ṁ'), 's') + tu, C0 + H0) + ',&nbsp; ' + i('D') + ' = √(4' + i('A') + '/π)', 'área e diâmetro'),
+          eq(sub(i('Q'), 'U') + ' = ' + fr(i('η') + sub(i('ṁ'), 's'), sub(C, 'U')) + ',&nbsp; ' + sub(i('T'), 's') + ' = ' + fr(sub(i('H'), 'e') + ' − ' + sub(Q, 'perdas'), sum() + ' ṁ' + sub(i('c'), 'p')), 'underflow e temperatura de saída')],
+        sym: [[H0 + ', ' + C0, 'altura e concentração iniciais do ensaio de proveta'], [sub(C, 'U'), 'concentração desejada no underflow (kg/m³)'], [i('η'), 'fração dos sólidos recuperada no underflow']],
+        note: 'A curva de batelada é gerada com 2 000 pontos em 2 h, como no código MATLAB; o ponto de compressão é o de máxima curvatura (segunda derivada numérica). Como a curva tem um "joelho" em t_L, a opção "do ramo de compressão" usa a inclinação logo depois dele e dá uma área maior (mais conservadora).'
+      };
+    },
+    kraft_digester: () => {
+      const m = s2 => sub(i('ṁ'), s2), k = i('κ'), cp = s2 => sub(i('c'), 'p,' + s2), Tc = sub(i('T'), 'cook'), Tb = sub(i('T'), 'blow');
+      return {
+        name: 'Digestor contínuo kraft: álcali efetivo, rendimento × kappa, licor negro e balanço de energia com vapor',
+        eqs: [eq(m('EA') + ' = EA·' + m('ms') + ',&nbsp; ' + sub(i('V'), 'LB') + ' = ' + fr(m('EA'), sub(i('C'), 'EA')) + ',&nbsp; ' + m('LB') + ' = ' + sub(i('ρ'), 'LB') + sub(i('V'), 'LB'), 'licor branco pela carga de álcali efetivo (como NaOH)'),
+          eq('EA = NaOH + ½Na₂S,&nbsp; S = ' + fr('Na₂S', 'NaOH + Na₂S') + ' (como NaOH),&nbsp; sais = ' + i('f') + '·' + m('EA'), 'álcali efetivo, sulfidez e carga morta (Na₂CO₃)'),
+          eq(i('Y') + ' = ' + i('a') + ' + ' + i('b') + k + ',&nbsp; ' + m('polpa') + ' = ' + m('ms') + i('Y') + '/100,&nbsp; lignina na polpa = ' + i('c') + k + ' %', 'rendimento bruto e lignina residual do eucalipto'),
+          eq(m('LN') + ' = ' + m('água') + ' + (' + m('ms') + ' − ' + m('polpa') + ') + sais,&nbsp; TS = ' + fr('sólidos', m('LN')), 'licor negro fraco'),
+          eq(sub(i('Q'), 'vapor') + ' = (' + m('ms') + cp('m') + ' + ' + m('água') + cp('a') + ')(' + Tc + ' − ' + sub(i('T'), 'cav') + ') + ' + m('LB') + cp('LB') + '(' + Tc + ' − ' + sub(i('T'), 'LB') + ') − Δ' + sub(i('H'), 'r') + m('diss') + ' + ' + sub(i('Q'), 'perdas'), 'aquecimento até a temperatura de cozimento'),
+          eq(m('vapor') + ' = ' + fr(sub(i('Q'), 'vapor'), sub(i('h'), 'fg')) + ',&nbsp; ' + sub(i('Q'), 'retirado') + ' = ' + sub(i('H'), 'e') + ' + Δ' + sub(i('H'), 'r') + m('diss') + ' − ' + sub(i('Q'), 'perdas') + ' − ' + sub(i('H'), 's') + '(' + Tb + ')', 'consumo de vapor e calor retirado até a descarga')],
+        sym: [[m('ms'), 'vazão de madeira seca (kg/s)'], ['EA, ' + sub(i('C'), 'EA'), 'carga (kg de NaOH/kg de madeira seca) e concentração (g/L) de álcali efetivo'], [k, 'número kappa da polpa'], [sub(i('h'), 'fg'), 'calor latente do vapor saturado (kJ/kg)']],
+        note: 'O vapor aquece indiretamente (sai como condensado) e não entra no licor negro, como no código de referência. A polpa e o licor negro saem a T_blow; o calor retirado entre o cozimento e a descarga (zona de lavagem e tanques de flash) é o que fecha o balanço de energia. Os carboidratos que ficam na polpa são divididos entre celulose (fração preservada informada) e hemicelulose.'
+      };
     }
   };
   M.cooler = p => Object.assign(M.heater(p), { name: 'Resfriador: balanço de energia (especificação: ' + (p.mode || 'Temperatura de saída') + ')' });
@@ -5908,7 +6556,29 @@ window.SIMULAFACIL_CONFIG = {
       'O "Lagrangeano químico" aplica essa ideia ao equilíbrio. Pela segunda lei da termodinâmica, a T e P constantes o sistema evolui até o mínimo da energia de Gibbs total, G = Σnᵢμᵢ. As restrições são a conservação dos átomos: cada elemento (C, H, O…) tem a mesma quantidade antes e depois, Σaₖᵢnᵢ = Aₖ. Daí ℒ = G + Σλₖ(Σaₖᵢnᵢ − Aₖ), e ∂ℒ/∂nᵢ = 0 dá ΔG°f,ᵢ + RT·ln(yᵢP/P°) + Σλₖaₖᵢ = 0. A grande vantagem é que não é preciso escrever nenhuma reação: bastam as espécies possíveis e seus ΔG°f.',
       'Os multiplicadores de Lagrange têm significado físico: −λₖ é o potencial químico do elemento k no equilíbrio, e a condição de mínimo diz que o potencial químico de cada espécie é a soma dos potenciais dos seus átomos, μᵢ = −Σaₖᵢλₖ. Isso equivale a Σνᵢμᵢ = 0 para todas as reações possíveis ao mesmo tempo, que é a condição clássica de equilíbrio químico.',
       'No exemplo "Reator de Gibbs — reforma do metano a vapor", 1 mol de CH₄ e 4 mol de H₂O (5 kmol/h) reagem a 1000 K e 1 bar entre CH₄, CO, H₂O, CO₂ e H₂, com os ΔG°f a 1000 K de Smith, Van Ness e Abbott (CH₄: +19 720 J/mol). O resultado é 99,4 % de conversão do metano e um gás com cerca de 50 % de H₂, 7 % de CO e 7 % de CO₂, com carga térmica de cerca de 57 kW (reforma endotérmica). O gráfico em função da temperatura mostra por que a reforma exige alta temperatura: com o mesmo excesso de vapor, a conversão do metano cai para cerca de 60 % a 800 K e 30 % a 700 K.',
-      'O exemplo "NOx: oxidação 2 NO + O₂ → 2 NO₂ e dimerização" mostra a química da fábrica de ácido nítrico (ΔH°f e ΔG°f das tabelas JANAF). A 25 °C e 1 bar o NO oxida por completo e 65 % do NO₂ forma o dímero N₂O₄ (K = 6,7 bar⁻¹), por isso o gás fica quase incolor no frio; a 150 °C quase só resta NO₂, castanho. Um alerta importante: se o N₂ entrar na lista de componentes, o mínimo de G decompõe o NO em N₂ e O₂ (ΔG = −173 kJ por 2 mol de NO). Essa é a resposta termodinâmica correta, mas a decomposição é cineticamente bloqueada; por isso, inertes que não reagem na prática ficam fora do reator de Gibbs.'] }
+      'O exemplo "NOx: oxidação 2 NO + O₂ → 2 NO₂ e dimerização" mostra a química da fábrica de ácido nítrico (ΔH°f e ΔG°f das tabelas JANAF). A 25 °C e 1 bar o NO oxida por completo e 65 % do NO₂ forma o dímero N₂O₄ (K = 6,7 bar⁻¹), por isso o gás fica quase incolor no frio; a 150 °C quase só resta NO₂, castanho. Um alerta importante: se o N₂ entrar na lista de componentes, o mínimo de G decompõe o NO em N₂ e O₂ (ΔG = −173 kJ por 2 mol de NO). Essa é a resposta termodinâmica correta, mas a decomposição é cineticamente bloqueada; por isso, inertes que não reagem na prática ficam fora do reator de Gibbs.'] },
+    blast_furnace: { ex: ex('alto-forno', 'Alto-forno contínuo'), p: [
+      'O alto-forno é um reator de contracorrente: a carga sólida (minério de ferro, coque e calcário) desce pela cuba e o ar quente soprado pelas ventaneiras sobe. Na frente das ventaneiras o coque queima a CO; o CO sobe, reduz os óxidos de ferro (Fe₂O₃ → Fe₃O₄ → FeO → Fe) e sai no topo como gás de alto-forno (BFG), uma mistura de CO, CO₂ e N₂. O ferro funde, dissolve carbono (cerca de 4,5 %) e escorre para o cadinho como gusa; a ganga do minério e as cinzas do coque reagem com a cal do calcário e formam a escória, mais leve, que flutua sobre o gusa.',
+      'O modelo é um balanço global: todo o oxigênio do minério vai para o gás, o calcário calcina (CaCO₃ → CaO + CO₂) e a escória é CaO + SiO₂. O carbono que não fica no gusa e o oxigênio do ar e do minério fecham as quantidades de CO e CO₂: n_CO₂ = O − C e n_CO = 2C − O. A utilização do gás, η_CO = CO₂/(CO + CO₂), mede quanto do CO foi aproveitado na redução. O balanço de energia usa entalpias de formação a 298,15 K e calores específicos médios, com o calor de fusão do ferro no gusa.',
+      'O exemplo reproduz o código MATLAB de referência: 100 kg/s de minério (90 % de Fe₂O₃), 30 kg/s de coque (88 % de C), 10 kg/s de calcário e 62 kg/s de ar a 1 100 °C. Saem 65,9 kg/s de gusa (237 t/h), 19,2 kg/s de escória e 116,9 kg/s de gás com 35,2 % de CO, 19,5 % de CO₂ e 45,4 % de N₂; a taxa de coque é 455 kg/t de gusa e η_CO = 0,356. O balanço de massa fecha (202 kg/s), mas o de energia deixa um resíduo de −176,7 MW: com as temperaturas de saída fixadas, falta energia. Cerca de 97 kg/s de ar de sopro fechariam o balanço, com η_CO ≈ 0,60.'] },
+    cement_kiln: { ex: ex('forno-cimento', 'Forno de cimento contínuo'), p: [
+      'Na fabricação do cimento, a farinha crua (calcário com argila, rica em SiO₂, Al₂O₃ e Fe₂O₃) passa pela torre de ciclones, onde é aquecida pelos gases quentes, e entra no forno rotativo. O CaCO₃ se decompõe (calcinação, CaCO₃ → CaO + CO₂, fortemente endotérmica) e, perto do maçarico, a 1 450 °C, a cal reage com os demais óxidos e forma os silicatos e aluminatos do clínquer. O combustível (coque de petróleo ou carvão) queima com o ar pré-aquecido no resfriador de clínquer.',
+      'O modelo supõe calcinação e combustão completas: o clínquer leva o CaO, a sílica (com as cinzas do combustível), a alumina e o óxido de ferro; os gases levam o CO₂ da calcinação e da combustão, a água e o oxigênio em excesso. A composição em óxidos dá as fases de Bogue (C₃S, C₂S, C₃A e C₄AF) e os módulos de saturação de cal, de sílica e de alumina, usados no controle de qualidade.',
+      'O exemplo reproduz o código MATLAB de referência: 100 kg/s de farinha (78 % de CaCO₃) a 70 °C, 6,5 kg/s de coque de petróleo (PCI de 32 000 kJ/kg) e 75 kg/s de ar a 800 °C dão 64,4 kg/s de clínquer (232 t/h) com 67,8 % de CaO e 22,8 % de SiO₂, consumo de 772 kcal/kg e 4,1 % de excesso de ar. O clínquer tem 56 % de C₃S e 23 % de C₂S, e o forno emite 0,85 kg de CO₂ por kg de clínquer, dos quais 0,53 vêm da calcinação. O resíduo térmico é de +1,9 MW: 6,44 kg/s de combustível fechariam o balanço.'] },
+    silo: { ex: ex('silo-tremonha', 'Silo com tremonha em operação contínua'), p: [
+      'Um sólido granular não escoa como um líquido: o atrito com as paredes sustenta parte do peso (efeito Janssen) e a vazão pelo orifício quase não depende da altura do leito. A correlação de Beverloo dá essa vazão, W = C ρ_b √g (D_o − k d_p)^2,5, com C ≈ 0,58 e k ≈ 1,5; o termo k·d_p é o "anel vazio" junto à borda do orifício, onde os grãos não chegam com a mesma densidade.',
+      'A tremonha cônica muda o padrão de escoamento. Se for íngreme o bastante, todo o material se move (escoamento em massa: o primeiro que entra é o primeiro que sai); se for rasa, só um canal central escoa e o material junto às paredes fica parado (escoamento em funil). O critério de Jenike depende do semiângulo θ (medido a partir da vertical) e do atrito com a parede; aqui se usa a aproximação θ ≤ 40° − φw/2. O fator de Rose e Tanaka, (tg θ·tg χ)^−0,35, mostra que tremonhas mais íngremes descarregam mais depressa.',
+      'Em operação contínua, o silo recebe a alimentação e a descarga a acompanha, desde que ela não passe da capacidade W do orifício. O exemplo alimenta 30 kg/s de areia (3 mm, ρ_b = 1 400 kg/m³) num silo de 1 m de diâmetro e 3 m de cilindro, com orifício de 0,20 m e tremonha de θ = 15°: W = 68,1 kg/s (escoamento em massa), a capacidade é de 3,98 t, o tempo de residência a 70 % do nível é 1,55 min e o silo cheio esvazia em 60 s. Os gráficos comparam os ângulos de 90° (fundo plano), 45°, 30° e 15°.',
+      'Os ângulos do código MATLAB de referência (75°, 60° e 45° com a horizontal) correspondem a 15°, 30° e 45° a partir da vertical, com as mesmas alturas e volumes de cone; no código original o fundo plano era classificado como escoamento em massa e o fator da tremonha diminuía a vazão das tremonhas mais íngremes, o que foi corrigido aqui.'] },
+    thickener: { ex: ex('sedimentador-continuo', 'Sedimentador contínuo (Talmadge e Fitch)'), p: [
+      'No sedimentador contínuo (espessador), a polpa entra pelo poço central, os sólidos sedimentam e são raspados para o centro do fundo, saindo como lama adensada (underflow), e o líquido clarificado transborda pela calha periférica (overflow). A área precisa ser grande o bastante para que os sólidos atravessem a zona de compressão e atinjam a concentração desejada no underflow.',
+      'O método de Talmadge e Fitch usa um único ensaio de sedimentação em proveta. Traça-se a curva da altura da interface H(t); a altura H_u = H₀C₀/C_U corresponde à concentração desejada; no ponto de compressão (onde a curva muda de inclinação) traça-se a tangente, que corta a reta H = H_u no tempo t_u. A área mínima é A = Ṁ_s·t_u/(C₀H₀).',
+      'O exemplo reproduz o código MATLAB de referência: 180 m³/h de polpa com 10 % de sílica (53,3 kg/s; 5,33 kg/s de sólidos), ensaio com H₀ = 1 m, C₀ = 106,64 kg/m³, v₀ = 1,5 mm/s até 350 s e compressão com k = 0,0015 s⁻¹, e C_U = 450 kg/m³: H_u = 0,237 m, t_u = 582 s, área de 29,1 m² e diâmetro de 6,09 m. Saem 15,1 kg/s de underflow (42,4 m³/h) e 38,2 kg/s de overflow, e a perda de 25 kW esfria a polpa em 0,12 °C. Como a curva tem um joelho em 350 s, a tangente do ramo de compressão daria t_u = 1 017 s e 50,8 m², valor mais conservador.'] },
+    kraft_digester: { ex: ex('digestor-kraft-eucalipto', 'Digestor contínuo kraft de eucalipto'), p: [
+      'No processo kraft, os cavacos de madeira são cozidos com o licor branco, uma solução de NaOH e Na₂S, a cerca de 160–170 °C. Os íons OH⁻ e HS⁻ fragmentam a lignina, que se dissolve, e as fibras de celulose ficam livres: é a polpa marrom (não branqueada). O licor que sai, com a lignina, os carboidratos degradados e os sais, é o licor negro, que depois é concentrado nos evaporadores e queimado na caldeira de recuperação para regenerar os reagentes e gerar vapor. No digestor contínuo (tipo Kamyr), os cavacos pré-vaporizados descem pela coluna e passam pelas zonas de impregnação, de cozimento e de lavagem; o licor negro é extraído por peneiras laterais e a polpa sai pelo fundo.',
+      'A carga de álcali é dada como álcali efetivo, EA = NaOH + ½Na₂S (expresso como NaOH), em kg por kg de madeira seca; a sulfidez é a fração de Na₂S no álcali ativo (NaOH + Na₂S). O licor branco também leva sais que não reagem (Na₂CO₃ e Na₂SO₄, a carga morta). O número kappa mede a lignina que ficou na polpa: para o eucalipto, a lignina residual vale cerca de 0,147κ % e o rendimento bruto segue Y = 47,5 + 0,38κ (% da madeira seca). Cozinhar até um kappa menor remove mais lignina, mas também dissolve mais carboidratos e reduz o rendimento.',
+      'O vapor aquece os cavacos e o licor da temperatura de entrada até a de cozimento; as reações kraft liberam cerca de 150 kJ por kg de madeira dissolvida. Como a polpa e o licor negro saem bem mais frios que o cozimento (90 °C), o calor retirado entre o cozimento e a descarga (pela lavagem no próprio digestor e pela extração de licor quente para os tanques de flash, que geram vapor para a pré-vaporização) aparece no balanço de energia. No código de referência esse termo era impresso como "resíduo do balanço" (cerca de 48 MW) e não como erro numérico.',
+      'O exemplo reproduz o código MATLAB de referência: 100 kg/s de cavacos de eucalipto com 45 % de umidade (55 kg/s de madeira seca) e licor branco com 18 % de álcali efetivo a 115 g/L (99,0 kg/s, 310 m³/h). Com κ = 17, o rendimento é de 53,96 %: saem 29,68 kg/s de polpa (107 t/h) e 169,3 kg/s de licor negro fraco com 23,4 % de sólidos. O vapor a 8 bar consome 27,8 kg/s (100 t/h) para fornecer 56,9 MW, e 48,6 MW são retirados entre o cozimento e a descarga. A relação água/madeira de 2,36 kg/kg é baixa para um digestor contínuo, que costuma trabalhar com 3,5 a 4,5 kg/kg completando o licor com licor negro de diluição.'] }
   };
 
   function html(type, open) {
@@ -5930,7 +6600,8 @@ window.SIMULAFACIL_CONFIG = {
   // entradas opcionais: sem corrente conectada, esses equipamentos usam os campos (vazão, composição) e ainda geram as correntes de saída
   const OPTIONAL_IN = { mixer: ['in2', 'in3', 'in4'], column: ['feed2', 'feed3'], crystallizer: ['feed'], tray_dryer: ['feed'], spray_dryer: ['feed'], freeze_dryer: ['feed'],
     bioreactor_tosetto: ['feed', 'side'], bioreactor_1: ['feed'], bioreactor_2: ['feed', 'side'], bioreactor_monod: ['feed'], bioreactor_verhulst: ['feed'],
-    biodiesel_reactor: ['oil', 'alcohol'], pid_cstr: ['feed'] };
+    biodiesel_reactor: ['oil', 'alcohol'], pid_cstr: ['feed'],
+    blast_furnace: ['ore', 'coke', 'flux', 'blast'], cement_kiln: ['meal', 'fuel', 'air'], silo: ['feed'], thickener: ['feed'], kraft_digester: ['chips', 'white_liquor'] };
   // portas de energia (correntes de energia): não carregam matéria
   const ENERGY_PORTS = { ei: 1, eo: 1, q_in: 1, q_out: 1, qc: 1, qr: 1, q_pre: 1 };
   const isEnergyPort = p => !!ENERGY_PORTS[p];
@@ -6042,7 +6713,7 @@ window.SIMULAFACIL_CONFIG = {
       Object.keys(r.out).forEach(port => {
         if (!outOf[id][port] && r.out[port] && r.out[port].F > 1e-12) {
           const sid = id + '.' + port; S[sid] = r.out[port];
-          extra.push({ id: sid, name: (b.name || id) + '-' + portLabel(port), from: id, fromPort: port, to: null, toPort: null, implicit: true });
+          extra.push({ id: sid, name: (b.name || id) + '-' + portLabel(port, b.type), from: id, fromPort: port, to: null, toPort: null, implicit: true });
         }
       });
     });
@@ -6055,7 +6726,7 @@ window.SIMULAFACIL_CONFIG = {
       if (!c) { blockRes[b.id].warn = (blockRes[b.id].warn || []).concat('corrente de energia sem ligação'); return; }
       const e = energy[c.id], other = blocks[c.from === b.id ? c.to : c.from];
       blockRes[b.id].res = [{ k: 'Carga térmica', v: e && e.Q != null ? e.Q / 1000 : '—', u: 'kW' },
-        { k: c.from === b.id ? 'Fornece energia para' : 'Recebe energia de', v: (other && (other.name || other.id)) + ' (' + portLabel(c.from === b.id ? c.toPort : c.fromPort) + ')', u: '' },
+        { k: c.from === b.id ? 'Fornece energia para' : 'Recebe energia de', v: (other && (other.name || other.id)) + ' (' + portLabel(c.from === b.id ? c.toPort : c.fromPort, other && other.type) + ')', u: '' },
         { k: 'Valor', v: e && e.spec ? 'informado pelo usuário' : 'calculado pelo equipamento', u: '' }];
     });
     const warnings = th.warnings.slice();
@@ -6073,7 +6744,14 @@ window.SIMULAFACIL_CONFIG = {
   const PORT_LABELS = { out: 'saída', in: 'entrada', vapor: 'vapor', liquid: 'líquido', light: 'fase leve', heavy: 'fase pesada', distillate: 'destilado', bottoms: 'fundo', side: 'lateral',
     gas_out: 'gás tratado', liq_out: 'líquido rico', extract: 'extrato', raffinate: 'rafinado', overflow: 'extrato', underflow: 'torta', hot_out: 'saída quente', cold_out: 'saída fria',
     out1: 'saída 1', out2: 'saída 2', out3: 'saída 3', hot_in: 'entrada quente', cold_in: 'entrada fria', ei: 'entrada de energia', eo: 'saída de energia', q_in: 'entrada de energia', q_out: 'saída de energia (calor retirado)', qc: 'calor do condensador', qr: 'calor do refervedor', q_pre: 'calor do pré-aquecedor da carga', feed: 'alimentação', feed2: 'alimentação 2', feed3: 'alimentação 3', product: 'produto', exhaust: 'ar de saída', liquor: 'água-mãe', crystals: 'cristais', condensate: 'condensado', gas: 'gás (CO₂)', oil: 'óleo', alcohol: 'metanol', solvent: 'solvente', solids: 'sólidos', gas_in: 'gás', liq_in: 'líquido', in1: 'entrada 1', in2: 'entrada 2', in3: 'entrada 3', in4: 'entrada 4' };
-  function portLabel(p) { return PORT_LABELS[p] || p; }
+  // nomes de porta que mudam conforme o equipamento (a mesma porta 'overflow' é extrato na lixiviação e líquido clarificado no sedimentador)
+  const TYPE_PORT_LABELS = {
+    blast_furnace: { ore: 'minério', coke: 'coque', flux: 'fundente', blast: 'ar de sopro', gas: 'gás de topo', slag: 'escória', pig_iron: 'gusa' },
+    cement_kiln: { meal: 'farinha crua', fuel: 'combustível', air: 'ar de combustão', gas: 'gases de exaustão', clinker: 'clínquer' },
+    silo: { feed: 'alimentação', product: 'descarga' },
+    thickener: { feed: 'polpa', overflow: 'overflow (clarificado)', underflow: 'underflow (lama adensada)' },
+    kraft_digester: { chips: 'cavacos', white_liquor: 'licor branco', pulp: 'polpa marrom', black_liquor: 'licor negro', condensate: 'condensado' } };
+  function portLabel(p, type) { return (type && TYPE_PORT_LABELS[type] && TYPE_PORT_LABELS[type][p]) || PORT_LABELS[p] || p; }
 
   SF.flowsheet = { solve, portLabel, PORT_LABELS, isEnergyPort, isEnergyStream };
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -6135,7 +6813,12 @@ window.SIMULAFACIL_CONFIG = {
     rgibbs: { w: 64, h: 80, ports: { in: P(0, 22, 'l', 'in'), out: P(64, 64, 'r', 'out') } },
     lle_ternary: { w: 54, h: 180, ports: { feed: P(0, 22, 'l', 'in'), solvent: P(0, 158, 'l', 'in'), extract: P(54, 22, 'r', 'out'), raffinate: P(54, 158, 'r', 'out') } },
     adsorber: { w: 56, h: 130, ports: { in: P(0, 16, 'l', 'in'), out: P(56, 114, 'r', 'out') } },
-    packaging: { w: 84, h: 70, ports: { in: P(0, 35, 'l', 'in'), out: P(84, 35, 'r', 'out') } }
+    packaging: { w: 84, h: 70, ports: { in: P(0, 35, 'l', 'in'), out: P(84, 35, 'r', 'out') } },
+    blast_furnace: { w: 124, h: 172, ports: { ore: P(0, 6, 'l', 'in'), coke: P(0, 32, 'l', 'in'), flux: P(0, 58, 'l', 'in'), blast: P(0, 124, 'l', 'in'), gas: P(124, 10, 'r', 'out'), slag: P(124, 142, 'r', 'out'), pig_iron: P(124, 160, 'r', 'out') } },
+    cement_kiln: { w: 176, h: 108, ports: { meal: P(0, 10, 'l', 'in'), fuel: P(0, 74, 'l', 'in'), air: P(0, 90, 'l', 'in'), gas: P(176, 6, 'r', 'out'), clinker: P(176, 102, 'r', 'out') } },
+    silo: { w: 76, h: 152, ports: { feed: P(0, 8, 'l', 'in'), product: P(76, 142, 'r', 'out') } },
+    thickener: { w: 144, h: 92, ports: { feed: P(0, 22, 'l', 'in'), overflow: P(144, 30, 'r', 'out'), underflow: P(144, 86, 'r', 'out') } },
+    kraft_digester: { w: 120, h: 190, ports: { chips: P(0, 10, 'l', 'in'), white_liquor: P(0, 42, 'l', 'in'), condensate: P(120, 78, 'r', 'out'), black_liquor: P(120, 112, 'r', 'out'), pulp: P(120, 182, 'r', 'out') } }
   };
 
   /* primitivas: rect (x,y,w,h,r), circ (cx,cy,r), line (polilinha aberta), poly (polígono fechado), text.
@@ -6305,7 +6988,40 @@ window.SIMULAFACIL_CONFIG = {
       return o;
     },
     packaging: () => [R(12, 8, 60, 54, 5), R(19, 15, 46, 40, 3, 'lnd'), L([[0, 35], [12, 35]]), L([[72, 35], [84, 35]]),
-      L([[2, 20], [10, 20]]), L([[6, 17], [10, 20], [6, 23]]), L([[2, 50], [10, 50]]), L([[6, 47], [10, 50], [6, 53]]), T(42, 40, 'O2')]
+      L([[2, 20], [10, 20]]), L([[6, 17], [10, 20], [6, 23]]), L([[2, 50], [10, 50]]), L([[6, 47], [10, 50], [6, 53]]), T(42, 40, 'O2')],
+    blast_furnace: () => { // cuba com camadas alternadas de minério e coque, ventaneiras com ar quente, cadinho com gusa e escória; carga pelo topo e gás pela lateral do topo
+      const o = [L([[0, 6], [56, 6]]), L([[0, 32], [36, 32], [36, 6]]), L([[0, 58], [28, 58], [28, 6]]),            // minério, coque e fundente → carregamento
+        Pg([[50, 2], [74, 2], [68, 12], [56, 12]], 'bodyw'),                                                        // tremonha de carga (cone)
+        Pg([[46, 14], [78, 14], [98, 92], [98, 104], [88, 130], [88, 164], [36, 164], [36, 130], [26, 104], [26, 92]])];  // cuba, ventre, rampa e cadinho
+      [[28, 'ln'], [40, 'lnd'], [52, 'ln'], [64, 'lnd'], [76, 'ln']].forEach(q => { const y = q[0], dx = (y - 14) * 20 / 78; o.push(L([[48 - dx, y], [76 + dx, y]], q[1])); });
+      o.push(L([[78, 22], [104, 22], [104, 10], [124, 10]], 'lnd'),                                                 // gás de topo (BFG)
+        L([[0, 124], [33, 124]], 'hot'), L([[91, 124], [98, 124]], 'hot'), C(33, 124, 3, 'hot'), C(91, 124, 3, 'hot'),  // ventaneiras (ar quente)
+        L([[38, 138], [86, 138]], 'lnd'), L([[38, 150], [86, 150]], 'hot'),                                          // escória sobre o gusa
+        L([[88, 142], [124, 142]]), L([[88, 160], [124, 160]], 'hot'), T(62, 112, 'Fe'));
+      return o;
+    },
+    cement_kiln: () => [ // torre de ciclones (pré-aquecedor), forno rotativo inclinado com anéis e apoios, maçarico e saída do clínquer
+      L([[0, 10], [118, 10], [118, 26], [130, 26]]), R(130, 16, 26, 22, 4), Pg([[130, 38], [156, 38], [146, 52], [140, 52]]), L([[143, 16], [143, 6], [176, 6]], 'lnd'),
+      L([[143, 52], [143, 58]]), Pg([[34, 72], [150, 54], [150, 72], [34, 90]]),
+      L([[106, 61], [106, 79]]), L([[66, 67], [66, 85]]), Pg([[101, 90], [111, 90], [106, 82]], 'ln'), Pg([[61, 96], [71, 96], [66, 88]], 'ln'),
+      R(18, 66, 16, 30, 2), L([[34, 80], [58, 77]], 'hot'), L([[34, 85], [54, 84]], 'hot'),
+      L([[0, 74], [18, 74]]), L([[0, 90], [18, 90]], 'hot'), L([[26, 96], [26, 102], [176, 102]]), T(70, 44, 'CaCO₃ → CaO')],
+    silo: () => [ // silo cilíndrico com tremonha cônica, superfície do material no ângulo de repouso e válvula de descarga
+      L([[0, 8], [38, 8], [38, 16]]), Pg([[10, 16], [66, 16], [66, 96], [44, 128], [32, 128], [10, 96]]),
+      L([[10, 46], [38, 32], [66, 46]], 'lnd'), C(26, 70, 1.6, 'ln'), C(40, 62, 1.6, 'ln'), C(52, 76, 1.6, 'ln'), C(34, 90, 1.6, 'ln'), C(46, 104, 1.6, 'ln'),
+      L([[38, 128], [38, 142], [76, 142]]), Pg([[32, 132], [44, 138], [44, 132], [32, 138]], 'bodyw'), T(57, 120, 'θ')],
+    thickener: () => [ // tanque raso com fundo cônico, poço de alimentação, raspador central, calha de overflow e underflow pelo fundo
+      L([[0, 22], [64, 22]]), R(64, 14, 16, 22, 2, 'bodyw'), Pg([[8, 26], [136, 26], [136, 56], [80, 80], [64, 80], [8, 56]]),
+      L([[12, 50], [132, 50]], 'lnd'), R(66, 2, 12, 9, 1), L([[72, 11], [72, 72]]), L([[22, 58], [72, 72], [122, 58]]),
+      L([[136, 30], [144, 30]]), L([[72, 80], [72, 86], [144, 86]]), T(104, 44, 'H(t)')],
+    kraft_digester: () => [ // digestor contínuo (tipo Kamyr): separador de topo com os cavacos, licor branco, zonas de impregnação, cozimento e lavagem,
+      // peneiras de extração do licor negro, circulação com aquecedor a vapor (condensado) e descarga da polpa pelo fundo
+      L([[0, 10], [50, 10], [50, 18]]), R(43, 18, 14, 9, 2, 'bodyw'), L([[0, 42], [30, 42]]),
+      Pg([[30, 34], [38, 27], [62, 27], [70, 34], [70, 158], [56, 174], [44, 174], [30, 158]]),
+      L([[30, 66], [70, 66]], 'lnd'), L([[30, 100], [70, 100]], 'lnd'), L([[30, 134], [70, 134]], 'lnd'),
+      C(40, 50, 1.6, 'ln'), C(54, 44, 1.6, 'ln'), C(60, 56, 1.6, 'ln'), C(44, 82, 1.6, 'ln'), C(58, 88, 1.6, 'ln'), C(38, 118, 1.6, 'ln'), C(54, 124, 1.6, 'ln'),
+      R(84, 38, 24, 30, 4, 'bodyw'), L([[89, 44], [103, 48], [89, 52], [103, 56], [89, 60]], 'cold'), L([[70, 46], [84, 46]], 'hot'), L([[84, 60], [70, 60]], 'hot'), L([[96, 0], [96, 38]], 'hot'), L([[96, 68], [96, 78], [120, 78]]),
+      R(70, 104, 5, 16, 1, 'bodyb'), L([[75, 112], [120, 112]]), L([[50, 174], [50, 182], [120, 182]]), T(50, 152, 'κ')]
   };
   function prims(t) { return PRIMS[t] ? PRIMS[t]() : [R(0, 0, G[t] ? G[t].w : 60, G[t] ? G[t].h : 60, 6)]; }
 
@@ -6501,7 +7217,7 @@ window.SIMULAFACIL_CONFIG = {
       const used = new Set(st.streams.filter(s => s.from === b.id).map(s => s.fromPort).concat(st.streams.filter(s => s.to === b.id).map(s => s.toPort)));
       Object.keys(g.ports).forEach(pn => {
         const p = g.ports[pn], armed = this.arm && this.arm.block === b.id && this.arm.port === pn;
-        h += '<circle class="port ' + p.io + (used.has(pn) ? '' : ' free') + (armed ? ' arm' : '') + '" data-port="' + pn + '" data-io="' + p.io + '" cx="' + p.x + '" cy="' + p.y + '" r="' + (touchUI ? 7 : 5) + '"><title>' + esc(SF.flowsheet.portLabel(pn)) + '</title></circle>';
+        h += '<circle class="port ' + p.io + (used.has(pn) ? '' : ' free') + (armed ? ' arm' : '') + '" data-port="' + pn + '" data-io="' + p.io + '" cx="' + p.x + '" cy="' + p.y + '" r="' + (touchUI ? 7 : 5) + '"><title>' + esc(SF.flowsheet.portLabel(pn, b.type)) + '</title></circle>';
         if (touchUI) h += '<circle class="port-hit" data-port="' + pn + '" data-io="' + p.io + '" cx="' + p.x + '" cy="' + p.y + '" r="16" fill="transparent"/>';
       });
       h += '</g>';
@@ -7503,6 +8219,152 @@ end
       }
       return out.join('\n');
     }
+    if (b.type === 'blast_furnace' && r.bf) {
+      const g = r.bf, w = (a, bb) => n2s(bb > 0 ? a / bb : 0);
+      out.push('function ' + fname + '(D, FS)', header, '% Alto-forno: balanço de massa (estequiometria global) e de energia (entalpias de formação e c_p médios), como no código de referência.', printRes.join('\n'),
+        '%% 1. Correntes de entrada (vazões em kg/s, temperaturas em K)',
+        'in_streams.ore.mass_flow = ' + n2s(g.ore.m) + '; in_streams.ore.w_Fe2O3 = ' + w(g.ore.kg.Fe2O3, g.ore.m) + '; in_streams.ore.T = ' + n2s(g.ore.T) + ';   % minério (Fe2O3 + ganga SiO2)',
+        'in_streams.coke.mass_flow = ' + n2s(g.coke.m) + '; in_streams.coke.w_C = ' + w(g.coke.kg.C, g.coke.m) + '; in_streams.coke.T = ' + n2s(g.coke.T) + ';   % coque (C + cinzas SiO2)',
+        'in_streams.flux.mass_flow = ' + n2s(g.flux.m) + '; in_streams.flux.T = ' + n2s(g.flux.T) + ';   % calcário CaCO3',
+        'in_streams.blast.mass_flow = ' + n2s(g.blast.m) + '; in_streams.blast.w_O2 = ' + w(g.blast.kg.O2, g.blast.m) + '; in_streams.blast.T = ' + n2s(g.blast.T) + ';   % ar quente',
+        '%% 2. Parâmetros operacionais',
+        'params.C_gusa = ' + n2s(g.Cg) + '; params.T_gusa = ' + n2s(g.Tg) + '; params.T_slag = ' + n2s(g.Ts) + '; params.T_gas = ' + n2s(g.Tgas) + '; params.Q_loss = ' + n2s(g.Qloss) + ';',
+        '%% 3. Bloco do alto-forno',
+        '[out, dg] = blast_furnace_block(in_streams, params);',
+        "fprintf('  MATLAB: gusa = %.3f kg/s (%.2f t/h), escória = %.3f kg/s, gás de topo = %.3f kg/s\\n', out.pig_iron.mass_flow, 3.6*out.pig_iron.mass_flow, out.slag.mass_flow, out.bfg.mass_flow);",
+        "fprintf('  MATLAB: CO = %.2f %%, CO2 = %.2f %%, N2 = %.2f %%, taxa de coque = %.1f kg/t, eta_CO = %.3f\\n', 100*out.bfg.y_CO, 100*out.bfg.y_CO2, 100*out.bfg.y_N2, dg.coke_rate_kg_per_t_gusa, dg.eta_CO_calculated);",
+        "fprintf('  MATLAB: H_e = %.2f kW, H_s = %.2f kW, H_e - H_s = %.2f kW, resíduo térmico = %.2f kW\\n', dg.H_in_kW, dg.H_out_kW, dg.Q_reactions_kW, dg.energy_balance_residual_kW);",
+        '%% 4. Efeito do ar de sopro no resíduo térmico (faixa em que CO >= 0 e CO2 >= 0)',
+        'mv = linspace(' + n2s(g.m1) + ', ' + n2s(g.m2) + ', 161); R = zeros(size(mv)); yCO = R; yCO2 = R;',
+        'for k = 1:numel(mv), s2 = in_streams; s2.blast.mass_flow = mv(k); [o2, d2] = blast_furnace_block(s2, params); R(k) = d2.energy_balance_residual_kW/1000; yCO(k) = 100*o2.bfg.y_CO; yCO2(k) = 100*o2.bfg.y_CO2; end',
+        'm_fecha = NaN; if R(1) < 0 && R(end) > 0, m_fecha = fzero(@(m) af_residuo(m, in_streams, params), [mv(1) mv(end)]); end',
+        "fprintf('  MATLAB: ar de sopro que zera o resíduo = %.2f kg/s\\n', m_fecha);",
+        "figure('Name', " + str(b.name + ' — alto-forno') + ", 'Color', 'w', 'Position', [30 80 1500 520]);",
+        "subplot(1, 3, 1); bar([in_streams.ore.mass_flow in_streams.coke.mass_flow in_streams.flux.mass_flow in_streams.blast.mass_flow; out.pig_iron.mass_flow out.slag.mass_flow out.bfg.mass_flow 0]');",
+        "set(gca, 'XTickLabel', {'minério / gusa', 'coque / escória', 'fundente / gás', 'ar / —'}, 'FontSize', FS); ylabel('Vazão (kg/s)', 'FontSize', FS); legend({'entradas', 'saídas'}); title('Balanço de massa', 'FontSize', FS); grid on;",
+        "subplot(1, 3, 2); plot(mv, R, 'Color', [0.48 0.24 0.72], 'LineWidth', 3); hold on; plot(mv([1 end]), [0 0], 'k--'); plot(in_streams.blast.mass_flow, dg.energy_balance_residual_kW/1000, 'ro', 'MarkerSize', 10, 'MarkerFaceColor', 'r');",
+        "if ~isnan(m_fecha), plot(m_fecha, 0, 'gd', 'MarkerSize', 11, 'MarkerFaceColor', 'g'); end",
+        "grid on; xlabel('Ar de sopro (kg/s)', 'FontSize', FS); ylabel('Resíduo térmico (MW)', 'FontSize', FS); title('Efeito do ar de sopro', 'FontSize', FS); set(gca, 'FontSize', FS);",
+        "subplot(1, 3, 3); plot(mv, yCO, 'r', mv, yCO2, 'b', 'LineWidth', 2.5); grid on; xlabel('Ar de sopro (kg/s)', 'FontSize', FS); ylabel('% molar no gás de topo', 'FontSize', FS); legend({'CO', 'CO_2'}); title('Gás de topo', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'cement_kiln' && r.kiln) {
+      const g = r.kiln, w = (a, bb) => n2s(bb > 0 ? a / bb : 0), me = g.meal, fu = g.fuel, ai = g.air;
+      out.push('function ' + fname + '(D, FS)', header, '% Forno de cimento: calcinação, combustão completa, clínquer, fases de Bogue e balanço de energia, como no código de referência.', printRes.join('\n'),
+        '%% 1. Correntes de entrada (kg/s e K)',
+        'in_streams.meal.mass_flow = ' + n2s(me.m) + '; in_streams.meal.w_CaCO3 = ' + w(me.kg.CaCO3, me.m) + '; in_streams.meal.w_SiO2 = ' + w(me.kg.SiO2, me.m) + '; in_streams.meal.w_Al2O3 = ' + w(me.kg.Al2O3, me.m) + ';',
+        'in_streams.meal.w_Fe2O3 = ' + w(me.kg.Fe2O3, me.m) + '; in_streams.meal.w_H2O = ' + w(me.kg.H2O, me.m) + '; in_streams.meal.T = ' + n2s(me.T) + ';   % farinha crua',
+        'in_streams.fuel.mass_flow = ' + n2s(fu.m) + '; in_streams.fuel.w_C = ' + w(fu.kg.C, fu.m) + '; in_streams.fuel.w_H = ' + w(fu.kg.H2, fu.m) + '; in_streams.fuel.w_ash = ' + w(fu.kg.ash, fu.m) + ';',
+        'in_streams.fuel.LHV = ' + n2s(g.LHV) + '; in_streams.fuel.T = ' + n2s(fu.T) + ';   % combustível (PCI em kJ/kg)',
+        'in_streams.air.mass_flow = ' + n2s(ai.m) + '; in_streams.air.w_O2 = ' + w(ai.kg.O2, ai.m) + '; in_streams.air.T = ' + n2s(ai.T) + ';   % ar de combustão',
+        '%% 2. Parâmetros operacionais',
+        'params.T_clinker = ' + n2s(g.Tcl) + '; params.T_gas = ' + n2s(g.Tg) + '; params.Q_loss = ' + n2s(g.Qloss) + ';',
+        '%% 3. Bloco do forno',
+        '[out, dg] = cement_kiln_block(in_streams, params);',
+        'cl = 100*[out.clinker.w_CaO out.clinker.w_SiO2 out.clinker.w_Al2O3 out.clinker.w_Fe2O3];   % C, S, A, F em % massa',
+        'C3S = 4.071*cl(1) - 7.600*cl(2) - 6.718*cl(3) - 1.430*cl(4); C2S = 2.867*cl(2) - 0.7544*C3S; C3A = 2.650*cl(3) - 1.692*cl(4); C4AF = 3.043*cl(4);   % Bogue',
+        "fprintf('  MATLAB: clínquer = %.3f kg/s (%.2f t/h), gases = %.3f kg/s, consumo = %.0f kcal/kg, excesso de ar = %.2f %%\\n', out.clinker.mass_flow, 3.6*out.clinker.mass_flow, out.flue_gas.mass_flow, dg.spec_energy_kcal, dg.air_excess_pct);",
+        "fprintf('  MATLAB: CaO/SiO2/Al2O3/Fe2O3 = %.2f/%.2f/%.2f/%.2f %%; Bogue C3S/C2S/C3A/C4AF = %.2f/%.2f/%.2f/%.2f %%\\n', cl, C3S, C2S, C3A, C4AF);",
+        "fprintf('  MATLAB: H_e = %.2f kW, H_s = %.2f kW, resíduo térmico = %.2f kW\\n', dg.H_in_kW, dg.H_out_kW, dg.energy_balance_residual_kW);",
+        '%% 4. Efeito da vazão de combustível (ar fixo)',
+        'fv = linspace(' + n2s(g.f1) + ', ' + n2s(g.f2) + ', 121); R = zeros(size(fv)); EX = R;',
+        'for k = 1:numel(fv), s2 = in_streams; s2.fuel.mass_flow = fv(k); [~, d2] = cement_kiln_block(s2, params); R(k) = d2.energy_balance_residual_kW/1000; EX(k) = d2.air_excess_pct; end',
+        'f_fecha = NaN; if R(1) < 0 && R(end) > 0, f_fecha = fzero(@(m) fc_residuo(m, in_streams, params), [fv(1) fv(end)]); end',
+        "fprintf('  MATLAB: combustível que zera o resíduo = %.3f kg/s\\n', f_fecha);",
+        "figure('Name', " + str(b.name + ' — forno de cimento') + ", 'Color', 'w', 'Position', [30 80 1500 520]);",
+        "subplot(1, 3, 1); bar([cl C3S C2S C3A C4AF], 'FaceColor', [0.88 0.48 0.22]); set(gca, 'XTickLabel', {'CaO', 'SiO_2', 'Al_2O_3', 'Fe_2O_3', 'C_3S', 'C_2S', 'C_3A', 'C_4AF'}, 'FontSize', FS);",
+        "ylabel('% massa', 'FontSize', FS); title('Óxidos e fases de Bogue', 'FontSize', FS); grid on;",
+        "subplot(1, 3, 2); bar([in_streams.meal.mass_flow in_streams.fuel.mass_flow in_streams.air.mass_flow; out.clinker.mass_flow out.flue_gas.mass_flow 0]'); set(gca, 'XTickLabel', {'farinha / clínquer', 'combustível / gases', 'ar / —'}, 'FontSize', FS);",
+        "ylabel('Vazão (kg/s)', 'FontSize', FS); legend({'entradas', 'saídas'}); title('Balanço de massa', 'FontSize', FS); grid on;",
+        "subplot(1, 3, 3); [ax, h1, h2] = plotyy(fv, R, fv, EX); set(h1, 'LineWidth', 3); set(h2, 'LineWidth', 2, 'LineStyle', '--'); hold(ax(1), 'on'); plot(ax(1), fv([1 end]), [0 0], 'k:');",
+        "ylabel(ax(1), 'Resíduo térmico (MW)', 'FontSize', FS); ylabel(ax(2), 'Excesso de ar (%)', 'FontSize', FS); grid on; xlabel('Combustível (kg/s)', 'FontSize', FS); title('Efeito do combustível', 'FontSize', FS); set(ax, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'silo' && r.silo) {
+      const g = r.silo, o = g.o;
+      out.push('function ' + fname + '(D, FS)', header, '% Silo com tremonha cônica: Beverloo, fator de Rose e Tanaka, regime de Jenike e esvaziamento (EDO), com operação contínua.', printRes.join('\n'),
+        '%% 1. Geometria e material granular',
+        'silo.D_s = ' + n2s(o.Ds) + '; silo.D_o = ' + n2s(o.Do) + '; silo.H_cyl = ' + n2s(o.Hc) + ';   % m',
+        'silo.d_p = ' + n2s(o.dp) + '; silo.rho_b = ' + n2s(o.rhob) + '; silo.phi_w = ' + n2s(o.phiw) + ';   % m, kg/m^3, graus',
+        'mp.C_beverloo = ' + n2s(o.C) + '; mp.k_beverloo = ' + n2s(o.k) + '; mp.chi = ' + n2s(o.chi) + '; mp.g = 9.81;   % chi: zona estagnada (graus, da horizontal)',
+        '%% 2. Semiângulos da tremonha a comparar (graus a partir da vertical; 90 = fundo plano)',
+        'theta_angles = ' + vec(g.angles) + '; theta_proj = ' + n2s(g.theta) + '; F = ' + n2s(g.F) + '; nivel = ' + n2s(g.level) + ';   % F em kg/s',
+        "figure('Name', " + str(b.name + ' — descarga do silo') + ", 'Color', 'w', 'Position', [30 60 1450 760]); cores = lines(numel(theta_angles)); res = cell(size(theta_angles));",
+        'for i = 1:numel(theta_angles)',
+        '    [res{i}, t, M, Q] = hopper_block(theta_angles(i), silo, mp);',
+        "    subplot(2, 2, 1); plot(t, M, 'LineWidth', 2, 'Color', cores(i, :)); hold on;",
+        "    subplot(2, 2, 3); plot(t, Q, 'LineWidth', 2, 'Color', cores(i, :)); hold on;",
+        'end',
+        "leg = arrayfun(@(i) sprintf('\\\\theta = %g° (%s)', theta_angles(i), res{i}.regime), 1:numel(theta_angles), 'UniformOutput', false);",
+        "subplot(2, 2, 1); grid on; xlabel('Tempo (s)', 'FontSize', FS); ylabel('Massa restante M(t) (kg)', 'FontSize', FS); legend(leg, 'Location', 'northeast'); title('Esvaziamento do silo cheio', 'FontSize', FS);",
+        "subplot(2, 2, 3); grid on; xlabel('Tempo (s)', 'FontSize', FS); ylabel('Q(t) (kg/s)', 'FontSize', FS); plot(xlim, [F F], 'r--'); title('Vazão de descarga', 'FontSize', FS);",
+        "fprintf('\\n  %-10s | %-22s | %-12s | %-12s | %-10s\\n', 'theta (°)', 'regime (Jenike)', 'W (kg/s)', 'M total (kg)', 't desc (s)');",
+        "for i = 1:numel(theta_angles), q = res{i}; fprintf('  %-10g | %-22s | %-12.2f | %-12.1f | %-10.1f\\n', q.theta, q.regime, q.W, q.M_total, q.t_discharge); end",
+        '%% 3. Operação contínua com o ângulo de projeto',
+        'p = hopper_block(theta_proj, silo, mp); Mop = nivel*p.M_total;',
+        "fprintf('  MATLAB: W = %.3f kg/s (fator %.4f), utilização = %.1f %%, tau = %.2f min, esvaziamento = %.1f s\\n', p.W, p.F_RT, 100*F/p.W, Mop/F/60, p.t_discharge);",
+        "if F > p.W, warning('A alimentação passa da capacidade de descarga: o silo enche.'); end",
+        'th = 5:90; W = arrayfun(@(a) hopper_capacidade(a, silo, mp), th); thc = 40 - silo.phi_w/2;',
+        "subplot(2, 2, [2 4]); plot(th, W, 'b', 'LineWidth', 3); hold on; plot([thc thc], [0 1.05*max(W)], 'm--', 'LineWidth', 1.5); plot(theta_proj, p.W, 'rd', 'MarkerSize', 11, 'MarkerFaceColor', 'r'); plot([5 90], [F F], 'r:');",
+        "grid on; xlabel('Semiângulo \\theta da vertical (°)', 'FontSize', FS); ylabel('Capacidade W (kg/s)', 'FontSize', FS); legend({'W(\\theta)', '\\theta_{crít} (massa à esquerda)', 'projeto', 'alimentação'}); title('Capacidade × ângulo da tremonha', 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'thickener' && r.tf) {
+      const g = r.tf;
+      out.push('function ' + fname + '(D, FS)', header, '% Sedimentador contínuo: método de Talmadge e Fitch (1955), balanço de sólidos e de energia, como no código de referência.', printRes.join('\n'),
+        '%% 1. Alimentação e ensaio de proveta',
+        'in_streams.feed.vol_flow = ' + n2s(g.QF) + '; in_streams.feed.w_solids = ' + n2s(g.wF) + '; in_streams.feed.rho_s = ' + n2s(g.rhos) + '; in_streams.feed.rho_f = ' + n2s(g.rhof) + '; in_streams.feed.T = ' + n2s(g.TF) + ';',
+        'batch.H0 = ' + n2s(g.H0) + '; batch.C0 = ' + n2s(g.C0) + '; batch.v0 = ' + n2s(g.v0) + '; batch.k_comp = ' + n2s(g.kc) + '; batch.t_linear = ' + n2s(g.tL) + ';   % m, kg/m^3, m/s, 1/s, s',
+        'params.C_U_target = ' + n2s(g.Cu) + '; params.eta_rec = ' + n2s(g.eta) + '; params.H_settler = ' + n2s(g.Hs) + '; params.Cp_solid = ' + n2s(g.cps) + '; params.Cp_fluid = ' + n2s(g.cpf) + '; params.Q_loss = ' + n2s(g.Ql) + ';',
+        'params.tangente_ramo = ' + (g.cons ? 'true' : 'false') + ';   % false: tangente numérica no ponto de máxima curvatura (código de referência)',
+        '[out, dg] = talmadge_fitch_block(in_streams, batch, params);',
+        "fprintf('  MATLAB: H_u = %.4f m, t_c = %.1f s, H_c = %.4f m, t_u = %.1f s (%.2f min)\\n', dg.Hu, dg.t_c, dg.H_c, dg.t_u, dg.t_u/60);",
+        "fprintf('  MATLAB: A = %.2f m^2, D = %.2f m, carga = %.2f kg/(m^2.h); underflow = %.3f kg/s, overflow = %.3f kg/s, T = %.3f K\\n', dg.A_min, dg.D_min, dg.solid_loading, out.underflow.mass_flow, out.overflow.mass_flow, out.underflow.T);",
+        "figure('Name', " + str(b.name + ' — Talmadge e Fitch') + ", 'Color', 'w', 'Position', [30 80 1450 560]);",
+        "subplot(1, 2, 1); plot(dg.t_vec/60, dg.H_vec, 'b-', 'LineWidth', 2.5); hold on; plot([0 max(dg.t_vec)/60], [dg.Hu dg.Hu], 'k--', 'LineWidth', 1.5);",
+        "t1 = linspace(0, dg.t_c*1.2, 50); plot(t1/60, batch.H0 - batch.v0*t1, 'g--', 'LineWidth', 1.2); plot(dg.t_c/60, dg.H_c, 'ro', 'MarkerSize', 8, 'MarkerFaceColor', 'r');",
+        "t2 = linspace(dg.t_c*0.5, dg.t_u*1.2, 50); plot(t2/60, dg.H_c + dg.dH_c*(t2 - dg.t_c), 'm-.', 'LineWidth', 1.8); plot(dg.t_u/60, dg.Hu, 'ks', 'MarkerSize', 10, 'MarkerFaceColor', 'y'); plot([dg.t_u dg.t_u]/60, [0 1.1*batch.H0], 'r:');",
+        "grid on; ylim([0 1.1*batch.H0]); xlim([0 min(max(dg.t_vec), max(2.2*dg.t_u, 1.5*batch.t_linear))/60]); xlabel('Tempo de ensaio t (min)', 'FontSize', FS); ylabel('Altura da interface H (m)', 'FontSize', FS);",
+        "legend({'H(t) batelada', 'H_u', 'tangente inicial (v_0)', 'ponto de compressão', 'tangente em (t_c, H_c)', sprintf('t_u = %.1f min', dg.t_u/60)}, 'Location', 'northeast'); title('Construção gráfica de Talmadge e Fitch', 'FontSize', FS); set(gca, 'FontSize', FS);",
+        'Cu = linspace(max(1.3*batch.C0, 120), min(0.55*in_streams.feed.rho_s, 1200), 120); A = zeros(size(Cu));',
+        'for k = 1:numel(Cu), p2 = params; p2.C_U_target = Cu(k); [~, d2] = talmadge_fitch_block(in_streams, batch, p2); A(k) = d2.A_min; end',
+        "subplot(1, 2, 2); plot(Cu, A, 'Color', [0.48 0.24 0.72], 'LineWidth', 3); hold on; plot(params.C_U_target, dg.A_min, 'rd', 'MarkerSize', 11, 'MarkerFaceColor', 'r'); grid on;",
+        "xlabel('C_U (kg/m^3)', 'FontSize', FS); ylabel('Área mínima (m^2)', 'FontSize', FS); title('Área × concentração do underflow', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'kraft_digester' && r.kraft) {
+      const g = r.kraft, wd = g.wood.kg, dry = wd.cel + wd.hem + wd.lig + wd.ext, w = (a, bb) => n2s(bb > 0 ? a / bb : 0);
+      out.push('function ' + fname + '(D, FS)', header, '% Digestor contínuo kraft (cavacos de eucalipto): licor branco, rendimento × kappa, licor negro, vapor e balanço de energia, como no código de referência.', printRes.join('\n'),
+        '%% 1. Correntes de entrada (vazões em kg/s, temperaturas em K)',
+        'in_streams.wood.mass_flow = ' + n2s(g.wood.m) + '; in_streams.wood.moisture = ' + w(wd.w, g.wood.m) + '; in_streams.wood.T = ' + n2s(g.wood.T) + ';   % cavacos úmidos',
+        'in_streams.wood.w_cellulose = ' + w(wd.cel, dry) + '; in_streams.wood.w_hemicell = ' + w(wd.hem, dry) + '; in_streams.wood.w_lignin = ' + w(wd.lig, dry) + '; in_streams.wood.w_extractives = ' + w(wd.ext, dry) + ';   % base seca',
+        'in_streams.white_liquor.EA_charge = ' + n2s(g.EA / dry) + '; in_streams.white_liquor.EA_conc = ' + n2s(g.EAc) + ';   % kg NaOH/kg madeira seca e g/L (kg/m^3)',
+        'in_streams.white_liquor.sulfidity = ' + n2s(g.sulf) + '; in_streams.white_liquor.inorg_ratio = ' + n2s(g.inorgR) + '; in_streams.white_liquor.density = ' + n2s(g.rhoWL) + '; in_streams.white_liquor.T = ' + n2s(g.wl.T) + ';',
+        'in_streams.steam.P_bar = ' + n2s(g.Ps) + '; in_streams.steam.h_fg = ' + n2s(g.hfg) + ';   % vapor saturado (kJ/kg)',
+        '%% 2. Parâmetros operacionais do digestor',
+        'params.kappa_target = ' + n2s(g.kappa) + '; params.yield_a = ' + n2s(g.yA) + '; params.yield_b = ' + n2s(g.yB) + '; params.lignin_per_kappa = ' + n2s(g.ligK) + '; params.cellulose_kept = ' + n2s(g.celRet) + ';',
+        'params.T_cook = ' + n2s(g.Tcook) + '; params.T_blow = ' + n2s(g.Tblow) + '; params.dH_rxn = ' + n2s(g.dHr) + '; params.Q_loss = ' + n2s(g.Qloss) + '; params.water_pulp = ' + n2s(g.wPulp) + ';',
+        "params.cp = struct('wood', " + n2s(g.cp.wood) + ", 'water', " + n2s(g.cp.w) + ", 'WL', " + n2s(g.cp.wl) + ", 'pulp', " + n2s(g.cp.pulp) + ", 'BL_solids', " + n2s(g.cp.bls) + ");   % kJ/(kg.K)",
+        '%% 3. Bloco do digestor',
+        '[out, dg] = eucalyptus_kraft_digester_block(in_streams, params);',
+        "fprintf('  MATLAB: licor branco = %.2f kg/s (%.1f m^3/h), vapor = %.3f kg/s (%.2f t/h), L/W = %.3f kg/kg\\n', dg.m_dot_WL, 3600*dg.V_dot_WL, dg.m_dot_steam, 3.6*dg.m_dot_steam, dg.LW_actual);",
+        "fprintf('  MATLAB: polpa = %.3f kg/s (%.2f t/h), rendimento = %.2f %%, lignina = %.3f %%; licor negro = %.2f kg/s com %.2f %% de sólidos\\n', out.pulp.mass_flow_dry, 3.6*out.pulp.mass_flow_dry, out.pulp.yield_pct, out.pulp.lignin_pct, out.black_liquor.mass_flow, out.black_liquor.solids_pct);",
+        "fprintf('  MATLAB: Q do vapor = %.1f kW, H_e = %.1f kW, H_s = %.1f kW, calor retirado até a descarga = %.1f kW, resíduo = %.2e kW\\n', dg.Q_thermal_kW, dg.H_in_kW, dg.H_out_kW, dg.Q_removed_kW, dg.energy_balance_residual_kW);",
+        '%% 4. Rendimento × kappa e vapor × temperatura de cozimento',
+        'kv = linspace(10, 30, 81); Yv = params.yield_a + params.yield_b*kv;',
+        'Tv = linspace(' + n2s(g.T1) + ', ' + n2s(g.T2) + ', 71); Sv = zeros(size(Tv));',
+        'for k = 1:numel(Tv), p2 = params; p2.T_cook = Tv(k) + 273.15; [~, d2] = eucalyptus_kraft_digester_block(in_streams, p2); Sv(k) = 3.6*d2.m_dot_steam; end',
+        "figure('Name', " + str(b.name + ' — digestor kraft') + ", 'Color', 'w', 'Position', [30 50 1450 800]);",
+        "subplot(2, 2, 1); plot(kv, Yv, 'b', 'LineWidth', 3); hold on; plot(kv, 100 - Yv, '--', 'Color', [0.48 0.29 0.12], 'LineWidth', 2.5); plot(params.kappa_target, out.pulp.yield_pct, 'rd', 'MarkerSize', 11, 'MarkerFaceColor', 'r');",
+        "grid on; xlabel('Número kappa', 'FontSize', FS); ylabel('% da madeira seca', 'FontSize', FS); legend({'polpa (rendimento)', 'dissolvida no licor negro', 'operação'}, 'Location', 'east'); title('Rendimento × kappa', 'FontSize', FS); set(gca, 'FontSize', FS);",
+        "subplot(2, 2, 2); plot(Tv, Sv, 'r', 'LineWidth', 3); hold on; plot(params.T_cook - 273.15, 3.6*dg.m_dot_steam, 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'k'); grid on;",
+        "xlabel('Temperatura de cozimento (°C)', 'FontSize', FS); ylabel('Vapor (t/h)', 'FontSize', FS); title(sprintf('Vapor a %g bar', in_streams.steam.P_bar), 'FontSize', FS); set(gca, 'FontSize', FS);",
+        "subplot(2, 2, 3); bar([dg.cel_pulp dg.hem_pulp dg.lig_pulp 0; dg.cel_wood - dg.cel_pulp dg.hem_wood - dg.hem_pulp dg.lig_wood - dg.lig_pulp dg.ext_wood]');",
+        "set(gca, 'XTickLabel', {'celulose', 'hemicelulose', 'lignina', 'extrativos'}, 'FontSize', FS); ylabel('kg/s', 'FontSize', FS); legend({'na polpa', 'no licor negro'}); title('Destino da madeira seca', 'FontSize', FS); grid on;",
+        "subplot(2, 2, 4); bar([dg.Q_heat_wood dg.Q_heat_WL params.Q_loss dg.Q_rxn dg.Q_thermal_kW dg.Q_removed_kW]/1000, 'FaceColor', [0.18 0.62 0.42]);",
+        "set(gca, 'XTickLabel', {'cavacos', 'licor', 'perdas', 'reações', 'vapor', 'retirado'}, 'FontSize', FS); ylabel('MW', 'FontSize', FS); title('Balanço de energia', 'FontSize', FS); grid on;", 'end');
+      return out.join('\n');
+    }
     if (b.type === 'crystallizer' && r.cry) {
       const g = r.cry;
       out.push('function ' + fname + '(D, FS)', header, '% Cristalizador contínuo por resfriamento (MSMPR): balanço com hidrato, calor retirado, tempo de residência, nucleação e distribuição de tamanhos.', printRes.join('\n'),
@@ -8208,6 +9070,204 @@ end
 end
 `;
 
+  const MET_FUNCS = `% --- alto-forno e forno de cimento (balanços de massa e energia) ---
+function [out_streams, diag] = blast_furnace_block(in_streams, params)
+% Alto-forno: estequiometria global + balanço de energia com entalpias de formação (kJ/kmol) e c_p médios (kJ/(kmol.K)).
+MW.Fe = 55.845; MW.O = 15.999; MW.C = 12.011; MW.Si = 28.085; MW.Ca = 40.078;
+MW.Fe2O3 = 2*MW.Fe + 3*MW.O; MW.SiO2 = MW.Si + 2*MW.O; MW.CaCO3 = MW.Ca + MW.C + 3*MW.O; MW.CaO = MW.Ca + MW.O;
+MW.CO = MW.C + MW.O; MW.CO2 = MW.C + 2*MW.O; MW.O2 = 2*MW.O; MW.N2 = 28.013;
+Hf.Fe2O3 = -824200; Hf.SiO2 = -910700; Hf.CaCO3 = -1206920; Hf.CaO = -635090; Hf.CO = -110530; Hf.CO2 = -393510; Hf.O2 = 0; Hf.N2 = 0; Hf.C = 0; Hf.Fe = 0;
+L_fus_Fe = 13800;   % calor latente de fusão do ferro (kJ/kmol)
+% vazões molares de entrada (kmol/s)
+n_Fe2O3 = in_streams.ore.mass_flow*in_streams.ore.w_Fe2O3/MW.Fe2O3; n_SiO2_ore = in_streams.ore.mass_flow*(1 - in_streams.ore.w_Fe2O3)/MW.SiO2;
+n_C_coke = in_streams.coke.mass_flow*in_streams.coke.w_C/MW.C; n_SiO2_coke = in_streams.coke.mass_flow*(1 - in_streams.coke.w_C)/MW.SiO2;
+n_CaCO3 = in_streams.flux.mass_flow/MW.CaCO3;
+n_O2 = in_streams.blast.mass_flow*in_streams.blast.w_O2/MW.O2; n_N2 = in_streams.blast.mass_flow*(1 - in_streams.blast.w_O2)/MW.N2;
+% estequiometria: Fe2O3 -> 2 Fe (o O vai para o gás), C dissolvido no gusa, CaCO3 -> CaO + CO2
+n_Fe = 2*n_Fe2O3; n_O_ore = 3*n_Fe2O3;
+m_Fe = n_Fe*MW.Fe; m_gusa = m_Fe/(1 - params.C_gusa); m_C_gusa = m_gusa*params.C_gusa; n_C_gusa = m_C_gusa/MW.C;
+n_C_gas = n_C_coke - n_C_gusa;
+if n_C_gas < 0, error('Coque insuficiente para carburar o gusa.'); end
+n_CaO = n_CaCO3; n_CO2_calc = n_CaCO3; n_SiO2 = n_SiO2_ore + n_SiO2_coke;
+m_slag = n_CaO*MW.CaO + n_SiO2*MW.SiO2;
+% CO e CO2 do topo pelos balanços de C e O
+C_gas = n_C_gas + n_CO2_calc; O_gas = 2*n_O2 + n_O_ore + 2*n_CO2_calc;
+n_CO2 = O_gas - C_gas; n_CO = 2*C_gas - O_gas;
+if n_CO < 0 || n_CO2 < 0, warning('Relação sopro/coque fora da faixa operacional válida.'); end
+n_gas = n_CO + n_CO2 + n_N2; m_bfg = n_CO*MW.CO + n_CO2*MW.CO2 + n_N2*MW.N2;
+out_streams.pig_iron.mass_flow = m_gusa; out_streams.pig_iron.w_Fe = 1 - params.C_gusa; out_streams.pig_iron.w_C = params.C_gusa; out_streams.pig_iron.T = params.T_gusa;
+out_streams.slag.mass_flow = m_slag; out_streams.slag.w_CaO = n_CaO*MW.CaO/m_slag; out_streams.slag.w_SiO2 = n_SiO2*MW.SiO2/m_slag; out_streams.slag.T = params.T_slag;
+out_streams.bfg.mass_flow = m_bfg; out_streams.bfg.y_CO = n_CO/n_gas; out_streams.bfg.y_CO2 = n_CO2/n_gas; out_streams.bfg.y_N2 = n_N2/n_gas; out_streams.bfg.T = params.T_gas;
+% balanço de energia (kW)
+Tr = 298.15;
+Cp.Fe2O3 = 105; Cp.SiO2 = 45; Cp.C = 16; Cp.CaCO3 = 90; Cp.O2 = 30; Cp.N2 = 30; Cp.CO = 31; Cp.CO2 = 45; Cp.Fe_l = 46; Cp.CaO = 50;
+H_in = n_Fe2O3*(Hf.Fe2O3 + Cp.Fe2O3*(in_streams.ore.T - Tr)) + n_SiO2_ore*(Hf.SiO2 + Cp.SiO2*(in_streams.ore.T - Tr)) ...
+     + n_C_coke*(Hf.C + Cp.C*(in_streams.coke.T - Tr)) + n_SiO2_coke*(Hf.SiO2 + Cp.SiO2*(in_streams.coke.T - Tr)) ...
+     + n_CaCO3*(Hf.CaCO3 + Cp.CaCO3*(in_streams.flux.T - Tr)) + n_O2*(Hf.O2 + Cp.O2*(in_streams.blast.T - Tr)) + n_N2*(Hf.N2 + Cp.N2*(in_streams.blast.T - Tr));
+H_out = n_Fe*(Hf.Fe + L_fus_Fe + Cp.Fe_l*(params.T_gusa - Tr)) + n_C_gusa*(Hf.C + Cp.C*(params.T_gusa - Tr)) ...
+      + n_CaO*(Hf.CaO + Cp.CaO*(params.T_slag - Tr)) + n_SiO2*(Hf.SiO2 + Cp.SiO2*(params.T_slag - Tr)) ...
+      + n_CO*(Hf.CO + Cp.CO*(params.T_gas - Tr)) + n_CO2*(Hf.CO2 + Cp.CO2*(params.T_gas - Tr)) + n_N2*(Hf.N2 + Cp.N2*(params.T_gas - Tr));
+diag.H_in_kW = H_in; diag.H_out_kW = H_out; diag.Q_reactions_kW = H_in - H_out;
+diag.energy_balance_residual_kW = H_in - H_out - params.Q_loss;
+diag.eta_CO_calculated = n_CO2/(n_CO + n_CO2);
+diag.coke_rate_kg_per_t_gusa = in_streams.coke.mass_flow/m_gusa*1000;
+end
+
+function r = af_residuo(m, in_streams, params)
+% resíduo térmico (kW) do alto-forno com a vazão m (kg/s) de ar de sopro
+in_streams.blast.mass_flow = m; [~, d] = blast_furnace_block(in_streams, params); r = d.energy_balance_residual_kW;
+end
+
+function [out_streams, diag] = cement_kiln_block(in_streams, params)
+% Forno de cimento: calcinação completa (CaCO3 -> CaO + CO2), combustão completa e balanço de energia.
+MW.CaCO3 = 100.086; MW.CaO = 56.077; MW.CO2 = 44.010; MW.SiO2 = 60.084; MW.Al2O3 = 101.960; MW.Fe2O3 = 159.690;
+MW.H2O = 18.015; MW.C = 12.011; MW.H2 = 2.016; MW.O2 = 31.998; MW.N2 = 28.013;
+Hf.CaCO3 = -1206920; Hf.CaO = -635090; Hf.CO2 = -393510; Hf.SiO2 = -910700; Hf.Al2O3 = -1675700; Hf.Fe2O3 = -824200;
+Hf.H2Ol = -285830; Hf.H2Og = -241820; Hf.C = 0; Hf.H2 = 0; Hf.O2 = 0; Hf.N2 = 0;
+m_meal = in_streams.meal.mass_flow;
+n_CaCO3 = m_meal*in_streams.meal.w_CaCO3/MW.CaCO3; n_SiO2_meal = m_meal*in_streams.meal.w_SiO2/MW.SiO2;
+n_Al2O3 = m_meal*in_streams.meal.w_Al2O3/MW.Al2O3; n_Fe2O3 = m_meal*in_streams.meal.w_Fe2O3/MW.Fe2O3; n_H2O_meal = m_meal*in_streams.meal.w_H2O/MW.H2O;
+m_fuel = in_streams.fuel.mass_flow;
+n_C = m_fuel*in_streams.fuel.w_C/MW.C; n_H2 = m_fuel*in_streams.fuel.w_H/MW.H2; n_SiO2_ash = m_fuel*in_streams.fuel.w_ash/MW.SiO2;
+m_air = in_streams.air.mass_flow; n_O2_air = m_air*in_streams.air.w_O2/MW.O2; n_N2_air = m_air*(1 - in_streams.air.w_O2)/MW.N2;
+n_CaO = n_CaCO3; n_CO2_calc = n_CaCO3;
+n_O2_req = n_C + 0.5*n_H2; n_O2_exc = n_O2_air - n_O2_req;
+if n_O2_exc < 0, warning('Ar de combustão insuficiente: a combustão seria incompleta.'); end
+m_CaO = n_CaO*MW.CaO; m_SiO2 = (n_SiO2_meal + n_SiO2_ash)*MW.SiO2; m_Al2O3 = n_Al2O3*MW.Al2O3; m_Fe2O3 = n_Fe2O3*MW.Fe2O3;
+m_cl = m_CaO + m_SiO2 + m_Al2O3 + m_Fe2O3;
+out_streams.clinker.mass_flow = m_cl; out_streams.clinker.w_CaO = m_CaO/m_cl; out_streams.clinker.w_SiO2 = m_SiO2/m_cl;
+out_streams.clinker.w_Al2O3 = m_Al2O3/m_cl; out_streams.clinker.w_Fe2O3 = m_Fe2O3/m_cl; out_streams.clinker.T = params.T_clinker;
+n_CO2 = n_CO2_calc + n_C; n_H2O = n_H2O_meal + n_H2; n_O2 = max(0, n_O2_exc); n_N2 = n_N2_air; n_tot = n_CO2 + n_H2O + n_O2 + n_N2;
+out_streams.flue_gas.mass_flow = n_CO2*MW.CO2 + n_H2O*MW.H2O + n_O2*MW.O2 + n_N2*MW.N2;
+out_streams.flue_gas.y_CO2 = n_CO2/n_tot; out_streams.flue_gas.y_H2O = n_H2O/n_tot; out_streams.flue_gas.y_O2 = n_O2/n_tot; out_streams.flue_gas.y_N2 = n_N2/n_tot; out_streams.flue_gas.T = params.T_gas;
+Tr = 298.15;
+Cp.CaCO3 = 90; Cp.CaO = 52; Cp.CO2 = 45; Cp.SiO2 = 55; Cp.Al2O3 = 115; Cp.Fe2O3 = 110; Cp.H2Ol = 75.3; Cp.H2Og = 38; Cp.C = 16; Cp.H2 = 29; Cp.O2 = 31; Cp.N2 = 30;
+Tm = in_streams.meal.T; Tf = in_streams.fuel.T; Ta = in_streams.air.T; Tc = params.T_clinker; Tg = params.T_gas;
+H_in = n_CaCO3*(Hf.CaCO3 + Cp.CaCO3*(Tm - Tr)) + n_SiO2_meal*(Hf.SiO2 + Cp.SiO2*(Tm - Tr)) + n_Al2O3*(Hf.Al2O3 + Cp.Al2O3*(Tm - Tr)) ...
+     + n_Fe2O3*(Hf.Fe2O3 + Cp.Fe2O3*(Tm - Tr)) + n_H2O_meal*(Hf.H2Ol + Cp.H2Ol*(Tm - Tr)) ...
+     + n_C*(Hf.C + Cp.C*(Tf - Tr)) + n_H2*(Hf.H2 + Cp.H2*(Tf - Tr)) + n_SiO2_ash*(Hf.SiO2 + Cp.SiO2*(Tf - Tr)) ...
+     + n_O2_air*(Hf.O2 + Cp.O2*(Ta - Tr)) + n_N2_air*(Hf.N2 + Cp.N2*(Ta - Tr));
+H_out = n_CaO*(Hf.CaO + Cp.CaO*(Tc - Tr)) + (n_SiO2_meal + n_SiO2_ash)*(Hf.SiO2 + Cp.SiO2*(Tc - Tr)) + n_Al2O3*(Hf.Al2O3 + Cp.Al2O3*(Tc - Tr)) ...
+      + n_Fe2O3*(Hf.Fe2O3 + Cp.Fe2O3*(Tc - Tr)) + n_CO2*(Hf.CO2 + Cp.CO2*(Tg - Tr)) + n_H2O*(Hf.H2Og + Cp.H2Og*(Tg - Tr)) ...
+      + n_O2*(Hf.O2 + Cp.O2*(Tg - Tr)) + n_N2*(Hf.N2 + Cp.N2*(Tg - Tr));
+diag.H_in_kW = H_in; diag.H_out_kW = H_out; diag.energy_balance_residual_kW = H_in - H_out - params.Q_loss;
+diag.yield_meal_to_clinker = m_cl/m_meal;
+diag.spec_energy_kJ = m_fuel*in_streams.fuel.LHV/m_cl; diag.spec_energy_kcal = diag.spec_energy_kJ/4.184;
+diag.air_excess_pct = n_O2_exc/n_O2_req*100;
+end
+
+function r = fc_residuo(m, in_streams, params)
+% resíduo térmico (kW) do forno de cimento com a vazão m (kg/s) de combustível (ar fixo)
+in_streams.fuel.mass_flow = m; [~, d] = cement_kiln_block(in_streams, params); r = d.energy_balance_residual_kW;
+end`;
+  const SILO_FUNCS = `% --- silo com tremonha cônica (Beverloo, Rose e Tanaka, Jenike) ---
+function [W, F_RT, W0] = hopper_capacidade(theta, silo, mp)
+% capacidade de descarga (kg/s): Beverloo para fundo plano vezes o fator de Rose e Tanaka (tg(theta)*tg(chi))^-0,35
+W0 = mp.C_beverloo*silo.rho_b*sqrt(mp.g)*(silo.D_o - mp.k_beverloo*silo.d_p)^2.5;
+F_RT = 1; if theta < 90, x = tand(theta)*tand(mp.chi); if x < 1, F_RT = x^(-0.35); end, end
+W = W0*F_RT;
+end
+
+function [res, t_vec, M_vec, Q_vec] = hopper_block(theta, silo, mp)
+% theta: semiângulo da tremonha a partir da vertical (graus); 90 = fundo plano
+R_s = silo.D_s/2; R_o = silo.D_o/2;
+V_cyl = pi*R_s^2*silo.H_cyl;
+if theta >= 90, H_cone = 0; else, H_cone = (R_s - R_o)/tand(theta); end
+V_cone = pi*H_cone/3*(R_s^2 + R_s*R_o + R_o^2);
+M_total = (V_cyl + V_cone)*silo.rho_b;
+theta_crit = 40 - silo.phi_w/2;   % aproximação de Jenike para tremonha cônica
+if theta < 90 && theta <= theta_crit, regime = 'escoamento em massa'; else, regime = 'escoamento em funil'; end
+[W, F_RT] = hopper_capacidade(theta, silo, mp);
+M_lim = 0.08*pi*R_s^2*silo.rho_b;   % camada final (8 cm): a vazão cai com sqrt(M/M_lim)
+ode = @(t, M) -silo_vazao(M, W, M_lim);
+opts = odeset('RelTol', 1e-6, 'AbsTol', 1e-5, 'Events', @silo_evento);
+[t_vec, M_vec] = ode45(ode, [0, 1.3*(M_total/W + 2*M_lim/W)], M_total, opts);
+Q_vec = arrayfun(@(M) silo_vazao(M, W, M_lim), M_vec);
+res.theta = theta; res.regime = regime; res.M_total = M_total; res.W = W; res.F_RT = F_RT;
+res.t_discharge = t_vec(end); res.Q_mean = M_total/t_vec(end); res.H_cone = H_cone;
+end
+
+function Q = silo_vazao(M, W, M_lim)
+if M <= 1e-3, Q = 0; elseif M < M_lim, Q = W*sqrt(M/M_lim); else, Q = W; end
+end
+
+function [valor, terminal, direcao] = silo_evento(~, M)
+% interrompe a integração quando o silo esvazia
+valor = M - 1e-3; terminal = 1; direcao = -1;
+end`;
+  const TF_FUNCS = `% --- sedimentador contínuo: Talmadge e Fitch (1955) ---
+function [out_streams, diag] = talmadge_fitch_block(in_streams, batch, params)
+Q_F = in_streams.feed.vol_flow; w_F = in_streams.feed.w_solids; rho_s = in_streams.feed.rho_s; rho_f = in_streams.feed.rho_f;
+rho_F = 1/(w_F/rho_s + (1 - w_F)/rho_f);
+m_feed = Q_F*rho_F; m_s = m_feed*w_F; m_l = m_feed*(1 - w_F);
+H0 = batch.H0; C0 = batch.C0; Cu = params.C_U_target;
+Hu = H0*C0/Cu;   % altura equivalente ao underflow
+t_vec = linspace(0, max(7200, batch.t_linear + 8/batch.k_comp), 2000);
+H_lin_end = H0 - batch.v0*batch.t_linear;
+H_vec = (t_vec <= batch.t_linear).*(H0 - batch.v0*t_vec) + (t_vec > batch.t_linear).*(Hu + (H_lin_end - Hu)*exp(-batch.k_comp*(t_vec - batch.t_linear)));
+dH = gradient(H_vec, t_vec); d2H = gradient(dH, t_vec);
+if Hu >= H_lin_end
+    t_c = batch.t_linear; H_c = H_lin_end; dH_c = -batch.v0; t_u = (H0 - Hu)/batch.v0;   % H_u no trecho livre
+elseif params.tangente_ramo
+    t_c = batch.t_linear; H_c = H_lin_end; dH_c = -batch.k_comp*(H_lin_end - Hu); t_u = t_c + (Hu - H_c)/dH_c;
+else
+    [~, ic] = max(d2H); t_c = t_vec(ic); H_c = H_vec(ic); dH_c = dH(ic); t_u = t_c + (Hu - H_c)/dH_c;   % ponto de máxima curvatura
+end
+A_min = m_s*t_u/(C0*H0); D_min = sqrt(4*A_min/pi);
+m_sU = m_s*params.eta_rec; m_sO = m_s - m_sU;
+Q_U = m_sU/Cu; m_lU = (Q_U - m_sU/rho_s)*rho_f; m_U = m_sU + m_lU;
+m_lO = m_l - m_lU; m_O = m_sO + m_lO; Q_O = m_sO/rho_s + m_lO/rho_f;
+cpF = w_F*params.Cp_solid + (1 - w_F)*params.Cp_fluid; H_in = m_feed*cpF*in_streams.feed.T;
+w_U = m_sU/m_U; w_O = m_sO/m_O;
+mcp = m_U*(w_U*params.Cp_solid + (1 - w_U)*params.Cp_fluid) + m_O*(w_O*params.Cp_solid + (1 - w_O)*params.Cp_fluid);
+T_out = (H_in - params.Q_loss)/mcp; H_out = mcp*T_out;
+out_streams.underflow.mass_flow = m_U; out_streams.underflow.vol_flow = Q_U; out_streams.underflow.C_solids = m_sU/Q_U; out_streams.underflow.T = T_out;
+out_streams.overflow.mass_flow = m_O; out_streams.overflow.vol_flow = Q_O; out_streams.overflow.C_solids = m_sO/Q_O; out_streams.overflow.T = T_out;
+diag.Hu = Hu; diag.t_c = t_c; diag.H_c = H_c; diag.dH_c = dH_c; diag.t_u = t_u; diag.A_min = A_min; diag.D_min = D_min;
+diag.solid_loading = m_s*3600/A_min; diag.H_in_kW = H_in; diag.H_out_kW = H_out; diag.energy_balance_residual_kW = H_in - H_out - params.Q_loss;
+diag.t_vec = t_vec; diag.H_vec = H_vec;
+end`;
+
+  const KRAFT_FUNCS = `% --- digestor contínuo kraft (eucalipto) ---
+function [out_streams, diag] = eucalyptus_kraft_digester_block(in_streams, params)
+% Balanço de massa e de energia do digestor kraft, como no código de referência, com três acréscimos:
+% a sulfidez separa NaOH, Na2S e a carga morta do licor branco; a polpa é dividida em celulose,
+% hemicelulose e lignina; e o calor retirado entre o cozimento e a descarga fecha o balanço de energia.
+wd = in_streams.wood; wl = in_streams.white_liquor;
+m_dry = wd.mass_flow*(1 - wd.moisture); m_w_wood = wd.mass_flow*wd.moisture;                 % madeira seca e água dos cavacos
+cel = m_dry*wd.w_cellulose; hem = m_dry*wd.w_hemicell; lig = m_dry*wd.w_lignin; ext = m_dry*wd.w_extractives;
+m_EA = m_dry*wl.EA_charge; V_WL = m_EA/wl.EA_conc; m_WL = V_WL*wl.density;                      % licor branco
+AA = m_EA/(1 - wl.sulfidity/2); m_NaOH = (1 - wl.sulfidity)*AA; m_Na2S = wl.sulfidity*AA*78.045/(2*39.997);
+m_inorg = m_EA*wl.inorg_ratio; m_dead = m_inorg - m_NaOH - m_Na2S; m_w_WL = m_WL - m_inorg;    % sais e carga morta (Na2CO3)
+m_w_in = m_w_wood + m_w_WL; LW = m_w_in/m_dry;                                                   % relação líquido/madeira
+kappa = params.kappa_target; Y = params.yield_a + params.yield_b*kappa;                           % rendimento bruto (%)
+m_pulp = m_dry*Y/100; m_diss = m_dry - m_pulp;
+lig_p = m_pulp*params.lignin_per_kappa*kappa/100; carb_p = m_pulp - lig_p;                       % lignina residual e carboidratos
+cel_p = min(params.cellulose_kept*cel, carb_p); hem_p = carb_p - cel_p;
+if hem_p > hem, hem_p = hem; cel_p = carb_p - hem; end
+m_w_pulp = min(params.water_pulp*m_pulp, m_w_in); m_w_BL = m_w_in - m_w_pulp;
+m_s_BL = m_diss + m_inorg; m_BL = m_w_BL + m_s_BL;                                               % licor negro fraco
+cp = params.cp; Tr = 298.15;
+Q_wood = (m_dry*cp.wood + m_w_wood*cp.water)*(params.T_cook - wd.T);
+Q_WL = m_WL*cp.WL*(params.T_cook - wl.T);
+Q_rxn = m_diss*params.dH_rxn;                                                                   % reações kraft (exotérmicas)
+Q_req = Q_wood + Q_WL - Q_rxn + params.Q_loss; m_steam = Q_req/in_streams.steam.h_fg;           % vapor (aquecimento indireto)
+H_in = (m_dry*cp.wood + m_w_wood*cp.water)*(wd.T - Tr) + m_WL*cp.WL*(wl.T - Tr) + m_steam*in_streams.steam.h_fg;
+H_out = (m_pulp*cp.pulp + m_w_pulp*cp.water)*(params.T_blow - Tr) + (m_s_BL*cp.BL_solids + m_w_BL*cp.water)*(params.T_blow - Tr);
+Q_removed = H_in + Q_rxn - params.Q_loss - H_out;                                                % lavagem e tanques de flash
+out_streams.pulp.mass_flow_dry = m_pulp; out_streams.pulp.yield_pct = Y; out_streams.pulp.kappa = kappa;
+out_streams.pulp.lignin_pct = params.lignin_per_kappa*kappa; out_streams.pulp.water = m_w_pulp; out_streams.pulp.T = params.T_blow;
+out_streams.black_liquor.mass_flow = m_BL; out_streams.black_liquor.m_organic_solids = m_diss; out_streams.black_liquor.m_inorganic_solids = m_inorg;
+out_streams.black_liquor.solids_pct = 100*m_s_BL/m_BL; out_streams.black_liquor.T = params.T_blow;
+out_streams.condensate.mass_flow = m_steam;
+diag.m_dot_wood_dry = m_dry; diag.m_dot_WL = m_WL; diag.V_dot_WL = V_WL; diag.LW_actual = LW;
+diag.m_NaOH = m_NaOH; diag.m_Na2S = m_Na2S; diag.m_dead_load = m_dead;
+diag.cel_wood = cel; diag.hem_wood = hem; diag.lig_wood = lig; diag.ext_wood = ext; diag.cel_pulp = cel_p; diag.hem_pulp = hem_p; diag.lig_pulp = lig_p;
+diag.Q_heat_wood = Q_wood; diag.Q_heat_WL = Q_WL; diag.Q_rxn = Q_rxn; diag.Q_thermal_kW = Q_req; diag.m_dot_steam = m_steam;
+diag.H_in_kW = H_in; diag.H_out_kW = H_out; diag.Q_removed_kW = Q_removed;
+diag.energy_balance_residual_kW = H_in + Q_rxn - params.Q_loss - H_out - Q_removed;
+end`;
+
   const BIO_FUNCS = `% --- bioprocessos: equação de Tosetto e cinética do biodiesel ---
 function mu = tosetto_mu(X, S, Pr, P)
 % equação de Tosetto: substrato limitante, inibição pelo substrato (S^2/Ki) e pelo produto ((1 - P/Pmax)^n)
@@ -8440,7 +9500,7 @@ end`;
     const parts = [head.join('\n'), td.code, streamTableCode(st, res), pfdCode(st, res), PFD_HEAD, iconLibMatlab(types)]
       .concat(blocks.map(x => x.code))
       .concat(needVLE ? [VLE_FUNCS] : []).concat(needFlash ? [FLASH_FUNC] : []).concat(needCSTR ? [CSTR_RHS] : []).concat(needPFR ? [PFR_TRANS] : [])
-      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []).concat(blocks.some(x => /gibbs_rand/.test(x.code)) ? [GIBBS_FUNCS] : []).concat(blocks.some(x => /ell_cross/.test(x.code)) ? [ELL_FUNCS] : []).concat(blocks.some(x => /steam_Tsat/.test(x.code)) ? [EVAP_FUNCS] : []).concat(blocks.some(x => /pid_simula/.test(x.code)) ? [PID_FUNCS] : []).concat(blocks.some(x => /tosetto_rhs|biodiesel_rhs/.test(x.code)) ? [BIO_FUNCS] : []).concat(blocks.some(x => /sf_bulbo_umido|cris_bal|lyo_ciclo|micro_rhs/.test(x.code)) ? [SEC_FUNCS] : []).concat(blocks.some(x => /mccabe_refluxo_gui/.test(x.code)) ? [MR_FUNCS] : []).concat(blocks.some(x => /bomba_sistema/.test(x.code)) ? [PUMP_FUNCS] : []);
+      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []).concat(blocks.some(x => /gibbs_rand/.test(x.code)) ? [GIBBS_FUNCS] : []).concat(blocks.some(x => /ell_cross/.test(x.code)) ? [ELL_FUNCS] : []).concat(blocks.some(x => /steam_Tsat/.test(x.code)) ? [EVAP_FUNCS] : []).concat(blocks.some(x => /pid_simula/.test(x.code)) ? [PID_FUNCS] : []).concat(blocks.some(x => /tosetto_rhs|biodiesel_rhs/.test(x.code)) ? [BIO_FUNCS] : []).concat(blocks.some(x => /sf_bulbo_umido|cris_bal|lyo_ciclo|micro_rhs/.test(x.code)) ? [SEC_FUNCS] : []).concat(blocks.some(x => /mccabe_refluxo_gui/.test(x.code)) ? [MR_FUNCS] : []).concat(blocks.some(x => /bomba_sistema/.test(x.code)) ? [PUMP_FUNCS] : []).concat(blocks.some(x => /blast_furnace_block|cement_kiln_block/.test(x.code)) ? [MET_FUNCS] : []).concat(blocks.some(x => /hopper_block/.test(x.code)) ? [SILO_FUNCS] : []).concat(blocks.some(x => /talmadge_fitch_block/.test(x.code)) ? [TF_FUNCS] : []).concat(blocks.some(x => /eucalyptus_kraft_digester_block/.test(x.code)) ? [KRAFT_FUNCS] : []);
     return parts.join('\n\n') + '\n';
   }
 
@@ -9061,6 +10121,139 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         "    a2.set_xlabel('X (kg água/kg sólido seco)'); a2.set_ylabel('R (kg/(h·m²))'); a2.legend(); a2.set_title('Taxa de secagem (dados)'); a2.grid(True)",
         '    f1.tight_layout()', '    return [f1]']).join('\n');
     }
+    if (b.type === 'blast_furnace' && r.bf) {
+      const g = r.bf, w = (a, bb) => n2s(bb > 0 ? a / bb : 0);
+      return head.concat([
+        '    # Alto-forno: balanço de massa (estequiometria global) e de energia (entalpias de formação e c_p médios), como no código de referência',
+        "    ins = {'ore': {'mass_flow': " + n2s(g.ore.m) + ", 'w_Fe2O3': " + w(g.ore.kg.Fe2O3, g.ore.m) + ", 'T': " + n2s(g.ore.T) + "},   # kg/s, fração, K",
+        "           'coke': {'mass_flow': " + n2s(g.coke.m) + ", 'w_C': " + w(g.coke.kg.C, g.coke.m) + ", 'T': " + n2s(g.coke.T) + "},",
+        "           'flux': {'mass_flow': " + n2s(g.flux.m) + ", 'T': " + n2s(g.flux.T) + "},",
+        "           'blast': {'mass_flow': " + n2s(g.blast.m) + ", 'w_O2': " + w(g.blast.kg.O2, g.blast.m) + ", 'T': " + n2s(g.blast.T) + "}}",
+        "    par = {'C_gusa': " + n2s(g.Cg) + ", 'T_gusa': " + n2s(g.Tg) + ", 'T_slag': " + n2s(g.Ts) + ", 'T_gas': " + n2s(g.Tgas) + ", 'Q_loss': " + n2s(g.Qloss) + "}",
+        '    out, dg = blast_furnace_block(ins, par)',
+        "    print(f\"  Python: gusa = {out['pig_iron']['mass_flow']:.3f} kg/s ({3.6 * out['pig_iron']['mass_flow']:.2f} t/h), escória = {out['slag']['mass_flow']:.3f} kg/s, gás de topo = {out['bfg']['mass_flow']:.3f} kg/s\")",
+        "    print(f\"  Python: CO = {100 * out['bfg']['y_CO']:.2f} %, CO2 = {100 * out['bfg']['y_CO2']:.2f} %, N2 = {100 * out['bfg']['y_N2']:.2f} %, coque = {dg['coke_rate']:.1f} kg/t, eta_CO = {dg['eta_CO']:.3f}\")",
+        "    print(f\"  Python: H_e = {dg['H_in']:.2f} kW, H_s = {dg['H_out']:.2f} kW, resíduo térmico = {dg['residual']:.2f} kW\")",
+        '    mv = np.linspace(' + n2s(g.m1) + ', ' + n2s(g.m2) + ', 161); R, yCO, yCO2 = [], [], []',
+        '    for m in mv:',
+        "        o2, d2 = blast_furnace_block(dict(ins, blast=dict(ins['blast'], mass_flow=m)), par)",
+        "        R.append(d2['residual'] / 1000); yCO.append(100 * o2['bfg']['y_CO']); yCO2.append(100 * o2['bfg']['y_CO2'])",
+        "    resid = lambda m: blast_furnace_block(dict(ins, blast=dict(ins['blast'], mass_flow=m)), par)[1]['residual']",
+        '    m_fecha = brentq(resid, mv[0], mv[-1]) if R[0] < 0 < R[-1] else np.nan',
+        "    print(f'  Python: ar de sopro que zera o resíduo = {m_fecha:.2f} kg/s')",
+        '    f1, (a1, a2, a3) = plt.subplots(1, 3, figsize=(20, 6.5))',
+        "    cat = ['minério', 'coque', 'fundente', 'ar', 'gusa', 'escória', 'gás']",
+        "    vals = [ins['ore']['mass_flow'], ins['coke']['mass_flow'], ins['flux']['mass_flow'], ins['blast']['mass_flow'], out['pig_iron']['mass_flow'], out['slag']['mass_flow'], out['bfg']['mass_flow']]",
+        "    a1.bar(cat, vals, color=['#2563c9'] * 4 + ['#d1302b'] * 3); a1.set_ylabel('Vazão (kg/s)'); a1.set_title('Balanço de massa'); a1.tick_params(axis='x', rotation=35); a1.grid(True, axis='y')",
+        "    a2.plot(mv, R, color='#7a3db8', lw=3, label='resíduo'); a2.axhline(0, color='k', ls='--', lw=1)",
+        "    a2.plot(ins['blast']['mass_flow'], dg['residual'] / 1000, 'ro', ms=10, label='operação atual')",
+        "    if np.isfinite(m_fecha): a2.plot(m_fecha, 0, 'gD', ms=10, label=f'balanço fechado ({m_fecha:.1f} kg/s)')",
+        "    a2.set_xlabel('Ar de sopro (kg/s)'); a2.set_ylabel('Resíduo térmico (MW)'); a2.set_title('Efeito do ar de sopro'); a2.legend(); a2.grid(True)",
+        "    a3.plot(mv, yCO, 'r', lw=2.5, label='CO'); a3.plot(mv, yCO2, 'b', lw=2.5, label='CO₂'); a3.set_xlabel('Ar de sopro (kg/s)'); a3.set_ylabel('% molar no gás de topo'); a3.set_title('Gás de topo'); a3.legend(); a3.grid(True)",
+        '    f1.tight_layout()', '    return [f1]']).join('\n');
+    }
+    if (b.type === 'cement_kiln' && r.kiln) {
+      const g = r.kiln, w = (a, bb) => n2s(bb > 0 ? a / bb : 0), me = g.meal, fu = g.fuel, ai = g.air;
+      return head.concat([
+        '    # Forno de cimento: calcinação, combustão completa, clínquer, fases de Bogue e balanço de energia, como no código de referência',
+        "    ins = {'meal': {'mass_flow': " + n2s(me.m) + ", 'w_CaCO3': " + w(me.kg.CaCO3, me.m) + ", 'w_SiO2': " + w(me.kg.SiO2, me.m) + ", 'w_Al2O3': " + w(me.kg.Al2O3, me.m) + ", 'w_Fe2O3': " + w(me.kg.Fe2O3, me.m) + ", 'w_H2O': " + w(me.kg.H2O, me.m) + ", 'T': " + n2s(me.T) + "},",
+        "           'fuel': {'mass_flow': " + n2s(fu.m) + ", 'w_C': " + w(fu.kg.C, fu.m) + ", 'w_H': " + w(fu.kg.H2, fu.m) + ", 'w_ash': " + w(fu.kg.ash, fu.m) + ", 'LHV': " + n2s(g.LHV) + ", 'T': " + n2s(fu.T) + "},",
+        "           'air': {'mass_flow': " + n2s(ai.m) + ", 'w_O2': " + w(ai.kg.O2, ai.m) + ", 'T': " + n2s(ai.T) + "}}",
+        "    par = {'T_clinker': " + n2s(g.Tcl) + ", 'T_gas': " + n2s(g.Tg) + ", 'Q_loss': " + n2s(g.Qloss) + "}",
+        '    out, dg = cement_kiln_block(ins, par)',
+        "    cl = [100 * out['clinker'][k] for k in ('w_CaO', 'w_SiO2', 'w_Al2O3', 'w_Fe2O3')]",
+        '    C3S = 4.071 * cl[0] - 7.600 * cl[1] - 6.718 * cl[2] - 1.430 * cl[3]; C2S = 2.867 * cl[1] - 0.7544 * C3S; C3A = 2.650 * cl[2] - 1.692 * cl[3]; C4AF = 3.043 * cl[3]   # Bogue',
+        "    print(f\"  Python: clínquer = {out['clinker']['mass_flow']:.3f} kg/s ({3.6 * out['clinker']['mass_flow']:.2f} t/h), gases = {out['flue_gas']['mass_flow']:.3f} kg/s, consumo = {dg['spec_kcal']:.0f} kcal/kg, excesso de ar = {dg['air_excess']:.2f} %\")",
+        "    print(f'  Python: CaO/SiO2/Al2O3/Fe2O3 = {cl[0]:.2f}/{cl[1]:.2f}/{cl[2]:.2f}/{cl[3]:.2f} %; Bogue C3S/C2S/C3A/C4AF = {C3S:.2f}/{C2S:.2f}/{C3A:.2f}/{C4AF:.2f} %')",
+        "    print(f\"  Python: H_e = {dg['H_in']:.2f} kW, H_s = {dg['H_out']:.2f} kW, resíduo térmico = {dg['residual']:.2f} kW\")",
+        '    fv = np.linspace(' + n2s(g.f1) + ', ' + n2s(g.f2) + ', 121); R, EX = [], []',
+        '    for m in fv:',
+        "        _, d2 = cement_kiln_block(dict(ins, fuel=dict(ins['fuel'], mass_flow=m)), par); R.append(d2['residual'] / 1000); EX.append(d2['air_excess'])",
+        "    resid = lambda m: cement_kiln_block(dict(ins, fuel=dict(ins['fuel'], mass_flow=m)), par)[1]['residual']",
+        '    f_fecha = brentq(resid, fv[0], fv[-1]) if R[0] < 0 < R[-1] else np.nan',
+        "    print(f'  Python: combustível que zera o resíduo = {f_fecha:.3f} kg/s')",
+        '    f1, (a1, a2, a3) = plt.subplots(1, 3, figsize=(20, 6.5))',
+        "    a1.bar(['CaO', 'SiO₂', 'Al₂O₃', 'Fe₂O₃', 'C₃S', 'C₂S', 'C₃A', 'C₄AF'], cl + [C3S, C2S, C3A, C4AF], color=['#e07b39'] * 4 + ['#2563c9'] * 4)",
+        "    a1.set_ylabel('% massa'); a1.set_title('Óxidos e fases de Bogue'); a1.tick_params(axis='x', rotation=35); a1.grid(True, axis='y')",
+        "    a2.bar(['farinha', 'combustível', 'ar', 'clínquer', 'gases'], [ins['meal']['mass_flow'], ins['fuel']['mass_flow'], ins['air']['mass_flow'], out['clinker']['mass_flow'], out['flue_gas']['mass_flow']], color=['#2563c9'] * 3 + ['#d1302b'] * 2)",
+        "    a2.set_ylabel('Vazão (kg/s)'); a2.set_title('Balanço de massa'); a2.tick_params(axis='x', rotation=35); a2.grid(True, axis='y')",
+        "    a3.plot(fv, R, color='#7a3db8', lw=3, label='resíduo (MW)'); a3.axhline(0, color='k', ls=':'); a3.set_xlabel('Combustível (kg/s)'); a3.set_ylabel('Resíduo térmico (MW)')",
+        "    b3 = a3.twinx(); b3.plot(fv, EX, color='#2e9e6b', ls='--', lw=2); b3.set_ylabel('Excesso de ar (%)'); a3.set_title('Efeito do combustível'); a3.grid(True)",
+        '    f1.tight_layout()', '    return [f1]']).join('\n');
+    }
+    if (b.type === 'silo' && r.silo) {
+      const g = r.silo, o = g.o;
+      return head.concat([
+        '    # Silo com tremonha cônica: Beverloo, fator de Rose e Tanaka, regime de Jenike e esvaziamento (EDO), com operação contínua',
+        "    silo = {'D_s': " + n2s(o.Ds) + ", 'D_o': " + n2s(o.Do) + ", 'H_cyl': " + n2s(o.Hc) + ", 'd_p': " + n2s(o.dp) + ", 'rho_b': " + n2s(o.rhob) + ", 'phi_w': " + n2s(o.phiw) + "}   # m, kg/m³, graus",
+        "    mp = {'C': " + n2s(o.C) + ", 'k': " + n2s(o.k) + ", 'chi': " + n2s(o.chi) + ", 'g': 9.81}   # chi: zona estagnada (graus, da horizontal)",
+        '    angulos = ' + vec(g.angles) + '; theta_proj = ' + n2s(g.theta) + '; F = ' + n2s(g.F) + '; nivel = ' + n2s(g.level) + '   # semiângulos a partir da vertical (90 = fundo plano); F em kg/s',
+        '    f1, ((a1, a3), (a2, a4)) = plt.subplots(2, 2, figsize=(18, 11)); a3.remove(); a4.remove(); a5 = f1.add_subplot(1, 2, 2)',
+        "    print(f\"\\n  {'theta (°)':<10} | {'regime (Jenike)':<22} | {'W (kg/s)':<10} | {'M total (kg)':<12} | {'t desc (s)':<10}\")",
+        '    for th in angulos:',
+        '        q, t, M, Q = hopper_block(th, silo, mp)',
+        "        a1.plot(t, M, lw=3.4 if th == theta_proj else 2, label=f\"θ = {th:g}° ({q['regime']})\"); a2.plot(t, Q, lw=3.4 if th == theta_proj else 2, label=f'θ = {th:g}°')",
+        "        print(f\"  {th:<10g} | {q['regime']:<22} | {q['W']:<10.2f} | {q['M_total']:<12.1f} | {q['t_discharge']:<10.1f}\")",
+        "    a1.set_xlabel('Tempo (s)'); a1.set_ylabel('Massa restante M(t) (kg)'); a1.set_title('Esvaziamento do silo cheio'); a1.legend(fontsize=FSP); a1.grid(True)",
+        "    a2.axhline(F, color='r', ls='--', lw=1.4, label='alimentação'); a2.set_xlabel('Tempo (s)'); a2.set_ylabel('Q(t) (kg/s)'); a2.set_title('Vazão de descarga'); a2.legend(fontsize=FSP); a2.grid(True)",
+        '    p, _, _, _ = hopper_block(theta_proj, silo, mp); Mop = nivel * p[\'M_total\']',
+        "    print(f\"  Python: W = {p['W']:.3f} kg/s (fator {p['F_RT']:.4f}), utilização = {100 * F / p['W']:.1f} %, tau = {Mop / F / 60:.2f} min, esvaziamento = {p['t_discharge']:.1f} s\")",
+        "    if F > p['W']: print('  Atenção: a alimentação passa da capacidade de descarga: o silo enche.')",
+        "    th = np.arange(5, 91); W = [hopper_capacidade(a, silo, mp)[0] for a in th]; thc = 40 - silo['phi_w'] / 2",
+        "    a5.plot(th, W, 'b', lw=3, label='W(θ)'); a5.axvline(thc, color='m', ls='--', lw=1.5, label='θ crítico (massa à esquerda)'); a5.plot(theta_proj, p['W'], 'rD', ms=11, label='projeto'); a5.axhline(F, color='r', ls=':', label='alimentação')",
+        "    a5.set_xlabel('Semiângulo θ a partir da vertical (°)'); a5.set_ylabel('Capacidade W (kg/s)'); a5.set_title('Capacidade × ângulo da tremonha'); a5.legend(fontsize=FSP); a5.grid(True)",
+        '    f1.tight_layout()', '    return [f1]']).join('\n');
+    }
+    if (b.type === 'thickener' && r.tf) {
+      const g = r.tf;
+      return head.concat([
+        '    # Sedimentador contínuo: método de Talmadge e Fitch (1955), balanço de sólidos e de energia, como no código de referência',
+        "    feed = {'vol_flow': " + n2s(g.QF) + ", 'w_solids': " + n2s(g.wF) + ", 'rho_s': " + n2s(g.rhos) + ", 'rho_f': " + n2s(g.rhof) + ", 'T': " + n2s(g.TF) + "}   # m³/s, fração, kg/m³, K",
+        "    batch = {'H0': " + n2s(g.H0) + ", 'C0': " + n2s(g.C0) + ", 'v0': " + n2s(g.v0) + ", 'k_comp': " + n2s(g.kc) + ", 't_linear': " + n2s(g.tL) + "}   # m, kg/m³, m/s, 1/s, s",
+        "    par = {'C_U': " + n2s(g.Cu) + ", 'eta': " + n2s(g.eta) + ", 'Cp_s': " + n2s(g.cps) + ", 'Cp_f': " + n2s(g.cpf) + ", 'Q_loss': " + n2s(g.Ql) + ", 'tangente_ramo': " + (g.cons ? 'True' : 'False') + "}",
+        '    out, dg = talmadge_fitch_block(feed, batch, par)',
+        "    print(f\"  Python: H_u = {dg['Hu']:.4f} m, t_c = {dg['t_c']:.1f} s, H_c = {dg['H_c']:.4f} m, t_u = {dg['t_u']:.1f} s ({dg['t_u'] / 60:.2f} min)\")",
+        "    print(f\"  Python: A = {dg['A']:.2f} m², D = {dg['D']:.2f} m, carga = {dg['loading']:.2f} kg/(m²·h); underflow = {out['underflow']['mass_flow']:.3f} kg/s, overflow = {out['overflow']['mass_flow']:.3f} kg/s, T = {out['T']:.3f} K\")",
+        '    f1, (a1, a2) = plt.subplots(1, 2, figsize=(18, 7))',
+        "    a1.plot(dg['t'] / 60, dg['H'], 'b', lw=2.5, label='H(t) batelada'); a1.axhline(dg['Hu'], color='k', ls='--', lw=1.5, label=f\"H_u = {dg['Hu']:.3f} m\")",
+        "    t1 = np.linspace(0, dg['t_c'] * 1.2, 50); a1.plot(t1 / 60, batch['H0'] - batch['v0'] * t1, 'g--', lw=1.2, label='tangente inicial (v₀)')",
+        "    a1.plot(dg['t_c'] / 60, dg['H_c'], 'ro', ms=8, label='ponto de compressão')",
+        "    t2 = np.linspace(dg['t_c'] * 0.5, dg['t_u'] * 1.2, 50); a1.plot(t2 / 60, dg['H_c'] + dg['dH_c'] * (t2 - dg['t_c']), 'm-.', lw=1.8, label='tangente em (t_c, H_c)')",
+        "    a1.plot(dg['t_u'] / 60, dg['Hu'], 'ks', ms=10, mfc='y', label=f\"t_u = {dg['t_u'] / 60:.1f} min\"); a1.axvline(dg['t_u'] / 60, color='r', ls=':')",
+        "    a1.set_ylim(0, 1.1 * batch['H0']); a1.set_xlim(0, min(dg['t'][-1], max(2.2 * dg['t_u'], 1.5 * batch['t_linear'])) / 60)",
+        "    a1.set_xlabel('Tempo de ensaio t (min)'); a1.set_ylabel('Altura da interface H (m)'); a1.set_title('Construção gráfica de Talmadge e Fitch'); a1.legend(fontsize=FSP); a1.grid(True)",
+        "    Cu = np.linspace(max(1.3 * batch['C0'], 120), min(0.55 * feed['rho_s'], 1200), 120); A = [talmadge_fitch_block(feed, batch, dict(par, C_U=c))[1]['A'] for c in Cu]",
+        "    a2.plot(Cu, A, color='#7a3db8', lw=3); a2.plot(par['C_U'], dg['A'], 'rD', ms=11); a2.set_xlabel('C_U (kg/m³)'); a2.set_ylabel('Área mínima (m²)'); a2.set_title('Área × concentração do underflow'); a2.grid(True)",
+        '    f1.tight_layout()', '    return [f1]']).join('\n');
+    }
+    if (b.type === 'kraft_digester' && r.kraft) {
+      const g = r.kraft, wd = g.wood.kg, dry = wd.cel + wd.hem + wd.lig + wd.ext, w = (a, bb) => n2s(bb > 0 ? a / bb : 0);
+      return head.concat([
+        '    # Digestor contínuo kraft (cavacos de eucalipto): licor branco, rendimento × kappa, licor negro, vapor e balanço de energia, como no código de referência',
+        "    wood = {'mass_flow': " + n2s(g.wood.m) + ", 'moisture': " + w(wd.w, g.wood.m) + ", 'w_cellulose': " + w(wd.cel, dry) + ", 'w_hemicell': " + w(wd.hem, dry) + ", 'w_lignin': " + w(wd.lig, dry) + ", 'w_extractives': " + w(wd.ext, dry) + ", 'T': " + n2s(g.wood.T) + "}   # kg/s, frações (base seca), K",
+        "    wl = {'EA_charge': " + n2s(g.EA / dry) + ", 'EA_conc': " + n2s(g.EAc) + ", 'sulfidity': " + n2s(g.sulf) + ", 'inorg_ratio': " + n2s(g.inorgR) + ", 'density': " + n2s(g.rhoWL) + ", 'T': " + n2s(g.wl.T) + "}   # licor branco (EA como NaOH; g/L)",
+        "    steam = {'P_bar': " + n2s(g.Ps) + ", 'h_fg': " + n2s(g.hfg) + "}   # vapor saturado (kJ/kg)",
+        "    par = {'kappa': " + n2s(g.kappa) + ", 'yield_a': " + n2s(g.yA) + ", 'yield_b': " + n2s(g.yB) + ", 'lignin_per_kappa': " + n2s(g.ligK) + ", 'cellulose_kept': " + n2s(g.celRet) + ",",
+        "           'T_cook': " + n2s(g.Tcook) + ", 'T_blow': " + n2s(g.Tblow) + ", 'dH_rxn': " + n2s(g.dHr) + ", 'Q_loss': " + n2s(g.Qloss) + ", 'water_pulp': " + n2s(g.wPulp) + ",",
+        "           'cp': {'wood': " + n2s(g.cp.wood) + ", 'water': " + n2s(g.cp.w) + ", 'WL': " + n2s(g.cp.wl) + ", 'pulp': " + n2s(g.cp.pulp) + ", 'BL_solids': " + n2s(g.cp.bls) + "}}   # kJ/(kg·K)",
+        '    out, dg = kraft_digester_block(wood, wl, steam, par)',
+        "    print(f\"  Python: licor branco = {dg['m_WL']:.2f} kg/s ({3600 * dg['V_WL']:.1f} m³/h), vapor = {dg['m_steam']:.3f} kg/s ({3.6 * dg['m_steam']:.2f} t/h), L/W = {dg['LW']:.3f} kg/kg\")",
+        "    print(f\"  Python: polpa = {out['pulp']['mass_flow_dry']:.3f} kg/s ({3.6 * out['pulp']['mass_flow_dry']:.2f} t/h), rendimento = {out['pulp']['yield_pct']:.2f} %, licor negro = {out['black_liquor']['mass_flow']:.2f} kg/s com {out['black_liquor']['solids_pct']:.2f} % de sólidos\")",
+        "    print(f\"  Python: Q do vapor = {dg['Q_req']:.1f} kW, H_e = {dg['H_in']:.1f} kW, H_s = {dg['H_out']:.1f} kW, calor retirado até a descarga = {dg['Q_removed']:.1f} kW, resíduo = {dg['residual']:.2e} kW\")",
+        "    kv = np.linspace(10, 30, 81); Yv = par['yield_a'] + par['yield_b'] * kv",
+        '    Tv = np.linspace(' + n2s(g.T1) + ', ' + n2s(g.T2) + ", 71); Sv = [3.6 * kraft_digester_block(wood, wl, steam, dict(par, T_cook=T + 273.15))[1]['m_steam'] for T in Tv]",
+        '    f1, ((a1, a2), (a3, a4)) = plt.subplots(2, 2, figsize=(18, 11))',
+        "    a1.plot(kv, Yv, 'b', lw=3, label='polpa (rendimento)'); a1.plot(kv, 100 - Yv, '--', color='#7a4a1f', lw=2.5, label='dissolvida no licor negro'); a1.plot(par['kappa'], out['pulp']['yield_pct'], 'rD', ms=11, label='operação')",
+        "    a1.set_xlabel('Número kappa'); a1.set_ylabel('% da madeira seca'); a1.set_title('Rendimento × kappa'); a1.legend(fontsize=FSP); a1.grid(True)",
+        "    a2.plot(Tv, Sv, 'r', lw=3); a2.plot(par['T_cook'] - 273.15, 3.6 * dg['m_steam'], 'ko', ms=10); a2.set_xlabel('Temperatura de cozimento (°C)'); a2.set_ylabel('Vapor (t/h)'); a2.set_title(f\"Vapor a {steam['P_bar']:g} bar\"); a2.grid(True)",
+        "    xc = np.arange(4); pol = [dg['cel_p'], dg['hem_p'], dg['lig_p'], 0]; lic = [dg['cel'] - dg['cel_p'], dg['hem'] - dg['hem_p'], dg['lig'] - dg['lig_p'], dg['ext']]",
+        "    a3.bar(xc - 0.2, pol, 0.4, color='#c98a3d', label='na polpa'); a3.bar(xc + 0.2, lic, 0.4, color='#3a2a1a', label='no licor negro'); a3.set_xticks(xc); a3.set_xticklabels(['celulose', 'hemicelulose', 'lignina', 'extrativos'])",
+        "    a3.set_ylabel('kg/s'); a3.set_title('Destino da madeira seca'); a3.legend(fontsize=FSP); a3.grid(True, axis='y')",
+        "    en = np.array([dg['Q_wood'], dg['Q_WL'], par['Q_loss'], dg['Q_rxn'], dg['Q_req'], dg['Q_removed']]) / 1000",
+        "    a4.bar(range(6), en, color=['#2563c9', '#2563c9', '#2563c9', '#d1302b', '#d1302b', '#2e9e6b']); a4.set_xticks(range(6)); a4.set_xticklabels(['cavacos', 'licor', 'perdas', 'reações', 'vapor', 'retirado'])",
+        "    a4.set_ylabel('MW'); a4.set_title('Balanço de energia'); a4.grid(True, axis='y')",
+        '    f1.tight_layout()', '    return [f1]']).join('\n');
+    }
     if (b.type === 'crystallizer' && r.cry) {
       const g = r.cry, L = ['    # Cristalizador contínuo por resfriamento (MSMPR): balanço com hidrato, calor, tempo de residência, nucleação e distribuição de tamanhos',
         '    F, w, T0, T1, MWs, nh, E = ' + [g.F, g.w, g.T0, g.T1, g.MWs, g.nh, g.E].map(n2s).join(', '),
@@ -9627,6 +10820,144 @@ def micro_ss(o, D):
             return [X, o['Sf'] - mu * X / (D * o['Yx']) - o['ms'] * X / D, o['Pf'] + (o['al'] * mu + o['be']) * X / D]
     return [0.0, o['Sf'], o['Pf']]
 `;
+  const MET_FUNCS = `
+
+def blast_furnace_block(ins, par):
+    """Alto-forno: estequiometria global + balanço de energia (entalpias de formação em kJ/kmol, c_p médios em kJ/(kmol·K))."""
+    Fe, O, C, Si, Ca = 55.845, 15.999, 12.011, 28.085, 40.078
+    MW = {'Fe': Fe, 'C': C, 'Fe2O3': 2 * Fe + 3 * O, 'SiO2': Si + 2 * O, 'CaCO3': Ca + C + 3 * O, 'CaO': Ca + O, 'CO': C + O, 'CO2': C + 2 * O, 'O2': 2 * O, 'N2': 28.013}
+    Hf = {'Fe2O3': -824200, 'SiO2': -910700, 'CaCO3': -1206920, 'CaO': -635090, 'CO': -110530, 'CO2': -393510}
+    Cp = {'Fe2O3': 105, 'SiO2': 45, 'C': 16, 'CaCO3': 90, 'O2': 30, 'N2': 30, 'CO': 31, 'CO2': 45, 'Fe_l': 46, 'CaO': 50}
+    Tr, L_fus = 298.15, 13800.0
+    ore, coke, flux, blast = ins['ore'], ins['coke'], ins['flux'], ins['blast']
+    nFe2O3 = ore['mass_flow'] * ore['w_Fe2O3'] / MW['Fe2O3']; nSiO2o = ore['mass_flow'] * (1 - ore['w_Fe2O3']) / MW['SiO2']
+    nC = coke['mass_flow'] * coke['w_C'] / MW['C']; nSiO2c = coke['mass_flow'] * (1 - coke['w_C']) / MW['SiO2']
+    nCaCO3 = flux['mass_flow'] / MW['CaCO3']; nO2 = blast['mass_flow'] * blast['w_O2'] / MW['O2']; nN2 = blast['mass_flow'] * (1 - blast['w_O2']) / MW['N2']
+    nFe = 2 * nFe2O3; mFe = nFe * MW['Fe']; mg = mFe / (1 - par['C_gusa']); nCg = mg * par['C_gusa'] / MW['C']
+    nCgas = nC - nCg
+    if nCgas < 0:
+        raise ValueError('Coque insuficiente para carburar o gusa.')
+    nCaO = nCaCO3; nSiO2 = nSiO2o + nSiO2c; mslag = nCaO * MW['CaO'] + nSiO2 * MW['SiO2']
+    Cg, Og = nCgas + nCaCO3, 2 * nO2 + 3 * nFe2O3 + 2 * nCaCO3
+    nCO2, nCO = Og - Cg, 2 * Cg - Og
+    ng = nCO + nCO2 + nN2; mbfg = nCO * MW['CO'] + nCO2 * MW['CO2'] + nN2 * MW['N2']
+    Hin = (nFe2O3 * (Hf['Fe2O3'] + Cp['Fe2O3'] * (ore['T'] - Tr)) + nSiO2o * (Hf['SiO2'] + Cp['SiO2'] * (ore['T'] - Tr))
+           + nC * Cp['C'] * (coke['T'] - Tr) + nSiO2c * (Hf['SiO2'] + Cp['SiO2'] * (coke['T'] - Tr))
+           + nCaCO3 * (Hf['CaCO3'] + Cp['CaCO3'] * (flux['T'] - Tr)) + (nO2 * Cp['O2'] + nN2 * Cp['N2']) * (blast['T'] - Tr))
+    Hout = (nFe * (L_fus + Cp['Fe_l'] * (par['T_gusa'] - Tr)) + nCg * Cp['C'] * (par['T_gusa'] - Tr)
+            + nCaO * (Hf['CaO'] + Cp['CaO'] * (par['T_slag'] - Tr)) + nSiO2 * (Hf['SiO2'] + Cp['SiO2'] * (par['T_slag'] - Tr))
+            + nCO * (Hf['CO'] + Cp['CO'] * (par['T_gas'] - Tr)) + nCO2 * (Hf['CO2'] + Cp['CO2'] * (par['T_gas'] - Tr)) + nN2 * Cp['N2'] * (par['T_gas'] - Tr))
+    out = {'pig_iron': {'mass_flow': mg}, 'slag': {'mass_flow': mslag, 'w_CaO': nCaO * MW['CaO'] / mslag},
+           'bfg': {'mass_flow': mbfg, 'y_CO': nCO / ng, 'y_CO2': nCO2 / ng, 'y_N2': nN2 / ng}}
+    dg = {'H_in': Hin, 'H_out': Hout, 'residual': Hin - Hout - par['Q_loss'], 'eta_CO': nCO2 / (nCO + nCO2), 'coke_rate': coke['mass_flow'] / mg * 1000}
+    return out, dg
+
+
+def cement_kiln_block(ins, par):
+    """Forno de cimento: calcinação completa, combustão completa e balanço de energia (kW)."""
+    MW = {'CaCO3': 100.086, 'CaO': 56.077, 'CO2': 44.010, 'SiO2': 60.084, 'Al2O3': 101.960, 'Fe2O3': 159.690, 'H2O': 18.015, 'C': 12.011, 'H2': 2.016, 'O2': 31.998, 'N2': 28.013}
+    Hf = {'CaCO3': -1206920, 'CaO': -635090, 'CO2': -393510, 'SiO2': -910700, 'Al2O3': -1675700, 'Fe2O3': -824200, 'H2Ol': -285830, 'H2Og': -241820}
+    Cp = {'CaCO3': 90, 'CaO': 52, 'CO2': 45, 'SiO2': 55, 'Al2O3': 115, 'Fe2O3': 110, 'H2Ol': 75.3, 'H2Og': 38, 'C': 16, 'H2': 29, 'O2': 31, 'N2': 30}
+    Tr = 298.15; me, fu, ai = ins['meal'], ins['fuel'], ins['air']
+    n = {k: me['mass_flow'] * me['w_' + k] / MW[k] for k in ('CaCO3', 'SiO2', 'Al2O3', 'Fe2O3', 'H2O')}
+    nC = fu['mass_flow'] * fu['w_C'] / MW['C']; nH2 = fu['mass_flow'] * fu['w_H'] / MW['H2']; nAsh = fu['mass_flow'] * fu['w_ash'] / MW['SiO2']
+    nO2 = ai['mass_flow'] * ai['w_O2'] / MW['O2']; nN2 = ai['mass_flow'] * (1 - ai['w_O2']) / MW['N2']
+    nO2req = nC + 0.5 * nH2; nO2ex = nO2 - nO2req
+    m = {'CaO': n['CaCO3'] * MW['CaO'], 'SiO2': (n['SiO2'] + nAsh) * MW['SiO2'], 'Al2O3': n['Al2O3'] * MW['Al2O3'], 'Fe2O3': n['Fe2O3'] * MW['Fe2O3']}
+    mcl = sum(m.values())
+    g = {'CO2': n['CaCO3'] + nC, 'H2O': n['H2O'] + nH2, 'O2': max(0.0, nO2ex), 'N2': nN2}; ng = sum(g.values())
+    mg = sum(g[k] * MW[k] for k in g)
+    Tm, Tf, Ta, Tc, Tg = me['T'], fu['T'], ai['T'], par['T_clinker'], par['T_gas']
+    Hin = (n['CaCO3'] * (Hf['CaCO3'] + Cp['CaCO3'] * (Tm - Tr)) + n['SiO2'] * (Hf['SiO2'] + Cp['SiO2'] * (Tm - Tr)) + n['Al2O3'] * (Hf['Al2O3'] + Cp['Al2O3'] * (Tm - Tr))
+           + n['Fe2O3'] * (Hf['Fe2O3'] + Cp['Fe2O3'] * (Tm - Tr)) + n['H2O'] * (Hf['H2Ol'] + Cp['H2Ol'] * (Tm - Tr))
+           + nC * Cp['C'] * (Tf - Tr) + nH2 * Cp['H2'] * (Tf - Tr) + nAsh * (Hf['SiO2'] + Cp['SiO2'] * (Tf - Tr)) + (nO2 * Cp['O2'] + nN2 * Cp['N2']) * (Ta - Tr))
+    Hout = (n['CaCO3'] * (Hf['CaO'] + Cp['CaO'] * (Tc - Tr)) + (n['SiO2'] + nAsh) * (Hf['SiO2'] + Cp['SiO2'] * (Tc - Tr)) + n['Al2O3'] * (Hf['Al2O3'] + Cp['Al2O3'] * (Tc - Tr))
+            + n['Fe2O3'] * (Hf['Fe2O3'] + Cp['Fe2O3'] * (Tc - Tr)) + g['CO2'] * (Hf['CO2'] + Cp['CO2'] * (Tg - Tr)) + g['H2O'] * (Hf['H2Og'] + Cp['H2Og'] * (Tg - Tr))
+            + (g['O2'] * Cp['O2'] + g['N2'] * Cp['N2']) * (Tg - Tr))
+    out = {'clinker': {'mass_flow': mcl, 'w_CaO': m['CaO'] / mcl, 'w_SiO2': m['SiO2'] / mcl, 'w_Al2O3': m['Al2O3'] / mcl, 'w_Fe2O3': m['Fe2O3'] / mcl},
+           'flue_gas': {'mass_flow': mg, **{'y_' + k: g[k] / ng for k in g}}}
+    spec = fu['mass_flow'] * fu['LHV'] / mcl
+    dg = {'H_in': Hin, 'H_out': Hout, 'residual': Hin - Hout - par['Q_loss'], 'spec_kJ': spec, 'spec_kcal': spec / 4.184, 'air_excess': 100 * nO2ex / nO2req}
+    return out, dg`;
+  const SILO_FUNCS = `
+
+def hopper_capacidade(theta, silo, mp):
+    """Capacidade de descarga (kg/s): Beverloo (fundo plano) vezes o fator de Rose e Tanaka (tg θ · tg χ)^-0,35."""
+    W0 = mp['C'] * silo['rho_b'] * np.sqrt(mp['g']) * (silo['D_o'] - mp['k'] * silo['d_p']) ** 2.5
+    F = 1.0
+    if theta < 90:
+        x = np.tan(np.radians(theta)) * np.tan(np.radians(mp['chi']))
+        F = x ** -0.35 if x < 1 else 1.0
+    return W0 * F, F
+
+
+def hopper_block(theta, silo, mp):
+    """Silo com tremonha cônica (theta a partir da vertical; 90 = fundo plano): capacidade, regime de Jenike e esvaziamento."""
+    Rs, Ro = silo['D_s'] / 2, silo['D_o'] / 2
+    Hk = 0.0 if theta >= 90 else (Rs - Ro) / np.tan(np.radians(theta))
+    M_total = (np.pi * Rs ** 2 * silo['H_cyl'] + np.pi * Hk / 3 * (Rs ** 2 + Rs * Ro + Ro ** 2)) * silo['rho_b']
+    regime = 'escoamento em massa' if theta < 90 and theta <= 40 - silo['phi_w'] / 2 else 'escoamento em funil'
+    W, F = hopper_capacidade(theta, silo, mp)
+    M_lim = 0.08 * np.pi * Rs ** 2 * silo['rho_b']
+    Q = lambda M: 0.0 if M <= 1e-3 else (W * np.sqrt(M / M_lim) if M < M_lim else W)
+    ev = lambda t, y: y[0] - 1e-3; ev.terminal = True; ev.direction = -1
+    sol = solve_ivp(lambda t, y: [-Q(y[0])], [0, 1.3 * (M_total / W + 2 * M_lim / W)], [M_total], events=ev, rtol=1e-6, atol=1e-5, max_step=0.5)
+    t, M = sol.t, sol.y[0]
+    res = {'theta': theta, 'regime': regime, 'M_total': M_total, 'W': W, 'F_RT': F, 't_discharge': t[-1], 'Q_mean': M_total / t[-1]}
+    return res, t, M, np.array([Q(m) for m in M])`;
+  const TF_FUNCS = `
+
+def talmadge_fitch_block(feed, batch, par):
+    """Sedimentador contínuo pelo método de Talmadge e Fitch (1955), com balanço de sólidos e de energia."""
+    wF, rs, rf = feed['w_solids'], feed['rho_s'], feed['rho_f']
+    rhoF = 1 / (wF / rs + (1 - wF) / rf); mF = feed['vol_flow'] * rhoF; ms = mF * wF; ml = mF * (1 - wF)
+    H0, C0, Cu = batch['H0'], batch['C0'], par['C_U']; Hu = H0 * C0 / Cu
+    t = np.linspace(0, max(7200, batch['t_linear'] + 8 / batch['k_comp']), 2000); Hle = H0 - batch['v0'] * batch['t_linear']
+    H = np.where(t <= batch['t_linear'], H0 - batch['v0'] * t, Hu + (Hle - Hu) * np.exp(-batch['k_comp'] * (t - batch['t_linear'])))
+    dH = np.gradient(H, t); d2 = np.gradient(dH, t)
+    if Hu >= Hle:
+        tc, Hc, dHc = batch['t_linear'], Hle, -batch['v0']; tu = (H0 - Hu) / batch['v0']
+    elif par['tangente_ramo']:
+        tc, Hc, dHc = batch['t_linear'], Hle, -batch['k_comp'] * (Hle - Hu); tu = tc + (Hu - Hc) / dHc
+    else:
+        i = int(np.argmax(d2)); tc, Hc, dHc = t[i], H[i], dH[i]; tu = tc + (Hu - Hc) / dHc
+    A = ms * tu / (C0 * H0); D = np.sqrt(4 * A / np.pi)
+    msU = ms * par['eta']; msO = ms - msU; QU = msU / Cu; mlU = (QU - msU / rs) * rf; mU = msU + mlU; mlO = ml - mlU; mO = msO + mlO
+    cp = lambda w: w * par['Cp_s'] + (1 - w) * par['Cp_f']
+    Hin = mF * cp(wF) * feed['T']; mcp = mU * cp(msU / mU) + mO * cp(msO / mO); T = (Hin - par['Q_loss']) / mcp
+    out = {'underflow': {'mass_flow': mU, 'vol_flow': QU}, 'overflow': {'mass_flow': mO}, 'T': T}
+    dg = {'Hu': Hu, 't_c': tc, 'H_c': Hc, 'dH_c': dHc, 't_u': tu, 'A': A, 'D': D, 'loading': ms * 3600 / A, 'H_in': Hin, 'H_out': mcp * T, 't': t, 'H': H}
+    return out, dg`;
+
+  const KRAFT_FUNCS = `
+
+def kraft_digester_block(wood, wl, steam, par):
+    """Digestor contínuo kraft (eucalipto): balanço de massa e de energia, como no código de referência, com a sulfidez
+    separando NaOH, Na2S e a carga morta, a polpa dividida em celulose, hemicelulose e lignina e o calor retirado até a descarga."""
+    m_dry = wood['mass_flow'] * (1 - wood['moisture']); m_w_wood = wood['mass_flow'] * wood['moisture']
+    cel, hem, lig, ext = (m_dry * wood[k] for k in ('w_cellulose', 'w_hemicell', 'w_lignin', 'w_extractives'))
+    m_EA = m_dry * wl['EA_charge']; V_WL = m_EA / wl['EA_conc']; m_WL = V_WL * wl['density']
+    AA = m_EA / (1 - wl['sulfidity'] / 2); m_NaOH = (1 - wl['sulfidity']) * AA; m_Na2S = wl['sulfidity'] * AA * 78.045 / (2 * 39.997)
+    m_inorg = m_EA * wl['inorg_ratio']; m_w_WL = m_WL - m_inorg; m_w_in = m_w_wood + m_w_WL
+    kappa = par['kappa']; Y = par['yield_a'] + par['yield_b'] * kappa; m_pulp = m_dry * Y / 100; m_diss = m_dry - m_pulp
+    lig_p = m_pulp * par['lignin_per_kappa'] * kappa / 100; carb_p = m_pulp - lig_p
+    cel_p = min(par['cellulose_kept'] * cel, carb_p); hem_p = carb_p - cel_p
+    if hem_p > hem:
+        hem_p = hem; cel_p = carb_p - hem
+    m_w_pulp = min(par['water_pulp'] * m_pulp, m_w_in); m_w_BL = m_w_in - m_w_pulp; m_s_BL = m_diss + m_inorg; m_BL = m_w_BL + m_s_BL
+    cp, Tr = par['cp'], 298.15
+    Q_wood = (m_dry * cp['wood'] + m_w_wood * cp['water']) * (par['T_cook'] - wood['T']); Q_WL = m_WL * cp['WL'] * (par['T_cook'] - wl['T'])
+    Q_rxn = m_diss * par['dH_rxn']; Q_req = Q_wood + Q_WL - Q_rxn + par['Q_loss']; m_steam = Q_req / steam['h_fg']
+    H_in = (m_dry * cp['wood'] + m_w_wood * cp['water']) * (wood['T'] - Tr) + m_WL * cp['WL'] * (wl['T'] - Tr) + m_steam * steam['h_fg']
+    H_out = (m_pulp * cp['pulp'] + m_w_pulp * cp['water'] + m_s_BL * cp['BL_solids'] + m_w_BL * cp['water']) * (par['T_blow'] - Tr)
+    Q_removed = H_in + Q_rxn - par['Q_loss'] - H_out
+    out = {'pulp': {'mass_flow_dry': m_pulp, 'yield_pct': Y, 'lignin_pct': par['lignin_per_kappa'] * kappa, 'water': m_w_pulp},
+           'black_liquor': {'mass_flow': m_BL, 'organic': m_diss, 'inorganic': m_inorg, 'solids_pct': 100 * m_s_BL / m_BL}, 'condensate': {'mass_flow': m_steam}}
+    dg = {'m_dry': m_dry, 'm_WL': m_WL, 'V_WL': V_WL, 'LW': m_w_in / m_dry, 'm_NaOH': m_NaOH, 'm_Na2S': m_Na2S, 'm_dead': m_inorg - m_NaOH - m_Na2S,
+          'cel': cel, 'hem': hem, 'lig': lig, 'ext': ext, 'cel_p': cel_p, 'hem_p': hem_p, 'lig_p': lig_p, 'Q_wood': Q_wood, 'Q_WL': Q_WL, 'Q_rxn': Q_rxn,
+          'Q_req': Q_req, 'm_steam': m_steam, 'H_in': H_in, 'H_out': H_out, 'Q_removed': Q_removed, 'residual': H_in + Q_rxn - par['Q_loss'] - H_out - Q_removed}
+    return out, dg`;
+
   const BIO_FUNCS = `
 
 def tosetto_mu(X, S, Pr, P):
@@ -9822,7 +11153,7 @@ def pfr_transiente(P, nome):
       .concat(["    if os.environ.get('SIMULA_SALVAR') == '1':", '        for k, f in enumerate(figs):', "            f.savefig(f'" + fn + "_fig{k + 1}.png', dpi=130)", '        print(f"{len(figs)} figuras salvas em PNG.")', '    plt.show()', '', '', "if __name__ == '__main__':", '    main()']).join('\n');
     const types = Array.from(new Set(st.blocks.map(b => b.type)));
     return [head, td.code, needVLE ? VLE : '', needFlash ? FLASH : '', '', streamsCode(st, res), PFD_HELPERS, iconLibPy(types), pfdCode(st, res), '']
-      .concat(blocks.map(x => x.code + '\n')).concat(needPFR ? [PFR_TRANS] : []).concat(blocks.some(x => /pid_simula/.test(x.code)) ? [PID_FUNCS] : []).concat(blocks.some(x => /tosetto_rhs|biodiesel_rhs/.test(x.code)) ? [BIO_FUNCS] : []).concat(blocks.some(x => /sf_bulbo_umido|cris_bal|lyo_ciclo|micro_rhs/.test(x.code)) ? [SEC_FUNCS] : []).concat(blocks.some(x => /mccabe_refluxo_gui/.test(x.code)) ? [MR_FUNCS] : []).concat(blocks.some(x => /bomba_sistema/.test(x.code)) ? [PUMP_FUNCS] : []).concat(['', main]).filter(s => s !== null).join('\n\n').replace(/\n{4,}/g, '\n\n\n') + '\n';
+      .concat(blocks.map(x => x.code + '\n')).concat(needPFR ? [PFR_TRANS] : []).concat(blocks.some(x => /pid_simula/.test(x.code)) ? [PID_FUNCS] : []).concat(blocks.some(x => /tosetto_rhs|biodiesel_rhs/.test(x.code)) ? [BIO_FUNCS] : []).concat(blocks.some(x => /sf_bulbo_umido|cris_bal|lyo_ciclo|micro_rhs/.test(x.code)) ? [SEC_FUNCS] : []).concat(blocks.some(x => /mccabe_refluxo_gui/.test(x.code)) ? [MR_FUNCS] : []).concat(blocks.some(x => /bomba_sistema/.test(x.code)) ? [PUMP_FUNCS] : []).concat(blocks.some(x => /blast_furnace_block|cement_kiln_block/.test(x.code)) ? [MET_FUNCS] : []).concat(blocks.some(x => /hopper_block/.test(x.code)) ? [SILO_FUNCS] : []).concat(blocks.some(x => /talmadge_fitch_block/.test(x.code)) ? [TF_FUNCS] : []).concat(blocks.some(x => /kraft_digester_block/.test(x.code)) ? [KRAFT_FUNCS] : []).concat(['', main]).filter(s => s !== null).join('\n\n').replace(/\n{4,}/g, '\n\n\n') + '\n';
   }
 
   function readme(st, fn) {
@@ -9937,6 +11268,50 @@ def pfr_transiente(P, nome):
         { id: 'EQ', type: 'energy', name: 'Q retirado', params: { Q: '' } },
         { id: 'PM', type: 'product', name: 'Água-mãe' }, { id: 'PC', type: 'product', name: 'Cristais de KNO₃' }],
       streams: [S('1', 'F', 'out', 'CR', 'feed', 'Alimentação'), S('E1', 'CR', 'q_out', 'EQ', 'ei', 'Q'), S('2', 'CR', 'liquor', 'PM', 'in', 'Água-mãe'), S('3', 'CR', 'crystals', 'PC', 'in', 'Cristais')] } },
+    { key: 'alto-forno', title: 'Siderurgia: alto-forno contínuo — minério + coque + calcário + ar quente → gusa, escória e gás de topo', fs: {
+      name: 'Alto-forno siderúrgico', components: ['hematite', 'silica', 'carbon', 'caco3', 'oxygen', 'nitrogen', 'iron', 'cao', 'co', 'co2'], model: 'IDEAL',
+      blocks: [
+        { id: 'FM', type: 'feed', name: 'Minério de ferro', params: { T: 25, P: 1.01325, vf: '', flow: 100, flowUnit: 'kg/s', basis: 'mássica', composition: { hematite: 0.90, silica: 0.10 } } },
+        { id: 'FC', type: 'feed', name: 'Coque', params: { T: 25, P: 1.01325, vf: '', flow: 30, flowUnit: 'kg/s', basis: 'mássica', composition: { carbon: 0.88, silica: 0.12 } } },
+        { id: 'FF', type: 'feed', name: 'Calcário (fundente)', params: { T: 25, P: 1.01325, vf: '', flow: 10, flowUnit: 'kg/s', basis: 'mássica', composition: { caco3: 1 } } },
+        { id: 'FA', type: 'feed', name: 'Ar quente a 1100 °C', params: { T: 1100, P: 1.01325, vf: '', flow: 62, flowUnit: 'kg/s', basis: 'mássica', composition: { oxygen: 0.23, nitrogen: 0.77 } } },
+        { id: 'AF', type: 'blast_furnace', name: 'Alto-forno AF-1', params: {} },
+        { id: 'PG', type: 'product', name: 'Gás de topo (BFG)' }, { id: 'PE', type: 'product', name: 'Escória' }, { id: 'PF', type: 'product', name: 'Gusa líquido' }],
+      streams: [S('1', 'FM', 'out', 'AF', 'ore', 'Minério'), S('2', 'FC', 'out', 'AF', 'coke', 'Coque'), S('3', 'FF', 'out', 'AF', 'flux', 'Calcário'), S('4', 'FA', 'out', 'AF', 'blast', 'Ar quente'),
+        S('5', 'AF', 'gas', 'PG', 'in', 'Gás de topo'), S('6', 'AF', 'slag', 'PE', 'in', 'Escória'), S('7', 'AF', 'pig_iron', 'PF', 'in', 'Gusa')] } },
+    { key: 'forno-cimento', title: 'Cimento: forno rotativo contínuo — farinha crua + coque de petróleo + ar → clínquer e gases (calcinação e clinquerização)', fs: {
+      name: 'Forno de clínquer', components: ['caco3', 'silica', 'alumina', 'hematite', 'water', 'carbon', 'hydrogen', 'oxygen', 'nitrogen', 'cao', 'co2'], model: 'IDEAL',
+      blocks: [
+        { id: 'FM', type: 'feed', name: 'Farinha crua (70 °C)', params: { T: 70, P: 1.01325, vf: '', flow: 100, flowUnit: 'kg/s', basis: 'mássica', composition: { caco3: 0.78, silica: 0.14, alumina: 0.04, hematite: 0.02, water: 0.02 } } },
+        { id: 'FC', type: 'feed', name: 'Coque de petróleo', params: { T: 25, P: 1.01325, vf: '', flow: 6.5, flowUnit: 'kg/s', basis: 'mássica', composition: { carbon: 0.85, hydrogen: 0.04, silica: 0.11 } } },
+        { id: 'FA', type: 'feed', name: 'Ar terciário (800 °C)', params: { T: 800, P: 1.01325, vf: '', flow: 75, flowUnit: 'kg/s', basis: 'mássica', composition: { oxygen: 0.233, nitrogen: 0.767 } } },
+        { id: 'FK', type: 'cement_kiln', name: 'Forno rotativo FC-1', params: {} },
+        { id: 'PG', type: 'product', name: 'Gases de exaustão' }, { id: 'PC', type: 'product', name: 'Clínquer' }],
+      streams: [S('1', 'FM', 'out', 'FK', 'meal', 'Farinha'), S('2', 'FC', 'out', 'FK', 'fuel', 'Combustível'), S('3', 'FA', 'out', 'FK', 'air', 'Ar'),
+        S('4', 'FK', 'gas', 'PG', 'in', 'Gases'), S('5', 'FK', 'clinker', 'PC', 'in', 'Clínquer')] } },
+    { key: 'silo-tremonha', title: 'Sólidos: silo com tremonha cônica em operação contínua — vazão de Beverloo e efeito do ângulo da tremonha', fs: {
+      name: 'Silo de areia com descarga contínua', components: ['silica'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Areia (3 mm)', params: { T: 25, P: 1.01325, vf: '', flow: 30, flowUnit: 'kg/s', basis: 'mássica', composition: { silica: 1 } } },
+        { id: 'SL', type: 'silo', name: 'Silo SL-1', params: {} },
+        { id: 'P', type: 'product', name: 'Descarga' }],
+      streams: [S('1', 'F', 'out', 'SL', 'feed', 'Alimentação'), S('2', 'SL', 'product', 'P', 'in', 'Descarga')] } },
+    { key: 'sedimentador-continuo', title: 'Sólidos: sedimentador contínuo (espessador) — área pelo método de Talmadge e Fitch', fs: {
+      name: 'Espessamento de polpa mineral', components: ['water', 'silica'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Polpa (180 m³/h, 10 % de sólidos)', params: { T: 25, P: 1.01325, vf: '', flow: 53.32, flowUnit: 'kg/s', basis: 'mássica', composition: { water: 0.90, silica: 0.10 } } },
+        { id: 'SD', type: 'thickener', name: 'Sedimentador SED-1', params: { C0: 106.64 } },
+        { id: 'PO', type: 'product', name: 'Overflow (água clarificada)' }, { id: 'PU', type: 'product', name: 'Underflow (lama adensada)' }],
+      streams: [S('1', 'F', 'out', 'SD', 'feed', 'Polpa'), S('2', 'SD', 'overflow', 'PO', 'in', 'Overflow'), S('3', 'SD', 'underflow', 'PU', 'in', 'Underflow')] } },
+    { key: 'digestor-kraft-eucalipto', title: 'Papel e celulose: digestor contínuo kraft — cavacos de eucalipto + licor branco + vapor → polpa marrom e licor negro', fs: {
+      name: 'Digestor kraft de eucalipto', components: ['cellulose', 'hemicellulose', 'lignin', 'wood-extractives', 'water', 'naoh', 'na2s', 'na2co3', 'bl-organics'], model: 'IDEAL',
+      blocks: [
+        { id: 'FW', type: 'feed', name: 'Cavacos de eucalipto (45 % de umidade, 70 °C)', params: { T: 70, P: 1.01325, vf: '', flow: 100, flowUnit: 'kg/s', basis: 'mássica', composition: { cellulose: 0.2475, hemicellulose: 0.1485, lignin: 0.1485, 'wood-extractives': 0.0055, water: 0.45 } } },
+        { id: 'FL', type: 'feed', name: 'Licor branco (EA 18 %, 115 g/L, 80 °C)', params: { T: 80, P: 1.01325, vf: '', flow: 99, flowUnit: 'kg/s', basis: 'mássica', composition: { naoh: 0.0823529411764706, na2s: 0.03443420021207474, na2co3: 0.028212858611454665, water: 0.855 } } },
+        { id: 'DG', type: 'kraft_digester', name: 'Digestor DG-1', params: {} },
+        { id: 'PP', type: 'product', name: 'Polpa marrom' }, { id: 'PL', type: 'product', name: 'Licor negro fraco' }, { id: 'PC', type: 'product', name: 'Condensado' }],
+      streams: [S('1', 'FW', 'out', 'DG', 'chips', 'Cavacos'), S('2', 'FL', 'out', 'DG', 'white_liquor', 'Licor branco'),
+        S('3', 'DG', 'pulp', 'PP', 'in', 'Polpa marrom'), S('4', 'DG', 'black_liquor', 'PL', 'in', 'Licor negro'), S('5', 'DG', 'condensate', 'PC', 'in', 'Condensado')] } },
     { key: 'pid-cstr', title: 'Controle PID não linear de um CSTR contínuo (sintonia ao vivo de Kp, Ki e Kd com barras deslizantes)', fs: {
       name: 'Controle PID de CSTR', components: ['comp-A', 'comp-B'], model: 'IDEAL',
       blocks: [
@@ -10162,7 +11537,7 @@ def pfr_transiente(P, nome):
   // blocos sem parâmetros recebem os valores pré-setados da unidade (secador, cristalizador, biorreatores...)
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && !Object.keys(b.params).length) T.params.forEach(f => { if (f.def !== undefined) b.params[f.k] = f.def; }); }));
   // equipamentos contínuos de sólidos e bioprocessos: os campos que o exemplo não informa recebem o valor pré-setado
-  const FILL = /^(tray_dryer|spray_dryer|freeze_dryer|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr)/;
+  const FILL = /^(tray_dryer|spray_dryer|freeze_dryer|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester)/;
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && FILL.test(b.type)) T.params.forEach(f => { if (b.params[f.k] === undefined && f.def !== undefined) b.params[f.k] = f.def; }); }));
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -10790,7 +12165,7 @@ def pfr_transiente(P, nome):
   const $ = s => document.querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false;
   const caps = { downloads: undefined };
@@ -10981,7 +12356,7 @@ def pfr_transiente(P, nome):
       const s = state.streams.find(x => x.id === sel.id); if (!s) { el.innerHTML = ''; return; }
       const r = results && results.streams && results.streams[s.id], en = SF.flowsheet.isEnergyStream(s), e = en && results && results.energy && results.energy[s.id];
       el.innerHTML = '<div class="blk-head">' + (en ? IC.paletteIcon('energy') : '') + '<input id="strName" value="' + esc(s.name) + '" aria-label="Nome da corrente"></div>' +
-        '<p class="small muted">' + (en ? '⚡ Corrente de energia: ' : '') + esc(blockName(s.from)) + ' (' + esc(SF.flowsheet.portLabel(s.fromPort)) + ') → ' + esc(blockName(s.to)) + ' (' + esc(SF.flowsheet.portLabel(s.toPort)) + ')</p>' +
+        '<p class="small muted">' + (en ? '⚡ Corrente de energia: ' : '') + esc(blockName(s.from)) + ' (' + esc(SF.flowsheet.portLabel(s.fromPort, blockType(s.from))) + ') → ' + esc(blockName(s.to)) + ' (' + esc(SF.flowsheet.portLabel(s.toPort, blockType(s.to))) + ')</p>' +
         (en ? (e && e.Q != null ? '<table class="grid"><tbody><tr><td>Carga térmica</td><td class="num">' + nf(e.Q / 1000, 2) + ' kW</td></tr><tr><td>Valor</td><td>' + (e.spec ? 'informado na corrente de energia' : 'calculado pelo equipamento') + '</td></tr></tbody></table>'
           : '<p class="muted small">Simule para ver a carga térmica.</p>') :
         (r ? streamDetail(r) : '<p class="muted small">Simule para ver as propriedades.</p>')) +
@@ -11025,6 +12400,7 @@ def pfr_transiente(P, nome):
     bindFields(b);
   }
   function blockName(id) { const b = state.blocks.find(x => x.id === id); return b ? b.name : id; }
+  function blockType(id) { const b = state.blocks.find(x => x.id === id); return b ? b.type : null; }
   function fieldHTML(b, f) {
     const v = b.params[f.k];
     if (f.type === 'select') return '<div class="field"><label for="f_' + f.k + '">' + esc(f.label) + '</label><select id="f_' + f.k + '" data-k="' + f.k + '">' + f.options.map(o => '<option' + (String(o) === String(v) ? ' selected' : '') + '>' + esc(o) + '</option>').join('') + '</select></div>';
@@ -11096,6 +12472,32 @@ def pfr_transiente(P, nome):
       ['Temperatura de operação', '20 °C, ajustável pela barra deslizante; a alimentação está a 60 °C.'],
       ['MSMPR', '<b>volume</b> V = 2 m³ (o programa calcula τ = V/Q) ou <b>tempo de residência</b> τ; G = 1,5 µm/min (2,5·10⁻⁸ m/s), k_v = 0,5236 (esfera), ρ_cristal = 2 160 kg/m³ e ρ_água-mãe = 1 150 kg/m³.'],
       ['Hidrato, evaporação e calor', 'n_h = 0 (cristal anidro); para Na₂CO₃·10H₂O use n_h = 10. A água evaporada representa o cristalizador a vácuo. c_p ≈ 3,0 kJ/(kg·K); calor de cristalização 0 no exemplo genérico (345 kJ/kg no do KNO₃).']] },
+    blast_furnace: { ex: 'Alto-forno contínuo', items: [
+      ['Correntes', 'quatro entradas: <b>minério</b> (Hematita + Sílica), <b>coque</b> (Carbono + Sílica como cinzas), <b>fundente</b> (Carbonato de cálcio) e <b>ar de sopro</b> (Oxigênio + Nitrogênio); saídas <b>gás de topo</b> (CO, CO₂, N₂), <b>escória</b> (CaO + SiO₂) e <b>gusa</b> (Fe + C). Uma entrada sem corrente usa os campos.'],
+      ['Carga e sopro', '100 kg/s de minério com 90 % de Fe₂O₃, 30 kg/s de coque com 88 % de C, 10 kg/s de calcário a 25 °C e 62 kg/s de ar (23 % de O₂ em massa) a 1 100 °C, como no código MATLAB de referência.'],
+      ['Saídas', '4,5 % de C no gusa; gusa a 1 500 °C, escória a 1 550 °C e gás de topo a 200 °C; perdas pelas paredes de 15 000 kW.'],
+      ['Energia', 'as temperaturas de saída são fixadas, então o balanço de energia deixa um <b>resíduo</b>; o programa mostra também o ar de sopro que o zeraria e o gráfico do resíduo × ar de sopro.']] },
+    cement_kiln: { ex: 'Forno de cimento contínuo', items: [
+      ['Correntes', 'entradas <b>farinha crua</b> (CaCO₃, SiO₂, Al₂O₃, Fe₂O₃ e água), <b>combustível</b> (Carbono, Hidrogênio e Sílica como cinzas) e <b>ar de combustão</b> (O₂ + N₂); saídas <b>gases de exaustão</b> e <b>clínquer</b>.'],
+      ['Farinha e combustível', '100 kg/s de farinha (78 % CaCO₃, 14 % SiO₂, 4 % Al₂O₃, 2 % Fe₂O₃, 2 % de umidade) a 70 °C; 6,5 kg/s de coque de petróleo (85 % C, 4 % H, 11 % cinzas) com PCI de 32 000 kJ/kg.'],
+      ['Ar e temperaturas', '75 kg/s de ar a 800 °C (pré-aquecido no resfriador); clínquer a 1 450 °C, gases a 350 °C e perdas de 5 000 kW.'],
+      ['Resultados extras', 'fases de Bogue, módulos de saturação de cal, sílica e alumina, CO₂ emitido por kg de clínquer e o combustível que zeraria o resíduo térmico.']] },
+    silo: { ex: 'Silo com tremonha em operação contínua', items: [
+      ['Correntes', 'alimentação de sólidos (por exemplo, Sílica como areia) e <b>descarga</b>, que acompanha a alimentação enquanto ela não passa da capacidade do orifício.'],
+      ['Geometria', 'silo de 1 m de diâmetro e 3 m de cilindro, orifício de 0,20 m; partículas de 3 mm com ρ_b = 1 400 kg/m³ e atrito com a parede φw = 25°.'],
+      ['Tremonha', 'semiângulo θ = 15° a partir da vertical (barra deslizante; 90° = fundo plano). Os gráficos comparam 90°, 45°, 30° e 15° (os 75°, 60° e 45° com a horizontal do código de referência).'],
+      ['Correlações', 'Beverloo com C = 0,58 e k = 1,5; fator de Rose e Tanaka com a zona estagnada a χ = 45°; nível de operação de 70 % para o tempo de residência.']] },
+    thickener: { ex: 'Sedimentador contínuo (Talmadge e Fitch)', items: [
+      ['Correntes', 'alimentação de polpa (Água + um sólido, por exemplo Sílica); saídas <b>overflow</b> (líquido clarificado) e <b>underflow</b> (lama adensada).'],
+      ['Polpa', '180 m³/h com 10 % de sólidos (53,32 kg/s), sólidos com ρ = 2 650 kg/m³, a 25 °C.'],
+      ['Ensaio de proveta', 'H₀ = 1 m, C₀ = 106,64 kg/m³ (vazio = a concentração da alimentação), v₀ = 1,5 mm/s até t_L = 350 s e compressão com k = 0,0015 s⁻¹.'],
+      ['Projeto', 'C_U = 450 kg/m³ (barra deslizante), recuperação de 99,5 % dos sólidos, altura de 3,5 m; c_p de 0,85 e 4,184 kJ/(kg·K) e perda de 25 kW. A tangente pode ser a numérica (como no código MATLAB) ou a do ramo de compressão (mais conservadora).']] },
+    kraft_digester: { ex: 'Digestor contínuo kraft de eucalipto', items: [
+      ['Correntes', 'entradas <b>cavacos</b> (Celulose, Hemicelulose, Lignina, Extrativos e Água) e <b>licor branco</b> (NaOH, Na₂S, Na₂CO₃ como carga morta e Água); saídas <b>polpa marrom</b>, <b>licor negro</b> (sólidos orgânicos dissolvidos, sais e água) e <b>condensado</b> do vapor. Uma entrada sem corrente usa os campos.'],
+      ['Cavacos', '100 kg/s de cavacos de eucalipto com 45 % de umidade; madeira seca com 45 % de celulose, 27 % de hemicelulose, 27 % de lignina e 1 % de extrativos, a 70 °C após a pré-vaporização.'],
+      ['Licor branco', 'carga de álcali efetivo de 18 % (como NaOH, base madeira seca), 115 g/L, sulfidez de 30 %, 1,45 kg de sais por kg de álcali efetivo, ρ = 1 150 kg/m³ e 80 °C. Com o licor ligado, a carga e a concentração passam a ser resultados.'],
+      ['Cozimento', 'κ = 17 (barra deslizante); rendimento Y = 47,5 + 0,38κ e lignina residual de 0,147κ % na polpa; 95 % da celulose fica na polpa. Cozimento a 165 °C, descarga a 90 °C.'],
+      ['Energia', 'vapor saturado a 8 bar (calor latente de 2 048 kJ/kg; vazio = IAPWS), 150 kJ/kg de madeira dissolvida liberados pelas reações e 3 000 kW de perdas. O calor retirado entre o cozimento e a descarga fecha o balanço.']] },
     evap_single: { ex: 'Evaporador de simples efeito (Geankoplis 8.4-1)', items: [
       ['Concentrado e pressões', 'x_P = 0,015; vapor de aquecimento saturado a 143,3 kPa; evaporador a 101,325 kPa.'],
       ['U, BPR e c_p', 'U = 1 704 W/(m²·K); BPR desprezada (b1 = b2 = 0); c_p = 4,14 kJ/(kg·K), como no livro.']] },

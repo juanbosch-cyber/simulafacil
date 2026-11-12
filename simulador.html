@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SIMULA FÁCIL IA – Simulador de processos químicos e bioprocessos (aplicativo) | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="Aplicativo do SIMULA FÁCIL IA: simulador de processos químicos e bioprocessos gratuito no navegador, com destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, fermentadores, secadores, cristalizadores, trocadores de calor, extração, mais de 500 componentes e geração de código MATLAB, Octave e Python. Autor: Prof. Juan Canellas Bosch Neto (Engenharia Química – UFSJ).">
+<meta name="description" content="Aplicativo do SIMULA FÁCIL IA: simulador de processos químicos e bioprocessos gratuito no navegador, com destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, fermentadores, secadores, cristalizadores, trocadores de calor, extração, mais de 40 mil compostos químicos e geração de código MATLAB, Octave e Python. Autor: Prof. Juan Canellas Bosch Neto (Engenharia Química – UFSJ).">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -469,6 +469,8 @@ body.mobile .top .tools a.manual-link { background: var(--bg); color: var(--ink)
 .ver-badge { display: inline-block; vertical-align: middle; margin: 0 8px; padding: 2px 8px; border-radius: 99px; background: var(--sun); color: #2a1b00; font: 900 11px var(--font-fun); letter-spacing: .06em; }
 .ver-badge.big { font-size: 15px; padding: 4px 12px; margin-left: 10px; position: relative; top: -4px; }
 .brand-title { flex-wrap: wrap; }
+.wnew { margin: -4px 0 4px; display: inline-block; padding: 6px 14px; border-radius: 99px; background: var(--sun); color: #2a1b00; font-weight: 700; font-size: 14.5px; }
+body.mobile .wnew { font-size: 12.5px; padding: 5px 10px; }
 .wdevice { margin: 10px 0 0; display: inline-block; padding: 6px 12px; border-radius: 99px; background: rgba(255,255,255,.14); color: #fff; font-weight: 700; font-size: 14px; }
 body.mobile .ver-badge { font-size: 9.5px; padding: 1px 6px; margin: 0 4px; }
 /* teoria (aba Propriedades) */
@@ -566,7 +568,7 @@ body.mobile .wl-url { flex-basis: 100%; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa">VERSÃO 3.0</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa">VERSÃO 4.0</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -707,8 +709,9 @@ body.mobile .wl-url { flex-basis: 100%; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 3.0</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 4.0</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
+        <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.0:</b> banco com mais de <b>40 mil compostos químicos</b></p>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
         <p class="wdevice"><span aria-hidden="true">💻</span> Versão para notebook (preferencial) · <span aria-hidden="true">📱</span> também funciona no celular</p>
         <a class="wman-top manual-href" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener"><span aria-hidden="true">📘</span> Manual do programa (PDF)</a>
@@ -738,7 +741,7 @@ body.mobile .wl-url { flex-basis: 100%; }
     <h2 class="wh2" id="wExTitle">Exemplos prontos</h2>
     <div class="wex" id="wExGrid"></div>
     <div class="wfeat">
-      <span>NRTL · UNIQUAC · UNIFAC · Peng-Robinson</span><span>Colunas rigorosas e McCabe-Thiele</span><span>CSTR e PFR transientes</span><span>Gráficos com fonte 18</span><span>Código MATLAB, Octave e Python</span><span>Fluxograma final em PNG</span><span>Equações e teoria de cada modelo</span><span>Reator de Gibbs (Lagrange)</span><span>Versão para celular</span>
+      <span>Mais de 40 mil compostos</span><span>NRTL · UNIQUAC · UNIFAC · Peng-Robinson</span><span>Colunas rigorosas e McCabe-Thiele</span><span>CSTR e PFR transientes</span><span>Gráficos com fonte 18</span><span>Código MATLAB, Octave e Python</span><span>Fluxograma final em PNG</span><span>Equações e teoria de cada modelo</span><span>Reator de Gibbs (Lagrange)</span><span>Versão para celular</span>
     </div>
     <p class="wmanual"><a class="manual-href" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener">📘 Baixar o manual do SIMULA FÁCIL IA (PDF)</a></p>
     <p class="wbook">Baseado no livro <i>Modelagem e Simulação de Processos Dinâmicos</i>, de Juan Canellas Bosch Neto (Editora Appris, 2019).</p>
@@ -849,7 +852,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
-    version: '3.0',
+    version: '4.0',
     subtitle: 'Simulador de processos químicos e bioprocessos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -2113,7 +2116,84 @@ window.SIMULAFACIL_CONFIG = {
     return null;
   };
 
-  SF.thermo = { R, T0, PATM, COMPONENTS, COMP, MODELS, Thermo, psatComp, hIGcomp, dHvapComp, rachfordRice, pairKey, NRTL_DB, makeUnifac, nrtlGamma };
+  // compostos do banco ampliado (js/dbx.js), acrescentados sob demanda
+  function addComponents(list) { (list || []).forEach(c => { if (!COMP[c.id]) { COMPONENTS.push(c); COMP[c.id] = c; } }); }
+  SF.thermo = { R, T0, PATM, COMPONENTS, COMP, MODELS, Thermo, addComponents, psatComp, hIGcomp, dHvapComp, rachfordRice, pairKey, NRTL_DB, makeUnifac, nrtlGamma };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>/* js/dbx.js */
+/* SIMULA FÁCIL IA — banco ampliado de compostos (dezenas de milhares), carregado sob demanda da pasta db/ do site.
+   indice.json: [CAS, nome, fórmula, Teb (K), qualidade]; parteK.json: propriedades no formato do simulador.
+   Dados compilados da biblioteca chemicals (Caleb Bell, licença MIT: IUPAC, CRC, Yaws, Landolt-Börnstein, Poling, Perry/DIPPR,
+   VDI, TRC, NIST WebBook, JANAF, ATcT, API, Joback, Wilson-Jasperson) e do PubChem (nomes e fórmulas). */
+(function (root) {
+  'use strict';
+  const SF = root.SF = root.SF || {};
+  // tenta a pasta do próprio site; se falhar (arquivo aberto do computador), o site público no GitHub Pages
+  const BASES = ['db/', 'https://juanbosch-cyber.github.io/simulafacil/db/'];
+  let base = null, idx = null, idxP = null, meta = null;
+  const partP = {}, rows = {};
+  async function getJSON(name) {
+    const tries = base ? [base] : BASES; let err = null;
+    for (const b of tries) {
+      try {
+        const r = await fetch(b + name, { cache: 'force-cache' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const j = await r.json(); base = b; return j;
+      } catch (e) { err = e; }
+    }
+    throw new Error('banco ampliado indisponível (' + (err && err.message || 'sem conexão') + ')');
+  }
+  const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  function loadIndex() {
+    if (!idxP) idxP = getJSON('indice.json').then(j => {
+      meta = j.meta;
+      idx = j.c.map(r => ({ cas: r[0], name: r[1], formula: r[2], tb: r[3], q: r[4], key: norm(r[1] + ' ' + r[2] + ' ' + r[0]) }));
+      return idx;
+    }).catch(e => { idxP = null; throw e; });
+    return idxP;
+  }
+  const nParts = () => (meta && meta.partes) || 4;
+  const shard = cas => parseInt(String(cas).replace(/-/g, ''), 10) % nParts();
+  function loadPart(k) {
+    if (!partP[k]) partP[k] = getJSON('parte' + k + '.json').then(a => { a.forEach(r => { rows[r[0]] = r; }); return true; }).catch(e => { partP[k] = null; throw e; });
+    return partP[k];
+  }
+  const QL = { A: 'críticas e pressão de vapor experimentais', B: 'em parte experimental', C: 'estimado' };
+  function toComp(ix, r) {
+    const c = { db: 'ext', id: 'x-' + r[0], name: ix ? ix.name : r[0], formula: ix ? ix.formula : '', cas: r[0], mw: r[1], tc: r[2], pc: r[3], w: r[4], tb: r[5], rho: r[6],
+      cp: r[7], dhv: r[8], q: ix ? ix.q : 'C', src: (r[12] || []).map(k => (meta && meta.fontes[k]) || '').filter(Boolean).join('; ') };
+    if (r[9]) c.vp = r[9];
+    if (r[10] != null) c.hf = r[10];
+    if (r[11] != null) c.gf = r[11];
+    return c;
+  }
+  // busca: CAS exato primeiro, depois nomes que começam com o texto, depois os que contêm todas as palavras
+  async function search(q, n) {
+    await loadIndex();
+    const t = norm(q).trim(); if (t.length < 2) return [];
+    const words = t.split(/\s+/).filter(Boolean), out = [], seen = new Set();
+    const add = e => { if (!seen.has(e.cas)) { seen.add(e.cas); out.push(e); } };
+    const byLen = (a, b) => a.name.length - b.name.length;
+    for (const e of idx) if (e.cas === t || norm(e.name) === t) add(e);
+    idx.filter(e => norm(e.name).startsWith(t) || norm(e.formula) === t).sort(byLen).slice(0, n).forEach(add);
+    if (out.length < n) idx.filter(e => words.every(w => e.key.indexOf(w) >= 0)).sort(byLen).slice(0, 3 * n).forEach(add);
+    return out.slice(0, n);
+  }
+  // garante que os compostos (ids "x-CAS") estejam no banco termodinâmico; devolve os que não existem no banco ampliado
+  async function ensure(ids) {
+    const TH = SF.thermo, need = (ids || []).filter(id => /^x-\d/.test(id) && !TH.COMP[id]);
+    if (!need.length) return [];
+    await loadIndex();
+    const byCas = {}; idx.forEach(e => { byCas[e.cas] = e; });
+    await Promise.all([...new Set(need.map(id => shard(id.slice(2))))].map(loadPart));
+    const add = [], missing = [];
+    need.forEach(id => { const cas = id.slice(2), r = rows[cas]; if (r) add.push(toComp(byCas[cas], r)); else missing.push(id); });
+    TH.addComponents(add);
+    return missing;
+  }
+  SF.dbx = { search, ensure, loadIndex, isExt: id => /^x-\d/.test(id), meta: () => meta, count: () => (idx ? idx.length : null), qualityLabel: q => QL[q] || '', base: () => base };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -11752,7 +11832,7 @@ def pfr_transiente(P, nome):
       const ps = t.params.map(f => f.k + (f.u ? ' [' + f.u + ']' : '') + (f.options ? ' {' + f.options.join(' | ') + '}' : '') + (f.type === 'composition' ? ' {id: valor}' : f.type === 'compfrac' ? ' {id: fração}' : f.type === 'compval' ? ' {id: valor em ' + (f.u || '') + '}' : f.type === 'matrix' ? ' (texto: uma linha por ponto, números separados por espaço)' : f.type === 'reactions' ? ' [lista de reações]' : f.type === 'comp' ? ' (id de componente)' : '') + (f.def !== undefined && f.def !== '' && typeof f.def !== 'object' ? ' = ' + f.def : '')).join('; ');
       return '- ' + k + ' — ' + t.label + ' | entradas: ' + (t.ins.join(', ') || '—') + ' | saídas: ' + (t.outs.join(', ') || '—') + ((t.eins || t.eouts) ? ' | energia (opcional): ' + (t.eins || []).map(x => x + ' (entra)').concat((t.eouts || []).map(x => x + ' (sai)')).join(', ') : '') + (ps ? ' | params: ' + ps : '');
     }).join('\n');
-    return '## Componentes disponíveis (id = nome)\n' + comps + '\n\n## Tipos de bloco (portas e parâmetros)\n' + types +
+    return '## Componentes disponíveis (id = nome)\n' + comps + '\n\nBancos extras (nomes em inglês): ChemSep, com ids "cs-..." (busque na aba Termodinâmica), e o banco ampliado com cerca de 40 mil compostos, que você pode usar pelo número CAS com o id "x-<CAS>" (por exemplo x-104-76-7 para o 2-etil-hexanol). Os compostos do banco ampliado são carregados da internet na primeira vez; muitos têm propriedades estimadas (qualidade C), o que vale avisar ao usuário.\n\n## Tipos de bloco (portas e parâmetros)\n' + types +
       '\n\n## Modelos termodinâmicos\n' + Object.keys(TH.MODELS).map(k => k + ' = ' + TH.MODELS[k]).join('; ') +
       '\n\n## Reações (params.reactions)\nCada reação: {"stoich": {"id": ν, ...} (negativo = reagente), "orders": {"id": ordem}, "k": constante em Tref (unidades de mol/L e s), "Tref": °C, "Ea": kJ/mol, "dH": kJ/mol (negativo = exotérmica)}. No reator de conversão use {"stoich", "key": id, "conversion": 0–1, "dH"}. Para problemas didáticos use comp-A, comp-B, comp-C, comp-D (solutos genéricos) dissolvidos em água e alimentação com basis "concentração (mol/L)", flowUnit "L/s" e composition em mol/L.' +
       '\n\n## Convenções da coluna rigorosa\nEstágio 1 = condensador, estágio N = refervedor. Dmode "Vazão D" usa D em kmol/h; "D/F" usa razão. feed2 é para solvente/arrastador (extrativa: perto do topo). Especificação de projeto opcional: specComp + specType + specValue + specVary (R ou D).';
@@ -11821,6 +11901,8 @@ def pfr_transiente(P, nome):
   function normStream(s, k) { return { id: 'S' + (k + 1) + '_' + Math.random().toString(36).slice(2, 6), name: String(s.nome || s.name || (k + 1)), from: s.de || s.from, fromPort: s.porta_saida || s.fromPort, to: s.para || s.to, toPort: s.porta_entrada || s.toPort }; }
   function validate(fs) {
     const errs = [], ids = new Set(fs.blocks.map(b => b.id));
+    const ext = fs.components.filter(c => !TH.COMP[c] && SF.dbx && SF.dbx.isExt(c));
+    if (ext.length) { SF.dbx.ensure(ext).catch(() => null); throw new Error('carregando do banco ampliado: ' + ext.join(', ') + '. Repita a mesma ação em alguns segundos (se o CAS não existir no banco, use outro composto).'); }
     fs.components.forEach(c => { if (!TH.COMP[c]) errs.push('componente desconhecido: ' + c); });
     if (!TH.MODELS[fs.model]) errs.push('modelo desconhecido: ' + fs.model);
     fs.streams.forEach(s => {
@@ -12780,6 +12862,35 @@ def pfr_transiente(P, nome):
     if (cs.every(c => c.g && Object.keys(c.g).every(g => ['CH3', 'CH2', 'CH', 'C', 'ACH', 'AC', 'ACCH3', 'ACCH2'].indexOf(g) >= 0))) return 'Hidrocarbonetos semelhantes a baixa pressão: Ideal (Raoult) é razoável; Peng-Robinson em pressões altas.';
     return 'NRTL é uma boa escolha geral para líquidos; Peng-Robinson para gases e pressões altas.';
   }
+  let compQuery = '', extTimer = null, extSeq = 0;
+  function extSearch(q) { // banco ampliado: até 25 resultados que ainda não estão na lista
+    const box = $('#extRes'); if (!box || !SF.dbx) return;
+    if (q.length < 3) { box.innerHTML = ''; return; }
+    const seq = ++extSeq; box.innerHTML = '<p class="small muted">Buscando no banco ampliado…</p>';
+    SF.dbx.search(q, 25).then(list => {
+      if (seq !== extSeq || !$('#extRes')) return;
+      list = list.filter(e => !TH.COMP['x-' + e.cas]);
+      box.innerHTML = list.length ? '<div class="small muted" style="margin:2px 0">Banco ampliado (' + (SF.dbx.count() || '').toLocaleString('pt-BR') + ' compostos) — clique para adicionar:</div><div class="comp-list ext-list">' +
+        list.map(e => '<label><button type="button" class="ext-add" data-cas="' + esc(e.cas) + '" title="Adicionar ao processo">+</button> ' + esc(e.name) + ' <small>' + esc(e.formula) + ' · CAS ' + esc(e.cas) + ' · Teb ' + nf(e.tb - 273.15, 1) + ' °C · qualidade ' + esc(e.q) + '</small></label>').join('') + '</div>'
+        : '<p class="small muted">Nada encontrado no banco ampliado.</p>';
+      box.querySelectorAll('.ext-add').forEach(bt => { bt.onclick = () => {
+        const id = 'x-' + bt.dataset.cas; bt.disabled = true; bt.textContent = '…';
+        SF.dbx.ensure([id]).then(miss => { if (miss.length) throw new Error('composto não encontrado'); pushUndo(); if (state.components.indexOf(id) < 0) state.components.push(id); afterChange(false); renderThermo(); toast(TH.COMP[id].name + ' adicionado' + (TH.COMP[id].q === 'C' ? ' (propriedades estimadas)' : '')); })
+          .catch(err => { bt.disabled = false; bt.textContent = '+'; toast('Não foi possível carregar: ' + err.message); });
+      }; });
+    }).catch(err => { if (seq === extSeq && $('#extRes')) $('#extRes').innerHTML = '<p class="small muted">' + esc(err.message) + '</p>'; });
+  }
+  // carrega do banco ampliado os compostos "x-CAS" de um projeto antes de usá-lo; os que faltarem são retirados com aviso
+  function withComps(fs, fn) {
+    const miss = (fs.components || []).filter(id => !TH.COMP[id]);
+    if (!miss.length || !SF.dbx) return fn();
+    setStatus('run', 'Carregando ' + miss.length + ' composto(s) do banco ampliado…');
+    SF.dbx.ensure(miss).catch(() => miss).then(left => {
+      const gone = (fs.components || []).filter(id => !TH.COMP[id]);
+      if (gone.length) { fs.components = fs.components.filter(id => TH.COMP[id]); toast('Componentes indisponíveis retirados: ' + gone.join(', ')); }
+      fn();
+    });
+  }
   function renderThermo() {
     const el = $('#thermoBody');
     let th = null, err = '';
@@ -12791,8 +12902,9 @@ def pfr_transiente(P, nome):
     const nCS = TH.COMPONENTS.filter(c => c.db === 'chemsep').length;
     h += '<div class="subhead">Componentes (' + state.components.length + ')</div><input id="compSearch" placeholder="Buscar componente (nome, fórmula ou CAS)…" style="width:100%;margin-bottom:6px" aria-label="Buscar componente">' +
       (nCS ? '<p class="small muted" style="margin:0 0 6px">Banco ChemSep v8.3 com mais ' + nCS + ' compostos (nomes em inglês): digite ao menos 2 letras, a fórmula ou o CAS para encontrá-los. © Kooijman e Taylor, Artistic License 2.0.</p>' : '') +
+      (SF.dbx ? '<p class="small muted" style="margin:0 0 6px">Banco ampliado com cerca de 40 mil compostos (nomes em inglês), carregado da internet quando você busca com 3 letras ou mais. Qualidade A: propriedades críticas e pressão de vapor experimentais; B: em parte experimentais; C: estimadas (Joback, Wilson-Jasperson, Lee-Kesler). Dados: biblioteca chemicals (C. Bell, MIT) e fontes citadas no manual.</p><div id="extRes"></div>' : '') +
       '<div class="comp-list" id="compList">' +
-      TH.COMPONENTS.slice().sort((a, b) => (state.components.indexOf(b.id) >= 0) - (state.components.indexOf(a.id) >= 0)).map(c => '<label data-name="' + esc((c.name + ' ' + c.formula + ' ' + c.id + ' ' + (c.cas || '')).toLowerCase()) + '"' + (c.db === 'chemsep' ? ' data-cs="1"' + (state.components.indexOf(c.id) >= 0 ? '' : ' hidden') : '') + '><input type="checkbox" data-comp="' + c.id + '"' + (state.components.indexOf(c.id) >= 0 ? ' checked' : '') + '>' + esc(c.name) + ' <small>' + esc(c.formula) + (c.db === 'chemsep' ? ' · ChemSep · CAS ' + esc(c.cas) : '') + (c.tb ? ' · Teb ' + nf(c.tb - 273.15, 1) + ' °C' : c.solid ? ' · sólido' : ' · não volátil') + '</small></label>').join('') + '</div>';
+      TH.COMPONENTS.slice().sort((a, b) => (state.components.indexOf(b.id) >= 0) - (state.components.indexOf(a.id) >= 0)).map(c => '<label data-name="' + esc((c.name + ' ' + c.formula + ' ' + c.id + ' ' + (c.cas || '')).toLowerCase()) + '"' + (c.db === 'chemsep' || c.db === 'ext' ? ' data-cs="1"' + (state.components.indexOf(c.id) >= 0 ? '' : ' hidden') : '') + '><input type="checkbox" data-comp="' + c.id + '"' + (state.components.indexOf(c.id) >= 0 ? ' checked' : '') + '>' + esc(c.name) + ' <small>' + esc(c.formula) + (c.db === 'chemsep' ? ' · ChemSep · CAS ' + esc(c.cas) : c.db === 'ext' ? ' · banco ampliado · CAS ' + esc(c.cas) + ' · qualidade ' + esc(c.q || 'C') : '') + (c.tb ? ' · Teb ' + nf(c.tb - 273.15, 1) + ' °C' : c.solid ? ' · sólido' : ' · não volátil') + '</small></label>').join('') + '</div>';
     if (th && th.pairInfo.length) {
       const isAct = ['NRTL', 'WILSON', 'UNIQUAC'].indexOf(state.model) >= 0;
       h += '<div class="subhead">Parâmetros binários (' + esc(TH.MODELS[state.model]) + ')</div>';
@@ -12816,9 +12928,11 @@ def pfr_transiente(P, nome):
     el.innerHTML = h;
     $('#modelSel').onchange = e => { pushUndo(); state.model = e.target.value; afterChange(false); renderThermo(); };
     $('#compSearch').oninput = e => { // os compostos do ChemSep só aparecem quando buscados (ou já selecionados)
-      const q = e.target.value.toLowerCase().trim();
+      const q = e.target.value.toLowerCase().trim(); compQuery = e.target.value;
       el.querySelectorAll('#compList label').forEach(l => { const sel = l.querySelector('input').checked, hit = !q || l.dataset.name.indexOf(q) >= 0; l.hidden = l.dataset.cs ? !(sel || (q.length >= 2 && hit)) : !hit; });
+      clearTimeout(extTimer); extTimer = setTimeout(() => extSearch(q), 280);
     };
+    if (compQuery) { $('#compSearch').value = compQuery; $('#compSearch').dispatchEvent(new Event('input')); }
     el.querySelectorAll('[data-comp]').forEach(cb => { cb.onchange = () => { pushUndo(); const id = cb.dataset.comp; if (cb.checked) { if (state.components.indexOf(id) < 0) state.components.push(id); } else state.components = state.components.filter(x => x !== id); afterChange(false); renderThermo(); }; });
     el.querySelectorAll('[data-pair]').forEach(inp => {
       inp.onchange = () => {
@@ -12863,7 +12977,7 @@ def pfr_transiente(P, nome):
     const C = SF.CREDITS;
     openModal('Sobre o ' + C.title,
       '<div style="max-width:740px">' +
-      '<p style="font-size:16px"><b>' + esc(C.title) + ' – ' + esc(C.subtitle) + '</b> <span class="ver-badge">VERSÃO ' + esc(C.version || '3.0') + '</span><br>Simulador de processos químicos e bioprocessos com agente de inteligência artificial.</p>' +
+      '<p style="font-size:16px"><b>' + esc(C.title) + ' – ' + esc(C.subtitle) + '</b> <span class="ver-badge">VERSÃO ' + esc(C.version || '4.0') + '</span><br>Simulador de processos químicos e bioprocessos com agente de inteligência artificial.</p>' +
       '<div class="subhead">Autor</div><p><b>' + esc(C.author) + '</b> – ' + esc(C.course) + '<br>' + esc(C.program) + ' &amp; CLAUDE<br><span class="small muted">' + esc(C.role) + ' · ' + esc(C.institution) + '</span></p>' +
       '<p>Autor do livro <i>' + esc(C.book) + '</i> (' + esc(C.publisher) + ', 2019), base dos modelos dinâmicos usados aqui.</p>' +
       '<div class="subhead">Coautor</div><p><b>' + esc(C.coauthor) + '</b> – desenvolvimento do código, do motor numérico e do agente.</p>' +
@@ -12919,7 +13033,11 @@ def pfr_transiente(P, nome):
   }
 
   /* ------------------------------------------------------------------ projeto: novo, exemplos, salvar, abrir */
-  function loadFlowsheet(fs, keepPositions) {
+  function loadFlowsheet(fs, keepPositions, then) {
+    if ((fs.components || []).some(id => !TH.COMP[id]) && SF.dbx) return withComps(fs = JSON.parse(JSON.stringify(fs)), () => { loadFlowsheet(fs, keepPositions); if (then) then(); });
+    loadFlowsheetNow(fs, keepPositions); if (then) then();
+  }
+  function loadFlowsheetNow(fs, keepPositions) {
     pushUndo();
     state = Object.assign(blank(), JSON.parse(JSON.stringify(fs)));
     state.binary = state.binary || {};
@@ -12930,7 +13048,7 @@ def pfr_transiente(P, nome):
   }
   function defaultParamsSafe(type, st) { const saved = state; state = st; try { return U.TYPES[type] ? defaultParams(type) : {}; } finally { state = saved; } }
   SF.examples.forEach(e => { const o = document.createElement('option'); o.value = e.key; o.textContent = e.title; $('#exampleSel').appendChild(o); });
-  $('#exampleSel').onchange = e => { const ex = SF.examples.find(x => x.key === e.target.value); e.target.value = ''; if (!ex) return; loadFlowsheet(ex.fs); runSimulation(true); toast('Exemplo carregado: ' + ex.title); };
+  $('#exampleSel').onchange = e => { const ex = SF.examples.find(x => x.key === e.target.value); e.target.value = ''; if (!ex) return; loadFlowsheet(ex.fs, false, () => { runSimulation(true); toast('Exemplo carregado: ' + ex.title); }); };
   $('#btnNew').onclick = () => { pushUndo(); state = blank(); results = null; pfd.sel = null; afterChange(true); pfd.fit(); renderCharts(null, []); };
   $('#btnUndo').onclick = undo;
   $('#btnRun').onclick = () => runSimulation();
@@ -13038,7 +13156,7 @@ def pfr_transiente(P, nome):
   try { const s = localStorage.getItem('simulafacil.v1'); if (s) { const fs = JSON.parse(s); if (fs && fs.blocks && fs.blocks.length) { state = Object.assign(blank(), fs); restored = true; } } } catch (e) { /* sem armazenamento */ }
   if (!restored) { const ex = SF.examples[0]; state = Object.assign(blank(), JSON.parse(JSON.stringify(ex.fs))); SF.pfd.autoLayout(state, true); }
   $('#projName').value = state.name; $('#emptyHint').hidden = state.blocks.length > 0; updateCompSummary();
-  requestAnimationFrame(() => { pfd.fit(); runSimulation(true); renderProps(); });
+  requestAnimationFrame(() => withComps(state, () => { pfd.fit(); runSimulation(true); renderProps(); }));
   (function () { let noShow = false; try { noShow = localStorage.getItem('simulafacil.noWelcome') === '1'; } catch (e) { /* */ } if (!noShow) openWelcome(); })();
   /* ------------------------------------------------------------------ versão para celular (mesmo programa, outra arrumação da tela) */
   const VM_KEY = 'simulafacil.viewMode', SIDE_VIEWS = ['props', 'results', 'agent', 'thermo'];

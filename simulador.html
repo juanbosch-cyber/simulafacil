@@ -2727,19 +2727,19 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'nodes', label: 'Pontos da malha espacial', u: '', def: 60 }] },
     blast_furnace: { label: 'Alto-forno contínuo (siderurgia): minério + coque + fundente + ar de sopro → gusa, escória e gás de topo; balanços de massa e energia', cat: 'Siderurgia e cimento', ins: ['ore', 'coke', 'flux', 'blast'], outs: ['gas', 'slag', 'pig_iron'], params: [
       { k: 'mOre', label: 'Vazão de minério' + SEMC, u: 'kg/s', def: 100 },
-      { k: 'wFe2O3', label: 'Fração mássica de Fe₂O₃ no minério (o restante é ganga, SiO₂)' + SEMC, u: '0–1', def: 0.90 },
-      { k: 'mCoke', label: 'Vazão de coque' + SEMC, u: 'kg/s', def: 30 },
+      { k: 'wFe2O3', label: 'Fração mássica de Fe₂O₃ no minério (o restante é ganga, SiO₂)' + SEMC, u: '0–1', def: 0.94 },
+      { k: 'mCoke', label: 'Vazão de coque' + SEMC, u: 'kg/s', def: 36 },
       { k: 'wC', label: 'Carbono fixo no coque (o restante são cinzas, como SiO₂)' + SEMC, u: '0–1', def: 0.88 },
-      { k: 'mFlux', label: 'Vazão de fundente: calcário CaCO₃' + SEMC, u: 'kg/s', def: 10 },
+      { k: 'mFlux', label: 'Vazão de fundente: calcário CaCO₃' + SEMC, u: 'kg/s', def: 19 },
       { k: 'Tch', label: 'Temperatura da carga: minério, coque e fundente' + SEMC, u: '°C', def: 25 },
-      { k: 'mBlast', label: 'Vazão de ar de sopro nas ventaneiras' + SEMC, u: 'kg/s', def: 62 },
+      { k: 'mBlast', label: 'Vazão de ar de sopro nas ventaneiras' + SEMC, u: 'kg/s', def: 115.9 },
       { k: 'wO2', label: 'Fração mássica de O₂ no ar de sopro' + SEMC, u: '0–1', def: 0.23 },
-      { k: 'Tbl', label: 'Temperatura do ar de sopro (aquecido nos regeneradores)' + SEMC, u: '°C', def: 1100 },
+      { k: 'Tbl', label: 'Temperatura do ar de sopro (aquecido nos regeneradores)' + SEMC, u: '°C', def: 1150 },
       { k: 'Cg', label: 'Carbono dissolvido no gusa', u: '% massa', def: 4.5 },
       { k: 'Tg', label: 'Temperatura do gusa líquido', u: '°C', def: 1500 },
       { k: 'Ts', label: 'Temperatura da escória', u: '°C', def: 1550 },
-      { k: 'Tgas', label: 'Temperatura do gás de topo', u: '°C', def: 200 },
-      { k: 'Qloss', label: 'Perdas térmicas pelas paredes', u: 'kW', def: 15000 }] },
+      { k: 'Tgas', label: 'Temperatura do gás de topo', u: '°C', def: 150 },
+      { k: 'Qloss', label: 'Perdas térmicas pelas paredes', u: 'kW', def: 25000 }] },
     cement_kiln: { label: 'Forno de cimento contínuo (calcinação e clinquerização): farinha crua + combustível + ar → clínquer e gases; balanços de massa e energia', cat: 'Siderurgia e cimento', ins: ['meal', 'fuel', 'air'], outs: ['gas', 'clinker'], params: [
       { k: 'mMeal', label: 'Vazão de farinha crua' + SEMC, u: 'kg/s', def: 100 },
       { k: 'xCaCO3', label: 'Farinha: fração mássica de CaCO₃' + SEMC, u: '0–1', def: 0.78 },
@@ -2747,14 +2747,14 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'xAl2O3', label: 'Farinha: fração mássica de Al₂O₃' + SEMC, u: '0–1', def: 0.04 },
       { k: 'xFe2O3', label: 'Farinha: fração mássica de Fe₂O₃' + SEMC, u: '0–1', def: 0.02 },
       { k: 'xH2O', label: 'Farinha: umidade residual (H₂O)' + SEMC, u: '0–1', def: 0.02 },
-      { k: 'Tmeal', label: 'Temperatura da farinha (após os pré-aquecedores)' + SEMC, u: '°C', def: 70 },
-      { k: 'mFuel', label: 'Vazão de combustível (coque de petróleo ou carvão)' + SEMC, u: 'kg/s', def: 6.5 },
+      { k: 'Tmeal', label: 'Temperatura da farinha na entrada da torre de ciclones (o volume de controle inclui os pré-aquecedores)' + SEMC, u: '°C', def: 70 },
+      { k: 'mFuel', label: 'Vazão de combustível (coque de petróleo ou carvão)' + SEMC, u: 'kg/s', def: 6.34 },
       { k: 'fC', label: 'Combustível: carbono fixo' + SEMC, u: '0–1', def: 0.85 },
       { k: 'fH', label: 'Combustível: hidrogênio' + SEMC, u: '0–1', def: 0.04 },
       { k: 'fAsh', label: 'Combustível: cinzas (como SiO₂)' + SEMC, u: '0–1', def: 0.11 },
       { k: 'Tfuel', label: 'Temperatura do combustível' + SEMC, u: '°C', def: 25 },
       { k: 'LHV', label: 'Poder calorífico inferior do combustível (para o consumo específico)', u: 'kJ/kg', def: 32000 },
-      { k: 'mAir', label: 'Vazão de ar de combustão (secundário e terciário)' + SEMC, u: 'kg/s', def: 75 },
+      { k: 'mAir', label: 'Vazão de ar de combustão (secundário e terciário)' + SEMC, u: 'kg/s', def: 82 },
       { k: 'wO2a', label: 'Fração mássica de O₂ no ar' + SEMC, u: '0–1', def: 0.233 },
       { k: 'Tair', label: 'Temperatura do ar (pré-aquecido no resfriador de clínquer)' + SEMC, u: '°C', def: 800 },
       { k: 'Tcl', label: 'Temperatura do clínquer', u: '°C', def: 1450 },
@@ -2762,9 +2762,9 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'QlossK', label: 'Perdas térmicas pelas paredes (radiação e convecção)', u: 'kW', def: 5000 }] },
     silo: { label: 'Silo com tremonha cônica, descarga contínua por gravidade: vazão de Beverloo, regime de Jenike e efeito do ângulo da tremonha', cat: 'Sólidos particulados', ins: ['feed'], outs: ['product'], params: [
       { k: 'Fs', label: 'Vazão de sólidos na alimentação' + SEMC, u: 'kg/s', def: 30 },
-      { k: 'Ds', label: 'Diâmetro do silo (seção cilíndrica)', u: 'm', def: 1.0 },
+      { k: 'Ds', label: 'Diâmetro do silo (seção cilíndrica)', u: 'm', def: 3.0 },
       { k: 'Do', label: 'Diâmetro do orifício de descarga', u: 'm', def: 0.20 },
-      { k: 'Hc', label: 'Altura da seção cilíndrica', u: 'm', def: 3.0 },
+      { k: 'Hc', label: 'Altura da seção cilíndrica', u: 'm', def: 8.0 },
       { k: 'dp', label: 'Diâmetro médio das partículas', u: 'mm', def: 3 },
       { k: 'rhob', label: 'Massa específica aparente do leito (bulk)', u: 'kg/m³', def: 1400 },
       { k: 'phiw', label: 'Ângulo de atrito partícula–parede φw', u: '°', def: 25 },
@@ -5458,11 +5458,11 @@ window.SIMULAFACIL_CONFIG = {
     const p = b.params, warn = [], i = ins || {};
     const Tch = num(p.Tch, 25);
     const I = {
-      ore: furnaceIn(th, i.ore, 'minério', { hematite: 'Fe2O3', silica: 'SiO2' }, () => { const m = num(p.mOre, 100), w = num(p.wFe2O3, 0.9); return { kg: { Fe2O3: m * w, SiO2: m * (1 - w) }, T: Tch }; }),
-      coke: furnaceIn(th, i.coke, 'coque', { carbon: 'C', silica: 'SiO2' }, () => { const m = num(p.mCoke, 30), w = num(p.wC, 0.88); return { kg: { C: m * w, SiO2: m * (1 - w) }, T: Tch }; }),
-      flux: furnaceIn(th, i.flux, 'fundente', { caco3: 'CaCO3' }, () => ({ kg: { CaCO3: num(p.mFlux, 10) }, T: Tch })),
-      blast: furnaceIn(th, i.blast, 'ar de sopro', { oxygen: 'O2', nitrogen: 'N2' }, () => { const m = num(p.mBlast, 62), w = num(p.wO2, 0.23); return { kg: { O2: m * w, N2: m * (1 - w) }, T: num(p.Tbl, 1100) }; }) };
-    const o = { Cg: num(p.Cg, 4.5) / 100, Tg: C2K(num(p.Tg, 1500)), Ts: C2K(num(p.Ts, 1550)), Tgas: C2K(num(p.Tgas, 200)), Qloss: num(p.Qloss, 15000) };
+      ore: furnaceIn(th, i.ore, 'minério', { hematite: 'Fe2O3', silica: 'SiO2' }, () => { const m = num(p.mOre, 100), w = num(p.wFe2O3, 0.94); return { kg: { Fe2O3: m * w, SiO2: m * (1 - w) }, T: Tch }; }),
+      coke: furnaceIn(th, i.coke, 'coque', { carbon: 'C', silica: 'SiO2' }, () => { const m = num(p.mCoke, 36), w = num(p.wC, 0.88); return { kg: { C: m * w, SiO2: m * (1 - w) }, T: Tch }; }),
+      flux: furnaceIn(th, i.flux, 'fundente', { caco3: 'CaCO3' }, () => ({ kg: { CaCO3: num(p.mFlux, 19) }, T: Tch })),
+      blast: furnaceIn(th, i.blast, 'ar de sopro', { oxygen: 'O2', nitrogen: 'N2' }, () => { const m = num(p.mBlast, 115.9), w = num(p.wO2, 0.23); return { kg: { O2: m * w, N2: m * (1 - w) }, T: num(p.Tbl, 1150) }; }) };
+    const o = { Cg: num(p.Cg, 4.5) / 100, Tg: C2K(num(p.Tg, 1500)), Ts: C2K(num(p.Ts, 1550)), Tgas: C2K(num(p.Tgas, 150)), Qloss: num(p.Qloss, 25000) };
     if (!(I.ore.kg.Fe2O3 > 0)) throw new Error('o minério precisa de Fe₂O₃ (Hematita)');
     if (!(I.coke.kg.C > 0)) throw new Error('o coque precisa de carbono');
     if (!(I.blast.kg.O2 > 0)) throw new Error('o ar de sopro precisa de oxigênio');
@@ -5544,8 +5544,8 @@ window.SIMULAFACIL_CONFIG = {
     const I = {
       meal: furnaceIn(th, i.meal, 'farinha', { caco3: 'CaCO3', silica: 'SiO2', alumina: 'Al2O3', hematite: 'Fe2O3', water: 'H2O' }, () => { const m = num(p.mMeal, 100);
         return { kg: { CaCO3: m * num(p.xCaCO3, 0.78), SiO2: m * num(p.xSiO2, 0.14), Al2O3: m * num(p.xAl2O3, 0.04), Fe2O3: m * num(p.xFe2O3, 0.02), H2O: m * num(p.xH2O, 0.02) }, T: num(p.Tmeal, 70) }; }),
-      fuel: furnaceIn(th, i.fuel, 'combustível', { carbon: 'C', hydrogen: 'H2', silica: 'ash' }, () => { const m = num(p.mFuel, 6.5); return { kg: { C: m * num(p.fC, 0.85), H2: m * num(p.fH, 0.04), ash: m * num(p.fAsh, 0.11) }, T: num(p.Tfuel, 25) }; }),
-      air: furnaceIn(th, i.air, 'ar de combustão', { oxygen: 'O2', nitrogen: 'N2' }, () => { const m = num(p.mAir, 75), w = num(p.wO2a, 0.233); return { kg: { O2: m * w, N2: m * (1 - w) }, T: num(p.Tair, 800) }; }) };
+      fuel: furnaceIn(th, i.fuel, 'combustível', { carbon: 'C', hydrogen: 'H2', silica: 'ash' }, () => { const m = num(p.mFuel, 6.34); return { kg: { C: m * num(p.fC, 0.85), H2: m * num(p.fH, 0.04), ash: m * num(p.fAsh, 0.11) }, T: num(p.Tfuel, 25) }; }),
+      air: furnaceIn(th, i.air, 'ar de combustão', { oxygen: 'O2', nitrogen: 'N2' }, () => { const m = num(p.mAir, 82), w = num(p.wO2a, 0.233); return { kg: { O2: m * w, N2: m * (1 - w) }, T: num(p.Tair, 800) }; }) };
     ['CaCO3', 'SiO2', 'Al2O3', 'Fe2O3', 'H2O'].forEach(k => { if (I.meal.kg[k] == null) I.meal.kg[k] = 0; });
     ['C', 'H2', 'ash'].forEach(k => { if (I.fuel.kg[k] == null) I.fuel.kg[k] = 0; });
     const o = { Tcl: C2K(num(p.Tcl, 1450)), Tg: C2K(num(p.Tgk, 350)), Qloss: num(p.QlossK, 5000), LHV: num(p.LHV, 32000) };
@@ -5620,7 +5620,7 @@ window.SIMULAFACIL_CONFIG = {
   }
   IMPL.silo = function (th, b, ins) {
     const p = b.params, warn = [], s = ins && ins.feed;
-    const o = { Ds: num(p.Ds, 1), Do: num(p.Do, 0.2), Hc: num(p.Hc, 3), dp: num(p.dp, 3) / 1000, rhob: num(p.rhob, 1400), phiw: num(p.phiw, 25), C: num(p.Cb, 0.58), k: num(p.kb, 1.5), chi: num(p.chi, 45) };
+    const o = { Ds: num(p.Ds, 3), Do: num(p.Do, 0.2), Hc: num(p.Hc, 8), dp: num(p.dp, 3) / 1000, rhob: num(p.rhob, 1400), phiw: num(p.phiw, 25), C: num(p.Cb, 0.58), k: num(p.kb, 1.5), chi: num(p.chi, 45) };
     const theta = clamp(num(p.theta, 15), 1, 90), level = clamp(num(p.level, 70), 1, 100) / 100;
     if (!(o.Ds > o.Do && o.Do > 0 && o.Hc > 0 && o.rhob > 0)) throw new Error('confira a geometria: o diâmetro do silo deve ser maior que o do orifício e as dimensões, positivas');
     if (!(o.Do - o.k * o.dp > 0)) throw new Error('orifício pequeno demais para as partículas: D_o deve ser maior que k·d_p');
@@ -6641,15 +6641,15 @@ window.SIMULAFACIL_CONFIG = {
     blast_furnace: { ex: ex('alto-forno', 'Alto-forno contínuo'), p: [
       'O alto-forno é um reator de contracorrente: a carga sólida (minério de ferro, coque e calcário) desce pela cuba e o ar quente soprado pelas ventaneiras sobe. Na frente das ventaneiras o coque queima a CO; o CO sobe, reduz os óxidos de ferro (Fe₂O₃ → Fe₃O₄ → FeO → Fe) e sai no topo como gás de alto-forno (BFG), uma mistura de CO, CO₂ e N₂. O ferro funde, dissolve carbono (cerca de 4,5 %) e escorre para o cadinho como gusa; a ganga do minério e as cinzas do coque reagem com a cal do calcário e formam a escória, mais leve, que flutua sobre o gusa.',
       'O modelo é um balanço global: todo o oxigênio do minério vai para o gás, o calcário calcina (CaCO₃ → CaO + CO₂) e a escória é CaO + SiO₂. O carbono que não fica no gusa e o oxigênio do ar e do minério fecham as quantidades de CO e CO₂: n_CO₂ = O − C e n_CO = 2C − O. A utilização do gás, η_CO = CO₂/(CO + CO₂), mede quanto do CO foi aproveitado na redução. O balanço de energia usa entalpias de formação a 298,15 K e calores específicos médios, com o calor de fusão do ferro no gusa.',
-      'O exemplo reproduz o código MATLAB de referência: 100 kg/s de minério (90 % de Fe₂O₃), 30 kg/s de coque (88 % de C), 10 kg/s de calcário e 62 kg/s de ar a 1 100 °C. Saem 65,9 kg/s de gusa (237 t/h), 19,2 kg/s de escória e 116,9 kg/s de gás com 35,2 % de CO, 19,5 % de CO₂ e 45,4 % de N₂; a taxa de coque é 455 kg/t de gusa e η_CO = 0,356. O balanço de massa fecha (202 kg/s), mas o de energia deixa um resíduo de −176,7 MW: com as temperaturas de saída fixadas, falta energia. Cerca de 97 kg/s de ar de sopro fechariam o balanço, com η_CO ≈ 0,60.'] },
+      'O exemplo é um alto-forno grande, de quase 6 000 t de gusa por dia, operado só com coque: 100 kg/s de minério (94 % de Fe₂O₃, 65,7 % de Fe), 36 kg/s de coque (88 % de C), 19 kg/s de calcário e 115,9 kg/s de ar a 1 150 °C. Saem 68,8 kg/s de gusa (248 t/h), 21,0 kg/s de escória (305 kg/t, basicidade CaO/SiO₂ = 1,03) e 181,1 kg/s de gás com 23,1 % de CO, 21,6 % de CO₂ e 55,4 % de N₂, valores típicos do BFG. A taxa de coque é 523 kg/t de gusa e η_CO = 0,48. Os balanços de massa (270,9 kg/s) e de energia fecham: o ar de sopro foi escolhido para zerar o resíduo térmico. Com os valores do código MATLAB de referência (90 % de Fe₂O₃, 30 kg/s de coque e 62 kg/s de ar a 1 100 °C), faltavam 177 MW e o gás de topo saía com 35 % de CO, sinal de ar de sopro insuficiente.'] },
     cement_kiln: { ex: ex('forno-cimento', 'Forno de cimento contínuo'), p: [
       'Na fabricação do cimento, a farinha crua (calcário com argila, rica em SiO₂, Al₂O₃ e Fe₂O₃) passa pela torre de ciclones, onde é aquecida pelos gases quentes, e entra no forno rotativo. O CaCO₃ se decompõe (calcinação, CaCO₃ → CaO + CO₂, fortemente endotérmica) e, perto do maçarico, a 1 450 °C, a cal reage com os demais óxidos e forma os silicatos e aluminatos do clínquer. O combustível (coque de petróleo ou carvão) queima com o ar pré-aquecido no resfriador de clínquer.',
       'O modelo supõe calcinação e combustão completas: o clínquer leva o CaO, a sílica (com as cinzas do combustível), a alumina e o óxido de ferro; os gases levam o CO₂ da calcinação e da combustão, a água e o oxigênio em excesso. A composição em óxidos dá as fases de Bogue (C₃S, C₂S, C₃A e C₄AF) e os módulos de saturação de cal, de sílica e de alumina, usados no controle de qualidade.',
-      'O exemplo reproduz o código MATLAB de referência: 100 kg/s de farinha (78 % de CaCO₃) a 70 °C, 6,5 kg/s de coque de petróleo (PCI de 32 000 kJ/kg) e 75 kg/s de ar a 800 °C dão 64,4 kg/s de clínquer (232 t/h) com 67,8 % de CaO e 22,8 % de SiO₂, consumo de 772 kcal/kg e 4,1 % de excesso de ar. O clínquer tem 56 % de C₃S e 23 % de C₂S, e o forno emite 0,85 kg de CO₂ por kg de clínquer, dos quais 0,53 vêm da calcinação. O resíduo térmico é de +1,9 MW: 6,44 kg/s de combustível fechariam o balanço.'] },
+      'No exemplo, 100 kg/s de farinha (78 % de CaCO₃) a 70 °C, 6,34 kg/s de coque de petróleo (PCI de 32 000 kJ/kg) e 82 kg/s de ar a 800 °C dão 64,4 kg/s de clínquer (232 t/h) com 67,9 % de CaO e 22,8 % de SiO₂. O consumo é de 753 kcal/kg (3 150 kJ/kg), típico de forno com pré-calcinador, com 17 % de excesso de ar e 2,3 % de O₂ nos gases. O clínquer tem 57 % de C₃S e 23 % de C₂S, e o forno emite 0,84 kg de CO₂ por kg de clínquer, dos quais 0,53 vêm da calcinação. O combustível foi escolhido para fechar o balanço de energia. O código de referência usava 6,5 kg/s de combustível e 75 kg/s de ar, com só 4 % de excesso, pouco para evitar CO nos gases.'] },
     silo: { ex: ex('silo-tremonha', 'Silo com tremonha em operação contínua'), p: [
       'Um sólido granular não escoa como um líquido: o atrito com as paredes sustenta parte do peso (efeito Janssen) e a vazão pelo orifício quase não depende da altura do leito. A correlação de Beverloo dá essa vazão, W = C ρ_b √g (D_o − k d_p)^2,5, com C ≈ 0,58 e k ≈ 1,5; o termo k·d_p é o "anel vazio" junto à borda do orifício, onde os grãos não chegam com a mesma densidade.',
       'A tremonha cônica muda o padrão de escoamento. Se for íngreme o bastante, todo o material se move (escoamento em massa: o primeiro que entra é o primeiro que sai); se for rasa, só um canal central escoa e o material junto às paredes fica parado (escoamento em funil). O critério de Jenike depende do semiângulo θ (medido a partir da vertical) e do atrito com a parede; aqui se usa a aproximação θ ≤ 40° − φw/2. O fator de Rose e Tanaka, (tg θ·tg χ)^−0,35, mostra que tremonhas mais íngremes descarregam mais depressa.',
-      'Em operação contínua, o silo recebe a alimentação e a descarga a acompanha, desde que ela não passe da capacidade W do orifício. O exemplo alimenta 30 kg/s de areia (3 mm, ρ_b = 1 400 kg/m³) num silo de 1 m de diâmetro e 3 m de cilindro, com orifício de 0,20 m e tremonha de θ = 15°: W = 68,1 kg/s (escoamento em massa), a capacidade é de 3,98 t, o tempo de residência a 70 % do nível é 1,55 min e o silo cheio esvazia em 60 s. Os gráficos comparam os ângulos de 90° (fundo plano), 45°, 30° e 15°.',
+      'Em operação contínua, o silo recebe a alimentação e a descarga a acompanha, desde que ela não passe da capacidade W do orifício. O exemplo alimenta 30 kg/s de areia (3 mm, ρ_b = 1 400 kg/m³) num silo de 3 m de diâmetro e 8 m de cilindro, com orifício de 0,20 m e tremonha de θ = 15°: W = 68,1 kg/s (escoamento em massa), a capacidade é de 97,6 t, o tempo de residência a 70 % do nível é 38 min e o silo cheio esvazia em 24 min, um silo pulmão de porte industrial. Os gráficos comparam os ângulos de 90° (fundo plano), 45°, 30° e 15°.',
       'Os ângulos do código MATLAB de referência (75°, 60° e 45° com a horizontal) correspondem a 15°, 30° e 45° a partir da vertical, com as mesmas alturas e volumes de cone; no código original o fundo plano era classificado como escoamento em massa e o fator da tremonha diminuía a vazão das tremonhas mais íngremes, o que foi corrigido aqui.'] },
     thickener: { ex: ex('sedimentador-continuo', 'Sedimentador contínuo (Talmadge e Fitch)'), p: [
       'No sedimentador contínuo (espessador), a polpa entra pelo poço central, os sólidos sedimentam e são raspados para o centro do fundo, saindo como lama adensada (underflow), e o líquido clarificado transborda pela calha periférica (overflow). A área precisa ser grande o bastante para que os sólidos atravessem a zona de compressão e atinjam a concentração desejada no underflow.',
@@ -11352,10 +11352,10 @@ def pfr_transiente(P, nome):
     { key: 'alto-forno', title: 'Siderurgia: alto-forno contínuo — minério + coque + calcário + ar quente → gusa, escória e gás de topo', fs: {
       name: 'Alto-forno siderúrgico', components: ['hematite', 'silica', 'carbon', 'caco3', 'oxygen', 'nitrogen', 'iron', 'cao', 'co', 'co2'], model: 'IDEAL',
       blocks: [
-        { id: 'FM', type: 'feed', name: 'Minério de ferro', params: { T: 25, P: 1.01325, vf: '', flow: 100, flowUnit: 'kg/s', basis: 'mássica', composition: { hematite: 0.90, silica: 0.10 } } },
-        { id: 'FC', type: 'feed', name: 'Coque', params: { T: 25, P: 1.01325, vf: '', flow: 30, flowUnit: 'kg/s', basis: 'mássica', composition: { carbon: 0.88, silica: 0.12 } } },
-        { id: 'FF', type: 'feed', name: 'Calcário (fundente)', params: { T: 25, P: 1.01325, vf: '', flow: 10, flowUnit: 'kg/s', basis: 'mássica', composition: { caco3: 1 } } },
-        { id: 'FA', type: 'feed', name: 'Ar quente a 1100 °C', params: { T: 1100, P: 1.01325, vf: '', flow: 62, flowUnit: 'kg/s', basis: 'mássica', composition: { oxygen: 0.23, nitrogen: 0.77 } } },
+        { id: 'FM', type: 'feed', name: 'Minério de ferro (65,7 % Fe)', params: { T: 25, P: 1.01325, vf: '', flow: 100, flowUnit: 'kg/s', basis: 'mássica', composition: { hematite: 0.94, silica: 0.06 } } },
+        { id: 'FC', type: 'feed', name: 'Coque', params: { T: 25, P: 1.01325, vf: '', flow: 36, flowUnit: 'kg/s', basis: 'mássica', composition: { carbon: 0.88, silica: 0.12 } } },
+        { id: 'FF', type: 'feed', name: 'Calcário (fundente)', params: { T: 25, P: 1.01325, vf: '', flow: 19, flowUnit: 'kg/s', basis: 'mássica', composition: { caco3: 1 } } },
+        { id: 'FA', type: 'feed', name: 'Ar quente a 1150 °C', params: { T: 1150, P: 1.01325, vf: '', flow: 115.9, flowUnit: 'kg/s', basis: 'mássica', composition: { oxygen: 0.23, nitrogen: 0.77 } } },
         { id: 'AF', type: 'blast_furnace', name: 'Alto-forno AF-1', params: {} },
         { id: 'PG', type: 'product', name: 'Gás de topo (BFG)' }, { id: 'PE', type: 'product', name: 'Escória' }, { id: 'PF', type: 'product', name: 'Gusa líquido' }],
       streams: [S('1', 'FM', 'out', 'AF', 'ore', 'Minério'), S('2', 'FC', 'out', 'AF', 'coke', 'Coque'), S('3', 'FF', 'out', 'AF', 'flux', 'Calcário'), S('4', 'FA', 'out', 'AF', 'blast', 'Ar quente'),
@@ -11364,8 +11364,8 @@ def pfr_transiente(P, nome):
       name: 'Forno de clínquer', components: ['caco3', 'silica', 'alumina', 'hematite', 'water', 'carbon', 'hydrogen', 'oxygen', 'nitrogen', 'cao', 'co2'], model: 'IDEAL',
       blocks: [
         { id: 'FM', type: 'feed', name: 'Farinha crua (70 °C)', params: { T: 70, P: 1.01325, vf: '', flow: 100, flowUnit: 'kg/s', basis: 'mássica', composition: { caco3: 0.78, silica: 0.14, alumina: 0.04, hematite: 0.02, water: 0.02 } } },
-        { id: 'FC', type: 'feed', name: 'Coque de petróleo', params: { T: 25, P: 1.01325, vf: '', flow: 6.5, flowUnit: 'kg/s', basis: 'mássica', composition: { carbon: 0.85, hydrogen: 0.04, silica: 0.11 } } },
-        { id: 'FA', type: 'feed', name: 'Ar terciário (800 °C)', params: { T: 800, P: 1.01325, vf: '', flow: 75, flowUnit: 'kg/s', basis: 'mássica', composition: { oxygen: 0.233, nitrogen: 0.767 } } },
+        { id: 'FC', type: 'feed', name: 'Coque de petróleo', params: { T: 25, P: 1.01325, vf: '', flow: 6.34, flowUnit: 'kg/s', basis: 'mássica', composition: { carbon: 0.85, hydrogen: 0.04, silica: 0.11 } } },
+        { id: 'FA', type: 'feed', name: 'Ar secundário e terciário (800 °C)', params: { T: 800, P: 1.01325, vf: '', flow: 82, flowUnit: 'kg/s', basis: 'mássica', composition: { oxygen: 0.233, nitrogen: 0.767 } } },
         { id: 'FK', type: 'cement_kiln', name: 'Forno rotativo FC-1', params: {} },
         { id: 'PG', type: 'product', name: 'Gases de exaustão' }, { id: 'PC', type: 'product', name: 'Clínquer' }],
       streams: [S('1', 'FM', 'out', 'FK', 'meal', 'Farinha'), S('2', 'FC', 'out', 'FK', 'fuel', 'Combustível'), S('3', 'FA', 'out', 'FK', 'air', 'Ar'),
@@ -12557,17 +12557,17 @@ def pfr_transiente(P, nome):
       ['Hidrato, evaporação e calor', 'n_h = 0 (cristal anidro); para Na₂CO₃·10H₂O use n_h = 10. A água evaporada representa o cristalizador a vácuo. c_p ≈ 3,0 kJ/(kg·K); calor de cristalização 0 no exemplo genérico (345 kJ/kg no do KNO₃).']] },
     blast_furnace: { ex: 'Alto-forno contínuo', items: [
       ['Correntes', 'quatro entradas: <b>minério</b> (Hematita + Sílica), <b>coque</b> (Carbono + Sílica como cinzas), <b>fundente</b> (Carbonato de cálcio) e <b>ar de sopro</b> (Oxigênio + Nitrogênio); saídas <b>gás de topo</b> (CO, CO₂, N₂), <b>escória</b> (CaO + SiO₂) e <b>gusa</b> (Fe + C). Uma entrada sem corrente usa os campos.'],
-      ['Carga e sopro', '100 kg/s de minério com 90 % de Fe₂O₃, 30 kg/s de coque com 88 % de C, 10 kg/s de calcário a 25 °C e 62 kg/s de ar (23 % de O₂ em massa) a 1 100 °C, como no código MATLAB de referência.'],
-      ['Saídas', '4,5 % de C no gusa; gusa a 1 500 °C, escória a 1 550 °C e gás de topo a 200 °C; perdas pelas paredes de 15 000 kW.'],
-      ['Energia', 'as temperaturas de saída são fixadas, então o balanço de energia deixa um <b>resíduo</b>; o programa mostra também o ar de sopro que o zeraria e o gráfico do resíduo × ar de sopro.']] },
+      ['Carga e sopro', '100 kg/s de minério com 94 % de Fe₂O₃ (65,7 % de Fe), 36 kg/s de coque com 88 % de C, 19 kg/s de calcário a 25 °C (escória com basicidade CaO/SiO₂ ≈ 1,0) e 115,9 kg/s de ar (23 % de O₂ em massa) a 1 150 °C, cerca de 1 300 Nm³ por tonelada de gusa.'],
+      ['Saídas', '4,5 % de C no gusa; gusa a 1 500 °C, escória a 1 550 °C e gás de topo a 150 °C; perdas pelas paredes de 25 000 kW (cerca de 0,36 GJ por tonelada de gusa).'],
+      ['Energia', 'as temperaturas de saída são fixadas, então o balanço de energia deixa um <b>resíduo</b>; no exemplo, o ar de sopro foi escolhido para zerá-lo. O programa mostra o ar de sopro que zera o resíduo e o gráfico do resíduo × ar de sopro (com o código de referência, 62 kg/s de ar, faltavam 177 MW).']] },
     cement_kiln: { ex: 'Forno de cimento contínuo', items: [
       ['Correntes', 'entradas <b>farinha crua</b> (CaCO₃, SiO₂, Al₂O₃, Fe₂O₃ e água), <b>combustível</b> (Carbono, Hidrogênio e Sílica como cinzas) e <b>ar de combustão</b> (O₂ + N₂); saídas <b>gases de exaustão</b> e <b>clínquer</b>.'],
-      ['Farinha e combustível', '100 kg/s de farinha (78 % CaCO₃, 14 % SiO₂, 4 % Al₂O₃, 2 % Fe₂O₃, 2 % de umidade) a 70 °C; 6,5 kg/s de coque de petróleo (85 % C, 4 % H, 11 % cinzas) com PCI de 32 000 kJ/kg.'],
-      ['Ar e temperaturas', '75 kg/s de ar a 800 °C (pré-aquecido no resfriador); clínquer a 1 450 °C, gases a 350 °C e perdas de 5 000 kW.'],
+      ['Farinha e combustível', '100 kg/s de farinha (78 % CaCO₃, 14 % SiO₂, 4 % Al₂O₃, 2 % Fe₂O₃, 2 % de umidade) a 70 °C; 6,34 kg/s de coque de petróleo (85 % C, 4 % H, 11 % cinzas) com PCI de 32 000 kJ/kg, a vazão que fecha o balanço de energia.'],
+      ['Ar e temperaturas', '82 kg/s de ar a 800 °C (pré-aquecido no resfriador), cerca de 17 % de excesso e 2,3 % de O₂ nos gases; clínquer a 1 450 °C, gases a 350 °C na saída da torre de ciclones e perdas de 5 000 kW.'],
       ['Resultados extras', 'fases de Bogue, módulos de saturação de cal, sílica e alumina, CO₂ emitido por kg de clínquer e o combustível que zeraria o resíduo térmico.']] },
     silo: { ex: 'Silo com tremonha em operação contínua', items: [
       ['Correntes', 'alimentação de sólidos (por exemplo, Sílica como areia) e <b>descarga</b>, que acompanha a alimentação enquanto ela não passa da capacidade do orifício.'],
-      ['Geometria', 'silo de 1 m de diâmetro e 3 m de cilindro, orifício de 0,20 m; partículas de 3 mm com ρ_b = 1 400 kg/m³ e atrito com a parede φw = 25°.'],
+      ['Geometria', 'silo de 3 m de diâmetro e 8 m de cilindro (cerca de 98 t de areia), orifício de 0,20 m; partículas de 3 mm com ρ_b = 1 400 kg/m³ e atrito com a parede φw = 25°.'],
       ['Tremonha', 'semiângulo θ = 15° a partir da vertical (barra deslizante; 90° = fundo plano). Os gráficos comparam 90°, 45°, 30° e 15° (os 75°, 60° e 45° com a horizontal do código de referência).'],
       ['Correlações', 'Beverloo com C = 0,58 e k = 1,5; fator de Rose e Tanaka com a zona estagnada a χ = 45°; nível de operação de 70 % para o tempo de residência.']] },
     thickener: { ex: 'Sedimentador contínuo (Talmadge e Fitch)', items: [

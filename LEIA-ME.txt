@@ -1,0 +1,38 @@
+SIMULA FÁCIL IA 4.0 – atualização de 12/11/2026
+================================================
+
+O QUE HÁ DE NOVO
+- Refrigerador (chiller) com ícone de geladeira, entrada e saída, e 9 fluidos
+  refrigerantes (R-134a, R-22, R-32, R-410A, R-152a, amônia, propano,
+  isobutano e CO2). Exemplo: "Chiller de água gelada com R-134a".
+- PC-SAFT na aba Termodinâmica (8º modelo), com 4 líquidos iônicos.
+  Exemplos: "Captura de CO2 com líquido iônico" e "Flash de metanol + água
+  com PC-SAFT".
+- Diagrama Txy: novo campo "Comparar com o modelo" (curvas de dois modelos,
+  tabela e pontos experimentais do Perry para metanol–água e etanol–água).
+- Secador de micro-ondas contínuo (esteira) ou em batelada (bandeja).
+  Exemplo: "Secador de micro-ondas contínuo: fatias de maçã".
+- Spray dryer agora também em batelada: todos os secadores têm a opção
+  contínuo ou batelada no campo "Operação".
+- Tutorial 5 (Termodinâmica) refeito com o PC-SAFT (2:45) e a imagem de
+  passo a passo 5 atualizada.
+- Manual atualizado (83 páginas) e página do site atualizada.
+
+COMO ENVIAR AO GITHUB (repositório juanbosch-cyber/simulafacil)
+1. Extraia este zip.
+2. Abra a pasta extraída SIMULA_FACIL_IA_atualizacao_v10.
+3. No GitHub: Add file → Upload files.
+4. Arraste os 6 ARQUIVOS que estão soltos dentro da pasta (não a pasta):
+     index.html
+     simulador.html
+     sitemap.xml
+     tutorial-5.mp4
+     passo-a-passo-5.jpg
+     Manual_SIMULA_FACIL_IA.pdf
+   NÃO envie a subpasta "so-para-o-youtube" nem este LEIA-ME.
+5. Clique em "Commit changes". O site atualiza em 1 a 2 minutos.
+
+SÓ PARA O YOUTUBE (opcional)
+Se já publicou o tutorial 5 antigo, substitua pelo novo tutorial-5.mp4
+(o mesmo arquivo da pasta principal) e use a legenda
+so-para-o-youtube/tutorial-5-legendas.srt.

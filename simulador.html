@@ -123,6 +123,7 @@ textarea { resize: vertical; width: 100%; }
 
 .center { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 .canvas-bar { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--line); background: var(--panel-2); flex-wrap: wrap; }
+.canvas-bar .hint { flex: 1 1 160px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .canvas-bar .pp-btn { border: 2px solid #e10600; color: #c40500; background: #fff; border-radius: 99px; padding: 4px 12px; font-weight: 800; cursor: pointer; box-shadow: 0 2px 6px rgba(225,6,0,.18); }
 .canvas-bar .pp-btn:hover { background: #ffecea; }
 .hint .dot, .hint-m .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; vertical-align: middle; }
@@ -830,7 +831,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '4.0-2026-11-12b',
+  manualVersion: '4.0-2026-11-12d',
   videosAlunos: []
 };
 
@@ -1554,6 +1555,235 @@ window.SIMULAFACIL_CONFIG = {
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
+<script>/* js/pcsaft.js */
+/* SIMULA FÁCIL IA — Equação de estado PC-SAFT (Gross e Sadowski, 2001; associação 2B de Gross e Sadowski, 2002)
+   Energia de Helmholtz residual = cadeia rígida + dispersão + associação. As derivadas (pressão, potencial químico,
+   entalpia residual) são calculadas por diferenças finitas centrais da densidade de energia de Helmholtz
+   f = ρ·ã_res (ρ em moléculas/Å³), o que dispensa as longas expressões analíticas e mantém o código curto e conferível.
+   Parâmetros: m (segmentos), σ (Å), ε/k (K), εAB/k (K) e κAB (esquema 2B: um sítio doador e um receptor).
+   Líquidos iônicos: modelo de molécula neutra (Al-fnaish e Lue, Fluid Phase Equilib. 2017), sem associação. */
+(function (root) {
+  'use strict';
+  const SF = root.SF = root.SF || {};
+  const KB = 1.380649e-23, PI = Math.PI;
+  // constantes universais (Gross e Sadowski, 2001, tabela 1)
+  const A0 = [0.9105631445, 0.6361281449, 2.6861347891, -26.547362491, 97.759208784, -159.59154087, 91.297774084];
+  const A1 = [-0.3084016918, 0.1860531159, -2.5030047259, 21.419793629, -65.255885330, 83.318680481, -33.746922930];
+  const A2 = [-0.0906148351, 0.4527842806, 0.5962700728, -1.7241829131, -4.1302112531, 13.776631870, -8.6728470368];
+  const B0 = [0.7240946941, 2.2382791861, -4.0025849485, -21.003576815, 26.855641363, 206.55133841, -355.60235612];
+  const B1 = [-0.5755498075, 0.6995095521, 3.8925673390, -17.215471648, 192.67226447, -161.82646165, -165.20769346];
+  const B2 = [0.0976883116, -0.2557574982, -9.1558561530, 20.642075974, -38.804430052, 93.626774077, -29.666905585];
+
+  const GS01 = 'Gross e Sadowski (2001)', GS02 = 'Gross e Sadowski (2002), associação 2B', AL17 = 'Al-fnaish e Lue (2017), molécula neutra';
+  // m, σ (Å), ε/k (K), [εAB/k (K), κAB]
+  const P = {
+    methane: [1.0000, 3.7039, 150.03, GS01], ethane: [1.6069, 3.5206, 191.42, GS01], propane: [2.0020, 3.6184, 208.11, GS01],
+    'n-butane': [2.3316, 3.7086, 222.88, GS01], isobutane: [2.2616, 3.7574, 216.53, GS01], 'n-pentane': [2.6896, 3.7729, 231.20, GS01],
+    'n-hexane': [3.0576, 3.7983, 236.77, GS01], 'n-heptane': [3.4831, 3.8049, 238.40, GS01], 'n-octane': [3.8176, 3.8373, 242.78, GS01],
+    cyclohexane: [2.5303, 3.8499, 278.11, GS01], benzene: [2.4653, 3.6478, 287.35, GS01], toluene: [2.8149, 3.7169, 285.69, GS01],
+    ethylbenzene: [3.0799, 3.7974, 287.35, GS01], 'p-xylene': [3.1723, 3.7850, 283.77, GS01], ethylene: [1.5930, 3.4450, 176.47, GS01],
+    propylene: [1.9597, 3.5356, 207.19, GS01], nitrogen: [1.2053, 3.3130, 90.96, GS01], oxygen: [1.1217, 3.2098, 114.96, GS01],
+    co: [1.3097, 3.2507, 92.15, GS01], co2: [2.0729, 2.7852, 169.21, GS01],
+    water: [1.0656, 3.0007, 366.51, GS02, 2500.7, 0.034868], methanol: [1.5255, 3.2300, 188.90, GS02, 2899.5, 0.035176],
+    ethanol: [2.3827, 3.1771, 198.24, GS02, 2653.4, 0.032384], '1-propanol': [2.9997, 3.2522, 233.40, GS02, 2276.8, 0.015268],
+    isopropanol: [3.0929, 3.2085, 208.42, GS02, 2253.9, 0.024675],
+    'il-c2mim-ntf2': [7.850, 3.700, 380, AL17], 'il-c4mim-ntf2': [8.360, 3.780, 383, AL17],
+    'il-c6mim-ntf2': [9.069, 3.830, 385, AL17], 'il-c8mim-ntf2': [9.290, 3.930, 387, AL17]
+  };
+  // pares 'a|b' (ordem alfabética) → kij; sem par = 0 (Al-fnaish e Lue usam kij = 0 para CO2 + líquido iônico)
+  const KIJ = { 'ethanol|water': -0.012, 'methanol|water': -0.0477 };
+  const KIJ_SRC = { 'ethanol|water': 'kij ajustado ao azeótropo a 1 atm (x = 0,897; NRTL do banco APV)', 'methanol|water': 'kij ajustado ao ELV a 1 atm (NRTL do banco APV)' };
+  function params(c) {
+    if (!c) return null;
+    if (c.saft) return c.saft;
+    const p = P[c.id]; if (!p) return null;
+    return { m: p[0], s: p[1], e: p[2], src: p[3], eAB: p[4] || 0, kAB: p[5] || 0 };
+  }
+
+  function solveSmall(A, b) { // eliminação de Gauss com pivotamento (sistemas pequenos)
+    const n = b.length, M = A.map((r, i) => r.concat([b[i]]));
+    for (let c = 0; c < n; c++) {
+      let p = c; for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r;
+      if (Math.abs(M[p][c]) < 1e-300) return null; [M[c], M[p]] = [M[p], M[c]];
+      for (let r = c + 1; r < n; r++) { const f = M[r][c] / M[c][c]; for (let k = c; k <= n; k++) M[r][k] -= f * M[c][k]; }
+    }
+    const x = new Array(n); for (let r = n - 1; r >= 0; r--) { let s = M[r][n]; for (let k = r + 1; k < n; k++) s -= M[r][k] * x[k]; x[r] = s / M[r][r]; }
+    return x;
+  }
+  /* mistura: parâmetros na ordem dos componentes; kij opcional */
+  function Mixture(list, kij) {
+    this.n = list.length; this.p = list;
+    this.k = list.map((a, i) => list.map((b, j) => (i === j ? 0 : (kij && kij[i] && kij[i][j]) || 0)));
+    this.assoc = list.map((p, i) => (p.eAB > 0 && p.kAB > 0 ? i : -1)).filter(i => i >= 0);
+  }
+  // ã_res por molécula; T (K), rho (moléculas/Å³), x (frações), cache para X de associação
+  Mixture.prototype.ares = function (T, rho, x, st) {
+    const n = this.n, p = this.p, d = new Array(n);
+    let mbar = 0, z0 = 0, z1 = 0, z2 = 0, z3 = 0;
+    for (let i = 0; i < n; i++) {
+      d[i] = p[i].s * (1 - 0.12 * Math.exp(-3 * p[i].e / T));
+      const xm = x[i] * p[i].m; mbar += xm;
+      z0 += xm; z1 += xm * d[i]; z2 += xm * d[i] * d[i]; z3 += xm * d[i] * d[i] * d[i];
+    }
+    const f6 = PI / 6 * rho; z0 *= f6; z1 *= f6; z2 *= f6; z3 *= f6;
+    if (!(z3 > 0) || z3 >= 0.9999) return NaN;
+    const e3 = 1 - z3, ahs = (3 * z1 * z2 / e3 + z2 * z2 * z2 / (z3 * e3 * e3) + (z2 * z2 * z2 / (z3 * z3) - z0) * Math.log(e3)) / z0;
+    const gij = (di, dj) => { const q = di * dj / (di + dj); return 1 / e3 + q * 3 * z2 / (e3 * e3) + q * q * 2 * z2 * z2 / (e3 * e3 * e3); };
+    let ahc = mbar * ahs;
+    for (let i = 0; i < n; i++) if (x[i] !== 0 && p[i].m !== 1) ahc -= x[i] * (p[i].m - 1) * Math.log(gij(d[i], d[i]));
+    // dispersão
+    let s1 = 0, s2 = 0;
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+      if (x[i] === 0 || x[j] === 0) continue;
+      const sij = (p[i].s + p[j].s) / 2, eij = Math.sqrt(p[i].e * p[j].e) * (1 - this.k[i][j]) / T, t = x[i] * x[j] * p[i].m * p[j].m * sij * sij * sij;
+      s1 += t * eij; s2 += t * eij * eij;
+    }
+    const eta = z3, r1 = (mbar - 1) / mbar, r2 = r1 * (mbar - 2) / mbar;
+    let I1 = 0, I2 = 0, ek = 1;
+    for (let k = 0; k < 7; k++) { I1 += (A0[k] + r1 * A1[k] + r2 * A2[k]) * ek; I2 += (B0[k] + r1 * B1[k] + r2 * B2[k]) * ek; ek *= eta; }
+    const C1 = 1 / (1 + mbar * (8 * eta - 2 * eta * eta) / Math.pow(1 - eta, 4) + (1 - mbar) * (20 * eta - 27 * eta * eta + 12 * eta ** 3 - 2 * eta ** 4) / Math.pow((1 - eta) * (2 - eta), 2));
+    const adisp = -2 * PI * rho * I1 * s1 - PI * rho * mbar * C1 * I2 * s2;
+    // associação (esquema 2B para todos os associativos: X_A = X_B; regras de Wolbach e Sandler)
+    let aas = 0;
+    const na = this.assoc.length;
+    if (na) {
+      const ia = this.assoc, D = [];
+      for (let a = 0; a < na; a++) { D.push([]); for (let b = 0; b < na; b++) {
+        const i = ia[a], j = ia[b], pi = p[i], pj = p[j], sij = (pi.s + pj.s) / 2;
+        const kab = Math.sqrt(pi.kAB * pj.kAB) * Math.pow(Math.sqrt(pi.s * pj.s) / sij, 3), eab = (pi.eAB + pj.eAB) / 2;
+        D[a].push(sij * sij * sij * gij(d[i], d[j]) * kab * (Math.exp(eab / T) - 1));
+      } }
+      let X = (st && st.X && st.X.length === na) ? st.X.slice() : new Array(na).fill(0.5);
+      // Newton em F_a = X_a·(1 + ρ Σ_b x_b X_b Δ_ab) − 1 = 0 (converge em poucas iterações); substituição sucessiva como reserva
+      let ok = false;
+      for (let it = 0; it < 30 && !ok; it++) {
+        const J = [], Fv = [];
+        for (let a = 0; a < na; a++) {
+          let s = 0; for (let b = 0; b < na; b++) s += x[ia[b]] * X[b] * D[a][b];
+          Fv.push(X[a] * (1 + rho * s) - 1); J.push([]);
+          for (let b = 0; b < na; b++) J[a].push((a === b ? 1 + rho * s : 0) + X[a] * rho * x[ia[b]] * D[a][b]);
+        }
+        const dx = solveSmall(J, Fv.map(v => -v)); if (!dx) break;
+        let mx = 0;
+        for (let a = 0; a < na; a++) { let v = X[a] + dx[a]; if (!(v > 0)) v = X[a] / 2; if (v > 1) v = (X[a] + 1) / 2; mx = Math.max(mx, Math.abs(v - X[a])); X[a] = v; }
+        if (mx < 1e-14) ok = true;
+      }
+      if (!ok) for (let it = 0; it < 2000; it++) {
+        let dmax = 0; const old = X.slice();
+        for (let a = 0; a < na; a++) { let s = 0; for (let b = 0; b < na; b++) s += x[ia[b]] * old[b] * D[a][b]; const v = 0.5 * old[a] + 0.5 / (1 + rho * s); dmax = Math.max(dmax, Math.abs(v - old[a])); X[a] = v; }
+        if (dmax < 1e-14) break;
+      }
+      if (st) st.X = X;
+      for (let a = 0; a < na; a++) if (x[ia[a]] !== 0) aas += x[ia[a]] * (2 * Math.log(X[a]) - X[a] + 1);
+    }
+    return ahc + adisp + aas;
+  };
+  Mixture.prototype.dvol = function (T, x) { // Σ x m d³ · π/6 (η = ρ·dvol)
+    let s = 0; for (let i = 0; i < this.n; i++) { const d = this.p[i].s * (1 - 0.12 * Math.exp(-3 * this.p[i].e / T)); s += x[i] * this.p[i].m * d * d * d; }
+    return PI / 6 * s;
+  };
+  // Z e (∂P/∂ρ)/kT na densidade rho
+  Mixture.prototype.Zrho = function (T, rho, x, st) {
+    const h = rho * 1e-5, ap = this.ares(T, rho + h, x, st), am = this.ares(T, rho - h, x, st);
+    return 1 + rho * (ap - am) / (2 * h);
+  };
+  Mixture.prototype.Pcalc = function (T, rho, x, st) { return this.Zrho(T, rho, x, st) * rho * KB * T * 1e30; }; // Pa
+  // P/kT − P0/kT e a derivada em η (3 avaliações de ã)
+  Mixture.prototype._pf = function (T, eta, dv, x, st, Pa) {
+    const rho = eta / dv, h = rho * 1e-4, am = this.ares(T, rho - h, x, st), a0 = this.ares(T, rho, x, st), ap = this.ares(T, rho + h, x, st);
+    const d1 = (ap - am) / (2 * h), d2 = (ap - 2 * a0 + am) / (h * h), c = KB * T * 1e30;
+    return { F: (rho + rho * rho * d1) * c - Pa, dF: (1 + 2 * rho * d1 + rho * rho * d2) * c / dv };   // dP/dη
+  };
+  // densidade (moléculas/Å³) na fase pedida: 'L' = maior raiz, 'V' = menor
+  Mixture.prototype.density = function (T, Pa, x, phase, guess) {
+    const dv = this.dvol(T, x), st = {}, f = eta => this.Pcalc(T, eta / dv, x, st) - Pa;
+    const newton = eta0 => {
+      let eta = eta0;
+      for (let it = 0; it < 40; it++) {
+        const r = this._pf(T, eta, dv, x, st, Pa);
+        if (!(r.dF > 0) || !isFinite(r.F)) return null; // ramo instável
+        let nx = eta - r.F / r.dF; if (nx <= 0) nx = eta / 4; if (nx >= 0.74) nx = (eta + 0.74) / 2;
+        if (Math.abs(nx - eta) < 1e-11 * eta + 1e-16) return nx;
+        eta = nx;
+      }
+      return Math.abs(f(eta)) < 1e-6 * Pa ? eta : null;
+    };
+    const ig = Pa / (KB * T * 1e30) * dv; // η do gás ideal
+    let eta = guess ? newton(guess) : null;
+    if (eta == null) eta = newton(phase === 'L' ? 0.5 : Math.min(ig, 0.3));
+    if (eta != null && phase === 'V' && eta > 0.3) { const e2 = newton(ig); if (e2 != null) eta = e2; }
+    if (eta == null) { // varredura
+      const roots = [];
+      let a = 1e-9, fa = f(a);
+      for (let k = 1; k <= 160; k++) {
+        const b = k < 60 ? 1e-9 * Math.pow(10, 8.2 * k / 60) : 0.16 + (0.738 - 0.16) * (k - 60) / 100, fb = f(b);
+        if (isFinite(fa) && isFinite(fb) && fa * fb < 0) { let lo = a, hi = b; for (let q = 0; q < 80; q++) { const m = (lo + hi) / 2; if (f(m) * f(lo) <= 0) hi = m; else lo = m; } roots.push((lo + hi) / 2); }
+        a = b; fa = fb;
+      }
+      if (!roots.length) throw new Error('PC-SAFT: sem raiz de densidade a ' + (T - 273.15).toFixed(1) + ' °C e ' + (Pa / 1e5).toFixed(3) + ' bar');
+      eta = phase === 'L' ? roots[roots.length - 1] : roots[0];
+    }
+    return { rho: eta / dv, eta, st };
+  };
+  // estado completo: Z, ln φ_i, h_res/RT
+  // segundo coeficiente virial do próprio PC-SAFT, B_ij (Å³ por molécula): B(x) = lim ã/ρ quando ρ → 0
+  Mixture.prototype.virial = function (T) {
+    const key = T.toPrecision(10); this._vc = this._vc || new Map();
+    let V = this._vc.get(key); if (V) return V;
+    const n = this.n, r0 = 1e-9, Bx = x => this.ares(T, r0, x, {}) / r0, B = [];
+    for (let i = 0; i < n; i++) { B.push(new Array(n).fill(0)); const e = new Array(n).fill(0); e[i] = 1; B[i][i] = Bx(e); }
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) { const e = new Array(n).fill(0); e[i] = e[j] = 0.5; B[i][j] = B[j][i] = 2 * Bx(e) - 0.5 * (B[i][i] + B[j][j]); }
+    V = B; if (this._vc.size > 3000) this._vc.clear(); this._vc.set(key, V); return V;
+  };
+  // vapor a baixa pressão (até 2,5 bar): equação virial truncada com o B do próprio PC-SAFT (erro da ordem de (Bρ)², < 0,5 % no φ)
+  Mixture.prototype.vaporVirial = function (T, Pa, x, need) {
+    const n = this.n, rho = Pa / (KB * T * 1e30), B = this.virial(T);
+    let Bm = 0; const sb = new Array(n).fill(0);
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { Bm += x[i] * x[j] * B[i][j]; sb[i] += x[j] * B[i][j]; }
+    if (Pa > 2.5e5 || !(Math.abs(Bm * rho) < 0.12)) return null;   // critério só pela pressão (contínuo numa coluna a P constante)
+    const out = { Z: 1 + Bm * rho, eta: this.dvol(T, x) * rho, rho, virial: true };
+    if (need !== 'h') out.lnphi = sb.map(v => (2 * v - Bm) * rho);
+    if (need !== 'phi') {
+      const h = T * 1e-4, Bp = this.virial(T + h), Bn = this.virial(T - h); let dB = 0;
+      for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) dB += x[i] * x[j] * (Bp[i][j] - Bn[i][j]) / (2 * h);
+      out.hres = (Bm - T * dB) * rho;
+    }
+    return out;
+  };
+  Mixture.prototype.state = function (T, Pa, x, phase, guess, need) {
+    if (phase === 'V') { const v = this.vaporVirial(T, Pa, x, need); if (v) return v; }
+    const n = this.n, D = this.density(T, Pa, x, phase, guess), rho = D.rho, st = D.st;
+    const Z = this.Zrho(T, rho, x, st), out = { Z, eta: D.eta, rho };
+    if (need !== 'h') { // μ_res,i/kT = ∂(ρ ã)/∂ρ_i a T constante
+      const rv = x.map(xi => xi * rho), mu = new Array(n);
+      const fval = r => { let s = 0; for (const v of r) s += v; return s * this.ares(T, s, r.map(v => v / s), st); };
+      for (let i = 0; i < n; i++) {
+        const h = Math.max(rho * 1e-6, 1e-12), rp = rv.slice(), rm = rv.slice(); rp[i] += h; rm[i] -= h;
+        mu[i] = (fval(rp) - fval(rm)) / (2 * h);
+      }
+      out.lnphi = mu.map(m => m - Math.log(Z));
+    }
+    if (need !== 'phi') { const hT = T * 1e-5, dadT = (this.ares(T + hT, rho, x, st) - this.ares(T - hT, rho, x, st)) / (2 * hT); out.hres = -T * dadT + Z - 1; }
+    return out;
+  };
+
+  /* pressão de vapor de um componente puro (φL = φV) — usada na validação e no ajuste de parâmetros */
+  function psatPure(p, T, P0) {
+    const mx = new Mixture([p]); let Pv = P0 || 1e5, gl = null, gv = null, last = null;
+    for (let it = 0; it < 80; it++) {
+      const L = mx.state(T, Pv, [1], 'L', gl), V = mx.state(T, Pv, [1], 'V', gv);
+      gl = L.eta; gv = V.eta;
+      if (Math.abs(L.eta - V.eta) < 1e-6) { Pv *= L.eta > 0.2 ? 0.7 : 1.4; gl = gv = null; continue; } // uma só raiz
+      const d = L.lnphi[0] - V.lnphi[0]; Pv *= Math.exp(d); last = { L, V };
+      if (Math.abs(d) < 1e-8) break;
+    }
+    return last ? { P: Pv, rhoL: last.L.rho, rhoV: last.V.rho, hvap: (last.V.hres - last.L.hres) * 8.314462618 * T } : { P: NaN, rhoL: NaN, rhoV: NaN, hvap: NaN };
+  }
+
+  SF.pcsaft = { params, Mixture, psatPure, P, KIJ, KIJ_SRC, KB };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
 <script>/* js/thermo.js */
 /* SIMULA FÁCIL IA — Termodinâmica
    Banco de componentes, pressão de vapor (Antoine / Lee-Kesler), modelos de coeficiente de atividade
@@ -1615,6 +1845,11 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'comp-B', name: 'Componente genérico B (soluto, M=100)', formula: 'B', mw: 100, rho: 1000, nv: true, cpl: 200 },
     { id: 'comp-C', name: 'Componente genérico C (soluto, M=200)', formula: 'C', mw: 200, rho: 1000, nv: true, cpl: 400 },
     { id: 'comp-D', name: 'Componente genérico D (soluto, M=50)', formula: 'D', mw: 50, rho: 1000, nv: true, cpl: 100 },
+    // líquidos iônicos (pressão de vapor desprezível): use o modelo PC-SAFT para a solubilidade de gases; ρ e cp do líquido a 25 °C (aprox.)
+    { id: 'il-c2mim-ntf2', name: 'Líquido iônico [C2mim][NTf2] ([emim][Tf2N])', formula: 'C8H11F6N3O4S2', mw: 391.31, rho: 1519, nv: true, cpl: 506, il: true },
+    { id: 'il-c4mim-ntf2', name: 'Líquido iônico [C4mim][NTf2] ([bmim][Tf2N])', formula: 'C10H15F6N3O4S2', mw: 419.36, rho: 1436, nv: true, cpl: 564, il: true },
+    { id: 'il-c6mim-ntf2', name: 'Líquido iônico [C6mim][NTf2] ([hmim][Tf2N])', formula: 'C12H19F6N3O4S2', mw: 447.42, rho: 1372, nv: true, cpl: 627, il: true },
+    { id: 'il-c8mim-ntf2', name: 'Líquido iônico [C8mim][NTf2] ([omim][Tf2N])', formula: 'C14H23F6N3O4S2', mw: 475.47, rho: 1320, nv: true, cpl: 690, il: true },
     { id: 'mn-ion', name: 'Íon manganês Mn²⁺ (soluto, M=54,94)', formula: 'Mn2+', mw: 54.938, rho: 7210, nv: true, cpl: 26 },
     { id: 'inert-solid', name: 'Sólido inerte (farelo/torta)', formula: '(C6H10O5)n', mw: 162.14, rho: 1500, solid: true, cpl: 210 },
     { id: 'glucose', name: 'Glicose (soluto não volátil)', formula: 'C6H12O6', mw: 180.156, rho: 1540, nv: true, cpl: 219 },
@@ -1845,7 +2080,7 @@ window.SIMULAFACIL_CONFIG = {
 
   /* ------------------------------------------------------------------ classe Thermo */
   const MODELS = {
-    IDEAL: 'Ideal (Raoult)', NRTL: 'NRTL', WILSON: 'Wilson', UNIQUAC: 'UNIQUAC', UNIFAC: 'UNIFAC (preditivo)', PR: 'Peng-Robinson', SRK: 'Soave-Redlich-Kwong'
+    IDEAL: 'Ideal (Raoult)', NRTL: 'NRTL', WILSON: 'Wilson', UNIQUAC: 'UNIQUAC', UNIFAC: 'UNIFAC (preditivo)', PR: 'Peng-Robinson', SRK: 'Soave-Redlich-Kwong', PCSAFT: 'PC-SAFT'
   };
 
   function Thermo(compIds, model, opts) {
@@ -1853,7 +2088,8 @@ window.SIMULAFACIL_CONFIG = {
     this.ids = compIds.slice();
     this.c = compIds.map(id => { if (!COMP[id]) throw new Error('Componente desconhecido: ' + id); return COMP[id]; });
     this.n = this.c.length; this.model = model || 'NRTL';
-    this.isEOS = this.model === 'PR' || this.model === 'SRK';
+    this.isSAFT = this.model === 'PCSAFT';
+    this.isEOS = this.model === 'PR' || this.model === 'SRK' || this.isSAFT;
     this.act = []; this.c.forEach((c, i) => { if (!c.nv && !c.solid) this.act.push(i); });
     this.warnings = []; this.pairInfo = [];
     this.userBinary = opts.binary || {};
@@ -1867,6 +2103,7 @@ window.SIMULAFACIL_CONFIG = {
       const k = pairKey(this.ids[i], this.ids[j]), db = NRTL_DB[k];
       if (db && db.heRK) { const first = k.split('|')[0], ii = this.ids[i] === first ? i : j, jj = ii === i ? j : i; (this.heRK = this.heRK || []).push({ i: ii, j: jj, A: db.heRK[0], B: db.heRK[1] }); }
     }
+    if (this.isSAFT) { this._setupSAFT(); return; }
     if (this.isEOS) {
       this.kij = act.map((ci, i) => act.map((cj, j) => { if (i === j) return 0; const k = pairKey(ci.id, cj.id); return this.kijUser[k] != null ? this.kijUser[k] : (KIJ_DB[k] || 0); }));
       for (let i = 0; i < na; i++) for (let j = i + 1; j < na; j++) this.pairInfo.push({ i: act[i].id, j: act[j].id, src: this.kij[i][j] ? 'kij do banco' : 'kij = 0', kij: this.kij[i][j] });
@@ -1956,7 +2193,8 @@ window.SIMULAFACIL_CONFIG = {
       return { a: ac * alpha, da: -ac * m * sq / Math.sqrt(T * c.tc), b: Ob * R * c.tc / c.pc };
     });
   };
-  Thermo.prototype._eos = function (xfull, T, P, phase) {
+  Thermo.prototype._eos = function (xfull, T, P, phase, need) {
+    if (this.isSAFT) return this._saft(xfull, T, P, phase, need);
     const act = this.act; let s = 0; act.forEach(i => { s += xfull[i]; });
     const x = act.map(i => (s > 0 ? xfull[i] / s : 1 / act.length)), n = x.length, pr = this._eosParams(T), isPR = this.model === 'PR';
     let a = 0, da = 0, b = 0; const sa = new Array(n).fill(0);
@@ -1983,10 +2221,80 @@ window.SIMULAFACIL_CONFIG = {
     return { phi, Z, Hres, frac: s };
   };
 
+  /* ---------------------------------------------------------------- PC-SAFT */
+  const SAFT_FIT = {};
+  // componente sem parâmetros publicados: m, σ e ε ajustados à pressão de vapor e à densidade do líquido do banco (sem associação)
+  function fitSaft(c) {
+    if (SAFT_FIT[c.id]) return SAFT_FIT[c.id];
+    const PS = SF.pcsaft, Ts = [0.58, 0.68, 0.78, 0.88].map(f => f * c.tc), Pd = Ts.map(T => psatComp(c, T));
+    const Trho = c.tb && c.tb < 298.15 ? c.tb : 298.15, NA = 6.02214076e23;
+    const obj = v => {
+      const p = { m: Math.exp(v[0]), s: Math.exp(v[1]), e: Math.exp(v[2]), eAB: 0, kAB: 0 };
+      if (p.m < 1 || p.m > 30) return 1e9;
+      let f = 0;
+      try {
+        for (let k = 0; k < Ts.length; k++) { const r = PS.psatPure(p, Ts[k], Pd[k]); const d = Math.log(r.P / Pd[k]); f += isFinite(d) ? d * d : 100; }
+        if (c.rho) { const mx = new PS.Mixture([p]), dd = mx.density(Trho, Math.max(PATM, psatComp(c, Trho) * 1.05), [1], 'L'); const rho = dd.rho * 1e30 / NA * c.mw / 1000; f += 4 * Math.pow(rho / c.rho - 1, 2); }
+      } catch (e) { return 1e9; }
+      return f;
+    };
+    const m0 = Math.min(10, Math.max(1, 1 + 6.3 * c.w)), e0 = c.tc / (0.95 + 0.33 * m0), s0 = Math.cbrt(0.075 * 1.380649e-23 * c.tc / c.pc * 1e30 / m0);
+    const r = N && N.nelderMead ? N.nelderMead(obj, [Math.log(m0), Math.log(s0), Math.log(e0)], { maxIter: 220, step: [0.08, 0.05, 0.05] }) : null;
+    const v = r ? (r.x || r) : [Math.log(m0), Math.log(s0), Math.log(e0)];
+    const out = { m: Math.exp(v[0]), s: Math.exp(v[1]), e: Math.exp(v[2]), eAB: 0, kAB: 0, src: 'Estimado: ajustado à pressão de vapor e à densidade do banco', fit: true, rms: Math.sqrt(obj(v) / 5) };
+    SAFT_FIT[c.id] = out; return out;
+  }
+  Thermo.prototype._setupSAFT = function () {
+    const PS = SF.pcsaft; if (!PS) throw new Error('Módulo PC-SAFT não carregado');
+    this.saftIdx = []; this.saftInfo = []; const plist = [];
+    this.c.forEach((c, i) => {
+      let p = PS.params(c);
+      if (!p && !c.nv && !c.solid && c.tc && c.pc) { p = fitSaft(c); this.warnings.push('PC-SAFT: ' + c.name + ' sem parâmetros publicados; m, σ e ε estimados pela pressão de vapor e densidade do banco.'); }
+      if (!p) { if (!c.solid) this.warnings.push('PC-SAFT: ' + c.name + ' sem parâmetros — tratado como soluto inerte.'); return; }
+      this.saftIdx.push(i); plist.push(p);
+      this.saftInfo.push({ id: c.id, name: c.name, m: p.m, s: p.s, e: p.e, eAB: p.eAB || 0, kAB: p.kAB || 0, src: p.src, il: !!c.il });
+    });
+    const ns = plist.length, ids = this.saftIdx.map(i => this.ids[i]);
+    const user = k => { const u = this.userBinary['PCSAFT:' + k]; return u && u.kij != null ? +u.kij : this.kijUser[k]; };
+    const kij = ids.map((a, i) => ids.map((b, j) => { if (i === j) return 0; const k = pairKey(a, b), u = user(k); return u != null ? u : (PS.KIJ[k] || 0); }));
+    for (let i = 0; i < ns; i++) for (let j = i + 1; j < ns; j++) {
+      const k = pairKey(ids[i], ids[j]);
+      this.pairInfo.push({ i: ids[i], j: ids[j], kij: kij[i][j], src: user(k) != null ? 'Informado pelo usuário' : PS.KIJ[k] != null ? PS.KIJ_SRC[k] : 'kij = 0 (padrão)' });
+    }
+    this.saft = new PS.Mixture(plist, kij); this.saftGuess = {}; this.ilRes = {};
+    this.ilIdx = this.saftIdx.filter(i => this.c[i].nv);
+  };
+  Thermo.prototype._saft = function (xfull, T, P, phase, need) {
+    const idx = this.saftIdx; let s = 0; idx.forEach(i => { s += Math.max(xfull[i], 0); });
+    const x = idx.map(i => (s > 0 ? Math.max(xfull[i], 0) / s : 1 / idx.length));
+    // memória dos últimos estados (o flash e as colunas repetem muitas vezes as mesmas condições)
+    const key = phase + T.toPrecision(12) + ':' + P.toPrecision(10) + ':' + x.map(v => v.toPrecision(12)).join(',');
+    const memo = this.saftMemo || (this.saftMemo = new Map());
+    let r = memo.get(key);
+    if (!r || (need !== 'h' && !r.lnphi) || (need !== 'phi' && r.hres == null)) {
+      const g = this.saftGuess[phase];
+      try { r = this.saft.state(T, P, x, phase, g, need === 'h' || need === 'phi' ? need : null); } catch (e) { r = this.saft.state(T, P, x, phase, null); }
+      if (phase === 'L' && r.eta < 0.2) { try { const r2 = this.saft.state(T, P, x, 'L', 0.5); if (r2.eta > r.eta) r = r2; } catch (e) { /* */ } }
+      const old = memo.get(key); if (old) { if (!r.lnphi) r.lnphi = old.lnphi; if (r.hres == null) r.hres = old.hres; }
+      if (memo.size > 4000) memo.clear(); memo.set(key, r);
+    }
+    this.saftGuess[phase] = r.eta;
+    const phi = new Array(this.n).fill(1); if (r.lnphi) idx.forEach((i, k) => { phi[i] = Math.exp(r.lnphi[k]); });
+    let Hres = r.hres != null ? r.hres * R * T : 0;
+    // líquidos iônicos: a entalpia do componente já é a do líquido puro (cp do líquido); desconta a parte residual do LI puro
+    this.ilIdx.forEach(i => { const k = idx.indexOf(i); if (x[k] > 0) Hres -= x[k] * this._ilHres(i, T, P); });
+    return { phi, Z: r.Z, Hres, frac: s };
+  };
+  Thermo.prototype._ilHres = function (i, T, P) {
+    const key = i + ':' + T.toFixed(2) + ':' + Math.round(P / 1000);
+    if (this.ilRes[key] == null) { const mx = new SF.pcsaft.Mixture([this.saft.p[this.saftIdx.indexOf(i)]]); this.ilRes[key] = mx.state(T, P, [1], 'L').hres * R * T; }
+    return this.ilRes[key];
+  };
+
   Thermo.prototype.K = function (T, P, x, y) {
     const n = this.n, K = new Array(n);
     if (this.isEOS) {
-      const L = this._eos(x, T, P, 'L'), V = this._eos(y, T, P, 'V');
+      const L = this._eos(x, T, P, 'L', 'phi'), V = this._eos(y, T, P, 'V', 'phi');
       for (let i = 0; i < n; i++) K[i] = (this.c[i].nv || this.c[i].solid) ? 1e-20 : L.phi[i] / V.phi[i];
       return K;
     }
@@ -2003,7 +2311,7 @@ window.SIMULAFACIL_CONFIG = {
     let h = 0; const c = this.c;
     if (this.isEOS) {
       for (let i = 0; i < this.n; i++) h += x[i] * ((c[i].nv || c[i].solid) ? hIGcomp(c[i], T) : hIGcomp(c[i], T));
-      const e = this._eos(x, T, P || PATM, 'L'); h += e.frac * e.Hres; return h;
+      const e = this._eos(x, T, P || PATM, 'L', 'h'); h += e.frac * e.Hres; return h;
     }
     for (let i = 0; i < this.n; i++) h += x[i] * (hIGcomp(c[i], T) - dHvapComp(c[i], T));
     if (this.heRK) h += this.hExcess(x, T);
@@ -2016,7 +2324,7 @@ window.SIMULAFACIL_CONFIG = {
   };
   Thermo.prototype.hV = function (y, T, P) {
     let h = 0; for (let i = 0; i < this.n; i++) h += y[i] * hIGcomp(this.c[i], T);
-    if (this.isEOS) { const e = this._eos(y, T, P || PATM, 'V'); h += e.frac * e.Hres; }
+    if (this.isEOS) { const e = this._eos(y, T, P || PATM, 'V', 'h'); h += e.frac * e.Hres; }
     return h;
   };
   Thermo.prototype.cpIG = function (y, T) { let s = 0; for (let i = 0; i < this.n; i++) s += y[i] * cpIGcomp(this.c[i], T); return s; };
@@ -2074,12 +2382,19 @@ window.SIMULAFACIL_CONFIG = {
   };
   Thermo.prototype.enthalpy = function (f) { return (1 - f.beta) * this.hL(f.x, f.T, f.P) + f.beta * this.hV(f.y, f.T, f.P); };
 
+  // Brent; se a função oscilar perto da raiz (EOS com várias raízes de densidade), cai para a bisseção
+  function safeRoot(g, a, b) {
+    try { return N.brent(g, a, b, 1e-8); } catch (e) {
+      let fa = g(a); for (let k = 0; k < 80; k++) { const m = (a + b) / 2, fm = g(m); if (fa * fm <= 0) b = m; else { a = m; fa = fm; } if (b - a < 1e-7) break; }
+      return (a + b) / 2;
+    }
+  }
   Thermo.prototype.bubbleT = function (x, P, Tg) {
     const self = this; let y = x.slice();
     const g = (T) => { let K = self.K(T, P, x, y), S = 0; for (let it = 0; it < 50; it++) { S = 0; for (let i = 0; i < self.n; i++) S += x[i] * K[i]; const yn = x.map((v, i) => v * K[i] / S); if (!self.isEOS) { y = yn; break; } let e = 0; yn.forEach((v, i) => { e = Math.max(e, Math.abs(v - y[i])); }); y = yn; K = self.K(T, P, x, y); if (e < 1e-10) break; } return Math.log(S); };
     Tg = Tg || this.guessT(x);
     const br = N.bracket(g, Tg - 5, Tg + 5, 40, 2500); if (!br) throw new Error('Ponto de bolha não encontrado');
-    const T = N.brent(g, br[0], br[1], 1e-8); g(T);
+    const T = safeRoot(g, br[0], br[1]); g(T);
     return { T, y: N.normalize(y) };
   };
   Thermo.prototype.dewT = function (y, P, Tg) {
@@ -2088,7 +2403,7 @@ window.SIMULAFACIL_CONFIG = {
     const g = (T) => { let S = 0; for (let it = 0; it < 80; it++) { const K = self.K(T, P, x, y); S = 0; for (let i = 0; i < self.n; i++) S += y[i] / K[i]; const xn = y.map((v, i) => v / K[i] / S); let e = 0; xn.forEach((v, i) => { e = Math.max(e, Math.abs(v - x[i])); }); x = xn; if (e < 1e-10) break; } return -Math.log(S); };
     Tg = Tg || this.guessT(y) + 5;
     const br = N.bracket(g, Tg - 5, Tg + 5, 40, 2500); if (!br) throw new Error('Ponto de orvalho não encontrado');
-    const T = N.brent(g, br[0], br[1], 1e-8); g(T);
+    const T = safeRoot(g, br[0], br[1]); g(T);
     return { T, x: N.normalize(x) };
   };
   Thermo.prototype.guessT = function (z) { let s = 0, w = 0; this.c.forEach((c, i) => { if (!c.nv && !c.solid) { s += z[i] * c.tb; w += z[i]; } }); return w > 0 ? s / w : 373; };
@@ -2169,7 +2484,154 @@ window.SIMULAFACIL_CONFIG = {
 
   // compostos do banco ampliado (js/dbx.js), acrescentados sob demanda
   function addComponents(list) { (list || []).forEach(c => { if (!COMP[c.id]) { COMPONENTS.push(c); COMP[c.id] = c; } }); }
-  SF.thermo = { R, T0, PATM, COMPONENTS, COMP, MODELS, Thermo, addComponents, psatComp, hIGcomp, dHvapComp, rachfordRice, pairKey, NRTL_DB, makeUnifac, nrtlGamma };
+  // dados experimentais de equilíbrio líquido-vapor a 1 atm, para comparar os modelos no diagrama Txy
+  const VLE_EXP = [
+    { a: 'methanol', b: 'water', P: 1.01325, src: 'Perry\'s Chemical Engineers\' Handbook (metanol–água a 760 mmHg)',
+      x: [0.02, 0.04, 0.06, 0.08, 0.10, 0.15, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 0.95],
+      T: [96.4, 93.5, 91.2, 89.3, 87.7, 84.4, 81.7, 78.0, 75.3, 73.1, 71.2, 69.3, 67.6, 66.0, 65.0],
+      y: [0.134, 0.230, 0.304, 0.365, 0.418, 0.517, 0.579, 0.665, 0.729, 0.779, 0.825, 0.870, 0.915, 0.958, 0.979] },
+    { a: 'ethanol', b: 'water', P: 1.01325, src: 'Perry\'s Chemical Engineers\' Handbook (Carey e Lewis, etanol–água a 760 mmHg)',
+      x: [0.019, 0.0721, 0.0966, 0.1238, 0.1661, 0.2337, 0.2608, 0.3273, 0.3965, 0.5079, 0.5198, 0.5732, 0.6763, 0.7472, 0.8943],
+      T: [95.5, 89.0, 86.7, 85.3, 84.1, 82.7, 82.3, 81.5, 80.7, 79.8, 79.7, 79.3, 78.74, 78.41, 78.15],
+      y: [0.170, 0.3891, 0.4375, 0.4704, 0.5089, 0.5445, 0.5580, 0.5826, 0.6122, 0.6564, 0.6599, 0.6841, 0.7385, 0.7815, 0.8943] }];
+  function vleExp(a, b, Pbar) {
+    for (const e of VLE_EXP) {
+      if (Math.abs(Pbar - e.P) > 0.02) continue;
+      if (e.a === a && e.b === b) return { x: e.x.slice(), T: e.T.slice(), y: e.y.slice(), src: e.src };
+      if (e.a === b && e.b === a) return { x: e.x.map(v => 1 - v), T: e.T.slice(), y: e.y.map(v => 1 - v), src: e.src };
+    }
+    return null;
+  }
+
+  SF.thermo = { R, T0, PATM, COMPONENTS, COMP, MODELS, Thermo, addComponents, psatComp, hIGcomp, dHvapComp, rachfordRice, pairKey, NRTL_DB, makeUnifac, nrtlGamma, VLE_EXP, vleExp };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>/* js/refrig.js */
+/* SIMULA FÁCIL IA — Fluidos refrigerantes e ciclo de refrigeração por compressão de vapor
+   Propriedades pela equação de Peng-Robinson com Cp de gás ideal (constantes críticas e Cp do banco do simulador).
+   Referência IIR: líquido saturado a 0 °C com h = 200 kJ/kg e s = 1,000 kJ/(kg·K), igual às tabelas de refrigerantes.
+   R-410A (50 % R-32 + 50 % R-125 em massa) é tratado como pseudo-puro: mistura quase azeotrópica (deslizamento < 0,2 K). */
+(function (root) {
+  'use strict';
+  const SF = root.SF = root.SF || {};
+  const R = 8.314462618, T0 = 298.15, P0 = 101325, S2 = Math.SQRT2;
+  // M (g/mol), Tc (K), Pc (Pa), ω, Cp gás ideal (J/mol/K) = A + BT + CT² + DT³, GWP (100 anos, IPCC AR4) e ODP
+  const BASE = {
+    r32: { mw: 52.0234, tc: 351.25, pc: 57.83e5, w: 0.2743, cp: [14.161, 0.1224, -6.34e-05, 1.19e-08] },
+    r125: { mw: 120.0214, tc: 339.4, pc: 36.3e5, w: 0.3046, cp: [18.948, 0.32232, -0.00025061, 6.8505e-08] }
+  };
+  const FLUIDS = {
+    'R-134a': { name: 'R-134a (1,1,1,2-tetrafluoroetano)', formula: 'CH2FCF3', mw: 102.0309, tc: 374.18, pc: 40.55e5, w: 0.327, cp: [16.506, 0.29601, -0.00021962, 5.871e-08], gwp: 1430, odp: 0, uso: 'refrigeração doméstica e automotiva, chillers' },
+    'R-22': { name: 'R-22 (clorodifluorometano)', formula: 'CHClF2', mw: 86.4684, tc: 369.25, pc: 49.9e5, w: 0.2197, cp: [17.809, 0.15999, -0.00011532, 3.0159e-08], gwp: 1810, odp: 0.055, uso: 'ar-condicionado antigo (em eliminação pelo Protocolo de Montreal)' },
+    'R-32': Object.assign({ name: 'R-32 (difluorometano)', formula: 'CH2F2', gwp: 675, odp: 0, uso: 'ar-condicionado split moderno' }, BASE.r32),
+    'R-410A': { name: 'R-410A (R-32/R-125, 50/50 % em massa)', formula: 'mistura', mix: [[BASE.r32, 0.5], [BASE.r125, 0.5]], gwp: 2088, odp: 0, uso: 'ar-condicionado e bombas de calor' },
+    'R-152a': { name: 'R-152a (1,1-difluoroetano)', formula: 'CH3CHF2', mw: 66.05, tc: 386.43, pc: 45.2e5, w: 0.2724, cp: [10.439, 0.23674, -0.00014513, 3.4532e-08], gwp: 124, odp: 0, uso: 'baixo GWP; aerossóis e refrigeração' },
+    'R-717': { name: 'R-717 (amônia)', formula: 'NH3', comp: 'ammonia', gwp: 0, odp: 0, uso: 'refrigeração industrial (frigoríficos, laticínios, cervejarias)' },
+    'R-290': { name: 'R-290 (propano)', formula: 'C3H8', comp: 'propane', gwp: 3, odp: 0, uso: 'refrigeração comercial, inflamável' },
+    'R-600a': { name: 'R-600a (isobutano)', formula: 'C4H10', comp: 'isobutane', gwp: 3, odp: 0, uso: 'geladeiras domésticas, inflamável' },
+    'R-744': { name: 'R-744 (dióxido de carbono)', formula: 'CO2', comp: 'co2', gwp: 1, odp: 0, uso: 'refrigeração comercial e bombas de calor (Tc = 31 °C)' }
+  };
+  const LIST = Object.keys(FLUIDS);
+
+  function Fluid(key) {
+    const f = FLUIDS[key]; if (!f) throw new Error('Refrigerante desconhecido: ' + key);
+    this.key = key; this.info = f;
+    let comps;
+    if (f.mix) { // frações mássicas → molares
+      const n = f.mix.map(([c, wf]) => wf / c.mw), s = n.reduce((a, b) => a + b, 0);
+      comps = f.mix.map(([c], k) => ({ c, x: n[k] / s }));
+    } else if (f.comp) {
+      const C = SF.thermo && SF.thermo.COMP[f.comp]; if (!C) throw new Error('Componente ' + f.comp + ' não encontrado');
+      comps = [{ c: { mw: C.mw, tc: C.tc, pc: C.pc, w: C.w, cp: C.cp }, x: 1 }];
+    } else comps = [{ c: f, x: 1 }];
+    this.comps = comps;
+    this.mw = comps.reduce((s, q) => s + q.x * q.c.mw, 0);
+    this.tc = comps.reduce((s, q) => s + q.x * q.c.tc, 0); // pseudo-crítico (só para limites)
+    this.cpc = [0, 1, 2, 3].map(k => comps.reduce((s, q) => s + q.x * q.c.cp[k], 0));
+    // referência IIR
+    this.h0 = 0; this.s0 = 0;
+    const L = this.sat(273.15);
+    this.h0 = 200 - L.hL; this.s0 = 1.0 - L.sL;
+  }
+  Fluid.prototype.ab = function (T) { // a, da/dT e b da mistura (van der Waals, kij = 0)
+    const pr = this.comps.map(q => {
+      const c = q.c, m = 0.37464 + 1.54226 * c.w - 0.26992 * c.w * c.w, sq = 1 + m * (1 - Math.sqrt(T / c.tc)), ac = 0.45724 * R * R * c.tc * c.tc / c.pc;
+      return { a: ac * sq * sq, da: -ac * m * sq / Math.sqrt(T * c.tc), b: 0.07780 * R * c.tc / c.pc, x: q.x };
+    });
+    let a = 0, da = 0, b = 0;
+    pr.forEach(p => { b += p.x * p.b; pr.forEach(q => { const aij = Math.sqrt(p.a * q.a); a += p.x * q.x * aij; da += p.x * q.x * 0.5 * aij * (p.da / p.a + q.da / q.a); }); });
+    return { a, da, b };
+  };
+  function cubic(c2, c1, c0) {
+    const q = (3 * c1 - c2 * c2) / 9, r = (9 * c2 * c1 - 27 * c0 - 2 * c2 ** 3) / 54, D = q ** 3 + r * r;
+    if (D > 0) { const s = Math.cbrt(r + Math.sqrt(D)), t = Math.cbrt(r - Math.sqrt(D)); return [s + t - c2 / 3]; }
+    const th = Math.acos(r / Math.sqrt(-(q ** 3))), m = 2 * Math.sqrt(-q);
+    return [m * Math.cos(th / 3) - c2 / 3, m * Math.cos((th + 2 * Math.PI) / 3) - c2 / 3, m * Math.cos((th + 4 * Math.PI) / 3) - c2 / 3].sort((x, y) => x - y);
+  }
+  // estado em T (K), P (Pa); fase 'L' ou 'V' (raiz menor ou maior); h em kJ/kg, s em kJ/(kg·K), v em m³/kg
+  Fluid.prototype.state = function (T, P, phase) {
+    const { a, da, b } = this.ab(T), A = a * P / (R * R * T * T), B = b * P / (R * T);
+    const Zs = cubic(-(1 - B), A - 3 * B * B - 2 * B, -(A * B - B * B - B ** 3)).filter(z => z > B);
+    const Z = phase === 'L' ? Zs[0] : Zs[Zs.length - 1];
+    const Lg = Math.log((Z + (1 + S2) * B) / (Z + (1 - S2) * B));
+    const lnphi = Z - 1 - Math.log(Z - B) - A / (2 * S2 * B) * Lg;
+    const hres = R * T * (Z - 1) + (T * da - a) / (2 * S2 * b) * Lg, sres = R * Math.log(Z - B) + da / (2 * S2 * b) * Lg;
+    const [cA, cB, cC, cD] = this.cpc;
+    const hig = cA * (T - T0) + cB / 2 * (T * T - T0 * T0) + cC / 3 * (T ** 3 - T0 ** 3) + cD / 4 * (T ** 4 - T0 ** 4);
+    const sig = cA * Math.log(T / T0) + cB * (T - T0) + cC / 2 * (T * T - T0 * T0) + cD / 3 * (T ** 3 - T0 ** 3) - R * Math.log(P / P0);
+    const k = 1 / this.mw; // J/mol → kJ/kg
+    return { T, P, Z, lnphi, h: (hig + hres) * k + this.h0, s: (sig + sres) * k + this.s0, v: Z * R * T / P / (this.mw * 1e-3) };
+  };
+  // saturação a T: P, h e s do líquido e do vapor
+  Fluid.prototype.sat = function (T) {
+    if (T >= this.tc - 0.3) throw new Error('Temperatura acima da crítica do ' + this.key + ' (' + (this.tc - 273.15).toFixed(1) + ' °C): não há condensação');
+    const c = this.comps[0].c; let P = c.pc * Math.exp(5.373 * (1 + c.w) * (1 - c.tc / T));
+    for (let it = 0; it < 200; it++) {
+      const L = this.state(T, P, 'L'), V = this.state(T, P, 'V');
+      if (Math.abs(L.Z - V.Z) < 1e-9) { P *= T < this.tc * 0.85 ? 0.9 : 1.02; continue; }
+      const d = L.lnphi - V.lnphi; P *= Math.exp(d);
+      if (Math.abs(d) < 1e-11) return { T, P, hL: L.h, hV: V.h, sL: L.s, sV: V.s, vL: L.v, vV: V.v };
+    }
+    throw new Error('Saturação do ' + this.key + ' não convergiu a ' + (T - 273.15).toFixed(1) + ' °C');
+  };
+  Fluid.prototype.Tsat = function (P) {
+    let lo = 0.4 * this.tc, hi = this.tc - 0.4;
+    for (let it = 0; it < 80; it++) { const m = (lo + hi) / 2; if (this.sat(m).P < P) lo = m; else hi = m; }
+    return (lo + hi) / 2;
+  };
+  // vapor superaquecido com entropia s a P (compressão isentrópica)
+  Fluid.prototype.TfromS = function (P, s, Tmin) {
+    let lo = Tmin, hi = Tmin + 250;
+    for (let it = 0; it < 80; it++) { const m = (lo + hi) / 2; if (this.state(m, P, 'V').s < s) lo = m; else hi = m; }
+    return (lo + hi) / 2;
+  };
+
+  /* ciclo ideal com compressor real: 1 saída do evaporador, 2 descarga, 3 saída do condensador, 4 após a válvula */
+  function cycle(key, o) {
+    const F = new Fluid(key), Tev = o.Tev, Tcd = o.Tcd, eta = Math.min(1, Math.max(0.3, o.eta || 0.75)), sh = Math.max(0, o.sh || 0), sc = Math.max(0, o.sc || 0);
+    if (Tcd <= Tev + 1) throw new Error('A temperatura de condensação deve ser maior que a de evaporação');
+    const E = F.sat(Tev), C = F.sat(Tcd);
+    const s1st = sh > 0.01 ? F.state(Tev + sh, E.P, 'V') : { T: Tev, P: E.P, h: E.hV, s: E.sV };
+    const T2s = F.TfromS(C.P, s1st.s, Tcd), st2s = F.state(T2s, C.P, 'V');
+    const h2 = s1st.h + (st2s.h - s1st.h) / eta;
+    let T2 = T2s; { let lo = T2s, hi = T2s + 200; for (let it = 0; it < 80; it++) { const m = (lo + hi) / 2; if (F.state(m, C.P, 'V').h < h2) lo = m; else hi = m; } T2 = (lo + hi) / 2; }
+    const st2 = F.state(T2, C.P, 'V');
+    const st3 = sc > 0.01 ? F.state(Tcd - sc, C.P, 'L') : { T: Tcd, P: C.P, h: C.hL, s: C.sL };
+    const h4 = st3.h, x4 = (h4 - E.hL) / (E.hV - E.hL), s4 = E.sL + x4 * (E.sV - E.sL);
+    const qev = s1st.h - h4, w = h2 - s1st.h, qcd = h2 - st3.h;
+    const pts = [
+      { n: 1, nome: 'Saída do evaporador', T: s1st.T, P: E.P, h: s1st.h, s: s1st.s, x: sh > 0.01 ? 'vapor superaquecido' : 'vapor saturado' },
+      { n: 2, nome: 'Descarga do compressor', T: T2, P: C.P, h: h2, s: st2.s, x: 'vapor superaquecido' },
+      { n: 3, nome: 'Saída do condensador', T: st3.T, P: C.P, h: st3.h, s: st3.s, x: sc > 0.01 ? 'líquido sub-resfriado' : 'líquido saturado' },
+      { n: 4, nome: 'Após a válvula de expansão', T: Tev, P: E.P, h: h4, s: s4, x: 'título ' + x4.toFixed(3) }];
+    // domo de saturação para o diagrama P–h
+    const dome = { hL: [], hV: [], P: [] }, Tlo = Math.min(Tev - 15, 0.6 * F.tc), N = 40;
+    for (let k = 0; k <= N; k++) { const T = Tlo + (F.tc - 1.5 - Tlo) * k / N; try { const s = F.sat(T); dome.hL.push(s.hL); dome.hV.push(s.hV); dome.P.push(s.P / 1e5); } catch (e) { /* perto do crítico */ } }
+    return { F, Pev: E.P, Pcd: C.P, T2s, T2, pts, qev, w, qcd, x4, cop: qev / w, copCarnot: Tev / (Tcd - Tev), eta, dome, hfgEv: E.hV - E.hL };
+  }
+
+  SF.refrig = { FLUIDS, LIST, Fluid, cycle };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -2332,6 +2794,10 @@ window.SIMULAFACIL_CONFIG = {
   const isCont = q => /^contínuo/.test(q.mode || ''), notCont = q => !isCont(q), isLab = q => /dados/.test(q.mode || '');
   const TD_CONT = 'contínuo: túnel de bandejas (alimentação → produto)', TD_MOD = 'batelada: modelo, taxa constante (convecção do ar) + taxa decrescente', TD_LAB = 'batelada: dados de laboratório (tempo × massa da bandeja)';
   const LY_CONT = 'contínuo: túnel com esteira transportadora (alimentação → produto)', LY_BAT = 'batelada: frascos em prateleiras (frente de sublimação)';
+  const MW_CONT = 'contínuo: túnel de micro-ondas com esteira (alimentação → produto)', MW_BAT = 'batelada: bandeja na cavidade de micro-ondas';
+  const MW_SX = 'umidade final X_f (calcula a potência de micro-ondas)', MW_SP = 'potência de micro-ondas (calcula a umidade final)';
+  const isMwSP = q => isCont(q) && /^potência/.test(q.spec || '');
+  const SD_CONT = 'contínuo (alimentação → pó)', SD_BAT = 'batelada: um lote de alimentação seco de uma vez', isSdBat = q => /^batelada/.test(q.mode || '');
   const BD_CONT = 'contínuo: CSTR com cinética global de 2ª ordem', BD_BAT = 'batelada: 3 etapas reversíveis (Noureddini & Zhu)';
   const SEMC = ' (só sem corrente conectada; com corrente, vem dela)';
   const TYPES = {
@@ -2354,6 +2820,15 @@ window.SIMULAFACIL_CONFIG = {
     cooler: { label: 'Resfriador', cat: 'Trocadores de calor', ins: ['in'], outs: ['out'], eouts: ['q_out'], params: [
       { k: 'mode', label: 'Especificação', type: 'select', options: ['Temperatura de saída', 'Carga térmica', 'Fração vaporizada'], def: 'Temperatura de saída' },
       { k: 'T', label: 'Temperatura de saída', u: '°C', def: 30 }, { k: 'Q', label: 'Calor removido', u: 'kW', def: 100 }, { k: 'vf', label: 'Fração vaporizada de saída', u: '0–1', def: 0 }, { k: 'dP', label: 'Perda de carga', u: 'bar', def: 0 }] },
+    refrigerator: { label: 'Refrigerador (ciclo de refrigeração)', cat: 'Trocadores de calor', ins: ['in'], outs: ['out'], params: [
+      { k: 'T', label: 'Temperatura de saída do produto', u: '°C', def: 7 },
+      { k: 'fluid', label: 'Fluido refrigerante', type: 'select', options: ['R-134a', 'R-22', 'R-32', 'R-410A', 'R-152a', 'R-717', 'R-290', 'R-600a', 'R-744'], def: 'R-134a' },
+      { k: 'Tcd', label: 'Temperatura de condensação', u: '°C', def: 40 },
+      { k: 'dTev', label: 'Diferença mínima no evaporador (T do produto − T de evaporação)', u: '°C', def: 5 },
+      { k: 'eta', label: 'Eficiência isentrópica do compressor', u: '0–1', def: 0.75 },
+      { k: 'sh', label: 'Superaquecimento na saída do evaporador', u: '°C', def: 5 },
+      { k: 'sc', label: 'Sub-resfriamento na saída do condensador', u: '°C', def: 3 },
+      { k: 'dP', label: 'Perda de carga do produto', u: 'bar', def: 0 }] },
     hx_shell: { label: 'Trocador casco e tubo', cat: 'Trocadores de calor', ins: ['hot_in', 'cold_in'], outs: ['hot_out', 'cold_out'], params: [
       { k: 'spec', label: 'Especificação', type: 'select', options: ['T saída quente', 'T saída fria', 'Carga térmica', 'UA (avaliação)'], def: 'T saída quente' },
       { k: 'value', label: 'Valor (°C, kW ou W/K)', u: '', def: 60 }, { k: 'U', label: 'Coef. global U', u: 'W/m²·K', def: 800 },
@@ -2547,8 +3022,10 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'kv', label: 'Fator de forma volumétrico kv (cubo 1; esfera 0,524)', u: '', def: 0.5 },
       { k: 'rhoc', label: 'Massa específica do cristal', u: 'kg/m³', def: 2109 },
       { k: 'rhoML', label: 'Massa específica da água-mãe', u: 'kg/m³', def: 1160 }] },
-    spray_dryer: { label: 'Spray dryer contínuo (secador por atomização): ar, energia, carta psicrométrica, gota e câmara', cat: 'Secagem e cristalização', ins: ['feed'], outs: ['product', 'exhaust'], eins: ['q_in'], params: [
-      { k: 'F', label: 'Vazão de alimentação' + SEMC, u: 'kg/h', def: 1000 },
+    spray_dryer: { label: 'Spray dryer (secador por atomização), contínuo ou em batelada: ar, energia, carta psicrométrica, gota e câmara', cat: 'Secagem e cristalização', ins: ['feed'], outs: ['product', 'exhaust'], eins: ['q_in'], params: [
+      { k: 'mode', label: 'Operação', type: 'select', options: [SD_CONT, SD_BAT], def: SD_CONT },
+      { k: 'Mlot', label: 'Batelada: massa de alimentação no lote (tanque)', u: 'kg', def: 200, when: isSdBat },
+      { k: 'F', label: 'Vazão de alimentação' + SEMC + ' (na batelada, vazão do atomizador)', u: 'kg/h', def: 1000 },
       { k: 'ws', label: 'Sólidos na alimentação' + SEMC, u: '% massa', def: 48 },
       { k: 'Tf', label: 'Temperatura da alimentação' + SEMC, u: '°C', def: 50 },
       { k: 'xp', label: 'Umidade do pó (base úmida)', u: '% massa', def: 3.5 },
@@ -2595,6 +3072,32 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'KC', label: 'K_v = K_C + K_P·P_c/(1 + K_D·P_c) — K_C (contato e radiação)', u: 'W/(m²·K)', def: 11.05, when: notCont },
       { k: 'KP', label: 'K_v — K_P (condução pelo gás)', u: 'W/(m²·K·Pa)', def: 1.143, when: notCont },
       { k: 'KD', label: 'K_v — K_D', u: '1/Pa', def: 0.00345, when: notCont }] },
+    microwave_dryer: { label: 'Secador de micro-ondas: túnel contínuo com esteira ou batelada na cavidade (aquecimento volumétrico)', cat: 'Secagem e cristalização', ins: ['feed'], outs: ['product', 'vapor'], eins: ['q_in'], params: [
+      { k: 'mode', label: 'Operação', type: 'select', options: [MW_CONT, MW_BAT], def: MW_CONT },
+      { k: 'spec', label: 'Especificar', type: 'select', options: [MW_SX, MW_SP], def: MW_SX, when: isCont },
+      { k: 'Fd', label: 'Vazão de produto úmido' + SEMC, u: 'kg/h', def: 100, when: isCont },
+      { k: 'cXi', label: 'Umidade inicial em base seca X_i' + SEMC, u: 'kg água/kg sólido seco', def: 6, when: isCont },
+      { k: 'Tf', label: 'Temperatura da alimentação' + SEMC, u: '°C', def: 25, when: isCont },
+      { k: 'Mb', label: 'Massa de produto úmido na bandeja', u: 'kg', def: 0.5, when: notCont },
+      { k: 'X0', label: 'Umidade inicial em base seca X_0', u: 'kg água/kg sólido seco', def: 6, when: notCont },
+      { k: 'T0', label: 'Temperatura inicial do produto', u: '°C', def: 25, when: notCont },
+      { k: 'Xf', label: 'Umidade final desejada X_f', u: 'kg água/kg sólido seco', def: 0.15, when: q => !isMwSP(q) },
+      { k: 'Pmw', label: 'Potência de micro-ondas emitida pelos magnétrons', u: 'kW', def: 80, when: isMwSP },
+      { k: 'Pb', label: 'Potência de micro-ondas do forno (emitida pelo magnétron)', u: 'W', type: 'range', min: 100, max: 3000, step: 50, def: 800, when: notCont },
+      { k: 'tau', label: 'Tempo de residência na esteira τ', u: 'min', type: 'range', min: 2, max: 120, step: 1, def: 30, when: isCont },
+      { k: 'Tp', label: 'Temperatura do produto durante a secagem (com ar de arraste)', u: '°C', def: 75 },
+      { k: 'cps', label: 'Calor específico do sólido seco', u: 'kJ/(kg·K)', def: 1.5 },
+      { k: 'Xe', label: 'Umidade de equilíbrio X_e', u: 'kg/kg', def: 0.05 },
+      { k: 'etaA', label: 'Fração máxima da potência absorvida pelo produto úmido η_máx', u: '0–1', def: 0.85 },
+      { k: 'Xa', label: 'Umidade característica da absorção X_a (o produto seco absorve menos)', u: 'kg/kg', def: 0.5 },
+      { k: 'etaG', label: 'Eficiência dos magnétrons (eletricidade → micro-ondas)', u: '0–1', def: 0.7 },
+      { k: 'freq', label: 'Frequência das micro-ondas', type: 'select', options: ['2450 MHz', '915 MHz'], def: '2450 MHz' },
+      { k: 'epsR', label: 'Constante dielétrica do produto úmido ε′', u: '', def: 55 },
+      { k: 'epsI', label: 'Fator de perda dielétrica do produto úmido ε″', u: '', def: 15 },
+      { k: 'rhoB', label: 'Massa específica aparente da camada de produto úmido', u: 'kg/m³', def: 600 },
+      { k: 'Lb', label: 'Carga de produto úmido na esteira', u: 'kg/m²', def: 8, when: isCont },
+      { k: 'We', label: 'Largura da esteira', u: 'm', def: 0.6, when: isCont },
+      { k: 'Ab', label: 'Área da bandeja', u: 'm²', def: 0.06, when: notCont }] },
     cstr: { label: 'Reator CSTR', cat: 'Reatores', ins: ['in'], outs: ['out'], params: [
       { k: 'V', label: 'Volume', u: 'm³', def: 1 }, { k: 'mode', label: 'Regime', type: 'select', options: ['permanente', 'transiente', 'batelada'], def: 'permanente' },
       { k: 'thermal', label: 'Energia', type: 'select', options: ['isotérmico', 'adiabático', 'camisa'], def: 'isotérmico' },
@@ -3218,6 +3721,45 @@ window.SIMULAFACIL_CONFIG = {
   };
   IMPL.heater = (th, b, ins) => heaterLike(th, b, ins, 1);
   IMPL.cooler = (th, b, ins) => heaterLike(th, b, ins, -1);
+
+  // refrigerador: o produto é resfriado no evaporador de um ciclo de compressão de vapor (1 → 2 compressor, 2 → 3 condensador, 3 → 4 válvula, 4 → 1 evaporador)
+  IMPL.refrigerator = function (th, b, ins) {
+    const s = ins.in, p = b.params, P = s.P - num(p.dP, 0) * BAR, Tout = C2K(num(p.T, 7));
+    const out = mkStream(th, s.flows, Tout, P), Q = out.H - s.H, warn = [];
+    const fluid = p.fluid || 'R-134a', RF = SF.refrig, info = RF && RF.FLUIDS[fluid];
+    const res = [{ k: 'Carga de refrigeração', v: kW(-Q), u: 'kW' }, { k: 'Temperatura de saída do produto', v: K2C(out.T), u: '°C' }];
+    if (!RF || !info) return { out: { out }, res, duty: Q, warn: ['Fluido refrigerante não disponível'] };
+    if (Q > -1) { warn.push('A corrente não está sendo resfriada (temperatura de saída ≥ entrada): o ciclo fica parado.'); return { out: { out }, res, duty: Q, warn }; }
+    const Tev = Tout - Math.max(0.5, num(p.dTev, 5)), Tcd = C2K(num(p.Tcd, 40));
+    let c;
+    try { c = RF.cycle(fluid, { Tev, Tcd, eta: num(p.eta, 0.75), sh: num(p.sh, 5), sc: num(p.sc, 3) }); }
+    catch (e) {
+      if (fluid === 'R-744') throw new Error('R-744 (CO2) tem temperatura crítica de 31 °C: use condensação abaixo de 28 °C (o ciclo transcrítico não está implementado)');
+      throw e;
+    }
+    const mdot = -Q / 1000 / c.qev, W = mdot * c.w, Qcd = mdot * c.qcd;   // kg/s, kW
+    res.push({ k: 'Capacidade', v: -Q / 1000 / 3.5169, u: 'TR' },
+      { k: 'Fluido refrigerante', v: info.name, u: '' },
+      { k: 'Temperatura de evaporação', v: K2C(Tev), u: '°C' }, { k: 'Pressão de evaporação', v: c.Pev / BAR, u: 'bar' },
+      { k: 'Temperatura de condensação', v: K2C(Tcd), u: '°C' }, { k: 'Pressão de condensação', v: c.Pcd / BAR, u: 'bar' },
+      { k: 'Razão de compressão', v: c.Pcd / c.Pev, u: '' }, { k: 'Vazão de refrigerante', v: mdot * 3600, u: 'kg/h' },
+      { k: 'Potência do compressor', v: W, u: 'kW' }, { k: 'Temperatura de descarga do compressor', v: K2C(c.T2), u: '°C' },
+      { k: 'Calor rejeitado no condensador', v: Qcd, u: 'kW' }, { k: 'Título na entrada do evaporador', v: c.x4, u: '' },
+      { k: 'Efeito refrigerante (h1 − h4)', v: c.qev, u: 'kJ/kg' }, { k: 'COP', v: c.cop, u: '' }, { k: 'COP de Carnot', v: c.copCarnot, u: '' },
+      { k: 'Eficiência de 2ª lei (COP/COP Carnot)', v: c.cop / c.copCarnot, u: '' }, { k: 'GWP do fluido (100 anos)', v: info.gwp, u: '' });
+    c.pts.forEach(q => res.push({ k: 'Estado ' + q.n + ' — ' + q.nome, v: 'T ' + (q.T - 273.15).toFixed(1) + ' °C · P ' + (q.P / BAR).toFixed(2) + ' bar · h ' + q.h.toFixed(1) + ' kJ/kg · s ' + q.s.toFixed(4) + ' kJ/(kg·K) · ' + q.x, u: '' }));
+    if (c.Pev < 101325) warn.push('Pressão de evaporação abaixo da atmosférica (' + (c.Pev / BAR).toFixed(2) + ' bar): ar e umidade podem entrar no circuito.');
+    if (K2C(c.T2) > 120) warn.push('Temperatura de descarga alta (' + K2C(c.T2).toFixed(0) + ' °C): risco de degradar o óleo do compressor; considere compressão em dois estágios.');
+    if (Tcd > 0.95 * c.F.tc) warn.push('Condensação perto da temperatura crítica do ' + fluid + ': o COP cai muito.');
+    if (info.odp > 0) warn.push(fluid + ' destrói a camada de ozônio (ODP ' + info.odp + ') e está sendo eliminado pelo Protocolo de Montreal.');
+    if (Tev >= s.T) warn.push('A temperatura de evaporação não fica abaixo da entrada do produto.');
+    const cyc = c.pts.concat([c.pts[0]]);
+    const plots = [{ kind: 'curves', title: 'Diagrama P–h do ' + fluid + ' (COP = ' + c.cop.toFixed(2) + ')', data: {
+      xLabel: 'Entalpia específica h (kJ/kg)', yLabel: 'Pressão (bar)', yLog: true,
+      series: [{ name: 'Líquido saturado', x: c.dome.hL, y: c.dome.P, color: '#2b6cb0' }, { name: 'Vapor saturado', x: c.dome.hV, y: c.dome.P, color: '#c53030' },
+        { name: 'Ciclo 1-2-3-4', x: cyc.map(q => q.h), y: cyc.map(q => q.P / BAR), color: '#111', width: 3.5, markers: true, size: 10, text: cyc.map((q, k) => (k < 4 ? String(q.n) : '')), mode: 'lines+markers+text' }] } }];
+    return { out: { out }, res, warn, duty: Q, plots, refr: { fluid, pts: c.pts, dome: c.dome, mdot, W, Qcd, Qev: -Q / 1000, cop: c.cop, copC: c.copCarnot, eta: c.eta } };
+  };
 
   IMPL.pump = function (th, b, ins) {
     const s = ins.in, P2 = num(b.params.P, 5) * BAR, eff = clamp(num(b.params.eff, 0.75), 0.05, 1);
@@ -4897,9 +5439,10 @@ window.SIMULAFACIL_CONFIG = {
     return { Fs, Wf, Pm, Wp, E, Ga, Hout, Qh, UR, vHin, vHout, Tas, cs, eta: (o.Tin - o.Tout) / (o.Tin - o.Tamb), spec: Qh * 3600 / E, Hs };
   }
   IMPL.spray_dryer = function (th, b, ins) {
-    const p = b.params, warn = [], ws0 = num(p.ws, 48) / 100;
+    const p = b.params, warn = [], ws0 = num(p.ws, 48) / 100, bat = isSdBat(p);
     if (!(ws0 > 0 && ws0 < 1)) throw new Error('teor de sólidos inválido');
-    const fd = wetFeed(th, ins && ins.feed, num(p.F, 1000), (1 - ws0) / ws0, num(p.Tf, 50), warn);
+    if (bat && ins && connected(ins.feed)) warn.push('na batelada a corrente de alimentação não é usada: o lote vem dos campos (massa do lote, vazão do atomizador e sólidos); escolha a operação contínua para ligar o spray dryer ao fluxograma');
+    const fd = wetFeed(th, bat ? null : ins && ins.feed, num(p.F, 1000), (1 - ws0) / ws0, num(p.Tf, 50), warn);
     const o = { F: fd.M, ws: fd.Ss / fd.M, Tf: fd.Tf, xp: num(p.xp, 3.5) / 100, Tp: num(p.Tp, 70), cps: num(p.cps, 1.5),
       Tin: num(p.Tin, 200), Tout: num(p.Tout, 90), Tamb: num(p.Tamb, 25), Hin: num(p.Hin, 0.01), P: num(p.P, 101.325) * 1000, loss: num(p.loss, 5) / 100 };
     if (!(o.F > 0 && o.ws > 0 && o.ws < 1 && o.xp >= 0 && o.xp < 1)) throw new Error('vazão e teores de sólidos/umidade inválidos');
@@ -4943,6 +5486,15 @@ window.SIMULAFACIL_CONFIG = {
     const tt = [], dd = []; for (let i = 0; i <= 100; i++) { const t = tc * i / 100; tt.push(t * 1000); dd.push(1e6 * Math.sqrt(Math.max(0, d0 * d0 - 8 * kA * dTlm * t / (rhoF * lw)))); }
     plots.push({ kind: 'curves', title: 'Encolhimento da gota no período de taxa constante (lei do d²)', data: { xLabel: 'Tempo (ms)', yLabel: 'Diâmetro da gota (µm)', series: [{ name: 'd(t)', x: tt, y: dd, color: '#7a3db8', width: 3.5 }],
       hlines: [{ y: dc * 1e6, name: 'Formação da crosta (d_c = ' + (dc * 1e6).toFixed(1).replace('.', ',') + ' µm)', color: '#8a8f98' }] } });
+    if (bat) {   // batelada: o lote do tanque é atomizado na vazão do atomizador; os resultados por hora valem durante o lote
+      const Ml = num(p.Mlot, 200); if (!(Ml > 0)) throw new Error('a massa do lote deve ser positiva');
+      const tl = Ml / o.F;
+      res.unshift({ k: 'Operação', v: 'batelada: lote de ' + br(Ml) + ' kg atomizado a ' + br(o.F) + ' kg/h (os valores por hora valem durante o lote)', u: '' },
+        { k: 'Tempo para secar o lote', v: tl.toFixed(3) + ' h (' + (tl * 60).toFixed(1) + ' min)', u: '' },
+        { k: 'Por lote: pó / água evaporada / ar seco', v: (r.Pm * tl).toFixed(2) + ' kg / ' + (r.E * tl).toFixed(2) + ' kg / ' + (r.Ga * tl).toFixed(0) + ' kg', u: '' },
+        { k: 'Energia do aquecedor de ar no lote', v: (r.Qh * tl).toFixed(2) + ' kWh (' + (r.Qh * tl * 3.6).toFixed(1) + ' MJ)', u: '' });
+      return { out: {}, duty: r.Qh * 1000, res: decBR(res), warn: decW(warn), plots, spray: { o, bat: { Ml, tl }, r: { Ga: r.Ga, Hout: r.Hout, Qh: r.Qh, E: r.E, Pm: r.Pm, Tas: r.Tas }, d0, rhoF, rhoP, kA, tres, Tw, lw, dTlm, tc, dc, Dch, Hch, Dset, dfin, vHout: r.vHout } };
+    }
     const out = {}; let util = feedUtil(fd);
     if (fd.sol) { out.product = solidsStream(th, fd, r.Fs, r.Wp, o.Tp, fd.Pst); const ha = humidAir(th, fd, r.Ga, o.Hin, r.E, o.Tout, fd.Pst, warn); out.exhaust = ha.s; util += ha.util; }
     return { out, duty: r.Qh * 1000, massUtil: util, res: decBR(res), warn: decW(warn), plots, spray: { o, r: { Ga: r.Ga, Hout: r.Hout, Qh: r.Qh, E: r.E, Pm: r.Pm, Tas: r.Tas }, d0, rhoF, rhoP, kA, tres, Tw, lw, dTlm, tc, dc, Dch, Hch, Dset, dfin, vHout: r.vHout } };
@@ -4969,6 +5521,117 @@ window.SIMULAFACIL_CONFIG = {
     }
     return { t, ls, st, Kv, rhoI, tpd: tt };
   }
+  /* ------------------------------------------------------------------ secador de micro-ondas: aquecimento volumétrico, secagem limitada pela energia absorvida.
+     η(X) = η_máx(1 − e^(−(X − X_e)/X_a)) (o produto seco absorve menos); aquecimento até T_p: t_a = (c_ps + X_0 c_pw)(T_p − T_0)/(η(X_0) q);
+     secagem a T_p: dX/dt = −η(X) q/λ  ⇒  t_s = (X_a/a) ln[(e^(u_0/X_a) − 1)/(e^(u/X_a) − 1)], a = η_máx q/λ, u = X − X_e; q = potência emitida por kg de sólido seco */
+  const lem1 = v => (v > 30 ? v + Math.log1p(-Math.exp(-v)) : Math.log(Math.expm1(Math.max(v, 1e-300))));   // ln(e^v − 1)
+  const softp = z => (z > 30 ? z + Math.log1p(Math.exp(-z)) : Math.log1p(Math.exp(z)));                   // ln(1 + e^z)
+  function mwKin(o) { // o: X0, Xe, Xa, etaM, cps, T0, Tp (°C); devolve funções da potência específica q (W/kg de sólido seco)
+    const cpw = 4.18, lam = (STEAM.hV(C2K(o.Tp)) - STEAM.hL(C2K(o.Tp))) * 1000, eta = X => o.etaM * (1 - Math.exp(-Math.max(0, X - o.Xe) / o.Xa));
+    const Eh = Math.max(0, (o.cps + o.X0 * cpw) * (o.Tp - o.T0) * 1000), eta0 = eta(o.X0), v0 = (o.X0 - o.Xe) / o.Xa;
+    const Kh = Eh / eta0, Kd = Xf => lam * o.Xa / o.etaM * (lem1(v0) - lem1((Xf - o.Xe) / o.Xa));   // J/kg ss emitidos: aquecimento e secagem até X_f
+    const Xt = (t, q) => { const th = Kh / q; if (t <= th) return o.X0; const a = o.etaM * q / lam; return o.Xe + o.Xa * softp(lem1(v0) - a * (t - th) / o.Xa); };
+    const Tt = (t, q) => { const th = Kh / q; return t >= th ? o.Tp : o.T0 + (o.Tp - o.T0) * t / th; };
+    return { cpw, lam, eta, Eh, eta0, Kh, Kd, Xt, Tt, K: Xf => Kh + Kd(Xf) };
+  }
+  function mwDp(f, er, ei) { // profundidade de penetração da potência (m), Metaxas: D_p = λ0/(2π√(2ε′))·[√(1 + (ε″/ε′)²) − 1]^(−1/2)
+    const l0 = 299792458 / f; return l0 / (2 * Math.PI * Math.sqrt(2 * er)) / Math.sqrt(Math.sqrt(1 + (ei / er) * (ei / er)) - 1);
+  }
+  IMPL.microwave_dryer = function (th, b, ins) {
+    const p = b.params, warn = [], cont = isCont(p);
+    const Tp = num(p.Tp, 75), cps = num(p.cps, 1.5), Xe = num(p.Xe, 0.05), etaM = num(p.etaA, 0.85), Xa = num(p.Xa, 0.5), etaG = num(p.etaG, 0.7);
+    const f = /915/.test(p.freq || '') ? 915e6 : 2450e6, er = num(p.epsR, 55), ei = num(p.epsI, 15), rhoB = num(p.rhoB, 600);
+    if (!(etaM > 0 && etaM <= 1 && etaG > 0 && etaG <= 1)) throw new Error('as eficiências devem estar entre 0 e 1');
+    if (!(Xa > 0 && Xe >= 0 && cps > 0 && rhoB > 0)) throw new Error('X_a, c_ps e a massa específica devem ser positivos (e X_e ≥ 0)');
+    if (!(er > 0 && ei > 0)) throw new Error('ε′ e ε″ devem ser positivos');
+    if (Tp > 100) warn.push('a ' + Tp + ' °C a água ferve a 1 atm: na prática o produto úmido fica perto de 100 °C (acima disso só com o produto já seco, com risco de queima)');
+    const Dp = mwDp(f, er, ei), fl = f === 915e6 ? '915 MHz' : '2450 MHz', col = { X: '#2563c9', T: '#d1302b', r: '#7a3db8', e: '#2e9e6b' };
+    const etaPlot = (X0) => { const xs = [], es = []; for (let i = 0; i <= 120; i++) { const X = X0 * i / 120; xs.push(X); es.push(etaM * (1 - Math.exp(-Math.max(0, X - Xe) / Xa))); }
+      return { kind: 'curves', title: 'Fração da potência absorvida pelo produto × umidade (o produto seco absorve menos)', data: { xLabel: 'X (kg de água/kg de sólido seco)', yLabel: 'η(X)', xRange: [0, X0], series: [
+        { name: 'η(X) = η_máx·(1 − e^(−(X − X_e)/X_a))', x: xs, y: es, color: col.e, width: 3.5 }] } }; };
+    if (cont) {
+      const fd = wetFeed(th, ins && ins.feed, num(p.Fd, 100), num(p.cXi, 6), num(p.Tf, 25), warn);
+      const X0 = fd.Xi, T0 = fd.Tf, tau = num(p.tau, 30) * 60, Lb = num(p.Lb, 8), We = num(p.We, 0.6);
+      if (!(tau > 0 && Lb > 0 && We > 0)) throw new Error('tempo de residência, carga e largura da esteira devem ser positivos');
+      if (!(X0 > Xe)) throw new Error('a umidade inicial deve ser maior que a de equilíbrio X_e');
+      const kin = mwKin({ X0, Xe, Xa, etaM, cps, T0, Tp }), ms = fd.Ss / 3600, sp = isMwSP(p);
+      let Xf, Pmw, Tout = Tp;
+      if (!sp) {
+        Xf = num(p.Xf, 0.15);
+        if (!(Xf > Xe && Xf < X0)) throw new Error('a umidade final deve ficar entre X_e = ' + Xe + ' e a inicial (X_i = ' + X0.toFixed(3) + ')');
+        Pmw = ms * kin.K(Xf);
+      } else {
+        Pmw = num(p.Pmw, 80) * 1000; if (!(Pmw > 0)) throw new Error('a potência de micro-ondas deve ser positiva');
+        const q = Pmw / (ms * tau), th_ = kin.Kh / q;
+        if (th_ >= tau) { Xf = X0; Tout = kin.Tt(tau, q); warn.push('a potência só aquece o produto até ' + Tout.toFixed(1) + ' °C no tempo de residência: não sobra tempo para secar; aumente a potência ou o tempo'); }
+        else Xf = kin.Xt(tau, q);
+      }
+      const q = Pmw / (ms * tau), th_ = Math.min(tau, kin.Kh / q), Pel = Pmw / etaG, E = fd.Ss * (X0 - Xf);
+      const Pabs = ms * ((cps + X0 * kin.cpw) * (Tout - T0) * 1000 + kin.lam * (X0 - Xf)), Mp = fd.Ss * (1 + Xf);
+      const Mds = ms * tau, Mwet = Mds * (1 + X0), A = Mwet / Lb, Lt = A / We, v = Lt / (tau / 60), e = Lb / rhoB, qw = Pmw / Mwet / 1000;
+      if (qw > 10) warn.push('potência específica de ' + qw.toFixed(1) + ' W/g de produto: acima de ~10 W/g há risco de pontos quentes e queima; aumente o tempo de residência');
+      if (e > 2 * Dp) warn.push('a camada de ' + (e * 1000).toFixed(1) + ' mm passa de duas vezes a profundidade de penetração (' + (Dp * 1000).toFixed(1) + ' mm): o centro aquece menos; reduza a carga na esteira ou use 915 MHz');
+      const res = [{ k: 'Operação', v: 'contínua: túnel de micro-ondas com esteira' + (fd.conn ? ' (alimentação pela corrente)' : ' (alimentação pelos campos)') + '; ' + (sp ? 'potência informada' : 'umidade final informada'), u: '' },
+        { k: 'Alimentação: produto úmido / sólido seco / água', v: fd.M.toFixed(2) + ' / ' + fd.Ss.toFixed(2) + ' / ' + fd.W.toFixed(2) + ' kg/h', u: '' },
+        { k: 'Umidade: inicial / final (base seca)', v: X0.toFixed(3) + ' / ' + Xf.toFixed(4) + ' kg/kg (' + (100 * X0 / (1 + X0)).toFixed(1) + ' % / ' + (100 * Xf / (1 + Xf)).toFixed(1) + ' % em base úmida)', u: '' },
+        { k: 'Água evaporada', v: +E.toFixed(2), u: 'kg/h' },
+        { k: 'Produto seco', v: +Mp.toFixed(2), u: 'kg/h' },
+        { k: 'Potência de micro-ondas emitida (' + fl + ')', v: +(Pmw / 1000).toFixed(2), u: 'kW' },
+        { k: 'Potência absorvida pelo produto (fração do emitido)', v: (Pabs / 1000).toFixed(2) + ' kW (' + (100 * Pabs / Pmw).toFixed(1) + ' %)', u: '' },
+        { k: 'Potência elétrica dos magnétrons (η = ' + br(etaG) + ')', v: +(Pel / 1000).toFixed(2), u: 'kW' },
+        { k: 'Consumo específico de eletricidade', v: E > 1e-9 ? (Pel / (E / 3600) / 1e6).toFixed(2) + ' MJ/kg de água (' + (Pel / (E / 3600) / 1e3 / (kin.lam / 1000)).toFixed(2) + ' vezes o calor latente)' : '— (não há evaporação)', u: '' },
+        { k: 'Tempo de residência: aquecimento até ' + br(Tp) + ' °C / secagem', v: (th_ / 60).toFixed(2) + ' / ' + ((tau - th_) / 60).toFixed(2) + ' min', u: '' },
+        { k: 'Potência específica (emitida por massa de produto úmido na esteira)', v: +qw.toFixed(2), u: 'W/g' },
+        { k: 'Carga na esteira (hold-up): produto úmido / sólido seco', v: Mwet.toFixed(2) + ' / ' + Mds.toFixed(2) + ' kg', u: '' },
+        { k: 'Esteira: área / comprimento útil (largura ' + br(We) + ' m) / velocidade', v: A.toFixed(2) + ' m² / ' + Lt.toFixed(2) + ' m / ' + v.toFixed(3) + ' m/min', u: '' },
+        { k: 'Espessura da camada / profundidade de penetração D_p (' + fl + ', ε′ = ' + br(er) + ', ε″ = ' + br(ei) + ')', v: (e * 1000).toFixed(1) + ' / ' + (Dp * 1000).toFixed(1) + ' mm', u: '' }];
+      const tt = [], Xs = [], Ts = []; for (let i = 0; i <= 240; i++) { const t = tau * i / 240; tt.push(t / 60); Xs.push(kin.Xt(t, q)); Ts.push(kin.Tt(t, q)); }
+      const plots = [{ kind: 'curves', title: 'Umidade e temperatura do produto ao longo do túnel', data: { xLabel: 'Tempo na esteira (min)  ·  posição = v·t', yLabel: 'X (kg/kg)  ·  T/10 (°C)', xRange: [0, tau / 60], series: [
+          { name: 'Umidade X(t)', x: tt, y: Xs, color: col.X, width: 3.5 }, { name: 'Temperatura do produto ÷ 10 (°C)', x: tt, y: Ts.map(x => x / 10), color: col.T, width: 2.5, dash: 'dash' },
+          { name: 'Saída (X_f)', x: [tau / 60], y: [Xf], mode: 'markers', size: 12, symbol: 'square', color: '#111' }] } }];
+      const Xr = [], Rr = []; for (let i = 0; i <= 160; i++) { const X = Xe + (X0 - Xe) * i / 160; Xr.push(X); Rr.push(60 * kin.eta(X) * q / kin.lam); }
+      plots.push({ kind: 'curves', title: 'Taxa de secagem × umidade: cai porque o produto seco absorve menos micro-ondas', data: { xLabel: 'X (kg de água/kg de sólido seco)', yLabel: '−dX/dt (kg de água/(kg de sólido seco·min))', series: [
+        { name: 'Taxa de secagem', x: Xr, y: Rr, color: col.r, width: 3.5 }] } });
+      const Ps = [], Xfs = []; for (let i = 1; i <= 80; i++) { const P = Pmw * 2.5 * i / 80, qq = P / (ms * tau); Ps.push(P / 1000); Xfs.push(kin.Kh / qq >= tau ? X0 : kin.Xt(tau, qq)); }
+      plots.push({ kind: 'curves', title: 'Efeito da potência de micro-ondas na umidade de saída (τ = ' + br((tau / 60).toFixed(1)) + ' min)', data: { xLabel: 'Potência emitida (kW)', yLabel: 'X_f (kg/kg)', yLog: true, series: [
+        { name: 'Umidade de saída', x: Ps, y: Xfs, color: col.X, width: 3.5 }, { name: 'Condição atual', x: [Pmw / 1000], y: [Xf], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }] } });
+      plots.push(etaPlot(X0));
+      const out = {};
+      if (fd.sol) {
+        out.product = solidsStream(th, fd, fd.Ss, fd.Ss * Xf, Tout, fd.Pst);
+        if (E > 0) { const kg = new Array(th.n).fill(0); kg[fd.iw] = E; out.vapor = mkStream(th, flowsOfKg(th, kg), C2K(Tout), Math.min(fd.Pst, 0.9 * STEAM.psat(C2K(Tout)))); }
+      }
+      return { out, duty: Pel, massUtil: feedUtil(fd), res: decBR(res), warn: decW(warn), plots,
+        mw: { M: fd.M, Ss: fd.Ss, X0, T0, Xf, Xe, Xa, etaM, etaG, cps, Tp, lam: kin.lam, tau, Pmw, Pel, Pabs, E, Lb, We, A, Lt, v, Mwet, e, Dp, f, er, ei, sp } };
+    }
+    // batelada: bandeja na cavidade
+    if (ins && connected(ins.feed)) warn.push('na batelada a corrente de alimentação não é usada: escolha a operação contínua (esteira) para ligar o secador ao fluxograma');
+    const Mb = num(p.Mb, 0.5), X0 = num(p.X0, 6), T0 = num(p.T0, 25), Pb = num(p.Pb, 800), Xf = num(p.Xf, 0.15), Ab = num(p.Ab, 0.06);
+    if (!(Mb > 0 && Pb > 0 && Ab > 0)) throw new Error('massa, potência e área da bandeja devem ser positivas');
+    if (!(X0 > Xe && Xf > Xe && Xf < X0)) throw new Error('as umidades devem obedecer X_e < X_f < X_0');
+    const kin = mwKin({ X0, Xe, Xa, etaM, cps, T0, Tp }), Ms = Mb / (1 + X0), q = Pb / Ms, th_ = kin.Kh / q, tf = kin.K(Xf) / q, E = Ms * (X0 - Xf);
+    const Eabs = Ms * (kin.Eh + kin.lam * (X0 - Xf)), Eem = Pb * tf, Eel = Eem / etaG, e = Mb / (rhoB * Ab), qw = Pb / Mb / 1000;
+    if (qw > 10) warn.push('potência específica de ' + qw.toFixed(1) + ' W/g: acima de ~10 W/g há risco de pontos quentes e queima; reduza a potência');
+    if (e > 2 * Dp) warn.push('a camada de ' + (e * 1000).toFixed(1) + ' mm passa de duas vezes a profundidade de penetração (' + (Dp * 1000).toFixed(1) + ' mm): o centro aquece menos');
+    const res = [{ k: 'Operação', v: 'batelada: bandeja na cavidade de micro-ondas (' + fl + ')', u: '' },
+      { k: 'Produto: úmido / sólido seco / água a retirar', v: Mb.toFixed(3) + ' / ' + Ms.toFixed(4) + ' / ' + E.toFixed(4) + ' kg', u: '' },
+      { k: 'Tempo de secagem até X_f = ' + br(Xf) + ' (aquecimento + secagem)', v: (tf / 60).toFixed(2) + ' min (' + (th_ / 60).toFixed(2) + ' + ' + ((tf - th_) / 60).toFixed(2) + ')', u: '' },
+      { k: 'Potência específica', v: qw.toFixed(2) + ' W/g de produto úmido (' + (q / 1000).toFixed(2) + ' W/g de sólido seco)', u: '' },
+      { k: 'Energia: emitida / absorvida pelo produto', v: (Eem / 3.6e6).toFixed(4) + ' / ' + (Eabs / 3.6e6).toFixed(4) + ' kWh (' + (100 * Eabs / Eem).toFixed(1) + ' %)', u: '' },
+      { k: 'Eletricidade consumida (η dos magnétrons = ' + br(etaG) + ')', v: (Eel / 3.6e6).toFixed(4) + ' kWh (' + (Eel / E / 1e6).toFixed(2) + ' MJ/kg de água)', u: '' },
+      { k: 'Taxa média de evaporação', v: +(E / (tf / 3600)).toFixed(4), u: 'kg/h' },
+      { k: 'Espessura da camada / profundidade de penetração D_p', v: (e * 1000).toFixed(1) + ' / ' + (Dp * 1000).toFixed(1) + ' mm', u: '' }];
+    const tmax = 1.6 * tf, curves = [0.5, 1, 1.5].map((k, j) => { const qq = q * k, xs = [], ys = []; for (let i = 0; i <= 200; i++) { const t = tmax * i / 200; xs.push(t / 60); ys.push(kin.Xt(t, qq)); }
+      return { name: 'P = ' + Math.round(Pb * k) + ' W', x: xs, y: ys, color: ['#7fa6e8', '#2563c9', '#0b2f80'][j], width: j === 1 ? 3.5 : 2.5, dash: j === 1 ? undefined : 'dash' }; });
+    curves.push({ name: 'X_f atingida', x: [tf / 60], y: [Xf], mode: 'markers', size: 12, symbol: 'square', color: '#111' });
+    const plots = [{ kind: 'curves', title: 'Curva de secagem X × t e o efeito da potência do forno', data: { xLabel: 'Tempo (min)', yLabel: 'X (kg de água/kg de sólido seco)', xRange: [0, tmax / 60], series: curves } }];
+    const tt = [], Ts = []; for (let i = 0; i <= 200; i++) { const t = tmax * i / 200; tt.push(t / 60); Ts.push(kin.Tt(t, q)); }
+    plots.push({ kind: 'curves', title: 'Temperatura do produto: aquecimento volumétrico e patamar de secagem', data: { xLabel: 'Tempo (min)', yLabel: 'T (°C)', xRange: [0, tmax / 60], series: [{ name: 'T do produto', x: tt, y: Ts, color: col.T, width: 3.5 }] } });
+    const Xr = [], Rr = []; for (let i = 0; i <= 160; i++) { const X = Xe + (X0 - Xe) * i / 160; Xr.push(X); Rr.push(60 * kin.eta(X) * q / kin.lam); }
+    plots.push({ kind: 'curves', title: 'Taxa de secagem × umidade', data: { xLabel: 'X (kg de água/kg de sólido seco)', yLabel: '−dX/dt (kg/(kg·min))', series: [{ name: 'Taxa de secagem', x: Xr, y: Rr, color: col.r, width: 3.5 }] } });
+    plots.push(etaPlot(X0));
+    return { out: {}, duty: Pb / etaG, res: decBR(res), warn: decW(warn), plots, mwb: { Mb, Ms, X0, T0, Xf, Xe, Xa, etaM, etaG, cps, Tp, lam: kin.lam, Pb, tf, th: th_, E, Eabs, Eel, e, Dp } };
+  };
   IMPL.freeze_dryer = function (th, b, ins) {
     if (isCont(b.params)) return lyoBelt(th, b, ins);
     const p = b.params, warn = [];
@@ -5943,9 +6606,9 @@ window.SIMULAFACIL_CONFIG = {
   const txt = h => '<p class="eq-txt">' + h + '</p>';
 
   /* constantes de equilíbrio conforme o modelo termodinâmico */
-  const MODEL_NAME = { IDEAL: 'Ideal', NRTL: 'NRTL', WILSON: 'Wilson', UNIQUAC: 'UNIQUAC', UNIFAC: 'UNIFAC', PR: 'Peng-Robinson', SRK: 'Soave-Redlich-Kwong' };
+  const MODEL_NAME = { IDEAL: 'Ideal', NRTL: 'NRTL', WILSON: 'Wilson', UNIQUAC: 'UNIQUAC', UNIFAC: 'UNIFAC', PR: 'Peng-Robinson', SRK: 'Soave-Redlich-Kwong', PCSAFT: 'PC-SAFT' };
   function kModel(model) {
-    const eos = /^(PR|SRK)$|Peng|Soave/i.test(model || '');
+    const eos = /^(PR|SRK|PCSAFT)$|Peng|Soave|SAFT/i.test(model || '');
     if (model === 'IDEAL') return eq(Ki + ' = ' + fr(sub(sup(i('P'), 'sat'), i('i')), P), 'lei de Raoult; pressão de vapor por Antoine');
     model = MODEL_NAME[model] || model;
     return eos
@@ -6049,7 +6712,7 @@ window.SIMULAFACIL_CONFIG = {
           eq(sup(d, '2') + ' = ' + sup(sub(d, '0'), '2') + ' − ' + fr('8' + i('k') + 'Δ' + sub(T, 'ml'), sub(i('ρ'), 'L') + i('λ')) + t + ',&nbsp; ' + sub(d, 'c') + ' = ' + sub(d, '0') + '(' + fr(sub(i('w'), 's') + sub(i('ρ'), 'L'), sub(i('ρ'), 'p')) + ')' + sup('', '1/3'), 'gota: lei do d² (Nu = 2) até formar a crosta'),
           eq(sub(d, 'final') + ' = ' + sub(d, '0') + '(' + fr(sub(i('ρ'), 'L') + sub('Ṁ', 'P'), sub(i('ρ'), 'p') + sub('Ṁ', 'F')) + ')' + sup('', '1/3') + ',&nbsp; ' + sub(V, 'câmara') + ' = ' + Ga + sub(i('v'), 'H') + sub(i('τ'), 'ar') + ',&nbsp; ' + i('H') + ' = ' + fr('4' + sub(V, 'câmara'), 'π' + sup(i('D'), '2')), 'partícula final, volume e altura da câmara')],
         sym: [[Ga, 'vazão de ar seco (kg/h)'], [H, 'umidade absoluta do ar (kg de água/kg de ar seco)'], [Ti + ', ' + To, 'temperaturas do ar na entrada e na saída da câmara'], [d + ', ' + sub(d, 'c'), 'diâmetro da gota e diâmetro ao formar a crosta']],
-        note: 'Entalpia do ar úmido h = (1,005 + 1,88H)T + 2501H kJ/kg de ar seco. A saída do ar não pode ficar abaixo da temperatura de saturação adiabática do ar de entrada; na prática, fica bem acima dela (umidade relativa de saída baixa) para o pó não ficar pegajoso.'
+        note: 'Entalpia do ar úmido h = (1,005 + 1,88H)T + 2501H kJ/kg de ar seco. A saída do ar não pode ficar abaixo da temperatura de saturação adiabática do ar de entrada; na prática, fica bem acima dela (umidade relativa de saída baixa) para o pó não ficar pegajoso. Na batelada, o lote do tanque é atomizado na vazão do atomizador: o tempo do lote é a massa do lote dividida por essa vazão, e as quantidades por lote são as vazões multiplicadas por esse tempo.'
       };
     },
     freeze_dryer: (p) => {
@@ -6063,6 +6726,22 @@ window.SIMULAFACIL_CONFIG = {
           eq(sub(i('P'), 'gelo') + ' = 3,597·10¹² exp(−6144,96/' + T + ')  Pa,&nbsp; ' + od(l, t) + ' = ' + fr(m, sub(i('ρ'), 'gelo,ef')), 'pressão de vapor do gelo e avanço da frente')],
         sym: [[Tp + ', ' + Tb + ', ' + Ts, 'temperaturas da frente de sublimação, do fundo do frasco e da prateleira'], [sub(i('P'), 'c'), 'pressão da câmara'], [Rp, 'resistência da camada seca ao vapor'], [Kv, 'coeficiente de troca de calor prateleira–frasco']],
         note: 'Para cada espessura seca l, T_p é obtida igualando o calor que chega pela prateleira ao calor de sublimação (ΔH_s = 2 838 kJ/kg, k_gelo = 2,3 W/(m·K)). O produto não pode passar da temperatura de colapso; o espaço de projeto mostra o tempo de secagem e a T_p máxima para cada par (T_s, P_c).'
+      };
+    },
+    microwave_dryer: (p) => {
+      const cont = /^contínuo/.test((p && p.mode) || ''), X = i('X'), Xe = sub(X, 'e'), Xa = sub(X, 'a'), eta = i('η'), q_ = i('q'), lam = i('λ'), tau = i('τ'), Tp = sub(T, 'p'), T0 = sub(T, '0'), u = i('u');
+      const eqs = [eq(eta + '(' + X + ') = ' + sub(eta, 'máx') + '[1 − exp(−' + fr(X + ' − ' + Xe, Xa) + ')]', 'fração da potência absorvida: o produto seco absorve menos'),
+        eq(q_ + ' = ' + fr(sub(i('P'), 'mo'), sub(i('M'), 's')) + ',&nbsp; ' + sub(t, 'a') + ' = ' + fr('(' + sub(i('c'), 'ps') + ' + ' + sub(X, '0') + sub(i('c'), 'pw') + ')(' + Tp + ' − ' + T0 + ')', eta + '(' + sub(X, '0') + ')' + q_), 'potência por kg de sólido seco e tempo de aquecimento'),
+        eq('−' + od(X, t) + ' = ' + fr(eta + '(' + X + ')' + q_, lam + '(' + Tp + ')'), 'secagem limitada pela energia absorvida, a ' + Tp),
+        eq(sub(t, 's') + ' = ' + fr(Xa, i('a')) + ' ln ' + fr('exp(' + sub(u, '0') + '/' + Xa + ') − 1', 'exp(' + u + '/' + Xa + ') − 1') + ',&nbsp; ' + i('a') + ' = ' + fr(sub(eta, 'máx') + q_, lam) + ',&nbsp; ' + u + ' = ' + X + ' − ' + Xe, 'solução analítica')];
+      if (cont) eqs.push(eq(sub(i('P'), 'mo') + ' = ' + sub('ṁ', 's') + '[' + fr('(' + sub(i('c'), 'ps') + ' + ' + sub(X, '0') + sub(i('c'), 'pw') + ')(' + Tp + ' − ' + T0 + ')', eta + '(' + sub(X, '0') + ')') + ' + ' + fr(lam + Xa, sub(eta, 'máx')) + ' ln ' + fr('exp(' + sub(u, '0') + '/' + Xa + ') − 1', 'exp(' + sub(u, 'f') + '/' + Xa + ') − 1') + ']', 'potência para chegar a ' + sub(X, 'f') + ' (não depende de ' + tau + ')'),
+        eq(sub(i('M'), 's') + ' = ' + sub('ṁ', 's') + tau + ',&nbsp; ' + sub(i('A'), 'esteira') + ' = ' + fr(sub(i('M'), 's') + '(1 + ' + sub(X, '0') + ')', sub(i('L'), 'b')) + ',&nbsp; ' + i('v') + ' = ' + fr(sub(i('A'), 'esteira'), i('W') + tau), 'carga, área e velocidade da esteira'));
+      eqs.push(eq(sub(i('D'), 'p') + ' = ' + fr(sub(lam, '0'), '2π√(2ε′)') + sup('[√(1 + (ε″/ε′)²) − 1]', '−1/2') + ',&nbsp; ' + sub(i('P'), 'el') + ' = ' + fr(sub(i('P'), 'mo'), sub(eta, 'mag')), 'profundidade de penetração e potência elétrica'));
+      return {
+        name: cont ? 'Secador de micro-ondas contínuo (túnel com esteira): aquecimento volumétrico e secagem limitada pela energia' : 'Secador de micro-ondas em batelada: curva de secagem na cavidade',
+        eqs,
+        sym: [[sub(i('P'), 'mo') + ', ' + q_, 'potência de micro-ondas emitida e potência por kg de sólido seco'], [eta + ', ' + Xa, 'fração absorvida e umidade característica da absorção'], [Tp + ', ' + lam, 'temperatura do produto durante a secagem e calor latente nela'], ['ε′, ε″', 'constante dielétrica e fator de perda do produto úmido'], [sub(i('L'), 'b') + ', ' + i('W'), 'carga de produto úmido na esteira (kg/m²) e largura da esteira']],
+        note: 'As micro-ondas aquecem o produto por dentro (a água é a molécula que mais absorve): o produto chega a T_p e a água evapora com a energia absorvida. Como a absorção cai quando o produto seca, a taxa cai no fim da secagem sem precisar de uma umidade crítica. A espessura da camada deve ficar abaixo de cerca de duas vezes D_p para aquecer por igual; 915 MHz penetra mais que 2450 MHz.'
       };
     },
     tray_dryer: (p) => {
@@ -6205,6 +6884,20 @@ window.SIMULAFACIL_CONFIG = {
       eqs: [eq(Q + ' = ' + F + '·[' + sub(i('h'), 'saí') + '(' + sub(T, 'saí') + ', ' + sub(P, 'saí') + ') − ' + sub(i('h'), 'ent') + ']'), eq(sub(P, 'saí') + ' = ' + sub(P, 'ent') + ' − Δ' + P), eq(i('h') + ' = ' + sum(i('i')) + ' ' + zi + sub(i('h'), i('i')) + '(' + T + ')' + ' &nbsp;(com calor latente na fração vaporizada)')],
       sym: [[Q, 'carga térmica (kW)'], [i('h'), 'entalpia molar da mistura'], ['Δ' + P, 'perda de carga']]
     }),
+    refrigerator: (p) => {
+      const h = n => sub(i('h'), n), m = sub('ṁ', 'r');
+      return {
+        name: 'Refrigerador: ciclo de compressão de vapor com ' + (p.fluid || 'R-134a') + ' (propriedades por Peng-Robinson)',
+        eqs: [eq(sub(Q, 'ev') + ' = ' + F + '·[' + sub(i('h'), 'ent') + ' − ' + sub(i('h'), 'saí') + ']', 'calor retirado do produto no evaporador'),
+          eq(sub(T, 'ev') + ' = ' + sub(T, 'saí') + ' − Δ' + sub(T, 'mín') + ',&nbsp; ' + sub(P, 'ev') + ' = ' + sub(sup(P, 'sat'), '') + '(' + sub(T, 'ev') + '),&nbsp; ' + sub(P, 'cd') + ' = ' + sup(P, 'sat') + '(' + sub(T, 'cd') + ')', 'pressões de saturação do refrigerante'),
+          eq(m + ' = ' + fr(sub(Q, 'ev'), h('1') + ' − ' + h('4')) + ',&nbsp; ' + h('4') + ' = ' + h('3'), 'vazão de refrigerante; válvula isentálpica'),
+          eq(h('2') + ' = ' + h('1') + ' + ' + fr(sub(h('2'), 's') + ' − ' + h('1'), sub(i('η'), 's')) + ',&nbsp; ' + sub(i('s'), '2s') + ' = ' + sub(i('s'), '1'), 'compressor real a partir do isentrópico'),
+          eq(i('W') + ' = ' + m + '(' + h('2') + ' − ' + h('1') + '),&nbsp; ' + sub(Q, 'cd') + ' = ' + m + '(' + h('2') + ' − ' + h('3') + ') = ' + sub(Q, 'ev') + ' + ' + i('W'), 'potência e calor rejeitado'),
+          eq('COP = ' + fr(sub(Q, 'ev'), i('W')) + ',&nbsp; ' + sub('COP', 'Carnot') + ' = ' + fr(sub(T, 'ev'), sub(T, 'cd') + ' − ' + sub(T, 'ev')), 'coeficiente de desempenho (T em K)')],
+        sym: [['1, 2, 3, 4', 'saída do evaporador, descarga do compressor, saída do condensador e entrada do evaporador'], [i('h') + ', ' + i('s'), 'entalpia e entropia específicas do refrigerante (referência IIR: líquido saturado a 0 °C com h = 200 kJ/kg e s = 1 kJ/(kg·K))'], [sub(i('η'), 's'), 'eficiência isentrópica do compressor']],
+        note: 'As propriedades do refrigerante vêm da equação de Peng-Robinson com as constantes críticas e o Cp de gás ideal do banco; as pressões de saturação ficam a cerca de 1 % das tabelas. O R-410A é tratado como pseudo-puro (mistura quase azeotrópica).'
+      };
+    },
     hx_shell: (p) => ({
       name: 'Trocador casco e tubo: método LMTD com fator de correção',
       eqs: [eq(Q + ' = ' + sub(F, 'q') + '(' + sub(i('h'), 'q,ent') + ' − ' + sub(i('h'), 'q,saí') + ')<br>= ' + sub(F, 'f') + '(' + sub(i('h'), 'f,saí') + ' − ' + sub(i('h'), 'f,ent') + ')', 'balanço de energia'),
@@ -6518,14 +7211,19 @@ window.SIMULAFACIL_CONFIG = {
       'Não há exemplo pronto com o separador. Um exercício útil é abrir o exemplo "Coluna shortcut BTX", anotar as recuperações de benzeno e tolueno obtidas e reproduzir o mesmo resultado com um separador, comparando o esforço de cálculo e a informação que cada modelo fornece (o separador não dá estágios, refluxo nem cargas térmicas).'] },
     spray_dryer: { ex: ex('spray-dryer-leite', 'Spray dryer contínuo: leite'), p: [
       'No spray dryer, a alimentação líquida é atomizada em gotas de dezenas de micrômetros dentro de uma câmara com ar quente. A enorme área das gotas faz a água evaporar em frações de segundo, e a gota fica perto da temperatura de bulbo úmido enquanto há água livre na superfície. Por isso é possível secar produtos sensíveis ao calor, como leite, café e enzimas, com ar de entrada bem quente.',
-      'É um equipamento contínuo: a corrente de alimentação entra pelo atomizador (porta de cima), o pó sai pela porta de baixo e o ar úmido sai pela porta "ar de saída", depois do ciclone. O ar é uma utilidade, tomado do ambiente e aquecido no aquecedor (a porta de energia mostra a carga dele). Com a corrente conectada, vazão, teor de sólidos e temperatura vêm dela: a água é a umidade e os demais componentes formam o sólido seco.',
+      'Na operação contínua (padrão), a corrente de alimentação entra pelo atomizador (porta de cima), o pó sai pela porta de baixo e o ar úmido sai pela porta "ar de saída", depois do ciclone. O ar é uma utilidade, tomado do ambiente e aquecido no aquecedor (a porta de energia mostra a carga dele). Com a corrente conectada, vazão, teor de sólidos e temperatura vêm dela: a água é a umidade e os demais componentes formam o sólido seco.',
       'O projeto sai de dois balanços: a água evaporada E é a diferença entre a água da alimentação e a do pó, e o ar seco necessário G_a vem do balanço de energia, com a temperatura de saída do ar escolhida pelo projetista. Quanto maior a diferença T_entrada − T_saída, menor o ar e maior a eficiência térmica η = (T_e − T_s)/(T_e − T_amb).',
-      'O exemplo seca 1 000 kg/h de leite com 20 % de sólidos (20 °C) até pó com 4 % de umidade, com ar de 110 °C na entrada e 55 °C na saída (H = 0,02 kg/kg): saem 208,3 kg/h de pó, evaporam-se 791,7 kg/h e são necessários cerca de 34 900 kg/h de ar seco, que sai com H = 0,043 kg/kg. A gota de 70 µm (raio de 35 µm) vira uma partícula de cerca de 21 µm de raio; com 3 s de residência do ar e 2 m de diâmetro, a câmara tem 28,9 m³ e 9,2 m de altura. Os avisos do exemplo são didáticos: com ar de entrada de só 110 °C, a umidade relativa de saída (41 %) é alta para leite, e a gota precisa de quase 1 s para perder a água livre.'] },
+      'O exemplo seca 1 000 kg/h de leite com 20 % de sólidos (20 °C) até pó com 4 % de umidade, com ar de 110 °C na entrada e 55 °C na saída (H = 0,02 kg/kg): saem 208,3 kg/h de pó, evaporam-se 791,7 kg/h e são necessários cerca de 34 900 kg/h de ar seco, que sai com H = 0,043 kg/kg. A gota de 70 µm (raio de 35 µm) vira uma partícula de cerca de 21 µm de raio; com 3 s de residência do ar e 2 m de diâmetro, a câmara tem 28,9 m³ e 9,2 m de altura. Os avisos do exemplo são didáticos: com ar de entrada de só 110 °C, a umidade relativa de saída (41 %) é alta para leite, e a gota precisa de quase 1 s para perder a água livre.', 'Na operação em batelada (campo Operação), um lote de alimentação do tanque é atomizado na vazão do atomizador: o tempo do lote é a massa do lote dividida por essa vazão, e o programa mostra o pó, a água evaporada, o ar e a energia gastos no lote. Nessa operação a corrente de alimentação não é usada.'] },
     freeze_dryer: { ex: ex('liofilizador-esteira', 'Liofilizador contínuo com esteira'), p: [
       'Na liofilização, o produto é congelado e a água sai do gelo direto para vapor (sublimação), sob vácuo. É o processo usado para vacinas, antibióticos, proteínas, probióticos e alimentos de alto valor: como tudo ocorre abaixo de 0 °C, a estrutura e a atividade biológica são preservadas.',
       'Na operação contínua, o produto congelado entra numa câmara de vácuo sobre uma esteira, numa camada fina, e sai seco do outro lado. A frente de sublimação recua da superfície para o meio da camada; o vapor atravessa a camada já seca, com fluxo N = K_g(p_gelo − p_s)/l, e vai ao condensador (porta "vapor"). Igualando esse fluxo à água que a frente libera, ρ_s ΔX dl/dt, chega-se ao tempo de residência t = ρ_s ΔX L_ef²/(2 K_g Δp), proporcional ao quadrado da espessura. Com aquecimento pelos dois lados, L_ef = L/2.',
       'O exemplo processa 50 kg/h de produto congelado com X_i = 4 kg de água/kg de sólido seco até X_f = 0,08, em camada de 5 mm numa esteira de 1 m, com p_gelo = 78 Pa (gelo a −23 °C), p_s = 40 Pa e K_g = 2,4·10⁻⁸ kg/(m·s·Pa). O tempo de residência é 21 min, a esteira anda a 21,3 m/h, o túnel tem 7,5 m e a sublimação de 39,2 kg/h de água exige 32 kW. ρ = 470 kg/m³ é a massa específica do produto congelado; o sólido seco por volume é ρ_s = ρ/(1 + X_i) = 94 kg/m³.',
       'A batelada em frascos continua disponível no campo Operação: lá, o calor da prateleira chega à frente de sublimação e o equilíbrio entre calor e massa fixa a temperatura do produto, que precisa ficar abaixo da temperatura de colapso (modelo de Pikal, com o espaço de projeto de temperatura da prateleira e pressão da câmara).'] },
+    microwave_dryer: { ex: ex('secador-micro-ondas', 'Secador de micro-ondas contínuo'), p: [
+      'No secador de micro-ondas, o calor não precisa atravessar o produto a partir da superfície: o campo eletromagnético (2 450 MHz nos fornos e túneis menores, 915 MHz nos túneis industriais) faz as moléculas de água girarem e o produto esquenta por dentro, por inteiro. Por isso a secagem é muito mais rápida que no ar quente, com menos encolhimento e cor mais preservada. O ar que passa pelo túnel só arrasta o vapor.',
+      'O modelo do programa é limitado pela energia: o produto aquece até a temperatura de secagem T_p e, daí em diante, a potência absorvida evapora a água, −dX/dt = η(X)·q/λ, com q = potência emitida por kg de sólido seco. A fração absorvida η(X) = η_máx·[1 − exp(−(X − X_e)/X_a)] cai quando o produto seca, porque o fator de perda dielétrica ε″ diminui com a umidade; é isso que produz o período de taxa decrescente. A equação tem solução analítica, e a potência para chegar a X_f não depende do tempo de residência: o tempo só define a carga na esteira, a potência específica (W/g) e o tamanho do túnel.',
+      'Na operação contínua, a fruta úmida entra numa esteira dentro do túnel e sai seca do outro lado; a porta de energia mostra a potência elétrica dos magnétrons (eficiência típica de 0,7 a 2 450 MHz e 0,85 a 915 MHz). Na batelada, uma bandeja fica na cavidade, como num forno doméstico, e o programa calcula o tempo para chegar a X_f e a curva de secagem para três potências.',
+      'O exemplo seca 100 kg/h de fatias de maçã com 85,7 % de água (X_i = 6) até X_f = 0,15 em 30 min, a 75 °C: evaporam 83,6 kg/h de água, os magnétrons emitem 78,8 kW (112,6 kW de eletricidade), o produto absorve 75 % disso e o consumo é de 4,85 MJ por kg de água, cerca de duas vezes o calor latente. A esteira de 0,6 m tem 10,4 m e anda a 0,35 m/min; a camada de 13,3 mm fica perto da profundidade de penetração (9,7 mm a 2 450 MHz), por isso o aquecimento é razoavelmente uniforme. Mude a frequência para 915 MHz e veja D_p subir para cerca de 26 mm.'] },
     tray_dryer: { ex: ex('secador-bandejas', 'Secador de bandejas contínuo (túnel)'), p: [
       'No secador de bandejas o ar quente escoa sobre o sólido úmido. Enquanto a superfície está coberta por água livre, ela se comporta como um termômetro de bulbo úmido: a temperatura fica em T_w e a taxa de secagem é constante, N_c = h(T − T_w)/λ_w, controlada só pelo ar. Quando a umidade cai abaixo da umidade crítica X_c, a água precisa migrar do interior até a superfície e a taxa diminui até zero na umidade de equilíbrio X_e.',
       'No secador contínuo de túnel, carrinhos com bandejas entram úmidos por uma ponta e saem secos pela outra. O tempo de residência é a soma do período de taxa constante, t_c = (L_s/A)(X_i − X_c)/N_c, e do decrescente, t_f = (L_s/A)(X_c − X_e)/N_c·ln((X_c − X_e)/(X_f − X_e)). O sólido retido no túnel é Ṁ_ss·τ, a área de bandejas é Ṁ_ss·τ/(L_s/A) e, a cada hora, entram Ṁ_ss/((L_s/A)·A_bandeja) bandejas.',
@@ -6604,6 +7302,11 @@ window.SIMULAFACIL_CONFIG = {
       'O resfriador é o inverso do aquecedor: retira calor da corrente, e a carga térmica aparece com sinal negativo. As mesmas equações de balanço de energia se aplicam, e o resfriamento pode provocar condensação parcial ou total, quando a temperatura cai abaixo do ponto de orvalho da mistura.',
       'Na prática, o resfriamento até temperaturas próximas da ambiente usa água de resfriamento; abaixo disso é preciso refrigeração, cujo custo cresce muito à medida que a temperatura cai. Por isso a temperatura de saída de um resfriador é uma decisão econômica, e não apenas técnica.',
       'No exemplo "Compressão, refrigeração e absorção de gás (Peng-Robinson)", o resfriador E-101 leva o gás comprimido de cerca de 130 °C a −10 °C, retirando 316 kW. A essa temperatura e 20 bar, cerca de 22 % da corrente condensa (fração vaporizada 0,78), formando um líquido rico em propano e butano que o flash V-101 separa. O exemplo "Destilação extrativa" também usa um resfriador para levar o etilenoglicol recuperado a 80 °C.'] },
+    refrigerator: { ex: ex('refrig', 'Chiller de água gelada com R-134a'), p: [
+      'O refrigerador resfria uma corrente abaixo da temperatura ambiente usando um ciclo de compressão de vapor. O refrigerante evapora a baixa pressão no evaporador, retirando calor do produto (1); o compressor eleva a pressão e a temperatura do vapor (2); no condensador o vapor cede calor ao ambiente e condensa (3); e a válvula de expansão derruba a pressão, formando uma mistura fria de líquido e vapor (4) que volta ao evaporador.',
+      'O desempenho é medido pelo coeficiente de desempenho, COP = Q_ev/W: quantos kW de frio cada kW de compressor produz. O limite teórico é o COP de Carnot, T_ev/(T_cd − T_ev), com T em kelvin. Por isso o COP cai quando a evaporação fica mais fria ou a condensação mais quente; aproximar essas duas temperaturas (trocadores maiores, condensação com água) economiza energia.',
+      'A escolha do refrigerante envolve pressões de trabalho, volume de vapor, temperatura de descarga, toxicidade, inflamabilidade e impacto ambiental. O R-22 destrói a camada de ozônio e está sendo eliminado; o R-134a e o R-410A têm GWP alto; a amônia (R-717), o propano (R-290), o isobutano (R-600a) e o CO2 (R-744) são alternativas naturais. No diagrama P–h, o ciclo aparece como um quadrilátero sobre a curva de saturação.',
+      'No exemplo "Chiller de água gelada com R-134a", 7 200 kg/h de água são resfriados de 12 °C para 7 °C, cerca de 45 kW (13 TR) de refrigeração. Com evaporação a 2 °C (3,1 bar), condensação a 40 °C (10,2 bar), compressor com 75 % de eficiência, 5 °C de superaquecimento e 3 °C de sub-resfriamento, circulam cerca de 1 050 kg/h de R-134a, o compressor consome 9,9 kW e o COP é 4,5, contra 7,2 do ciclo de Carnot entre as mesmas temperaturas.'] },
     hx_shell: { ex: ex('hx', 'Trocadores de calor casco e tubo + placas'), p: [
       'Num trocador casco e tubo, um fluido escoa por dentro dos tubos e o outro pelo casco, e o calor atravessa a parede dos tubos. O projeto combina dois balanços de energia (o calor perdido pelo fluido quente é o ganho pelo frio) com a equação de projeto Q = U·A·F·ΔT_ml, em que ΔT_ml é a média logarítmica das diferenças de temperatura nas extremidades e U é o coeficiente global de troca térmica.',
       'Quando há mais de um passe nos tubos, o escoamento não é contracorrente puro e a força motriz efetiva é menor: o fator de correção F, sempre menor que 1, corrige o ΔT_ml. Se F fica abaixo de cerca de 0,75, o trocador é ineficiente e convém usar cascos em série; o simulador calcula esse número de cascos e a área necessária.',
@@ -6626,7 +7329,7 @@ window.SIMULAFACIL_CONFIG = {
       'No exemplo "Compressão, refrigeração e absorção de gás (Peng-Robinson)", a válvula VLV-101 expande o líquido do flash V-101 de 20 para 5 bar. Cerca de 16 % do líquido vaporiza e a temperatura cai de −10 °C para cerca de −22,5 °C, sem nenhum equipamento de refrigeração: só pela queda de pressão.'] },
     flash: { ex: ex('flash', 'Flash com reciclo (benzeno/tolueno)'), p: [
       'O vaso flash é um único estágio de equilíbrio líquido-vapor. A alimentação entra, as fases se separam e saem em equilíbrio, com yᵢ = Kᵢ·xᵢ. O cálculo combina as equações MESH: balanço de massa por componente, equilíbrio, somatórios das frações e balanço de energia. A equação de Rachford-Rice dá a fração vaporizada ψ que satisfaz os balanços.',
-      'As constantes de equilíbrio dependem do modelo termodinâmico: lei de Raoult para misturas ideais, Raoult modificada com coeficientes de atividade (NRTL, UNIQUAC, UNIFAC) para líquidos não ideais, ou coeficientes de fugacidade de uma equação de estado (Peng-Robinson, SRK) em pressões elevadas. O flash pode ser especificado por T e P, ou ser adiabático, quando a temperatura resulta do balanço de energia.',
+      'As constantes de equilíbrio dependem do modelo termodinâmico: lei de Raoult para misturas ideais, Raoult modificada com coeficientes de atividade (NRTL, UNIQUAC, UNIFAC) para líquidos não ideais, ou coeficientes de fugacidade de uma equação de estado (Peng-Robinson, SRK) em pressões elevadas. O PC-SAFT, equação de estado molecular que trata cada molécula como uma cadeia de segmentos com dispersão e ligações de hidrogênio, descreve bem água, álcoois, polímeros e líquidos iônicos, como na absorção de CO2. O flash pode ser especificado por T e P, ou ser adiabático, quando a temperatura resulta do balanço de energia.',
       'No exemplo "Flash com reciclo (benzeno/tolueno)", o V-101 é adiabático a 1 atm: o líquido aquecido a 100 °C sob pressão expande, cerca de 4 % vaporiza e a temperatura cai para 92,5 °C. Os valores de K mostram a separação: benzeno 1,45 (concentra no vapor) e tolueno 0,58 (concentra no líquido). Um único estágio separa pouco, e é por isso que se usam colunas com vários estágios.'] },
     decanter: { ex: ex('lle', 'Extração líquido-líquido: acetona da água com tolueno'), p: [
       'O decantador separa duas fases líquidas imiscíveis ou parcialmente miscíveis, como água e um hidrocarboneto. No equilíbrio líquido-líquido, a atividade de cada componente é igual nas duas fases, xᵢᴵγᵢᴵ = xᵢᴵᴵγᵢᴵᴵ; a razão Kᵢ = γᵢᴵ/γᵢᴵᴵ faz o papel da constante de equilíbrio, e uma equação do tipo Rachford-Rice dá a fração da alimentação que vai para cada fase.',
@@ -6729,7 +7432,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   const U = SF.units, N = SF.num;
   // entradas opcionais: sem corrente conectada, esses equipamentos usam os campos (vazão, composição) e ainda geram as correntes de saída
-  const OPTIONAL_IN = { mixer: ['in2', 'in3', 'in4'], column: ['feed2', 'feed3'], crystallizer: ['feed'], tray_dryer: ['feed'], spray_dryer: ['feed'], freeze_dryer: ['feed'],
+  const OPTIONAL_IN = { mixer: ['in2', 'in3', 'in4'], column: ['feed2', 'feed3'], crystallizer: ['feed'], tray_dryer: ['feed'], spray_dryer: ['feed'], freeze_dryer: ['feed'], microwave_dryer: ['feed'],
     bioreactor_tosetto: ['feed', 'side'], bioreactor_1: ['feed'], bioreactor_2: ['feed', 'side'], bioreactor_monod: ['feed'], bioreactor_verhulst: ['feed'],
     biodiesel_reactor: ['oil', 'alcohol'], pid_cstr: ['feed'],
     blast_furnace: ['ore', 'coke', 'flux', 'blast'], cement_kiln: ['meal', 'fuel', 'air'], silo: ['feed'], thickener: ['feed'], kraft_digester: ['chips', 'white_liquor'] };
@@ -6908,6 +7611,7 @@ window.SIMULAFACIL_CONFIG = {
     separator: { w: 60, h: 64, ports: { in: P(0, 32, 'l', 'in'), out1: P(60, 14, 'r', 'out'), out2: P(60, 50, 'r', 'out') } },
     heater: { w: 56, h: 56, ports: { in: P(0, 28, 'l', 'in'), out: P(56, 28, 'r', 'out'), q_in: P(28, 56, 'd', 'ein') } },
     cooler: { w: 56, h: 56, ports: { in: P(0, 28, 'l', 'in'), out: P(56, 28, 'r', 'out'), q_out: P(28, 56, 'd', 'eout') } },
+    refrigerator: { w: 56, h: 64, ports: { in: P(0, 42, 'l', 'in'), out: P(56, 42, 'r', 'out') } },
     hx_shell: { w: 120, h: 56, ports: { hot_in: P(30, 0, 'u', 'in'), hot_out: P(92, 56, 'd', 'out'), cold_in: P(0, 28, 'l', 'in'), cold_out: P(120, 28, 'r', 'out') } },
     hx_plate: { w: 64, h: 90, ports: { hot_in: P(0, 14, 'l', 'in'), hot_out: P(64, 76, 'r', 'out'), cold_in: P(0, 76, 'l', 'in'), cold_out: P(64, 14, 'r', 'out') } },
     evap_single: { w: 64, h: 96, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 62, 'l', 'in'), vapor: P(64, 10, 'r', 'out'), product: P(64, 88, 'r', 'out') } },
@@ -6931,6 +7635,7 @@ window.SIMULAFACIL_CONFIG = {
     bioreactor_verhulst: { w: 92, h: 104, ports: { feed: P(0, 40, 'l', 'in'), gas: P(92, 14, 'r', 'out'), product: P(92, 80, 'r', 'out') } },
     tray_dryer: { w: 130, h: 100, ports: { feed: P(0, 74, 'l', 'in'), q_in: P(38, 100, 'd', 'ein'), exhaust: P(130, 12, 'r', 'out'), product: P(130, 74, 'r', 'out') } },
     spray_dryer: { w: 120, h: 150, ports: { feed: P(44, 0, 'u', 'in'), q_in: P(0, 14, 'l', 'ein'), exhaust: P(120, 44, 'r', 'out'), product: P(44, 150, 'd', 'out') } },
+    microwave_dryer: { w: 140, h: 96, ports: { feed: P(0, 54, 'l', 'in'), q_in: P(70, 0, 'u', 'ein'), vapor: P(140, 28, 'r', 'out'), product: P(140, 54, 'r', 'out') } },
     freeze_dryer: { w: 140, h: 114, ports: { feed: P(0, 46, 'l', 'in'), q_in: P(46, 0, 'u', 'ein'), product: P(94, 114, 'd', 'out'), vapor: P(112, 114, 'd', 'out') } },
     crystallizer: { w: 110, h: 124, ports: { feed: P(0, 34, 'l', 'in'), vapor: P(55, 0, 'u', 'out'), q_out: P(30, 124, 'd', 'eout'), liquor: P(110, 40, 'r', 'out'), crystals: P(110, 116, 'r', 'out') } },
     biodiesel_reactor: { w: 120, h: 104, ports: { oil: P(0, 28, 'l', 'in'), alcohol: P(0, 44, 'l', 'in'), product: P(120, 80, 'r', 'out') } },
@@ -7018,6 +7723,8 @@ window.SIMULAFACIL_CONFIG = {
     evap_double: () => evapBodies(2),
     heater: () => [C(28, 28, 24), zig(8, 28, 40, 'hot')],
     cooler: () => [C(28, 28, 24), zig(8, 28, 40, 'cold')],
+    refrigerator: () => [R(8, 2, 40, 60, 5), L([[8, 22], [48, 22]]), L([[41, 8], [41, 16]]), L([[41, 28], [41, 38]]), L([[0, 42], [8, 42]]), L([[48, 42], [56, 42]]),
+      L([[24, 33], [24, 55]], 'cold'), L([[14.5, 38.5], [33.5, 49.5]], 'cold'), L([[14.5, 49.5], [33.5, 38.5]], 'cold'), L([[21, 35], [24, 38], [27, 35]], 'cold'), L([[21, 53], [24, 50], [27, 53]], 'cold')],
     hx_shell: () => [R(10, 10, 100, 36, 18), L([[24, 10], [24, 46]]), L([[24, 20], [100, 20]]), L([[24, 28], [100, 28]]), L([[24, 36], [100, 36]]),
       L([[30, 0], [30, 10]]), L([[92, 46], [92, 56]]), L([[0, 28], [10, 28]]), L([[110, 28], [120, 28]])],
     hx_plate: () => [R(6, 4, 52, 82, 4), L([[16, 8], [16, 82]]), L([[24, 8], [24, 82]]), L([[32, 8], [32, 82]]), L([[40, 8], [40, 82]]), L([[48, 8], [48, 82]]),
@@ -7078,6 +7785,15 @@ window.SIMULAFACIL_CONFIG = {
       C(30, 70, 1.8, 'hot'), C(40, 76, 1.8, 'hot'), C(50, 72, 1.8, 'hot'), C(58, 80, 1.8, 'hot'), C(36, 88, 1.8, 'hot'), C(48, 92, 1.8, 'hot'),
       L([[0, 14], [26, 14], [26, 22]], 'hot'), L([[44, 132], [44, 150]]), L([[74, 40], [92, 40], [92, 52]]),
       R(86, 52, 22, 26, 2), Pg([[86, 78], [108, 78], [100, 96], [94, 96]]), L([[97, 52], [97, 44], [120, 44]]), L([[97, 96], [97, 106]]), T(66, 146, 'pó')],
+    microwave_dryer: () => { // túnel com magnétrons no teto, ondas descendo sobre o produto na esteira transportadora
+      const wave = (cx, y0, y1) => { const pts = []; for (let k = 0; k <= 32; k++) { const y = y0 + (y1 - y0) * k / 32; pts.push([cx + 3.4 * Math.sin(k * Math.PI / 4), y]); } return L(pts, 'hot'); };
+      const o = [R(16, 18, 108, 50, 4), R(30, 4, 20, 12, 2, 'bodyw'), R(60, 4, 20, 12, 2, 'bodyw'), R(90, 4, 20, 12, 2, 'bodyw'), L([[70, 0], [70, 4]], 'hot')];
+      [40, 70, 100].forEach(x => o.push(L([[x, 16], [x, 20]]), wave(x, 22, 44)));
+      [26, 42, 58, 74, 90, 106].forEach(x => o.push(R(x, 49, 10, 5, 1, 'bodyw')));
+      o.push(L([[8, 54], [132, 54]]), L([[12, 62], [128, 62]]), C(12, 58, 4), C(128, 58, 4), L([[0, 54], [8, 54]]), L([[132, 54], [140, 54]]),
+        L([[118, 28], [140, 28]], 'lnd'), T(70, 86, 'micro-ondas'));
+      return o;
+    },
     freeze_dryer: () => { // câmara com prateleiras e frascos, condensador frio ao lado e bomba de vácuo
       const o = [R(4, 6, 84, 90, 6), L([[10, 36], [82, 36]], 'hot'), L([[10, 70], [82, 70]], 'hot')];
       [16, 30, 44, 58, 72].forEach(x => { o.push(R(x - 4, 22, 8, 14, 1, 'bodyw'), R(x - 4, 56, 8, 14, 1, 'bodyw'), L([[x - 3, 32], [x + 3, 32]], 'cold'), L([[x - 3, 66], [x + 3, 66]], 'cold')); });
@@ -7580,11 +8296,12 @@ window.SIMULAFACIL_CONFIG = {
         return { data, layout: L };
       }
       case 'curves': { // curvas genéricas com linhas horizontais de referência
-        const data = d.series.map((s, k) => ({ x: s.x, y: s.y, mode: s.mode || (s.markers ? 'lines+markers' : 'lines'), name: s.name, line: { color: s.color || PALETTE[k % 8], width: s.width || 3, dash: s.dash || 'solid' }, marker: { size: s.size || 6, symbol: s.symbol || 'circle', color: s.color || PALETTE[k % 8], line: { color: '#111', width: s.size > 9 ? 1 : 0 } } }));
+        const data = d.series.map((s, k) => ({ x: s.x, y: s.y, mode: s.mode || (s.markers ? 'lines+markers' : 'lines'), name: s.name, text: s.text, textposition: s.text ? 'top left' : undefined, textfont: s.text ? { size: 18, color: s.color || '#111' } : undefined, line: { color: s.color || PALETTE[k % 8], width: s.width || 3, dash: s.dash || 'solid' }, marker: { size: s.size || 6, symbol: s.symbol || 'circle', color: s.color || PALETTE[k % 8], line: { color: '#111', width: s.size > 9 ? 1 : 0 } } }));
         const xr = d.xRange || [Math.min.apply(null, d.series[0].x), Math.max.apply(null, d.series[0].x)];
         (d.hlines || []).forEach(h => data.push({ x: xr, y: [h.y, h.y], mode: 'lines', name: h.name, line: { color: h.color || css('--muted'), width: 2, dash: 'dash' }, hoverinfo: 'name' }));
         const L = baseLayout(p.title, d.xLabel || '', d.yLabel || '');
         if (d.xRange) L.xaxis.range = d.xRange; if (d.yRange) L.yaxis.range = d.yRange;
+        if (d.yLog) L.yaxis.type = 'log';
         if (d.hlines && d.hlines.length) { L.legend = Object.assign(L.legend, { orientation: 'h', xref: 'container', yref: 'container', x: 0.02, xanchor: 'left', y: 0.01, yanchor: 'bottom', bgcolor: 'rgba(0,0,0,0)', borderwidth: 0 }); L.margin = Object.assign({}, L.margin, { b: 150 }); L.height = 560; }
         return { data, layout: L };
       }
@@ -7698,14 +8415,20 @@ window.SIMULAFACIL_CONFIG = {
         return { data: d.series.map((s, k) => ({ x: d.stage, y: s.v, mode: 'lines+markers', name: s.name, line: { color: PALETTE[k % 8], width: 3 }, marker: { size: 9 } })), layout: baseLayout(p.title, 'Estágio', 'Fração') };
       case 'txy': {
         const L = baseLayout(p.title, 'Fração molar de ' + d.n1, 'Temperatura (°C)');
-        const data = [{ x: d.x, y: d.T, mode: 'lines', name: 'Ponto de bolha (líquido)', line: { color: '#2563c9', width: 3 } }, { x: d.y, y: d.T, mode: 'lines', name: 'Ponto de orvalho (vapor)', line: { color: '#d1302b', width: 3 } }];
+        const lb = d.label ? ' – ' + d.label : '';
+        const data = [{ x: d.x, y: d.T, mode: 'lines', name: 'Ponto de bolha (líquido)' + lb, line: { color: '#2563c9', width: 3 } }, { x: d.y, y: d.T, mode: 'lines', name: 'Ponto de orvalho (vapor)' + lb, line: { color: '#d1302b', width: 3 } }];
+        if (d.cmp) data.push({ x: d.cmp.x, y: d.cmp.T, mode: 'lines', name: 'Bolha – ' + d.cmp.label, line: { color: '#2563c9', width: 2.5, dash: 'dash' } }, { x: d.cmp.y, y: d.cmp.T, mode: 'lines', name: 'Orvalho – ' + d.cmp.label, line: { color: '#d1302b', width: 2.5, dash: 'dash' } });
+        if (d.exp) data.push({ x: d.exp.x, y: d.exp.T, mode: 'markers', name: 'Experimental: líquido', marker: { symbol: 'circle-open', color: '#0b2f80', size: 9, line: { width: 2 } } }, { x: d.exp.y, y: d.exp.T, mode: 'markers', name: 'Experimental: vapor', marker: { symbol: 'square-open', color: '#8a1410', size: 9, line: { width: 2 } } });
         if (d.az) data.push({ x: [d.az.x], y: [d.az.T], mode: 'markers', name: 'Azeótropo', marker: { color: '#e0a100', size: 13, line: { color: '#000', width: 1 } } });
         L.xaxis.range = [0, 1];
         return { data, layout: L };
       }
       case 'xy': {
         const L = baseLayout(p.title, 'x (' + d.n1 + ', líquido)', 'y (' + d.n1 + ', vapor)'); L.xaxis.range = [0, 1]; L.yaxis.range = [0, 1]; L.yaxis.scaleanchor = 'x';
-        return { data: [{ x: [0, 1], y: [0, 1], mode: 'lines', name: '45°', line: { dash: 'dash', color: css('--muted') } }, { x: d.x, y: d.y, mode: 'lines', name: 'Equilíbrio', line: { color: '#1f3fbf', width: 3.5 } }], layout: L };
+        const data = [{ x: [0, 1], y: [0, 1], mode: 'lines', name: '45°', line: { dash: 'dot', color: css('--muted') } }, { x: d.x, y: d.y, mode: 'lines', name: 'Equilíbrio' + (d.label ? ' – ' + d.label : ''), line: { color: '#1f3fbf', width: 3.5 } }];
+        if (d.cmp) data.push({ x: d.cmp.x, y: d.cmp.y, mode: 'lines', name: 'Equilíbrio – ' + d.cmp.label, line: { color: '#e0532f', width: 2.5, dash: 'dash' } });
+        if (d.exp) data.push({ x: d.exp.x, y: d.exp.y, mode: 'markers', name: 'Experimental', marker: { symbol: 'circle-open', color: '#11262d', size: 9, line: { width: 2 } } });
+        return { data, layout: L };
       }
       default: return null;
     }
@@ -8290,6 +9013,42 @@ end
         "xlabel('Tempo no túnel (h)', 'FontSize', FS); ylabel('X (kg H_2O/kg ss)', 'FontSize', FS); title('Umidade ao longo do túnel', 'FontSize', FS); set(gca, 'FontSize', FS);",
         "subplot(1, 2, 2); plot(Lv*1000, tv, 'Color', [0.48 0.24 0.72], 'LineWidth', 2.5); hold on; plot(L_camada*1000, t_res_h, 'kd', 'MarkerSize', 10, 'MarkerFaceColor', 'k'); grid on;",
         "xlabel('Espessura da camada (mm)', 'FontSize', FS); ylabel('Tempo de residência (h)', 'FontSize', FS); title('Tempo cresce com L^2', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'microwave_dryer' && (r.mw || r.mwb)) {
+      const g = r.mw || r.mwb, cont = !!r.mw;
+      const L0 = ['function ' + fname + '(D, FS)', header, '% Secador de micro-ondas ' + (cont ? 'contínuo (túnel com esteira)' : 'em batelada (bandeja na cavidade)') + ': aquecimento volumétrico e secagem limitada pela energia absorvida.', printRes.join('\n'),
+        'X0 = ' + n2s(g.X0) + '; T0 = ' + n2s(g.T0) + '; Xe = ' + n2s(g.Xe) + '; Xa = ' + n2s(g.Xa) + ';   % kg/kg (base seca) e °C',
+        'eta_max = ' + n2s(g.etaM) + '; eta_mag = ' + n2s(g.etaG) + '; cps = ' + n2s(g.cps * 1000) + '; cpw = 4180; Tp = ' + n2s(g.Tp) + '; lam = ' + n2s(g.lam) + ';   % J/(kg.K), °C e J/kg (calor latente a Tp)',
+        'eta = @(X) eta_max*(1 - exp(-max(0, X - Xe)/Xa));      % fração da potência absorvida',
+        'lem1 = @(v) v + log(-expm1(-v));                       % ln(e^v - 1), estável',
+        'softp = @(z) max(z, 0) + log1p(exp(-abs(z)));          % ln(1 + e^z), estável',
+        'Kh = (cps + X0*cpw)*(Tp - T0)/eta(X0);                  % J emitidos por kg de sólido seco para aquecer até Tp',
+        'Kd = @(X) lam*Xa/eta_max*(lem1((X0 - Xe)/Xa) - lem1((X - Xe)/Xa));   % J/kg ss para secar até X',
+        'Xt = @(t, q) X0*(t <= Kh/q) + (t > Kh/q).*(Xe + Xa*softp(lem1((X0 - Xe)/Xa) - eta_max*q/lam*(t - Kh/q)/Xa));'];
+      if (cont) {
+        L0.push('m_feed = ' + n2s(g.M) + '; m_s = m_feed/(1 + X0)/3600; tau = ' + n2s(g.tau) + ';   % kg/h, kg/s de sólido seco e s',
+          g.sp ? 'P_mw = ' + n2s(g.Pmw) + '; q = P_mw/(m_s*tau); Xf = Xt(tau, q);   % potência informada (W) => umidade de saída'
+            : 'Xf = ' + n2s(g.Xf) + '; P_mw = m_s*(Kh + Kd(Xf)); q = P_mw/(m_s*tau);   % umidade final informada => potência (W)',
+          'P_el = P_mw/eta_mag; E = m_s*3600*(X0 - Xf); Lb = ' + n2s(g.Lb) + '; W = ' + n2s(g.We) + ';',
+          'M_hold = m_s*tau*(1 + X0); A_est = M_hold/Lb; L_tunel = A_est/W; v_est = L_tunel/(tau/60);',
+          "fprintf('  MATLAB: Xf = %.4f, P_mo = %.2f kW, P_el = %.2f kW, água = %.2f kg/h, %.2f MJ/kg, esteira = %.2f m^2, túnel = %.2f m, v = %.3f m/min\\n', Xf, P_mw/1000, P_el/1000, E, P_el/(E/3600)/1e6, A_est, L_tunel, v_est);",
+          't = linspace(0, tau, 400); X = Xt(t, q); Pv = linspace(0.05, 2.5, 120)*P_mw; Xfv = arrayfun(@(P) Xt(tau, P/(m_s*tau)), Pv);',
+          "figure('Name', " + str(b.name + ' — micro-ondas contínuo') + ", 'Color', 'w', 'Position', [60 80 1300 560]);",
+          "subplot(1, 2, 1); plot(t/60, X, 'b-', 'LineWidth', 2.5); hold on; plot(tau/60, Xf, 'ks', 'MarkerSize', 10, 'MarkerFaceColor', 'k'); grid on;",
+          "xlabel('Tempo na esteira (min)', 'FontSize', FS); ylabel('X (kg H_2O/kg ss)', 'FontSize', FS); title('Umidade ao longo do túnel', 'FontSize', FS); set(gca, 'FontSize', FS);",
+          "subplot(1, 2, 2); semilogy(Pv/1000, Xfv, 'b-', 'LineWidth', 2.5); hold on; semilogy(P_mw/1000, Xf, 'kd', 'MarkerSize', 10, 'MarkerFaceColor', 'k'); grid on;",
+          "xlabel('Potência de micro-ondas (kW)', 'FontSize', FS); ylabel('X_f (kg/kg)', 'FontSize', FS); title('Efeito da potência', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      } else {
+        L0.push('M_s = ' + n2s(g.Ms) + '; P = ' + n2s(g.Pb) + '; Xf = ' + n2s(g.Xf) + ';   % kg de sólido seco, W e kg/kg',
+          'q = P/M_s; t_f = (Kh + Kd(Xf))/q; E_el = P*t_f/eta_mag;',
+          "fprintf('  MATLAB: tempo = %.2f min, água = %.4f kg, eletricidade = %.4f kWh (%.2f MJ/kg de água)\\n', t_f/60, M_s*(X0 - Xf), E_el/3.6e6, E_el/(M_s*(X0 - Xf))/1e6);",
+          "t = linspace(0, 1.6*t_f, 400); figure('Name', " + str(b.name + ' — micro-ondas em batelada') + ", 'Color', 'w', 'Position', [60 80 900 560]); hold on;",
+          "k = [0.5 1 1.5]; for j = 1:3, plot(t/60, Xt(t, k(j)*q), 'LineWidth', 1.5 + (j == 2)); end; plot(t_f/60, Xf, 'ks', 'MarkerSize', 10, 'MarkerFaceColor', 'k'); grid on;",
+          "legend(sprintf('P = %.0f W', 0.5*P), sprintf('P = %.0f W', P), sprintf('P = %.0f W', 1.5*P), 'X_f');",
+          "xlabel('Tempo (min)', 'FontSize', FS); ylabel('X (kg H_2O/kg ss)', 'FontSize', FS); title('Curva de secagem por micro-ondas', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      }
+      out.push(L0.join('\n'));
       return out.join('\n');
     }
     if (b.type === 'biodiesel_reactor' && r.bdc) {
@@ -10188,6 +10947,40 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         "    a2.plot(Lv * 1000, tv, color='#7a3db8', lw=2.5); a2.plot(L_camada * 1000, t_res_h, 'kd', ms=9); a2.set_xlabel('Espessura da camada (mm)'); a2.set_ylabel('Tempo de residência (h)'); a2.set_title('O tempo cresce com L²'); a2.grid(True)",
         '    f1.tight_layout()', '    return [f1]']).join('\n');
     }
+    if (b.type === 'microwave_dryer' && (r.mw || r.mwb)) {
+      const g = r.mw || r.mwb, cont = !!r.mw;
+      const L0 = head.concat([
+        '    # Secador de micro-ondas ' + (cont ? 'contínuo (túnel com esteira)' : 'em batelada (bandeja na cavidade)') + ': aquecimento volumétrico e secagem limitada pela energia absorvida',
+        '    X0, T0, Xe, Xa = ' + [g.X0, g.T0, g.Xe, g.Xa].map(n2s).join(', ') + '   # kg/kg (base seca) e °C',
+        '    eta_max, eta_mag, cps, cpw, Tp, lam = ' + [g.etaM, g.etaG, g.cps * 1000, 4180, g.Tp, g.lam].map(n2s).join(', ') + '   # J/(kg·K), °C e J/kg (calor latente a Tp)',
+        '    eta = lambda X: eta_max * (1 - np.exp(-np.maximum(0, X - Xe) / Xa))   # fração da potência absorvida',
+        '    lem1 = lambda v: v + np.log(-np.expm1(-v))              # ln(e^v - 1), estável',
+        '    softp = lambda z: np.maximum(z, 0) + np.log1p(np.exp(-np.abs(z)))   # ln(1 + e^z), estável',
+        '    Kh = (cps + X0 * cpw) * (Tp - T0) / eta(X0)             # J emitidos por kg de sólido seco para aquecer até Tp',
+        '    Kd = lambda X: lam * Xa / eta_max * (lem1((X0 - Xe) / Xa) - lem1((X - Xe) / Xa))',
+        '    def Xt(t, q):',
+        '        t = np.asarray(t, dtype=float); th = Kh / q',
+        '        return np.where(t <= th, X0, Xe + Xa * softp(lem1((X0 - Xe) / Xa) - eta_max * q / lam * (t - th) / Xa))']);
+      if (cont) L0.push('    m_feed, tau = ' + n2s(g.M) + ', ' + n2s(g.tau) + '; m_s = m_feed / (1 + X0) / 3600   # kg/h, s e kg/s de sólido seco',
+        g.sp ? '    P_mw = ' + n2s(g.Pmw) + '; q = P_mw / (m_s * tau); Xf = float(Xt(tau, q))   # potência informada (W) => umidade de saída'
+          : '    Xf = ' + n2s(g.Xf) + '; P_mw = m_s * (Kh + Kd(Xf)); q = P_mw / (m_s * tau)   # umidade final informada => potência (W)',
+        '    P_el = P_mw / eta_mag; E = m_s * 3600 * (X0 - Xf); Lb, W = ' + n2s(g.Lb) + ', ' + n2s(g.We),
+        '    M_hold = m_s * tau * (1 + X0); A_est = M_hold / Lb; L_tunel = A_est / W; v_est = L_tunel / (tau / 60)',
+        "    print(f'  Python: Xf = {Xf:.4f}, P_mo = {P_mw/1000:.2f} kW, P_el = {P_el/1000:.2f} kW, água = {E:.2f} kg/h, {P_el/(E/3600)/1e6:.2f} MJ/kg, esteira = {A_est:.2f} m², túnel = {L_tunel:.2f} m, v = {v_est:.3f} m/min')",
+        '    t = np.linspace(0, tau, 400); X = Xt(t, q); Pv = np.linspace(0.05, 2.5, 120) * P_mw; Xfv = np.array([Xt(tau, P / (m_s * tau)) for P in Pv])',
+        '    f1, (a1, a2) = plt.subplots(1, 2, figsize=(15, 6.5))',
+        "    a1.plot(t / 60, X, 'b', lw=2.5); a1.plot(tau / 60, Xf, 'ks', ms=9); a1.set_xlabel('Tempo na esteira (min)'); a1.set_ylabel('X (kg H₂O/kg ss)'); a1.set_title('Umidade ao longo do túnel'); a1.grid(True)",
+        "    a2.semilogy(Pv / 1000, Xfv, 'b', lw=2.5); a2.semilogy(P_mw / 1000, Xf, 'kd', ms=9); a2.set_xlabel('Potência de micro-ondas (kW)'); a2.set_ylabel('X_f (kg/kg)'); a2.set_title('Efeito da potência'); a2.grid(True)",
+        '    f1.tight_layout()', '    return [f1]');
+      else L0.push('    M_s, P, Xf = ' + [g.Ms, g.Pb, g.Xf].map(n2s).join(', ') + '   # kg de sólido seco, W e kg/kg',
+        '    q = P / M_s; t_f = (Kh + Kd(Xf)) / q; E_el = P * t_f / eta_mag',
+        "    print(f'  Python: tempo = {t_f/60:.2f} min, água = {M_s*(X0-Xf):.4f} kg, eletricidade = {E_el/3.6e6:.4f} kWh ({E_el/(M_s*(X0-Xf))/1e6:.2f} MJ/kg de água)')",
+        '    t = np.linspace(0, 1.6 * t_f, 400); f1, a1 = plt.subplots(figsize=(10, 6.5))',
+        "    for k in (0.5, 1, 1.5): a1.plot(t / 60, Xt(t, k * q), lw=3 if k == 1 else 2, label=f'P = {k*P:.0f} W')",
+        "    a1.plot(t_f / 60, Xf, 'ks', ms=9, label='X_f'); a1.set_xlabel('Tempo (min)'); a1.set_ylabel('X (kg H₂O/kg ss)'); a1.set_title('Curva de secagem por micro-ondas'); a1.grid(True); a1.legend()",
+        '    f1.tight_layout()', '    return [f1]');
+      return L0.join('\n');
+    }
     if (b.type === 'biodiesel_reactor' && r.bdc) {
       const g = r.bdc;
       return head.concat([
@@ -11383,6 +12176,15 @@ def pfr_transiente(P, nome):
         { id: 'EQ', type: 'energy', name: 'Q sublimação', params: { Q: '' } },
         { id: 'PL', type: 'product', name: 'Produto liofilizado' }, { id: 'PV', type: 'product', name: 'Vapor ao condensador' }],
       streams: [S('1', 'F', 'out', 'LF', 'feed', 'Congelado'), S('E1', 'EQ', 'eo', 'LF', 'q_in', 'Q'), S('2', 'LF', 'product', 'PL', 'in', 'Seco'), S('3', 'LF', 'vapor', 'PV', 'in', 'Vapor')] } },
+    { key: 'secador-micro-ondas', title: 'Secador de micro-ondas contínuo: fatias de maçã numa esteira, potência dos magnétrons, consumo de energia e comprimento do túnel', fs: {
+      name: 'Secagem contínua por micro-ondas', components: ['water', 'dry-solids'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Fatias de maçã (85,7 % de água)', params: { T: 25, P: 1.01325, vf: '', flow: 100, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.857143, 'dry-solids': 0.142857 } } },
+        { id: 'MO', type: 'microwave_dryer', name: 'Túnel de micro-ondas MO-101', params: { mode: 'contínuo: túnel de micro-ondas com esteira (alimentação → produto)', spec: 'umidade final X_f (calcula a potência de micro-ondas)',
+          Xf: 0.15, tau: 30, Tp: 75, cps: 1.5, Xe: 0.05, etaA: 0.85, Xa: 0.5, etaG: 0.7, freq: '2450 MHz', epsR: 55, epsI: 15, rhoB: 600, Lb: 8, We: 0.6 } },
+        { id: 'EQ', type: 'energy', name: 'Eletricidade dos magnétrons', params: { Q: '' } },
+        { id: 'PS', type: 'product', name: 'Maçã seca' }, { id: 'PV', type: 'product', name: 'Vapor de água (com o ar de arraste)' }],
+      streams: [S('1', 'F', 'out', 'MO', 'feed', 'Maçã úmida'), S('E1', 'EQ', 'eo', 'MO', 'q_in', 'P elétrica'), S('2', 'MO', 'product', 'PS', 'in', 'Seca'), S('3', 'MO', 'vapor', 'PV', 'in', 'Vapor')] } },
     { key: 'cristalizador-msmpr', title: 'Cristalizador contínuo MSMPR: produção, tempo de residência, nucleação e distribuição de tamanhos (soluto genérico)', fs: {
       name: 'Cristalização contínua MSMPR', components: ['water', 'comp-A'], model: 'IDEAL',
       blocks: [
@@ -11617,6 +12419,31 @@ def pfr_transiente(P, nome):
         { id: 'W', type: 'product', name: 'Resíduo W' }],
       streams: [S('1', 'F', 'out', 'C', 'feed'), S('2', 'C', 'distillate', 'D', 'in'), S('3', 'C', 'bottoms', 'W', 'in')] } },
     // ---- bioprocessos (por último na lista e na tela inicial)
+    { key: 'refrig', title: 'Chiller de água gelada com R-134a (refrigerador: ciclo de compressão de vapor e diagrama P–h)', fs: {
+      name: 'Chiller de água gelada', components: ['water'], model: 'NRTL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Água de retorno', params: { T: 12, P: 2, vf: '', flow: 7200, flowUnit: 'kg/h', basis: 'molar', composition: { water: 1 } } },
+        { id: 'CH', type: 'refrigerator', name: 'Chiller CH-01', params: { T: 7, fluid: 'R-134a', Tcd: 40, dTev: 5, eta: 0.75, sh: 5, sc: 3, dP: 0.3 } },
+        { id: 'P', type: 'product', name: 'Água gelada' }],
+      streams: [S('1', 'F', 'out', 'CH', 'in', 'Retorno 12 °C'), S('2', 'CH', 'out', 'P', 'in', 'Água gelada 7 °C')] } },
+    { key: 'co2-liquido-ionico', title: 'Captura de CO₂ com líquido iônico [C4mim][NTf2] — modelo PC-SAFT (absorção a 20 bar e regeneração a 1 atm)', fs: {
+      name: 'Captura de CO2 com líquido iônico', components: ['co2', 'nitrogen', 'il-c4mim-ntf2'], model: 'PCSAFT',
+      blocks: [
+        { id: 'G', type: 'feed', name: 'Gás de combustão', params: { T: 25, P: 20, vf: '', flow: 10, flowUnit: 'kmol/h', basis: 'molar', composition: { co2: 0.15, nitrogen: 0.85 } } },
+        { id: 'IL', type: 'feed', name: 'Líquido iônico pobre', params: { T: 25, P: 20, vf: '', flow: 20, flowUnit: 'kmol/h', basis: 'molar', composition: { 'il-c4mim-ntf2': 1 } } },
+        { id: 'M', type: 'mixer', name: 'Contato gás-líquido', params: { P: '' } },
+        { id: 'A', type: 'flash', name: 'Absorvedor (1 estágio)', params: { mode: 'T e P', T: 25, P: 20, Q: 0, vf: 0.5 } },
+        { id: 'R', type: 'flash', name: 'Regenerador', params: { mode: 'T e P', T: 80, P: 1.01325, Q: 0, vf: 0.5 } },
+        { id: 'GT', type: 'product', name: 'Gás tratado' }, { id: 'CO2', type: 'product', name: 'CO2 recuperado' }, { id: 'LI', type: 'product', name: 'Líquido iônico regenerado' }],
+      streams: [S('1', 'G', 'out', 'M', 'in1', 'Gás'), S('2', 'IL', 'out', 'M', 'in2', 'LI'), S('3', 'M', 'out', 'A', 'in', '3'), S('4', 'A', 'vapor', 'GT', 'in', 'Gás tratado'),
+        S('5', 'A', 'liquid', 'R', 'in', 'LI rico'), S('6', 'R', 'vapor', 'CO2', 'in', 'CO2'), S('7', 'R', 'liquid', 'LI', 'in', 'LI pobre')] } },
+    { key: 'metanol-agua-pcsaft', title: 'Flash de metanol + água com PC-SAFT (moléculas que se associam por ligações de hidrogênio) — troque para NRTL e compare', fs: {
+      name: 'Flash metanol-água com PC-SAFT', components: ['methanol', 'water'], model: 'PCSAFT',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Mistura a 25 °C', params: { T: 25, P: 1.01325, vf: '', flow: 100, flowUnit: 'kmol/h', basis: 'molar', composition: { methanol: 0.40, water: 0.60 } } },
+        { id: 'V1', type: 'flash', name: 'Vaso flash V-101', params: { mode: 'T e P', T: 80, P: 1.01325, Q: 0, vf: 0.5 } },
+        { id: 'PV', type: 'product', name: 'Vapor rico em metanol' }, { id: 'PL', type: 'product', name: 'Líquido rico em água' }],
+      streams: [S('1', 'F', 'out', 'V1', 'in', 'Alimentação'), S('2', 'V1', 'vapor', 'PV', 'in', 'Vapor'), S('3', 'V1', 'liquid', 'PL', 'in', 'Líquido')] } },
     { key: 'biorreatores-tosetto', title: 'Bioprocesso: 3 biorreatores contínuos em série com a equação de Tosetto (mosto + mosto extra → vinho e CO₂)', fs: {
       name: 'Fermentação alcoólica contínua em 3 biorreatores', components: ['water', 'sucrose', 'ethanol', 'biomass', 'co2'], model: 'IDEAL',
       blocks: [
@@ -11665,11 +12492,12 @@ def pfr_transiente(P, nome):
           cspec: 'conversão desejada (calcula o volume)', Xt: 0.98, Vr: 50, Tc: 60 } },
         { id: 'P', type: 'product', name: 'Biodiesel + glicerina' }],
       streams: [S('1', 'FO', 'out', 'RB', 'oil', 'Óleo'), S('2', 'FA', 'out', 'RB', 'alcohol', 'Metanol'), S('3', 'RB', 'product', 'P', 'in', 'Produto')] } }
+
   ];
   // blocos sem parâmetros recebem os valores pré-setados da unidade (secador, cristalizador, biorreatores...)
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && !Object.keys(b.params).length) T.params.forEach(f => { if (f.def !== undefined) b.params[f.k] = f.def; }); }));
   // equipamentos contínuos de sólidos e bioprocessos: os campos que o exemplo não informa recebem o valor pré-setado
-  const FILL = /^(tray_dryer|spray_dryer|freeze_dryer|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester)/;
+  const FILL = /^(tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester)/;
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && FILL.test(b.type)) T.params.forEach(f => { if (b.params[f.k] === undefined && f.def !== undefined) b.params[f.k] = f.def; }); }));
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -11889,8 +12717,8 @@ def pfr_transiente(P, nome):
       '\n\n## Reações (params.reactions)\nCada reação: {"stoich": {"id": ν, ...} (negativo = reagente), "orders": {"id": ordem}, "k": constante em Tref (unidades de mol/L e s), "Tref": °C, "Ea": kJ/mol, "dH": kJ/mol (negativo = exotérmica)}. No reator de conversão use {"stoich", "key": id, "conversion": 0–1, "dH"}. Para problemas didáticos use comp-A, comp-B, comp-C, comp-D (solutos genéricos) dissolvidos em água e alimentação com basis "concentração (mol/L)", flowUnit "L/s" e composition em mol/L.' +
       '\n\n## Convenções da coluna rigorosa\nEstágio 1 = condensador, estágio N = refervedor. Dmode "Vazão D" usa D em kmol/h; "D/F" usa razão. feed2 é para solvente/arrastador (extrativa: perto do topo). Especificação de projeto opcional: specComp + specType + specValue + specVary (R ou D).';
   }
-  const RULES = 'Você é o agente do SIMULA FÁCIL IA, simulador de processos químicos e bioprocessos no navegador. O software foi criado pelo Prof. Juan Canellas Bosch Neto (Curso de Engenharia Química – UFSJ; PPGEQ-DEQUI-CAP-UFSJ), autor do livro "Modelagem e Simulação de Processos Dinâmicos" (Editora Appris, 2019), com coautoria do CLAUDE (Anthropic); informe isso se perguntarem sobre a autoria e indique o livro a quem quiser aprofundar a modelagem dinâmica. Converse em português do Brasil com o engenheiro, entenda o processo (texto e figuras), sugira operações unitárias, modelo termodinâmico, condições e especificações, e use as ferramentas para montar e simular o fluxograma. O motor numérico do simulador faz os cálculos rigorosos (ELV com NRTL/UNIQUAC/UNIFAC/PR, colunas MESH por ponto de bolha + Newton, reatores com integração de EDOs). Nunca invente resultados: rode a simulação e cite os números retornados.\n\n' +
-    'Regras:\n1. Use somente ids de componentes e tipos/portas de bloco do catálogo. Se faltar um componente, diga qual e proponha substituto.\n2. Modelo: NRTL ou UNIQUAC para líquidos polares e azeótropos; UNIFAC se faltar dado; Peng-Robinson/SRK para gases, hidrocarbonetos leves e alta pressão; Ideal só para misturas quase ideais.\n3. Para montar do zero use construir_fluxograma com TODOS os blocos e correntes (cada alimentação é um bloco feed; saídas sem ligação viram produtos). Para ajustes use modificar_fluxograma. As duas ferramentas já simulam e devolvem o resumo.\n4. Se a simulação falhar, leia o erro, corrija a especificação e tente de novo (no máximo duas tentativas) antes de responder.\n5. Azeótropos (ex.: etanol/água ~0,89 a 1 atm): avise o limite e sugira destilação extrativa (etilenoglicol), azeotrópica heterogênea (ciclohexano + decantador), variação de pressão, peneira molecular ou pervaporação.\n6. Depois de simular: interprete pureza, recuperação, cargas térmicas e convergência, e dê de 2 a 4 sugestões concretas e quantificadas de melhoria.\n7. Figuras: descreva em uma ou duas frases o que identificou (equipamentos, correntes, condições) e monte o fluxograma correspondente; assuma valores típicos para dados ausentes e diga quais assumiu.\n8. Pedidos de código: MATLAB/Octave → chame abrir_codigo_matlab; Python → chame abrir_codigo_python (ambos geram o programa completo com fluxograma nos ícones padrão e gráficos com fonte 18). Para trechos específicos escreva um bloco ```matlab (set(0,\'DefaultAxesFontSize\',18)) ou ```python (plt.rcParams[\'font.size\'] = 18).\n9. Pedido de fluxograma final ou relatório: chame abrir_fluxograma_final.\n10. Seja conciso: frases curtas, listas curtas, números com unidade e vírgula decimal. Perguntas só conceituais dispensam ferramentas.\n\nUnidades dos parâmetros: T °C, P bar, vazões kmol/h (ou kg/h, L/s), cargas kW, volume m³, tempo s.\n\n';
+  const RULES = 'Você é o agente do SIMULA FÁCIL IA, simulador de processos químicos e bioprocessos no navegador. O software foi criado pelo Prof. Juan Canellas Bosch Neto (Curso de Engenharia Química – UFSJ; PPGEQ-DEQUI-CAP-UFSJ), autor do livro "Modelagem e Simulação de Processos Dinâmicos" (Editora Appris, 2019), com coautoria do CLAUDE (Anthropic); informe isso se perguntarem sobre a autoria e indique o livro a quem quiser aprofundar a modelagem dinâmica. Converse em português do Brasil com o engenheiro, entenda o processo (texto e figuras), sugira operações unitárias, modelo termodinâmico, condições e especificações, e use as ferramentas para montar e simular o fluxograma. O motor numérico do simulador faz os cálculos rigorosos (ELV com NRTL/UNIQUAC/UNIFAC/PR/PC-SAFT, colunas MESH por ponto de bolha + Newton, reatores com integração de EDOs). Nunca invente resultados: rode a simulação e cite os números retornados.\n\n' +
+    'Regras:\n1. Use somente ids de componentes e tipos/portas de bloco do catálogo. Se faltar um componente, diga qual e proponha substituto.\n2. Modelo: NRTL ou UNIQUAC para líquidos polares e azeótropos; UNIFAC se faltar dado; Peng-Robinson/SRK para gases, hidrocarbonetos leves e alta pressão; PC-SAFT para líquidos iônicos (ex.: CO2 em [C4mim][NTf2]), polímeros e associação forte; Ideal só para misturas quase ideais.\n3. Para montar do zero use construir_fluxograma com TODOS os blocos e correntes (cada alimentação é um bloco feed; saídas sem ligação viram produtos). Para ajustes use modificar_fluxograma. As duas ferramentas já simulam e devolvem o resumo.\n4. Se a simulação falhar, leia o erro, corrija a especificação e tente de novo (no máximo duas tentativas) antes de responder.\n5. Azeótropos (ex.: etanol/água ~0,89 a 1 atm): avise o limite e sugira destilação extrativa (etilenoglicol), azeotrópica heterogênea (ciclohexano + decantador), variação de pressão, peneira molecular ou pervaporação.\n6. Depois de simular: interprete pureza, recuperação, cargas térmicas e convergência, e dê de 2 a 4 sugestões concretas e quantificadas de melhoria.\n7. Figuras: descreva em uma ou duas frases o que identificou (equipamentos, correntes, condições) e monte o fluxograma correspondente; assuma valores típicos para dados ausentes e diga quais assumiu.\n8. Pedidos de código: MATLAB/Octave → chame abrir_codigo_matlab; Python → chame abrir_codigo_python (ambos geram o programa completo com fluxograma nos ícones padrão e gráficos com fonte 18). Para trechos específicos escreva um bloco ```matlab (set(0,\'DefaultAxesFontSize\',18)) ou ```python (plt.rcParams[\'font.size\'] = 18).\n9. Pedido de fluxograma final ou relatório: chame abrir_fluxograma_final.\n10. Seja conciso: frases curtas, listas curtas, números com unidade e vírgula decimal. Perguntas só conceituais dispensam ferramentas.\n\nUnidades dos parâmetros: T °C, P bar, vazões kmol/h (ou kg/h, L/s), cargas kW, volume m³, tempo s.\n\n';
 
   /* ---------------- resumo do estado e dos resultados */
   function stateSummary(st) {
@@ -11925,7 +12753,7 @@ def pfr_transiente(P, nome):
     '- construir_fluxograma substitui tudo: inclua TODOS os componentes, blocos e correntes. Cada alimentação é um bloco feed; saídas sem ligação viram produtos.\n' +
     '- Para ajustar o que já existe use {"acao": "modificar_fluxograma", "args": {"alterar": [{"id": "T1", "params": {"R": 4}}], "adicionar_blocos": [...], "adicionar_correntes": [...], "remover_blocos": ["id"], "remover_correntes": ["nome"], "componentes": [...], "modelo": "..."}} (use só os campos necessários; params são mesclados aos existentes).\n' +
     '- Use somente ids de componentes, tipos de bloco, portas e parâmetros do catálogo abaixo, com os valores das listas entre chaves escritos exatamente como aparecem. JSON válido: aspas duplas, ponto decimal, sem comentários.\n\n' +
-    'Regras de engenharia:\n1. Modelo: NRTL ou UNIQUAC para líquidos polares e azeótropos; UNIFAC se faltar dado; Peng-Robinson/SRK para gases, hidrocarbonetos leves e alta pressão; Ideal só para misturas quase ideais.\n2. Azeótropos (ex.: etanol/água ~0,89 a 1 atm): avise o limite e sugira destilação extrativa (etilenoglicol), azeotrópica heterogênea (ciclohexano + decantador), variação de pressão, peneira molecular ou pervaporação.\n3. Quando receber resultados: interprete pureza, recuperação, cargas térmicas e convergência, e dê de 2 a 4 sugestões concretas e quantificadas; se quiser testar uma melhoria, devolva o bloco json de modificar_fluxograma.\n4. Se a simulação colada mostrar erro, leia a mensagem, corrija a especificação e devolva o json corrigido.\n5. Figuras: descreva em uma ou duas frases o que identificou e monte o fluxograma correspondente; assuma valores típicos para dados ausentes e diga quais assumiu.\n6. Código: o simulador gera MATLAB/Octave e Python completos pelos botões "MATLAB/Octave" e "Python"; indique esses botões. Para trechos específicos use set(0,\'DefaultAxesFontSize\',18) no MATLAB e plt.rcParams[\'font.size\'] = 18 no Python.\n7. Seja conciso: frases curtas, números com unidade e vírgula decimal no texto (no json, ponto decimal).\n\nUnidades dos parâmetros: T °C, P bar, vazões kmol/h (ou kg/h, L/s), cargas kW, volume m³, tempo s.\n\n';
+    'Regras de engenharia:\n1. Modelo: NRTL ou UNIQUAC para líquidos polares e azeótropos; UNIFAC se faltar dado; Peng-Robinson/SRK para gases, hidrocarbonetos leves e alta pressão; PC-SAFT para líquidos iônicos (ex.: CO2 em [C4mim][NTf2]), polímeros e associação forte; Ideal só para misturas quase ideais.\n2. Azeótropos (ex.: etanol/água ~0,89 a 1 atm): avise o limite e sugira destilação extrativa (etilenoglicol), azeotrópica heterogênea (ciclohexano + decantador), variação de pressão, peneira molecular ou pervaporação.\n3. Quando receber resultados: interprete pureza, recuperação, cargas térmicas e convergência, e dê de 2 a 4 sugestões concretas e quantificadas; se quiser testar uma melhoria, devolva o bloco json de modificar_fluxograma.\n4. Se a simulação colada mostrar erro, leia a mensagem, corrija a especificação e devolva o json corrigido.\n5. Figuras: descreva em uma ou duas frases o que identificou e monte o fluxograma correspondente; assuma valores típicos para dados ausentes e diga quais assumiu.\n6. Código: o simulador gera MATLAB/Octave e Python completos pelos botões "MATLAB/Octave" e "Python"; indique esses botões. Para trechos específicos use set(0,\'DefaultAxesFontSize\',18) no MATLAB e plt.rcParams[\'font.size\'] = 18 no Python.\n7. Seja conciso: frases curtas, números com unidade e vírgula decimal no texto (no json, ponto decimal).\n\nUnidades dos parâmetros: T °C, P bar, vazões kmol/h (ou kg/h, L/s), cargas kW, volume m³, tempo s.\n\n';
   function gemInstructions() { return GEM_RULES + catalog(); }
 
   // acha a ação no texto colado: bloco ```json, ou o maior objeto JSON do texto
@@ -12299,7 +13127,7 @@ def pfr_transiente(P, nome):
 (function (root) {
   'use strict';
   const SF = root.SF = root.SF || {};
-  const LIST = [{"file": "tutorial-1.mp4", "poster": "tutorial-1.jpg", "img": "passo-a-passo-1.jpg", "title": "Conheça o programa em 5 passos", "voice": "m", "narr": "Lucas", "dur": "1:42", "cues": [{"start": 0.6, "end": 11.72, "say": "Olá! Eu sou o Lucas. Em poucos minutos, você vai conhecer o Simula Fácil I.A., o simulador de processos químicos e bioprocessos da U.F.S.J."}, {"start": 13.82, "end": 24.3, "say": "É grátis e roda no navegador. Na tela inicial, escolha: conversar com o agente de I.A., abrir um exemplo pronto, ou montar do zero."}, {"start": 26.4, "end": 34.56, "say": "Arraste os equipamentos da paleta, à esquerda, para o fluxograma. Comece pela corrente de alimentação."}, {"start": 36.66, "end": 46.1, "say": "Ligue as correntes: clique na saída do equipamento, a bolinha cheia, e depois na entrada do próximo, a bolinha vazada."}, {"start": 48.2, "end": 57.08, "say": "Na aba Termodinâmica, escolha os componentes, entre mais de quarenta mil compostos, e o modelo, como o N.R.T.L."}, {"start": 59.18, "end": 68.06, "say": "Clique no equipamento e digite os dados de entrada na aba Propriedades: pratos, refluxo, vazões e temperaturas."}, {"start": 70.16, "end": 76.24, "say": "Clique em Simular. Os resultados, as tabelas e os gráficos aparecem na hora."}, {"start": 78.34, "end": 86.02, "say": "Prefere conversar? Peça ao agente de I.A.: ele monta o processo, simula e explica os resultados."}, {"start": 88.12, "end": 95.08, "say": "No fim, abra o fluxograma final e gere os códigos Mátlab e Páiton para o seu relatório."}, {"start": 97.18, "end": 100.54, "say": "Pronto! Agora é com você. Boas simulações!"}]}, {"file": "tutorial-2.mp4", "poster": "tutorial-2.jpg", "img": "passo-a-passo-2.jpg", "title": "Alimentação com vários componentes: frações molares e temperatura", "voice": "m", "narr": "Lucas", "dur": "3:07", "cues": [{"start": 0.6, "end": 11.0, "say": "Olá! Agora você vai aprender a montar uma alimentação com vários componentes: frações molares, temperatura e mistura de correntes."}, {"start": 13.1, "end": 24.38, "say": "Primeiro, na aba Termodinâmica, marque os componentes da mistura: metanol, etanol e água. Para álcoois com água, o programa sugere o N.R.T.L."}, {"start": 26.48, "end": 36.08, "say": "Arraste uma Corrente de alimentação para o fluxograma. Ela já traz uma linha de composição para cada componente marcado."}, {"start": 38.18, "end": 51.46, "say": "Em Propriedades, digite a temperatura, vinte e cinco graus, a pressão, uma atmosfera, que é um vírgula zero um três bar, e a vazão total: sessenta quilomols por hora."}, {"start": 53.56, "end": 63.88, "say": "A temperatura define o estado da corrente. Se ela for vapor, ou parte vapor, informe a fração vaporizada no lugar da temperatura."}, {"start": 65.98, "end": 72.46, "say": "Logo abaixo, escolha a unidade da vazão e a base da composição: molar ou mássica."}, {"start": 74.56, "end": 87.28, "say": "Na Composição, digite a fração molar de cada componente: metanol, zero vírgula cinco, etanol, zero vírgula três, e água, zero vírgula dois. A soma deve dar um."}, {"start": 89.38, "end": 99.14, "say": "Dica: se a soma não der um, o programa normaliza sozinho. Você pode até digitar em porcentagem: cinquenta, trinta e vinte."}, {"start": 101.24, "end": 105.08, "say": "Agora arraste a segunda corrente de alimentação."}, {"start": 107.18, "end": 121.98, "say": "A corrente dois é mais quente e rica em água: quarenta quilomols por hora, a setenta graus, com metanol, zero vírgula zero cinco, etanol, zero vírgula quinze, e água, zero vírgula oito."}, {"start": 124.08, "end": 129.36, "say": "Arraste um Misturador. Ele aceita até quatro correntes de entrada."}, {"start": 131.46, "end": 135.3, "say": "Arraste também um Produto, que recebe a mistura."}, {"start": 137.4, "end": 145.4, "say": "Ligue as correntes: cada alimentação numa entrada do misturador, e a saída do misturador no produto."}, {"start": 147.5, "end": 163.5, "say": "Clique em Simular. A mistura sai com cem quilomols por hora e a nova composição: zero vírgula trinta e dois de metanol, zero vírgula vinte e quatro de etanol, e zero vírgula quarenta e quatro de água."}, {"start": 165.6, "end": 176.56, "say": "A temperatura de saída, quarenta e um graus, vem do balanço de energia: fica entre vinte e cinco e setenta, mais perto da corrente maior."}, {"start": 178.66, "end": 185.7, "say": "Pronto! Agora use essa mistura para alimentar qualquer equipamento. Até o próximo vídeo!"}]}, {"file": "tutorial-3.mp4", "poster": "tutorial-3.jpg", "img": "passo-a-passo-3.jpg", "title": "Destilação de etanol e água, passo a passo", "voice": "f", "narr": "Marina", "dur": "2:04", "cues": [{"start": 0.6, "end": 7.8, "say": "Oi! Eu sou a Marina. Vamos simular juntos, passo a passo, uma destilação de etanol e água."}, {"start": 9.9, "end": 13.74, "say": "Clique em Novo para começar um fluxograma vazio."}, {"start": 15.84, "end": 24.24, "say": "Na aba Termodinâmica, marque Etanol e Água, e escolha o modelo N.R.T.L., indicado para misturas com água."}, {"start": 26.34, "end": 33.78, "say": "Arraste uma Corrente de alimentação. Ela é a entrada do processo: o vinho, com etanol e água."}, {"start": 35.88, "end": 47.8, "say": "Clique na alimentação. Em Propriedades, digite a temperatura, vinte e cinco graus, a pressão, uma atmosfera, e a vazão total: cem quilomols por hora."}, {"start": 49.9, "end": 60.94, "say": "Desça até a Composição e digite a fração molar de cada componente: etanol, zero vírgula um, e água, zero vírgula nove. A soma deve dar um."}, {"start": 63.04, "end": 67.44, "say": "Agora arraste a Coluna de destilação para o fluxograma."}, {"start": 69.54, "end": 75.14, "say": "Arraste também dois Produtos: o destilado, que sai no topo, e o fundo."}, {"start": 77.24, "end": 83.64, "say": "Ligue as correntes: da alimentação para a coluna, e da coluna para cada produto."}, {"start": 85.74, "end": 95.1, "say": "Na coluna, use vinte pratos, alimentação no prato dez, razão de refluxo três, e destilado de doze quilomols por hora."}, {"start": 97.2, "end": 106.72, "say": "Clique em Simular. O destilado sai com oitenta e dois por cento de etanol, em mol, e o fundo leva praticamente só água."}, {"start": 108.82, "end": 114.9, "say": "No gráfico de Mac Cábi Tíli, você vê os pratos da coluna, degrau por degrau."}, {"start": 117.0, "end": 122.52, "say": "Fácil, né? Agora mude o refluxo e veja o que acontece. Até a próxima!"}]}, {"file": "tutorial-4.mp4", "poster": "tutorial-4.jpg", "img": "passo-a-passo-4.jpg", "title": "Operações em sequência: bomba, pré-aquecedor, coluna e resfriador", "voice": "m", "narr": "Lucas", "dur": "1:17", "cues": [{"start": 0.6, "end": 6.84, "say": "Olá de novo! Agora vamos montar um processo com várias operações em sequência."}, {"start": 8.94, "end": 16.54, "say": "Comece pela alimentação, o vinho. Depois, arraste uma Bomba: ela eleva a pressão para dois bar."}, {"start": 18.64, "end": 24.32, "say": "Em seguida, um Aquecedor: o pré-aquecedor leva o vinho a setenta graus."}, {"start": 26.42, "end": 31.86, "say": "Agora, a Coluna de destilação. O fundo, a vinhaça, sai como produto."}, {"start": 33.96, "end": 39.56, "say": "Por fim, um Resfriador no destilado esfria o etanol para trinta graus."}, {"start": 41.66, "end": 49.1, "say": "Clique em cada equipamento e confira os dados: a pressão da bomba e as temperaturas de saída."}, {"start": 51.2, "end": 59.2, "say": "Clique em Simular: o programa resolve os equipamentos na ordem do fluxo e mostra todas as correntes."}, {"start": 61.3, "end": 68.9, "say": "No fluxograma final aparecem as cargas térmicas e a potência da bomba. Pronto para o relatório!"}, {"start": 71.0, "end": 75.16, "say": "Agora monte o seu próprio processo. Boas simulações!"}]}, {"file": "tutorial-5.mp4", "poster": "tutorial-5.jpg", "img": "passo-a-passo-5.jpg", "title": "Aba Termodinâmica: como escolher o modelo (NRTL, UNIQUAC…)", "voice": "f", "narr": "Marina", "dur": "2:31", "cues": [{"start": 0.6, "end": 9.32, "say": "Oi! Eu sou a Marina. Agora vamos entender a aba Termodinâmica: como escolher os componentes e o modelo certo."}, {"start": 11.42, "end": 21.66, "say": "Clique na aba Termodinâmica. Ela define quem está no processo, os componentes, e como eles se comportam: o modelo termodinâmico."}, {"start": 23.76, "end": 31.2, "say": "Para adicionar um componente, digite o nome, a fórmula ou o CAS na busca e marque a caixinha."}, {"start": 33.3, "end": 44.34, "say": "Não achou? Digite em inglês, com três letras ou mais: o banco ampliado tem cerca de quarenta mil compostos. Clique no mais para adicionar."}, {"start": 46.44, "end": 55.0, "say": "Depois, escolha o modelo. São sete opções: Ideal, N.R.T.L., Wilson, Uníquac, Unifác, Peng-Róbinson e S.R.K."}, {"start": 57.1, "end": 66.14, "say": "Na dúvida, leia a sugestão logo abaixo. Para etanol e água, mistura polar, o programa indica N.R.T.L. ou Uníquac."}, {"start": 68.24, "end": 77.92, "say": "Para hidrocarbonetos parecidos, como benzeno e tolueno, a baixa pressão, o modelo Ideal, a lei de Raúlt, já funciona bem."}, {"start": 80.02, "end": 89.22, "say": "Para gases leves e pressões altas, como metano, etano e propano, use uma equação de estado: Peng-Róbinson ou S.R.K."}, {"start": 91.32, "end": 102.68, "say": "Resumindo: N.R.T.L. e Uníquac para líquidos polares, água, álcoois e azeótropos. Eles também preveem duas fases líquidas, como num decantador."}, {"start": 104.78, "end": 116.94, "say": "Wilson, para polares que se misturam bem. Unifác, quando faltam parâmetros. Peng-Róbinson e S.R.K., para gases. E Ideal, só para misturas bem parecidas."}, {"start": 119.04, "end": 129.52, "say": "Com N.R.T.L., Wilson ou Uníquac, confira os parâmetros binários e a fonte dos dados. Você pode editá-los com valores da literatura."}, {"start": 131.62, "end": 143.22, "say": "Por fim, clique em Gerar T x y. Veja o azeótropo do etanol com água, perto de noventa por cento em mol: a destilação comum não passa desse ponto."}, {"start": 145.32, "end": 149.88, "say": "Modelo bem escolhido, simulação confiável. Até a próxima!"}]}];
+  const LIST = [{"file": "tutorial-1.mp4", "poster": "tutorial-1.jpg", "img": "passo-a-passo-1.jpg", "title": "Conheça o programa em 5 passos", "voice": "m", "narr": "Lucas", "dur": "1:42", "cues": [{"start": 0.6, "end": 11.72, "say": "Olá! Eu sou o Lucas. Em poucos minutos, você vai conhecer o Simula Fácil I.A., o simulador de processos químicos e bioprocessos da U.F.S.J."}, {"start": 13.82, "end": 24.3, "say": "É grátis e roda no navegador. Na tela inicial, escolha: conversar com o agente de I.A., abrir um exemplo pronto, ou montar do zero."}, {"start": 26.4, "end": 34.56, "say": "Arraste os equipamentos da paleta, à esquerda, para o fluxograma. Comece pela corrente de alimentação."}, {"start": 36.66, "end": 46.1, "say": "Ligue as correntes: clique na saída do equipamento, a bolinha cheia, e depois na entrada do próximo, a bolinha vazada."}, {"start": 48.2, "end": 57.08, "say": "Na aba Termodinâmica, escolha os componentes, entre mais de quarenta mil compostos, e o modelo, como o N.R.T.L."}, {"start": 59.18, "end": 68.06, "say": "Clique no equipamento e digite os dados de entrada na aba Propriedades: pratos, refluxo, vazões e temperaturas."}, {"start": 70.16, "end": 76.24, "say": "Clique em Simular. Os resultados, as tabelas e os gráficos aparecem na hora."}, {"start": 78.34, "end": 86.02, "say": "Prefere conversar? Peça ao agente de I.A.: ele monta o processo, simula e explica os resultados."}, {"start": 88.12, "end": 95.08, "say": "No fim, abra o fluxograma final e gere os códigos Mátlab e Páiton para o seu relatório."}, {"start": 97.18, "end": 100.54, "say": "Pronto! Agora é com você. Boas simulações!"}]}, {"file": "tutorial-2.mp4", "poster": "tutorial-2.jpg", "img": "passo-a-passo-2.jpg", "title": "Alimentação com vários componentes: frações molares e temperatura", "voice": "m", "narr": "Lucas", "dur": "3:07", "cues": [{"start": 0.6, "end": 11.0, "say": "Olá! Agora você vai aprender a montar uma alimentação com vários componentes: frações molares, temperatura e mistura de correntes."}, {"start": 13.1, "end": 24.38, "say": "Primeiro, na aba Termodinâmica, marque os componentes da mistura: metanol, etanol e água. Para álcoois com água, o programa sugere o N.R.T.L."}, {"start": 26.48, "end": 36.08, "say": "Arraste uma Corrente de alimentação para o fluxograma. Ela já traz uma linha de composição para cada componente marcado."}, {"start": 38.18, "end": 51.46, "say": "Em Propriedades, digite a temperatura, vinte e cinco graus, a pressão, uma atmosfera, que é um vírgula zero um três bar, e a vazão total: sessenta quilomols por hora."}, {"start": 53.56, "end": 63.88, "say": "A temperatura define o estado da corrente. Se ela for vapor, ou parte vapor, informe a fração vaporizada no lugar da temperatura."}, {"start": 65.98, "end": 72.46, "say": "Logo abaixo, escolha a unidade da vazão e a base da composição: molar ou mássica."}, {"start": 74.56, "end": 87.28, "say": "Na Composição, digite a fração molar de cada componente: metanol, zero vírgula cinco, etanol, zero vírgula três, e água, zero vírgula dois. A soma deve dar um."}, {"start": 89.38, "end": 99.14, "say": "Dica: se a soma não der um, o programa normaliza sozinho. Você pode até digitar em porcentagem: cinquenta, trinta e vinte."}, {"start": 101.24, "end": 105.08, "say": "Agora arraste a segunda corrente de alimentação."}, {"start": 107.18, "end": 121.98, "say": "A corrente dois é mais quente e rica em água: quarenta quilomols por hora, a setenta graus, com metanol, zero vírgula zero cinco, etanol, zero vírgula quinze, e água, zero vírgula oito."}, {"start": 124.08, "end": 129.36, "say": "Arraste um Misturador. Ele aceita até quatro correntes de entrada."}, {"start": 131.46, "end": 135.3, "say": "Arraste também um Produto, que recebe a mistura."}, {"start": 137.4, "end": 145.4, "say": "Ligue as correntes: cada alimentação numa entrada do misturador, e a saída do misturador no produto."}, {"start": 147.5, "end": 163.5, "say": "Clique em Simular. A mistura sai com cem quilomols por hora e a nova composição: zero vírgula trinta e dois de metanol, zero vírgula vinte e quatro de etanol, e zero vírgula quarenta e quatro de água."}, {"start": 165.6, "end": 176.56, "say": "A temperatura de saída, quarenta e um graus, vem do balanço de energia: fica entre vinte e cinco e setenta, mais perto da corrente maior."}, {"start": 178.66, "end": 185.7, "say": "Pronto! Agora use essa mistura para alimentar qualquer equipamento. Até o próximo vídeo!"}]}, {"file": "tutorial-3.mp4", "poster": "tutorial-3.jpg", "img": "passo-a-passo-3.jpg", "title": "Destilação de etanol e água, passo a passo", "voice": "f", "narr": "Marina", "dur": "2:04", "cues": [{"start": 0.6, "end": 7.8, "say": "Oi! Eu sou a Marina. Vamos simular juntos, passo a passo, uma destilação de etanol e água."}, {"start": 9.9, "end": 13.74, "say": "Clique em Novo para começar um fluxograma vazio."}, {"start": 15.84, "end": 24.24, "say": "Na aba Termodinâmica, marque Etanol e Água, e escolha o modelo N.R.T.L., indicado para misturas com água."}, {"start": 26.34, "end": 33.78, "say": "Arraste uma Corrente de alimentação. Ela é a entrada do processo: o vinho, com etanol e água."}, {"start": 35.88, "end": 47.8, "say": "Clique na alimentação. Em Propriedades, digite a temperatura, vinte e cinco graus, a pressão, uma atmosfera, e a vazão total: cem quilomols por hora."}, {"start": 49.9, "end": 60.94, "say": "Desça até a Composição e digite a fração molar de cada componente: etanol, zero vírgula um, e água, zero vírgula nove. A soma deve dar um."}, {"start": 63.04, "end": 67.44, "say": "Agora arraste a Coluna de destilação para o fluxograma."}, {"start": 69.54, "end": 75.14, "say": "Arraste também dois Produtos: o destilado, que sai no topo, e o fundo."}, {"start": 77.24, "end": 83.64, "say": "Ligue as correntes: da alimentação para a coluna, e da coluna para cada produto."}, {"start": 85.74, "end": 95.1, "say": "Na coluna, use vinte pratos, alimentação no prato dez, razão de refluxo três, e destilado de doze quilomols por hora."}, {"start": 97.2, "end": 106.72, "say": "Clique em Simular. O destilado sai com oitenta e dois por cento de etanol, em mol, e o fundo leva praticamente só água."}, {"start": 108.82, "end": 114.9, "say": "No gráfico de Mac Cábi Tíli, você vê os pratos da coluna, degrau por degrau."}, {"start": 117.0, "end": 122.52, "say": "Fácil, né? Agora mude o refluxo e veja o que acontece. Até a próxima!"}]}, {"file": "tutorial-4.mp4", "poster": "tutorial-4.jpg", "img": "passo-a-passo-4.jpg", "title": "Operações em sequência: bomba, pré-aquecedor, coluna e resfriador", "voice": "m", "narr": "Lucas", "dur": "1:17", "cues": [{"start": 0.6, "end": 6.84, "say": "Olá de novo! Agora vamos montar um processo com várias operações em sequência."}, {"start": 8.94, "end": 16.54, "say": "Comece pela alimentação, o vinho. Depois, arraste uma Bomba: ela eleva a pressão para dois bar."}, {"start": 18.64, "end": 24.32, "say": "Em seguida, um Aquecedor: o pré-aquecedor leva o vinho a setenta graus."}, {"start": 26.42, "end": 31.86, "say": "Agora, a Coluna de destilação. O fundo, a vinhaça, sai como produto."}, {"start": 33.96, "end": 39.56, "say": "Por fim, um Resfriador no destilado esfria o etanol para trinta graus."}, {"start": 41.66, "end": 49.1, "say": "Clique em cada equipamento e confira os dados: a pressão da bomba e as temperaturas de saída."}, {"start": 51.2, "end": 59.2, "say": "Clique em Simular: o programa resolve os equipamentos na ordem do fluxo e mostra todas as correntes."}, {"start": 61.3, "end": 68.9, "say": "No fluxograma final aparecem as cargas térmicas e a potência da bomba. Pronto para o relatório!"}, {"start": 71.0, "end": 75.16, "say": "Agora monte o seu próprio processo. Boas simulações!"}]}, {"file": "tutorial-5.mp4", "poster": "tutorial-5.jpg", "img": "passo-a-passo-5.jpg", "title": "Aba Termodinâmica: como escolher o modelo (NRTL, UNIQUAC…)", "voice": "f", "narr": "Marina", "dur": "2:45", "cues": [{"start": 0.6, "end": 9.32, "say": "Oi! Eu sou a Marina. Agora vamos entender a aba Termodinâmica: como escolher os componentes e o modelo certo."}, {"start": 11.42, "end": 21.66, "say": "Clique na aba Termodinâmica. Ela define quem está no processo, os componentes, e como eles se comportam: o modelo termodinâmico."}, {"start": 23.76, "end": 31.2, "say": "Para adicionar um componente, digite o nome, a fórmula ou o CAS na busca e marque a caixinha."}, {"start": 33.3, "end": 44.34, "say": "Não achou? Digite em inglês, com três letras ou mais: o banco ampliado tem cerca de quarenta mil compostos. Clique no mais para adicionar."}, {"start": 46.44, "end": 56.12, "say": "Depois, escolha o modelo. São oito opções: Ideal, N.R.T.L., Wilson, Uníquac, Unifác, Peng-Róbinson, S.R.K. e Pê Cê Sáfti."}, {"start": 58.22, "end": 67.26, "say": "Na dúvida, leia a sugestão logo abaixo. Para etanol e água, mistura polar, o programa indica N.R.T.L. ou Uníquac."}, {"start": 69.36, "end": 79.04, "say": "Para hidrocarbonetos parecidos, como benzeno e tolueno, a baixa pressão, o modelo Ideal, a lei de Raúlt, já funciona bem."}, {"start": 81.14, "end": 90.34, "say": "Para gases leves e pressões altas, como metano, etano e propano, use uma equação de estado: Peng-Róbinson ou S.R.K."}, {"start": 92.44, "end": 103.8, "say": "Resumindo: N.R.T.L. e Uníquac para líquidos polares, água, álcoois e azeótropos. Eles também preveem duas fases líquidas, como num decantador."}, {"start": 105.9, "end": 117.9, "say": "Wilson, para polares que se misturam bem. Unifác, quando faltam parâmetros. Peng-Róbinson e S.R.K., para gases. Ideal, só para misturas bem parecidas."}, {"start": 120.0, "end": 130.72, "say": "E o Pê Cê Sáfti, um modelo molecular, para água e álcoois que se associam, polímeros e líquidos iônicos, como na captura de cê ó dois."}, {"start": 132.82, "end": 143.3, "say": "Com N.R.T.L., Wilson ou Uníquac, confira os parâmetros binários e a fonte dos dados. Você pode editá-los com valores da literatura."}, {"start": 145.4, "end": 157.0, "say": "Por fim, clique em Gerar T x y. Veja o azeótropo do etanol com água, perto de noventa por cento em mol: a destilação comum não passa desse ponto."}, {"start": 159.1, "end": 163.66, "say": "Modelo bem escolhido, simulação confiável. Até a próxima!"}]}];
   const css = `
 .tut-ov{position:fixed;inset:0;z-index:100000;background:rgba(4,22,30,.82);display:flex;align-items:center;justify-content:center;padding:14px;font-family:inherit}
 .tut-card{background:#fff;color:#11262d;border-radius:18px;width:min(1000px,100%);max-height:100%;overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.45)}
@@ -12423,7 +13251,7 @@ def pfr_transiente(P, nome):
   const $ = s => document.querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -12690,6 +13518,13 @@ def pfr_transiente(P, nome):
   }
   // o que significa cada campo de dados de entrada, com os valores do exemplo pronto
   const FIELD_HELP = {
+    refrigerator: { ex: 'Chiller de água gelada com R-134a', items: [
+      ['Temperatura de saída do produto (°C)', 'temperatura que a corrente deve atingir: 7 °C no exemplo (água gelada que volta a 12 °C).'],
+      ['Fluido refrigerante', 'o gás que circula no ciclo. R-134a no exemplo; compare R-717 (amônia), R-290 (propano) e R-32: mudam as pressões, a vazão de refrigerante, a temperatura de descarga e o GWP.'],
+      ['Temperatura de condensação (°C)', 'onde o refrigerante cede calor ao ambiente; uns 10 a 15 °C acima do ar ou da água de resfriamento. 40 °C no exemplo.'],
+      ['Diferença mínima no evaporador (°C)', 'quanto o refrigerante evapora abaixo da saída do produto: T_ev = 7 − 5 = 2 °C no exemplo. Diferença menor exige evaporador maior, mas melhora o COP.'],
+      ['Eficiência isentrópica do compressor', 'razão entre o trabalho ideal (isentrópico) e o real: 0,75 no exemplo; compressores típicos ficam entre 0,6 e 0,85.'],
+      ['Superaquecimento e sub-resfriamento (°C)', 'garantem vapor seco na entrada do compressor (5 °C) e líquido sem bolhas na válvula (3 °C).']] },
     cstr: { ex: 'CSTR transiente com camisa', items: [
       ['Volume V (m³)', 'volume de líquido no tanque. Com a vazão volumétrica v₀ da alimentação dá o tempo de residência τ = V/v₀: no exemplo, 1 m³ e 2 L/s, τ = 500 s.'],
       ['Regime', '<b>permanente</b> resolve os balanços algébricos (dC/dt = 0); <b>transiente</b> integra as EDOs de massa e energia no tempo, com alimentação contínua; <b>batelada</b> é o tanque fechado, sem entrada nem saída.'],
@@ -12709,6 +13544,7 @@ def pfr_transiente(P, nome):
       ['Tempo de simulação (s)', 'duração do transiente. Use algumas vezes τ: no exemplo, 80 s ≈ 1,6τ, quando a saída já está estável.'],
       ['Células de discretização', 'número de trechos em que o tubo é dividido para o transiente (método das linhas); cada célula funciona como um pequeno CSTR. Mais células aproximam o PFR ideal: com 60 células, a saída fica em C_A = 0,891 mol/L, contra 0,869 mol/L do PFR ideal; com 200 células, 0,880 mol/L.']] },
     spray_dryer: { ex: 'Spray dryer contínuo: leite', items: [
+      ['Operação', '<b>contínua</b> (padrão): ligada ao fluxograma pelas correntes; <b>batelada</b>: um lote do tanque (massa do lote) atomizado na vazão do atomizador; o programa mostra o tempo do lote e o pó, a água, o ar e a energia por lote.'],
       ['Correntes', '<b>alimentação</b> (porta de cima) com água e o sólido seco; saídas <b>produto</b> (pó, embaixo) e <b>ar de saída</b> (depois do ciclone); a porta de energia mostra a carga do aquecedor de ar. Com corrente conectada, vazão, sólidos e temperatura vêm dela.'],
       ['Alimentação e pó', '1 000 kg/h de leite com 20 % de sólidos a 20 °C (pela corrente); pó com 4 % de umidade a 41 °C; c_p dos sólidos = 1,5 kJ/(kg·K).'],
       ['Ar', 'entrada a 110 °C e saída a 55 °C (barras deslizantes), ambiente a 30 °C com H = 0,02 kg/kg, sem perdas. Inclua o componente Air (banco ChemSep) para ver o ar na corrente de saída.'],
@@ -12718,6 +13554,13 @@ def pfr_transiente(P, nome):
       ['Alimentação', '50 kg/h de produto congelado a −30 °C com X_i = 4 kg de água/kg de sólido seco (pela corrente: água + Sólidos secos do produto).'],
       ['Camada e esteira', 'X_f = 0,08; ρ = 470 kg/m³ (produto congelado); camada de 5 mm, esteira de 1 m, secagem pelos dois lados (L_ef = L/2).'],
       ['Transferência de massa', 'p_gelo = 78 Pa na frente de sublimação, p_s = 40 Pa na superfície, K_g = 2,4·10⁻⁸ kg/(m·s·Pa) e calor de sublimação de 2 950 kJ/kg.']] },
+    microwave_dryer: { ex: 'Secador de micro-ondas contínuo', items: [
+      ['Operação', '<b>contínua</b>: túnel com esteira, ligado ao fluxograma (produto úmido → produto seco + vapor; a porta de energia mostra a eletricidade dos magnétrons); <b>batelada</b>: bandeja na cavidade, como num forno. O editor mostra só os campos do modo escolhido.'],
+      ['Especificar', 'com a <b>umidade final</b>, o programa calcula a potência de micro-ondas (78,8 kW no exemplo); com a <b>potência</b>, calcula a umidade de saída. A potência para chegar a X_f não depende do tempo de residência.'],
+      ['Alimentação', '100 kg/h de fatias de maçã com 85,7 % de água (X_i = 6) a 25 °C, pela corrente: a água é a umidade e os demais componentes, o sólido seco.'],
+      ['Tempo e temperatura', 'τ = 30 min na esteira (barra deslizante): define a carga, a potência específica (1,6 W/g) e o tamanho do túnel. T_p = 75 °C é a temperatura do produto durante a secagem.'],
+      ['Absorção', 'η_máx = 0,85 da potência emitida é absorvida pelo produto úmido; a absorção cai à medida que ele seca, com a umidade característica X_a = 0,5 kg/kg; X_e = 0,05. Magnétrons com eficiência de 0,7.'],
+      ['Dielétricas e camada', 'ε′ = 55 e ε″ = 15 dão a profundidade de penetração D_p = 9,7 mm a 2 450 MHz (cerca de 26 mm a 915 MHz). Carga de 8 kg/m² e massa específica de 600 kg/m³ dão uma camada de 13,3 mm; a esteira tem 0,6 m de largura.']] },
     tray_dryer: { ex: 'Secador de bandejas contínuo (túnel)', items: [
       ['Operação', '<b>contínua</b>: túnel de bandejas ligado ao fluxograma (alimentação → produto + ar de saída); <b>batelada</b>: modelo pelo ar ou dados de laboratório. O editor mostra só os campos do modo escolhido.'],
       ['Alimentação', '100 kg/h de alimento com 75 % de água (X_i = 3), pela corrente: a água é a umidade e os demais componentes, o sólido seco.'],
@@ -13045,6 +13888,7 @@ def pfr_transiente(P, nome):
   /* ------------------------------------------------------------------ termodinâmica */
   function modelAdvice(ids) {
     const cs = ids.map(id => TH.COMP[id]);
+    if (cs.some(c => c.il)) return 'Líquido iônico na mistura: use o PC-SAFT (dissolve gases como o CO2; o líquido iônico não evapora).';
     const gas = cs.filter(c => c.tc && c.tc < 380 && !c.ant).length, polar = cs.filter(c => c.g && (c.g.OH || c.g.H2O || c.g.CH3OH || c.g.COOH || c.g.CH3CO || c.g.CH3COO)).length;
     if (gas && gas >= cs.length / 2) return 'Predominam gases leves: use Peng-Robinson ou SRK (equações de estado).';
     if (polar >= 1 && cs.some(c => c.id === 'water')) return 'Mistura polar com água: use NRTL (ou UNIQUAC). Para pares sem dados, os parâmetros são estimados por UNIFAC.';
@@ -13099,21 +13943,31 @@ def pfr_transiente(P, nome):
       const isAct = ['NRTL', 'WILSON', 'UNIQUAC'].indexOf(state.model) >= 0;
       h += '<div class="subhead">Parâmetros binários (' + esc(TH.MODELS[state.model]) + ')</div>';
       if (isAct) h += '<p class="small muted">' + (state.model === 'NRTL' ? 'τij = aij + bij/T; α = cij' : state.model === 'UNIQUAC' ? 'τij = exp(aij + bij/T)' : 'ln Λij = aij + bij/T') + '. Edite para usar valores de outro banco de dados ou ajustados aos seus dados experimentais.</p>';
-      h += '<div class="scroll-x"><table class="grid"><thead><tr><th>i / j</th>' + (isAct ? '<th>aij</th><th>aji</th><th>bij</th><th>bji</th>' + (state.model === 'NRTL' ? '<th>α</th>' : '') : state.model === 'PR' || state.model === 'SRK' ? '<th>kij</th>' : '') + '<th>Fonte</th></tr></thead><tbody>';
+      h += '<div class="scroll-x"><table class="grid"><thead><tr><th>i / j</th>' + (isAct ? '<th>aij</th><th>aji</th><th>bij</th><th>bji</th>' + (state.model === 'NRTL' ? '<th>α</th>' : '') : state.model === 'PR' || state.model === 'SRK' || state.model === 'PCSAFT' ? '<th>kij</th>' : '') + '<th>Fonte</th></tr></thead><tbody>';
       th.pairInfo.forEach((p, k) => {
         h += '<tr><td>' + esc(TH.COMP[p.i].name) + ' / ' + esc(TH.COMP[p.j].name) + '</td>';
         if (isAct) ['a12', 'a21', 'b12', 'b21'].concat(state.model === 'NRTL' ? ['c'] : []).forEach(f => { h += '<td><input type="number" step="any" data-pair="' + k + '" data-pf="' + f + '" value="' + (+p[f]).toPrecision(5) + '"></td>'; });
+        else if (p.kij != null && state.model === 'PCSAFT') h += '<td><input type="number" step="any" data-pair="' + k + '" data-pf="kij" value="' + (+p.kij).toPrecision(4) + '"></td>';
         else if (p.kij != null) h += '<td class="num">' + nf(p.kij, 4) + '</td>';
         h += '<td class="small">' + esc(p.src) + '</td></tr>';
       });
       h += '</tbody></table></div>';
+      if (state.model === 'PCSAFT') h += '<p class="small muted">εij = √(εi·εj)·(1 − kij). Edite o kij para ajustar a dados experimentais da mistura.</p>';
+    }
+    if (th && th.isSAFT && th.saftInfo.length) {
+      h += '<div class="subhead">Parâmetros PC-SAFT dos componentes</div><div class="scroll-x"><table class="grid"><thead><tr><th>Componente</th><th>m</th><th>σ (Å)</th><th>ε/k (K)</th><th>εAB/k (K)</th><th>κAB</th><th>Fonte</th></tr></thead><tbody>' +
+        th.saftInfo.map(p => '<tr><td>' + esc(p.name) + '</td><td class="num">' + nf(p.m, 4) + '</td><td class="num">' + nf(p.s, 4) + '</td><td class="num">' + nf(p.e, 2) + '</td><td class="num">' + (p.eAB ? nf(p.eAB, 1) : '—') + '</td><td class="num">' + (p.kAB ? nf(p.kAB, 6) : '—') + '</td><td class="small">' + esc(p.src || '') + '</td></tr>').join('') +
+        '</tbody></table></div><p class="small muted">m: número de segmentos da cadeia; σ: diâmetro do segmento; ε/k: energia de dispersão; εAB/k e κAB: associação (ligações de hidrogênio, esquema 2B). Líquidos iônicos: molécula neutra, sem associação.</p>';
     }
     const vol = state.components.filter(id => !TH.COMP[id].nv && !TH.COMP[id].solid);
     h += '<div class="subhead">Diagrama de fases binário (Txy / xy)</div>';
     if (vol.length >= 2) {
       h += '<div class="field"><label for="txy1">Componente 1</label><select id="txy1">' + vol.map((id, i) => '<option value="' + id + '"' + (i === 0 ? ' selected' : '') + '>' + esc(TH.COMP[id].name) + '</option>').join('') + '</select></div>' +
         '<div class="field"><label for="txy2">Componente 2</label><select id="txy2">' + vol.map((id, i) => '<option value="' + id + '"' + (i === 1 ? ' selected' : '') + '>' + esc(TH.COMP[id].name) + '</option>').join('') + '</select></div>' +
-        '<div class="field"><label for="txyP">Pressão<span class="u">bar</span></label><input id="txyP" type="number" step="any" value="1.01325"></div><div class="row-actions"><button id="txyBtn" class="primary">Gerar Txy e xy</button></div><div id="txyOut"></div>';
+        '<div class="field"><label for="txyP">Pressão<span class="u">bar</span></label><input id="txyP" type="number" step="any" value="1.01325"></div>' +
+        '<div class="field"><label for="txyCmp">Comparar com o modelo</label><select id="txyCmp"><option value="">— nenhum —</option>' + Object.keys(TH.MODELS).filter(m => m !== state.model).map(m => '<option value="' + m + '"' + (state.model === 'PCSAFT' && m === 'NRTL' ? ' selected' : '') + '>' + esc(TH.MODELS[m]) + '</option>').join('') + '</select></div>' +
+        '<p class="small muted">A comparação desenha as curvas do segundo modelo tracejadas e monta uma tabela com T e y de bolha dos dois modelos. Para metanol–água e etanol–água a 1 atm, os pontos experimentais (Perry) também aparecem.</p>' +
+        '<div class="row-actions"><button id="txyBtn" class="primary">Gerar Txy e xy</button></div><div id="txyOut"></div>';
     } else h += '<p class="small muted">Selecione ao menos dois componentes voláteis.</p>';
     el.innerHTML = h;
     $('#modelSel').onchange = e => { pushUndo(); state.model = e.target.value; afterChange(false); renderThermo(); };
@@ -13127,6 +13981,7 @@ def pfr_transiente(P, nome):
     el.querySelectorAll('[data-pair]').forEach(inp => {
       inp.onchange = () => {
         pushUndo(); const p = th.pairInfo[+inp.dataset.pair], key = TH.pairKey(p.i, p.j), flip = p.i > p.j;
+        if (inp.dataset.pf === 'kij') { state.binary[state.model + ':' + key] = { kij: +inp.value }; afterChange(false); renderThermo(); return; }
         const cur = { a12: p.a12, a21: p.a21, b12: p.b12, b21: p.b21, c: p.c }; cur[inp.dataset.pf] = +inp.value;
         state.binary[state.model + ':' + key] = flip ? { a12: cur.a21, a21: cur.a12, b12: cur.b21, b21: cur.b12, c: cur.c } : cur;
         afterChange(false); renderThermo();
@@ -13137,10 +13992,30 @@ def pfr_transiente(P, nome):
       if (a === b) return toast('Escolha dois componentes diferentes');
       try {
         const t2 = new TH.Thermo([a, b], state.model, { binary: state.binary }), d = t2.binaryTxy(0, 1, P, 51); let az = null; try { az = t2.azeotrope(0, 1, P); } catch (e) { /* */ }
-        const n1 = TH.COMP[a].name, n2 = TH.COMP[b].name;
-        $('#txyOut').innerHTML = az ? '<div class="note warn">Azeótropo de ' + esc(az.type) + ' em x(' + esc(n1) + ') = ' + nf(az.x, 4) + ' a ' + nf(az.T - 273.15, 2) + ' °C. Destilação simples não ultrapassa esse ponto.</div>' : '<div class="note ok">Sem azeótropo a ' + nf(P / 1e5, 3) + ' bar.</div>';
-        renderCharts(null, [{ kind: 'txy', title: 'Txy ' + n1 + '/' + n2 + ' a ' + nf(P / 1e5, 3) + ' bar (' + TH.MODELS[state.model] + ')', data: { x: d.x, y: d.y, T: d.T.map(T => T - 273.15), n1, az: az ? { x: az.x, T: az.T - 273.15 } : null } },
-          { kind: 'xy', title: 'Diagrama xy ' + n1 + '/' + n2, data: { x: d.x, y: d.y, n1 } }], 'Equilíbrio líquido-vapor');
+        const n1 = TH.COMP[a].name, n2 = TH.COMP[b].name, L1 = TH.MODELS[state.model];
+        let h = az ? '<div class="note warn">Azeótropo de ' + esc(az.type) + ' em x(' + esc(n1) + ') = ' + nf(az.x, 4) + ' a ' + nf(az.T - 273.15, 2) + ' °C. Destilação simples não ultrapassa esse ponto.</div>' : '<div class="note ok">Sem azeótropo a ' + nf(P / 1e5, 3) + ' bar.</div>';
+        // comparação com um segundo modelo e com dados experimentais
+        const cm = $('#txyCmp') ? $('#txyCmp').value : '', L2 = cm ? TH.MODELS[cm] : '', ex = TH.vleExp ? TH.vleExp(a, b, P / 1e5) : null;
+        let t3 = null, d3 = null;
+        if (cm) { try { t3 = new TH.Thermo([a, b], cm, { binary: state.binary }); d3 = t3.binaryTxy(0, 1, P, 51); } catch (e) { h += '<div class="note err">' + esc(L2) + ': ' + esc(e.message) + '</div>'; t3 = d3 = null; } }
+        if (t3 || ex) {
+          const xs = ex ? ex.x : [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], bub = (t, x) => { try { const r = t.bubbleT([x, 1 - x], P); return { T: r.T - 273.15, y: r.y[0] }; } catch (e) { return null; } };
+          const r1 = xs.map(x => bub(t2, x)), r2 = t3 ? xs.map(x => bub(t3, x)) : null, dev = (r) => { let sT = 0, sy = 0, k = 0; r.forEach((v, i) => { if (v) { sT += Math.abs(v.T - ex.T[i]); sy += Math.abs(v.y - ex.y[i]); k++; } }); return k ? { T: sT / k, y: sy / k } : null; };
+          const f = (v, k, dg) => v ? nf(v[k], dg) : '—';
+          h += '<div class="subhead">Comparação' + (t3 ? ': ' + esc(L1) + ' × ' + esc(L2) : '') + (ex ? ' × experimental' : '') + '</div><div class="scroll-x"><table class="grid"><thead><tr><th>x (' + esc(n1) + ')</th><th>T bolha ' + esc(L1) + ' (°C)</th>' + (t3 ? '<th>T bolha ' + esc(L2) + ' (°C)</th>' : '') + (ex ? '<th>T exp. (°C)</th>' : '') +
+            '<th>y ' + esc(L1) + '</th>' + (t3 ? '<th>y ' + esc(L2) + '</th>' : '') + (ex ? '<th>y exp.</th>' : '') + '</tr></thead><tbody>' +
+            xs.map((x, i) => '<tr><td class="num">' + nf(x, 3) + '</td><td class="num">' + f(r1[i], 'T', 2) + '</td>' + (t3 ? '<td class="num">' + f(r2[i], 'T', 2) + '</td>' : '') + (ex ? '<td class="num">' + nf(ex.T[i], 2) + '</td>' : '') +
+              '<td class="num">' + f(r1[i], 'y', 4) + '</td>' + (t3 ? '<td class="num">' + f(r2[i], 'y', 4) + '</td>' : '') + (ex ? '<td class="num">' + nf(ex.y[i], 4) + '</td>' : '') + '</tr>').join('') + '</tbody></table></div><p class="small muted">T: temperatura de bolha do líquido com fração x; y: fração de ' + esc(n1) + ' no vapor em equilíbrio.</p>';
+          if (ex) {
+            const e1 = dev(r1), e2 = r2 ? dev(r2) : null, line = (L, e) => e ? '<b>' + esc(L) + '</b>: |ΔT| médio = ' + nf(e.T, 2) + ' °C, |Δy| médio = ' + nf(e.y, 4) : '';
+            h += '<p class="small">Desvio em relação aos dados experimentais — ' + [line(L1, e1), line(L2, e2)].filter(Boolean).join('; ') + '. Fonte: ' + esc(ex.src) + '.</p>';
+          } else h += '<p class="small muted">Sem dados experimentais cadastrados para este par a ' + nf(P / 1e5, 3) + ' bar: a tabela compara só os modelos.</p>';
+        }
+        $('#txyOut').innerHTML = h;
+        const lab = cm || ex;
+        renderCharts(null, [{ kind: 'txy', title: 'Txy ' + n1 + '/' + n2 + ' a ' + nf(P / 1e5, 3) + ' bar (' + L1 + (d3 ? ' × ' + L2 : '') + ')',
+          data: { x: d.x, y: d.y, T: d.T.map(T => T - 273.15), n1, az: az ? { x: az.x, T: az.T - 273.15 } : null, label: lab ? L1 : '', cmp: d3 ? { x: d3.x, y: d3.y, T: d3.T.map(T => T - 273.15), label: L2 } : null, exp: ex } },
+          { kind: 'xy', title: 'Diagrama xy ' + n1 + '/' + n2 + (d3 ? ' (' + L1 + ' × ' + L2 + ')' : ''), data: { x: d.x, y: d.y, n1, label: lab ? L1 : '', cmp: d3 ? { x: d3.x, y: d3.y, label: L2 } : null, exp: ex } }], 'Equilíbrio líquido-vapor');
       } catch (e) { $('#txyOut').innerHTML = '<div class="note err">' + esc(e.message) + '</div>'; }
     };
   }
@@ -13171,7 +14046,7 @@ def pfr_transiente(P, nome):
       '<div class="subhead">Autor</div><p><b>' + esc(C.author) + '</b> – ' + esc(C.course) + '<br>' + esc(C.program) + ' &amp; CLAUDE<br><span class="small muted">' + esc(C.role) + ' · ' + esc(C.institution) + '</span></p>' +
       '<p>Autor do livro <i>' + esc(C.book) + '</i> (' + esc(C.publisher) + ', 2019), base dos modelos dinâmicos usados aqui.</p>' +
       '<div class="subhead">Coautor</div><p><b>' + esc(C.coauthor) + '</b> – desenvolvimento do código, do motor numérico e do agente.</p>' +
-      '<div class="subhead">Recursos</div><ul class="small"><li>Termodinâmica: Ideal, NRTL, Wilson, UNIQUAC, UNIFAC, Peng-Robinson e SRK.</li>' +
+      '<div class="subhead">Recursos</div><ul class="small"><li>Termodinâmica: Ideal, NRTL, Wilson, UNIQUAC, UNIFAC, Peng-Robinson, SRK e PC-SAFT (inclusive líquidos iônicos).</li>' +
       '<li>Colunas rigorosas pelo método do ponto de bolha (Wang–Henke + θ) com Newton simultâneo (Naphtali–Sandholm).</li>' +
       '<li>Reatores CSTR e PFR em regime permanente e transiente; trocadores, extratores, vasos e máquinas.</li>' +
       '<li>Fluxograma final, gráficos com fonte 18 e geração de código MATLAB, Octave e Python.</li></ul>' +

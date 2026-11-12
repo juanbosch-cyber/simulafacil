@@ -1,0 +1,55 @@
+1
+00:00:00,600 --> 00:00:09,920
+Oi! Eu sou a Marina. Agora vamos entender a aba Termodinâmica: como escolher os componentes e o modelo certo.
+
+2
+00:00:11,420 --> 00:00:22,260
+Clique na aba Termodinâmica. Ela define quem está no processo, os componentes, e como eles se comportam: o modelo termodinâmico.
+
+3
+00:00:23,760 --> 00:00:31,800
+Para adicionar um componente, digite o nome, a fórmula ou o CAS na busca e marque a caixinha.
+
+4
+00:00:33,300 --> 00:00:44,940
+Não achou? Digite em inglês, com 3 letras ou mais: o banco ampliado tem cerca de 40 mil compostos. Clique no + para adicionar.
+
+5
+00:00:46,440 --> 00:00:56,720
+Depois, escolha o modelo. São oito opções: Ideal, NRTL, Wilson, UNIQUAC, UNIFAC, Peng-Robinson, SRK e PC-SAFT.
+
+6
+00:00:58,220 --> 00:01:07,860
+Na dúvida, leia a sugestão logo abaixo. Para etanol e água, mistura polar, o programa indica NRTL ou UNIQUAC.
+
+7
+00:01:09,360 --> 00:01:19,640
+Para hidrocarbonetos parecidos, como benzeno e tolueno, a baixa pressão, o modelo Ideal, a lei de Raoult, já funciona bem.
+
+8
+00:01:21,140 --> 00:01:30,940
+Para gases leves e pressões altas, como metano, etano e propano, use uma equação de estado: Peng-Robinson ou SRK.
+
+9
+00:01:32,440 --> 00:01:44,400
+Resumindo: NRTL e UNIQUAC para líquidos polares, água, álcoois e azeótropos. Eles também preveem duas fases líquidas, como num decantador.
+
+10
+00:01:45,900 --> 00:01:58,500
+Wilson, para polares que se misturam bem. UNIFAC, quando faltam parâmetros. Peng-Robinson e SRK, para gases. Ideal, só para misturas bem parecidas.
+
+11
+00:02:00,000 --> 00:02:11,320
+E o PC-SAFT, um modelo molecular, para água e álcoois que se associam, polímeros e líquidos iônicos, como na captura de CO2.
+
+12
+00:02:12,820 --> 00:02:23,900
+Com NRTL, Wilson ou UNIQUAC, confira os parâmetros binários e a fonte dos dados. Você pode editá-los com valores da literatura.
+
+13
+00:02:25,400 --> 00:02:37,600
+Por fim, clique em Gerar Txy. Veja o azeótropo do etanol com água, perto de 90 % em mol: a destilação comum não passa desse ponto.
+
+14
+00:02:39,100 --> 00:02:44,260
+Modelo bem escolhido, simulação confiável. Até a próxima!

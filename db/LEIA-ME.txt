@@ -1,0 +1,19 @@
+SIMULA FÁCIL IA — banco ampliado de compostos (versão 1.0, novembro de 2026)
+
+39 756 compostos, carregados pelo simulador sob demanda (aba Termodinâmica, busca com 3 letras ou mais,
+ou id "x-<CAS>" num projeto). Arquivos:
+  indice.json  — [CAS, nome (inglês), fórmula, Teb (K), qualidade] de cada composto, mais os metadados
+  parte0..3.json — propriedades: [CAS, M, Tc (K), Pc (Pa), ω, Teb (K), ρ líquido (kg/m³), cp gás ideal
+                   [A, B, C, D] (J/(mol·K), cp = A + BT + CT² + DT³), ΔHvap em Teb (J/mol),
+                   pressão de vapor DIPPR 101 [A, B, C, D, E, Tmin, Tmax] (ln P/Pa), ΔHf e ΔGf do gás (J/mol), fontes]
+
+Qualidade: A = propriedades críticas e pressão de vapor experimentais; B = propriedades críticas (ou pressão
+de vapor) experimentais; C = propriedades estimadas (Wilson-Jasperson, Joback, Lee-Kesler). Quando não há
+correlação experimental de pressão de vapor, o fator acêntrico é escolhido para que a equação de Lee-Kesler
+reproduza a temperatura de ebulição normal.
+
+Fontes: dados compilados da biblioteca "chemicals" (Caleb Bell, licença MIT, arquivo LICENCA-chemicals-MIT.txt),
+que reúne IUPAC (Ambrose et al.), CRC Handbook of Chemistry and Physics, Yaws, Landolt-Börnstein, Poling, Prausnitz
+e O'Connell (The Properties of Gases and Liquids), Perry/DIPPR, VDI Heat Atlas, TRC, NIST WebBook, JANAF, ATcT,
+API TDB, Joback e Wilson-Jasperson; nomes, fórmulas e massas molares do PubChem.
+Gerado pelo programa build_dbx.py (nesta pasta) do SIMULA FÁCIL IA.

@@ -123,6 +123,8 @@ textarea { resize: vertical; width: 100%; }
 
 .center { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 .canvas-bar { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--line); background: var(--panel-2); flex-wrap: wrap; }
+.canvas-bar .pp-btn { border: 2px solid #e10600; color: #c40500; background: #fff; border-radius: 99px; padding: 4px 12px; font-weight: 800; cursor: pointer; box-shadow: 0 2px 6px rgba(225,6,0,.18); }
+.canvas-bar .pp-btn:hover { background: #ffecea; }
 .hint .dot, .hint-m .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; vertical-align: middle; }
 .dot.out { background: var(--stream); } .dot.in { background: var(--panel); border: 2px solid var(--stream); }
 .chip { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; border: 1px solid currentColor; }
@@ -172,6 +174,16 @@ textarea { resize: vertical; width: 100%; }
 .drawer-body { flex: 1; overflow: auto; padding: 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)); grid-auto-rows: max-content; gap: 26px 20px; align-content: start; }
 .chart-card { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); overflow: hidden; padding-bottom: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
 .chart-card.wide { grid-column: 1 / -1; }
+.drawer-head .max-btn { border: 1.5px solid var(--teal, #10a8a0); color: #0a6f86; background: #fff; border-radius: 99px; padding: 3px 12px; font-weight: 800; cursor: pointer; }
+.drawer-head .max-btn:hover { background: #e3f5f3; }
+body.charts-max .drawer { position: fixed; inset: 0; z-index: 950; height: auto !important; min-height: 0; border-top: 0; box-shadow: 0 0 0 100vmax rgba(4,22,30,.35); }
+body.charts-max .drawer .splitter, body.charts-max #drawerToggle { display: none; }
+body.charts-max .drawer.closed .drawer-body { display: grid; }
+body.charts-max .drawer-head { padding: 10px 16px; background: linear-gradient(105deg, #073b4c, #0a6f86 60%, #10a8a0); color: #fff; }
+body.charts-max .drawer-head .muted { color: #d8f3f1; }
+body.charts-max .drawer-head .max-btn { background: #ffc93c; border-color: #ffc93c; color: #2a1b00; }
+body.charts-max .drawer-body { grid-template-columns: repeat(auto-fill, minmax(min(100%, 760px), 1fr)); padding: 16px 20px 24px; gap: 26px 24px; background: var(--panel-2, #f3f8f8); }
+body.mobile .drawer-head .max-btn { display: none; }
 .chart-empty { color: var(--muted); padding: 14px; }
 
 /* painel lateral */
@@ -548,6 +560,26 @@ body.mobile .wl-url { flex-basis: 100%; }
 .field-range .rng-num { width: 84px; flex: 0 0 auto; }
 .field-range .rng-val { color: #2563c9; }
 
+/* tutoriais em vídeo */
+.top .tools button.tut-btn { background: #ff6b4a; border-color: #ff6b4a; color: #fff; font-weight: 700; box-shadow: 0 0 0 0 rgba(255, 107, 74, .6); animation: tutPulse 2.6s ease-out 3; }
+.top .tools button.tut-btn:hover { filter: brightness(1.08); }
+@keyframes tutPulse { 0% { box-shadow: 0 0 0 0 rgba(255, 107, 74, .65); } 70% { box-shadow: 0 0 0 12px rgba(255, 107, 74, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 107, 74, 0); } }
+body.mobile .top .tools button.tut-btn { background: #ff6b4a; color: #fff; }
+.wtut { margin: 16px 30px 0; padding: 12px 14px 14px; border-radius: 16px; background: linear-gradient(100deg, #fff1e8, #fff8e5); border: 2px solid #ffc93c; }
+.wtut-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin-bottom: 10px; }
+.wtut-h b { font: 900 19px var(--font-fun); color: #b33a1f; } .wtut-h span { font-size: 13.5px; color: var(--muted); }
+.wtut-g { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.wtut-c { display: flex; flex-direction: column; gap: 6px; }
+.wtut-pp { align-self: stretch; border: 1.5px solid #e10600; color: #c40500; background: #fff; border-radius: 99px; padding: 4px 10px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.wtut-pp:hover { background: #ffecea; }
+@media (max-width: 1100px) { .wtut-g { grid-template-columns: repeat(2, 1fr); } }
+.wtut-i { display: flex; flex-direction: column; gap: 6px; padding: 6px; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; cursor: pointer; text-align: left; font: inherit; color: var(--ink); transition: transform .12s, box-shadow .12s; }
+.wtut-i:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.12); border-color: #ff6b4a; }
+.wtut-i img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; background: #0a6f86; }
+.wtut-i b { display: block; font-size: 14.5px; line-height: 1.25; } .wtut-i small { color: var(--muted); font-size: 12px; }
+@media (max-width: 760px) { .wtut-g { grid-template-columns: 1fr; } .wtut-i { flex-direction: row; align-items: center; } .wtut-i img { width: 132px; flex: none; } .wtut { margin: 12px 14px 0; } }
+@media (max-width: 1320px) { body:not(.mobile) .tools { gap: 4px; } body:not(.mobile) .top .tools button, body:not(.mobile) .top .tools select, body:not(.mobile) .top .tools a.manual-link, body:not(.mobile) .top .tools a.claude-link { padding: 5px 7px; font-size: 13.5px; } }
+
 </style>
 </head>
 <body>
@@ -584,6 +616,7 @@ body.mobile .wl-url { flex-basis: 100%; }
     <button id="btnPython" title="Gerar código Python (NumPy, SciPy, Matplotlib)">Python</button>
     <button id="btnSave" title="Salvar projeto (.json)">Salvar</button>
     <button id="btnOpen" title="Abrir projeto (.json)">Abrir</button>
+    <button id="btnTut" class="tut-btn" type="button" title="Tutoriais em vídeo curtos, com narração, e imagens de passo a passo">🎬 Vídeos</button>
     <a id="btnManual" class="btn manual-link" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener" title="Abrir ou baixar o manual em PDF">📘 Manual</a>
     <button id="btnAbout" title="Sobre o SIMULA FÁCIL IA e autoria">Sobre</button>
     <button id="btnThermoM" class="m-only" type="button">Componentes e termodinâmica</button>
@@ -608,6 +641,7 @@ body.mobile .wl-url { flex-basis: 100%; }
       <button class="icon" id="zoomOut" title="Afastar">−</button>
       <button class="icon" id="zoomFit" title="Ajustar à tela">⤢</button>
       <button class="icon" id="zoomIn" title="Aproximar">+</button>
+      <button class="pp-btn" id="btnPP" type="button" title="Imagens com setas vermelhas mostrando cada passo (4 tutoriais)">🧭 Passo a passo</button>
     </div>
     <div class="canvas-wrap" id="canvasWrap">
       <svg id="pfd" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fluxograma do processo"></svg>
@@ -625,6 +659,7 @@ body.mobile .wl-url { flex-basis: 100%; }
         <strong id="drawerTitle">Gráficos</strong>
         <span class="muted small">fonte 18 · “Baixar PNG” em cada gráfico</span>
         <span class="spacer"></span>
+        <button id="drawerMax" class="max-btn" type="button" title="Maximizar os gráficos em tela cheia (duplo clique na barra também) · Esc volta">⛶ Maximizar</button>
         <button id="drawerToggle" class="icon" title="Recolher/expandir">▾</button>
       </div>
       <div class="drawer-body" id="charts"></div>
@@ -730,6 +765,15 @@ body.mobile .wl-url { flex-basis: 100%; }
         <circle cx="190" cy="112" r="6" fill="#ffffff" opacity=".7"/><circle cx="210" cy="126" r="4" fill="#ffffff" opacity=".5"/><circle cx="176" cy="132" r="3" fill="#ffffff" opacity=".5"/>
       </svg>
     </section>
+    <section class="wtut" aria-label="Tutoriais em vídeo e passo a passo">
+      <div class="wtut-h"><b>🎬 Aprenda rapidinho</b><span>vídeos curtos com narração e legendas · 🧭 imagens de passo a passo com setas vermelhas</span></div>
+      <div class="wtut-g">
+        <div class="wtut-c"><button type="button" class="wtut-i" data-tut="0"><img src="tutorial-1.jpg" alt="" loading="lazy"><span><b>1. Conheça o programa</b><small>🎬 os 5 passos · Lucas · 1:42</small></span></button><button type="button" class="wtut-pp" data-tut="0" title="Imagem com setas vermelhas indicando cada passo">🧭 Passo a passo</button></div>
+        <div class="wtut-c"><button type="button" class="wtut-i" data-tut="1"><img src="tutorial-2.jpg" alt="" loading="lazy"><span><b>2. Destilação etanol–água</b><small>🎬 exemplo prático · Marina · 1:48</small></span></button><button type="button" class="wtut-pp" data-tut="1" title="Imagem com setas vermelhas indicando cada passo">🧭 Passo a passo</button></div>
+        <div class="wtut-c"><button type="button" class="wtut-i" data-tut="2"><img src="tutorial-3.jpg" alt="" loading="lazy"><span><b>3. Operações em sequência</b><small>🎬 bomba, aquecedor, coluna e resfriador · 1:17</small></span></button><button type="button" class="wtut-pp" data-tut="2" title="Imagem com setas vermelhas indicando cada passo">🧭 Passo a passo</button></div>
+        <div class="wtut-c"><button type="button" class="wtut-i" data-tut="3"><img src="tutorial-4.jpg" alt="" loading="lazy"><span><b>4. Aba Termodinâmica</b><small>🎬 qual modelo escolher: NRTL, UNIQUAC… · 2:31</small></span></button><button type="button" class="wtut-pp" data-tut="3" title="Imagem com setas vermelhas indicando cada passo">🧭 Passo a passo</button></div>
+      </div>
+    </section>
     <div class="wlinkbar" role="group" aria-label="Link do programa">
       <span class="wl-lbl"><span aria-hidden="true">🔗</span> <b>Link do programa</b> — está no celular? Copie e abra no notebook:</span>
       <span class="wl-box"><span id="wLinkUrl" class="wl-url" title="Endereço do programa">https://juanbosch-cyber.github.io/simulafacil/simulador.html</span><button type="button" class="wl-btn" id="wLinkCopy">📋 Copiar link</button><button type="button" class="wl-btn alt" id="wLinkShare" hidden>📤 Enviar</button></span>
@@ -777,13 +821,15 @@ body.mobile .wl-url { flex-basis: 100%; }
    siteUrl:     endereço deste site no GitHub Pages (troque juanbosch-cyber pelo seu usuário do GitHub).
    goatcounter: código da conta em goatcounter.com que conta as visitas (veja js/visitas.js); '' desliga.
    manual:      nome do arquivo PDF do manual, enviado para a mesma pasta do site no GitHub.
+   videosAlunos: vídeos enviados pelos alunos, por exemplo { titulo: 'Coluna de destilação', autor: 'Nome do aluno', url: 'https://youtu.be/...' }.
    manualVersion: troque a cada manual novo (por exemplo, a data); o link muda e o navegador não abre o PDF antigo do cache. */
 window.SIMULAFACIL_CONFIG = {
   claudeUrl: 'https://claude.ai/artifact/A8LR4WDCvpfBY9XhF5T3TF',
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '4.0-2026-11-11'
+  manualVersion: '4.0-2026-11-12',
+  videosAlunos: []
 };
 
 </script>
@@ -7696,6 +7742,7 @@ window.SIMULAFACIL_CONFIG = {
     head.innerHTML = '<span class="small muted" style="flex:1">' + (opts.source || '') + '</span>';
     const btn = document.createElement('button'); btn.textContent = 'Baixar PNG'; btn.className = 'ghost'; btn.style.fontSize = '12px';
     head.appendChild(btn); card.appendChild(head);
+    if (opts.height && !small) f.layout.height = Math.max(f.layout.height || 430, opts.height); // gráficos maximizados
     if (!f.layout.height) f.layout.height = 430; // altura explícita: o gráfico nunca passa do cartão
     const div = document.createElement('div'); div.style.height = f.layout.height + 'px'; card.appendChild(div);
     container.appendChild(card);
@@ -12242,6 +12289,130 @@ def pfr_transiente(P, nome):
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
+<script>/* js/tutoriais.js */
+/* SIMULA FÁCIL IA — tutoriais em vídeo (1 a 2,5 minutos) com narração pela voz do próprio navegador,
+   e uma imagem de passo a passo (setas vermelhas) para cada tutorial.
+   Os arquivos (tutorial-N.mp4, tutorial-N.jpg, passo-a-passo-N.jpg) ficam na mesma pasta do site; as legendas já estão no vídeo.
+   Vídeos dos alunos: acrescente em js/site-config.js, em videosAlunos: [{ titulo: '...', autor: '...', url: 'https://...' }]. */
+(function (root) {
+  'use strict';
+  const SF = root.SF = root.SF || {};
+  const LIST = [{"file": "tutorial-1.mp4", "poster": "tutorial-1.jpg", "img": "passo-a-passo-1.jpg", "title": "Conheça o programa em 5 passos", "voice": "m", "narr": "Lucas", "dur": "1:42", "cues": [{"start": 0.6, "end": 11.72, "say": "Olá! Eu sou o Lucas. Em poucos minutos, você vai conhecer o Simula Fácil I.A., o simulador de processos químicos e bioprocessos da U.F.S.J."}, {"start": 13.82, "end": 24.3, "say": "É grátis e roda no navegador. Na tela inicial, escolha: conversar com o agente de I.A., abrir um exemplo pronto, ou montar do zero."}, {"start": 26.4, "end": 34.56, "say": "Arraste os equipamentos da paleta, à esquerda, para o fluxograma. Comece pela corrente de alimentação."}, {"start": 36.66, "end": 46.1, "say": "Ligue as correntes: clique na saída do equipamento, a bolinha cheia, e depois na entrada do próximo, a bolinha vazada."}, {"start": 48.2, "end": 57.08, "say": "Na aba Termodinâmica, escolha os componentes, entre mais de quarenta mil compostos, e o modelo, como o N.R.T.L."}, {"start": 59.18, "end": 68.06, "say": "Clique no equipamento e digite os dados de entrada na aba Propriedades: pratos, refluxo, vazões e temperaturas."}, {"start": 70.16, "end": 76.24, "say": "Clique em Simular. Os resultados, as tabelas e os gráficos aparecem na hora."}, {"start": 78.34, "end": 86.02, "say": "Prefere conversar? Peça ao agente de I.A.: ele monta o processo, simula e explica os resultados."}, {"start": 88.12, "end": 95.08, "say": "No fim, abra o fluxograma final e gere os códigos Mátlab e Páiton para o seu relatório."}, {"start": 97.18, "end": 100.54, "say": "Pronto! Agora é com você. Boas simulações!"}]}, {"file": "tutorial-2.mp4", "poster": "tutorial-2.jpg", "img": "passo-a-passo-2.jpg", "title": "Destilação de etanol e água, passo a passo", "voice": "f", "narr": "Marina", "dur": "1:48", "cues": [{"start": 0.6, "end": 7.8, "say": "Oi! Eu sou a Marina. Vamos simular juntos, passo a passo, uma destilação de etanol e água."}, {"start": 9.9, "end": 13.74, "say": "Clique em Novo para começar um fluxograma vazio."}, {"start": 15.84, "end": 24.24, "say": "Na aba Termodinâmica, marque Etanol e Água, e escolha o modelo N.R.T.L., indicado para misturas com água."}, {"start": 26.34, "end": 33.78, "say": "Arraste uma Corrente de alimentação. Ela é a entrada do processo: o vinho, com etanol e água."}, {"start": 35.88, "end": 45.4, "say": "Em Propriedades, digite os dados: cem quilomols por hora, vinte e cinco graus, uma atmosfera e dez por cento de etanol."}, {"start": 47.5, "end": 51.9, "say": "Agora arraste a Coluna de destilação para o fluxograma."}, {"start": 54.0, "end": 59.6, "say": "Arraste também dois Produtos: o destilado, que sai no topo, e o fundo."}, {"start": 61.7, "end": 68.1, "say": "Ligue as correntes: da alimentação para a coluna, e da coluna para cada produto."}, {"start": 70.2, "end": 79.56, "say": "Na coluna, use vinte pratos, alimentação no prato dez, razão de refluxo três, e destilado de doze quilomols por hora."}, {"start": 81.66, "end": 91.18, "say": "Clique em Simular. O destilado sai com oitenta e dois por cento de etanol, em mol, e o fundo leva praticamente só água."}, {"start": 93.28, "end": 99.36, "say": "No gráfico de Mac Cábi Tíli, você vê os pratos da coluna, degrau por degrau."}, {"start": 101.46, "end": 106.98, "say": "Fácil, né? Agora mude o refluxo e veja o que acontece. Até a próxima!"}]}, {"file": "tutorial-3.mp4", "poster": "tutorial-3.jpg", "img": "passo-a-passo-3.jpg", "title": "Operações em sequência: bomba, pré-aquecedor, coluna e resfriador", "voice": "m", "narr": "Lucas", "dur": "1:17", "cues": [{"start": 0.6, "end": 6.84, "say": "Olá de novo! Agora vamos montar um processo com várias operações em sequência."}, {"start": 8.94, "end": 16.54, "say": "Comece pela alimentação, o vinho. Depois, arraste uma Bomba: ela eleva a pressão para dois bar."}, {"start": 18.64, "end": 24.32, "say": "Em seguida, um Aquecedor: o pré-aquecedor leva o vinho a setenta graus."}, {"start": 26.42, "end": 31.86, "say": "Agora, a Coluna de destilação. O fundo, a vinhaça, sai como produto."}, {"start": 33.96, "end": 39.56, "say": "Por fim, um Resfriador no destilado esfria o etanol para trinta graus."}, {"start": 41.66, "end": 49.1, "say": "Clique em cada equipamento e confira os dados: a pressão da bomba e as temperaturas de saída."}, {"start": 51.2, "end": 59.2, "say": "Clique em Simular: o programa resolve os equipamentos na ordem do fluxo e mostra todas as correntes."}, {"start": 61.3, "end": 68.9, "say": "No fluxograma final aparecem as cargas térmicas e a potência da bomba. Pronto para o relatório!"}, {"start": 71.0, "end": 75.16, "say": "Agora monte o seu próprio processo. Boas simulações!"}]}, {"file": "tutorial-4.mp4", "poster": "tutorial-4.jpg", "img": "passo-a-passo-4.jpg", "title": "Aba Termodinâmica: como escolher o modelo (NRTL, UNIQUAC…)", "voice": "f", "narr": "Marina", "dur": "2:31", "cues": [{"start": 0.6, "end": 9.32, "say": "Oi! Eu sou a Marina. Agora vamos entender a aba Termodinâmica: como escolher os componentes e o modelo certo."}, {"start": 11.42, "end": 21.66, "say": "Clique na aba Termodinâmica. Ela define quem está no processo, os componentes, e como eles se comportam: o modelo termodinâmico."}, {"start": 23.76, "end": 31.2, "say": "Para adicionar um componente, digite o nome, a fórmula ou o CAS na busca e marque a caixinha."}, {"start": 33.3, "end": 44.34, "say": "Não achou? Digite em inglês, com três letras ou mais: o banco ampliado tem cerca de quarenta mil compostos. Clique no mais para adicionar."}, {"start": 46.44, "end": 55.0, "say": "Depois, escolha o modelo. São sete opções: Ideal, N.R.T.L., Wilson, Uníquac, Unifác, Peng-Róbinson e S.R.K."}, {"start": 57.1, "end": 66.14, "say": "Na dúvida, leia a sugestão logo abaixo. Para etanol e água, mistura polar, o programa indica N.R.T.L. ou Uníquac."}, {"start": 68.24, "end": 77.92, "say": "Para hidrocarbonetos parecidos, como benzeno e tolueno, a baixa pressão, o modelo Ideal, a lei de Raúlt, já funciona bem."}, {"start": 80.02, "end": 89.22, "say": "Para gases leves e pressões altas, como metano, etano e propano, use uma equação de estado: Peng-Róbinson ou S.R.K."}, {"start": 91.32, "end": 102.68, "say": "Resumindo: N.R.T.L. e Uníquac para líquidos polares, água, álcoois e azeótropos. Eles também preveem duas fases líquidas, como num decantador."}, {"start": 104.78, "end": 116.94, "say": "Wilson, para polares que se misturam bem. Unifác, quando faltam parâmetros. Peng-Róbinson e S.R.K., para gases. E Ideal, só para misturas bem parecidas."}, {"start": 119.04, "end": 129.52, "say": "Com N.R.T.L., Wilson ou Uníquac, confira os parâmetros binários e a fonte dos dados. Você pode editá-los com valores da literatura."}, {"start": 131.62, "end": 143.22, "say": "Por fim, clique em Gerar T x y. Veja o azeótropo do etanol com água, perto de noventa por cento em mol: a destilação comum não passa desse ponto."}, {"start": 145.32, "end": 149.88, "say": "Modelo bem escolhido, simulação confiável. Até a próxima!"}]}];
+  const css = `
+.tut-ov{position:fixed;inset:0;z-index:100000;background:rgba(4,22,30,.82);display:flex;align-items:center;justify-content:center;padding:14px;font-family:inherit}
+.tut-card{background:#fff;color:#11262d;border-radius:18px;width:min(1000px,100%);max-height:100%;overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.tut-head{display:flex;align-items:center;gap:10px;padding:12px 16px;background:linear-gradient(105deg,#073b4c,#0a6f86 60%,#10a8a0);color:#fff}
+.tut-head b{font-size:18px}.tut-head span{flex:1;font-size:13px;opacity:.9}
+.tut-x{background:rgba(255,255,255,.18);border:0;color:#fff;font-size:18px;width:36px;height:36px;border-radius:50%;cursor:pointer}
+.tut-video{display:block;width:100%;background:#000;aspect-ratio:16/9}
+.tut-imgbox{background:#eef5f5;max-height:70vh;overflow:auto;text-align:center}.tut-imgbox img{display:block;width:100%;height:auto}
+.tut-pp-btn{background:#e10600;color:#fff;border:0;border-radius:99px;padding:7px 14px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(225,6,0,.35)}
+.tut-pp-btn:hover{filter:brightness(1.08)}.tut-dl{font-weight:600;color:#0a6f86}
+.tut-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #d6e1e4;font-size:14px}
+.tut-bar label{display:flex;align-items:center;gap:6px;font-weight:600;cursor:pointer}.tut-bar small{color:#4d6168}
+.tut-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;padding:14px 16px}
+.tut-item{display:flex;flex-direction:column;gap:6px;border:2px solid #d6e1e4;border-radius:14px;background:#f3f8f8;padding:8px}
+.tut-play{display:flex;flex-direction:column;gap:6px;text-align:left;border:0;background:none;padding:0;cursor:pointer;font:inherit;color:inherit}
+.tut-pp{align-self:flex-start;border:1.5px solid #e10600;color:#c40500;background:#fff;border-radius:99px;padding:3px 10px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}.tut-pp:hover{background:#ffecea}
+.tut-item img{width:100%;border-radius:9px;aspect-ratio:16/9;object-fit:cover}.tut-item.on{border-color:#ffc93c;background:#fff8e5}
+.tut-item b{font-size:14px;line-height:1.25}.tut-item small{color:#4d6168;font-size:12px}
+.tut-alunos{padding:0 16px 16px}.tut-alunos h4{margin:4px 0 8px;font-size:15px}.tut-alunos a{display:block;padding:6px 0;color:#0a6f86;font-weight:600}
+@media (max-width:640px){.tut-head span{display:none}.tut-list{grid-template-columns:1fr 1fr}.tut-imgbox{max-height:62vh}}`;
+  let ov = null, video = null, imgMode = false, cur = 0, voice = null, spoken = new Set(), speaking = false, waiting = false, active = -1, raf = 0;
+  const synth = root.speechSynthesis;
+  let narr = true; try { narr = localStorage.getItem('simulafacil.narracao') !== '0'; } catch (e) { /* */ }
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function cfg() { return root.SIMULAFACIL_CONFIG || {}; }
+  function src(file) { return file; }   // vídeos na mesma pasta da página (site e Claude)
+  function pickVoice(g) {
+    if (!synth) return null;
+    const vs = synth.getVoices(); let pt = vs.filter(v => /^pt[-_]?BR/i.test(v.lang)); if (!pt.length) pt = vs.filter(v => /^pt/i.test(v.lang));
+    const re = g === 'm' ? /Antonio|Daniel|Donato|Fabio|Humberto|Julio|Nicolau|Valerio|Ricardo|male|masculin/i : /Francisca|Thalita|Maria|Luciana|Brenda|Elza|Giovanna|Leila|Leticia|Manuela|Yara|Vit[oó]ria|Raquel|female|feminin|Google/i;
+    const good = pt.filter(v => re.test(v.name) && !(g === 'm' && /female|feminin/i.test(v.name)));
+    const rank = v => (/Natural|Online|Neural/i.test(v.name) ? 0 : 1);
+    good.sort((a, b) => rank(a) - rank(b));
+    return good[0] || pt[0] || null;
+  }
+  function duck(on) { if (video) video.volume = on ? 0.16 : 0.45; }
+  function stopSpeech() { if (synth) synth.cancel(); speaking = false; active = -1; duck(false); }
+  function speak(k) {
+    const T = LIST[cur], c = T.cues[k]; spoken.add(k);
+    if (!synth || !narr) return;
+    if (!voice) voice = pickVoice(T.voice);
+    const u = new SpeechSynthesisUtterance(c.say); u.lang = 'pt-BR'; if (voice) u.voice = voice;
+    u.rate = 0.97; u.pitch = T.voice === 'm' ? 0.95 : 1.06;
+    u.onend = u.onerror = () => { if (active !== k) return; speaking = false; active = -1; duck(false); if (waiting && video) { waiting = false; video.play().catch(() => {}); } };
+    speaking = true; active = k; duck(true); synth.speak(u);
+  }
+  function tick() {
+    raf = requestAnimationFrame(tick);
+    if (!video || !ov) return;
+    const T = LIST[cur], t = video.currentTime;
+    if (imgMode) return;
+    if (narr && !speaking && !video.paused) {
+      const k = T.cues.findIndex((c, i) => !spoken.has(i) && t >= c.start - 0.05 && t < c.end + 0.6);
+      if (k >= 0) speak(k);
+    }
+    if (narr && speaking && !video.paused && !waiting) {
+      const nx = T.cues[active + 1], lim = nx ? nx.start - 0.2 : video.duration - 0.6;
+      if (t >= lim) { waiting = true; video.pause(); }
+    }
+  }
+  function load(k, mode) {
+    cur = k; stopSpeech(); waiting = false; spoken = new Set(); voice = null;
+    const T = LIST[k];
+    imgMode = mode === 'img' && !!T.img;
+    ov.querySelector('.tut-head b').textContent = T.title;
+    ov.querySelector('.tut-head span').textContent = imgMode ? 'Passo a passo com setas vermelhas' : 'Apresentação: ' + T.narr + ' · ' + T.dur;
+    ov.querySelectorAll('.tut-item').forEach((b, i) => b.classList.toggle('on', i === k));
+    const box = ov.querySelector('.tut-imgbox'), pp = ov.querySelector('.tut-pp-btn'), dl = ov.querySelector('.tut-dl');
+    box.hidden = !imgMode; video.style.display = imgMode ? 'none' : 'block'; ov.querySelector('.tut-narrw').style.display = imgMode ? 'none' : 'contents';
+    pp.hidden = !T.img; pp.textContent = imgMode ? '🎬 Ver o vídeo' : '🧭 Passo a passo (imagem)';
+    dl.hidden = !imgMode || !T.img; if (T.img) { dl.href = src(T.img); dl.setAttribute('download', T.img); }
+    if (imgMode) { video.pause(); video.removeAttribute('src'); video.load(); box.querySelector('img').src = src(T.img); box.querySelector('img').alt = 'Passo a passo: ' + T.title; box.scrollTop = 0; return; }
+    video.src = src(T.file); video.poster = src(T.poster); duck(false);
+    voiceInfo();
+    video.play().catch(() => {});
+  }
+  function voiceInfo() {
+    const el = ov && ov.querySelector('.tut-voice'); if (!el) return;
+    if (!synth) { el.textContent = 'Seu navegador não tem leitura em voz alta; as legendas aparecem no vídeo.'; return; }
+    const v = pickVoice(LIST[cur].voice);
+    el.textContent = v ? 'Voz: ' + v.name.replace(/Microsoft |Google | - Portuguese \(Brazil\)| \(Natural\)| Online/gi, '') : 'Sem voz em português neste navegador: as legendas aparecem no vídeo.';
+  }
+  function open(k, mode) {
+    if (!document.getElementById('tutCss')) { const st = document.createElement('style'); st.id = 'tutCss'; st.textContent = css; document.head.appendChild(st); }
+    close();
+    ov = document.createElement('div'); ov.className = 'tut-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Tutoriais em vídeo');
+    const al = (cfg().videosAlunos || []).filter(v => v && v.url);
+    ov.innerHTML = '<div class="tut-card"><div class="tut-head"><b></b><span></span><button class="tut-x" title="Fechar (Esc)">✕</button></div>' +
+      '<video class="tut-video" controls playsinline preload="metadata"></video><div class="tut-imgbox" hidden><img alt=""></div>' +
+      '<div class="tut-bar"><button type="button" class="tut-pp-btn"></button><a class="tut-dl" hidden>⬇ Baixar a imagem</a><span class="tut-narrw" style="display:contents"><label><input type="checkbox" class="tut-narr"' + (narr ? ' checked' : '') + '> 🔊 Narração por voz</label><small class="tut-voice"></small></span><small style="margin-left:auto">Legendas no vídeo · setas vermelhas na imagem</small></div>' +
+      '<div class="tut-list">' + LIST.map((T, i) => '<div class="tut-item" data-k="' + i + '"><button type="button" class="tut-play" data-k="' + i + '" title="Assistir ao vídeo"><img alt="" src="' + esc(src(T.poster)) + '"><b>' + (i + 1) + '. ' + esc(T.title) + '</b><small>🎬 ' + esc(T.narr) + ' · ' + esc(T.dur) + '</small></button>' + (T.img ? '<button type="button" class="tut-pp" data-k="' + i + '" title="Imagem com o passo a passo">🧭 Passo a passo</button>' : '') + '</div>').join('') + '</div>' +
+      (al.length ? '<div class="tut-alunos"><h4>🎓 Vídeos dos alunos</h4>' + al.map(v => '<a href="' + esc(v.url) + '" target="_blank" rel="noopener">▶ ' + esc(v.titulo || v.url) + (v.autor ? ' — ' + esc(v.autor) : '') + '</a>').join('') + '</div>' : '') +
+      '</div>';
+    document.body.appendChild(ov);
+    video = ov.querySelector('video');
+    ov.querySelector('.tut-x').onclick = close;
+    ov.addEventListener('click', e => { if (e.target === ov) close(); });
+    ov.querySelectorAll('.tut-play').forEach(b => { b.onclick = () => load(+b.dataset.k); });
+    ov.querySelectorAll('.tut-pp').forEach(b => { b.onclick = () => load(+b.dataset.k, 'img'); });
+    ov.querySelector('.tut-pp-btn').onclick = () => load(cur, imgMode ? 'video' : 'img');
+    ov.querySelector('.tut-narr').onchange = e => { narr = e.target.checked; try { localStorage.setItem('simulafacil.narracao', narr ? '1' : '0'); } catch (er) { /* */ } if (!narr) { stopSpeech(); if (waiting) { waiting = false; video.play().catch(() => {}); } } };
+    video.addEventListener('pause', () => { if (video && !waiting) { stopSpeech(); spoken = new Set(LIST[cur].cues.map((c, i) => i).filter(i => LIST[cur].cues[i].end < video.currentTime - 0.3)); } });
+    video.addEventListener('seeking', () => { if (!video) return; stopSpeech(); waiting = false; spoken = new Set(LIST[cur].cues.map((c, i) => i).filter(i => LIST[cur].cues[i].end < video.currentTime - 0.3)); });
+    video.addEventListener('ended', () => { if (!video || imgMode) return; stopSpeech(); if (cur + 1 < LIST.length) setTimeout(() => { if (ov && video && !imgMode && video.ended) load(cur + 1); }, 2500); });
+    document.addEventListener('keydown', onKey);
+    if (synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = voiceInfo;
+    cancelAnimationFrame(raf); tick();
+    load(k || 0, mode);
+  }
+  function onKey(e) { if (e.key === 'Escape' && ov) close(); }
+  function close() { if (!ov) return; stopSpeech(); waiting = false; if (video) video.pause(); ov.remove(); ov = null; video = null; cancelAnimationFrame(raf); document.removeEventListener('keydown', onKey); }
+  SF.tutoriais = { open, close, list: LIST };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
 <script>/* js/app.js */
 /* SIMULA FÁCIL IA — aplicação: estado, paleta, propriedades, resultados, termodinâmica, relatórios e arquivos */
 (function () {
@@ -12252,7 +12423,7 @@ def pfr_transiente(P, nome):
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B' };
 
-  let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false;
+  let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
 
   function blank() { return { name: 'Novo processo', components: ['ethanol', 'water'], model: 'NRTL', blocks: [], streams: [], binary: {} }; }
@@ -12809,7 +12980,8 @@ def pfr_transiente(P, nome):
     if (!plots.length) { el.innerHTML = '<p class="chart-empty">Sem gráficos para mostrar. Simule e selecione uma coluna, reator, trocador ou extrator.</p>'; return; }
     setDrawer(true);
     const cw = SF.mobile ? (el.clientWidth || window.innerWidth) - 18 : 0;
-    plots.forEach(p => SF.charts.render(el, p, { save: saveFile, toast, source: title ? '' : blockName(target), compact: !!SF.mobile, width: cw }));
+    const bigH = chartsMax && !SF.mobile ? Math.round(Math.max(430, Math.min(window.innerHeight - 170, 780))) : 0;
+    plots.forEach(p => SF.charts.render(el, p, { save: saveFile, toast, source: title ? '' : blockName(target), compact: !!SF.mobile, width: cw, height: bigH }));
     if (SF.mobile && mview !== 'charts') $('#mNav .mbadge').hidden = false;
   }
   /* ------------------------------------------------------------------ divisórias arrastáveis (paleta | fluxograma | painel; fluxograma / gráficos) */
@@ -12819,6 +12991,16 @@ def pfr_transiente(P, nome):
   const clampN = (x, a, b) => Math.max(a, Math.min(b, x));
   let relayoutPending = false;
   const relayout = () => { if (relayoutPending) return; relayoutPending = true; requestAnimationFrame(() => { relayoutPending = false; pfd.render(); window.dispatchEvent(new Event('resize')); }); };
+  function setChartsMax(on) {
+    on = !!on; if (on === chartsMax) return;
+    if (on) drawerWasClosed = $('#drawer').classList.contains('closed');
+    chartsMax = on; document.body.classList.toggle('charts-max', on);
+    const b = $('#drawerMax'); if (b) { b.textContent = on ? '↙ Restaurar' : '⛶ Maximizar'; b.title = on ? 'Voltar à tela normal (Esc)' : 'Maximizar os gráficos em tela cheia (duplo clique na barra também) · Esc volta'; }
+    if (on) setDrawer(true); else setDrawer(!drawerWasClosed);
+    if (lastCharts) renderCharts.apply(null, lastCharts);
+    if (!on && drawerWasClosed) setDrawer(false);
+    setTimeout(() => { pfd.render(); window.dispatchEvent(new Event('resize')); }, 60);
+  }
   function setDrawer(open) {
     const d = $('#drawer'); d.classList.toggle('closed', !open);
     d.style.height = open && layout.drawer ? layout.drawer + 'px' : '';
@@ -12853,6 +13035,9 @@ def pfr_transiente(P, nome):
     layout.drawer = clampN(h, 120, maxDrawer()); setDrawer(true);
   }, () => { delete layout.drawer; setDrawer(true); }, d => { layout.drawer = clampN($('#drawer').offsetHeight - d, 120, maxDrawer()); setDrawer(true); });
   applyLayout();
+  if ($('#drawerMax')) $('#drawerMax').onclick = () => setChartsMax(!chartsMax);
+  $('.drawer-head').addEventListener('dblclick', e => { if (!e.target.closest('button') && !SF.mobile) setChartsMax(!chartsMax); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && chartsMax && !document.querySelector('.tut-ov')) { e.preventDefault(); setChartsMax(false); } });
   $('#drawerToggle').onclick = () => { setDrawer($('#drawer').classList.contains('closed')); setTimeout(() => { pfd.render(); window.dispatchEvent(new Event('resize')); }, 50); };
 
   /* ------------------------------------------------------------------ termodinâmica */
@@ -13061,6 +13246,10 @@ def pfr_transiente(P, nome):
   $('#btnSave').onclick = () => saveFile(slug(state.name) + '.json', JSON.stringify(state, null, 2));
   $('#btnOpen').onclick = () => $('#fileOpen').click();
   $('#btnAbout').onclick = openAbout;
+  $('#btnTut').onclick = () => { if (SF.tutoriais) SF.tutoriais.open(0); };
+  if ($('#btnPP')) $('#btnPP').onclick = () => { if (SF.tutoriais) SF.tutoriais.open(0, 'img'); };
+  document.querySelectorAll('.wtut-i').forEach(b => { b.onclick = () => { closeWelcome(); if (SF.tutoriais) SF.tutoriais.open(+b.dataset.tut); }; });
+  document.querySelectorAll('.wtut-pp').forEach(b => { b.onclick = () => { closeWelcome(); if (SF.tutoriais) SF.tutoriais.open(+b.dataset.tut, 'img'); }; });
   $('#fileOpen').onchange = e => { const f = e.target.files[0]; if (!f) return; f.text().then(t => { try { const fs = JSON.parse(t); if (!fs.blocks) throw new Error('arquivo sem blocos'); loadFlowsheet(fs, true); toast('Projeto aberto'); } catch (err) { toast('Arquivo inválido: ' + err.message); } }); e.target.value = ''; };
   $('#projName').onchange = e => { state.name = e.target.value || 'Processo'; persist(); };
   $('#zoomIn').onclick = () => pfd.zoom(1.2); $('#zoomOut').onclick = () => pfd.zoom(1 / 1.2); $('#zoomFit').onclick = () => pfd.fit();
@@ -13088,7 +13277,7 @@ def pfr_transiente(P, nome):
     });
     let noShow = false; try { noShow = localStorage.getItem('simulafacil.noWelcome') === '1'; } catch (e) { /* */ }
     $('#wNoShow').checked = noShow;
-    $('#welcome').hidden = false; setTimeout(() => $('#wClaude').focus(), 30);
+    $('#welcome').hidden = false; $('#welcome').scrollTop = 0; setTimeout(() => { $('#wClaude').focus({ preventScroll: true }); $('#welcome').scrollTop = 0; }, 30);
   }
   function closeWelcome() { $('#welcome').hidden = true; setTimeout(() => pfd.fit(), 30); }
   /* botão "Descer a tela": para quem usa notebook sem mouse (touchpad sem rolagem) — rola a tela inicial ou a página */

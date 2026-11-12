@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SIMULA FÁCIL IA 4.0 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="Aplicativo do SIMULA FÁCIL IA: simulador de processos químicos e bioprocessos gratuito no navegador, com destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, fermentadores, secadores, cristalizadores, trocadores de calor, extração, mais de 40 mil compostos químicos e geração de código MATLAB, Octave e Python. Autor: Prof. Juan Canellas Bosch Neto (Engenharia Química – UFSJ).">
+<meta name="description" content="SIMULA FÁCIL IA 4.0, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -776,12 +776,14 @@ body.mobile .wl-url { flex-basis: 100%; }
    claudeUrl:   link da versão com o agente de IA (abra o artefato no Claude, clique em Compartilhar/Publicar e cole aqui o link público).
    siteUrl:     endereço deste site no GitHub Pages (troque juanbosch-cyber pelo seu usuário do GitHub).
    goatcounter: código da conta em goatcounter.com que conta as visitas (veja js/visitas.js); '' desliga.
-   manual:      nome do arquivo PDF do manual, enviado para a mesma pasta do site no GitHub. */
+   manual:      nome do arquivo PDF do manual, enviado para a mesma pasta do site no GitHub.
+   manualVersion: troque a cada manual novo (por exemplo, a data); o link muda e o navegador não abre o PDF antigo do cache. */
 window.SIMULAFACIL_CONFIG = {
   claudeUrl: 'https://claude.ai/artifact/A8LR4WDCvpfBY9XhF5T3TF',
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
-  manual: 'Manual_SIMULA_FACIL_IA.pdf'
+  manual: 'Manual_SIMULA_FACIL_IA.pdf',
+  manualVersion: '4.0-2026-11-11'
 };
 
 </script>
@@ -13126,7 +13128,9 @@ def pfr_transiente(P, nome):
   bindLinkBox('#wLinkUrl', '#wLinkCopy', '#wLinkShare'); bindLinkBox('#mobUrl', '#mobCopy', '#mobShare');
   // manual em PDF: no site, o arquivo fica na mesma pasta; dentro do Claude, usa o endereço do site
   function manualUrl() {
-    const cfg = window.SIMULAFACIL_CONFIG || {}, f = cfg.manual || 'Manual_SIMULA_FACIL_IA.pdf';
+    const cfg = window.SIMULAFACIL_CONFIG || {}, f0 = cfg.manual || 'Manual_SIMULA_FACIL_IA.pdf';
+    // manualVersion muda o endereço a cada edição do manual, para o navegador não abrir o PDF antigo guardado no cache
+    const f = f0 + (cfg.manualVersion ? (f0.indexOf('?') >= 0 ? '&' : '?') + 'v=' + encodeURIComponent(cfg.manualVersion) : '');
     if (/^https?:/i.test(f)) return f;
     const insideClaude = !!window.claude || /claude\.ai|claudeusercontent|anthropic/i.test(location.hostname) || !/^https?:/.test(location.protocol);
     return insideClaude && cfg.siteUrl ? cfg.siteUrl + f : f;

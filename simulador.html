@@ -831,7 +831,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '4.0-2026-11-12e',
+  manualVersion: '4.0-2026-11-12f',
   videosAlunos: []
 };
 
@@ -1822,11 +1822,11 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'n-octane', name: 'n-Octano', formula: 'C8H18', mw: 114.23, tc: 568.7, pc: 24.9e5, w: 0.399, tb: 398.8, rho: 699, cp: [-6.096, 7.712e-1, -4.195e-4, 8.855e-8], dhv: 34410, ant: [6.91868, 1351.99, 209.155], g: { CH3: 2, CH2: 6 } },
     { id: 'methane', name: 'Metano', formula: 'CH4', mw: 16.043, tc: 190.6, pc: 45.99e5, w: 0.012, tb: 111.7, rho: 422, cp: [19.25, 5.213e-2, 1.197e-5, -1.132e-8], dhv: 8170 },
     { id: 'ethane', name: 'Etano', formula: 'C2H6', mw: 30.07, tc: 305.3, pc: 48.72e5, w: 0.100, tb: 184.6, rho: 544, cp: [5.409, 1.781e-1, -6.938e-5, 8.713e-9], dhv: 14700 },
-    { id: 'propane', name: 'Propano', formula: 'C3H8', mw: 44.097, tc: 369.8, pc: 42.48e5, w: 0.152, tb: 231.1, rho: 493, cp: [-4.224, 3.063e-1, -1.586e-4, 3.215e-8], dhv: 19040 },
-    { id: 'n-butane', name: 'n-Butano', formula: 'C4H10', mw: 58.123, tc: 425.1, pc: 37.96e5, w: 0.200, tb: 272.7, rho: 573, cp: [9.487, 3.313e-1, -1.108e-4, -2.822e-9], dhv: 22440 },
-    { id: 'isobutane', name: 'Isobutano', formula: 'C4H10', mw: 58.123, tc: 407.8, pc: 36.4e5, w: 0.184, tb: 261.4, rho: 551, cp: [-1.39, 3.847e-1, -1.846e-4, 2.895e-8], dhv: 21300 },
+    { id: 'propane', name: 'Propano', formula: 'C3H8', mw: 44.097, tc: 369.8, pc: 42.48e5, w: 0.152, tb: 231.1, rho: 493, cp: [-4.224, 3.063e-1, -1.586e-4, 3.215e-8], dhv: 19040, alias: 'R-290' },
+    { id: 'n-butane', name: 'n-Butano', formula: 'C4H10', mw: 58.123, tc: 425.1, pc: 37.96e5, w: 0.200, tb: 272.7, rho: 573, cp: [9.487, 3.313e-1, -1.108e-4, -2.822e-9], dhv: 22440, alias: 'R-600' },
+    { id: 'isobutane', name: 'Isobutano', formula: 'C4H10', mw: 58.123, tc: 407.8, pc: 36.4e5, w: 0.184, tb: 261.4, rho: 551, cp: [-1.39, 3.847e-1, -1.846e-4, 2.895e-8], dhv: 21300, alias: 'R-600a' },
     { id: 'ethylene', name: 'Etileno', formula: 'C2H4', mw: 28.054, tc: 282.3, pc: 50.4e5, w: 0.087, tb: 169.4, rho: 568, cp: [3.806, 1.566e-1, -8.348e-5, 1.755e-8], dhv: 13530 },
-    { id: 'propylene', name: 'Propeno', formula: 'C3H6', mw: 42.081, tc: 364.9, pc: 46.0e5, w: 0.142, tb: 225.5, rho: 505, cp: [3.71, 2.345e-1, -1.16e-4, 2.205e-8], dhv: 18420 },
+    { id: 'propylene', name: 'Propeno', formula: 'C3H6', mw: 42.081, tc: 364.9, pc: 46.0e5, w: 0.142, tb: 225.5, rho: 505, cp: [3.71, 2.345e-1, -1.16e-4, 2.205e-8], dhv: 18420, alias: 'R-1270' },
     { id: 'hydrogen', name: 'Hidrogênio', formula: 'H2', mw: 2.016, tc: 33.19, pc: 13.13e5, w: -0.216, tb: 20.3, rho: 71, cp: [27.14, 9.274e-3, -1.381e-5, 7.645e-9], dhv: 904 },
     { id: 'nitrogen', name: 'Nitrogênio', formula: 'N2', mw: 28.014, tc: 126.2, pc: 33.98e5, w: 0.037, tb: 77.35, rho: 806, cp: [31.15, -1.357e-2, 2.68e-5, -1.168e-8], dhv: 5580 },
     { id: 'nitric-acid', name: 'Ácido nítrico', formula: 'HNO3', mw: 63.013, tc: 520, pc: 68.9e5, w: 0.714, tb: 356.1, rho: 1512, cp: [9.432, 1.91538e-1, -1.64526e-4, 5.39863e-8], dhv: 37200, ant: [7.56453, 1431.74, 222.69] },
@@ -1834,9 +1834,9 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'no2', name: 'Dióxido de nitrogênio (NO2)', formula: 'NO2', mw: 46.006, tc: 431.4, pc: 101.3e5, w: 0.85, tb: 294.3, rho: 1443, cp: [24.081, 5.05123e-2, -2.65127e-5, 4.16834e-9], dhv: 19100 },
     { id: 'n2o4', name: 'Tetróxido de dinitrogênio (N2O4)', formula: 'N2O4', mw: 92.011, tc: 431.4, pc: 101.3e5, w: 0.85, tb: 294.3, rho: 1443, cp: [28.07, 2.12899e-1, -1.76845e-4, 5.51126e-8], dhv: 38120 },
     { id: 'oxygen', name: 'Oxigênio', formula: 'O2', mw: 31.999, tc: 154.6, pc: 50.43e5, w: 0.022, tb: 90.2, rho: 1141, cp: [28.11, -3.68e-6, 1.746e-5, -1.065e-8], dhv: 6820 },
-    { id: 'co2', name: 'Dióxido de carbono', formula: 'CO2', mw: 44.01, tc: 304.1, pc: 73.83e5, w: 0.224, tb: 194.7, rho: 770, cp: [19.80, 7.344e-2, -5.602e-5, 1.715e-8], dhv: 16700 },
+    { id: 'co2', name: 'Dióxido de carbono', formula: 'CO2', mw: 44.01, tc: 304.1, pc: 73.83e5, w: 0.224, tb: 194.7, rho: 770, cp: [19.80, 7.344e-2, -5.602e-5, 1.715e-8], dhv: 16700, alias: 'R-744' },
     { id: 'co', name: 'Monóxido de carbono', formula: 'CO', mw: 28.01, tc: 132.9, pc: 34.99e5, w: 0.045, tb: 81.7, rho: 789, cp: [30.87, -1.285e-2, 2.789e-5, -1.272e-8], dhv: 6040 },
-    { id: 'ammonia', name: 'Amônia', formula: 'NH3', mw: 17.031, tc: 405.4, pc: 113.53e5, w: 0.257, tb: 239.8, rho: 603, cp: [27.31, 2.383e-2, 1.707e-5, -1.185e-8], dhv: 23350, ant: [7.36050, 926.132, 240.17] },
+    { id: 'ammonia', name: 'Amônia', formula: 'NH3', mw: 17.031, tc: 405.4, pc: 113.53e5, w: 0.257, tb: 239.8, rho: 603, cp: [27.31, 2.383e-2, 1.707e-5, -1.185e-8], dhv: 23350, ant: [7.36050, 926.132, 240.17], alias: 'R-717' },
     { id: 'sucrose', name: 'Sacarose (soluto não volátil)', formula: 'C12H22O11', mw: 342.3, rho: 1587, nv: true, cpl: 425 },
     { id: 'nacl', name: 'Cloreto de sódio (soluto não volátil)', formula: 'NaCl', mw: 58.443, rho: 2165, nv: true, cpl: 50.5 },
     { id: 'kno3', name: 'Nitrato de potássio (soluto não volátil)', formula: 'KNO3', mw: 101.103, rho: 2109, nv: true, cpl: 96.4 },
@@ -1850,6 +1850,22 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'il-c4mim-ntf2', name: 'Líquido iônico [C4mim][NTf2] ([bmim][Tf2N])', formula: 'C10H15F6N3O4S2', mw: 419.36, rho: 1436, nv: true, cpl: 564, il: true },
     { id: 'il-c6mim-ntf2', name: 'Líquido iônico [C6mim][NTf2] ([hmim][Tf2N])', formula: 'C12H19F6N3O4S2', mw: 447.42, rho: 1372, nv: true, cpl: 627, il: true },
     { id: 'il-c8mim-ntf2', name: 'Líquido iônico [C8mim][NTf2] ([omim][Tf2N])', formula: 'C14H23F6N3O4S2', mw: 475.47, rho: 1320, nv: true, cpl: 690, il: true },
+    // fluidos refrigerantes (os mesmos do refrigerador): propriedades críticas da literatura; Antoine e ΔHvap ajustados à equação de Peng-Robinson
+    // do módulo de refrigeração (pressões a ~1 % das tabelas); misturas como pseudo-puras, com Tc e Pc pseudocríticos (ASHRAE)
+    { id: 'r134a', name: 'R-134a (1,1,1,2-tetrafluoroetano)', formula: 'CH2FCF3', mw: 102.0309, tc: 374.18, pc: 40.55e5, w: 0.327, tb: 247.09, rho: 1188, cp: [16.506, 0.29601, -0.00021962, 5.871e-08], dhv: 22233, ant: [7.22518, 955.786, 246], cas: '811-97-2', refr: 'R-134a', alias: 'R-134a R134a HFC-134a' },
+    { id: 'r32', name: 'R-32 (difluorometano)', formula: 'CH2F2', mw: 52.0234, tc: 351.25, pc: 57.83e5, w: 0.2743, tb: 221.56, rho: 959.5, cp: [14.161, 0.1224, -6.34e-05, 1.19e-08], dhv: 20309, ant: [7.34222, 896.9, 252.5], cas: '75-10-5', refr: 'R-32', alias: 'R-32 R32 HFC-32' },
+    { id: 'r125', name: 'R-125 (pentafluoroetano)', formula: 'CHF2CF3', mw: 120.0214, tc: 339.4, pc: 36.3e5, w: 0.3046, tb: 225.09, rho: 1190, cp: [18.948, 0.32232, -0.00025061, 6.8505e-08], dhv: 19659, ant: [7.19956, 883.409, 252.5], cas: '354-33-6', refr: 'R-125', alias: 'R-125 R125 HFC-125' },
+    { id: 'r143a', name: 'R-143a (1,1,1-trifluoroetano)', formula: 'CH3CF3', mw: 84.04, tc: 345.86, pc: 37.62e5, w: 0.2615, tb: 226.01, rho: 928, cp: [-5.13, 0.35502, -0.000306, 1.013e-07], dhv: 19326, ant: [7.15802, 889.593, 255], cas: '420-46-2', refr: 'R-143a', alias: 'R-143a R143a HFC-143a' },
+    { id: 'r152a', name: 'R-152a (1,1-difluoroetano)', formula: 'CH3CHF2', mw: 66.05, tc: 386.43, pc: 45.2e5, w: 0.2724, tb: 249.05, rho: 899.1, cp: [10.439, 0.23674, -0.00014513, 3.4532e-08], dhv: 22028, ant: [7.18187, 963.259, 248], cas: '75-37-6', refr: 'R-152a', alias: 'R-152a R152a HFC-152a' },
+    { id: 'r23', name: 'R-23 (trifluorometano)', formula: 'CHF3', mw: 70.0139, tc: 299.29, pc: 48.32e5, w: 0.263, tb: 191.21, rho: 1352.5, cp: [12.465, 0.16049, -0.00010835, 2.6521e-08], dhv: 16975, ant: [7.24606, 760.319, 256], cas: '75-46-7', refr: 'R-23', alias: 'R-23 R23 HFC-23' },
+    { id: 'r245fa', name: 'R-245fa (1,1,1,3,3-pentafluoropropano)', formula: 'CF3CH2CHF2', mw: 134.0479, tc: 427.2, pc: 36.51e5, w: 0.3776, tb: 288.2, rho: 1339, cp: [4.461, 0.4795, -0.0003964, 1.239e-07], dhv: 26285, ant: [7.17795, 1072.401, 234.5], cas: '460-73-1', refr: 'R-245fa', alias: 'R-245fa R245fa HFC-245fa' },
+    { id: 'r22', name: 'R-22 (clorodifluorometano)', formula: 'CHClF2', mw: 86.4684, tc: 369.25, pc: 49.9e5, w: 0.2197, tb: 232.16, rho: 1191, cp: [17.809, 0.15999, -0.00011532, 3.0159e-08], dhv: 20141, ant: [7.17496, 915.07, 254], cas: '75-45-6', refr: 'R-22', alias: 'R-22 R22 HCFC-22' },
+    { id: 'r1234yf', name: 'R-1234yf (2,3,3,3-tetrafluoropropeno)', formula: 'CF3CF=CH2', mw: 114.0416, tc: 367.85, pc: 33.82e5, w: 0.276, tb: 243.74, rho: 1092, cp: [9.0477, 0.40436, -0.0003441, 9.2694e-08], dhv: 20695, ant: [7.10452, 938.402, 251.5], cas: '754-12-1', refr: 'R-1234yf', alias: 'R-1234yf R1234yf HFO-1234yf' },
+    { id: 'r1234ze', name: 'R-1234ze(E) (trans-1,3,3,3-tetrafluoropropeno)', formula: 'CF3CH=CHF', mw: 114.0416, tc: 382.51, pc: 36.35e5, w: 0.313, tb: 254.19, rho: 1163, cp: [25.583, 0.34131, -0.00039666, 2.8737e-07], dhv: 22318, ant: [7.15113, 969.763, 246], cas: '29118-24-9', refr: 'R-1234ze(E)', alias: 'R-1234ze(E) R1234ze HFO-1234ze(E)' },
+    { id: 'r404a', name: 'R-404A (mistura R-125/R-143a/R-134a, pseudo-pura)', formula: 'mistura', mw: 97.6031, tc: 345.27, pc: 37.29e5, w: 0.2745, tb: 226.49, rho: 1044, cp: [4.31333, 0.341062, -0.000282875, 8.79358e-08], dhv: 19555, ant: [7.18, 891.887, 254], refr: 'R-404A', alias: 'R-404A R404A' },
+    { id: 'r407c', name: 'R-407C (mistura R-32/R-125/R-134a, pseudo-pura)', formula: 'mistura', mw: 86.2028, tc: 359.35, pc: 46.3e5, w: 0.3042, tb: 232.88, rho: 1134, cp: [16.0508, 0.23457, -0.000165647, 4.2629e-08], dhv: 20924, ant: [7.26572, 922.274, 250.5], refr: 'R-407C', alias: 'R-407C R407C' },
+    { id: 'r410a', name: 'R-410A (mistura R-32/R-125, pseudo-pura)', formula: 'mistura', mw: 72.5848, tc: 344.49, pc: 49.01e5, w: 0.2931, tb: 221.38, rho: 1062, cp: [15.6085, 0.182852, -0.000120009, 2.90164e-08], dhv: 19913, ant: [7.29866, 891.81, 253.5], refr: 'R-410A', alias: 'R-410A R410A' },
+    { id: 'r507a', name: 'R-507A (mistura R-125/R-143a, pseudo-pura)', formula: 'mistura', mw: 98.8585, tc: 343.77, pc: 37.05e5, w: 0.2742, tb: 225.62, rho: 1040, cp: [4.78621, 0.341553, -0.000283188, 8.77938e-08], dhv: 19464, ant: [7.17612, 887.374, 254], refr: 'R-507A', alias: 'R-507A R507A' },
     { id: 'mn-ion', name: 'Íon manganês Mn²⁺ (soluto, M=54,94)', formula: 'Mn2+', mw: 54.938, rho: 7210, nv: true, cpl: 26 },
     { id: 'inert-solid', name: 'Sólido inerte (farelo/torta)', formula: '(C6H10O5)n', mw: 162.14, rho: 1500, solid: true, cpl: 210 },
     { id: 'glucose', name: 'Glicose (soluto não volátil)', formula: 'C6H12O6', mw: 180.156, rho: 1540, nv: true, cpl: 219 },
@@ -12442,6 +12458,15 @@ def pfr_transiente(P, nome):
         { id: 'CH', type: 'refrigerator', name: 'Chiller CH-01', params: { T: 7, fluid: 'R-134a', Tcd: 40, dTev: 5, eta: 0.75, sh: 5, sc: 3, dP: 0.3 } },
         { id: 'P', type: 'product', name: 'Água gelada' }],
       streams: [S('1', 'F', 'out', 'CH', 'in', 'Retorno 12 °C'), S('2', 'CH', 'out', 'P', 'in', 'Água gelada 7 °C')] } },
+    { key: 'r407c-evaporador', title: 'Refrigerante R-407C (R-32/R-125/R-134a) com Peng-Robinson: válvula de expansão e evaporador, com o deslizamento de temperatura da mistura zeotrópica', fs: {
+      name: 'Evaporação do R-407C', components: ['r32', 'r125', 'r134a'], model: 'PR',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'R-407C líquido do condensador', params: { T: 35, P: 17, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica', composition: { r32: 0.23, r125: 0.25, r134a: 0.52 } } },
+        { id: 'VE', type: 'valve', name: 'Válvula de expansão', params: { P: 5 } },
+        { id: 'EV', type: 'heater', name: 'Evaporador', params: { mode: 'Fração vaporizada', T: 10, Q: 0, vf: 1, dP: 0 } },
+        { id: 'EQ', type: 'energy', name: 'Calor retirado do ambiente refrigerado', params: { Q: '' } },
+        { id: 'P', type: 'product', name: 'Vapor saturado ao compressor' }],
+      streams: [S('1', 'F', 'out', 'VE', 'in', 'Líquido 17 bar'), S('2', 'VE', 'out', 'EV', 'in', 'Mistura bifásica 5 bar'), S('E1', 'EQ', 'eo', 'EV', 'q_in', 'Q'), S('3', 'EV', 'out', 'P', 'in', 'Vapor saturado')] } },
     { key: 'co2-liquido-ionico', title: 'Captura de CO₂ com líquido iônico [C4mim][NTf2] — modelo PC-SAFT (absorção a 20 bar e regeneração a 1 atm)', fs: {
       name: 'Captura de CO2 com líquido iônico', components: ['co2', 'nitrogen', 'il-c4mim-ntf2'], model: 'PCSAFT',
       blocks: [
@@ -13905,6 +13930,7 @@ def pfr_transiente(P, nome):
   function modelAdvice(ids) {
     const cs = ids.map(id => TH.COMP[id]);
     if (cs.some(c => c.il)) return 'Líquido iônico na mistura: use o PC-SAFT (dissolve gases como o CO2; o líquido iônico não evapora).';
+    if (cs.length && cs.filter(c => c.refr || c.alias).length >= cs.length / 2) return 'Fluidos refrigerantes: use Peng-Robinson (ou SRK), a mesma base do refrigerador. Em misturas zeotrópicas, como o R-407C (R-32/R-125/R-134a), o PR mostra o deslizamento de temperatura entre bolha e orvalho; pares sem kij usam kij = 0.';
     const gas = cs.filter(c => c.tc && c.tc < 380 && !c.ant).length, polar = cs.filter(c => c.g && (c.g.OH || c.g.H2O || c.g.CH3OH || c.g.COOH || c.g.CH3CO || c.g.CH3COO)).length;
     if (gas && gas >= cs.length / 2) return 'Predominam gases leves: use Peng-Robinson ou SRK (equações de estado).';
     if (polar >= 1 && cs.some(c => c.id === 'water')) return 'Mistura polar com água: use NRTL (ou UNIQUAC). Para pares sem dados, os parâmetros são estimados por UNIFAC.';
@@ -13954,7 +13980,7 @@ def pfr_transiente(P, nome):
       (nCS ? '<p class="small muted" style="margin:0 0 6px">Banco ChemSep v8.3 com mais ' + nCS + ' compostos (nomes em inglês): digite ao menos 2 letras, a fórmula ou o CAS para encontrá-los. © Kooijman e Taylor, Artistic License 2.0.</p>' : '') +
       (SF.dbx ? '<p class="small muted" style="margin:0 0 6px">Banco ampliado com cerca de 40 mil compostos (nomes em inglês), carregado da internet quando você busca com 3 letras ou mais. Qualidade A: propriedades críticas e pressão de vapor experimentais; B: em parte experimentais; C: estimadas (Joback, Wilson-Jasperson, Lee-Kesler). Dados: biblioteca chemicals (C. Bell, MIT) e fontes citadas no manual.</p><div id="extRes"></div>' : '') +
       '<div class="comp-list" id="compList">' +
-      TH.COMPONENTS.slice().sort((a, b) => (state.components.indexOf(b.id) >= 0) - (state.components.indexOf(a.id) >= 0)).map(c => '<label data-name="' + esc((c.name + ' ' + c.formula + ' ' + c.id + ' ' + (c.cas || '')).toLowerCase()) + '"' + (c.db === 'chemsep' || c.db === 'ext' ? ' data-cs="1"' + (state.components.indexOf(c.id) >= 0 ? '' : ' hidden') : '') + '><input type="checkbox" data-comp="' + c.id + '"' + (state.components.indexOf(c.id) >= 0 ? ' checked' : '') + '>' + esc(c.name) + ' <small>' + esc(c.formula) + (c.db === 'chemsep' ? ' · ChemSep · CAS ' + esc(c.cas) : c.db === 'ext' ? ' · banco ampliado · CAS ' + esc(c.cas) + ' · qualidade ' + esc(c.q || 'C') : '') + (c.tb ? ' · Teb ' + nf(c.tb - 273.15, 1) + ' °C' : c.solid ? ' · sólido' : ' · não volátil') + '</small></label>').join('') + '</div>';
+      TH.COMPONENTS.slice().sort((a, b) => (state.components.indexOf(b.id) >= 0) - (state.components.indexOf(a.id) >= 0)).map(c => '<label data-name="' + esc((c.name + ' ' + c.formula + ' ' + c.id + ' ' + (c.cas || '') + (c.alias ? ' ' + c.alias + ' ' + c.alias.replace(/-/g, '') + ' refrigerante' : '')).toLowerCase()) + '"' + (c.db === 'chemsep' || c.db === 'ext' ? ' data-cs="1"' + (state.components.indexOf(c.id) >= 0 ? '' : ' hidden') : '') + '><input type="checkbox" data-comp="' + c.id + '"' + (state.components.indexOf(c.id) >= 0 ? ' checked' : '') + '>' + esc(c.name) + ' <small>' + esc(c.formula) + (c.refr ? ' · refrigerante' : c.alias ? ' · refrigerante ' + esc(c.alias) : '') + (c.db === 'chemsep' ? ' · ChemSep · CAS ' + esc(c.cas) : c.db === 'ext' ? ' · banco ampliado · CAS ' + esc(c.cas) + ' · qualidade ' + esc(c.q || 'C') : '') + (c.tb ? ' · Teb ' + nf(c.tb - 273.15, 1) + ' °C' : c.solid ? ' · sólido' : ' · não volátil') + '</small></label>').join('') + '</div>';
     if (th && th.pairInfo.length) {
       const isAct = ['NRTL', 'WILSON', 'UNIQUAC'].indexOf(state.model) >= 0;
       h += '<div class="subhead">Parâmetros binários (' + esc(TH.MODELS[state.model]) + ')</div>';

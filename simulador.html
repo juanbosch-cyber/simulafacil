@@ -604,6 +604,13 @@ body.mobile .top .tools button.tut-btn { background: #ff6b4a; color: #fff; }
 .wtut-i b { display: block; font-size: 14.5px; line-height: 1.25; } .wtut-i small { color: var(--muted); font-size: 12px; }
 @media (max-width: 760px) { .wtut-g { grid-template-columns: 1fr; } .wtut-i { flex-direction: row; align-items: center; } .wtut-i img { width: 132px; flex: none; } .wtut { margin: 12px 14px 0; } }
 @media (max-width: 1320px) { body:not(.mobile) .tools { gap: 4px; } body:not(.mobile) .top .tools button, body:not(.mobile) .top .tools select, body:not(.mobile) .top .tools a.manual-link, body:not(.mobile) .top .tools a.claude-link { padding: 5px 7px; font-size: 13.5px; } }
+/* alimentos e lodos (aba Termodinâmica) */
+.food-props > summary { cursor: pointer; }
+.food-tab td.num, .food-tab th { white-space: nowrap; }
+.food-tab td:first-child { min-width: 9em; }
+.food-tab small.fcomp { display: block; color: var(--muted, #6b7280); font-size: 11px; line-height: 1.3; margin-top: 2px; }
+.food-tab tr.on td { background: rgba(37, 99, 201, .08); font-weight: 600; }
+.food-tab button.mini { padding: 1px 8px; font-size: 12px; line-height: 1.5; }
 
 </style>
 </head>
@@ -858,7 +865,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '4.0-2026-11-13c',
+  manualVersion: '4.0-2026-11-13d',
   videosAlunos: [
     { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' }
   ]
@@ -1918,6 +1925,79 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'na2co3', name: 'Carbonato de sódio (carga morta do licor, soluto não volátil)', formula: 'Na2CO3', mw: 105.988, rho: 2540, nv: true, cpl: 112.3 },
     { id: 'bl-organics', name: 'Sólidos orgânicos do licor negro (lignina e carboidratos dissolvidos)', formula: 'ORG', mw: 180, rho: 1300, nv: true, cpl: 252 }
   ];
+  /* ------------------------------------------------------------------ alimentos e lodos: a matéria seca de cada um é um componente (M = 100 g/mol, como
+     os "Sólidos secos do produto"), com a composição centesimal. Propriedades pelas correlações de Choi e Okos (1986), T em °C:
+     c_p (kJ/(kg·K)) pela média mássica; ρ (kg/m³) por 1/Σ(x_i/ρ_i); k (W/(m·K)) pela média em volume. Constituintes: w água, p proteína,
+     f gordura, c carboidratos (sem fibra), fi fibras, a cinzas. Composições de alimentos: USDA FoodData Central (SR Legacy), g/100 g in natura.
+     Lodos de fábrica de celulose (ETE): fibras = celulose + hemicelulose + lignina; cinzas = carga mineral (CaCO3, argila); biomassa = proteína. */
+  const CHOI = {
+    w: { cp: [4.1762, -9.0864e-5, 5.4731e-6], rho: [997.18, 3.1439e-3, -3.7574e-3], k: [0.57109, 1.7625e-3, -6.7036e-6] },
+    p: { cp: [2.0082, 1.2089e-3, -1.3129e-6], rho: [1329.9, -0.5184, 0], k: [0.17881, 1.1958e-3, -2.7178e-6] },
+    f: { cp: [1.9842, 1.4733e-3, -4.8008e-6], rho: [925.59, -0.41757, 0], k: [0.18071, -2.7604e-4, -1.7749e-7] },
+    c: { cp: [1.5488, 1.9625e-3, -5.9399e-6], rho: [1599.1, -0.31046, 0], k: [0.20141, 1.3874e-3, -4.3312e-6] },
+    fi: { cp: [1.8459, 1.8306e-3, -4.6509e-6], rho: [1311.5, -0.36589, 0], k: [0.18331, 1.2497e-3, -3.1683e-6] },
+    a: { cp: [1.0926, 1.8896e-3, -3.6817e-6], rho: [2423.8, -0.28063, 0], k: [0.32962, 1.4011e-3, -2.9069e-6] }
+  };
+  const FOOD_KEYS = ['p', 'f', 'c', 'fi', 'a'];
+  const choi = (key, prop, T) => { const q = CHOI[key][prop]; return q[0] + q[1] * T + q[2] * T * T; };
+  // comp = {w, p, f, c, fi, a}: frações mássicas (in natura, somam 1); devolve c_p, ρ, k e α = k/(ρ·c_p)
+  function choiOkos(comp, Tc) {
+    const T = Tc == null ? 25 : Tc, ks = ['w'].concat(FOOD_KEYS); let cp = 0, iv = 0, kk = 0;
+    ks.forEach(q => { const x = comp[q] || 0; cp += x * choi(q, 'cp', T); iv += x / choi(q, 'rho', T); });
+    const rho = 1 / iv; ks.forEach(q => { const x = comp[q] || 0; kk += (x / choi(q, 'rho', T)) * rho * choi(q, 'k', T); });
+    return { cp, rho, k: kk, alpha: kk / (rho * cp * 1000) };
+  }
+  // tipo: 'fruta', 'líquido' (sólidos dissolvidos ou em suspensão: evaporador, spray dryer) ou 'lodo'; g/100 g in natura [água, proteína, gordura, carboidratos sem fibra, fibras, cinzas]
+  const FOODS = [
+    { id: 'food-abacaxi', nome: 'Abacaxi', tipo: 'fruta', g: [86.00, 0.54, 0.12, 11.72, 1.40, 0.22] },
+    { id: 'food-morango', nome: 'Morango', tipo: 'fruta', g: [90.95, 0.67, 0.30, 5.68, 2.00, 0.40] },
+    { id: 'food-uva', nome: 'Uva', tipo: 'fruta', g: [80.54, 0.72, 0.16, 17.20, 0.90, 0.48] },
+    { id: 'food-banana', nome: 'Banana', tipo: 'fruta', g: [74.91, 1.09, 0.33, 20.24, 2.60, 0.82] },
+    { id: 'food-manga', nome: 'Manga', tipo: 'fruta', g: [83.46, 0.82, 0.38, 13.38, 1.60, 0.36] },
+    { id: 'food-maca', nome: 'Maçã', tipo: 'fruta', g: [85.56, 0.26, 0.17, 11.41, 2.40, 0.19] },
+    { id: 'food-mamao', nome: 'Mamão', tipo: 'fruta', g: [88.06, 0.47, 0.26, 9.12, 1.70, 0.39] },
+    { id: 'food-goiaba', nome: 'Goiaba', tipo: 'fruta', g: [80.80, 2.55, 0.95, 8.92, 5.40, 1.39] },
+    { id: 'food-tomate', nome: 'Tomate (polpa ou suco, para extrato ou tomate seco)', tipo: 'líquido', g: [94.52, 0.88, 0.20, 2.69, 1.20, 0.50] },
+    { id: 'food-laranja', nome: 'Suco de laranja', tipo: 'líquido', g: [88.30, 0.70, 0.20, 10.20, 0.20, 0.40] },
+    { id: 'food-leite', nome: 'Leite integral', tipo: 'líquido', g: [88.13, 3.15, 3.25, 4.80, 0, 0.67] },
+    { id: 'food-leite-desnatado', nome: 'Leite desnatado', tipo: 'líquido', g: [90.84, 3.37, 0.08, 4.96, 0, 0.75] },
+    // extrato de café para o spray dryer: matéria seca com a composição do café solúvel em pó (USDA); extrato com 40 % de sólidos
+    { id: 'food-cafe', nome: 'Extrato de café (café solúvel)', tipo: 'líquido', g: [60, 5.04, 0.20, 31.12, 0, 3.64] },
+    // lodos da ETE de fábrica de celulose kraft (base seca, literatura): primário = fibras não recuperadas; biológico (secundário) = biomassa + fibras + cinzas
+    { id: 'sludge-primario', nome: 'Lodo primário de fábrica de celulose (fibras)', tipo: 'lodo', w: 70, dry: { p: 0, f: 2, c: 0, fi: 85, a: 13 } },
+    { id: 'sludge-biologico', nome: 'Lodo biológico (secundário) de fábrica de celulose', tipo: 'lodo', w: 82, dry: { p: 30.7, f: 4.2, c: 11.6, fi: 26.9, a: 26.6 } },
+    { id: 'sludge-misto', nome: 'Lodo misto de fábrica de celulose (70 % primário + 30 % biológico, base seca)', tipo: 'lodo', w: 75, dry: { p: 9.2, f: 2.7, c: 3.5, fi: 67.6, a: 17.0 } }
+  ];
+  FOODS.forEach(fd => {
+    let dry; const w = fd.g ? fd.g[0] : fd.w;
+    if (fd.g) { const s = fd.g.slice(1).reduce((a, v) => a + v, 0); dry = {}; FOOD_KEYS.forEach((q, i) => { dry[q] = fd.g[i + 1] / s; }); }
+    else { const s = FOOD_KEYS.reduce((a, q) => a + (fd.dry[q] || 0), 0); dry = {}; FOOD_KEYS.forEach(q => { dry[q] = (fd.dry[q] || 0) / s; }); }
+    fd.dryComp = dry; fd.xw = w / 100;
+    const pS = choiOkos(dry, 25), lodo = fd.tipo === 'lodo';
+    const rot = lodo ? 'matéria seca do lodo' : fd.tipo === 'fruta' ? 'sólidos secos (alimento)' : 'sólidos (alimento)';
+    COMPONENTS.push(Object.assign({ id: fd.id, name: fd.nome + ': ' + rot, formula: lodo ? 'MS-lodo' : 'MS', mw: 100, rho: Math.round(pS.rho),
+      cpl: +(pS.cp * 100).toFixed(2), food: fd, tags: lodo ? 'lodo celulose papel ete efluente secagem solar' : 'alimento ' + (fd.tipo === 'fruta' ? 'fruta fruit secagem' : 'líquido concentrado evaporador spray') },
+      fd.tipo === 'líquido' ? { nv: true } : { solid: true }));
+  });
+  // propriedades do material úmido (fração mássica de água xw) e dos sólidos secos, por Choi–Okos
+  function foodProps(id, xw, Tc) {
+    const c = COMP[id], fd = c && c.food; if (!fd) return null;
+    const comp = { w: xw }; FOOD_KEYS.forEach(q => { comp[q] = (1 - xw) * fd.dryComp[q]; });
+    return Object.assign(choiOkos(comp, Tc), { dry: choiOkos(fd.dryComp, Tc), comp });
+  }
+  // mistura de água + matérias secas de alimentos/lodos (massas em kg): null se houver outro componente relevante
+  function foodMix(ids, kg, Tc) {
+    const tot = kg.reduce((a, v) => a + v, 0); if (!(tot > 0)) return null;
+    const comp = { w: 0, p: 0, f: 0, c: 0, fi: 0, a: 0 }; let anyFood = false;
+    for (let i = 0; i < ids.length; i++) {
+      const x = kg[i] / tot; if (x < 1e-9) continue;
+      if (ids[i] === 'water') { comp.w += x; continue; }
+      const c = COMP[ids[i]]; if (!c || !c.food) { if (x > 1e-4) return null; continue; }
+      anyFood = true; FOOD_KEYS.forEach(q => { comp[q] += x * c.food.dryComp[q]; });
+    }
+    return anyFood ? Object.assign(choiOkos(comp, Tc), { comp }) : null;
+  }
+
   // banco ChemSep (js/chemsep.js, carregado antes): 518 compostos extras, buscáveis na aba Termodinâmica; CAS dos embutidos para os pares do banco
   const CS = root.SF && root.SF.CHEMSEP;
   if (CS) {
@@ -2548,7 +2628,8 @@ window.SIMULAFACIL_CONFIG = {
     return null;
   }
 
-  SF.thermo = { R, T0, PATM, COMPONENTS, COMP, MODELS, Thermo, addComponents, psatComp, hIGcomp, dHvapComp, rachfordRice, pairKey, NRTL_DB, makeUnifac, nrtlGamma, VLE_EXP, vleExp };
+  SF.thermo = { R, T0, PATM, COMPONENTS, COMP, MODELS, Thermo, addComponents, psatComp, hIGcomp, dHvapComp, rachfordRice, pairKey, NRTL_DB, makeUnifac, nrtlGamma, VLE_EXP, vleExp,
+    FOODS, CHOI, choiOkos, foodProps, foodMix };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -2780,6 +2861,7 @@ window.SIMULAFACIL_CONFIG = {
   const C2K = t => t + 273.15, K2C = T => T - 273.15, BAR = 1e5, KMOLH = 1000 / 3600;
   const sum = N.sum, clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const num = (v, d) => (v === undefined || v === null || v === '' || isNaN(+v) ? d : +v);
+  const MAT_NONE = 'nenhum (composição manual)';
 
   /* ------------------------------------------------------------------ correntes */
   function mkStream(th, flows, T, P, fl) {
@@ -2859,6 +2941,14 @@ window.SIMULAFACIL_CONFIG = {
   const SD_CONT = 'contínuo (alimentação → pó)', SD_BAT = 'batelada: um lote de alimentação seco de uma vez', isSdBat = q => /^batelada/.test(q.mode || '');
   const BD_CONT = 'contínuo: CSTR com cinética global de 2ª ordem', BD_BAT = 'batelada: 3 etapas reversíveis (Noureddini & Zhu)';
   const SEMC = ' (só sem corrente conectada; com corrente, vem dela)';
+  // secador solar
+  const SO_CONT = 'contínuo: túnel solar com bandejas (alimentação → produto seco)', SO_BAT = 'batelada: bandejas carregadas uma vez, secando ao longo dos dias';
+  const SO_MIX = 'misto: coletor solar + câmara com cobertura transparente', SO_IND = 'indireto: coletor solar + câmara opaca', SO_DIR = 'direto: estufa ou cabine solar, sem coletor';
+  const soCol = q => !/^direto/.test(q.type || ''), soGlz = q => !/^indireto/.test(q.type || '');
+  const SO_PRESETS = (function () { // material da batelada: umidade inicial típica e parâmetros de secagem coerentes
+    const o = {}; (TH.FOODS || []).forEach(f => { const X0 = +(f.xw / (1 - f.xw)).toFixed(3), lodo = f.tipo === 'lodo';
+      o[f.nome] = lodo ? { X0, Xf: 0.25, Xc: +Math.min(X0, 1.5).toFixed(2), Xe: 0.05, alfa: 0.9, Ld: 6 } : { X0, Xf: 0.18, Xc: +(0.5 * X0).toFixed(2), Xe: 0.1, alfa: 0.8, Ld: 1.2 }; });
+    return o; })();
   const TYPES = {
     feed: { label: 'Corrente de alimentação', cat: 'Correntes', ins: [], outs: ['out'], params: [
       Object.assign({ def: 25 }, P_T), Object.assign({ def: 1.01325 }, P_P),
@@ -2866,6 +2956,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'flow', label: 'Vazão total', u: '', def: 100 }, { k: 'flowUnit', label: 'Unidade da vazão', type: 'select', options: ['kmol/h', 'kg/h', 'kg/s', 't/h', 'mol/s', 'L/s', 'm³/h'], def: 'kmol/h' },
       { k: 'basis', label: 'Base da composição', type: 'select', options: ['molar', 'mássica', 'concentração (mol/L)'], def: 'molar' },
       { k: 'solvent', label: 'Solvente (base concentração)', type: 'comp', def: '' },
+      { k: 'material', label: 'Alimento ou lodo (preenche a composição mássica: água + matéria seca)', type: 'select', options: [MAT_NONE].concat(TH.FOODS ? TH.FOODS.map(f => f.nome) : []), def: MAT_NONE },
       { k: 'composition', label: 'Composição', type: 'composition' }] },
     product: { label: 'Produto (saída)', cat: 'Correntes', ins: ['in'], outs: [], params: [] },
     energy: { label: 'Corrente de energia', cat: 'Correntes', ins: [], outs: [], eins: ['ei'], eouts: ['eo'], params: [
@@ -3157,6 +3248,36 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Lb', label: 'Carga de produto úmido na esteira', u: 'kg/m²', def: 8, when: isCont },
       { k: 'We', label: 'Largura da esteira', u: 'm', def: 0.6, when: isCont },
       { k: 'Ab', label: 'Área da bandeja', u: 'm²', def: 0.06, when: notCont }] },
+    solar_dryer: { label: 'Secador solar: coletor solar de ar + câmara de bandejas; túnel contínuo ou batelada ao longo dos dias', cat: 'Secagem e cristalização', ins: ['feed'], outs: ['product', 'exhaust'], eins: ['q_in'], params: [
+      { k: 'mode', label: 'Operação', type: 'select', options: [SO_CONT, SO_BAT], def: SO_CONT },
+      { k: 'type', label: 'Tipo de secador solar', type: 'select', options: [SO_MIX, SO_IND, SO_DIR], def: SO_MIX },
+      { k: 'Fd', label: 'Vazão de produto úmido (nas horas de operação)' + SEMC, u: 'kg/h', def: 5, when: isCont },
+      { k: 'cXi', label: 'Umidade inicial em base seca X_i' + SEMC, u: 'kg água/kg sólido seco', def: 6.14, when: isCont },
+      { k: 'Tf', label: 'Temperatura da alimentação' + SEMC, u: '°C', def: 25, when: isCont },
+      { k: 'mat', label: 'Material (preenche X_0 e os parâmetros típicos)', type: 'select', options: [MAT_NONE].concat(Object.keys(SO_PRESETS)), def: MAT_NONE, presets: SO_PRESETS, when: notCont },
+      { k: 'Mb', label: 'Massa de produto úmido carregada', u: 'kg', def: 50, when: notCont },
+      { k: 'X0', label: 'Umidade inicial em base seca X_0', u: 'kg água/kg sólido seco', def: 6.14, when: notCont },
+      { k: 'Xf', label: 'Umidade final desejada X_f', u: 'kg água/kg sólido seco', def: 0.18 },
+      { k: 'Xc', label: 'Umidade crítica X_c (fim do período de taxa constante)', u: 'kg/kg', def: 3 },
+      { k: 'Xe', label: 'Umidade de equilíbrio X_e', u: 'kg/kg', def: 0.1 },
+      { k: 'Ld', label: 'Carga de sólido seco nas bandejas', u: 'kg/m²', def: 1.2 },
+      { k: 'Wt', label: 'Largura do túnel', u: 'm', def: 2, when: isCont },
+      { k: 'Hd', label: 'Irradiação solar diária (no plano do coletor)', u: 'kWh/(m²·dia)', type: 'range', min: 2, max: 8, step: 0.1, def: 5.5 },
+      { k: 'Lday', label: 'Duração do dia (do nascer ao pôr do sol)', u: 'h', def: 12 },
+      { k: 'Lop', label: 'Horas de operação por dia (centradas no meio-dia)', u: 'h', def: 8, when: isCont },
+      { k: 'tIni', label: 'Hora da carga', u: 'h', def: 8, when: notCont },
+      { k: 'Ta', label: 'Temperatura do ar ambiente (durante o dia)', u: '°C', def: 30 },
+      { k: 'URa', label: 'Umidade relativa do ar ambiente', u: '%', def: 60 },
+      { k: 'P', label: 'Pressão atmosférica', u: 'kPa', def: 101.325 },
+      { k: 'Ac', label: 'Área do coletor solar', u: 'm²', type: 'range', min: 1, max: 80, step: 0.5, def: 12, when: soCol },
+      { k: 'etaC', label: 'Eficiência térmica do coletor η_c', u: '0–1', def: 0.5, when: soCol },
+      { k: 'Qa', label: 'Vazão de ar do ventilador (na condição ambiente)', u: 'm³/h', def: 500 },
+      { k: 'v', label: 'Velocidade do ar sobre as bandejas', u: 'm/s', def: 1 },
+      { k: 'tauG', label: 'Transmitância solar da cobertura transparente τ', u: '0–1', def: 0.85, when: soGlz },
+      { k: 'alfa', label: 'Absortância solar do produto α', u: '0–1', def: 0.8 },
+      { k: 'Uc', label: 'Perda de calor da câmara para o ambiente U (por m² de bandeja)', u: 'W/(m²·K)', def: 5 },
+      { k: 'Tmax', label: 'Temperatura máxima do ar admitida pelo produto (qualidade)', u: '°C', def: 65 },
+      { k: 'vw', label: 'Vento na secagem ao sol aberto (comparação)', u: 'm/s', def: 1.5, when: notCont }] },
     cstr: { label: 'Reator CSTR', cat: 'Reatores', ins: ['in'], outs: ['out'], params: [
       { k: 'V', label: 'Volume', u: 'm³', def: 1 }, { k: 'mode', label: 'Regime', type: 'select', options: ['permanente', 'transiente', 'batelada'], def: 'permanente' },
       { k: 'thermal', label: 'Energia', type: 'select', options: ['isotérmico', 'adiabático', 'camisa'], def: 'isotérmico' },
@@ -5693,6 +5814,201 @@ window.SIMULAFACIL_CONFIG = {
     plots.push(etaPlot(X0));
     return { out: {}, duty: Pb / etaG, res: decBR(res), warn: decW(warn), plots, mwb: { Mb, Ms, X0, T0, Xf, Xe, Xa, etaM, etaG, cps, Tp, lam: kin.lam, Pb, tf, th: th_, E, Eabs, Eel, e, Dp } };
   };
+  /* ------------------------------------------------------------------ secador solar: coletor solar de ar + câmara de bandejas (contínuo: túnel; batelada: dias de sol).
+     Irradiância ao longo do dia: I(t) = I_máx·sen(π(t − t_n)/L) do nascer t_n = 12 − L/2 ao pôr do sol, com I_máx = π·H_d/(2L).
+     Ar aquecido no coletor: T_h = T_amb + η_c·I·A_c/(G_a·c_s). Secagem nas bandejas: convecção, N_c = h·(T − T_w)/λ_w, mais a radiação
+     que atravessa a cobertura e é absorvida pelo produto (tipos misto e direto): a fração φ = 0,5 dela evapora água, φ·τ·α·I/λ_w, e o resto aquece o ar
+     da câmara (efeito estufa). No período decrescente as taxas são multiplicadas por f(X) = (X − X_e)/(X_c − X_e). O ar umidifica e esfria ao passar
+     pelas bandejas (balanços de massa e de entalpia). À noite o secador fica fechado. Ao sol aberto, a outra metade se perde para o ambiente. */
+  const SO_PHI = 0.5;
+  function solarDay(p) {
+    const L = num(p.Lday, 12), Hd = num(p.Hd, 5.5);
+    if (!(L > 4 && L < 20)) throw new Error('a duração do dia deve ficar entre 4 e 20 h');
+    if (!(Hd > 0 && Hd < 12)) throw new Error('a irradiação diária deve ficar entre 0 e 12 kWh/(m²·dia)');
+    const Imax = Math.PI * Hd * 1000 / (2 * L), tn = 12 - L / 2;
+    const I = h => { const hh = ((h % 24) + 24) % 24; return hh > tn && hh < tn + L ? Imax * Math.sin(Math.PI * (hh - tn) / L) : 0; };
+    return { L, Hd, Imax, tn, I };
+  }
+  function solarAir(p, warn) {
+    const P = num(p.P, 101.325) * 1000, Ta = num(p.Ta, 30), URa = num(p.URa, 60);
+    if (!(P > 50e3 && P < 120e3)) throw new Error('a pressão atmosférica deve ficar entre 50 e 120 kPa');
+    if (!(URa > 0 && URa < 100)) throw new Error('a umidade relativa do ambiente deve ficar entre 0 e 100 %');
+    const pw = URa / 100 * STEAM.psat(C2K(Ta)), H = 0.622 * pw / (P - pw), amb = airProps(Ta, H, P);
+    const Qa = num(p.Qa, 500), v = num(p.v, 1), col = soCol(p), glz = soGlz(p);
+    const Ac = col ? num(p.Ac, 12) : 0, etaC = col ? num(p.etaC, 0.5) : 0, tauG = glz ? num(p.tauG, 0.85) : 0, alfa = num(p.alfa, 0.8);
+    if (!(Qa > 0 && v > 0)) throw new Error('a vazão e a velocidade do ar devem ser positivas');
+    if (col && !(Ac > 0 && etaC > 0 && etaC < 1)) throw new Error('a área do coletor deve ser positiva e a eficiência ficar entre 0 e 1');
+    if (!(alfa >= 0 && alfa <= 1 && tauG >= 0 && tauG <= 1)) throw new Error('a transmitância e a absortância devem ficar entre 0 e 1');
+    if (v > 5) warn.push('velocidade do ar de ' + v + ' m/s: secadores solares costumam trabalhar entre 0,3 e 2 m/s (mais vento arrasta o produto e gasta energia no ventilador)');
+    const Ga = Qa / amb.vH, cs = 1.005 + 1.88 * H;             // ar seco (kg/h) e calor úmido (kJ/(kg·K))
+    const Th = I => Ta + etaC * I * Ac / 1000 / (Ga / 3600 * cs);   // ar quente na saída do coletor (°C)
+    const Uc = num(p.Uc, 5); if (!(Uc >= 0)) throw new Error('o coeficiente de perda de calor da câmara não pode ser negativo');
+    return { P, Ta, URa, H, amb, Qa, v, col, glz, Ac, etaC, tauG, alfa, Ga, cs, Th, Uc, Tmax: num(p.Tmax, 65) };
+  }
+  const soType = p => (/^direto/.test(p.type || '') ? 'direto (estufa ou cabine, sem coletor)' : /^indireto/.test(p.type || '') ? 'indireto (coletor + câmara opaca)' : 'misto (coletor + câmara com cobertura transparente)');
+  const sat = (T, P) => { const ps = STEAM.psat(C2K(T)); return ps >= P ? Infinity : 0.622 * ps / (P - ps); };
+  // propriedades do produto quando o sólido é a matéria seca de um alimento ou lodo do banco (Choi e Okos)
+  function soFoodRows(id, X0, Xf, T) {
+    if (!id || !TH.foodProps) return [];
+    const c = TH.COMP[id]; if (!c || !c.food) return [];
+    const a = TH.foodProps(id, X0 / (1 + X0), T), b = TH.foodProps(id, Xf / (1 + Xf), T);
+    return [{ k: 'Material: ' + c.food.nome, v: 'propriedades por Choi e Okos a ' + br(T.toFixed(0)) + ' °C', u: '' },
+      { k: 'c_p: úmido (entrada) / produto seco (X_f)', v: a.cp.toFixed(3) + ' / ' + b.cp.toFixed(3) + ' kJ/(kg·K)', u: '' },
+      { k: 'ρ: úmido / seco', v: a.rho.toFixed(0) + ' / ' + b.rho.toFixed(0) + ' kg/m³', u: '' },
+      { k: 'k: úmido / seco', v: a.k.toFixed(3) + ' / ' + b.k.toFixed(3) + ' W/(m·K)', u: '' }];
+  }
+  IMPL.solar_dryer = function (th, b, ins) {
+    const p = b.params, warn = [], cont = isCont(p), day = solarDay(p), air = solarAir(p, warn);
+    const Xc = num(p.Xc, 3), Xe = num(p.Xe, 0.1), Ld = num(p.Ld, 1.2);
+    if (!(Ld > 0)) throw new Error('a carga de sólido seco nas bandejas deve ser positiva');
+    if (!(Xc > Xe && Xe >= 0)) throw new Error('a umidade crítica deve ser maior que a de equilíbrio');
+    const f = X => (X >= Xc ? 1 : Math.max(0, (X - Xe) / (Xc - Xe)));
+    const col = { X: '#2563c9', T: '#d1302b', I: '#e8a317', g: '#2e9e6b', k: '#8a8f98', o: '#7a3db8' };
+    const qr = I => air.tauG * air.alfa * I;                          // W/m² absorvidos pelo produto sob a cobertura
+    const glp = kWh => kWh * 3.6 / (46.4 * 0.85);                     // kg de GLP (PCI 46,4 MJ/kg, queimador 85 %)
+    if (cont) {
+      const fd = wetFeed(th, ins && ins.feed, num(p.Fd, 5), num(p.cXi, 6.14), num(p.Tf, 25), warn);
+      const X0 = fd.Xi, Xf = num(p.Xf, 0.18), Lop = num(p.Lop, 8), Wt = num(p.Wt, 2);
+      if (!(Xf > Xe && Xf < X0)) throw new Error('a umidade final deve ficar entre X_e = ' + Xe + ' e a inicial (X_i = ' + X0.toFixed(3) + ')');
+      if (!(Lop > 0 && Lop <= day.L)) throw new Error('as horas de operação devem ser positivas e não passar da duração do dia (' + day.L + ' h)');
+      if (!(Wt > 0)) throw new Error('a largura do túnel deve ser positiva');
+      // irradiância média nas horas de operação (janela centrada no meio-dia)
+      const Iop = day.Imax * (2 * day.L / (Math.PI * Lop)) * Math.sin(Math.PI * Lop / (2 * day.L)), Th = air.Th(Iop), Ss = fd.Ss, Ga = air.Ga;
+      if (Th > air.Tmax) warn.push('o ar sai do coletor a ' + Th.toFixed(1) + ' °C, acima do máximo admitido pelo produto (' + br(air.Tmax) + ' °C): aumente a vazão de ar ou reduza o coletor');
+      // túnel em paralelo (cocorrente): o ar quente encontra o produto úmido na entrada; integração em X, da entrada (X_i) à saída (X_f)
+      const n = 800, dX = (X0 - Xf) / n, Rr0 = qr(Iop);
+      let Ec = 0, Er = 0, A = 0, tau = 0, Qa_ = 0, Tpk = Th; const pos = [0], Xp = [X0], Tp = [Th], Hp = [air.H], Rp = [];
+      let T = Th, H = air.H;
+      for (let i = 0; i < n; i++) {
+        const X = X0 - (i + 0.5) * dX;
+        if (H >= 0.995 * sat(T, air.P)) throw new Error('o ar fica saturado no túnel antes de o produto chegar a X_f (com X = ' + X.toFixed(2) + ' kg/kg): aumente a vazão de ar (mínimo de cerca de ' + Math.ceil(Ss * (X0 - Xf) / Math.max(1e-6, air.amb.Hw - air.H) * air.amb.vH / 10) * 10 + ' m³/h) ou o coletor');
+        const a = dryerRc(T, H, air.P, air.v, false), rc = a.Rc * f(X), rr = SO_PHI * Rr0 * 3.6 / a.lw * f(X), R = rc + rr;
+        if (!(R > 1e-6)) throw new Error('a taxa de secagem se anula no túnel (X = ' + X.toFixed(3) + '): aumente a vazão de ar, o coletor ou a umidade final');
+        const dA = Ss * dX / R; A += dA; tau += Ld * dX / R;
+        Ec += rc * dA; Er += rr * dA; Qa_ += ((1 - SO_PHI * f(X)) * Rr0 - air.Uc * (T - air.Ta)) * 3.6 * dA; Tpk = Math.max(Tpk, T);   // kJ/h: radiação que aquece o ar menos a perda pela câmara
+        H = air.H + (Ec + Er) / Ga; T = Th + (Qa_ - a.lw * Ec) / (Ga * air.cs);   // o ar cede o calor da evaporação convectiva e recebe parte da radiação
+        if (i % 8 === 7) { pos.push(A); Xp.push(X0 - (i + 1) * dX); Tp.push(T); Hp.push(H); Rp.push(R); }
+      }
+      const E = Ss * (X0 - Xf), Mp = Ss * (1 + Xf), Tout = T, Hout = H, URo = 100 * Hout * air.P / (0.622 + Hout) / STEAM.psat(C2K(Tout)), Lt = A / Wt, days = tau / Lop;
+      const lam = STEAM.hV(C2K(air.amb.Tw)) - STEAM.hL(C2K(air.amb.Tw)), Qu = air.etaC * Iop * air.Ac / 1000, Qr = Rr0 * A / 1000, Qev = E * lam / 3600;
+      const Sinc = Iop * (air.Ac + (air.glz ? A : 0)) / 1000, etaS = Sinc > 0 ? Qev / Sinc : 0, Eday = (Qu + Qr) * Lop;
+      if (Tpk > air.Tmax + 0.05 && Th <= air.Tmax) warn.push('dentro do túnel o ar chega a ' + Tpk.toFixed(1) + ' °C (aquecido pela radiação sobre o produto já seco), acima do máximo do produto (' + br(air.Tmax) + ' °C): aumente a vazão de ar');
+      if (days > 6) warn.push('o produto fica ' + days.toFixed(1) + ' dias de operação no túnel: aumente o coletor, a vazão de ar ou a temperatura; secagens solares longas favorecem fungos e escurecimento');
+      if (URo > 90) warn.push('o ar sai do túnel com UR de ' + URo.toFixed(0) + ' %: perto da saturação; mais vazão de ar evita condensação nas bandejas finais');
+      const res = [{ k: 'Operação', v: 'contínua: túnel solar ' + soType(p) + (fd.conn ? ' (alimentação pela corrente)' : ' (alimentação pelos campos)'), u: '' },
+        { k: 'Alimentação: produto úmido / sólido seco / água (nas horas de operação)', v: fd.M.toFixed(2) + ' / ' + Ss.toFixed(3) + ' / ' + fd.W.toFixed(2) + ' kg/h', u: '' },
+        { k: 'Umidade: inicial / final (base seca)', v: X0.toFixed(3) + ' / ' + Xf.toFixed(3) + ' kg/kg (' + (100 * X0 / (1 + X0)).toFixed(1) + ' % / ' + (100 * Xf / (1 + Xf)).toFixed(1) + ' % em base úmida)', u: '' },
+        { k: 'Água evaporada / produto seco', v: E.toFixed(3) + ' / ' + Mp.toFixed(3) + ' kg/h', u: '' },
+        { k: 'Produção por dia (' + br(Lop) + ' h de operação): úmido processado / produto seco', v: (fd.M * Lop).toFixed(1) + ' / ' + (Mp * Lop).toFixed(2) + ' kg/dia', u: '' },
+        { k: 'Sol: irradiação diária / I_máx ao meio-dia / média nas horas de operação', v: br(day.Hd) + ' kWh/(m²·dia) / ' + day.Imax.toFixed(0) + ' / ' + Iop.toFixed(0) + ' W/m²', u: '' },
+        { k: 'Ar ambiente: T / UR / H / T de bulbo úmido', v: air.Ta.toFixed(1) + ' °C / ' + air.URa.toFixed(0) + ' % / ' + air.H.toFixed(4) + ' kg/kg / ' + air.amb.Tw.toFixed(1) + ' °C', u: '' },
+        { k: 'Ar seco do ventilador G_a', v: Ga.toFixed(0) + ' kg/h (' + br(air.Qa) + ' m³/h)', u: '' },
+        { k: air.col ? 'Ar na saída do coletor (A_c = ' + br(air.Ac) + ' m², η_c = ' + br(air.etaC) + ')' : 'Ar na entrada da câmara (sem coletor)', v: +Th.toFixed(2), u: '°C' },
+        { k: 'Ar na saída do túnel: T / H / UR', v: Tout.toFixed(1) + ' °C / ' + Hout.toFixed(4) + ' kg/kg / ' + URo.toFixed(0) + ' %', u: '' },
+        { k: 'Tempo de residência no túnel (horas de sol)', v: tau.toFixed(2) + ' h = ' + days.toFixed(2) + ' dias de operação', u: '' },
+        { k: 'Área de bandejas / comprimento do túnel (largura ' + br(Wt) + ' m)', v: A.toFixed(2) + ' m² / ' + Lt.toFixed(2) + ' m', u: '' },
+        { k: 'Produto retido no túnel (hold-up, sólido seco)', v: +(Ss * tau).toFixed(2), u: 'kg' },
+        { k: 'Calor útil do coletor / radiação absorvida pelo produto (φ = 0,5 dela evapora água; o resto aquece o ar)', v: Qu.toFixed(2) + ' / ' + Qr.toFixed(2) + ' kW', u: '' },
+        { k: 'Calor da evaporação / eficiência térmica do secador', v: Qev.toFixed(2) + ' kW / ' + (100 * etaS).toFixed(1) + ' %', u: '' },
+        { k: 'Energia solar aproveitada por dia (GLP evitado: PCI 46,4 MJ/kg, queimador 85 %)', v: Eday.toFixed(1) + ' kWh/dia (' + glp(Eday).toFixed(1) + ' kg de GLP)', u: '' }];
+      const fid = fd.sol ? th.ids[fd.sol.reduce((bi, v, i) => (v > fd.sol[bi] ? i : bi), 0)] : null;
+      soFoodRows(fid, X0, Xf, (Th + Tout) / 2).forEach(r => res.push(r));
+      const fr = pos.map(a => a / A * Lt), HwTh = dryerRc(Th, air.H, air.P, air.v, false).Hw;
+      const plots = [{ kind: 'curves', title: 'Ao longo do túnel: umidade do produto e temperatura do ar', data: { xLabel: 'Posição no túnel (m)', yLabel: 'X (kg/kg)  ·  T/10 (°C)', xRange: [0, Lt], series: [
+          { name: 'Umidade do produto X', x: fr, y: Xp, color: col.X, width: 3.5 }, { name: 'Temperatura do ar ÷ 10 (°C)', x: fr, y: Tp.map(t => t / 10), color: col.T, width: 2.5, dash: 'dash' }],
+          hlines: [{ y: Xf, name: 'X_f', color: col.g }] } },
+        { kind: 'curves', title: 'Umidade do ar ao longo do túnel (o ar recolhe a água evaporada)', data: { xLabel: 'Posição no túnel (m)', yLabel: 'H (kg de água/kg de ar seco)', xRange: [0, Lt], series: [
+          { name: 'H do ar', x: fr, y: Hp, color: col.o, width: 3.5 }, { name: 'Saturação adiabática do ar quente (H_w)', x: [0, Lt], y: [HwTh, HwTh], color: col.k, dash: 'dot', width: 1.6 }] } }];
+      const hh = [], Ii = [], Tt = []; for (let i = 0; i <= 96; i++) { const h = day.tn + day.L * i / 96; hh.push(h); Ii.push(day.I(h)); Tt.push(air.Th(day.I(h))); }
+      plots.push({ kind: 'curves', title: 'Irradiância e temperatura do ar na saída do coletor ao longo do dia', data: { xLabel: 'Hora do dia', yLabel: 'I/10 (W/m²)  ·  T (°C)', xRange: [day.tn, day.tn + day.L], series: [
+        { name: 'Irradiância ÷ 10 (W/m²)', x: hh, y: Ii.map(v => v / 10), color: col.I, width: 3 }, { name: 'Ar na saída do coletor (°C)', x: hh, y: Tt, color: col.T, width: 3.5 },
+        { name: 'Janela de operação', x: [12 - Lop / 2, 12 + Lop / 2], y: [air.Ta, air.Ta], mode: 'lines', color: '#111', width: 5 }], hlines: [{ y: air.Tmax, name: 'T máxima do produto', color: col.k }] } });
+      const XX = [], RR = []; for (let i = 0; i <= 150; i++) { const X = Xe + (X0 - Xe) * i / 150; XX.push(X); RR.push((dryerRc(Th, air.H, air.P, air.v, false).Rc + SO_PHI * Rr0 * 3.6 / air.amb.lw) * f(X)); }
+      plots.push({ kind: 'curves', title: 'Taxa de secagem × umidade (na entrada do túnel: convecção + radiação)', data: { xLabel: 'X (kg de água/kg de sólido seco)', yLabel: 'N (kg/(h·m²))', series: [
+        { name: 'N(X) com o ar da entrada', x: XX, y: RR, color: col.T, width: 3.5 }, { name: 'X_c', x: [Xc, Xc], y: [0, Math.max.apply(null, RR) * 1.05], color: '#111', dash: 'dash', width: 1.6 }] } });
+      const out = {}; let util = feedUtil(fd);
+      if (fd.sol) { out.product = solidsStream(th, fd, Ss, Ss * Xf, Tout, fd.Pst); const ha = humidAir(th, fd, Ga, air.H, E, Tout, fd.Pst, warn); out.exhaust = ha.s; util += ha.util; }
+      return { out, duty: (Qu + Qr) * 1000, massUtil: util, res: decBR(res), warn: decW(warn), plots,
+        sol: { cont: true, type: soType(p), P: air.P, Uc: air.Uc, M: fd.M, Ss, X0, Xf, Xc, Xe, Ld, Wt, Hd: day.Hd, L: day.L, Lop, Imax: day.Imax, Iop, Ta: air.Ta, URa: air.URa, H: air.H, Ga, Qa: air.Qa, v: air.v,
+          Ac: air.Ac, etaC: air.etaC, tauG: air.tauG, alfa: air.alfa, Th, Tout, Hout, tau, days, A, Lt, E, Qu, Qr, etaS } };
+    }
+    // batelada: bandejas carregadas uma vez; integração no tempo, minuto a minuto, até X_f (no máximo 40 dias)
+    if (ins && connected(ins.feed)) warn.push('na batelada a corrente de alimentação não é usada: escolha a operação contínua (túnel) para ligar o secador ao fluxograma');
+    const Mb = num(p.Mb, 50), X0 = num(p.X0, 6.14), Xf = num(p.Xf, 0.18), t0 = num(p.tIni, 8), vw = num(p.vw, 1.5);
+    if (!(Mb > 0)) throw new Error('a massa carregada deve ser positiva');
+    if (!(X0 > Xe && Xf > Xe && Xf < X0)) throw new Error('as umidades devem obedecer X_e < X_f < X_0');
+    if (!(vw > 0)) throw new Error('a velocidade do vento deve ser positiva');
+    const Ms = Mb / (1 + X0), A = Ms / Ld, Ga = air.Ga, dt = 1 / 60, Hin = air.H;
+    // estado do ar na entrada a cada minuto do dia (só depende do sol): T_h, T_w, H_w, λ e N_c
+    // g = fração da radiação absorvida que aquece o ar da câmara (1 − φ·f(X)): interpolação entre g = 0 e g = 1
+    // ar da câmara (mistura): G·c_s·(T − T_h) = g·q_r·A − U·A·(T − T_amb)
+    const GC = Ga / 3600 * air.cs * 1000, UA = air.Uc * A, Tch = (Th, g, I) => (GC * Th + g * qr(I) * A + UA * air.Ta) / (GC + UA);
+    const tab = []; for (let m = 0; m < 1440; m++) { const I = day.I(m / 60); if (!(I > 0)) { tab.push(null); continue; } const T = Tch(air.Th(I), 0, I), a = dryerRc(T, Hin, air.P, air.v, false), T1 = Tch(air.Th(I), 1, I), c = Math.abs(T1 - T) > 1e-6 ? dryerRc(T1, Hin, air.P, air.v, false) : a;
+      tab.push({ I, T, T1, Hw: a.Hw, Hw1: c.Hw, lw: a.lw, lw1: c.lw, Rc: a.Rc, Rc1: c.Rc }); }
+    const at = (s, g) => ({ I: s.I, T: s.T + g * (s.T1 - s.T), Hw: s.Hw + g * (s.Hw1 - s.Hw), lw: s.lw + g * (s.lw1 - s.lw), Rc: s.Rc + g * (s.Rc1 - s.Rc) });
+    const open = dryerRc(air.Ta, Hin, air.P, vw, false), lamA = air.amb.lw;
+    let X = X0, Xo = X0, t = 0, tEnd = null, tOpen = null, Esun = 0, Eev = 0, Tmx = air.Ta, sunH = 0, Sinc = 0;
+    const tt = [0], XS = [X0], XO = [X0], dayEnd = [], tmax = 40 * 24;
+    while (t < tmax && (tEnd == null || tOpen == null)) {
+      const k = Math.floor((((t0 + t) % 24) + 24) % 24 * 60 + 1e-6) % 1440, s0 = tab[k], s = s0 && at(s0, 1 - SO_PHI * f(X));
+      if (s) {
+        if (tEnd == null) {
+          const Emax = Ga * Math.max(0, s.Hw - Hin), NTU = Emax > 0 ? s.Rc * A / Emax : 0, ff = f(X);
+          let Ec = Emax > 0 ? Emax * (1 - Math.exp(-NTU * ff)) : 0, Er = SO_PHI * qr(s.I) * 3.6 / s.lw * A * ff;
+          const Tout = s.T - s.lw * Ec / (Ga * air.cs), Hcap = Math.max(0, 0.98 * sat(Tout, air.P) - Hin) * Ga;   // o ar não passa da saturação
+          if (Ec + Er > Hcap) Er = Math.max(0, Hcap - Ec);
+          const dXs = (Ec + Er) * dt / Ms; X = Math.max(Xe, X - dXs); Eev += (Ec + Er) * dt;
+          Esun += (air.etaC * s.I * air.Ac + qr(s.I) * A) / 1000 * dt; Sinc += s.I * (air.Ac + (air.glz ? A : 0)) / 1000 * dt; Tmx = Math.max(Tmx, air.Th(s0.I), s.T); sunH += dt;
+          if (X <= Xf) tEnd = t + dt;
+        }
+        if (tOpen == null) { const ro = (open.Rc + SO_PHI * air.alfa * s0.I * 3.6 / lamA) * f(Xo); Xo = Math.max(Xe, Xo - ro * dt / Ld); if (Xo <= Xf) tOpen = t + dt; }
+      }
+      t += dt;
+      if (Math.abs(((t0 + t) % 24) - 18) < dt / 2) dayEnd.push({ d: Math.floor((t0 + t) / 24) + 1, X: tEnd == null ? X : Xf, Xo: tOpen == null ? Xo : Xf });
+      if (Math.round(t / dt) % 10 === 0) { tt.push(t / 24); XS.push(tEnd == null ? X : Xf); XO.push(tOpen == null ? Xo : Xf); }
+    }
+    const done = tEnd != null, tE = done ? tEnd : t, dE = tE / 24, Mfin = Ms * (1 + (done ? Xf : X)), E = Mb - Mfin;
+    if (!done) warn.push('em 40 dias o produto não chegou a X_f (ficou em X = ' + X.toFixed(3) + ' kg/kg): aumente o coletor, a vazão de ar ou reduza a carga nas bandejas');
+    if (Tmx > air.Tmax) warn.push('ao meio-dia o ar quente chega a ' + Tmx.toFixed(1) + ' °C, acima do máximo do produto (' + br(air.Tmax) + ' °C): aumente a vazão de ar');
+    const lamEv = air.amb.lw;
+    const noon = tab[720] && at(tab[720], 1 - SO_PHI);
+    const res = [{ k: 'Operação', v: 'batelada: secador solar ' + soType(p) + ', carga às ' + br(t0) + ' h', u: '' },
+      { k: 'Carga: produto úmido / sólido seco / água a retirar', v: Mb.toFixed(2) + ' / ' + Ms.toFixed(3) + ' / ' + (Ms * (X0 - Xf)).toFixed(3) + ' kg', u: '' },
+      { k: 'Umidade: inicial / final (base seca)', v: X0.toFixed(3) + ' / ' + Xf.toFixed(3) + ' kg/kg (' + (100 * X0 / (1 + X0)).toFixed(1) + ' % / ' + (100 * Xf / (1 + Xf)).toFixed(1) + ' % em base úmida)', u: '' },
+      { k: 'Área de bandejas (carga de ' + br(Ld) + ' kg de sólido seco/m²)', v: +A.toFixed(2), u: 'm²' },
+      { k: 'Tempo de secagem até X_f', v: done ? (tE.toFixed(1) + ' h desde a carga = ' + dE.toFixed(2) + ' dias (' + sunH.toFixed(1) + ' h de sol)') : 'não atingido em 40 dias', u: '' },
+      { k: 'Comparação: secagem ao sol aberto (vento de ' + br(vw) + ' m/s)', v: tOpen != null ? (tOpen.toFixed(1) + ' h = ' + (tOpen / 24).toFixed(2) + ' dias' + (done ? ' (' + (tOpen / tE).toFixed(2) + ' vezes o tempo no secador)' : '')) : 'não atinge X_f em 40 dias', u: '' },
+      { k: 'Sol: irradiação diária / I_máx ao meio-dia', v: br(day.Hd) + ' kWh/(m²·dia) / ' + day.Imax.toFixed(0) + ' W/m²', u: '' },
+      { k: 'Ar ambiente: T / UR / H', v: air.Ta.toFixed(1) + ' °C / ' + air.URa.toFixed(0) + ' % / ' + air.H.toFixed(4) + ' kg/kg', u: '' },
+      { k: 'Ar seco do ventilador G_a', v: Ga.toFixed(0) + ' kg/h (' + br(air.Qa) + ' m³/h)', u: '' },
+      { k: air.col ? 'Ar na saída do coletor ao meio-dia (A_c = ' + br(air.Ac) + ' m², η_c = ' + br(air.etaC) + ')' : 'Ar na entrada da câmara ao meio-dia', v: tab[720] ? +air.Th(tab[720].I).toFixed(2) : air.Ta, u: '°C' },
+      { k: 'Ar na câmara ao meio-dia (aquecido também pela radiação absorvida, produto úmido)', v: noon ? +noon.T.toFixed(2) : air.Ta, u: '°C' },
+      { k: 'Taxa de secagem constante ao meio-dia: convecção / radiação', v: noon ? (noon.Rc.toFixed(3) + ' / ' + (SO_PHI * qr(noon.I) * 3.6 / noon.lw).toFixed(3) + ' kg/(h·m²)') : '—', u: '' },
+      { k: 'Água evaporada / produto seco retirado', v: E.toFixed(3) + ' / ' + Mfin.toFixed(3) + ' kg', u: '' },
+      { k: 'Energia solar aproveitada (coletor + produto) / calor da evaporação', v: Esun.toFixed(2) + ' / ' + (Eev * lamEv / 3600).toFixed(2) + ' kWh', u: '' },
+      { k: 'Eficiência térmica do secador (evaporação ÷ sol incidente)', v: Sinc > 0 ? (100 * Eev * lamEv / 3600 / Sinc).toFixed(1) + ' %' : '—', u: '' },
+      { k: 'GLP que seria gasto num secador a gás (PCI 46,4 MJ/kg, queimador 85 %)', v: +glp(Esun).toFixed(2), u: 'kg' }];
+    if (dayEnd.length) res.push({ k: 'Umidade ao fim de cada dia (18 h): secador / sol aberto', v: dayEnd.slice(0, 8).map(d => 'dia ' + d.d + ': ' + d.X.toFixed(2) + ' / ' + d.Xo.toFixed(2)).join('; '), u: 'kg/kg' });
+    const mid = p.mat && p.mat !== MAT_NONE ? (TH.FOODS || []).find(fdd => fdd.nome === p.mat) : null;
+    soFoodRows(mid && mid.id, X0, Xf, noon ? (noon.T + air.Ta) / 2 : air.Ta).forEach(r => res.push(r));
+    const xmax = Math.max(tt[tt.length - 1], 0.5);
+    const plots = [{ kind: 'curves', title: 'Curva de secagem ao longo dos dias: secador solar × sol aberto (à noite a secagem para)', data: { xLabel: 'Tempo desde a carga (dias)', yLabel: 'X (kg de água/kg de sólido seco)', xRange: [0, xmax], series: [
+        { name: 'Secador solar (' + soType(p).split(' ')[0] + ')', x: tt, y: XS, color: col.X, width: 3.5 }, { name: 'Sol aberto', x: tt, y: XO, color: col.I, width: 3, dash: 'dash' },
+        { name: 'X_f atingida', x: done ? [tE / 24] : [], y: done ? [Xf] : [], mode: 'markers', size: 12, symbol: 'square', color: '#111' }],
+        hlines: [{ y: Xf, name: 'X_f', color: col.g }, { y: Xe, name: 'X_e', color: col.k }] } }];
+    const hh = [], Ii = [], Th = [], Tc = [], To = []; for (let i = 0; i <= 96; i++) { const h = day.tn + day.L * i / 96, I = day.I(h); hh.push(h); Ii.push(I / 10); Th.push(air.Th(I));
+      const s0 = tab[Math.min(1439, Math.round(h * 60))], a = s0 ? at(s0, 1 - SO_PHI * f(X0)) : null, Em = a ? Ga * Math.max(0, a.Hw - Hin) : 0, Ec = a && Em > 0 ? Em * (1 - Math.exp(-a.Rc * A / Em * f(X0))) : 0;
+      Tc.push(a ? a.T : air.Ta); To.push(a ? a.T - a.lw * Ec / (Ga * air.cs) : air.Ta); }
+    plots.push({ kind: 'curves', title: 'No primeiro dia: irradiância, ar na saída do coletor e ar na saída da câmara (produto ainda úmido)', data: { xLabel: 'Hora do dia', yLabel: 'I/10 (W/m²)  ·  T (°C)', xRange: [day.tn, day.tn + day.L], series: [
+      { name: 'Irradiância ÷ 10 (W/m²)', x: hh, y: Ii, color: col.I, width: 3 }, { name: 'Ar na saída do coletor (°C)', x: hh, y: Th, color: col.T, width: 3.5 }, { name: 'Ar na câmara, com a radiação (°C)', x: hh, y: Tc, color: '#b5502a', width: 2, dash: 'dot' }, { name: 'Ar na saída da câmara (°C)', x: hh, y: To, color: col.o, width: 2.5, dash: 'dash' }],
+      hlines: [{ y: air.Tmax, name: 'T máxima do produto', color: col.k }] } });
+    const XX = [], RR = [], RO = []; for (let i = 0; i <= 150; i++) { const Xx = Xe + (X0 - Xe) * i / 150; XX.push(Xx); RR.push(noon ? (noon.Rc + SO_PHI * qr(noon.I) * 3.6 / noon.lw) * f(Xx) : 0); RO.push(noon ? (open.Rc + SO_PHI * air.alfa * noon.I * 3.6 / lamA) * f(Xx) : 0); }
+    plots.push({ kind: 'curves', title: 'Taxa de secagem × umidade ao meio-dia (sem limite do ar): secador × sol aberto', data: { xLabel: 'X (kg de água/kg de sólido seco)', yLabel: 'N (kg/(h·m²))', series: [
+      { name: 'Secador solar', x: XX, y: RR, color: col.X, width: 3.5 }, { name: 'Sol aberto', x: XX, y: RO, color: col.I, width: 3, dash: 'dash' }] } });
+    return { out: {}, duty: Esun / Math.max(1e-9, tE) * 1000, res: decBR(res), warn: decW(warn), plots,
+      solb: { type: soType(p), P: air.P, Uc: air.Uc, Mb, Ms, X0, Xf, Xc, Xe, Ld, A, Hd: day.Hd, L: day.L, Imax: day.Imax, t0, Ta: air.Ta, URa: air.URa, H: air.H, Ga, Qa: air.Qa, v: air.v, vw, Ac: air.Ac, etaC: air.etaC, tauG: air.tauG, alfa: air.alfa,
+        tE: done ? tE : null, tOpen, sunH, Esun, Eev, Thn: noon ? noon.T : air.Ta } };
+  };
   IMPL.freeze_dryer = function (th, b, ins) {
     if (isCont(b.params)) return lyoBelt(th, b, ins);
     const p = b.params, warn = [];
@@ -6805,6 +7121,26 @@ window.SIMULAFACIL_CONFIG = {
         note: 'As micro-ondas aquecem o produto por dentro (a água é a molécula que mais absorve): o produto chega a T_p e a água evapora com a energia absorvida. Como a absorção cai quando o produto seca, a taxa cai no fim da secagem sem precisar de uma umidade crítica. A espessura da camada deve ficar abaixo de cerca de duas vezes D_p para aquecer por igual; 915 MHz penetra mais que 2450 MHz.'
       };
     },
+    solar_dryer: (p) => {
+      const cont = /^contínuo/.test((p && p.mode) || ''), X = i('X'), Xe = sub(X, 'e'), Xc = sub(X, 'c'), I = i('I'), Lh = i('L'), Th = sub(T, 'h'), Ta = sub(T, 'amb'), Tw = sub(T, 'w');
+      const lw = sub(i('λ'), 'w'), h = i('h'), Ga = sub(i('G'), 'a'), cs = sub(i('c'), 's'), H = i('H'), phi = i('φ'), ta = i('τ') + i('α'), A = i('A'), Ac = sub(A, 'c'), etac = sub(i('η'), 'c'), Nn = i('N'), U = i('U'), E = i('E'), f = i('f');
+      const eqs = [eq(I + '(' + t + ') = ' + sub(I, 'máx') + ' sen[π(' + t + ' − ' + sub(t, 'n') + ')/' + Lh + '],&nbsp; ' + sub(I, 'máx') + ' = ' + fr('π' + sub(H, 'd'), '2' + Lh), 'irradiância ao longo do dia; zero à noite'),
+        eq(Th + ' = ' + Ta + ' + ' + fr(etac + I + Ac, Ga + cs) + ',&nbsp; ' + cs + ' = 1,005 + 1,88' + H, 'ar quente na saída do coletor solar'),
+        eq(Nn + ' = ' + fr(h + '(' + T + ' − ' + Tw + ') + ' + phi + ta + I, lw) + ' ' + f + '(' + X + '),&nbsp; ' + f + ' = 1 (' + X + ' ≥ ' + Xc + '),&nbsp; ' + f + ' = ' + fr(X + ' − ' + Xe, Xc + ' − ' + Xe) + ' (' + X + ' < ' + Xc + ')', 'convecção + radiação absorvida (φ = 0,5)'),
+        eq(h + ' = 0,0204 ' + sup(i('G'), '0,8') + ',&nbsp; ' + i('G') + ' = ' + i('v') + i('ρ'), 'convecção com o ar paralelo às bandejas'),
+        eq(Ga + '(' + H + ' − ' + sub(H, '0') + ') = ' + E + ',&nbsp; ' + Ga + cs + '(' + T + ' − ' + Th + ') = (1 − ' + phi + f + ')' + ta + I + A + ' − ' + U + A + '(' + T + ' − ' + Ta + ') − ' + lw + sub(E, 'conv'), 'balanços de água e de entalpia do ar na câmara')];
+      if (cont) eqs.push(eq(i('τ') + ' = ' + sub(i('L'), 'd') + ' ∫ ' + fr('d' + X, Nn) + ' (de ' + sub(X, 'f') + ' a ' + sub(X, 'i') + '),&nbsp; ' + A + ' = ' + fr(sub('Ṁ', 'ss') + i('τ'), sub(i('L'), 'd')), 'tempo de residência (horas de sol) e área de bandejas do túnel'));
+      else eqs.push(eq('−' + sub(i('M'), 'ss') + od(X, t) + ' = ' + sub(E, 'conv') + ' + ' + sub(E, 'rad') + ',&nbsp; ' + sub(E, 'conv') + ' = ' + sub(E, 'máx') + '[1 − exp(−' + fr(sub(Nn, 'c') + A + f, sub(E, 'máx')) + ')],&nbsp; ' + sub(E, 'máx') + ' = ' + Ga + '(' + sub(H, 'w') + ' − ' + sub(H, '0') + ')', 'batelada: o ar umidifica ao passar pelas bandejas'),
+        eq(sub(Nn, 'sol aberto') + ' = ' + fr(h + '(' + Ta + ' − ' + Tw + ') + ' + phi + i('α') + I, lw) + ' ' + f + '(' + X + ')', 'comparação: produto exposto ao sol e ao vento'));
+      eqs.push(eq(sub(i('η'), 'secador') + ' = ' + fr(E + lw, I + '(' + Ac + ' + ' + A + ')'), 'eficiência térmica: evaporação ÷ sol incidente'));
+      return {
+        name: cont ? 'Secador solar contínuo (túnel): coletor solar de ar + bandejas, ar em paralelo com o produto' : 'Secador solar em batelada: secagem ao longo dos dias (sol e noite) e comparação com o sol aberto',
+        eqs,
+        sym: [[I + ', ' + sub(H, 'd') + ', ' + Lh, 'irradiância (W/m²), irradiação diária (kWh/(m²·dia)) e duração do dia'], [etac + ', ' + Ac, 'eficiência e área do coletor solar'], [ta + ', ' + phi, 'transmitância da cobertura × absortância do produto; fração da radiação que evapora água'],
+          [Th + ', ' + Tw + ', ' + lw, 'ar quente, bulbo úmido e calor latente'], [Ga + ', ' + H, 'vazão de ar seco e umidade do ar'], [X + ', ' + Xc + ', ' + Xe, 'umidade em base seca, crítica e de equilíbrio'], [sub(i('L'), 'd') + ', ' + U, 'carga de sólido seco por m² e perda de calor da câmara']],
+        note: 'Na operação contínua, o cálculo usa a irradiância média das horas de operação (janela centrada no meio-dia) e integra o túnel do X da entrada ao da saída, atualizando a temperatura e a umidade do ar a cada passo. Na batelada, a integração é minuto a minuto: com sol, a secagem segue a irradiância; à noite o secador fica fechado e ela para. Ao sol aberto, metade da radiação absorvida evapora água e o resto se perde para o ambiente; na câmara, esse resto aquece o ar (efeito estufa).'
+      };
+    },
     tray_dryer: (p) => {
       if (/^contínuo/.test((p && p.mode) || '')) return trayCont();
       const X = i('X'), R = i('R'), Ls = sub(i('L'), 's'), A = i('A'), Tw = sub(T, 'w'), Xc = sub(X, 'c'), Xe = sup(X, '*'), lw = sub(i('λ'), 'w'), h = i('h'), G = i('G'), H = i('H');
@@ -7253,7 +7589,8 @@ window.SIMULAFACIL_CONFIG = {
     feed: { ex: ex('etoh-mccabe', 'Destilação etanol/água — McCabe-Thiele'), p: [
       'Toda simulação começa pela especificação das correntes de entrada. Pela regra das fases de Gibbs, uma corrente de composição conhecida fica totalmente definida por duas variáveis intensivas: temperatura e pressão, ou pressão e fração vaporizada. Com isso o simulador resolve um flash na condição informada e calcula a fase, as composições do líquido e do vapor e a entalpia, que serão usadas por todos os equipamentos a jusante.',
       'A escolha do par de especificações tem consequência física. Informar a fração vaporizada igual a 0 significa líquido saturado (no ponto de bolha); igual a 1, vapor saturado (no ponto de orvalho). Na destilação, essa condição térmica define o parâmetro q da reta de alimentação: q = 1 para líquido saturado e q = 0 para vapor saturado. A vazão pode ser dada em base molar, mássica, volumétrica ou como concentrações, conforme o problema.',
-      'No exemplo "Destilação etanol/água — McCabe-Thiele", a alimentação F tem 100 kmol/h com 10 % de etanol, a 1 atm e fração vaporizada 0. O simulador calcula a temperatura de bolha (cerca de 86 °C) e a coluna recebe a carga como líquido saturado, o que deixa a reta q vertical no diagrama de McCabe-Thiele. Experimente mudar a fração vaporizada para 0,5 e observe como a reta q se inclina e o número de estágios muda.'] },
+      'No exemplo "Destilação etanol/água — McCabe-Thiele", a alimentação F tem 100 kmol/h com 10 % de etanol, a 1 atm e fração vaporizada 0. O simulador calcula a temperatura de bolha (cerca de 86 °C) e a coluna recebe a carga como líquido saturado, o que deixa a reta q vertical no diagrama de McCabe-Thiele. Experimente mudar a fração vaporizada para 0,5 e observe como a reta q se inclina e o número de estágios muda.',
+      'Para alimentos e lodos, use o campo “Alimento ou lodo”: ele inclui a água e a matéria seca do material na lista de componentes (frutas como abacaxi, morango, uva, banana, manga, maçã, mamão e goiaba; suco de tomate e de laranja; leite integral e desnatado; extrato de café; e os lodos primário, biológico e misto de fábrica de celulose) e preenche a composição mássica in natura. Depois de simular, o detalhe da corrente mostra c_p, ρ, k e a difusividade térmica calculados pela composição (Choi e Okos, 1986).'] },
     product: { ex: ex('etoh-mccabe', 'Destilação etanol/água — McCabe-Thiele'), p: [
       'O produto é o ponto em que uma corrente deixa o fluxograma. Ele não tem equações próprias, mas é nele que se conferem os balanços globais do processo: a soma das massas que saem deve ser igual à soma das que entram, e cada componente deve ser conservado quando não há reação química.',
       'Verificar os balanços nos produtos é um hábito essencial em simulação. O simulador mostra, na aba Resultados, o fechamento do balanço de massa global do fluxograma; valores muito diferentes de zero indicam reciclo não convergido ou especificações inconsistentes. Para destilação, os balanços F = D + W e F·z = D·x_D + W·x_W permitem conferir as purezas obtidas.',
@@ -7285,6 +7622,12 @@ window.SIMULAFACIL_CONFIG = {
       'O modelo do programa é limitado pela energia: o produto aquece até a temperatura de secagem T_p e, daí em diante, a potência absorvida evapora a água, −dX/dt = η(X)·q/λ, com q = potência emitida por kg de sólido seco. A fração absorvida η(X) = η_máx·[1 − exp(−(X − X_e)/X_a)] cai quando o produto seca, porque o fator de perda dielétrica ε″ diminui com a umidade; é isso que produz o período de taxa decrescente. A equação tem solução analítica, e a potência para chegar a X_f não depende do tempo de residência: o tempo só define a carga na esteira, a potência específica (W/g) e o tamanho do túnel.',
       'Na operação contínua, a fruta úmida entra numa esteira dentro do túnel e sai seca do outro lado; a porta de energia mostra a potência elétrica dos magnétrons (eficiência típica de 0,7 a 2 450 MHz e 0,85 a 915 MHz). Na batelada, uma bandeja fica na cavidade, como num forno doméstico, e o programa calcula o tempo para chegar a X_f e a curva de secagem para três potências.',
       'O exemplo seca 100 kg/h de fatias de maçã com 85,7 % de água (X_i = 6) até X_f = 0,15 em 30 min, a 75 °C: evaporam 83,6 kg/h de água, os magnétrons emitem 78,8 kW (112,6 kW de eletricidade), o produto absorve 75 % disso e o consumo é de 4,85 MJ por kg de água, cerca de duas vezes o calor latente. A esteira de 0,6 m tem 10,4 m e anda a 0,35 m/min; a camada de 13,3 mm fica perto da profundidade de penetração (9,7 mm a 2 450 MHz), por isso o aquecimento é razoavelmente uniforme. Mude a frequência para 915 MHz e veja D_p subir para cerca de 26 mm.'] },
+    solar_dryer: { ex: ex('secador-solar-abacaxi', 'Secador solar contínuo: abacaxi'), p: [
+      'O secador solar usa o sol para aquecer o ar de secagem. No tipo indireto, um coletor solar de ar (uma caixa com placa absorvedora preta e cobertura de vidro ou plástico) aquece o ar ambiente que o ventilador empurra para a câmara de bandejas, onde o produto fica à sombra, o que preserva a cor e as vitaminas. No tipo misto, a câmara também tem cobertura transparente e o produto recebe sol direto; no direto (estufa ou cabine solar), não há coletor. Comparado à secagem ao sol aberto, o secador protege da chuva, da poeira e dos insetos e seca mais depressa.',
+      'A irradiância segue uma senoide ao longo do dia, I(t) = I_máx·sen(π(t − t_n)/L), com I_máx = π·H_d/(2L); a irradiação diária H_d (kWh/(m²·dia)) vem do atlas solarimétrico da região, cerca de 5 a 6 no Brasil. O coletor aquece o ar em ΔT = η_c·I·A_c/(G_a·c_s). Nas bandejas, a secagem tem duas parcelas: a convecção do ar quente, h(T − T_w)/λ_w, como no secador de bandejas, e a radiação absorvida pelo produto, da qual metade evapora água e o resto aquece o ar da câmara (efeito estufa), descontada a perda de calor pela cobertura. Abaixo da umidade crítica X_c as duas parcelas caem linearmente até a umidade de equilíbrio X_e. O ar recolhe a água evaporada e esfria; se chegar à saturação, a secagem para.',
+      'Na operação contínua (túnel), as bandejas avançam pelo túnel nas horas de sol e o ar quente segue no mesmo sentido do produto: o programa integra o túnel da entrada à saída e calcula o tempo de residência, em horas de sol e em dias de operação, a área de bandejas, o comprimento do túnel e o estado do ar na saída. Na batelada, as bandejas são carregadas uma vez e a integração é minuto a minuto, com o sol subindo e descendo e a secagem parando à noite; o programa mostra a umidade ao fim de cada dia e a compara com a secagem ao sol aberto, sem secador.',
+      'O exemplo seca 5 kg/h de abacaxi em fatias (86 % de água, X_i = 6,14) até 15 % de umidade (X_f = 0,18) num túnel misto com coletor de 12 m², 500 m³/h de ar e 5,5 kWh/(m²·dia): o ar sai do coletor a 51,9 °C, o produto fica 22 h de sol no túnel (2,75 dias de 8 h), são 12,8 m² de bandejas (túnel de 6,4 m × 2 m) e saem 6,6 kg/dia de abacaxi seco. As propriedades do abacaxi (c_p, ρ e k, úmido e seco) vêm da composição centesimal pelas correlações de Choi e Okos.',
+      'O segundo exemplo (secador-solar-lodo) seca em batelada 500 kg de lodo misto da estação de efluentes de uma fábrica de celulose, de 75 % para 20 % de umidade: 3,15 dias no secador contra 4,14 dias ao sol aberto. Os lodos primário (rico em fibras), biológico (biomassa, fibras e carga mineral) e misto estão no banco de componentes com composições típicas da literatura. Secar o lodo reduz o volume que vai para o aterro e permite queimá-lo na caldeira de biomassa.'] },
     tray_dryer: { ex: ex('secador-bandejas', 'Secador de bandejas contínuo (túnel)'), p: [
       'No secador de bandejas o ar quente escoa sobre o sólido úmido. Enquanto a superfície está coberta por água livre, ela se comporta como um termômetro de bulbo úmido: a temperatura fica em T_w e a taxa de secagem é constante, N_c = h(T − T_w)/λ_w, controlada só pelo ar. Quando a umidade cai abaixo da umidade crítica X_c, a água precisa migrar do interior até a superfície e a taxa diminui até zero na umidade de equilíbrio X_e.',
       'No secador contínuo de túnel, carrinhos com bandejas entram úmidos por uma ponta e saem secos pela outra. O tempo de residência é a soma do período de taxa constante, t_c = (L_s/A)(X_i − X_c)/N_c, e do decrescente, t_f = (L_s/A)(X_c − X_e)/N_c·ln((X_c − X_e)/(X_f − X_e)). O sólido retido no túnel é Ṁ_ss·τ, a área de bandejas é Ṁ_ss·τ/(L_s/A) e, a cada hora, entram Ṁ_ss/((L_s/A)·A_bandeja) bandejas.',
@@ -7300,7 +7643,8 @@ window.SIMULAFACIL_CONFIG = {
       'O exemplo reproduz o Exemplo 8.4-1 de Geankoplis: 9 072 kg/h de solução salina a 1 % e 311 K concentrada a 1,5 % a 1 atm, com vapor saturado a 143,3 kPa e U = 1 704 W/(m²·K). Evaporam-se 3 024 kg/h, a área é 149,4 m² (o livro dá 149,3 m²) e o vapor consumido é cerca de 4 110 kg/h, com economia de 0,74.'] },
     evap_double: { ex: ex('evaporador-duplo', 'Evaporador de duplo efeito'), p: [
       'No duplo efeito, o vapor gerado no 1º efeito aquece o 2º, que opera a uma pressão menor (vácuo) para que a solução ferva numa temperatura mais baixa. O mesmo vapor de aquecimento evapora quase o dobro de água: a economia sobe para perto de 2, ao custo de mais área de troca.',
-      'O exemplo concentra a mesma solução de açúcar do triplo efeito (22 680 kg/h, de 10 % a 50 %). Com dois efeitos, a economia é 1,54 kg/kg e o vapor consumido é 11 780 kg/h; com três, a economia é 2,03 e o vapor cai para 8 954 kg/h. A área total, porém, passa de 154 m² para 315 m²: o número ótimo de efeitos vem do balanço entre o custo do vapor e o custo dos equipamentos.'] },
+      'O exemplo concentra a mesma solução de açúcar do triplo efeito (22 680 kg/h, de 10 % a 50 %). Com dois efeitos, a economia é 1,54 kg/kg e o vapor consumido é 11 780 kg/h; com três, a economia é 2,03 e o vapor cai para 8 954 kg/h. A área total, porém, passa de 154 m² para 315 m²: o número ótimo de efeitos vem do balanço entre o custo do vapor e o custo dos equipamentos.',
+      'O exemplo evaporador-tomate concentra 5 000 kg/h de suco de tomate de 5,5 % para 28 % de sólidos (extrato), com vapor a 143,3 kPa (110 °C) e vácuo de 10 kPa no 2º efeito, onde o produto ferve a 46 °C e preserva cor e sabor. O c_p do suco sai da composição do tomate (Choi e Okos): c_p ≈ 4,18 − 2,48x kJ/(kg·K). Evaporam-se 4 021 kg/h com 2 241 kg/h de vapor (economia de 1,80) e 28,7 m² por efeito.'] },
     bioreactor_monod: { ex: ex('biorreator-monod', 'Biorreator contínuo com a equação de Monod'), p: [
       'A equação de Monod (1949) relaciona a velocidade específica de crescimento com a concentração do substrato limitante: μ = μmáx S/(Ks + S). Com muito substrato (S ≫ Ks), μ ≈ μmáx e o crescimento é exponencial; quando o substrato acaba, μ cai a zero. Ks é a concentração de substrato em que μ = μmáx/2.',
       'No quimiostato (operação contínua), a vazão de diluição D = F/V fixa a velocidade de crescimento no estado estacionário: μ = D + k_d. O substrato residual fica em S = Ks D/(μmáx − D) e as células em X = Y_X/S(S_f − S). Acima da vazão de diluição crítica, D_crít = μmáx S_f/(Ks + S_f), as células saem mais depressa do que crescem e são lavadas do reator (washout).',
@@ -7493,7 +7837,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   const U = SF.units, N = SF.num;
   // entradas opcionais: sem corrente conectada, esses equipamentos usam os campos (vazão, composição) e ainda geram as correntes de saída
-  const OPTIONAL_IN = { mixer: ['in2', 'in3', 'in4'], column: ['feed2', 'feed3'], crystallizer: ['feed'], tray_dryer: ['feed'], spray_dryer: ['feed'], freeze_dryer: ['feed'], microwave_dryer: ['feed'],
+  const OPTIONAL_IN = { mixer: ['in2', 'in3', 'in4'], column: ['feed2', 'feed3'], crystallizer: ['feed'], tray_dryer: ['feed'], spray_dryer: ['feed'], freeze_dryer: ['feed'], microwave_dryer: ['feed'], solar_dryer: ['feed'],
     bioreactor_tosetto: ['feed', 'side'], bioreactor_1: ['feed'], bioreactor_2: ['feed', 'side'], bioreactor_monod: ['feed'], bioreactor_verhulst: ['feed'],
     biodiesel_reactor: ['oil', 'alcohol'], pid_cstr: ['feed'],
     blast_furnace: ['ore', 'coke', 'flux', 'blast'], cement_kiln: ['meal', 'fuel', 'air'], silo: ['feed'], thickener: ['feed'], kraft_digester: ['chips', 'white_liquor'] };
@@ -7697,6 +8041,7 @@ window.SIMULAFACIL_CONFIG = {
     tray_dryer: { w: 130, h: 100, ports: { feed: P(0, 74, 'l', 'in'), q_in: P(38, 100, 'd', 'ein'), exhaust: P(130, 12, 'r', 'out'), product: P(130, 74, 'r', 'out') } },
     spray_dryer: { w: 120, h: 150, ports: { feed: P(44, 0, 'u', 'in'), q_in: P(0, 14, 'l', 'ein'), exhaust: P(120, 44, 'r', 'out'), product: P(44, 150, 'd', 'out') } },
     microwave_dryer: { w: 140, h: 96, ports: { feed: P(0, 54, 'l', 'in'), q_in: P(70, 0, 'u', 'ein'), vapor: P(140, 28, 'r', 'out'), product: P(140, 54, 'r', 'out') } },
+    solar_dryer: { w: 150, h: 112, ports: { feed: P(0, 44, 'l', 'in'), q_in: P(20, 0, 'u', 'ein'), exhaust: P(150, 14, 'r', 'out'), product: P(150, 84, 'r', 'out') } },
     freeze_dryer: { w: 140, h: 114, ports: { feed: P(0, 46, 'l', 'in'), q_in: P(46, 0, 'u', 'ein'), product: P(94, 114, 'd', 'out'), vapor: P(112, 114, 'd', 'out') } },
     crystallizer: { w: 110, h: 124, ports: { feed: P(0, 34, 'l', 'in'), vapor: P(55, 0, 'u', 'out'), q_out: P(30, 124, 'd', 'eout'), liquor: P(110, 40, 'r', 'out'), crystals: P(110, 116, 'r', 'out') } },
     biodiesel_reactor: { w: 120, h: 104, ports: { oil: P(0, 28, 'l', 'in'), alcohol: P(0, 44, 'l', 'in'), product: P(120, 80, 'r', 'out') } },
@@ -7853,6 +8198,16 @@ window.SIMULAFACIL_CONFIG = {
       [26, 42, 58, 74, 90, 106].forEach(x => o.push(R(x, 49, 10, 5, 1, 'bodyw')));
       o.push(L([[8, 54], [132, 54]]), L([[12, 62], [128, 62]]), C(12, 58, 4), C(128, 58, 4), L([[0, 54], [8, 54]]), L([[132, 54], [140, 54]]),
         L([[118, 28], [140, 28]], 'lnd'), T(70, 86, 'micro-ondas'));
+      return o;
+    },
+    solar_dryer: () => { // sol, coletor solar de ar inclinado (o ar ambiente entra embaixo e sobe aquecido) e câmara de bandejas com cobertura transparente e chaminé
+      const o = [C(20, 15, 6.5, 'hot')];
+      [[0, -1], [0, 1], [-1, 0], [1, 0], [0.71, -0.71], [-0.71, 0.71], [0.71, 0.71], [-0.71, -0.71]].forEach(([dx, dy]) => o.push(L([[20 + dx * 9, 15 + dy * 9], [20 + dx * 15, 15 + dy * 15]], 'hot')));
+      o.push(Pg([[4, 100], [66, 64], [72, 74], [10, 110]]), L([[6, 103], [68, 67]], 'lnd'));
+      [0.2, 0.4, 0.6, 0.8].forEach(t => { const x = 4 + 62 * t, y = 100 - 36 * t; o.push(L([[x + 2, y + 2], [x + 6, y + 9]], 'hot')); });
+      o.push(R(76, 30, 62, 68, 3), L([[76, 30], [138, 30]], 'lnd'), L([[70, 70], [76, 70]], 'hot'), L([[0, 104], [6, 102]], 'cold'));   // câmara com cobertura de vidro; ar quente do coletor; ar ambiente entrando no coletor
+      [48, 64, 80].forEach(y => { o.push(L([[82, y], [132, y]])); [86, 98, 110, 122].forEach(x => o.push(R(x, y - 4, 7, 4, 1, 'bodyw'))); });
+      o.push(R(118, 8, 12, 22, 2), L([[130, 14], [150, 14]]), L([[0, 44], [76, 44]]), L([[138, 84], [150, 84]]), T(106, 109, 'solar'));
       return o;
     },
     freeze_dryer: () => { // câmara com prateleiras e frascos, condensador frio ao lado e bomba de vácuo
@@ -8068,6 +8423,7 @@ window.SIMULAFACIL_CONFIG = {
     if (b.type === 'energy') return marks;
     if (r.duties && (b.type === 'column_mt' || b.type === 'column_reflux')) { if (!wired('qc')) add(120, -4, r.duties.Qc, 'Qc', true); if (!wired('qr')) add(120, g.h + 4, r.duties.Qr, 'Qr', false); if (!wired('q_pre') && Math.abs(r.duties.Qpre || 0) > 1e-3) add(20, b.type === 'column_reflux' ? 120 : 130, r.duties.Qpre, 'Qpré', false, true); }
     else if (r.duties && (b.type === 'column' || b.type === 'column_short' || b.type === 'ponchon')) { if (!wired('qc')) add(82, -4, r.duties.Qc, 'Qc', true); if (!wired('qr')) add(82, g.h + 4, r.duties.Qr, 'Qr', false); }
+    else if (r.duty != null && Math.abs(r.duty) > 1e-3 && b.type === 'solar_dryer' && !wired('q_in')) add(g.ports.q_in.x, -4, r.duty, 'Sol', true);   // energia solar no sol do ícone
     else if (r.duty != null && Math.abs(r.duty) > 1e-3 && b.type !== 'feed' && !wired('q_in') && !wired('q_out')) add(g.w - 2, g.h + 4, r.duty, r.power ? 'W' : 'Q', false);
     return marks;
   }
@@ -9074,6 +9430,68 @@ end
         "xlabel('Tempo no túnel (h)', 'FontSize', FS); ylabel('X (kg H_2O/kg ss)', 'FontSize', FS); title('Umidade ao longo do túnel', 'FontSize', FS); set(gca, 'FontSize', FS);",
         "subplot(1, 2, 2); plot(Lv*1000, tv, 'Color', [0.48 0.24 0.72], 'LineWidth', 2.5); hold on; plot(L_camada*1000, t_res_h, 'kd', 'MarkerSize', 10, 'MarkerFaceColor', 'k'); grid on;",
         "xlabel('Espessura da camada (mm)', 'FontSize', FS); ylabel('Tempo de residência (h)', 'FontSize', FS); title('Tempo cresce com L^2', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'solar_dryer' && (r.sol || r.solb)) {
+      const g = r.sol || r.solb, cont = !!r.sol;
+      const L0 = ['function ' + fname + '(D, FS)', header, '% Secador solar ' + (cont ? 'contínuo (túnel, ar em paralelo com o produto)' : 'em batelada (minuto a minuto ao longo dos dias, com sol e noite)') + ', tipo ' + g.type + '.', printRes.join('\n'),
+        '% água saturada (equações auxiliares da IAPWS): pressão de vapor (Pa) e calor latente por Clapeyron (kJ/kg); T em K',
+        'Tc = 647.096; pc = 22.064e6; rc = 322; tt = @(T) 1 - T/Tc;',
+        'a = [-7.85951783 1.84408259 -11.7866497 22.6807411 -15.9618719 1.80122502];',
+        'bb = [1.99274064 1.09965342 -0.510839303 -1.75493479 -45.5170352 -6.74694450e5]; cc = [-2.03150240 -2.68302940 -5.38626492 -17.2991605 -44.7586581 -63.9201063];',
+        'psat = @(T) pc*exp(Tc./T.*(a(1)*tt(T) + a(2)*tt(T).^1.5 + a(3)*tt(T).^3 + a(4)*tt(T).^3.5 + a(5)*tt(T).^4 + a(6)*tt(T).^7.5));',
+        'dpdT = @(T) -psat(T)./T.*(log(psat(T)/pc) + a(1) + 1.5*a(2)*sqrt(tt(T)) + 3*a(3)*tt(T).^2 + 3.5*a(4)*tt(T).^2.5 + 4*a(5)*tt(T).^3 + 7.5*a(6)*tt(T).^6.5);',
+        'rhoL = @(T) rc*(1 + bb(1)*tt(T).^(1/3) + bb(2)*tt(T).^(2/3) + bb(3)*tt(T).^(5/3) + bb(4)*tt(T).^(16/3) + bb(5)*tt(T).^(43/3) + bb(6)*tt(T).^(110/3));',
+        'rhoV = @(T) rc*exp(cc(1)*tt(T).^(1/3) + cc(2)*tt(T).^(2/3) + cc(3)*tt(T).^(4/3) + cc(4)*tt(T).^3 + cc(5)*tt(T).^(37/6) + cc(6)*tt(T).^(71/6));',
+        'lam = @(t) (t + 273.15).*dpdT(t + 273.15).*(1./rhoV(t + 273.15) - 1./rhoL(t + 273.15))/1000;   % kJ/kg, t em °C',
+        'P = ' + n2s(g.P || 101325) + '; Hs = @(t) 0.622*psat(t + 273.15)./(P - psat(t + 273.15));   % Pa e umidade de saturação',
+        'twf = @(T, H) fzero(@(x) Hs(x) - H - (1.005 + 1.88*H)*(T - x)/lam(x), [0.01 T]);   % bulbo úmido (Lewis = 1)',
+        'hcf = @(T, H, vv) 0.0204*(vv*(1 + H)/((1/28.97 + H/18.015)*8314.46*(T + 273.15)/P)*3600)^0.8;   % W/(m^2.K), ar paralelo às bandejas',
+        'Xc = ' + n2s(g.Xc) + '; Xe = ' + n2s(g.Xe) + '; Ld = ' + n2s(g.Ld) + '; phi = 0.5; f = @(X) min(1, max(0, (X - Xe)/(Xc - Xe)));',
+        'Ta = ' + n2s(g.Ta) + '; H0 = ' + n2s(g.H) + '; Ga = ' + n2s(g.Ga) + '; cs = 1.005 + 1.88*H0; v = ' + n2s(g.v) + ';   % °C, kg/kg, kg/h de ar seco',
+        'Ac = ' + n2s(g.Ac) + '; eta_c = ' + n2s(g.etaC) + '; qrf = ' + n2s(g.tauG * g.alfa) + '; Uc = ' + n2s(g.Uc) + ';   % coletor, tau*alfa da cobertura e do produto, perda da câmara'];
+      if (cont) L0.push('X0 = ' + n2s(g.X0) + '; Xf = ' + n2s(g.Xf) + '; Ss = ' + n2s(g.Ss) + '; Wt = ' + n2s(g.Wt) + '; Lop = ' + n2s(g.Lop) + ';   % kg/kg, kg/h de sólido seco, m e h/dia',
+        'Iop = ' + n2s(g.Iop) + '; Th = Ta + eta_c*Iop*Ac/1000/(Ga/3600*cs); qr = qrf*Iop;   % irradiância média de operação (W/m^2) e ar quente do coletor',
+        'n = 800; dX = (X0 - Xf)/n; T = Th; H = H0; A = 0; tau = 0; Ec = 0; Er = 0; Qa = 0; pos = zeros(1, n + 1); XX = pos; TT = pos; XX(1) = X0; TT(1) = Th;',
+        'for i = 1:n',
+        '  X = X0 - (i - 0.5)*dX; tw = twf(T, H); lw = lam(tw); rc = hcf(T, H, v)*(T - tw)*3.6/lw*f(X); rr = phi*qr*3.6/lw*f(X); R = rc + rr;',
+        '  dA = Ss*dX/R; A = A + dA; tau = tau + Ld*dX/R; Ec = Ec + rc*dA; Er = Er + rr*dA; Qa = Qa + ((1 - phi*f(X))*qr - Uc*(T - Ta))*3.6*dA;',
+        '  H = H0 + (Ec + Er)/Ga; T = Th + (Qa - lw*Ec)/(Ga*cs); pos(i + 1) = A; XX(i + 1) = X0 - i*dX; TT(i + 1) = T;',
+        'end',
+        "fprintf('  MATLAB: T_h = %.2f °C, tau = %.2f h (%.2f dias), A = %.2f m^2, túnel = %.2f m, ar de saída %.1f °C e H = %.4f kg/kg\\n', Th, tau, tau/Lop, A, A/Wt, T, H);",
+        "figure('Name', " + str(b.name + ' — túnel solar') + ", 'Color', 'w', 'Position', [60 80 1300 560]);",
+        "subplot(1, 2, 1); plot(pos/Wt, XX, 'b-', 'LineWidth', 2.5); grid on; xlabel('Posição no túnel (m)', 'FontSize', FS); ylabel('X (kg H_2O/kg ss)', 'FontSize', FS); title('Umidade do produto ao longo do túnel', 'FontSize', FS); set(gca, 'FontSize', FS);",
+        "subplot(1, 2, 2); plot(pos/Wt, TT, 'r-', 'LineWidth', 2.5); grid on; xlabel('Posição no túnel (m)', 'FontSize', FS); ylabel('T do ar (°C)', 'FontSize', FS); title('Temperatura do ar ao longo do túnel', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      else L0.push('Mb = ' + n2s(g.Mb) + '; X0 = ' + n2s(g.X0) + '; Xf = ' + n2s(g.Xf) + '; Ms = Mb/(1 + X0); A = Ms/Ld; alfa = ' + n2s(g.alfa) + '; vw = ' + n2s(g.vw) + ';   % kg, kg/kg, m^2 e vento (m/s)',
+        'Hd = ' + n2s(g.Hd) + '; L = ' + n2s(g.L) + '; t0 = ' + n2s(g.t0) + '; Imax = pi*Hd*1000/(2*L); tn = 12 - L/2;   % kWh/(m^2.dia), h, hora da carga',
+        'Ifun = @(h) (mod(h, 24) > tn & mod(h, 24) < tn + L).*Imax.*sin(pi*(mod(h, 24) - tn)/L);',
+        'GC = Ga/3600*cs*1000; UA = Uc*A; Thf = @(I) Ta + eta_c*I*Ac/1000/(Ga/3600*cs); Tch = @(I, g) (GC*Thf(I) + g*qrf*I*A + UA*Ta)/(GC + UA);',
+        '% tabela minuto a minuto do ar da câmara para g = 0 e g = 1 (g = fração da radiação absorvida que aquece o ar)',
+        'tab = nan(1440, 9);',
+        'for m = 0:1439, I = Ifun(m/60); if I <= 0, continue; end',
+        '  T0_ = Tch(I, 0); T1_ = Tch(I, 1); w0 = twf(T0_, H0); w1 = twf(T1_, H0);',
+        '  tab(m + 1, :) = [I T0_ T1_ Hs(w0) Hs(w1) lam(w0) lam(w1) hcf(T0_, H0, v)*(T0_ - w0)*3.6/lam(w0) hcf(T1_, H0, v)*(T1_ - w1)*3.6/lam(w1)];',
+        'end',
+        'wa = twf(Ta, H0); lamA = lam(wa); RcO = hcf(Ta, H0, vw)*(Ta - wa)*3.6/lamA;   % sol aberto: ar ambiente e vento',
+        'X = X0; Xo = X0; t = 0; dt = 1/60; tEnd = NaN; tOpen = NaN; k10 = 0; ts = 0; XS = X0; XO = X0;',
+        'while t < 40*24 && (isnan(tEnd) || isnan(tOpen))',
+        '  s0 = tab(mod(floor(mod(t0 + t, 24)*60 + 1e-6), 1440) + 1, :);',
+        '  if ~isnan(s0(1))',
+        '    g = 1 - phi*f(X); Tt = s0(2) + g*(s0(3) - s0(2)); Hw = s0(4) + g*(s0(5) - s0(4)); lw = s0(6) + g*(s0(7) - s0(6)); Rc = s0(8) + g*(s0(9) - s0(8));',
+        '    if isnan(tEnd)',
+        '      Emax = Ga*max(0, Hw - H0); ff = f(X); Ec = 0; if Emax > 0, Ec = Emax*(1 - exp(-Rc*A/Emax*ff)); end',
+        '      Er = phi*qrf*s0(1)*3.6/lw*A*ff; Tout = Tt - lw*Ec/(Ga*cs); Hcap = max(0, 0.98*Hs(Tout) - H0)*Ga; if Ec + Er > Hcap, Er = max(0, Hcap - Ec); end',
+        '      X = max(Xe, X - (Ec + Er)*dt/Ms); if X <= Xf, tEnd = t + dt; end',
+        '    end',
+        '    if isnan(tOpen), Xo = max(Xe, Xo - (RcO + phi*alfa*s0(1)*3.6/lamA)*f(Xo)*dt/Ld); if Xo <= Xf, tOpen = t + dt; end, end',
+        '  end',
+        '  t = t + dt; k10 = k10 + 1; if mod(k10, 10) == 0, ts(end + 1) = t/24; XS(end + 1) = X; XO(end + 1) = Xo; end',
+        'end',
+        "fprintf('  MATLAB: A = %.2f m^2, secador: %.1f h (%.2f dias), sol aberto: %.1f h (%.2f dias)\\n', A, tEnd, tEnd/24, tOpen, tOpen/24);",
+        "figure('Name', " + str(b.name + ' — secagem solar em batelada') + ", 'Color', 'w', 'Position', [60 80 900 560]);",
+        "plot(ts, XS, 'b-', 'LineWidth', 2.5); hold on; plot(ts, XO, '--', 'Color', [0.9 0.6 0.1], 'LineWidth', 2); plot([0 ts(end)], [Xf Xf], 'g:', 'LineWidth', 1.4); grid on;",
+        "legend({'secador solar', 'sol aberto', 'X_f'}); xlabel('Tempo desde a carga (dias)', 'FontSize', FS); ylabel('X (kg H_2O/kg ss)', 'FontSize', FS); title('Secagem ao longo dos dias (à noite para)', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      out.push(L0.join('\n'));
       return out.join('\n');
     }
     if (b.type === 'microwave_dryer' && (r.mw || r.mwb)) {
@@ -11008,6 +11426,86 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         "    a2.plot(Lv * 1000, tv, color='#7a3db8', lw=2.5); a2.plot(L_camada * 1000, t_res_h, 'kd', ms=9); a2.set_xlabel('Espessura da camada (mm)'); a2.set_ylabel('Tempo de residência (h)'); a2.set_title('O tempo cresce com L²'); a2.grid(True)",
         '    f1.tight_layout()', '    return [f1]']).join('\n');
     }
+    if (b.type === 'solar_dryer' && (r.sol || r.solb)) {
+      const g = r.sol || r.solb, cont = !!r.sol;
+      const L0 = head.concat([
+        '    # Secador solar ' + (cont ? 'contínuo (túnel, ar em paralelo com o produto)' : 'em batelada (minuto a minuto ao longo dos dias, com sol e noite)') + ', tipo ' + g.type,
+        '    # água saturada (equações auxiliares da IAPWS): pressão de vapor (Pa) e calor latente por Clapeyron (kJ/kg); T em K',
+        '    Tc, pc, rc = 647.096, 22.064e6, 322.0',
+        '    a = [-7.85951783, 1.84408259, -11.7866497, 22.6807411, -15.9618719, 1.80122502]',
+        '    bb = [1.99274064, 1.09965342, -0.510839303, -1.75493479, -45.5170352, -6.74694450e5]',
+        '    cc = [-2.03150240, -2.68302940, -5.38626492, -17.2991605, -44.7586581, -63.9201063]',
+        '    def psat(T):',
+        '        t = 1 - T / Tc',
+        '        return pc * np.exp(Tc / T * (a[0]*t + a[1]*t**1.5 + a[2]*t**3 + a[3]*t**3.5 + a[4]*t**4 + a[5]*t**7.5))',
+        '    def lam(tC):   # kJ/kg, tC em °C',
+        '        T = tC + 273.15; t = 1 - T / Tc; p = psat(T)',
+        '        dpdT = -p / T * (np.log(p / pc) + a[0] + 1.5*a[1]*np.sqrt(t) + 3*a[2]*t**2 + 3.5*a[3]*t**2.5 + 4*a[4]*t**3 + 7.5*a[5]*t**6.5)',
+        '        rL = rc * (1 + bb[0]*t**(1/3) + bb[1]*t**(2/3) + bb[2]*t**(5/3) + bb[3]*t**(16/3) + bb[4]*t**(43/3) + bb[5]*t**(110/3))',
+        '        rV = rc * np.exp(cc[0]*t**(2/6) + cc[1]*t**(4/6) + cc[2]*t**(8/6) + cc[3]*t**(18/6) + cc[4]*t**(37/6) + cc[5]*t**(71/6))',
+        '        return T * dpdT * (1 / rV - 1 / rL) / 1000',
+        '    P = ' + n2s(g.P || 101325),
+        '    Hs = lambda tC: 0.622 * psat(tC + 273.15) / (P - psat(tC + 273.15))',
+        '    twf = lambda T, H: brentq(lambda x: Hs(x) - H - (1.005 + 1.88 * H) * (T - x) / lam(x), 0.01, T, xtol=1e-12)   # bulbo úmido',
+        '    hcf = lambda T, H, vv: 0.0204 * (vv * (1 + H) / ((1 / 28.97 + H / 18.015) * 8314.46 * (T + 273.15) / P) * 3600) ** 0.8   # W/(m²·K)',
+        '    Xc, Xe, Ld, phi = ' + [g.Xc, g.Xe, g.Ld, 0.5].map(n2s).join(', '),
+        '    f = lambda X: min(1.0, max(0.0, (X - Xe) / (Xc - Xe)))',
+        '    Ta, H0, Ga, v = ' + [g.Ta, g.H, g.Ga, g.v].map(n2s).join(', ') + '   # °C, kg/kg, kg/h de ar seco, m/s',
+        '    cs = 1.005 + 1.88 * H0',
+        '    Ac, eta_c, qrf, Uc = ' + [g.Ac, g.etaC, g.tauG * g.alfa, g.Uc].map(n2s).join(', ') + '   # coletor, τ·α, perda da câmara W/(m²·K)']);
+      if (cont) L0.push('    X0, Xf, Ss, Wt, Lop = ' + [g.X0, g.Xf, g.Ss, g.Wt, g.Lop].map(n2s).join(', ') + '   # kg/kg, kg/h de sólido seco, m e h/dia',
+        '    Iop = ' + n2s(g.Iop) + '; Th = Ta + eta_c * Iop * Ac / 1000 / (Ga / 3600 * cs); qr = qrf * Iop',
+        '    n = 800; dX = (X0 - Xf) / n; T, H, A, tau, Ec, Er, Qa = Th, H0, 0.0, 0.0, 0.0, 0.0, 0.0',
+        '    pos, XX, TT = [0.0], [X0], [Th]',
+        '    for i in range(1, n + 1):',
+        '        X = X0 - (i - 0.5) * dX; tw = twf(T, H); lw = lam(tw)',
+        '        rc_ = hcf(T, H, v) * (T - tw) * 3.6 / lw * f(X); rr = phi * qr * 3.6 / lw * f(X); R = rc_ + rr',
+        '        dA = Ss * dX / R; A += dA; tau += Ld * dX / R; Ec += rc_ * dA; Er += rr * dA; Qa += ((1 - phi * f(X)) * qr - Uc * (T - Ta)) * 3.6 * dA',
+        '        H = H0 + (Ec + Er) / Ga; T = Th + (Qa - lw * Ec) / (Ga * cs); pos.append(A); XX.append(X0 - i * dX); TT.append(T)',
+        "    print(f'  Python: T_h = {Th:.2f} °C, tau = {tau:.2f} h ({tau/Lop:.2f} dias), A = {A:.2f} m², túnel = {A/Wt:.2f} m, ar de saída {T:.1f} °C e H = {H:.4f} kg/kg')",
+        '    f1, a1 = plt.subplots(figsize=(10, 6.5)); x = np.array(pos) / Wt',
+        "    a1.plot(x, XX, 'b', lw=2.5, label='X do produto'); a1.set_xlabel('Posição no túnel (m)'); a1.set_ylabel('X (kg H₂O/kg ss)'); a1.grid(True)",
+        "    a2 = a1.twinx(); a2.plot(x, TT, 'r--', lw=2, label='T do ar'); a2.set_ylabel('T do ar (°C)'); a1.set_title('Umidade do produto e temperatura do ar ao longo do túnel')",
+        '    f1.tight_layout()', '    return [f1]');
+      else L0.push('    Mb, X0, Xf, alfa, vw = ' + [g.Mb, g.X0, g.Xf, g.alfa, g.vw].map(n2s).join(', ') + '   # kg, kg/kg, absortância e vento (m/s)',
+        '    Ms = Mb / (1 + X0); A = Ms / Ld',
+        '    Hd, L, t0 = ' + [g.Hd, g.L, g.t0].map(n2s).join(', ') + '; Imax = np.pi * Hd * 1000 / (2 * L); tn = 12 - L / 2',
+        '    def Ifun(h):',
+        '        hh = h % 24',
+        '        return Imax * np.sin(np.pi * (hh - tn) / L) if tn < hh < tn + L else 0.0',
+        '    GC = Ga / 3600 * cs * 1000; UA = Uc * A',
+        '    Thf = lambda I: Ta + eta_c * I * Ac / 1000 / (Ga / 3600 * cs)',
+        '    Tch = lambda I, g: (GC * Thf(I) + g * qrf * I * A + UA * Ta) / (GC + UA)',
+        '    tab = [None] * 1440   # ar da câmara minuto a minuto para g = 0 e g = 1 (g = fração da radiação que aquece o ar)',
+        '    for m in range(1440):',
+        '        I = Ifun(m / 60)',
+        '        if I <= 0: continue',
+        '        T0_, T1_ = Tch(I, 0), Tch(I, 1); w0, w1 = twf(T0_, H0), twf(T1_, H0)',
+        '        tab[m] = (I, T0_, T1_, Hs(w0), Hs(w1), lam(w0), lam(w1), hcf(T0_, H0, v) * (T0_ - w0) * 3.6 / lam(w0), hcf(T1_, H0, v) * (T1_ - w1) * 3.6 / lam(w1))',
+        '    wa = twf(Ta, H0); lamA = lam(wa); RcO = hcf(Ta, H0, vw) * (Ta - wa) * 3.6 / lamA   # sol aberto',
+        '    X = Xo = X0; t = 0.0; dt = 1 / 60; tEnd = tOpen = None; k10 = 0; ts, XS, XO = [0.0], [X0], [X0]',
+        '    while t < 40 * 24 and (tEnd is None or tOpen is None):',
+        '        s0 = tab[int(np.floor(((t0 + t) % 24) * 60 + 1e-6)) % 1440]',
+        '        if s0 is not None:',
+        '            g = 1 - phi * f(X); Tt, Hw, lw, Rc = (s0[1] + g * (s0[2] - s0[1]), s0[3] + g * (s0[4] - s0[3]), s0[5] + g * (s0[6] - s0[5]), s0[7] + g * (s0[8] - s0[7]))',
+        '            if tEnd is None:',
+        '                Emax = Ga * max(0.0, Hw - H0); ff = f(X); Ec = Emax * (1 - np.exp(-Rc * A / Emax * ff)) if Emax > 0 else 0.0',
+        '                Er = phi * qrf * s0[0] * 3.6 / lw * A * ff; Tout = Tt - lw * Ec / (Ga * cs); Hcap = max(0.0, 0.98 * Hs(Tout) - H0) * Ga',
+        '                if Ec + Er > Hcap: Er = max(0.0, Hcap - Ec)',
+        '                X = max(Xe, X - (Ec + Er) * dt / Ms)',
+        '                if X <= Xf: tEnd = t + dt',
+        '            if tOpen is None:',
+        '                Xo = max(Xe, Xo - (RcO + phi * alfa * s0[0] * 3.6 / lamA) * f(Xo) * dt / Ld)',
+        '                if Xo <= Xf: tOpen = t + dt',
+        '        t += dt; k10 += 1',
+        '        if k10 % 10 == 0: ts.append(t / 24); XS.append(X); XO.append(Xo)',
+        "    print(f'  Python: A = {A:.2f} m², secador: {tEnd:.1f} h ({tEnd/24:.2f} dias), sol aberto: {tOpen:.1f} h ({tOpen/24:.2f} dias)' if tEnd and tOpen else '  Python: X_f não atingida em 40 dias')",
+        '    f1, a1 = plt.subplots(figsize=(10, 6.5))',
+        "    a1.plot(ts, XS, 'b', lw=2.5, label='secador solar'); a1.plot(ts, XO, '--', color='#e8a317', lw=2, label='sol aberto'); a1.axhline(Xf, color='g', ls=':', label='X_f')",
+        "    a1.set_xlabel('Tempo desde a carga (dias)'); a1.set_ylabel('X (kg H₂O/kg ss)'); a1.set_title('Secagem ao longo dos dias (à noite para)'); a1.grid(True); a1.legend()",
+        '    f1.tight_layout()', '    return [f1]');
+      return L0.join('\n');
+    }
     if (b.type === 'microwave_dryer' && (r.mw || r.mwb)) {
       const g = r.mw || r.mwb, cont = !!r.mw;
       const L0 = head.concat([
@@ -12220,9 +12718,9 @@ def pfr_transiente(P, nome):
         { id: 'PS', type: 'product', name: 'Alimento seco' }, { id: 'PA', type: 'product', name: 'Ar de saída' }],
       streams: [S('1', 'F', 'out', 'SEC', 'feed', 'Alimento'), S('E1', 'EQ', 'eo', 'SEC', 'q_in', 'Q'), S('2', 'SEC', 'product', 'PS', 'in', 'Seco'), S('3', 'SEC', 'exhaust', 'PA', 'in', 'Ar')] } },
     { key: 'spray-dryer-leite', title: 'Spray dryer contínuo: leite (balanços de ar e energia, carta psicrométrica, partícula e altura da câmara)', fs: {
-      name: 'Secagem por atomização contínua', components: ['water', 'dry-solids', 'cs-air'], model: 'IDEAL',
+      name: 'Secagem por atomização contínua', components: ['water', 'food-leite', 'cs-air'], model: 'IDEAL',
       blocks: [
-        { id: 'F', type: 'feed', name: 'Leite concentrado', params: { T: 20, P: 1.01325, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.8, 'dry-solids': 0.2 } } },
+        { id: 'F', type: 'feed', name: 'Leite concentrado', params: { T: 20, P: 1.01325, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.8, 'food-leite': 0.2 } } },
         { id: 'SD', type: 'spray_dryer', name: 'Spray dryer SD-101', params: { xp: 4, Tp: 41, cps: 1.5, Tin: 110, Tout: 55, Tamb: 30, Hin: 0.02, P: 101.325, loss: 0,
           d0: 70, rhoF: 1075, rhoP: 1040, kA: 0.032, tres: 3, Dch: 2 } },
         { id: 'EQ', type: 'energy', name: 'Q aquecedor de ar', params: { Q: '' } },
@@ -12238,14 +12736,30 @@ def pfr_transiente(P, nome):
         { id: 'PL', type: 'product', name: 'Produto liofilizado' }, { id: 'PV', type: 'product', name: 'Vapor ao condensador' }],
       streams: [S('1', 'F', 'out', 'LF', 'feed', 'Congelado'), S('E1', 'EQ', 'eo', 'LF', 'q_in', 'Q'), S('2', 'LF', 'product', 'PL', 'in', 'Seco'), S('3', 'LF', 'vapor', 'PV', 'in', 'Vapor')] } },
     { key: 'secador-micro-ondas', title: 'Secador de micro-ondas contínuo: fatias de maçã numa esteira, potência dos magnétrons, consumo de energia e comprimento do túnel', fs: {
-      name: 'Secagem contínua por micro-ondas', components: ['water', 'dry-solids'], model: 'IDEAL',
+      name: 'Secagem contínua por micro-ondas', components: ['water', 'food-maca'], model: 'IDEAL',
       blocks: [
-        { id: 'F', type: 'feed', name: 'Fatias de maçã (85,7 % de água)', params: { T: 25, P: 1.01325, vf: '', flow: 100, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.857143, 'dry-solids': 0.142857 } } },
+        { id: 'F', type: 'feed', name: 'Fatias de maçã (85,7 % de água)', params: { T: 25, P: 1.01325, vf: '', flow: 100, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.857143, 'food-maca': 0.142857 } } },
         { id: 'MO', type: 'microwave_dryer', name: 'Túnel de micro-ondas MO-101', params: { mode: 'contínuo: túnel de micro-ondas com esteira (alimentação → produto)', spec: 'umidade final X_f (calcula a potência de micro-ondas)',
           Xf: 0.15, tau: 30, Tp: 75, cps: 1.5, Xe: 0.05, etaA: 0.85, Xa: 0.5, etaG: 0.7, freq: '2450 MHz', epsR: 55, epsI: 15, rhoB: 600, Lb: 8, We: 0.6 } },
         { id: 'EQ', type: 'energy', name: 'Eletricidade dos magnétrons', params: { Q: '' } },
         { id: 'PS', type: 'product', name: 'Maçã seca' }, { id: 'PV', type: 'product', name: 'Vapor de água (com o ar de arraste)' }],
       streams: [S('1', 'F', 'out', 'MO', 'feed', 'Maçã úmida'), S('E1', 'EQ', 'eo', 'MO', 'q_in', 'P elétrica'), S('2', 'MO', 'product', 'PS', 'in', 'Seca'), S('3', 'MO', 'vapor', 'PV', 'in', 'Vapor')] } },
+    { key: 'secador-solar-abacaxi', title: 'Secador solar contínuo (túnel misto): abacaxi com propriedades de alimento (Choi e Okos), coletor solar, tempo de secagem em dias de sol e tamanho do túnel', fs: {
+      name: 'Secagem solar contínua de abacaxi', components: ['water', 'food-abacaxi', 'cs-air'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Abacaxi em fatias (86 % de água)', params: { T: 25, P: 1.01325, vf: '', flow: 5, flowUnit: 'kg/h', basis: 'mássica', material: 'Abacaxi', composition: { water: 0.86, 'food-abacaxi': 0.14 } } },
+        { id: 'SS', type: 'solar_dryer', name: 'Túnel solar SS-101', params: { mode: 'contínuo: túnel solar com bandejas (alimentação → produto seco)', type: 'misto: coletor solar + câmara com cobertura transparente',
+          Xf: 0.18, Xc: 3, Xe: 0.1, Ld: 1.2, Wt: 2, Hd: 5.5, Lday: 12, Lop: 8, Ta: 30, URa: 60, P: 101.325, Ac: 12, etaC: 0.5, Qa: 500, v: 1, tauG: 0.85, alfa: 0.8, Uc: 5, Tmax: 65 } },
+        { id: 'EQ', type: 'energy', name: 'Sol (radiação absorvida)', params: { Q: '' } },
+        { id: 'PS', type: 'product', name: 'Abacaxi seco' }, { id: 'PA', type: 'product', name: 'Ar úmido de saída' }],
+      streams: [S('1', 'F', 'out', 'SS', 'feed', 'Abacaxi'), S('E1', 'EQ', 'eo', 'SS', 'q_in', 'Sol'), S('2', 'SS', 'product', 'PS', 'in', 'Seco'), S('3', 'SS', 'exhaust', 'PA', 'in', 'Ar')] } },
+    { key: 'secador-solar-lodo', title: 'Secador solar em batelada: lodo de fábrica de celulose (ETE), secagem ao longo dos dias e comparação com o sol aberto', fs: {
+      name: 'Secagem solar de lodo de celulose', components: ['water', 'sludge-misto'], model: 'IDEAL',
+      blocks: [
+        { id: 'SS', type: 'solar_dryer', name: 'Secador solar de lodo SS-201', params: { mode: 'batelada: bandejas carregadas uma vez, secando ao longo dos dias', type: 'misto: coletor solar + câmara com cobertura transparente',
+          mat: 'Lodo misto de fábrica de celulose (70 % primário + 30 % biológico, base seca)', Mb: 500, X0: 3, Xf: 0.25, Xc: 1.5, Xe: 0.05, Ld: 6, Hd: 5.5, Lday: 12, tIni: 8, Ta: 30, URa: 60, P: 101.325,
+          Ac: 30, etaC: 0.5, Qa: 1500, v: 1, tauG: 0.85, alfa: 0.9, Uc: 5, Tmax: 70, vw: 1.5 } }],
+      streams: [] } },
     { key: 'cristalizador-msmpr', title: 'Cristalizador contínuo MSMPR: produção, tempo de residência, nucleação e distribuição de tamanhos (soluto genérico)', fs: {
       name: 'Cristalização contínua MSMPR', components: ['water', 'comp-A'], model: 'IDEAL',
       blocks: [
@@ -12337,6 +12851,14 @@ def pfr_transiente(P, nome):
         { id: 'ES', type: 'energy', name: 'Vapor S', params: { Q: '' } },
         { id: 'EV', type: 'evap_multi', name: 'EV-101', params: { N: 3, xP: 0.5, Ps: 205.5, PN: 13.4, U: '3123; 1987; 1136', b1: 1.78, b2: 6.22, cp0: 4.19, cp1: 2.35 } },
         { id: 'P', type: 'product', name: 'Concentrado (50 %)' }, { id: 'VC', type: 'product', name: 'Vapor ao condensador' }, { id: 'C', type: 'product', name: 'Condensados' }],
+      streams: [S('1', 'F', 'out', 'EV', 'feed', '1'), S('E1', 'ES', 'eo', 'EV', 'q_in', 'E1'), S('2', 'EV', 'product', 'P', 'in', '2'), S('3', 'EV', 'vapor', 'VC', 'in', '3'), S('4', 'EV', 'condensate', 'C', 'in', '4')] } },
+    { key: 'evaporador-tomate', title: 'Evaporador de duplo efeito: suco de tomate de 5,5 % a 28 % de sólidos (extrato), com vácuo no último efeito e c_p do alimento por Choi e Okos', fs: {
+      name: 'Concentração de suco de tomate', components: ['water', 'food-tomate'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Suco de tomate (5,5 % de sólidos)', params: { T: 60, P: 2.5, vf: '', flow: 5000, flowUnit: 'kg/h', basis: 'mássica', material: 'Tomate (polpa ou suco, para extrato ou tomate seco)', composition: { water: 0.9452, 'food-tomate': 0.0548 } } },
+        { id: 'ES', type: 'energy', name: 'Vapor S', params: { Q: '' } },
+        { id: 'EV', type: 'evap_double', name: 'EV-301', params: { xP: 0.28, Ps: 143.3, PN: 10, U: '2000; 1100', b1: 1, b2: 2, cp0: 4.18, cp1: 2.48 } },
+        { id: 'P', type: 'product', name: 'Extrato de tomate (28 %)' }, { id: 'VC', type: 'product', name: 'Vapor ao condensador' }, { id: 'C', type: 'product', name: 'Condensado' }],
       streams: [S('1', 'F', 'out', 'EV', 'feed', '1'), S('E1', 'ES', 'eo', 'EV', 'q_in', 'E1'), S('2', 'EV', 'product', 'P', 'in', '2'), S('3', 'EV', 'vapor', 'VC', 'in', '3'), S('4', 'EV', 'condensate', 'C', 'in', '4')] } },
     { key: 'extractive', title: 'Destilação extrativa etanol/água com etilenoglicol', fs: {
       name: 'Desidratação de etanol por destilação extrativa', components: ['ethanol', 'water', 'ethylene-glycol'], model: 'NRTL',
@@ -12567,7 +13089,7 @@ def pfr_transiente(P, nome):
   // blocos sem parâmetros recebem os valores pré-setados da unidade (secador, cristalizador, biorreatores...)
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && !Object.keys(b.params).length) T.params.forEach(f => { if (f.def !== undefined) b.params[f.k] = f.def; }); }));
   // equipamentos contínuos de sólidos e bioprocessos: os campos que o exemplo não informa recebem o valor pré-setado
-  const FILL = /^(tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester)/;
+  const FILL = /^(tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester)/;
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && FILL.test(b.type)) T.params.forEach(f => { if (b.params[f.k] === undefined && f.def !== undefined) b.params[f.k] = f.def; }); }));
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -13358,7 +13880,7 @@ def pfr_transiente(P, nome):
   const $ = s => document.querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -13668,6 +14190,16 @@ def pfr_transiente(P, nome):
       ['Tempo e temperatura', 'τ = 30 min na esteira (barra deslizante): define a carga, a potência específica (1,6 W/g) e o tamanho do túnel. T_p = 75 °C é a temperatura do produto durante a secagem.'],
       ['Absorção', 'η_máx = 0,85 da potência emitida é absorvida pelo produto úmido; a absorção cai à medida que ele seca, com a umidade característica X_a = 0,5 kg/kg; X_e = 0,05. Magnétrons com eficiência de 0,7.'],
       ['Dielétricas e camada', 'ε′ = 55 e ε″ = 15 dão a profundidade de penetração D_p = 9,7 mm a 2 450 MHz (cerca de 26 mm a 915 MHz). Carga de 8 kg/m² e massa específica de 600 kg/m³ dão uma camada de 13,3 mm; a esteira tem 0,6 m de largura.']] },
+    solar_dryer: { ex: 'Secador solar contínuo: abacaxi', items: [
+      ['Operação', '<b>contínua</b>: túnel solar ligado ao fluxograma (produto úmido → produto seco + ar úmido; a porta de energia mostra a energia solar aproveitada); <b>batelada</b>: bandejas carregadas uma vez, secando ao longo dos dias, com a comparação com o sol aberto. O editor mostra só os campos do modo escolhido.'],
+      ['Tipo de secador solar', '<b>misto</b>: coletor + câmara com cobertura transparente (o produto também recebe sol); <b>indireto</b>: coletor + câmara opaca (produto à sombra, melhor para cor e vitaminas); <b>direto</b>: estufa ou cabine solar, sem coletor.'],
+      ['Alimentação', '5 kg/h de abacaxi em fatias com 86 % de água (X_i = 6,14) nas horas de operação, pela corrente com água + “Abacaxi: sólidos secos”. Use o campo “Alimento ou lodo” da corrente para preencher a composição.'],
+      ['Umidades e bandejas', 'X_f = 0,18 (15 % de umidade), X_c = 3 e X_e = 0,1 kg/kg; 1,2 kg de sólido seco por m² de bandeja (cerca de 8,6 kg de fruta fresca/m²); túnel de 2 m de largura.'],
+      ['Sol', 'irradiação diária de 5,5 kWh/(m²·dia) (barra deslizante; no Brasil, de 4,5 a 6,5 conforme a região e o mês), dia de 12 h e 8 h de operação centradas no meio-dia. Na batelada, a hora da carga diz quando a secagem começa.'],
+      ['Ar ambiente', '30 °C e 60 % de umidade relativa a 101,325 kPa (em cidades altas use a pressão local: cerca de 91 kPa a 900 m).'],
+      ['Coletor e ventilador', 'coletor de 12 m² (barra deslizante) com eficiência de 0,5 e 500 m³/h de ar a 1 m/s sobre as bandejas. Mais ar esfria o coletor, mas leva mais água; menos ar esquenta demais e satura.'],
+      ['Radiação e perdas', 'transmitância da cobertura τ = 0,85, absortância do produto α = 0,8 (lodo escuro: 0,9), perda de calor da câmara de 5 W/(m²·K) e temperatura máxima de 65 °C para o produto (frutas: 55 a 65 °C).'],
+      ['Material e vento (batelada)', 'o campo Material preenche X_0, X_f, X_c, X_e, α e a carga para frutas, líquidos e lodos de fábrica de celulose; o vento (1,5 m/s) é usado só na comparação com a secagem ao sol aberto.']] },
     tray_dryer: { ex: 'Secador de bandejas contínuo (túnel)', items: [
       ['Operação', '<b>contínua</b>: túnel de bandejas ligado ao fluxograma (alimentação → produto + ar de saída); <b>batelada</b>: modelo pelo ar ou dados de laboratório. O editor mostra só os campos do modo escolhido.'],
       ['Alimentação', '100 kg/h de alimento com 75 % de água (X_i = 3), pela corrente: a água é a umidade e os demais componentes, o sólido seco.'],
@@ -13834,7 +14366,9 @@ def pfr_transiente(P, nome):
         pushUndo(); const k = inp.dataset.k, f = U.TYPES[b.type].params.find(x => x.k === k);
         b.params[k] = (f.type === 'select' || f.type === 'comp' || f.type === 'matrix') ? inp.value : (inp.value === '' ? '' : +inp.value);
         if (f.presets && f.presets[inp.value]) Object.assign(b.params, f.presets[inp.value]);   // ex.: banco de microrganismos preenche as constantes
+        if (b.type === 'feed' && k === 'material') applyMaterial(b);
         afterChange(false); if (f.type === 'select') renderProps();
+        if (b.type === 'feed' && k === 'material' && $('#thermoBody')) renderThermo();
       };
     });
     el.querySelectorAll('[data-range]').forEach(inp => { // arrastar = simula ao vivo; soltar = atualiza tudo
@@ -13869,7 +14403,25 @@ def pfr_transiente(P, nome):
       [['Temperatura', nf(s.T - 273.15, 2) + ' °C'], ['Pressão', nf(s.P / 1e5, 4) + ' bar'], ['Fase', s.phase + ' (vf = ' + nf(s.beta, 4) + ')'], ['Vazão molar', nf(s.F * 3.6, 4) + ' kmol/h'], ['Vazão mássica', nf(s.mass * 3600, 2) + ' kg/h'], ['Massa molar', nf(s.mw, 3) + ' g/mol'], ['Entalpia', nf(s.h / 1000, 3) + ' kJ/mol']]
         .map(r => '<tr><td>' + r[0] + '</td><td class="num">' + r[1] + '</td></tr>').join('') + '</tbody></table>' +
       '<div class="subhead">Composição</div><table class="grid"><thead><tr><th>Componente</th><th>x molar</th><th>kmol/h</th></tr></thead><tbody>' +
-      th.ids.map((id, i) => '<tr><td>' + esc(th.c[i].name) + '</td><td class="num">' + nf(s.z[i], 5) + '</td><td class="num">' + nf(s.flows[i] * 3.6, 4) + '</td></tr>').join('') + '</tbody></table>';
+      th.ids.map((id, i) => '<tr><td>' + esc(th.c[i].name) + '</td><td class="num">' + nf(s.z[i], 5) + '</td><td class="num">' + nf(s.flows[i] * 3.6, 4) + '</td></tr>').join('') + '</tbody></table>' + foodStreamHTML(s, th);
+  }
+  // corrente de água + matéria seca de alimentos ou lodos: propriedades pela composição (Choi e Okos)
+  function foodStreamHTML(s, th) {
+    if (!TH.foodMix || !(s.F > 0)) return '';
+    const kg = s.flows.map((f, i) => f * th.c[i].mw * 3.6), P = TH.foodMix(th.ids, kg, s.T - 273.15); if (!P) return '';
+    const tot = kg.reduce((a, v) => a + v, 0), iw = th.ids.indexOf('water'), xw = iw >= 0 ? kg[iw] / tot : 0;
+    return '<div class="subhead">Propriedades do alimento ou lodo (Choi e Okos, a ' + nf(s.T - 273.15, 1) + ' °C)</div><table class="grid"><tbody>' +
+      [['Água (base úmida) / umidade X (base seca)', nf(100 * xw, 2) + ' % / ' + (xw < 1 ? nf(xw / (1 - xw), 4) : '—') + ' kg/kg'], ['Calor específico c<sub>p</sub>', nf(P.cp, 3) + ' kJ/(kg·K)'], ['Massa específica ρ', nf(P.rho, 1) + ' kg/m³'],
+        ['Condutividade térmica k', nf(P.k, 4) + ' W/(m·K)'], ['Difusividade térmica α', nf(P.alpha * 1e7, 3) + '·10⁻⁷ m²/s']]
+        .map(r => '<tr><td>' + r[0] + '</td><td class="num">' + r[1] + '</td></tr>').join('') + '</tbody></table>';
+  }
+  // campo "Alimento ou lodo" da corrente de alimentação: inclui água e a matéria seca e preenche a composição mássica
+  function applyMaterial(b) {
+    const f = TH.FOODS && TH.FOODS.find(x => x.nome === b.params.material); if (!f) return;
+    ['water', f.id].forEach(id => { if (state.components.indexOf(id) < 0) state.components.push(id); });
+    const comp = {}; state.components.forEach(id => { comp[id] = 0; }); comp.water = +f.xw.toFixed(4); comp[f.id] = +(1 - f.xw).toFixed(4);
+    b.params.composition = comp; b.params.basis = 'mássica'; if (/mol/.test(b.params.flowUnit || '')) b.params.flowUnit = 'kg/h';
+    toast(f.nome + ': ' + nf(100 * f.xw, 1) + ' % de água e ' + nf(100 * (1 - f.xw), 1) + ' % de matéria seca (frações mássicas)');
   }
 
   /* ------------------------------------------------------------------ resultados */
@@ -14033,6 +14585,17 @@ def pfr_transiente(P, nome):
       fn();
     });
   }
+  let foodT = 25;
+  function foodTable(T) { // tabela de propriedades dos alimentos e lodos na temperatura T (°C)
+    const sel = TH.FOODS.filter(f => state.components.indexOf(f.id) >= 0), list = sel.concat(TH.FOODS.filter(f => sel.indexOf(f) < 0)), pc = v => nf(100 * v, 1);
+    return '<div class="scroll-x"><table class="grid food-tab"><thead><tr><th>Material (in natura)</th><th>Água %</th><th>c<sub>p</sub></th><th>ρ</th><th>k</th><th></th></tr></thead><tbody>' +
+      list.map(f => { const P = TH.foodProps(f.id, f.xw, T), c = P.comp, on = sel.indexOf(f) >= 0;
+        return '<tr' + (on ? ' class="on"' : '') + ' title="α = ' + nf(P.alpha * 1e7, 2) + '·10⁻⁷ m²/s; matéria seca: c_p = ' + nf(P.dry.cp, 3) + ' kJ/(kg·K), ρ = ' + nf(P.dry.rho, 0) + ' kg/m³, k = ' + nf(P.dry.k, 3) + ' W/(m·K)"><td>' + esc(f.nome) + (f.tipo === 'lodo' ? ' <small class="muted">(umidade típica)</small>' : '') +
+          '<small class="fcomp">prot. ' + pc(c.p) + ' · gord. ' + pc(c.f) + ' · carb. ' + pc(c.c) + ' · fibras ' + pc(c.fi) + ' · cinzas ' + pc(c.a) + ' %</small></td><td class="num">' + pc(c.w) + '</td>' +
+          '<td class="num">' + nf(P.cp, 3) + '</td><td class="num">' + nf(P.rho, 0) + '</td><td class="num">' + nf(P.k, 3) + '</td>' +
+          '<td>' + (on ? '✓' : '<button class="mini" data-usefood="' + f.id + '" title="Incluir água e esta matéria seca na lista de componentes">usar</button>') + '</td></tr>'; }).join('') +
+      '</tbody></table></div><p class="small muted">c<sub>p</sub> em kJ/(kg·K), ρ em kg/m³ e k em W/(m·K). Composição in natura em massa (carboidratos sem as fibras). Passe o mouse sobre a linha para ver α e as propriedades da matéria seca. Para outra umidade, as propriedades aparecem no detalhe da corrente (clique nela depois de simular).</p>';
+  }
   function renderThermo() {
     const el = $('#thermoBody');
     let th = null, err = '';
@@ -14046,7 +14609,13 @@ def pfr_transiente(P, nome):
       (nCS ? '<p class="small muted" style="margin:0 0 6px">Banco ChemSep v8.3 com mais ' + nCS + ' compostos (nomes em inglês): digite ao menos 2 letras, a fórmula ou o CAS para encontrá-los. © Kooijman e Taylor, Artistic License 2.0.</p>' : '') +
       (SF.dbx ? '<p class="small muted" style="margin:0 0 6px">Banco ampliado com cerca de 40 mil compostos (nomes em inglês), carregado da internet quando você busca com 3 letras ou mais. Qualidade A: propriedades críticas e pressão de vapor experimentais; B: em parte experimentais; C: estimadas (Joback, Wilson-Jasperson, Lee-Kesler). Dados: biblioteca chemicals (C. Bell, MIT) e fontes citadas no manual.</p><div id="extRes"></div>' : '') +
       '<div class="comp-list" id="compList">' +
-      TH.COMPONENTS.slice().sort((a, b) => (state.components.indexOf(b.id) >= 0) - (state.components.indexOf(a.id) >= 0)).map(c => '<label data-name="' + esc((c.name + ' ' + c.formula + ' ' + c.id + ' ' + (c.cas || '') + (c.alias ? ' ' + c.alias + ' ' + c.alias.replace(/-/g, '') + ' refrigerante' : '')).toLowerCase()) + '"' + (c.db === 'chemsep' || c.db === 'ext' ? ' data-cs="1"' + (state.components.indexOf(c.id) >= 0 ? '' : ' hidden') : '') + '><input type="checkbox" data-comp="' + c.id + '"' + (state.components.indexOf(c.id) >= 0 ? ' checked' : '') + '>' + esc(c.name) + ' <small>' + esc(c.formula) + (c.refr ? ' · refrigerante' : c.alias ? ' · refrigerante ' + esc(c.alias) : '') + (c.db === 'chemsep' ? ' · ChemSep · CAS ' + esc(c.cas) : c.db === 'ext' ? ' · banco ampliado · CAS ' + esc(c.cas) + ' · qualidade ' + esc(c.q || 'C') : '') + (c.tb ? ' · Teb ' + nf(c.tb - 273.15, 1) + ' °C' : c.solid ? ' · sólido' : ' · não volátil') + '</small></label>').join('') + '</div>';
+      TH.COMPONENTS.slice().sort((a, b) => (state.components.indexOf(b.id) >= 0) - (state.components.indexOf(a.id) >= 0)).map(c => '<label data-name="' + esc((c.name + ' ' + c.formula + ' ' + c.id + ' ' + (c.cas || '') + (c.alias ? ' ' + c.alias + ' ' + c.alias.replace(/-/g, '') + ' refrigerante' : '') + (c.tags ? ' ' + c.tags : '')).toLowerCase()) + '"' + (c.db === 'chemsep' || c.db === 'ext' ? ' data-cs="1"' + (state.components.indexOf(c.id) >= 0 ? '' : ' hidden') : '') + '><input type="checkbox" data-comp="' + c.id + '"' + (state.components.indexOf(c.id) >= 0 ? ' checked' : '') + '>' + esc(c.name) + ' <small>' + esc(c.formula) + (c.refr ? ' · refrigerante' : c.alias ? ' · refrigerante ' + esc(c.alias) : c.food ? (c.food.tipo === 'lodo' ? ' · lodo' : ' · alimento') + ', ' + nf(100 * c.food.xw, 1) + ' % de água' + (c.food.tipo === 'lodo' ? ' típica' : ' in natura') : '') + (c.db === 'chemsep' ? ' · ChemSep · CAS ' + esc(c.cas) : c.db === 'ext' ? ' · banco ampliado · CAS ' + esc(c.cas) + ' · qualidade ' + esc(c.q || 'C') : '') + (c.tb ? ' · Teb ' + nf(c.tb - 273.15, 1) + ' °C' : c.solid ? ' · sólido' : ' · não volátil') + '</small></label>').join('') + '</div>';
+    if (TH.FOODS) { // alimentos e lodos: propriedades pela composição centesimal (Choi e Okos)
+      const nSel = TH.FOODS.filter(f => state.components.indexOf(f.id) >= 0).length;
+      h += '<details class="food-props"' + (nSel ? ' open' : '') + '><summary class="subhead">Alimentos e lodos: propriedades pela composição (Choi e Okos)</summary>' +
+        '<p class="small muted" style="margin:4px 0 6px">A matéria seca de cada alimento ou lodo é um componente (busque por “alimento”, “fruta” ou “lodo”). O c<sub>p</sub>, a massa específica ρ e a condutividade k saem da composição centesimal pelas correlações de Choi e Okos (1986): c<sub>p</sub> pela média mássica, ρ por 1/Σ(x<sub>i</sub>/ρ<sub>i</sub>) e k pela média em volume. Na corrente de alimentação, o campo “Alimento ou lodo” preenche a composição sozinho. Alimentos: USDA FoodData Central; lodos de fábrica de celulose: literatura (fibras = celulose, hemicelulose e lignina; cinzas = carga mineral).</p>' +
+        '<div class="field"><label for="foodT">Temperatura das propriedades<span class="u">°C</span></label><input id="foodT" type="number" step="any" value="' + foodT + '"></div><div id="foodTab"></div></details>';
+    }
     if (th && th.pairInfo.length) {
       const isAct = ['NRTL', 'WILSON', 'UNIQUAC'].indexOf(state.model) >= 0;
       h += '<div class="subhead">Parâmetros binários (' + esc(TH.MODELS[state.model]) + ')</div>';
@@ -14078,6 +14647,9 @@ def pfr_transiente(P, nome):
         '<div class="row-actions"><button id="txyBtn" class="primary">Gerar Txy e xy</button></div><div id="txyOut"></div>';
     } else h += '<p class="small muted">Selecione ao menos dois componentes voláteis.</p>';
     el.innerHTML = h;
+    if ($('#foodT')) { const ft = () => { $('#foodTab').innerHTML = foodTable(foodT); $('#foodTab').querySelectorAll('[data-usefood]').forEach(bt => { bt.onclick = () => {
+        pushUndo(); ['water', bt.dataset.usefood].forEach(id => { if (state.components.indexOf(id) < 0) state.components.push(id); }); afterChange(false); renderThermo(); toast('Água e ' + TH.COMP[bt.dataset.usefood].name + ' na lista de componentes'); }; }); };
+      ft(); $('#foodT').oninput = e => { const v = parseFloat(e.target.value); if (isFinite(v) && v > -20 && v < 150) { foodT = v; ft(); } }; }
     $('#modelSel').onchange = e => { pushUndo(); state.model = e.target.value; afterChange(false); renderThermo(); };
     $('#compSearch').oninput = e => { // os compostos do ChemSep só aparecem quando buscados (ou já selecionados)
       const q = e.target.value.toLowerCase().trim(); compQuery = e.target.value;

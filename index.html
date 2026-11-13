@@ -76,7 +76,7 @@
         "Controle PID de CSTR com sintonia ao vivo",
         "Extração líquido-líquido e sólido-líquido",
         "Diagramas Txy e detecção de azeótropos",
-        "42 exemplos prontos",
+        "47 exemplos prontos",
         "Fluxograma final em PNG e SVG",
         "Código MATLAB, GNU Octave e Python"
       ],
@@ -265,6 +265,21 @@
       "author": {
         "@id": "#autor"
       }
+    },
+    {
+      "@type": "VideoObject",
+      "name": "Simulação de um refrigerador no SIMULA FÁCIL IA – vídeo da aluna Ana Clara Alves de Macedo (Engenharia Química UFSJ)",
+      "description": "Vídeo feito por aluna da turma de Modelagem e Simulação de Processos da UFSJ: simulação de um refrigerador (ciclo de compressão de vapor) no SIMULA FÁCIL IA.",
+      "thumbnailUrl": "https://i.ytimg.com/vi/MqbwtjsU0-4/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/MqbwtjsU0-4",
+      "url": "https://youtu.be/MqbwtjsU0-4",
+      "uploadDate": "2026-11-13",
+      "inLanguage": "pt-BR",
+      "isFamilyFriendly": true,
+      "creator": {
+        "@type": "Person",
+        "name": "Ana Clara Alves de Macedo"
+      }
     }
   ]
 }
@@ -331,10 +346,24 @@ nav.bar .links a:hover { opacity: 1; text-decoration: underline; }
 .btn-pp { border: 2px solid #e10600; border-radius: 99px; padding: 7px 14px; background: #fff; color: #c40500; font: 800 15px var(--fun); cursor: pointer; text-decoration: none; }
 .btn-pp:hover { background: #ffecea; }
 .alunos { margin-top: 24px; } .alunos h3 { font: 800 20px var(--fun); margin: 0 0 10px; }
+.alunos-h { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-bottom: 10px; } .alunos-h h3 { margin: 0; }
+.alunos-h input { flex: 1 1 240px; max-width: 360px; border: 1.5px solid var(--line); border-radius: 99px; padding: 8px 16px; font: inherit; font-size: 14px; background: var(--panel); color: inherit; }
+.alunos-mais { margin-top: 12px; border: 0; border-radius: 99px; padding: 9px 18px; background: #0a6f86; color: #fff; font: inherit; font-weight: 700; cursor: pointer; } .alunos-none { color: var(--muted); }
 .alunos-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
-.alunos-list a { display: block; padding: 10px 14px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); text-decoration: none; font-weight: 600; }
+.alunos-list .al { display: flex; flex-direction: column; gap: 6px; padding: 10px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); }
+.alunos-list .al-v { position: relative; display: block; width: 100%; aspect-ratio: 16/9; border: 0; padding: 0; border-radius: 10px; background: #0b2f3a center/cover no-repeat; cursor: pointer; overflow: hidden; }
+.alunos-list .al-v::after { content: '▶'; position: absolute; inset: 0; margin: auto; width: 56px; height: 38px; border-radius: 10px; background: #e10600; color: #fff; font-size: 20px; display: grid; place-items: center; }
+.alunos-list .al-v.on::after { display: none; } .alunos-list iframe { display: block; width: 100%; height: 100%; border: 0; }
+.alunos-list .al b { font-size: 15px; line-height: 1.25; } .alunos-list .al small { color: var(--muted); } .alunos-list .al a { font-size: 13px; font-weight: 600; }
 [hidden] { display: none !important; }
 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 99px; font: 800 16px var(--fun); text-decoration: none; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+@keyframes alunosGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, .8), 0 4px 14px rgba(0, 0, 0, .25); } 50% { box-shadow: 0 0 0 9px rgba(255, 193, 7, 0), 0 4px 14px rgba(0, 0, 0, .25); } }
+@keyframes alunosNew { 0%, 100% { transform: rotate(-6deg) scale(1); } 50% { transform: rotate(-6deg) scale(1.12); } }
+.btn.gold { position: relative; background: linear-gradient(135deg, #fff176, #ffc107 55%, #ff9800); color: #3a2500; font-weight: 900; border: 2px solid #fff; animation: alunosGlow 1.8s ease-in-out infinite; }
+.btn.gold .al-new, nav.bar .links a.nav-alunos .al-new { position: absolute; top: -10px; right: -8px; background: #e10600; color: #fff; font: 900 10.5px/1 sans-serif; letter-spacing: .8px; padding: 3px 7px; border-radius: 99px; border: 1.5px solid #fff; animation: alunosNew 1.4s ease-in-out infinite; }
+.btn.gold .al-n { display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 7px; margin-left: 4px; border-radius: 99px; background: #3a2500; color: #ffd54f; font-size: 13px; }
+nav.bar .links a.nav-alunos { background: linear-gradient(135deg, #fff176, #ffc107 55%, #ff9800); color: #3a2500; opacity: 1; padding: 4px 12px; border-radius: 99px; font-weight: 900; animation: alunosGlow 1.8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .btn.gold, .btn.gold .al-new, nav.bar .links a.nav-alunos { animation: none; } }
 .btn.sun { background: var(--sun); color: #2a1b00; } .btn.pop { background: var(--pop); color: #fff; } .btn.ghost { background: rgba(255,255,255,.14); color: #fff; box-shadow: none; border: 1px solid rgba(255,255,255,.4); }
 .btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
 .shot { border-radius: 14px; overflow: hidden; box-shadow: 0 18px 50px rgba(0,0,0,.35); border: 3px solid rgba(255,255,255,.35); background: #fff; }
@@ -384,20 +413,21 @@ footer a { color: var(--sun); }
   <div class="wrap">
     <nav class="bar" aria-label="Navegação principal">
       <a class="brand" href="./"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>SIMULA FÁCIL IA</a>
-      <div class="links"><a href="simulador.html">Abrir o simulador</a><a href="#tutoriais">🎬 Tutoriais</a><a href="#banco">40 mil compostos</a><a href="#recursos">Recursos</a><a href="#codigos">MATLAB e Python</a><a href="#autor">Autor</a><a href="#turma">Para a turma</a><a href="#perguntas">Perguntas</a></div>
+      <div class="links"><a href="simulador.html">Abrir o simulador</a><a href="#tutoriais">🎬 Tutoriais</a><a href="#alunos" class="nav-alunos" id="alunosNav" hidden>🎓 Vídeos dos alunos</a><a href="#banco">40 mil compostos</a><a href="#recursos">Recursos</a><a href="#codigos">MATLAB e Python</a><a href="#autor">Autor</a><a href="#turma">Para a turma</a><a href="#perguntas">Perguntas</a></div>
     </nav>
     <div class="hero">
       <div>
         <p class="eyebrow">Engenharia Química · UFSJ</p>
         <h1>SIMULA FÁCIL IA <em class="ver">VERSÃO 4.0</em><span>Simulador de processos químicos e bioprocessos</span></h1>
         <a class="new-pill" href="#banco"><span aria-hidden="true">✨</span> <b>Novo na 4.0:</b> mais de 40 mil compostos químicos <span aria-hidden="true">→</span></a>
-        <p class="lead">Monte fluxogramas de processos químicos e bioprocessos direto no navegador e de graça: destilação com McCabe-Thiele, reatores CSTR e PFR transientes, trocadores de calor, extratores, secadores, cristalizadores, biorreatores, reator de biodiesel, alto-forno, forno de cimento, silo, sedimentador e digestor kraft contínuos, com mais de 40 mil compostos químicos e 42 exemplos prontos. Um agente de inteligência artificial conversa sobre o processo, lê figuras e sugere melhorias.</p>
+        <p class="lead">Monte fluxogramas de processos químicos e bioprocessos direto no navegador e de graça: destilação com McCabe-Thiele, reatores CSTR e PFR transientes, trocadores de calor, extratores, secadores, cristalizadores, biorreatores, reator de biodiesel, alto-forno, forno de cimento, silo, sedimentador e digestor kraft contínuos, com mais de 40 mil compostos químicos e 47 exemplos prontos. Um agente de inteligência artificial conversa sobre o processo, lê figuras e sugere melhorias.</p>
         <p class="author-pill"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
         <div class="cta">
           <a class="btn sun" href="simulador.html">Abrir o simulador</a>
           <a class="btn pop" id="claudeBtn" href="https://claude.ai/artifact/A8LR4WDCvpfBY9XhF5T3TF" target="_blank" rel="noopener">Usar com o Claude (preferencial) ↗</a>
           <a class="btn pop" href="#tutoriais">🎬 Tutoriais e passo a passo</a>
-          <a class="btn ghost" href="Manual_SIMULA_FACIL_IA.pdf?v=4.0-2026-11-12f" target="_blank" rel="noopener">📘 Manual (PDF)</a>
+          <a class="btn gold" id="alunosBtn" href="#alunos" hidden><span class="al-new">NOVO</span>🎓 Vídeos dos alunos <span class="al-n"></span></a>
+          <a class="btn ghost" href="Manual_SIMULA_FACIL_IA.pdf?v=4.0-2026-11-13c" target="_blank" rel="noopener">📘 Manual (PDF)</a>
         </div>
         <p class="pc-pill"><span aria-hidden="true">💻</span> Versão para notebook (preferencial) · <span aria-hidden="true">📱</span> e para celular</p>
         <div class="prog-link" role="group" aria-label="Link do programa">
@@ -429,7 +459,7 @@ footer a { color: var(--sun); }
       <figure class="vcard"><video controls preload="none" playsinline poster="tutorial-5.jpg" src="tutorial-5.mp4" title="Aba Termodinâmica: qual modelo escolher"></video>
         <figcaption><b>5. Aba Termodinâmica: qual modelo escolher</b><span>buscar componentes entre 40 mil e escolher entre Ideal, NRTL, Wilson, UNIQUAC, UNIFAC, Peng-Robinson, SRK e PC-SAFT · Marina · 2:45</span><div class="vbtns"><button type="button" class="btn-narr" data-tut="4">🔊 Assistir com narração</button><button type="button" class="btn-pp" data-tut="4">🧭 Passo a passo</button></div></figcaption></figure>
     </div>
-    <div id="alunos" class="alunos" hidden><h3>🎓 Vídeos dos alunos</h3><div class="alunos-list"></div></div>
+    <div id="alunos" class="alunos" hidden><div class="alunos-h"><h3>🎓 Vídeos dos alunos</h3><input type="search" id="alunosQ" placeholder="Buscar por tema ou aluno…" aria-label="Buscar vídeos dos alunos" hidden></div><div class="alunos-list"></div><p class="alunos-none" hidden>Nenhum vídeo com esse tema ou nome.</p><button type="button" id="alunosMais" class="alunos-mais" hidden></button></div>
     <p class="also" id="alunosBreve"><b>Em breve:</b> vídeos feitos pelos alunos da turma de Modelagem e Simulação de Processos.</p>
   </div>
 </section>
@@ -466,14 +496,14 @@ footer a { color: var(--sun); }
         <div class="chips"><span>IUPAC</span><span>CRC Handbook</span><span>NIST WebBook</span><span>JANAF</span><span>ATcT</span><span>DIPPR / Perry</span><span>Yaws</span><span>VDI</span><span>Landolt-Börnstein</span><span>Poling</span><span>TRC</span><span>API</span><span>PubChem</span></div>
       </div>
     </div>
-    <p class="also"><b>Também na 4.0:</b> digestor contínuo kraft de eucalipto, na nova categoria <b>Papel e celulose</b>. São 47 equipamentos na paleta e 42 exemplos prontos.</p>
+    <p class="also"><b>Também na 4.0:</b> digestor contínuo kraft de eucalipto, na nova categoria <b>Papel e celulose</b>. São 49 equipamentos na paleta e 47 exemplos prontos.</p>
   </div>
 </section>
 
 <section id="recursos">
   <div class="wrap">
     <h2>O que dá para simular</h2>
-    <p class="sub">Motor numérico rigoroso, com as equações de cada equipamento à vista, em uma interface feita para a sala de aula: são 47 equipamentos na paleta.</p>
+    <p class="sub">Motor numérico rigoroso, com as equações de cada equipamento à vista, em uma interface feita para a sala de aula: são 49 equipamentos na paleta.</p>
     <div class="grid">
       <article class="card"><svg viewBox="-4 -4 120 238" aria-hidden="true"><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="4" y="6" width="46" height="218" rx="12"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 30 L45 30"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 44 L45 44"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 58 L45 58"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 72 L45 72"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 86 L45 86"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 100 L45 100"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 114 L45 114"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 128 L45 128"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 142 L45 142"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 156 L45 156"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 170 L45 170"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 184 L45 184"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M9 198 L45 198"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M36 6 L36 2 L82 2 L82 10"/><circle fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" cx="82" cy="21" r="11"/><path fill="none" stroke="#2f74d0" stroke-width="1.8" d="M73 21 L91 21"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M82 32 L82 38"/><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="62" y="38" width="40" height="16" rx="8"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M102 46 L112 46"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M70 54 L70 62 L50 62"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M38 224 L38 229 L82 229 L82 219"/><circle fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" cx="82" cy="208" r="11"/><path fill="none" stroke="#d24a35" stroke-width="1.8" d="M73 208 L91 208"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M82 197 L82 188 L50 188"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M93 208 L112 208"/></svg><h3>Destilação</h3><p>Coluna rigorosa (método do ponto de bolha com Newton simultâneo), shortcut de Fenske–Underwood–Gilliland, McCabe-Thiele (com barra deslizante do refluxo, refluxo ótimo e pré-aquecedor da carga embutido na coluna), Ponchon–Savarit (diagrama entalpia–composição), destilação extrativa e retirada lateral.</p></article>
       <article class="card"><svg viewBox="-4 -4 78 92" aria-hidden="true"><rect fill="none" stroke="#ec6a4c" stroke-width="1.2" stroke-dasharray="4 3" x="3" y="14" width="64" height="66" rx="13"/><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="7" y="12" width="56" height="66" rx="11"/><rect fill="#ffe6dc" stroke="#ec6a4c" stroke-width="1.6" x="29" y="0" width="12" height="7" rx="1"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M35 7 L35 60"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M23 60 L47 60"/><path fill="none" stroke="#ec6a4c" stroke-width="1.2" d="M23 54 L35 60 L47 54"/><path fill="none" stroke="#d24a35" stroke-width="1.8" d="M3 70 L0 70"/><path fill="none" stroke="#d24a35" stroke-width="1.8" d="M67 22 L70 22"/></svg><h3>Reatores CSTR</h3><p>Regime permanente, transiente e batelada, isotérmico, adiabático ou com camisa, com cinética de Arrhenius. Controle PID não linear do CSTR com barras deslizantes para sintonizar Kp, Ki e Kd ao vivo.</p></article>
@@ -545,7 +575,7 @@ footer a { color: var(--sun); }
     <details><summary>Os resultados são confiáveis?</summary><p>O motor foi validado contra dados clássicos: o azeótropo etanol/água previsto é 0,897 a 78,1 °C (experimental 0,894 a 78,15 °C), e os balanços de massa fecham em todos os exemplos. Para projeto industrial, confira os parâmetros binários com um banco de dados de referência.</p></details>
     <details><summary>Como uso o agente de inteligência artificial?</summary><p>O <b>Claude</b> é a IA preferencial: clique em “Usar com o Claude” e entre com uma conta do Claude. Sem conta do Claude, no simulador escolha <b>Gemini UFSJ</b> no menu “IA do agente”: o simulador copia o pedido, abre o Gemini (entre com o e-mail da UFSJ) e você cola a resposta de volta. Depois descreva o processo ou envie uma foto do fluxograma: o agente monta, simula e sugere melhorias com os números do simulador.</p></details>
     <details><summary>Quais componentes químicos estão disponíveis?</summary><p>Mais de 40 mil. São 602 no banco principal (84 do banco próprio, inclusive quatro líquidos iônicos e os 18 fluidos refrigerantes, e 518 do ChemSep, com centenas de pares binários NRTL, UNIQUAC e de Peng-Robinson) e 39 756 no banco ampliado, montado com dados abertos (IUPAC, CRC, Yaws, Landolt-Börnstein, NIST, TRC e outros) e carregado sob demanda; nele, cada composto traz a qualidade dos dados (A, B ou C, de experimental a estimado). No simulador, abra a aba <b>Termodinâmica</b> e busque o componente pelo nome em inglês (por exemplo, <i>ethanol</i>, <i>limonene</i>, <i>glucose</i>), pela fórmula ou pelo número CAS.</p></details>
-    <details><summary>Que exemplos prontos existem?</summary><p>São 42 exemplos, abertos na tela inicial ou na lista <b>Exemplos…</b>: destilação, reatores, trocadores de calor, evaporadores, bombeamento, controle PID, secadores, cristalizadores, adsorção, ácido nítrico, alto-forno, forno de cimento, silo com tremonha, sedimentador contínuo, digestor kraft de eucalipto e, no fim da lista, os bioprocessos (biorreatores de Tosetto, Monod e Verhulst e reator de biodiesel). Cada um é um fluxograma contínuo, pronto para alterar e simular.</p></details>
+    <details><summary>Que exemplos prontos existem?</summary><p>São 47 exemplos, abertos na tela inicial ou na lista <b>Exemplos…</b>: destilação, reatores, trocadores de calor, evaporadores, bombeamento, controle PID, secadores, cristalizadores, adsorção, ácido nítrico, alto-forno, forno de cimento, silo com tremonha, sedimentador contínuo, digestor kraft de eucalipto e, no fim da lista, os bioprocessos (biorreatores de Tosetto, Monod e Verhulst e reator de biodiesel). Cada um é um fluxograma contínuo, pronto para alterar e simular.</p></details>
     <details><summary>Posso usar em aulas e trabalhos?</summary><p>Sim. O simulador foi feito para o ensino. Cite-o como indicado em “Como citar”.</p></details>
     <details><summary>Os projetos ficam salvos?</summary><p>O simulador guarda o último projeto no próprio navegador. Use “Salvar” para baixar o projeto (.json) e “Abrir” para continuar em outro computador.</p></details>
   </div>
@@ -555,7 +585,7 @@ footer a { color: var(--sun); }
 <footer>
   <div class="wrap">
     <p style="margin:0 0 6px"><b>SIMULA FÁCIL IA – Simulador de processos químicos e bioprocessos</b></p>
-    <p style="margin:0">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE · <a href="simulador.html">Abrir o simulador</a> · <a href="Manual_SIMULA_FACIL_IA.pdf?v=4.0-2026-11-12f" target="_blank" rel="noopener">Manual (PDF)</a></p>
+    <p style="margin:0">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE · <a href="simulador.html">Abrir o simulador</a> · <a href="Manual_SIMULA_FACIL_IA.pdf?v=4.0-2026-11-13c" target="_blank" rel="noopener">Manual (PDF)</a></p>
     <p class="visitas" style="margin:8px 0 0" hidden>Contador de visitas: <b class="vis-n"></b></p>
   </div>
 </footer>
@@ -588,8 +618,10 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '4.0-2026-11-12f',
-  videosAlunos: []
+  manualVersion: '4.0-2026-11-13c',
+  videosAlunos: [
+    { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' }
+  ]
 };
 
 </script>
@@ -681,13 +713,14 @@ window.SIMULAFACIL_CONFIG = {
 .tut-pp{align-self:flex-start;border:1.5px solid #e10600;color:#c40500;background:#fff;border-radius:99px;padding:3px 10px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}.tut-pp:hover{background:#ffecea}
 .tut-item img{width:100%;border-radius:9px;aspect-ratio:16/9;object-fit:cover}.tut-item.on{border-color:#ffc93c;background:#fff8e5}
 .tut-item b{font-size:14px;line-height:1.25}.tut-item small{color:#4d6168;font-size:12px}
-.tut-alunos{padding:0 16px 16px}.tut-alunos h4{margin:4px 0 8px;font-size:15px}.tut-alunos a{display:block;padding:6px 0;color:#0a6f86;font-weight:600}
+.tut-alunos{padding:0 16px 16px}.tut-alunos h4{margin:4px 0 8px;font-size:15px}.tut-alh{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px}.tut-alq{flex:1 1 220px;max-width:340px;border:1.5px solid #c9d8db;border-radius:99px;padding:6px 14px;font:inherit;font-size:13.5px}.tut-alnone{color:#4d6168;font-size:13px;padding:6px 2px}.tut-algrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}.tut-al{display:flex;flex-direction:column;gap:6px;border:2px solid #d6e1e4;border-radius:14px;background:#f3f8f8;padding:8px}.tut-al.on{border-color:#ffc93c;background:#fff8e5}.tut-yt{display:flex;flex-direction:column;gap:6px;text-align:left;border:0;background:none;padding:0;cursor:pointer;font:inherit;color:inherit}.tut-yt .th{position:relative;display:block;width:100%;aspect-ratio:16/9;border-radius:9px;background:#0b2f3a center/cover no-repeat}.tut-yt .th::after{content:'▶';position:absolute;inset:0;margin:auto;width:46px;height:32px;border-radius:9px;background:#e10600;color:#fff;font-size:17px;display:grid;place-items:center}.tut-yt b{font-size:14px;line-height:1.25}.tut-yt small,.tut-al a{color:#4d6168;font-size:12px}.tut-al a{color:#0a6f86;font-weight:600}.tut-ytbox{background:#000}.tut-ytbox iframe{display:block;width:100%;aspect-ratio:16/9;max-height:62vh;border:0}.tut-ytnote{margin:0;padding:6px 16px 8px;font-size:12.5px;color:#d7e7ea}.tut-ytnote a{color:#ffc93c;font-weight:700}.tut-item,.tut-al{min-width:0}.tut-play,.tut-yt{white-space:normal;min-width:0;width:100%}.tut-play b,.tut-yt b{white-space:normal;overflow-wrap:anywhere}
 @media (max-width:640px){.tut-head span{display:none}.tut-list{grid-template-columns:1fr 1fr}.tut-imgbox{max-height:62vh}}`;
   let ov = null, video = null, imgMode = false, cur = 0, voice = null, spoken = new Set(), speaking = false, waiting = false, active = -1, raf = 0;
   const synth = root.speechSynthesis;
   let narr = true; try { narr = localStorage.getItem('simulafacil.narracao') !== '0'; } catch (e) { /* */ }
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   function cfg() { return root.SIMULAFACIL_CONFIG || {}; }
+  function ytId(u) { const m = String(u || '').match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([A-Za-z0-9_-]{11})/); return m ? m[1] : null; }
   function src(file) { return file; }   // vídeos na mesma pasta da página (site e Claude)
   function pickVoice(g) {
     if (!synth) return null;
@@ -724,7 +757,7 @@ window.SIMULAFACIL_CONFIG = {
     }
   }
   function load(k, mode) {
-    cur = k; stopSpeech(); waiting = false; spoken = new Set(); voice = null;
+    ytOff(); cur = k; stopSpeech(); waiting = false; spoken = new Set(); voice = null;
     const T = LIST[k];
     imgMode = mode === 'img' && !!T.img;
     ov.querySelector('.tut-head b').textContent = T.title;
@@ -752,9 +785,12 @@ window.SIMULAFACIL_CONFIG = {
     const al = (cfg().videosAlunos || []).filter(v => v && v.url);
     ov.innerHTML = '<div class="tut-card"><div class="tut-head"><b></b><span></span><button class="tut-x" title="Fechar (Esc)">✕</button></div>' +
       '<video class="tut-video" controls playsinline preload="metadata"></video><div class="tut-imgbox" hidden><img alt=""></div>' +
+      '<div class="tut-ytbox" hidden><iframe title="Vídeo do YouTube" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><p class="tut-ytnote"></p></div>' +
       '<div class="tut-bar"><button type="button" class="tut-pp-btn"></button><a class="tut-dl" hidden>⬇ Baixar a imagem</a><span class="tut-narrw" style="display:contents"><label><input type="checkbox" class="tut-narr"' + (narr ? ' checked' : '') + '> 🔊 Narração por voz</label><small class="tut-voice"></small></span><small style="margin-left:auto">Legendas no vídeo · setas vermelhas na imagem</small></div>' +
       '<div class="tut-list">' + LIST.map((T, i) => '<div class="tut-item" data-k="' + i + '"><button type="button" class="tut-play" data-k="' + i + '" title="Assistir ao vídeo"><img alt="" src="' + esc(src(T.poster)) + '"><b>' + (i + 1) + '. ' + esc(T.title) + '</b><small>🎬 ' + esc(T.narr) + ' · ' + esc(T.dur) + '</small></button>' + (T.img ? '<button type="button" class="tut-pp" data-k="' + i + '" title="Imagem com o passo a passo">🧭 Passo a passo</button>' : '') + '</div>').join('') + '</div>' +
-      (al.length ? '<div class="tut-alunos"><h4>🎓 Vídeos dos alunos</h4>' + al.map(v => '<a href="' + esc(v.url) + '" target="_blank" rel="noopener">▶ ' + esc(v.titulo || v.url) + (v.autor ? ' — ' + esc(v.autor) : '') + '</a>').join('') + '</div>' : '') +
+      (al.length ? '<div class="tut-alunos"><div class="tut-alh"><h4>🎓 Vídeos dos alunos (' + al.length + ')</h4>' + (al.length > 6 ? '<input type="search" class="tut-alq" placeholder="Buscar por tema ou aluno…" aria-label="Buscar vídeos dos alunos">' : '') + '</div><div class="tut-algrid">' + al.map((v, i) => { const id = ytId(v.url);
+        return '<div class="tut-al" data-i="' + i + '" data-s="' + esc(((v.titulo || '') + ' ' + (v.autor || '')).toLowerCase()) + '"><button type="button" class="tut-yt" data-i="' + i + '" title="Assistir aqui"><span class="th"' + (id ? ' style="background-image:url(https://i.ytimg.com/vi/' + id + '/mqdefault.jpg)"' : '') + '></span><b>' + esc(v.titulo || 'Vídeo do aluno') + '</b><small>' + esc(v.autor || '') + '</small></button>' +
+          '<a href="' + esc(v.url) + '" target="_blank" rel="noopener">Abrir no YouTube ↗</a></div>'; }).join('') + '</div></div>' : '') +
       '</div>';
     document.body.appendChild(ov);
     video = ov.querySelector('video');
@@ -762,6 +798,10 @@ window.SIMULAFACIL_CONFIG = {
     ov.addEventListener('click', e => { if (e.target === ov) close(); });
     ov.querySelectorAll('.tut-play').forEach(b => { b.onclick = () => load(+b.dataset.k); });
     ov.querySelectorAll('.tut-pp').forEach(b => { b.onclick = () => load(+b.dataset.k, 'img'); });
+    ov.querySelectorAll('.tut-yt').forEach(b => { b.onclick = () => playYT(+b.dataset.i); });
+    const q = ov.querySelector('.tut-alq');
+    if (q) q.oninput = () => { const t = q.value.toLowerCase().trim(); let n = 0; ov.querySelectorAll('.tut-al').forEach(a => { const ok = !t || a.dataset.s.indexOf(t) >= 0; a.hidden = !ok; n += ok; });
+      let m = ov.querySelector('.tut-alnone'); if (!n && !m) { m = document.createElement('p'); m.className = 'tut-alnone'; m.textContent = 'Nenhum vídeo com esse tema ou nome.'; ov.querySelector('.tut-algrid').after(m); } if (n && m) m.remove(); };
     ov.querySelector('.tut-pp-btn').onclick = () => load(cur, imgMode ? 'video' : 'img');
     ov.querySelector('.tut-narr').onchange = e => { narr = e.target.checked; try { localStorage.setItem('simulafacil.narracao', narr ? '1' : '0'); } catch (er) { /* */ } if (!narr) { stopSpeech(); if (waiting) { waiting = false; video.play().catch(() => {}); } } };
     video.addEventListener('pause', () => { if (video && !waiting) { stopSpeech(); spoken = new Set(LIST[cur].cues.map((c, i) => i).filter(i => LIST[cur].cues[i].end < video.currentTime - 0.3)); } });
@@ -770,11 +810,40 @@ window.SIMULAFACIL_CONFIG = {
     document.addEventListener('keydown', onKey);
     if (synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = voiceInfo;
     cancelAnimationFrame(raf); tick();
-    load(k || 0, mode);
+    if (mode === 'aluno') playYT(k || 0); else if (mode === 'alunos') listAlunos(); else load(k || 0, mode);
   }
+  function ytOff() { // volta ao player dos tutoriais
+    if (!ov) return; const yb = ov.querySelector('.tut-ytbox'); if (!yb || yb.hidden) return;
+    yb.hidden = true; yb.querySelector('iframe').src = 'about:blank'; yb.querySelector('iframe').style.display = ''; ov.querySelector('.tut-bar').style.display = ''; ov.querySelectorAll('.tut-al').forEach(a => a.classList.remove('on'));
+  }
+  function playYT(i) { // vídeo de aluno: YouTube embutido (youtube-nocookie); se a página não puder embutir, o link abre no YouTube
+    const al = (cfg().videosAlunos || []).filter(v => v && v.url), v = al[i]; if (!v) return;
+    const id = ytId(v.url); if (!id) { root.open(v.url, '_blank', 'noopener'); return; }
+    stopSpeech(); waiting = false; imgMode = false; if (video) { video.pause(); video.style.display = 'none'; }
+    ov.querySelector('.tut-imgbox').hidden = true; ov.querySelector('.tut-bar').style.display = 'none';
+    const yb = ov.querySelector('.tut-ytbox'); yb.hidden = false;
+    const fr = yb.querySelector('iframe'); fr.style.display = ''; fr.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&hl=pt-BR';
+    yb.querySelector('.tut-ytnote').innerHTML = 'Se o vídeo não abrir aqui, <a href="' + esc(v.url) + '" target="_blank" rel="noopener">assista no YouTube ↗</a>.';
+    ov.querySelector('.tut-head b').textContent = v.titulo || 'Vídeo do aluno';
+    ov.querySelector('.tut-head span').textContent = '🎓 ' + (v.autor || 'Vídeo dos alunos');
+    ov.querySelectorAll('.tut-item').forEach(b => b.classList.remove('on')); ov.querySelectorAll('.tut-al').forEach(a => a.classList.toggle('on', +a.dataset.i === i));
+    ov.querySelector('.tut-card').scrollTop = 0;
+  }
+  function listAlunos() { // abre a janela já na lista de vídeos dos alunos, sem tocar nada
+    const al = (cfg().videosAlunos || []).filter(v => v && v.url); if (!al.length) { load(0); return; }
+    stopSpeech(); if (video) { video.pause(); video.style.display = 'none'; }
+    ov.querySelector('.tut-imgbox').hidden = true; ov.querySelector('.tut-bar').style.display = 'none';
+    const yb = ov.querySelector('.tut-ytbox'); yb.hidden = false; yb.querySelector('iframe').style.display = 'none';
+    yb.querySelector('.tut-ytnote').innerHTML = '🎓 Escolha um dos ' + al.length + ' vídeos dos alunos abaixo: ele toca aqui.';
+    ov.querySelector('.tut-head b').textContent = 'Vídeos dos alunos'; ov.querySelector('.tut-head span').textContent = al.length + ' vídeo' + (al.length > 1 ? 's' : '') + ' no YouTube';
+    ov.querySelectorAll('.tut-item').forEach(b => b.classList.remove('on'));
+    setTimeout(() => { const t = ov && ov.querySelector('.tut-alunos'); if (t) t.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 60);
+  }
+  function openAluno(i) { open(i || 0, 'aluno'); }
+  function openAlunos() { open(0, 'alunos'); }
   function onKey(e) { if (e.key === 'Escape' && ov) close(); }
-  function close() { if (!ov) return; stopSpeech(); waiting = false; if (video) video.pause(); ov.remove(); ov = null; video = null; cancelAnimationFrame(raf); document.removeEventListener('keydown', onKey); }
-  SF.tutoriais = { open, close, list: LIST };
+  function close() { if (!ov) return; const yb = ov.querySelector('.tut-ytbox'); if (yb) yb.querySelector('iframe').src = 'about:blank'; stopSpeech(); waiting = false; if (video) video.pause(); ov.remove(); ov = null; video = null; cancelAnimationFrame(raf); document.removeEventListener('keydown', onKey); }
+  SF.tutoriais = { open, close, openAluno, openAlunos, ytId, list: LIST };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -782,7 +851,29 @@ window.SIMULAFACIL_CONFIG = {
 (function () {
   document.querySelectorAll(".btn-narr, .btn-pp").forEach(function (b) { b.onclick = function () { document.querySelectorAll(".vcard video").forEach(function (v) { v.pause(); }); if (window.SF && SF.tutoriais) SF.tutoriais.open(+b.dataset.tut, b.classList.contains("btn-pp") ? "img" : undefined); }; });
   var al = ((window.SIMULAFACIL_CONFIG || {}).videosAlunos || []).filter(function (v) { return v && v.url; });
-  if (al.length) { var box = document.getElementById("alunos"), list = box.querySelector(".alunos-list"); al.forEach(function (v) { var a = document.createElement("a"); a.href = v.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = "▶ " + (v.titulo || v.url) + (v.autor ? " — " + v.autor : ""); list.appendChild(a); }); box.hidden = false; document.getElementById("alunosBreve").hidden = true; }
+  function ytId(u) { var m = String(u || "").match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([A-Za-z0-9_-]{11})/); return m ? m[1] : null; }
+  if (al.length) { var box = document.getElementById("alunos"), list = box.querySelector(".alunos-list");
+    al.forEach(function (v) { // vídeo do aluno no YouTube: miniatura; o clique embute o player aqui mesmo (youtube-nocookie)
+      var id = ytId(v.url), card = document.createElement("div"); card.className = "al";
+      var btn = document.createElement(id ? "button" : "a"); btn.className = "al-v"; btn.setAttribute("aria-label", "Assistir: " + (v.titulo || "vídeo do aluno"));
+      if (id) { btn.type = "button"; btn.style.backgroundImage = "url(https://i.ytimg.com/vi/" + id + "/hqdefault.jpg)";
+        btn.onclick = function () { if (btn.classList.contains("on")) return; btn.classList.add("on"); btn.innerHTML = '<iframe title="' + (v.titulo || "Vídeo do aluno").replace(/"/g, "&quot;") + '" src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&hl=pt-BR" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>'; }; }
+      else { btn.href = v.url; btn.target = "_blank"; btn.rel = "noopener"; }
+      var t = document.createElement("b"); t.textContent = v.titulo || "Vídeo do aluno";
+      var a = document.createElement("small"); a.textContent = v.autor || "";
+      var l = document.createElement("a"); l.href = v.url; l.target = "_blank"; l.rel = "noopener"; l.textContent = "Abrir no YouTube ↗";
+      card.appendChild(btn); card.appendChild(t); if (v.autor) card.appendChild(a); card.appendChild(l); list.appendChild(card); });
+    // muitos vídeos: mostra os 8 primeiros, botão "ver todos" e busca por tema ou aluno
+    var cards = list.querySelectorAll(".al"), MAX = 8, mais = document.getElementById("alunosMais"), q = document.getElementById("alunosQ"), none = box.querySelector(".alunos-none"), aberto = false;
+    box.querySelector("h3").textContent = "🎓 Vídeos dos alunos" + (al.length > 1 ? " (" + al.length + ")" : "");
+    al.forEach(function (v, i) { cards[i].setAttribute("data-s", ((v.titulo || "") + " " + (v.autor || "")).toLowerCase()); });
+    function mostra() { var t = q.value.toLowerCase().trim(), n = 0;
+      for (var i = 0; i < cards.length; i++) { var ok = t ? cards[i].getAttribute("data-s").indexOf(t) >= 0 : (aberto || i < MAX); cards[i].hidden = !ok; if (ok) n++; }
+      none.hidden = n > 0; mais.hidden = !!t || aberto || cards.length <= MAX; mais.textContent = "Ver todos os " + cards.length + " vídeos ↓"; }
+    mais.onclick = function () { aberto = true; mostra(); };
+    q.hidden = al.length <= 6; q.oninput = mostra; mostra();
+    box.hidden = false; document.getElementById("alunosBreve").hidden = true;
+    var hb = document.getElementById("alunosBtn"); hb.querySelector(".al-n").textContent = al.length; hb.hidden = false; document.getElementById("alunosNav").hidden = false; }
 })();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>

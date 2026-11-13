@@ -562,11 +562,34 @@ body.mobile .wl-url { flex-basis: 100%; }
 .field-range .rng-val { color: #2563c9; }
 
 /* tutoriais em vídeo */
+/* vídeos dos alunos: botão dourado com selo NOVO e brilho pulsante */
+@keyframes alunosGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, .75), 0 2px 8px rgba(0, 0, 0, .25); } 50% { box-shadow: 0 0 0 7px rgba(255, 193, 7, 0), 0 2px 8px rgba(0, 0, 0, .25); } }
+@keyframes alunosNew { 0%, 100% { transform: rotate(-6deg) scale(1); } 50% { transform: rotate(-6deg) scale(1.12); } }
+.top button.alunos-btn, .wtut-alunos-btn { position: relative; background: linear-gradient(135deg, #fff176, #ffc107 55%, #ff9800); border: 2px solid #fff; color: #3a2500; font-weight: 900; letter-spacing: .2px; border-radius: 99px; cursor: pointer; animation: alunosGlow 1.8s ease-in-out infinite; text-shadow: 0 1px 0 rgba(255, 255, 255, .5); }
+.top button.alunos-btn { padding: 7px 16px 7px 14px; font-size: 14.5px; font-family: var(--font-fun); align-self: center; white-space: nowrap; flex: none; }
+.top button.alunos-btn:hover, .wtut-alunos-btn:hover { filter: brightness(1.06) saturate(1.1); transform: translateY(-1px); }
+.alunos-btn .al-new, .wtut-alunos-btn .al-new { position: absolute; top: -9px; right: -6px; background: #e10600; color: #fff; font: 900 10px/1 sans-serif; letter-spacing: .8px; padding: 3px 6px; border-radius: 99px; border: 1.5px solid #fff; animation: alunosNew 1.4s ease-in-out infinite; text-shadow: none; }
+.alunos-btn .al-n, .wtut-alunos-btn .al-n { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; margin-left: 2px; border-radius: 99px; background: #3a2500; color: #ffd54f; font-size: 12.5px; text-shadow: none; }
+.whero-al.wtut-alunos-btn { margin: 10px 0 0 10px; vertical-align: top; font-size: 15px; padding: 7px 16px 7px 14px; } body.mobile .whero-al.wtut-alunos-btn { margin-left: 0; }
+.wtut-alunos-btn { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px 9px 16px; font-size: 16px; font-family: var(--font-fun); }
+body.mobile .top button.alunos-btn { background: linear-gradient(135deg, #fff176, #ffc107 55%, #ff9800); color: #3a2500; }
+.alunos-btn .al-tm { display: none; }
+body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica no menu ☰ e na tela inicial */
+@media (prefers-reduced-motion: reduce) { .top button.alunos-btn, .wtut-alunos-btn, .alunos-btn .al-new, .wtut-alunos-btn .al-new { animation: none; } }
 .top .tools button.tut-btn { background: #ff6b4a; border-color: #ff6b4a; color: #fff; font-weight: 700; box-shadow: 0 0 0 0 rgba(255, 107, 74, .6); animation: tutPulse 2.6s ease-out 3; }
 .top .tools button.tut-btn:hover { filter: brightness(1.08); }
 @keyframes tutPulse { 0% { box-shadow: 0 0 0 0 rgba(255, 107, 74, .65); } 70% { box-shadow: 0 0 0 12px rgba(255, 107, 74, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 107, 74, 0); } }
 body.mobile .top .tools button.tut-btn { background: #ff6b4a; color: #fff; }
 .wtut { margin: 16px 30px 0; padding: 12px 14px 14px; border-radius: 16px; background: linear-gradient(100deg, #fff1e8, #fff8e5); border: 2px solid #ffc93c; }
+.wtut-al { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); }
+.wtut-al > b { font: 900 16px var(--font-fun); color: #0a6f86; }
+.wtut-al-l { display: flex; flex-wrap: wrap; gap: 8px; }
+.wtut-al-l button { display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid #0a6f86; background: #fff; color: #0a4f60; border-radius: 99px; padding: 4px 12px 4px 4px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; max-width: 100%; }
+.wtut-al-l button:hover { background: #e7f6f6; }
+.wtut-al-l button img { width: 46px; height: 26px; object-fit: cover; border-radius: 99px; flex: none; }
+.wtut-al-l button span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wtut-al-l .wtut-al-all { background: #0a6f86; color: #fff; padding: 6px 14px; } .wtut-al-l .wtut-al-all:hover { background: #075a6d; }
+.wtut-al-l button { max-width: 340px; }
 .wtut-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin-bottom: 10px; }
 .wtut-h b { font: 900 19px var(--font-fun); color: #b33a1f; } .wtut-h span { font-size: 13.5px; color: var(--muted); }
 .wtut-g { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
@@ -607,6 +630,7 @@ body.mobile .top .tools button.tut-btn { background: #ff6b4a; color: #fff; }
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
+  <button id="btnAlunos" class="alunos-btn" type="button" hidden title="Vídeos feitos pelos alunos de Engenharia Química da UFSJ (YouTube)"><span class="al-new">NOVO</span>🎓 <span class="al-t">Vídeos dos alunos</span><span class="al-tm">Alunos</span> <span class="al-n"></span></button>
   <div class="tools" id="tools">
     <button id="btnNew" title="Novo fluxograma">Novo</button>
     <label class="sr" for="exampleSel">Exemplos</label>
@@ -618,6 +642,7 @@ body.mobile .top .tools button.tut-btn { background: #ff6b4a; color: #fff; }
     <button id="btnPython" title="Gerar código Python (NumPy, SciPy, Matplotlib)">Python</button>
     <button id="btnSave" title="Salvar projeto (.json)">Salvar</button>
     <button id="btnOpen" title="Abrir projeto (.json)">Abrir</button>
+    <button id="btnAlunosM" class="alunos-btn m-only" type="button" hidden><span class="al-new">NOVO</span>🎓 Vídeos dos alunos <span class="al-n"></span></button>
     <button id="btnTut" class="tut-btn" type="button" title="Tutoriais em vídeo curtos, com narração, e imagens de passo a passo">🎬 Vídeos</button>
     <a id="btnManual" class="btn manual-link" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener" title="Abrir ou baixar o manual em PDF">📘 Manual</a>
     <button id="btnAbout" title="Sobre o SIMULA FÁCIL IA e autoria">Sobre</button>
@@ -753,6 +778,7 @@ body.mobile .top .tools button.tut-btn { background: #ff6b4a; color: #fff; }
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
         <p class="wdevice"><span aria-hidden="true">💻</span> Versão para notebook (preferencial) · <span aria-hidden="true">📱</span> também funciona no celular</p>
         <a class="wman-top manual-href" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener"><span aria-hidden="true">📘</span> Manual do programa (PDF)</a>
+        <button type="button" class="wtut-alunos-btn whero-al" id="wAlunosTop" hidden><span class="al-new">NOVO</span>🎓 Vídeos dos alunos <span class="al-n"></span><span aria-hidden="true">▶</span></button>
       </div>
       <svg class="wart" viewBox="0 0 260 150" aria-hidden="true">
         <rect x="18" y="18" width="34" height="118" rx="17" fill="#ffffff" stroke="#0a6f86" stroke-width="3"/>
@@ -768,7 +794,7 @@ body.mobile .top .tools button.tut-btn { background: #ff6b4a; color: #fff; }
       </svg>
     </section>
     <section class="wtut" aria-label="Tutoriais em vídeo e passo a passo">
-      <div class="wtut-h"><b>🎬 Aprenda rapidinho</b><span>vídeos curtos com narração e legendas · 🧭 imagens de passo a passo com setas vermelhas</span></div>
+      <div class="wtut-h"><b>🎬 Aprenda rapidinho</b><span>vídeos curtos com narração e legendas · 🧭 imagens de passo a passo com setas vermelhas</span><button type="button" class="wtut-alunos-btn" id="wAlunosBtn" hidden><span class="al-new">NOVO</span>🎓 Vídeos dos alunos <span class="al-n"></span><span aria-hidden="true">▶</span></button></div>
       <div class="wtut-g">
         <div class="wtut-c"><button type="button" class="wtut-i" data-tut="0"><img src="tutorial-1.jpg" alt="" loading="lazy"><span><b>1. Conheça o programa</b><small>🎬 os 5 passos · Lucas · 1:42</small></span></button><button type="button" class="wtut-pp" data-tut="0" title="Imagem com setas vermelhas indicando cada passo">🧭 Passo a passo</button></div>
         <div class="wtut-c"><button type="button" class="wtut-i" data-tut="1"><img src="tutorial-2.jpg" alt="" loading="lazy"><span><b>2. Alimentação com vários componentes</b><small>🎬 frações molares, temperatura e misturador · Lucas · 3:07</small></span></button><button type="button" class="wtut-pp" data-tut="1" title="Imagem com setas vermelhas indicando cada passo">🧭 Passo a passo</button></div>
@@ -776,6 +802,7 @@ body.mobile .top .tools button.tut-btn { background: #ff6b4a; color: #fff; }
         <div class="wtut-c"><button type="button" class="wtut-i" data-tut="3"><img src="tutorial-4.jpg" alt="" loading="lazy"><span><b>4. Operações em sequência</b><small>🎬 bomba, aquecedor, coluna e resfriador · Lucas · 1:17</small></span></button><button type="button" class="wtut-pp" data-tut="3" title="Imagem com setas vermelhas indicando cada passo">🧭 Passo a passo</button></div>
         <div class="wtut-c"><button type="button" class="wtut-i" data-tut="4"><img src="tutorial-5.jpg" alt="" loading="lazy"><span><b>5. Aba Termodinâmica</b><small>🎬 qual modelo escolher: NRTL, UNIQUAC, PC-SAFT… · Marina · 2:45</small></span></button><button type="button" class="wtut-pp" data-tut="4" title="Imagem com setas vermelhas indicando cada passo">🧭 Passo a passo</button></div>
       </div>
+      <div class="wtut-al" id="wtutAl" hidden><b>🎓 Vídeos dos alunos</b><span class="wtut-al-l"></span></div>
     </section>
     <div class="wlinkbar" role="group" aria-label="Link do programa">
       <span class="wl-lbl"><span aria-hidden="true">🔗</span> <b>Link do programa</b> — está no celular? Copie e abra no notebook:</span>
@@ -831,8 +858,10 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '4.0-2026-11-12f',
-  videosAlunos: []
+  manualVersion: '4.0-2026-11-13c',
+  videosAlunos: [
+    { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' }
+  ]
 };
 
 </script>
@@ -13187,13 +13216,14 @@ def pfr_transiente(P, nome):
 .tut-pp{align-self:flex-start;border:1.5px solid #e10600;color:#c40500;background:#fff;border-radius:99px;padding:3px 10px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}.tut-pp:hover{background:#ffecea}
 .tut-item img{width:100%;border-radius:9px;aspect-ratio:16/9;object-fit:cover}.tut-item.on{border-color:#ffc93c;background:#fff8e5}
 .tut-item b{font-size:14px;line-height:1.25}.tut-item small{color:#4d6168;font-size:12px}
-.tut-alunos{padding:0 16px 16px}.tut-alunos h4{margin:4px 0 8px;font-size:15px}.tut-alunos a{display:block;padding:6px 0;color:#0a6f86;font-weight:600}
+.tut-alunos{padding:0 16px 16px}.tut-alunos h4{margin:4px 0 8px;font-size:15px}.tut-alh{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px}.tut-alq{flex:1 1 220px;max-width:340px;border:1.5px solid #c9d8db;border-radius:99px;padding:6px 14px;font:inherit;font-size:13.5px}.tut-alnone{color:#4d6168;font-size:13px;padding:6px 2px}.tut-algrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}.tut-al{display:flex;flex-direction:column;gap:6px;border:2px solid #d6e1e4;border-radius:14px;background:#f3f8f8;padding:8px}.tut-al.on{border-color:#ffc93c;background:#fff8e5}.tut-yt{display:flex;flex-direction:column;gap:6px;text-align:left;border:0;background:none;padding:0;cursor:pointer;font:inherit;color:inherit}.tut-yt .th{position:relative;display:block;width:100%;aspect-ratio:16/9;border-radius:9px;background:#0b2f3a center/cover no-repeat}.tut-yt .th::after{content:'▶';position:absolute;inset:0;margin:auto;width:46px;height:32px;border-radius:9px;background:#e10600;color:#fff;font-size:17px;display:grid;place-items:center}.tut-yt b{font-size:14px;line-height:1.25}.tut-yt small,.tut-al a{color:#4d6168;font-size:12px}.tut-al a{color:#0a6f86;font-weight:600}.tut-ytbox{background:#000}.tut-ytbox iframe{display:block;width:100%;aspect-ratio:16/9;max-height:62vh;border:0}.tut-ytnote{margin:0;padding:6px 16px 8px;font-size:12.5px;color:#d7e7ea}.tut-ytnote a{color:#ffc93c;font-weight:700}.tut-item,.tut-al{min-width:0}.tut-play,.tut-yt{white-space:normal;min-width:0;width:100%}.tut-play b,.tut-yt b{white-space:normal;overflow-wrap:anywhere}
 @media (max-width:640px){.tut-head span{display:none}.tut-list{grid-template-columns:1fr 1fr}.tut-imgbox{max-height:62vh}}`;
   let ov = null, video = null, imgMode = false, cur = 0, voice = null, spoken = new Set(), speaking = false, waiting = false, active = -1, raf = 0;
   const synth = root.speechSynthesis;
   let narr = true; try { narr = localStorage.getItem('simulafacil.narracao') !== '0'; } catch (e) { /* */ }
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   function cfg() { return root.SIMULAFACIL_CONFIG || {}; }
+  function ytId(u) { const m = String(u || '').match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([A-Za-z0-9_-]{11})/); return m ? m[1] : null; }
   function src(file) { return file; }   // vídeos na mesma pasta da página (site e Claude)
   function pickVoice(g) {
     if (!synth) return null;
@@ -13230,7 +13260,7 @@ def pfr_transiente(P, nome):
     }
   }
   function load(k, mode) {
-    cur = k; stopSpeech(); waiting = false; spoken = new Set(); voice = null;
+    ytOff(); cur = k; stopSpeech(); waiting = false; spoken = new Set(); voice = null;
     const T = LIST[k];
     imgMode = mode === 'img' && !!T.img;
     ov.querySelector('.tut-head b').textContent = T.title;
@@ -13258,9 +13288,12 @@ def pfr_transiente(P, nome):
     const al = (cfg().videosAlunos || []).filter(v => v && v.url);
     ov.innerHTML = '<div class="tut-card"><div class="tut-head"><b></b><span></span><button class="tut-x" title="Fechar (Esc)">✕</button></div>' +
       '<video class="tut-video" controls playsinline preload="metadata"></video><div class="tut-imgbox" hidden><img alt=""></div>' +
+      '<div class="tut-ytbox" hidden><iframe title="Vídeo do YouTube" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><p class="tut-ytnote"></p></div>' +
       '<div class="tut-bar"><button type="button" class="tut-pp-btn"></button><a class="tut-dl" hidden>⬇ Baixar a imagem</a><span class="tut-narrw" style="display:contents"><label><input type="checkbox" class="tut-narr"' + (narr ? ' checked' : '') + '> 🔊 Narração por voz</label><small class="tut-voice"></small></span><small style="margin-left:auto">Legendas no vídeo · setas vermelhas na imagem</small></div>' +
       '<div class="tut-list">' + LIST.map((T, i) => '<div class="tut-item" data-k="' + i + '"><button type="button" class="tut-play" data-k="' + i + '" title="Assistir ao vídeo"><img alt="" src="' + esc(src(T.poster)) + '"><b>' + (i + 1) + '. ' + esc(T.title) + '</b><small>🎬 ' + esc(T.narr) + ' · ' + esc(T.dur) + '</small></button>' + (T.img ? '<button type="button" class="tut-pp" data-k="' + i + '" title="Imagem com o passo a passo">🧭 Passo a passo</button>' : '') + '</div>').join('') + '</div>' +
-      (al.length ? '<div class="tut-alunos"><h4>🎓 Vídeos dos alunos</h4>' + al.map(v => '<a href="' + esc(v.url) + '" target="_blank" rel="noopener">▶ ' + esc(v.titulo || v.url) + (v.autor ? ' — ' + esc(v.autor) : '') + '</a>').join('') + '</div>' : '') +
+      (al.length ? '<div class="tut-alunos"><div class="tut-alh"><h4>🎓 Vídeos dos alunos (' + al.length + ')</h4>' + (al.length > 6 ? '<input type="search" class="tut-alq" placeholder="Buscar por tema ou aluno…" aria-label="Buscar vídeos dos alunos">' : '') + '</div><div class="tut-algrid">' + al.map((v, i) => { const id = ytId(v.url);
+        return '<div class="tut-al" data-i="' + i + '" data-s="' + esc(((v.titulo || '') + ' ' + (v.autor || '')).toLowerCase()) + '"><button type="button" class="tut-yt" data-i="' + i + '" title="Assistir aqui"><span class="th"' + (id ? ' style="background-image:url(https://i.ytimg.com/vi/' + id + '/mqdefault.jpg)"' : '') + '></span><b>' + esc(v.titulo || 'Vídeo do aluno') + '</b><small>' + esc(v.autor || '') + '</small></button>' +
+          '<a href="' + esc(v.url) + '" target="_blank" rel="noopener">Abrir no YouTube ↗</a></div>'; }).join('') + '</div></div>' : '') +
       '</div>';
     document.body.appendChild(ov);
     video = ov.querySelector('video');
@@ -13268,6 +13301,10 @@ def pfr_transiente(P, nome):
     ov.addEventListener('click', e => { if (e.target === ov) close(); });
     ov.querySelectorAll('.tut-play').forEach(b => { b.onclick = () => load(+b.dataset.k); });
     ov.querySelectorAll('.tut-pp').forEach(b => { b.onclick = () => load(+b.dataset.k, 'img'); });
+    ov.querySelectorAll('.tut-yt').forEach(b => { b.onclick = () => playYT(+b.dataset.i); });
+    const q = ov.querySelector('.tut-alq');
+    if (q) q.oninput = () => { const t = q.value.toLowerCase().trim(); let n = 0; ov.querySelectorAll('.tut-al').forEach(a => { const ok = !t || a.dataset.s.indexOf(t) >= 0; a.hidden = !ok; n += ok; });
+      let m = ov.querySelector('.tut-alnone'); if (!n && !m) { m = document.createElement('p'); m.className = 'tut-alnone'; m.textContent = 'Nenhum vídeo com esse tema ou nome.'; ov.querySelector('.tut-algrid').after(m); } if (n && m) m.remove(); };
     ov.querySelector('.tut-pp-btn').onclick = () => load(cur, imgMode ? 'video' : 'img');
     ov.querySelector('.tut-narr').onchange = e => { narr = e.target.checked; try { localStorage.setItem('simulafacil.narracao', narr ? '1' : '0'); } catch (er) { /* */ } if (!narr) { stopSpeech(); if (waiting) { waiting = false; video.play().catch(() => {}); } } };
     video.addEventListener('pause', () => { if (video && !waiting) { stopSpeech(); spoken = new Set(LIST[cur].cues.map((c, i) => i).filter(i => LIST[cur].cues[i].end < video.currentTime - 0.3)); } });
@@ -13276,11 +13313,40 @@ def pfr_transiente(P, nome):
     document.addEventListener('keydown', onKey);
     if (synth && synth.onvoiceschanged !== undefined) synth.onvoiceschanged = voiceInfo;
     cancelAnimationFrame(raf); tick();
-    load(k || 0, mode);
+    if (mode === 'aluno') playYT(k || 0); else if (mode === 'alunos') listAlunos(); else load(k || 0, mode);
   }
+  function ytOff() { // volta ao player dos tutoriais
+    if (!ov) return; const yb = ov.querySelector('.tut-ytbox'); if (!yb || yb.hidden) return;
+    yb.hidden = true; yb.querySelector('iframe').src = 'about:blank'; yb.querySelector('iframe').style.display = ''; ov.querySelector('.tut-bar').style.display = ''; ov.querySelectorAll('.tut-al').forEach(a => a.classList.remove('on'));
+  }
+  function playYT(i) { // vídeo de aluno: YouTube embutido (youtube-nocookie); se a página não puder embutir, o link abre no YouTube
+    const al = (cfg().videosAlunos || []).filter(v => v && v.url), v = al[i]; if (!v) return;
+    const id = ytId(v.url); if (!id) { root.open(v.url, '_blank', 'noopener'); return; }
+    stopSpeech(); waiting = false; imgMode = false; if (video) { video.pause(); video.style.display = 'none'; }
+    ov.querySelector('.tut-imgbox').hidden = true; ov.querySelector('.tut-bar').style.display = 'none';
+    const yb = ov.querySelector('.tut-ytbox'); yb.hidden = false;
+    const fr = yb.querySelector('iframe'); fr.style.display = ''; fr.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&hl=pt-BR';
+    yb.querySelector('.tut-ytnote').innerHTML = 'Se o vídeo não abrir aqui, <a href="' + esc(v.url) + '" target="_blank" rel="noopener">assista no YouTube ↗</a>.';
+    ov.querySelector('.tut-head b').textContent = v.titulo || 'Vídeo do aluno';
+    ov.querySelector('.tut-head span').textContent = '🎓 ' + (v.autor || 'Vídeo dos alunos');
+    ov.querySelectorAll('.tut-item').forEach(b => b.classList.remove('on')); ov.querySelectorAll('.tut-al').forEach(a => a.classList.toggle('on', +a.dataset.i === i));
+    ov.querySelector('.tut-card').scrollTop = 0;
+  }
+  function listAlunos() { // abre a janela já na lista de vídeos dos alunos, sem tocar nada
+    const al = (cfg().videosAlunos || []).filter(v => v && v.url); if (!al.length) { load(0); return; }
+    stopSpeech(); if (video) { video.pause(); video.style.display = 'none'; }
+    ov.querySelector('.tut-imgbox').hidden = true; ov.querySelector('.tut-bar').style.display = 'none';
+    const yb = ov.querySelector('.tut-ytbox'); yb.hidden = false; yb.querySelector('iframe').style.display = 'none';
+    yb.querySelector('.tut-ytnote').innerHTML = '🎓 Escolha um dos ' + al.length + ' vídeos dos alunos abaixo: ele toca aqui.';
+    ov.querySelector('.tut-head b').textContent = 'Vídeos dos alunos'; ov.querySelector('.tut-head span').textContent = al.length + ' vídeo' + (al.length > 1 ? 's' : '') + ' no YouTube';
+    ov.querySelectorAll('.tut-item').forEach(b => b.classList.remove('on'));
+    setTimeout(() => { const t = ov && ov.querySelector('.tut-alunos'); if (t) t.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 60);
+  }
+  function openAluno(i) { open(i || 0, 'aluno'); }
+  function openAlunos() { open(0, 'alunos'); }
   function onKey(e) { if (e.key === 'Escape' && ov) close(); }
-  function close() { if (!ov) return; stopSpeech(); waiting = false; if (video) video.pause(); ov.remove(); ov = null; video = null; cancelAnimationFrame(raf); document.removeEventListener('keydown', onKey); }
-  SF.tutoriais = { open, close, list: LIST };
+  function close() { if (!ov) return; const yb = ov.querySelector('.tut-ytbox'); if (yb) yb.querySelector('iframe').src = 'about:blank'; stopSpeech(); waiting = false; if (video) video.pause(); ov.remove(); ov = null; video = null; cancelAnimationFrame(raf); document.removeEventListener('keydown', onKey); }
+  SF.tutoriais = { open, close, openAluno, openAlunos, ytId, list: LIST };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -14169,6 +14235,19 @@ def pfr_transiente(P, nome):
   if ($('#btnPP')) $('#btnPP').onclick = () => { if (SF.tutoriais) SF.tutoriais.open(0, 'img'); };
   document.querySelectorAll('.wtut-i').forEach(b => { b.onclick = () => { closeWelcome(); if (SF.tutoriais) SF.tutoriais.open(+b.dataset.tut); }; });
   document.querySelectorAll('.wtut-pp').forEach(b => { b.onclick = () => { closeWelcome(); if (SF.tutoriais) SF.tutoriais.open(+b.dataset.tut, 'img'); }; });
+  (function alunos() { // vídeos dos alunos (YouTube), configurados em js/site-config.js
+    const al = ((window.SIMULAFACIL_CONFIG || {}).videosAlunos || []).filter(v => v && v.url), box = $('#wtutAl'); if (!al.length || !box) return;
+    const yid = u => (SF.tutoriais && SF.tutoriais.ytId ? SF.tutoriais.ytId(u) : null);
+    const MAX = 4;   // na tela inicial: os 4 primeiros + "ver todos"; a lista completa (com busca) fica na janela dos tutoriais
+    box.querySelector('b').textContent = '🎓 Vídeos dos alunos' + (al.length > 1 ? ' (' + al.length + ')' : '');
+    box.querySelector('.wtut-al-l').innerHTML = al.slice(0, MAX).map((v, i) => { const id = yid(v.url); return '<button type="button" data-al="' + i + '" title="' + esc((v.titulo || 'Vídeo') + (v.autor ? ' — ' + v.autor : '')) + '">' + (id ? '<img alt="" loading="lazy" src="https://i.ytimg.com/vi/' + id + '/default.jpg">' : '') + '<span>' + esc(v.titulo || 'Vídeo do aluno') + (v.autor ? ' · ' + esc(v.autor.split(/\s[–-]\s/)[0]) : '') + '</span></button>'; }).join('') +
+      (al.length > MAX ? '<button type="button" class="wtut-al-all">Ver todos os ' + al.length + ' vídeos →</button>' : '');
+    box.querySelectorAll('[data-al]').forEach(b => { b.onclick = () => { closeWelcome(); if (SF.tutoriais) SF.tutoriais.openAluno(+b.dataset.al); }; });
+    const all = box.querySelector('.wtut-al-all'); if (all) all.onclick = () => { closeWelcome(); if (SF.tutoriais) SF.tutoriais.openAlunos(); };
+    const abre = () => { closeWelcome(); if (!SF.tutoriais) return; if (al.length === 1) SF.tutoriais.openAluno(0); else SF.tutoriais.openAlunos(); };
+    ['#btnAlunos', '#btnAlunosM', '#wAlunosBtn', '#wAlunosTop'].forEach(sel => { const b = $(sel); if (!b) return; b.querySelector('.al-n').textContent = al.length; b.onclick = abre; b.hidden = false; });
+    box.hidden = false;
+  })();
   $('#fileOpen').onchange = e => { const f = e.target.files[0]; if (!f) return; f.text().then(t => { try { const fs = JSON.parse(t); if (!fs.blocks) throw new Error('arquivo sem blocos'); loadFlowsheet(fs, true); toast('Projeto aberto'); } catch (err) { toast('Arquivo inválido: ' + err.message); } }); e.target.value = ''; };
   $('#projName').onchange = e => { state.name = e.target.value || 'Processo'; persist(); };
   $('#zoomIn').onclick = () => pfd.zoom(1.2); $('#zoomOut').onclick = () => pfd.zoom(1 / 1.2); $('#zoomFit').onclick = () => pfd.fit();

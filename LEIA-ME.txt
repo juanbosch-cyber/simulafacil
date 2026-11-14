@@ -1,3 +1,73 @@
+SIMULA FÁCIL IA 4.1 – atualização de 14/11/2026
+================================================
+
+A versão 4.1 cuida da experiência de uso, principalmente no celular.
+O motor de cálculo, os modelos e os resultados são os mesmos da 4.0.
+
+O QUE HÁ DE NOVO
+
+No simulador (simulador.html), versão para celular
+- Abas de baixo com ícones desenhados (iguais em qualquer aparelho) e a
+  tela atual destacada.
+- Todos os botões, campos e listas com pelo menos 44 px de altura para o
+  toque; campos com fonte de 16 px (o iPhone não amplia a página ao focar).
+- Menu reorganizado: nome do projeto, Exemplos, Novo/Desfazer,
+  Salvar/Abrir, "Resultados e código" e "Ajuda" (com o Passo a passo).
+  Arrastar a folha para baixo fecha o menu e a paleta.
+- Barra do fluxograma em uma linha só; o aviso de "exemplo carregado" não
+  cobre mais o botão "+ Equipamento".
+- Tela inicial em tela cheia, começando pelas três ações (agente, exemplo,
+  montar do zero); tutoriais em trilho deslizante; lista de exemplos
+  recolhida, com "Ver todos os 60 exemplos".
+- Gráficos: o dedo rola a tela por cima do gráfico (antes ampliava o
+  gráfico) e a barra de ferramentas não cobre mais o título.
+- Agente: com o teclado aberto as abas somem e o campo fica à vista; o
+  Enter quebra a linha e o envio é pelo botão; sugestões em trilho.
+- Janelas (fluxograma final, códigos, tutoriais) em tela cheia, com o
+  botão de fechar no canto e as ações numa linha deslizante.
+- Áreas seguras do aparelho (entalhe e barra de gestos) respeitadas; o
+  programa pode ser adicionado à tela de início do celular.
+- Tema escuro: a seção de tutoriais da tela inicial agora acompanha o tema.
+
+No simulador, em qualquer tela
+- Busca de equipamentos na paleta e busca nos exemplos da tela inicial
+  (ignoram acento e maiúsculas).
+- Acessibilidade: abas com estado para leitores de tela, o foco fica
+  dentro da janela aberta e volta a quem a abriu, botões de ícone com
+  nome, avisos anunciados.
+
+Na página inicial (index.html)
+- Barra do topo presa na tela, com "Abrir o simulador" sempre à mão; os
+  links viram um menu quando não cabem numa linha.
+- Os botões principais vêm logo depois do título (no celular, antes do
+  texto longo); um só botão amarelo de destaque.
+- Tutoriais em trilho deslizante no celular; números do banco em 2 × 2;
+  cartões de "O que dá para simular" compactos, com "Ver mais".
+- No celular a página ficou cerca de um terço mais curta.
+- Perguntas frequentes com área de toque maior e seta de abrir/fechar.
+
+ARQUIVOS DESTA VERSÃO
+     index.html
+     simulador.html
+     sitemap.xml
+     site.webmanifest        (novo)
+     icon-192.png            (novo)
+     icon-512.png            (novo)
+     LEIA-ME.txt
+
+IMPORTANTE PARA AS PRÓXIMAS VERSÕES
+As mudanças da 4.1 foram feitas diretamente em index.html e
+simulador.html. Se a próxima versão for gerada de novo a partir dos
+arquivos-fonte antigos (css/app.css, js/app.js etc.) e enviada por cima,
+essas melhorias se perdem: parta sempre dos dois arquivos deste
+repositório.
+
+O manual em PDF e a imagem de compartilhamento (og-image.jpg) continuam
+os da versão 4.0.
+
+
+------------------------------------------------------------------------
+
 SIMULA FÁCIL IA 4.0 – atualização de 12/11/2026
 ================================================
 

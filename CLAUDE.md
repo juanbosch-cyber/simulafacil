@@ -31,3 +31,14 @@ Site estático publicado pelo GitHub Pages a partir do branch `main`
 - Não altere as linhas longas de dados embutidos (imagens em base64, bancos de compostos).
 - A cada versão nova, atualize o selo e os títulos, o `softwareVersion` dos dados
   estruturados, o `lastmod` do `sitemap.xml` e o `LEIA-ME.txt`.
+
+## Skills do Claude Code (pedido do autor em 14/11/2026)
+
+- **ponytail** (plugin em `.claude/settings.json`): deixe ativo em todo pedido, no nível
+  `full`. Não desligue com "stop ponytail" ou "normal mode", a menos que o autor peça.
+- **design-taste-frontend** (taste-skill, em `.claude/skills/`): use só em pedidos que
+  envolvam design ou frontend (visual, layout, CSS, componentes de tela, páginas). Não use em
+  pedidos de conteúdo, dados, química, configuração ou publicação.
+- Quando a taste-skill entrar em conflito com as regras deste arquivo (arquivos únicos com CSS
+  e JS embutidos, 44 px de toque, 16 px nos campos, temas claro e escuro), valem as regras
+  deste arquivo.

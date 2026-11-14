@@ -865,7 +865,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '4.0-2026-11-14b',
+  manualVersion: '4.0-2026-11-14d',
   videosAlunos: [
     { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' }
   ]
@@ -1996,7 +1996,8 @@ window.SIMULAFACIL_CONFIG = {
   [{ id: 'milk-fat', name: 'Gordura do leite (lipídios)', formula: 'GORD', nome: 'Gordura do leite', dry: { f: 1 }, tags: 'leite gordura nata creme manteiga laticínio alimento' },
     { id: 'milk-snf', name: 'Sólidos não gordurosos do leite (proteína, lactose e minerais)', formula: 'SNG', nome: 'Sólidos não gordurosos do leite', dry: { p: 36.5, c: 55.7, a: 7.8 }, tags: 'leite extrato seco desengordurado proteína lactose laticínio alimento' },
     { id: 'lecithin', name: 'Fosfolipídios: lecitina de soja (gomas do óleo)', formula: 'C42H80NO8P', mw: 758.1, nome: 'Lecitina de soja', dry: { f: 1 }, tags: 'soja óleo degomagem gomas fosfatídeos lecitina alimento' },
-    { id: 'drink-extract', name: 'Extrato seco de bebidas (açúcares do malte, dextrinas, proteínas e minerais)', formula: 'EXT', nome: 'Extrato de bebidas', dry: { p: 6, c: 90, a: 4 }, tags: 'bebida cerveja mosto malte extrato plato vinho' }
+    { id: 'drink-extract', name: 'Extrato seco de bebidas (açúcares do malte, dextrinas, proteínas e minerais)', formula: 'EXT', nome: 'Extrato de bebidas', dry: { p: 6, c: 90, a: 4 }, tags: 'bebida cerveja mosto malte extrato plato vinho' },
+    { id: 'starch', name: 'Amido e dextrinas (malte, milho, mandioca; por unidade de glicose)', formula: 'C6H10O5', mw: 162.14, nome: 'Amido e dextrinas', dry: { c: 1 }, tags: 'amido dextrina malte mostura cerveja milho mandioca hidrólise' }
   ].forEach(q => {
     const s = FOOD_KEYS.reduce((a, k) => a + (q.dry[k] || 0), 0), dry = {}; FOOD_KEYS.forEach(k => { dry[k] = (q.dry[k] || 0) / s; });
     const pS = choiOkos(dry, 25), mw = q.mw || 100;
@@ -4262,10 +4263,10 @@ window.SIMULAFACIL_CONFIG = {
     if (lk < 0 || hk < 0) throw new Error('Defina as chaves leve e pesada');
     const rl = clamp(num(p.lkRec, 0.99), 0.5, 0.99999), rh = clamp(num(p.hkRec, 0.99), 0.5, 0.99999);
     const f = s.flows; let d = new Array(n).fill(0), bb = new Array(n).fill(0);
-    let Ttop = th.bubbleT(s.z, P).T, Tbot = Ttop + 20;
+    const bz = th.bubbleT(s.z, P); let Ttop = bz.T, Tbot = Ttop + 20, yTop = bz.y || s.z, yBot = bz.y || s.z;   // y de bolha: nas equações de estado, K = φL/φV precisa do vapor em equilíbrio
     let alpha, Nmin;
     for (let it = 0; it < 6; it++) {
-      const Kt = th.K(Ttop, P, d.some(v => v > 0) ? N.normalize(d) : s.z, s.z), Kb = th.K(Tbot, P, bb.some(v => v > 0) ? N.normalize(bb) : s.z, s.z);
+      const Kt = th.K(Ttop, P, d.some(v => v > 0) ? N.normalize(d) : s.z, yTop), Kb = th.K(Tbot, P, bb.some(v => v > 0) ? N.normalize(bb) : s.z, yBot);
       alpha = Kt.map((k, i) => Math.sqrt((k / Kt[hk]) * (Kb[i] / Kb[hk])));
       if (alpha[lk] <= 1) throw new Error('Chave leve não é mais volátil que a chave pesada nestas condições');
       const dl = f[lk] * rl, bl = f[lk] - dl, bh = f[hk] * rh, dh = f[hk] - bh;
@@ -4275,7 +4276,7 @@ window.SIMULAFACIL_CONFIG = {
         if (th.c[i].nv || th.c[i].solid) { d[i] = 0; bb[i] = f[i]; continue; }
         const ratio = (dh / bh) * Math.pow(alpha[i], Nmin); d[i] = f[i] * ratio / (1 + ratio); bb[i] = f[i] - d[i];
       }
-      Ttop = th.bubbleT(N.normalize(d), P).T; Tbot = th.bubbleT(N.normalize(bb), P).T;
+      const bt = th.bubbleT(N.normalize(d), P), bw = th.bubbleT(N.normalize(bb), P); Ttop = bt.T; Tbot = bw.T; yTop = bt.y || yTop; yBot = bw.y || yBot;
     }
     const D = sum(d), B = sum(bb), xD = d.map(v => v / D), xB = bb.map(v => v / B);
     const q = 1 - s.beta;
@@ -13752,46 +13753,80 @@ def pfr_transiente(P, nome):
         { id: 'PO', type: 'product', name: 'Óleo degomado' }, { id: 'PLE', type: 'product', name: 'Lecitina de soja' }, { id: 'PV', type: 'product', name: 'Vapor ao condensador' }, { id: 'PL', type: 'product', name: 'Lodo' }],
       streams: [S('1', 'FO', 'out', 'MX', 'in1', 'Óleo bruto'), S('2', 'FA', 'out', 'MX', 'in2', 'Água'), S('3', 'MX', 'out', 'CF', 'feed', 'Óleo hidratado'), S('E1', 'EM', 'eo', 'CF', 'q_in', 'Motor'),
         S('4', 'CF', 'light', 'PO', 'in', 'Óleo degomado'), S('5', 'CF', 'heavy', 'SEC', 'in', 'Gomas úmidas'), S('6', 'CF', 'sludge', 'PL', 'in', 'Lodo'), S('7', 'SEC', 'liquid', 'PLE', 'in', 'Lecitina'), S('8', 'SEC', 'vapor', 'PV', 'in', 'Vapor')] } },
-    { key: 'refrigerante-cola', title: 'Bebidas: refrigerante de cola — xarope 60 °Brix diluído, resfriado no chiller, carbonatado a 4 bar e o gás que escapa no copo (lei de Henry)', fs: {
-      name: 'Linha de refrigerante: proporcionador, resfriador e carbonatador', components: ['water', 'sucrose', 'phosphoric-acid', 'caffeine', 'co2'], model: 'NRTL',
+    { key: 'refrigerante-processo', title: 'Bebidas: fabricação de refrigerante de cola — xarope simples, pasteurização, xarope composto, proporcionamento, resfriamento, carbonatação e amostra aberta no copo (lei de Henry)', fs: {
+      name: 'Fábrica de refrigerante de cola', components: ['water', 'sucrose', 'phosphoric-acid', 'caffeine', 'co2'], model: 'NRTL',
       blocks: [
-        { id: 'FX', type: 'feed', name: 'Xarope composto de cola (60 °Brix, com ácido fosfórico e cafeína)', params: { T: 25, P: 3, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica',
-          composition: { water: 0.39635, sucrose: 0.6, 'phosphoric-acid': 0.00312, caffeine: 0.00053, co2: 0 } } },
-        { id: 'FA', type: 'feed', name: 'Água tratada e desaerada', params: { T: 20, P: 3, vf: '', flow: 4888, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
-        { id: 'MX', type: 'mixer', name: 'Proporcionador (1 parte de xarope para 4,9 de água)', params: { P: '' } },
+        { id: 'FA', type: 'feed', name: 'Açúcar cristal', params: { T: 25, P: 2, vf: '', flow: 600, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.002, sucrose: 0.998, 'phosphoric-acid': 0, caffeine: 0, co2: 0 } } },
+        { id: 'FW', type: 'feed', name: 'Água tratada quente (85 °C)', params: { T: 85, P: 2, vf: '', flow: 398.8, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'DS', type: 'mixer', name: 'Dissolvedor de açúcar (xarope simples a 60 °Brix)', params: { P: '' } },
+        { id: 'HX', type: 'heater', name: 'Pasteurização do xarope (85 °C)', params: { mode: 'Temperatura de saída', T: 85, dP: 0 } },
+        { id: 'CL', type: 'cooler', name: 'Resfriamento do xarope (20 °C)', params: { mode: 'Temperatura de saída', T: 20, dP: 0 } },
+        { id: 'FK', type: 'feed', name: 'Concentrado de cola (ácido fosfórico e cafeína)', params: { T: 20, P: 2, vf: '', flow: 7.3, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.5, 'phosphoric-acid': 0.427, caffeine: 0.073 } } },
+        { id: 'XC', type: 'mixer', name: 'Tanque de xarope composto', params: { P: '' } },
+        { id: 'FT', type: 'feed', name: 'Água tratada e desaerada', params: { T: 20, P: 2, vf: '', flow: 4880, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'PR', type: 'mixer', name: 'Proporcionador (1 parte de xarope para 4,9 de água)', params: { P: '' } },
         { id: 'CH', type: 'refrigerator', name: 'Resfriador da bebida (R-134a)', params: { T: 3, fluid: 'R-134a', Tcd: 40, dTev: 5, eta: 0.75, sh: 5, sc: 3, dP: 0 } },
-        { id: 'FC', type: 'feed', name: 'CO₂ para a carbonatação (6,7 g/kg ≈ 3,4 volumes)', params: { T: 3, P: 4, vf: '', flow: 39.45, flowUnit: 'kg/h', basis: 'mássica', composition: { co2: 1 } } },
+        { id: 'FC', type: 'feed', name: 'CO₂ para a carbonatação (6,7 g/kg)', params: { T: 3, P: 4, vf: '', flow: 39.5, flowUnit: 'kg/h', basis: 'mássica', composition: { co2: 1 } } },
         { id: 'CB', type: 'mixer', name: 'Carbonatador (4 bar)', params: { P: 4 } },
-        { id: 'FL', type: 'flash', name: 'Garrafa aberta no copo (25 °C, 1 atm)', params: { mode: 'T e P', T: 25, P: 1.01325 } },
-        { id: 'P1', type: 'product', name: 'Refrigerante no copo' }, { id: 'P2', type: 'product', name: 'CO₂ que escapa (bolhas)' }],
-      streams: [S('1', 'FX', 'out', 'MX', 'in1', 'Xarope'), S('2', 'FA', 'out', 'MX', 'in2', 'Água'), S('3', 'MX', 'out', 'CH', 'in', 'Bebida base'), S('4', 'CH', 'out', 'CB', 'in1', 'Bebida a 3 °C'),
-        S('5', 'FC', 'out', 'CB', 'in2', 'CO₂'), S('6', 'CB', 'out', 'FL', 'in', 'Refrigerante'), S('7', 'FL', 'liquid', 'P1', 'in', 'No copo'), S('8', 'FL', 'vapor', 'P2', 'in', 'Gás')] } },
-    { key: 'cervejaria-mosto-pasteurizacao', title: 'Bebidas: cervejaria — resfriamento do mosto no trocador de placas e pasteurização flash da cerveja (unidades de pasteurização)', fs: {
-      name: 'Cervejaria: resfriamento do mosto e pasteurização flash', components: ['water', 'ethanol', 'drink-extract', 'co2'], model: 'NRTL',
+        { id: 'EN', type: 'splitter', name: 'Enchedora (0,1 % para o controle de qualidade)', params: { f1: 0.999, f2: 0.001 } },
+        { id: 'FL', type: 'flash', name: 'Amostra aberta no copo (25 °C, 1 atm)', params: { mode: 'T e P', T: 25, P: 1.01325 } },
+        { id: 'P1', type: 'product', name: 'Refrigerante para as garrafas' }, { id: 'P2', type: 'product', name: 'Amostra no copo' }, { id: 'P3', type: 'product', name: 'CO₂ que escapa da amostra' }],
+      streams: [S('1', 'FA', 'out', 'DS', 'in1', 'Açúcar'), S('2', 'FW', 'out', 'DS', 'in2', 'Água quente'), S('3', 'DS', 'out', 'HX', 'in', 'Xarope simples'), S('4', 'HX', 'out', 'CL', 'in', 'Xarope a 85 °C'),
+        S('5', 'CL', 'out', 'XC', 'in1', 'Xarope frio'), S('6', 'FK', 'out', 'XC', 'in2', 'Concentrado'), S('7', 'XC', 'out', 'PR', 'in1', 'Xarope composto'), S('8', 'FT', 'out', 'PR', 'in2', 'Água'),
+        S('9', 'PR', 'out', 'CH', 'in', 'Bebida base'), S('10', 'CH', 'out', 'CB', 'in1', 'Bebida a 3 °C'), S('11', 'FC', 'out', 'CB', 'in2', 'CO₂'), S('12', 'CB', 'out', 'EN', 'in', 'Refrigerante'),
+        S('13', 'EN', 'out1', 'P1', 'in', 'Garrafas'), S('14', 'EN', 'out2', 'FL', 'in', 'Amostra'), S('15', 'FL', 'liquid', 'P2', 'in', 'No copo'), S('16', 'FL', 'vapor', 'P3', 'in', 'Gás')] } },
+    { key: 'cerveja-processo', title: 'Bebidas: fabricação de cerveja — mosturação, filtração do mosto, fervura, resfriamento, fermentação, maturação, filtração, carbonatação e pasteurização flash', fs: {
+      name: 'Cervejaria: do malte à cerveja pasteurizada', components: ['water', 'starch', 'glucose', 'drink-extract', 'inert-solid', 'ethanol', 'biomass', 'co2'], model: 'NRTL',
       blocks: [
-        { id: 'FM', type: 'feed', name: 'Mosto quente do whirlpool (12 °P, 98 °C)', params: { T: 98, P: 2, vf: '', flow: 10000, flowUnit: 'kg/h', basis: 'mássica', bebida: 'Mosto cervejeiro (12 °P)',
-          composition: { water: 0.88001, ethanol: 0, 'drink-extract': 0.11999, co2: 0 } } },
-        { id: 'FW', type: 'feed', name: 'Água gelada (2 °C)', params: { T: 2, P: 3, vf: '', flow: 12000, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'FM', type: 'feed', name: 'Malte moído (1 t/h)', params: { T: 20, P: 1.5, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica',
+          composition: { water: 0.04, starch: 0.62, glucose: 0, 'drink-extract': 0.12, 'inert-solid': 0.22, ethanol: 0, biomass: 0, co2: 0 } } },
+        { id: 'FA', type: 'feed', name: 'Água cervejeira da mostura (72 °C)', params: { T: 72, P: 1.5, vf: '', flow: 3000, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'MX', type: 'mixer', name: 'Tina de mostura', params: { P: '' } },
+        { id: 'RX', type: 'rconv', name: 'Mosturação a 65 °C (amilases do malte)', params: { thermal: 'isotérmico', T: 65,
+          reactions: [{ stoich: { starch: -1, water: -1, glucose: 1 }, key: 'starch', conversion: 0.8, dH: 0, label: 'amido + água → açúcares fermentescíveis' }] } },
+        { id: 'FS', type: 'feed', name: 'Água de lavagem do bagaço (78 °C)', params: { T: 78, P: 1.5, vf: '', flow: 3800, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'LT', type: 'leaching', name: 'Tina de filtração (lauter)', params: { N: 3, r: 3, T: 75, P: 1.5 } },
+        { id: 'BO', type: 'flash', name: 'Tina de fervura com lúpulo (evapora 8 %)', params: { mode: 'Fração vaporizada', vf: 0.08, P: 1.01325 } },
+        { id: 'FW', type: 'feed', name: 'Água gelada (2 °C)', params: { T: 2, P: 3, vf: '', flow: 8000, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
         { id: 'TP', type: 'hx_plate', name: 'Resfriador de mosto (placas)', params: { spec: 'T saída quente', value: 10, U: 3500, plateArea: 0.5 } },
-        { id: 'FC', type: 'feed', name: 'Cerveja filtrada (2 °C, 15 bar)', params: { T: 2, P: 15, vf: '', flow: 10000, flowUnit: 'kg/h', basis: 'mássica', bebida: 'Cerveja pilsen (4,8 % v/v)',
-          composition: { water: 0.91976, ethanol: 0.03758, 'drink-extract': 0.0377, co2: 0.00496 } } },
-        { id: 'PAS', type: 'pasteurizer', name: 'Pasteurizador flash de cerveja (72 °C, 30 s)', params: { Tp: 72, th: 30, eps: 0.94, Tout: 2, Thw: 80, dThw: 5, Tcw: -2, dTcw: 3, Ureg: 3000, Uh: 3500, Uc: 3200,
+        { id: 'FER', type: 'bioreactor_monod', name: 'Fermentação (levedura, 10 °C)', params: { mode: 'contínuo (quimiostato): D = F/V', V: 150000 } },
+        { id: 'MAT', type: 'cooler', name: 'Maturação (0 °C)', params: { mode: 'Temperatura de saída', T: 0, dP: 0 } },
+        { id: 'FIL', type: 'separator', name: 'Filtração (retira a levedura)', params: { splits: { water: 1, starch: 1, glucose: 1, 'drink-extract': 1, 'inert-solid': 0, ethanol: 1, biomass: 0, co2: 1 } } },
+        { id: 'FC', type: 'feed', name: 'CO₂ para a carbonatação', params: { T: 0, P: 3, vf: '', flow: 31, flowUnit: 'kg/h', basis: 'mássica', composition: { co2: 1 } } },
+        { id: 'CB', type: 'mixer', name: 'Carbonatador (3 bar)', params: { P: 3 } },
+        { id: 'BP', type: 'pump', name: 'Bomba de reforço (15 bar)', params: { P: 15, eff: 0.7 } },
+        { id: 'PAS', type: 'pasteurizer', name: 'Pasteurizador flash (72 °C, 30 s)', params: { Tp: 72, th: 30, eps: 0.94, Tout: 2, Thw: 80, dThw: 5, Tcw: -2, dTcw: 3, Ureg: 3000, Uh: 3500, Uc: 3200,
           Dh: 0.06, muH: 1.0, D72: 1.12, z: 6.94, nmin: 15 } },
-        { id: 'P1', type: 'product', name: 'Mosto frio para o fermentador (10 °C)' }, { id: 'P2', type: 'product', name: 'Água quente para a próxima brassagem' }, { id: 'P3', type: 'product', name: 'Cerveja pasteurizada para o envase' }],
-      streams: [S('1', 'FM', 'out', 'TP', 'hot_in', 'Mosto quente'), S('2', 'FW', 'out', 'TP', 'cold_in', 'Água gelada'), S('3', 'TP', 'hot_out', 'P1', 'in', 'Mosto frio'), S('4', 'TP', 'cold_out', 'P2', 'in', 'Água quente'),
-        S('5', 'FC', 'out', 'PAS', 'feed', 'Cerveja'), S('6', 'PAS', 'out', 'P3', 'in', 'Cerveja pasteurizada')] } },
-    { key: 'cachaca-coluna', title: 'Bebidas: cachaça — destilação do vinho de cana (8 % v/v) em coluna, resfriamento e diluição a 40 % v/v', fs: {
-      name: 'Destilaria de cachaça em coluna', components: ['water', 'ethanol'], model: 'NRTL',
+        { id: 'P1', type: 'product', name: 'Bagaço de malte (ração animal)' }, { id: 'P2', type: 'product', name: 'Vapor da fervura' }, { id: 'P3', type: 'product', name: 'Água quente (próxima brassagem)' },
+        { id: 'P4', type: 'product', name: 'CO₂ da fermentação' }, { id: 'P5', type: 'product', name: 'Levedura' }, { id: 'P6', type: 'product', name: 'Cerveja para o envase' }],
+      streams: [S('1', 'FM', 'out', 'MX', 'in1', 'Malte'), S('2', 'FA', 'out', 'MX', 'in2', 'Água'), S('3', 'MX', 'out', 'RX', 'in', 'Mosto'), S('4', 'RX', 'out', 'LT', 'solids', 'Mosto sacarificado'),
+        S('5', 'FS', 'out', 'LT', 'solvent', 'Lavagem'), S('6', 'LT', 'underflow', 'P1', 'in', 'Bagaço'), S('7', 'LT', 'overflow', 'BO', 'in', 'Mosto'), S('8', 'BO', 'vapor', 'P2', 'in', 'Vapor'),
+        S('9', 'BO', 'liquid', 'TP', 'hot_in', 'Mosto fervido'), S('10', 'FW', 'out', 'TP', 'cold_in', 'Água gelada'), S('11', 'TP', 'cold_out', 'P3', 'in', 'Água quente'), S('12', 'TP', 'hot_out', 'FER', 'feed', 'Mosto frio'),
+        S('13', 'FER', 'gas', 'P4', 'in', 'CO₂'), S('14', 'FER', 'product', 'MAT', 'in', 'Cerveja verde'), S('15', 'MAT', 'out', 'FIL', 'in', 'Cerveja maturada'), S('16', 'FIL', 'out2', 'P5', 'in', 'Levedura'),
+        S('17', 'FIL', 'out1', 'CB', 'in1', 'Cerveja filtrada'), S('18', 'FC', 'out', 'CB', 'in2', 'CO₂'), S('19', 'CB', 'out', 'BP', 'in', 'Cerveja carbonatada'), S('20', 'BP', 'out', 'PAS', 'feed', 'A 15 bar'),
+        S('21', 'PAS', 'out', 'P6', 'in', 'Cerveja pasteurizada')] } },
+    { key: 'cachaca-processo', title: 'Bebidas: fabricação de cachaça — moagem da cana, fermentação contínua (Tosetto), destilação em coluna e padronização a 40 % v/v', fs: {
+      name: 'Alambique industrial: da cana à cachaça', components: ['water', 'sucrose', 'drink-extract', 'inert-solid', 'ethanol', 'biomass', 'co2'], model: 'NRTL',
       blocks: [
-        { id: 'FV', type: 'feed', name: 'Vinho de cana fermentado (8 % v/v, pré-aquecido a 90 °C)', params: { T: 90, P: 1.2, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica', bebida: 'Vinho de cana fermentado (8 % v/v, para destilar)',
-          composition: { water: 0.93609, ethanol: 0.06391 } } },
-        { id: 'T101', type: 'column', name: 'Coluna de destilação (12 pratos)', params: { N: 12, feedStage: 3, R: 1.5, Dmode: 'Vazão D', D: 7.2, condenser: 'total', P: 1.01325, dP: 0 } },
+        { id: 'FC', type: 'feed', name: 'Cana-de-açúcar (5 t/h)', params: { T: 25, P: 1.5, vf: '', flow: 5000, flowUnit: 'kg/h', basis: 'mássica',
+          composition: { water: 0.70, sucrose: 0.15, 'drink-extract': 0.02, 'inert-solid': 0.13, ethanol: 0, biomass: 0, co2: 0 } } },
+        { id: 'FE', type: 'feed', name: 'Água de embebição', params: { T: 25, P: 1.5, vf: '', flow: 1250, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'MO', type: 'leaching', name: 'Moenda (3 ternos com embebição)', params: { N: 3, r: 1, T: 25, P: 1.5 } },
+        { id: 'FY', type: 'feed', name: 'Fermento (pé de cuba)', params: { T: 30, P: 1.5, vf: '', flow: 500, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.85, biomass: 0.15 } } },
+        { id: 'MXF', type: 'mixer', name: 'Preparo do mosto', params: { P: '' } },
+        { id: 'BR', type: 'bioreactor_1', name: 'Dorna de fermentação contínua (Tosetto)', params: { mode: 'contínuo (quimiostato)', V1: 60000 } },
+        { id: 'DEC', type: 'separator', name: 'Decantação do fermento', params: { splits: { water: 1, sucrose: 1, 'drink-extract': 1, 'inert-solid': 1, ethanol: 1, biomass: 0.05, co2: 1 } } },
+        { id: 'HX', type: 'heater', name: 'Preaquecedor do vinho', params: { mode: 'Temperatura de saída', T: 90, dP: 0 } },
+        { id: 'COL', type: 'column', name: 'Coluna de destilação (12 pratos)', params: { N: 12, feedStage: 3, R: 1.5, Dmode: 'Vazão D', D: 33, condenser: 'total', P: 1.01325, dP: 0 } },
         { id: 'E1', type: 'cooler', name: 'Resfriador do destilado', params: { mode: 'Temperatura de saída', T: 20, dP: 0 } },
-        { id: 'FA', type: 'feed', name: 'Água desmineralizada (redução do teor alcoólico)', params: { T: 20, P: 1.2, vf: '', flow: 23.3, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
-        { id: 'MX', type: 'mixer', name: 'Tanque de padronização', params: { P: '' } },
-        { id: 'PC', type: 'product', name: 'Cachaça a 40 % v/v (para o envelhecimento ou o envase)' }, { id: 'PV', type: 'product', name: 'Vinhaça (fertirrigação)' }],
-      streams: [S('1', 'FV', 'out', 'T101', 'feed', 'Vinho'), S('2', 'T101', 'distillate', 'E1', 'in', 'Destilado a 45 % v/v'), S('3', 'T101', 'bottoms', 'PV', 'in', 'Vinhaça'), S('4', 'E1', 'out', 'MX', 'in1', 'Destilado frio'),
-        S('5', 'FA', 'out', 'MX', 'in2', 'Água'), S('6', 'MX', 'out', 'PC', 'in', 'Cachaça')] } },
+        { id: 'FA', type: 'feed', name: 'Água de padronização', params: { T: 20, P: 1.2, vf: '', flow: 104, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'MX', type: 'mixer', name: 'Tanque de padronização (40 % v/v)', params: { P: '' } },
+        { id: 'P1', type: 'product', name: 'Bagaço (caldeira)' }, { id: 'P2', type: 'product', name: 'CO₂ da fermentação' }, { id: 'P3', type: 'product', name: 'Fermento recuperado' },
+        { id: 'P4', type: 'product', name: 'Vinhaça (fertirrigação)' }, { id: 'P5', type: 'product', name: 'Cachaça a 40 % v/v' }],
+      streams: [S('1', 'FC', 'out', 'MO', 'solids', 'Cana'), S('2', 'FE', 'out', 'MO', 'solvent', 'Embebição'), S('3', 'MO', 'underflow', 'P1', 'in', 'Bagaço'), S('4', 'MO', 'overflow', 'MXF', 'in1', 'Caldo'),
+        S('5', 'FY', 'out', 'MXF', 'in2', 'Fermento'), S('6', 'MXF', 'out', 'BR', 'feed', 'Mosto'), S('7', 'BR', 'gas', 'P2', 'in', 'CO₂'), S('8', 'BR', 'product', 'DEC', 'in', 'Vinho'),
+        S('9', 'DEC', 'out2', 'P3', 'in', 'Fermento'), S('10', 'DEC', 'out1', 'HX', 'in', 'Vinho delevurado'), S('11', 'HX', 'out', 'COL', 'feed', 'Vinho a 90 °C'), S('12', 'COL', 'bottoms', 'P4', 'in', 'Vinhaça'),
+        S('13', 'COL', 'distillate', 'E1', 'in', 'Destilado'), S('14', 'E1', 'out', 'MX', 'in1', 'Destilado frio'), S('15', 'FA', 'out', 'MX', 'in2', 'Água'), S('16', 'MX', 'out', 'P5', 'in', 'Cachaça')] } },
     { key: 'cafe-soluvel', title: 'Bebidas: café solúvel — extração em percoladores a 150 °C, concentração em evaporador de triplo efeito e secagem em spray dryer', fs: {
       name: 'Fábrica de café solúvel (spray dried)', components: ['water', 'food-cafe', 'inert-solid', 'cs-air'], model: 'IDEAL',
       blocks: [
@@ -13875,6 +13910,26 @@ def pfr_transiente(P, nome):
         { id: 'A', type: 'absorber', name: 'T-101', params: { N: 6, T: 30, P: 20 } },
         { id: 'VL', type: 'valve', name: 'VLV-101', params: { P: 5 } }],
       streams: [S('1', 'F', 'out', 'K', 'in'), S('2', 'K', 'out', 'E', 'in'), S('3', 'E', 'out', 'V', 'in'), S('4', 'V', 'vapor', 'A', 'gas_in'), S('5', 'O', 'out', 'A', 'liq_in'), S('6', 'V', 'liquid', 'VL', 'in')] } },
+    { key: 'refinaria-petroleo', title: 'Petróleo: refinaria simplificada — forno, torre atmosférica em cortes (GLP, nafta, querosene, diesel), debutanizadora e torre de vácuo (Fenske–Underwood–Gilliland)', fs: {
+      name: 'Refinaria de petróleo: destilação atmosférica e a vácuo', model: 'PR',
+      components: ['propane', 'n-butane', 'n-pentane', 'n-hexane', 'n-heptane', 'toluene', 'n-octane', 'cs-n-decane', 'cs-n-dodecane', 'cs-n-tetradecane', 'cs-n-hexadecane', 'cs-n-octadecane', 'cs-n-eicosane', 'cs-n-docosane', 'cs-n-tetracosane'],
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Petróleo cru dessalgado (100 t/h)', params: { T: 30, P: 3, vf: '', flow: 100000, flowUnit: 'kg/h', basis: 'mássica',
+          composition: { propane: 0.01, 'n-butane': 0.02, 'n-pentane': 0.03, 'n-hexane': 0.05, 'n-heptane': 0.06, toluene: 0.02, 'n-octane': 0.06, 'cs-n-decane': 0.06, 'cs-n-dodecane': 0.08,
+            'cs-n-tetradecane': 0.08, 'cs-n-hexadecane': 0.09, 'cs-n-octadecane': 0.07, 'cs-n-eicosane': 0.12, 'cs-n-docosane': 0.10, 'cs-n-tetracosane': 0.15 } } },
+        { id: 'H', type: 'heater', name: 'Forno atmosférico', params: { mode: 'Temperatura de saída', T: 230, dP: 1 } },
+        { id: 'EF', type: 'energy', name: 'Queimadores do forno', params: { Q: '' } },
+        { id: 'T1', type: 'column_short', name: 'Torre atmosférica: topo (gases + nafta)', params: { lk: 'n-octane', hk: 'cs-n-decane', lkRec: 0.99, hkRec: 0.99, RRmin: 1.3, P: 1.5 } },
+        { id: 'T4', type: 'column_short', name: 'Debutanizadora (5 bar)', params: { lk: 'n-butane', hk: 'n-pentane', lkRec: 0.99, hkRec: 0.99, RRmin: 1.3, P: 5 } },
+        { id: 'T2', type: 'column_short', name: 'Retificadora de querosene', params: { lk: 'cs-n-dodecane', hk: 'cs-n-tetradecane', lkRec: 0.98, hkRec: 0.98, RRmin: 1.3, P: 1.5 } },
+        { id: 'T3', type: 'column_short', name: 'Retificadora de diesel', params: { lk: 'cs-n-octadecane', hk: 'cs-n-eicosane', lkRec: 0.98, hkRec: 0.98, RRmin: 1.3, P: 1.5 } },
+        { id: 'T5', type: 'column_short', name: 'Torre de vácuo (0,1 bar)', params: { lk: 'cs-n-docosane', hk: 'cs-n-tetracosane', lkRec: 0.97, hkRec: 0.97, RRmin: 1.3, P: 0.1 } },
+        { id: 'P1', type: 'product', name: 'GLP' }, { id: 'P2', type: 'product', name: 'Nafta (gasolina)' }, { id: 'P3', type: 'product', name: 'Querosene de aviação' },
+        { id: 'P4', type: 'product', name: 'Óleo diesel' }, { id: 'P5', type: 'product', name: 'Gasóleo de vácuo (para o FCC)' }, { id: 'P6', type: 'product', name: 'Resíduo de vácuo (asfalto)' }],
+      streams: [S('1', 'F', 'out', 'H', 'in', 'Petróleo'), S('E1', 'EF', 'eo', 'H', 'q_in', 'Combustível'), S('2', 'H', 'out', 'T1', 'feed', 'Petróleo a 230 °C'), S('3', 'T1', 'distillate', 'T4', 'feed', 'Gases + nafta'),
+        S('4', 'T4', 'distillate', 'P1', 'in', 'GLP'), S('5', 'T4', 'bottoms', 'P2', 'in', 'Nafta'), S('6', 'T1', 'bottoms', 'T2', 'feed', 'Cru reduzido'), S('7', 'T2', 'distillate', 'P3', 'in', 'Querosene'),
+        S('8', 'T2', 'bottoms', 'T3', 'feed', 'Fundo'), S('9', 'T3', 'distillate', 'P4', 'in', 'Diesel'), S('10', 'T3', 'bottoms', 'T5', 'feed', 'Resíduo atmosférico'),
+        S('11', 'T5', 'distillate', 'P5', 'in', 'Gasóleo'), S('12', 'T5', 'bottoms', 'P6', 'in', 'Resíduo de vácuo')] } },
     { key: 'fug', title: 'Coluna shortcut BTX (Fenske–Underwood–Gilliland)', fs: {
       name: 'Shortcut BTX', components: ['benzene', 'toluene', 'p-xylene'], model: 'IDEAL',
       blocks: [

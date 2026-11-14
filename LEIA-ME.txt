@@ -1,3 +1,29 @@
+SIMULA FÁCIL IA 4.3 – atualização de 14/11/2026
+================================================
+
+A versão 4.3 simplifica o agente de IA com o Gemini.
+O motor de cálculo, os modelos e os resultados são os mesmos da 4.2.
+
+O QUE MUDOU
+
+No agente (simulador.html, bloco js/agent.js)
+- O Gemini funciona com a conta Google de cada pessoa (pode ser o e-mail
+  da UFSJ), sem chave da API. O menu "IA do agente" ficou com duas opções:
+  "Claude — preferencial" e "Gemini — sua conta Google". A opção de chave
+  própria só aparece para quem já tinha uma chave guardada no navegador.
+- "Enviar ao Gemini" copia o pedido (com o fluxograma e os resultados) e
+  abre o Gemini numa nova aba; lá, basta colar e enviar. O Gemini não
+  aceita receber o pedido já escrito pelo link, por isso o colar continua.
+- Para trazer a resposta, um botão só: "Trazer a resposta do Gemini" lê o
+  que foi copiado no Gemini, mostra no chat e monta o fluxograma. Ao voltar
+  do Gemini, o botão fica destacado. Se o navegador não deixar ler, o
+  quadro "Colar a resposta à mão" se abre.
+- Cada envio abre uma conversa nova no Gemini, então o pedido sempre leva
+  as instruções do simulador (antes, a partir do segundo envio, ia sem
+  elas e o Gemini respondia fora do formato). Com um Gem da turma
+  configurado, os envios continuam curtos.
+
+
 SIMULA FÁCIL IA 4.2 – atualização de 14/11/2026
 ================================================
 

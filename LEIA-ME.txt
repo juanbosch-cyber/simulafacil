@@ -1,3 +1,27 @@
+SIMULA FÁCIL IA 4.2 – atualização de 14/11/2026
+================================================
+
+A versão 4.2 corrige o agente de IA quando a escolha é o Claude.
+O motor de cálculo, os modelos e os resultados são os mesmos da 4.1.
+
+O QUE FOI CORRIGIDO
+
+No agente (simulador.html, bloco js/agent.js)
+- Na versão aberta no Claude, o botão Enviar abria a MESMA página numa
+  aba nova, sem responder, em três situações: quando a pergunta era
+  enviada antes de a ligação com o Claude terminar de carregar, quando o
+  uso do Claude tinha sido recusado uma vez e quando a conta não podia
+  usar o Claude ali. Cada aba nova repetia o problema.
+- Agora o agente espera a ligação com o Claude ("Conectando ao Claude…")
+  e responde no próprio chat. Se o uso foi recusado, explica e mostra o
+  botão "Permitir o Claude", que abre o painel de permissões; se a conta
+  não pode usar o Claude, explica e indica o Gemini UFSJ.
+- No site (GitHub Pages) o Claude continua respondendo só na versão
+  aberta no Claude, com a conta do próprio usuário: o chat agora diz isso
+  com clareza e traz o link, caso o navegador bloqueie a aba nova.
+- Erros sem texto não deixam mais um balão vazio no chat.
+
+
 SIMULA FÁCIL IA 4.1 – atualização de 14/11/2026
 ================================================
 

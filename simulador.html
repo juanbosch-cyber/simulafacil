@@ -5,13 +5,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#073b4c">
 <meta name="color-scheme" content="light dark">
+<script>/* tema claro/escuro: a escolha fica salva no navegador e vale para todas as páginas do site.
+   Sem escolha salva, segue o tema do celular ou do computador. Os botões com data-theme-toggle trocam o tema. */
+(function () {
+  var d = document.documentElement, K = 'sf-tema', mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+  function salvo() { try { var t = localStorage.getItem(K); return t === 'dark' || t === 'light' ? t : null; } catch (e) { return null; } }
+  function sistema() { return mq && mq.matches ? 'dark' : 'light'; }
+  function mostra() {
+    var esc = d.getAttribute('data-theme') === 'dark';
+    var bs = document.querySelectorAll('[data-theme-toggle]');
+    for (var i = 0; i < bs.length; i++) { bs[i].setAttribute('aria-pressed', esc ? 'true' : 'false'); bs[i].title = esc ? 'Modo escuro ligado: toque para voltar ao claro' : 'Ligar o modo escuro'; }
+  }
+  function aplica(t, guarda) {
+    if (guarda) { try { localStorage.setItem(K, t); } catch (e) {} }
+    if (d.getAttribute('data-theme') === t) { mostra(); return; }
+    d.setAttribute('data-theme', t); mostra();
+    try { window.dispatchEvent(new CustomEvent('sf-tema', { detail: t })); } catch (e) {}
+  }
+  d.setAttribute('data-theme', salvo() || sistema());
+  if (mq) { var muda = function () { if (!salvo()) aplica(sistema()); }; if (mq.addEventListener) mq.addEventListener('change', muda); else if (mq.addListener) mq.addListener(muda); }
+  window.addEventListener('storage', function (e) { if (e.key === K) aplica(salvo() || sistema()); });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-theme-toggle]');
+    if (b) aplica(d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+  });
+  document.addEventListener('DOMContentLoaded', mostra);
+})();
+</script>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SIMULA FÁCIL IA">
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 4.3 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 4.3, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 4.4 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 4.4, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -20,7 +47,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 4.3 – Simulador de processos químicos e bioprocessos com mais de 40 mil compostos">
+<meta property="og:title" content="SIMULA FÁCIL IA 4.4 – Simulador de processos químicos e bioprocessos com mais de 40 mil compostos">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -445,6 +472,32 @@ body.mobile.mmenu .m-menu { background: #fff; color: #073b4c; }
   body.mobile .m-run { padding: 0 12px 0 10px; font-size: 14px; }
 }
 
+/* modo escuro: botão sol/lua no topo; a escolha fica salva e vale para todas as páginas do site */
+.top .theme-btn { flex: none; width: 36px; height: 36px; padding: 0; justify-content: center; border-radius: 99px; background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.28); color: #fff; }
+.top .theme-btn:hover { background: rgba(255,255,255,.24); border-color: #fff; }
+.top .theme-btn:active { transform: scale(.94); }
+.theme-btn svg { width: 20px; height: 20px; }
+:root[data-theme="dark"] .theme-btn .i-moon, :root:not([data-theme="dark"]) .theme-btn .i-sun { display: none; }
+body.mobile .top .theme-btn { width: var(--tap); height: var(--tap); border-radius: var(--r-md); background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.4); }
+body.mobile .top .theme-btn svg { width: 22px; height: 22px; }
+/* no celular o botão sai da barra (o nome do programa não caberia) e fica no menu ☰, com texto */
+body.mobile .top > #themeBtn { display: none; }
+body.mobile .top .tools .theme-row { order: 17; grid-column: 1 / -1; width: auto; height: auto; min-height: var(--tap); justify-content: center; gap: 8px; }
+.theme-row .tr-on, :root[data-theme="dark"] .theme-row .tr-off { display: none; }
+:root[data-theme="dark"] .theme-row .tr-on { display: inline; }
+@media print { :root[data-theme="dark"] { --bg: #edf1f2; --panel: #fff; --panel-2: #f6f8f9; --ink: #15232a; --muted: #5a6a72; --line: #d2dbdf; color-scheme: light; } }
+/* janela dos tutoriais no modo escuro */
+:root[data-theme="dark"] .tut-card { background: #162126; color: #e3ecef; }
+:root[data-theme="dark"] .tut-imgbox { background: #0f1619; }
+:root[data-theme="dark"] .tut-bar { border-bottom-color: #2a3a41; }
+:root[data-theme="dark"] .tut-bar small, :root[data-theme="dark"] .tut-item small, :root[data-theme="dark"] .tut-yt small, :root[data-theme="dark"] .tut-alnone { color: #9db0b7; }
+:root[data-theme="dark"] .tut-item, :root[data-theme="dark"] .tut-al { background: #1b282e; border-color: #2a3a41; }
+:root[data-theme="dark"] .tut-item.on, :root[data-theme="dark"] .tut-al.on { background: #352a14; border-color: #ffc93c; }
+:root[data-theme="dark"] .tut-pp { background: transparent; color: #ff8a7d; border-color: #ff8a7d; }
+:root[data-theme="dark"] .tut-pp:hover { background: #3a1f1c; }
+:root[data-theme="dark"] .tut-dl, :root[data-theme="dark"] .tut-al a { color: #5cc8e0; }
+:root[data-theme="dark"] .tut-alq { background: #0f1619; color: #e3ecef; border-color: #2a3a41; }
+
 /* folhas que sobem de baixo: menu ☰ e paleta de equipamentos */
 .m-backdrop { position: fixed; inset: 0; z-index: 78; background: rgba(7, 33, 41, .5); }
 body.mobile .tools, body.mobile .palette { position: fixed; left: 0; right: 0; bottom: 0; margin: 0; background: var(--panel); color: var(--ink); border: 0; border-radius: var(--r-lg) var(--r-lg) 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,.28); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; transform: translateY(105%); visibility: hidden; transition: transform .24s cubic-bezier(.2, .8, .2, 1), visibility .24s; }
@@ -595,7 +648,12 @@ body.mobile .whero { grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; 
 body.mobile .whero-txt { display: contents; }
 body.mobile .wlogo { width: 52px; height: 52px; grid-row: 1 / span 2; }
 body.mobile .weyebrow { grid-column: 2; margin: 0; font-size: 11px; padding-right: 48px; }
-body.mobile .whero h1 { grid-column: 2; font-size: 25px; line-height: 1.05; padding-right: 40px; }
+body.mobile .whero h1 { grid-column: 2; font-size: 25px; line-height: 1.05; padding-right: 92px; }
+.wtheme { position: absolute; top: 12px; right: 50px; z-index: 2; background: rgba(255,255,255,.2); color: #fff; border-color: rgba(255,255,255,.4); border-radius: 50%; }
+.wtheme:hover { background: rgba(255,255,255,.3); border-color: #fff; }
+.wtheme svg { width: 17px; height: 17px; }
+body.mobile .wtheme { top: calc(8px + env(safe-area-inset-top)); right: 62px; width: var(--tap); height: var(--tap); }
+body.mobile .wtheme svg { width: 21px; height: 21px; }
 body.mobile .whero h1 .ver-badge.big { font-size: 10px; padding: 2px 8px; margin-left: 4px; top: -3px; }
 body.mobile .wsub, body.mobile .wnew, body.mobile .wauth, body.mobile .wman-top, body.mobile .whero-al { grid-column: 1 / -1; }
 body.mobile .wsub { margin: 8px 0 0; font-size: 16px; line-height: 1.25; }
@@ -821,7 +879,7 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>4.3</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>4.4</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -844,10 +902,12 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
     <button id="btnTut" class="tut-btn" type="button" title="Tutoriais em vídeo curtos, com narração, e imagens de passo a passo">🎬 Vídeos</button>
     <a id="btnManual" class="btn manual-link" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener" title="Abrir ou baixar o manual em PDF">📘 Manual</a>
     <button id="btnAbout" title="Sobre o SIMULA FÁCIL IA e autoria">Sobre</button>
+    <button type="button" class="theme-btn theme-row m-only" id="themeBtnM" data-theme-toggle aria-pressed="false" aria-label="Modo escuro" title="Ligar o modo escuro"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.7A8.4 8.4 0 0 1 9.3 3.8a8.4 8.4 0 1 0 10.9 10.9z" fill="currentColor"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.3" fill="currentColor"/><path d="M12 2.4v2.4M12 19.2v2.4M2.4 12h2.4M19.2 12h2.4M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M5.2 18.8l1.7-1.7M17.1 6.9l1.7-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="tr-txt">Modo escuro: <span class="tr-off" aria-hidden="true">desligado</span><span class="tr-on" aria-hidden="true">ligado</span></span></button>
     <button id="btnThermoM" class="m-only" type="button">Componentes e termodinâmica</button>
     <button id="btnViewMode" type="button" hidden>📱 Versão para celular</button>
     <input type="file" id="fileOpen" accept=".json,application/json" hidden>
   </div>
+  <button type="button" class="theme-btn" id="themeBtn" data-theme-toggle aria-pressed="false" aria-label="Modo escuro" title="Ligar o modo escuro"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.7A8.4 8.4 0 0 1 9.3 3.8a8.4 8.4 0 1 0 10.9 10.9z" fill="currentColor"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.3" fill="currentColor"/><path d="M12 2.4v2.4M12 19.2v2.4M2.4 12h2.4M19.2 12h2.4M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M5.2 18.8l1.7-1.7M17.1 6.9l1.7-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
   <button id="mRun" class="m-only m-run" type="button"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="currentColor"/></svg>Simular</button>
   <button id="mMenuBtn" class="m-only m-menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="tools"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
 </header>
@@ -963,12 +1023,13 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
 
 <div class="welcome" id="welcome" hidden>
   <div class="wcard" role="dialog" aria-modal="true" aria-labelledby="wTitle">
+    <button type="button" class="icon wtheme theme-btn" id="wTheme" data-theme-toggle aria-pressed="false" aria-label="Modo escuro" title="Ligar o modo escuro"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.7A8.4 8.4 0 0 1 9.3 3.8a8.4 8.4 0 1 0 10.9 10.9z" fill="currentColor"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.3" fill="currentColor"/><path d="M12 2.4v2.4M12 19.2v2.4M2.4 12h2.4M19.2 12h2.4M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M5.2 18.8l1.7-1.7M17.1 6.9l1.7-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
     <button class="icon wclose" id="wClose" type="button" title="Fechar e ir para o simulador" aria-label="Fechar e ir para o simulador">✕</button>
     <section class="whero">
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 4.3</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 4.4</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.0:</b> banco com mais de <b>40 mil compostos químicos</b></p>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1132,7 +1193,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
-    version: '4.3',
+    version: '4.4',
     subtitle: 'Simulador de processos químicos e bioprocessos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -16108,7 +16169,7 @@ def pfr_transiente(P, nome):
     const C = SF.CREDITS;
     openModal('Sobre o ' + C.title,
       '<div style="max-width:740px">' +
-      '<p style="font-size:16px"><b>' + esc(C.title) + ' – ' + esc(C.subtitle) + '</b> <span class="ver-badge">VERSÃO ' + esc(C.version || '4.3') + '</span><br>Simulador de processos químicos e bioprocessos com agente de inteligência artificial.</p>' +
+      '<p style="font-size:16px"><b>' + esc(C.title) + ' – ' + esc(C.subtitle) + '</b> <span class="ver-badge">VERSÃO ' + esc(C.version || '4.4') + '</span><br>Simulador de processos químicos e bioprocessos com agente de inteligência artificial.</p>' +
       '<div class="subhead">Autor</div><p><b>' + esc(C.author) + '</b> – ' + esc(C.course) + '<br>' + esc(C.program) + ' &amp; CLAUDE<br><span class="small muted">' + esc(C.role) + ' · ' + esc(C.institution) + '</span></p>' +
       '<p>Autor do livro <i>' + esc(C.book) + '</i> (' + esc(C.publisher) + ', 2019), base dos modelos dinâmicos usados aqui.</p>' +
       '<div class="subhead">Coautor</div><p><b>' + esc(C.coauthor) + '</b> – desenvolvimento do código, do motor numérico e do agente.</p>' +
@@ -16381,6 +16442,8 @@ def pfr_transiente(P, nome):
       setTimeout(() => { pfd.fit(); window.dispatchEvent(new Event('resize')); }, 80);
     }
   }
+  // troca de tema: os gráficos e o fluxograma releem as cores
+  window.addEventListener('sf-tema', () => { if (lastCharts) renderCharts.apply(null, lastCharts); pfd.render(); });
   $('#mNav').addEventListener('click', e => { const b = e.target.closest('button[data-mview]'); if (!b) return; if (!$('#welcome').hidden) closeWelcome(); setMView(b.dataset.mview); });
   // altura real da tela do celular (a barra do navegador muda a altura visível) e altura das abas de baixo
   // Com o teclado aberto (a altura visível cai bem abaixo da maior já vista com um campo em foco),
@@ -16424,7 +16487,8 @@ def pfr_transiente(P, nome):
   $('#mSelEdit').onclick = () => setMView('props');
   $('#mSelDel').onclick = () => { deleteSelected(); updateSelBar(); };
   $('#palette').addEventListener('click', e => { if (SF.mobile && e.target.closest('.pal-item')) { closeSheets(); updateSelBar(); } });
-  $('.tools').addEventListener('click', e => { if (SF.mobile && e.target.closest('button, a') && e.target.closest('button, a').id !== 'btnViewMode') setTimeout(closeSheets, 0); });
+  // o menu fecha depois de cada item, menos na troca de versão e na troca de tema (dá para ver o tema mudar e voltar)
+  $('.tools').addEventListener('click', e => { const b = SF.mobile && e.target.closest('button, a'); if (b && b.id !== 'btnViewMode' && !b.hasAttribute('data-theme-toggle')) setTimeout(closeSheets, 0); });
   $('#exampleSel').addEventListener('change', () => { if (SF.mobile) { closeSheets(); setMView('flow'); mFitted = true; setTimeout(() => pfd.fit(), 60); } });
   $('#btnViewMode').onclick = () => { const m = SF.mobile ? 'desktop' : 'mobile'; try { localStorage.setItem(VM_KEY, m); } catch (e) { /* */ } closeSheets(); applyView(m, true); toast(m === 'mobile' ? 'Versão para celular' : 'Versão completa para notebook'); };
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && SF.mobile) closeSheets(); });

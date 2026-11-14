@@ -1,3 +1,29 @@
+SIMULA FÁCIL IA 4.4 – atualização de 14/11/2026
+================================================
+
+A versão 4.4 traz o modo escuro, com um botão para ligar e desligar.
+O motor de cálculo, os modelos e os resultados são os mesmos da 4.3.
+
+O QUE MUDOU
+
+Botão sol/lua (index.html e simulador.html)
+- Na página de apresentação, o botão fica na barra de cima, ao lado dos
+  links (no celular, ao lado do menu ☰).
+- No simulador, fica no fim da barra de cima no computador, na tela de
+  boas-vindas (ao lado do ✕) e, no celular, dentro do menu ☰, com o texto
+  "Modo escuro: ligado/desligado" (na barra do celular, o botão espremeria
+  o nome do programa).
+- A lua liga o modo escuro; o sol volta ao claro. A escolha fica salva no
+  navegador (chave "sf-tema") e vale para todas as páginas do site, até
+  em outras abas abertas. Sem escolha salva, o site segue o tema do
+  celular ou do computador, como antes.
+- Ao trocar o tema, os gráficos e o fluxograma são redesenhados com as
+  cores novas. A janela dos tutoriais também ganhou as cores escuras.
+- A página de apresentação ganhou o tema escuro completo (antes era só
+  clara). Na impressão, as páginas voltam às cores claras.
+- A página 404 segue o tema escolhido.
+
+
 SIMULA FÁCIL IA 4.3 – atualização de 14/11/2026
 ================================================
 

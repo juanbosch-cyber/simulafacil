@@ -4,10 +4,37 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#073b4c">
+<script>/* tema claro/escuro: a escolha fica salva no navegador e vale para todas as páginas do site.
+   Sem escolha salva, segue o tema do celular ou do computador. Os botões com data-theme-toggle trocam o tema. */
+(function () {
+  var d = document.documentElement, K = 'sf-tema', mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+  function salvo() { try { var t = localStorage.getItem(K); return t === 'dark' || t === 'light' ? t : null; } catch (e) { return null; } }
+  function sistema() { return mq && mq.matches ? 'dark' : 'light'; }
+  function mostra() {
+    var esc = d.getAttribute('data-theme') === 'dark';
+    var bs = document.querySelectorAll('[data-theme-toggle]');
+    for (var i = 0; i < bs.length; i++) { bs[i].setAttribute('aria-pressed', esc ? 'true' : 'false'); bs[i].title = esc ? 'Modo escuro ligado: toque para voltar ao claro' : 'Ligar o modo escuro'; }
+  }
+  function aplica(t, guarda) {
+    if (guarda) { try { localStorage.setItem(K, t); } catch (e) {} }
+    if (d.getAttribute('data-theme') === t) { mostra(); return; }
+    d.setAttribute('data-theme', t); mostra();
+    try { window.dispatchEvent(new CustomEvent('sf-tema', { detail: t })); } catch (e) {}
+  }
+  d.setAttribute('data-theme', salvo() || sistema());
+  if (mq) { var muda = function () { if (!salvo()) aplica(sistema()); }; if (mq.addEventListener) mq.addEventListener('change', muda); else if (mq.addListener) mq.addListener(muda); }
+  window.addEventListener('storage', function (e) { if (e.key === K) aplica(salvo() || sistema()); });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-theme-toggle]');
+    if (b) aplica(d.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+  });
+  document.addEventListener('DOMContentLoaded', mostra);
+})();
+</script>
 <link rel="manifest" href="site.webmanifest">
 <script>document.documentElement.classList.add('js');</script>
-<title>SIMULA FÁCIL IA 4.3 – Simulador de processos químicos e bioprocessos online, com mais de 40 mil compostos | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 4.3: simulador gratuito de processos químicos e bioprocessos com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python. Prof. Juan Canellas Bosch Neto – UFSJ. Destilação e McCabe-Thiele, reatores CSTR e PFR, biorreatores, reator de biodiesel, alto-forno, forno de cimento, silo, sedimentador, digestor kraft de celulose, secadores, cristalizadores, secador de micro-ondas, secador solar, propriedades de alimentos, centrífuga de leite e de óleo, pasteurizador, batedeira de manteiga, trocadores de calor, refrigerador (chiller) e extração; termodinâmica com PC-SAFT para líquidos iônicos; biodigestor e bebidas (cerveja, refrigerante, cachaça).">
+<title>SIMULA FÁCIL IA 4.4 – Simulador de processos químicos e bioprocessos online, com mais de 40 mil compostos | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 4.4: simulador gratuito de processos químicos e bioprocessos com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python. Prof. Juan Canellas Bosch Neto – UFSJ. Destilação e McCabe-Thiele, reatores CSTR e PFR, biorreatores, reator de biodiesel, alto-forno, forno de cimento, silo, sedimentador, digestor kraft de celulose, secadores, cristalizadores, secador de micro-ondas, secador solar, propriedades de alimentos, centrífuga de leite e de óleo, pasteurizador, batedeira de manteiga, trocadores de calor, refrigerador (chiller) e extração; termodinâmica com PC-SAFT para líquidos iônicos; biodigestor e bebidas (cerveja, refrigerante, cachaça).">
 <meta name="keywords" content="simulador de processos químicos e bioprocessos, simulador de bioprocessos, biorreator, fermentação, Monod, simulação de processos, SIMULA FÁCIL IA, Juan Canellas Bosch Neto, UFSJ, engenharia química, McCabe-Thiele, destilação, CSTR, PFR, trocador de calor, NRTL, UNIFAC, Peng-Robinson, PC-SAFT, líquidos iônicos, refrigeração, ciclo de refrigeração, fluido refrigerante, R-1234yf, R-1234ze, R-404A, HFO, secador de micro-ondas, secagem por micro-ondas, secador solar, secagem solar, coletor solar, propriedades de alimentos, Choi e Okos, lodo de celulose, centrífuga de discos, desnatadeira, pasteurizador HTST, manteiga, leite em pó, laticínio, degomagem, lecitina de soja, biodigestor, biogás, biofertilizante, esterco, bebidas, cerveja, refrigerante, cachaça, carbonatação, lei de Henry, MATLAB, Octave, Python, secador, spray dryer, liofilizador, secador de micro-ondas, cristalizador MSMPR, evaporador, adsorção, biodiesel, Tosetto, Verhulst, alto-forno, siderurgia, forno de cimento, clínquer, silo, tremonha, Beverloo, sedimentador, espessador, Talmadge e Fitch, papel e celulose, digestor kraft, polpa kraft, licor negro, número kappa, eucalipto, quimiostato, banco de microrganismos, banco de dados ChemSep, banco de dados de compostos químicos, mais de 40 mil compostos, modelagem e simulação de processos dinâmicos">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -18,7 +45,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 4.3 – Simulador de processos químicos e bioprocessos com mais de 40 mil compostos">
+<meta property="og:title" content="SIMULA FÁCIL IA 4.4 – Simulador de processos químicos e bioprocessos com mais de 40 mil compostos">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador, com agente de IA e código MATLAB, Octave e Python. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -53,7 +80,7 @@
         "price": "0",
         "priceCurrency": "BRL"
       },
-      "softwareVersion": "4.3",
+      "softwareVersion": "4.4",
       "description": "Simulador de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos e termodinâmica NRTL, UNIQUAC, UNIFAC, Peng-Robinson e PC-SAFT (líquidos iônicos), refrigerador com fluidos refrigerantes, colunas de destilação rigorosas e McCabe-Thiele, reatores CSTR e PFR transientes, biorreatores de Tosetto, Monod e Verhulst, reator de biodiesel, alto-forno, forno de cimento, silo, sedimentador e digestor kraft contínuos, secadores, cristalizador, trocadores de calor, extração, agente de inteligência artificial e geração de código MATLAB, Octave e Python.",
       "featureList": [
         "Mais de 40 mil compostos químicos (banco próprio, ChemSep e banco ampliado)",
@@ -327,7 +354,7 @@ nav.bar { display: flex; align-items: center; gap: 6px 14px; min-height: var(--n
 nav.bar .brand { display: flex; align-items: center; gap: 10px; min-height: var(--tap); color: #fff; text-decoration: none; font: 900 20px var(--fun); white-space: nowrap; flex: none; }
 nav.bar .brand svg { width: 40px; height: 40px; flex: none; }
 nav.bar .links { margin-left: auto; display: flex; align-items: center; gap: 2px 4px; flex-wrap: wrap; justify-content: flex-end; }
-nav.bar .links a { position: relative; display: inline-flex; align-items: center; min-height: 40px; padding: 0 9px; border-radius: var(--r-sm); color: #fff; text-decoration: none; font-weight: 600; font-size: 15px; opacity: .92; transition: background-color .15s, opacity .15s; }
+nav.bar .links a { position: relative; display: inline-flex; align-items: center; min-height: 40px; padding: 0 8px; border-radius: var(--r-sm); color: #fff; text-decoration: none; font-weight: 600; font-size: 15px; opacity: .92; transition: background-color .15s, opacity .15s; }
 nav.bar .links a:hover { opacity: 1; background: rgba(255, 255, 255, .14); }
 nav.bar .links a.nav-open { background: var(--sun); color: var(--sun-ink); opacity: 1; padding: 0 16px; border-radius: var(--r-pill); font: 800 15px var(--fun); }
 nav.bar .links a.nav-open:hover { filter: brightness(1.06); }
@@ -544,6 +571,59 @@ footer a { color: var(--sun); }
   header.top { background: none; color: #000; } .hero h1 span, .hero p.lead { color: #000; }
   .js .card p { display: block; } .card-more { display: none; }
 }
+/* 11. modo escuro: o botão sol/lua da barra liga e desliga; a escolha vale para todas as páginas */
+.theme-btn { order: 2; display: inline-grid; place-items: center; flex: none; width: var(--tap); height: var(--tap); padding: 0; border: 1px solid rgba(255, 255, 255, .4); border-radius: var(--r-pill); background: rgba(255, 255, 255, .15); color: #fff; cursor: pointer; transition: background-color .15s, transform .12s; }
+.theme-btn:hover { background: rgba(255, 255, 255, .27); }
+.theme-btn:active { transform: scale(.94); }
+.theme-btn svg { width: 22px; height: 22px; }
+/* no computador, com a barra inteira, o botão fica do tamanho dos links (40 px) para os links caberem numa linha */
+.navbar:not(.compact) nav.bar { column-gap: 10px; } .navbar:not(.compact) nav.bar .links { column-gap: 2px; }
+.navbar:not(.compact) .theme-btn { width: 40px; height: 40px; }
+.navbar:not(.compact) .theme-btn svg { width: 20px; height: 20px; }
+:root[data-theme="dark"] .theme-btn .i-moon, :root:not([data-theme="dark"]) .theme-btn .i-sun { display: none; }
+nav.bar .links { order: 1; }
+.navbar.compact .theme-btn { order: 0; }
+:root[data-theme="dark"] {
+  --ink: #e3ecef; --muted: #9db0b7; --line: #2a3a41; --bg: #0f1619; --panel: #162126;
+  --teal: #2fd1c5; --ocean: #5cc8e0; --pop: #ff7a5c; --leaf: #4cd391;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, .35), 0 6px 18px rgba(0, 0, 0, .3);
+  --shadow-2: 0 6px 16px rgba(0, 0, 0, .45);
+  color-scheme: dark;
+}
+:root[data-theme="dark"] .navbar, :root[data-theme="dark"] header.top { background: linear-gradient(105deg, #04212b 0%, #064656 50%, #0a6662 100%); }
+:root[data-theme="dark"] .btn.pop, :root[data-theme="dark"] .btn-narr { color: #1d0700; }
+:root[data-theme="dark"] .chips span { background: #133b3a; } :root[data-theme="dark"] .chips span:nth-child(3n+2) { background: #3a2621; } :root[data-theme="dark"] .chips span:nth-child(3n+3) { background: #352a14; }
+:root[data-theme="dark"] .card-more:hover { background: #133b3a; }
+:root[data-theme="dark"] .figure { background: var(--panel); }
+:root[data-theme="dark"] .btn-pp { background: transparent; border-color: #ff8a7d; color: #ff8a7d; }
+:root[data-theme="dark"] .btn-pp:hover { background: #3a1f1c; }
+:root[data-theme="dark"] .alunos-mais, :root[data-theme="dark"] .qual .q.qb { background: #0a6f86; color: #fff; }
+:root[data-theme="dark"] .qual .q.qc { background: #5d6d74; }
+:root[data-theme="dark"] .stat b { color: #5cc8e0; }
+:root[data-theme="dark"] #banco { background: linear-gradient(180deg, #2a2410 0%, var(--bg) 100%); }
+:root[data-theme="dark"] .book { background: #2a2410; }
+:root[data-theme="dark"] .cite { background: #0f1a1e; }
+:root[data-theme="dark"] #qrbox { border-color: #fff; color: #4d6168; }
+:root[data-theme="dark"] details[open] { border-color: #3d5c66; }
+:root[data-theme="dark"] details summary:hover { background: #1b282e; }
+:root[data-theme="dark"] footer { background: #0a1215; border-top: 1px solid var(--line); }
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="dark"] ::-webkit-scrollbar-track { background: #0f1619; }
+  :root[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #3d525b; border: 3px solid transparent; background-clip: padding-box; }
+  :root[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: #57707b; border: 3px solid transparent; background-clip: padding-box; }
+}
+/* janela dos tutoriais no modo escuro */
+:root[data-theme="dark"] .tut-card { background: #162126; color: #e3ecef; }
+:root[data-theme="dark"] .tut-imgbox { background: #0f1619; }
+:root[data-theme="dark"] .tut-bar { border-bottom-color: #2a3a41; }
+:root[data-theme="dark"] .tut-bar small, :root[data-theme="dark"] .tut-item small, :root[data-theme="dark"] .tut-yt small, :root[data-theme="dark"] .tut-alnone { color: #9db0b7; }
+:root[data-theme="dark"] .tut-item, :root[data-theme="dark"] .tut-al { background: #1b282e; border-color: #2a3a41; }
+:root[data-theme="dark"] .tut-item.on, :root[data-theme="dark"] .tut-al.on { background: #352a14; border-color: #ffc93c; }
+:root[data-theme="dark"] .tut-pp { background: transparent; color: #ff8a7d; border-color: #ff8a7d; }
+:root[data-theme="dark"] .tut-pp:hover { background: #3a1f1c; }
+:root[data-theme="dark"] .tut-dl, :root[data-theme="dark"] .tut-al a { color: #5cc8e0; }
+:root[data-theme="dark"] .tut-alq { background: #0f1619; color: #e3ecef; border-color: #2a3a41; }
+@media print { :root[data-theme="dark"] { --ink: #11262d; --muted: #4d6168; --line: #d6e1e4; --bg: #fff; --panel: #fff; --ocean: #0a6f86; color-scheme: light; } }
 </style>
 </head>
 <body>
@@ -553,6 +633,7 @@ footer a { color: var(--sun); }
     <nav class="bar" aria-label="Navegação principal">
       <a class="brand" href="./"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>SIMULA FÁCIL IA</a>
       <a class="nav-cta" href="simulador.html">Abrir<span class="nc-long"> o simulador</span></a>
+      <button type="button" class="theme-btn" id="themeBtn" data-theme-toggle aria-pressed="false" aria-label="Modo escuro" title="Ligar o modo escuro"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.7A8.4 8.4 0 0 1 9.3 3.8a8.4 8.4 0 1 0 10.9 10.9z" fill="currentColor"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.3" fill="currentColor"/><path d="M12 2.4v2.4M12 19.2v2.4M2.4 12h2.4M19.2 12h2.4M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M5.2 18.8l1.7-1.7M17.1 6.9l1.7-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Abrir o menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
       <div class="links" id="navLinks"><a href="#tutoriais">🎬 Tutoriais</a><a href="#alunos" class="nav-alunos" id="alunosNav" hidden>🎓 Vídeos dos alunos</a><a href="#banco">40 mil compostos</a><a href="#recursos">Recursos</a><a href="#codigos">MATLAB e Python</a><a href="#autor">Autor</a><a href="#turma">Para a turma</a><a href="#perguntas">Perguntas</a><a class="nav-open" href="simulador.html">Abrir o simulador</a></div>
     </nav>
@@ -563,7 +644,7 @@ footer a { color: var(--sun); }
     <div class="hero">
       <div class="hero-txt">
         <p class="eyebrow">Engenharia Química · UFSJ</p>
-        <h1>SIMULA FÁCIL IA <em class="ver">VERSÃO 4.3</em><span>Simulador de processos químicos e bioprocessos</span></h1>
+        <h1>SIMULA FÁCIL IA <em class="ver">VERSÃO 4.4</em><span>Simulador de processos químicos e bioprocessos</span></h1>
         <a class="new-pill" href="#banco"><span aria-hidden="true">✨</span> <b>Novo na 4.0:</b> mais de 40 mil compostos químicos <span aria-hidden="true">→</span></a>
         <p class="lead">Monte fluxogramas de processos químicos e bioprocessos direto no navegador e de graça: destilação com McCabe-Thiele, reatores CSTR e PFR transientes, trocadores de calor, extratores, secadores, cristalizadores, biorreatores, reator de biodiesel, centrífuga, pasteurizador, alto-forno, forno de cimento, silo, sedimentador e digestor kraft contínuos, com mais de 40 mil compostos químicos e 60 exemplos prontos, inclusive biodigestor, fabricação de cerveja, cachaça e refrigerante, café solúvel e uma refinaria de petróleo simplificada. Um agente de inteligência artificial conversa sobre o processo, lê figuras e sugere melhorias.</p>
         <div class="cta">
@@ -717,7 +798,7 @@ footer a { color: var(--sun); }
 <section id="perguntas">
   <div class="wrap">
     <h2>Perguntas frequentes</h2>
-    <details open><summary>O que há de novo na versão 4.3?</summary><p>A versão 4.3 simplifica o <b>Gemini</b>: ele funciona com a conta Google de cada pessoa, sem chave. O simulador copia o pedido e abre o Gemini; para montar o fluxograma, basta copiar a resposta lá e tocar em <b>Trazer a resposta do Gemini</b>. A versão 4.2 corrigiu o <b>agente com o Claude</b>: na versão aberta no Claude, ele não abre mais a mesma página numa aba nova quando a ligação ainda está carregando ou quando o uso foi recusado; agora espera a ligação, responde no próprio chat e, se for preciso, mostra como liberar o Claude. Aqui no site, o chat explica que o Claude responde na versão aberta no Claude e traz o link. A versão 4.1 cuidou da experiência de uso, principalmente no <b>celular</b>: abas de baixo com ícones nítidos, botões maiores para o toque, menu reorganizado com o nome do projeto, <b>busca de equipamentos</b> na paleta e <b>busca nos 60 exemplos</b>, gráficos que deixam a tela rolar com o dedo e teclado que não cobre o campo do agente. Esta página ganhou um menu compacto, os tutoriais em trilho deslizante e os botões principais logo no topo. O motor de cálculo e os resultados são os mesmos da versão 4.0.</p></details>
+    <details open><summary>O que há de novo na versão 4.4?</summary><p>A versão 4.4 traz o <b>modo escuro</b>: o botão com o sol e a lua, no alto da página e do simulador (no celular, dentro do menu ☰ do simulador), liga e desliga. A escolha fica salva no navegador e vale para todas as páginas; sem escolha, o site segue o tema do celular ou do computador. A versão 4.3 simplifica o <b>Gemini</b>: ele funciona com a conta Google de cada pessoa, sem chave. O simulador copia o pedido e abre o Gemini; para montar o fluxograma, basta copiar a resposta lá e tocar em <b>Trazer a resposta do Gemini</b>. A versão 4.2 corrigiu o <b>agente com o Claude</b>: na versão aberta no Claude, ele não abre mais a mesma página numa aba nova quando a ligação ainda está carregando ou quando o uso foi recusado; agora espera a ligação, responde no próprio chat e, se for preciso, mostra como liberar o Claude. Aqui no site, o chat explica que o Claude responde na versão aberta no Claude e traz o link. A versão 4.1 cuidou da experiência de uso, principalmente no <b>celular</b>: abas de baixo com ícones nítidos, botões maiores para o toque, menu reorganizado com o nome do projeto, <b>busca de equipamentos</b> na paleta e <b>busca nos 60 exemplos</b>, gráficos que deixam a tela rolar com o dedo e teclado que não cobre o campo do agente. Esta página ganhou um menu compacto, os tutoriais em trilho deslizante e os botões principais logo no topo. O motor de cálculo e os resultados são os mesmos da versão 4.0.</p></details>
     <details><summary>O que veio na versão 4.0?</summary><p>O destaque é o <a href="#banco">banco ampliado</a>: 39 756 compostos que, somados aos 632 do banco principal, passam de <b>40 mil compostos químicos</b>, com propriedades críticas, pressão de vapor, Cp de gás ideal, densidade do líquido e entalpias de formação de fontes como IUPAC, CRC Handbook, NIST, JANAF e DIPPR. A versão 4.0 traz também o digestor contínuo kraft de eucalipto, na nova categoria Papel e celulose, o refrigerador (chiller) com 18 fluidos refrigerantes, o secador de micro-ondas e o secador solar, contínuos ou em batelada, alimentos e lodos de celulose com propriedades no banco de componentes, a centrífuga de discos, o pasteurizador contínuo e a batedeira de manteiga, com o fluxograma completo de um laticínio, o biodigestor anaeróbio, as bebidas (cerveja, refrigerantes, energético e cachaça) com a lei de Henry para o CO₂ e o modelo PC-SAFT para água, álcoois e líquidos iônicos, com comparação entre modelos e dados experimentais no diagrama Txy.</p></details>
     <details><summary>É gratuito? Precisa instalar alguma coisa?</summary><p>É gratuito e não precisa instalar nada: abre direto no navegador, inclusive no celular.</p></details>
     <details><summary>Os resultados são confiáveis?</summary><p>O motor foi validado contra dados clássicos: o azeótropo etanol/água previsto é 0,897 a 78,1 °C (experimental 0,894 a 78,15 °C), e os balanços de massa fecham em todos os exemplos. Para projeto industrial, confira os parâmetros binários com um banco de dados de referência.</p></details>

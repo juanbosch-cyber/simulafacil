@@ -10,8 +10,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 4.2 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 4.2, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 4.3 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 4.3, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -20,7 +20,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 4.2 – Simulador de processos químicos e bioprocessos com mais de 40 mil compostos">
+<meta property="og:title" content="SIMULA FÁCIL IA 4.3 – Simulador de processos químicos e bioprocessos com mais de 40 mil compostos">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -369,6 +369,11 @@ table.grid input { width: 84px; text-align: right; font-family: var(--mono); fon
 .gem-prof summary { cursor: pointer; color: var(--muted); } .gem-prof p { margin: 4px 0; }
 .gem-prof .gem-line { margin-top: 4px; } .gem-prof input { flex: 1; min-width: 0; font-size: 12px; }
 .gem-how summary { cursor: pointer; font-weight: 600; color: var(--accent); } .gem-how[open] summary { margin-bottom: 4px; }
+.gem-intro { margin: 0; font-size: 12.5px; line-height: 1.45; }
+.gem-bring { width: 100%; font-weight: 700; }
+.gem-bring.ready { box-shadow: 0 0 0 3px var(--pop); }
+.gem-more { display: flex; flex-direction: column; gap: 6px; } .gem-more summary { cursor: pointer; color: var(--muted); } .gem-more[open] summary { margin-bottom: 4px; }
+.gem-more > * + * { margin-top: 6px; }
 
 /* escolha da IA do agente */
 .prov-row { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
@@ -816,7 +821,7 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>4.2</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>4.3</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -901,7 +906,7 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
         <div class="attach-row" id="attachRow" hidden></div>
         <label class="sr" for="chatInput">Mensagem para o agente</label>
         <textarea id="chatInput" rows="3" placeholder="Descreva o processo, peça sugestões ou cole uma figura (Ctrl+V)…"></textarea>
-        <div class="prov-row"><label for="provSel">IA do agente</label><select id="provSel" title="Modelo de IA do agente"><option value="claude">Claude — preferencial</option><option value="gem">Gemini UFSJ (sem chave)</option><option value="gemini">Gemini (chave da API)</option></select></div>
+        <div class="prov-row"><label for="provSel">IA do agente</label><select id="provSel" title="Modelo de IA do agente"><option value="claude">Claude — preferencial</option><option value="gem">Gemini — sua conta Google</option><option value="gemini">Gemini (chave da API)</option></select></div>
         <details class="gem-box" id="gemBox" hidden>
           <summary id="gemSummary">Configurar o Gemini (chave e modelo)</summary>
           <div class="gem-grid">
@@ -915,20 +920,18 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
           <p class="small muted">Gere a chave grátis em <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio → Get API key</a>. A chave fica só no seu navegador e vai direto para o Google. No nível gratuito, o Google pode usar as conversas para melhorar os modelos: não envie dados confidenciais.</p>
         </details>
         <div class="gem-box gem-ufsj" id="gemUfsjBox" hidden>
-          <details class="gem-how small" id="gemHow" open><summary>Como usar o Gemini da UFSJ (3 passos)</summary>
-          <ol class="gem-steps small">
-            <li>Escreva o pedido acima e clique em <b>Enviar</b>: o simulador copia o pedido com o fluxograma e os resultados e abre o Gemini.</li>
-            <li>No Gemini (entre com o e-mail da UFSJ), cole com <b>Ctrl+V</b> e envie. Figuras podem ser anexadas lá mesmo.</li>
-            <li>Copie a resposta do Gemini (botão de copiar embaixo dela) e cole aqui:</li>
-          </ol></details>
+          <p class="gem-intro"><b>Gemini com a sua conta Google</b> (pode ser o e-mail da UFSJ), sem chave: em <b>Enviar ao Gemini</b>, o pedido vai copiado e o Gemini abre numa nova aba. Lá, cole (<b>Ctrl+V</b>; no celular, toque longo → <b>Colar</b>) e envie.</p>
+          <button type="button" id="gemBring" class="primary gem-bring" hidden title="Lê a resposta que você copiou no Gemini, mostra aqui e monta o fluxograma">📋 Trazer a resposta do Gemini</button>
+          <p class="small muted gem-intro" id="gemBringHint" hidden>Para mostrar a resposta aqui e montar o fluxograma: no Gemini, toque em <b>Copiar</b> embaixo da resposta e depois no botão acima.</p>
+          <details class="gem-more small" id="gemMore"><summary>Colar a resposta à mão e outras opções</summary>
           <label class="sr" for="gemPaste">Resposta do Gemini</label>
           <textarea id="gemPaste" rows="3" placeholder="Cole aqui a resposta do Gemini…"></textarea>
           <div class="gem-line gem-actions"><button type="button" id="gemApply" class="primary">Aplicar no simulador</button><button type="button" id="gemCopyRes" class="ghost" title="Copia os resultados para colar no Gemini e pedir a análise">Copiar resultados</button><button type="button" id="gemOpen" class="ghost">Abrir o Gemini ↗</button></div>
-          <label class="small gem-remember"><input type="checkbox" id="gemFull"> Incluir as instruções completas do simulador no próximo envio (marque ao começar uma conversa nova no Gemini)</label>
           <details class="gem-prof small"><summary>Para o professor: Gem da turma (opcional)</summary>
             <p>Um Gem guarda as instruções do simulador no Gemini, e os envios ficam mais curtos. No Gemini: <b>Gems → Novo Gem</b>, nome "SIMULA FÁCIL IA", cole as instruções, salve e compartilhe com a turma.</p>
             <div class="gem-line"><button type="button" id="gemCopyInstr" class="ghost">Copiar instruções do Gem</button></div>
             <div class="gem-line"><input id="gemLink" spellcheck="false" placeholder="link do Gem (https://gemini.google.com/gem/…)"></div>
+          </details>
           </details>
         </div>
         <div class="composer-row">
@@ -965,7 +968,7 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 4.2</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 4.3</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.0:</b> banco com mais de <b>40 mil compostos químicos</b></p>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1002,7 +1005,7 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
       <span class="wl-box"><span id="wLinkUrl" class="wl-url" title="Endereço do programa">https://juanbosch-cyber.github.io/simulafacil/simulador.html</span><button type="button" class="wl-btn" id="wLinkCopy">📋 Copiar link</button><button type="button" class="wl-btn alt" id="wLinkShare" hidden>📤 Enviar</button></span>
     </div>
     <section class="wactions">
-      <div class="wbtn coral wagent" id="wAgent"><span class="wico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1.3" fill="currentColor"/><circle cx="13" cy="10.5" r="1.3" fill="currentColor"/><circle cx="17" cy="10.5" r="1.3" fill="currentColor"/></svg></span><b>Conversar com o agente IA</b><span class="wdesc">Descreva o processo ou envie uma figura. Escolha a IA:</span><div class="wpicks"><button type="button" class="wpick wpref" id="wClaude">Claude <span class="wbadge">preferencial</span><small id="wClaudeNote">usa a sua conta do Claude</small></button><button type="button" class="wpick" id="wGemini">Gemini<small>com o e-mail da UFSJ</small></button></div></div>
+      <div class="wbtn coral wagent" id="wAgent"><span class="wico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1.3" fill="currentColor"/><circle cx="13" cy="10.5" r="1.3" fill="currentColor"/><circle cx="17" cy="10.5" r="1.3" fill="currentColor"/></svg></span><b>Conversar com o agente IA</b><span class="wdesc">Descreva o processo ou envie uma figura. Escolha a IA:</span><div class="wpicks"><button type="button" class="wpick wpref" id="wClaude">Claude <span class="wbadge">preferencial</span><small id="wClaudeNote">usa a sua conta do Claude</small></button><button type="button" class="wpick" id="wGemini">Gemini<small>com a sua conta Google</small></button></div></div>
       <button class="wbtn sun" id="wExamples"><span class="wico"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 10c-.6 1.3.2 2 1.4 2h11.2c1.2 0 2-.7 1.4-2l-5-10V3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7.5 15h9" stroke="currentColor" stroke-width="2"/></svg></span><b>Abrir um exemplo pronto</b><span>Colunas, reatores, bioprocessos, secagem, cristalização, evaporadores e mais</span></button>
       <button class="wbtn teal" id="wBlank"><span class="wico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="14" y="13" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 7.5h4v9" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><b>Montar do zero</b><span>Arraste equipamentos da paleta e ligue as correntes</span></button>
     </section>
@@ -1129,7 +1132,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
-    version: '4.2',
+    version: '4.3',
     subtitle: 'Simulador de processos químicos e bioprocessos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -14710,6 +14713,7 @@ def pfr_transiente(P, nome):
     /* ---- configuração do Gemini */
     let sessionKey = store.get(K_KEY) || '';
     gemKey.value = sessionKey; $('#gemRemember').checked = !!store.get(K_KEY);
+    if (!sessionKey) { const o = provSel.querySelector('option[value="gemini"]'); if (o) o.remove(); }   // sem chave guardada: o menu fica só com Claude e Gemini (conta Google)
     function fillModels(listed) {
       const keep = GM.cleanModel(gemModel.value || store.get(K_MODEL) || GM.DEFAULT_MODEL);
       gemModel.innerHTML = '';
@@ -14739,31 +14743,31 @@ def pfr_transiente(P, nome):
 
     /* ---- escolha do modelo de IA */
     function setProvider(p, persist) {
+      if (p === 'gemini' && !sessionKey) p = 'gem';
       provider = (p === 'gemini' || p === 'gem') ? p : 'claude'; provSel.value = provider;
       tierSel.value = store.get(K_TIER + provider) || TIER_DEFAULT[provider];
       if (persist) store.set(K_PROV, provider);
       gemBox.hidden = provider !== 'gemini'; gemUfsjBox.hidden = provider !== 'gem'; tierSel.hidden = provider === 'gem';
-      $('#sendBtn').textContent = provider === 'gem' ? 'Enviar ao Gemini' : (provider === 'claude' && !claudeReady && claudeUrl && !inViewer) ? 'Abrir no Claude ↗' : 'Enviar';
+      $('#sendBtn').textContent = provider === 'gem' ? 'Enviar ao Gemini ↗' : (provider === 'claude' && !claudeReady && claudeUrl && !inViewer) ? 'Abrir no Claude ↗' : 'Enviar';
       if (provider === 'gemini' && !sessionKey) gemBox.open = true;
       $('#attachBtn').hidden = provider === 'claude' ? !(claudeReady && limits && limits.images) : provider === 'gem';
       $('#imgInput').accept = provider === 'gemini' ? GM.IMG_TYPES.join(',') : ((limits && limits.images && limits.images.mediaTypes) || []).join(',');
-      if (provider === 'gem') note.innerHTML = 'Gemini da UFSJ, sem chave: usa o aplicativo Gemini com o seu e-mail da UFSJ. Lá, escolha o modo <b>Raciocínio</b> ou <b>Pro</b>.';
+      if (provider === 'gem') note.innerHTML = 'No Gemini, o modo <b>Raciocínio</b> ou <b>Pro</b> dá respostas melhores.';
       else if (provider === 'gemini') note.textContent = 'Agente com Gemini (Google): monta e simula o fluxograma por ferramentas, usando a sua chave da API do Google AI Studio.';
-      else if (claudeBlock === 'denied') note.innerHTML = '<b>Claude</b>: o uso do Claude foi recusado nesta página. Clique em <b>Enviar</b> para ver como liberar, ou escolha <b>Gemini UFSJ</b>.';
-      else if (claudeBlock === 'off' || (inViewer && !claudeReady)) note.innerHTML = '<b>Claude</b>: entre na sua conta do Claude (claude.ai) e, quando a página pedir, clique em <b>Permitir</b>. Sem conta do Claude, escolha <b>Gemini UFSJ</b>.';
+      else if (claudeBlock === 'denied') note.innerHTML = '<b>Claude</b>: o uso do Claude foi recusado nesta página. Clique em <b>Enviar</b> para ver como liberar, ou escolha <b>Gemini</b>.';
+      else if (claudeBlock === 'off' || (inViewer && !claudeReady)) note.innerHTML = '<b>Claude</b>: entre na sua conta do Claude (claude.ai) e, quando a página pedir, clique em <b>Permitir</b>. Sem conta do Claude, escolha <b>Gemini</b>.';
       else if (claudeReady) note.textContent = (limits && limits.tools ? 'Agente com Claude (Anthropic): monta e simula o fluxograma por ferramentas. ' : 'Esta visualização não permite ferramentas: o agente responde em texto. ') + 'Usa a sua conta do Claude.';
-      else note.innerHTML = '<b>Claude (preferencial)</b>: funciona na versão do simulador aberta no Claude, com a sua conta do Claude.' + (claudeUrl ? ' <a href="' + claudeUrl + '" target="_blank" rel="noopener"><b>Abrir a versão com o Claude</b></a>.' : '') + ' Sem conta do Claude, escolha <b>Gemini UFSJ</b>.';
+      else note.innerHTML = '<b>Claude (preferencial)</b>: funciona na versão do simulador aberta no Claude, com a sua conta do Claude.' + (claudeUrl ? ' <a href="' + claudeUrl + '" target="_blank" rel="noopener"><b>Abrir a versão com o Claude</b></a>.' : '') + ' Sem conta do Claude, escolha <b>Gemini</b>.';
     }
     provSel.onchange = () => setProvider(provSel.value, true);
 
     /* ---- Gemini da UFSJ: copia o pedido, abre o Gemini e aplica a resposta colada */
-    const gemLink = $('#gemLink'), gemPaste = $('#gemPaste'), gemFull = $('#gemFull');
+    const gemLink = $('#gemLink'), gemPaste = $('#gemPaste'), gemBring = $('#gemBring');
+    let gemPending = false;   // já mandou um pedido ao Gemini e ainda não trouxe a resposta
     const cfgGem = (window.SIMULAFACIL_CONFIG && window.SIMULAFACIL_CONFIG.gemUrl) || '';
     gemLink.value = store.get(K_GEMLINK) || cfgGem;
-    gemLink.addEventListener('change', () => { const v = gemLink.value.trim(); store.set(K_GEMLINK, /^https:\/\/(gemini\.google\.com|g\.co)\//.test(v) ? v : null); gemFull.checked = !gemUrl(true); });
+    gemLink.addEventListener('change', () => { const v = gemLink.value.trim(); store.set(K_GEMLINK, /^https:\/\/(gemini\.google\.com|g\.co)\//.test(v) ? v : null); });
     const gemUrl = onlyGem => { const v = (gemLink.value || '').trim(); return /^https:\/\/(gemini\.google\.com|g\.co)\//.test(v) ? v : (onlyGem ? '' : 'https://gemini.google.com/app'); };
-    gemFull.checked = !gemUrl(true);   // sem Gem da turma, o primeiro envio leva as instruções completas
-    if (store.get('simulafacil.gemHowSeen')) $('#gemHow').open = false;
     const openGem = () => { window.open(gemUrl(), '_blank', 'noopener'); };
     async function copyOrShow(text, okMsg) {
       if (await copyText(text)) { app.toast(okMsg, 4500); return true; }
@@ -14771,7 +14775,7 @@ def pfr_transiente(P, nome):
       return false;
     }
     function gemPrompt(msg) {
-      const full = gemFull.checked;
+      const full = !gemUrl(true);   // cada envio abre uma conversa nova no Gemini: sem Gem da turma, as instruções vão sempre
       return '[SIMULA FÁCIL IA]\n' + (full ? '### Instruções do simulador (siga-as nesta conversa)\n' + gemInstructions() + '\n\n' : '') +
         '### Pedido do estudante\n' + msg + '\n\n### Fluxograma atual (JSON)\n' + stateSummary(app.getState()) +
         '\n\n### Resultados da última simulação (JSON)\n' + JSON.stringify(resultSummary(app)) +
@@ -14779,26 +14783,42 @@ def pfr_transiente(P, nome):
     }
     async function sendGem(text) {
       const msg = text || 'Analise o fluxograma e os resultados atuais e sugira melhorias.';
-      const u = add('user', md(msg)); u.insertAdjacentHTML('beforeend', '<div class="small muted">→ enviado ao Gemini da UFSJ</div>');
+      const u = add('user', md(msg)); u.insertAdjacentHTML('beforeend', '<div class="small muted">→ enviado ao Gemini</div>');
       input.value = ''; $('#quickPrompts').hidden = true; history.push({ role: 'user', content: msg });
-      const copying = copyOrShow(gemPrompt(msg), 'Pedido copiado. No Gemini, cole com Ctrl+V e envie.'); // copia antes de a página perder o foco
+      const copying = copyOrShow(gemPrompt(msg), 'Pedido copiado. No Gemini, cole e envie.'); // copia antes de a página perder o foco
       openGem();   // abre ainda dentro do clique, para o navegador não bloquear a janela
       const ok = await copying;
-      gemFull.checked = false;
-      add('sys', (ok ? 'Copiei o seu pedido com o fluxograma e os resultados e abri o Gemini. ' : 'Abri o Gemini; copie o texto da janela. ') + 'Lá, entre com o e-mail da UFSJ, escolha <b>Raciocínio</b> ou <b>Pro</b>, cole com <b>Ctrl+V</b> e envie. Depois copie a resposta e cole no quadro “Cole aqui a resposta do Gemini”.');
-      setTimeout(() => gemPaste.focus(), 80);
+      gemPending = true; gemBring.classList.remove('ready'); gemBring.hidden = false; $('#gemBringHint').hidden = false;
+      add('sys', (ok ? 'Copiei o seu pedido (com o fluxograma e os resultados) e abri o Gemini numa nova aba. ' : 'Abri o Gemini numa nova aba; copie o texto da janela. ') +
+        'Lá, entre com a sua conta Google, cole com <b>Ctrl+V</b> (no celular, toque longo → <b>Colar</b>) e envie: a resposta aparece no Gemini. ' +
+        'Para trazê-la para cá e montar o fluxograma, toque em <b>Copiar</b> embaixo da resposta e depois em <b>Trazer a resposta do Gemini</b>. ' +
+        'Se a aba não abriu, <a href="' + esc(gemUrl()) + '" target="_blank" rel="noopener"><b>clique aqui</b></a>.');
     }
+    // ao voltar do Gemini, destaca o botão que traz a resposta
+    const gemBack = () => { if (gemPending && provider === 'gem' && document.visibilityState === 'visible') { gemBring.classList.add('ready'); gemBring.scrollIntoView({ block: 'nearest' }); } };
+    document.addEventListener('visibilitychange', gemBack); window.addEventListener('focus', gemBack);
+    // lê a resposta copiada no Gemini (o navegador pode pedir permissão para colar)
+    async function bringGem() {
+      let text = '';
+      try { if (navigator.clipboard && navigator.clipboard.readText) text = String(await navigator.clipboard.readText() || '').trim(); } catch (e) { text = ''; }
+      if (text && !/^\[SIMULA FÁCIL IA\]/.test(text)) { gemPaste.value = text; applyGem(); return; }
+      $('#gemMore').open = true;
+      add('sys', text ? 'O que está copiado ainda é o seu pedido, não a resposta. No Gemini, toque em <b>Copiar</b> embaixo da resposta e clique de novo em <b>Trazer a resposta do Gemini</b>.'
+        : 'Não consegui ler a resposta copiada (o navegador não deixou ou nada foi copiado). No Gemini, toque em <b>Copiar</b> embaixo da resposta e tente de novo, ou cole no quadro <b>Colar a resposta à mão</b> e clique em <b>Aplicar no simulador</b>.');
+      if (!text) setTimeout(() => gemPaste.focus(), 80);
+    }
+    gemBring.onclick = bringGem;
     function applyGem() {
       const text = gemPaste.value.trim();
       if (!text) { gemPaste.focus(); app.toast('Cole a resposta do Gemini no quadro.'); return; }
-      const bot = add('bot', ''); const tag = document.createElement('div'); tag.className = 'small muted'; tag.textContent = 'Gemini da UFSJ'; bot.appendChild(tag);
+      const bot = add('bot', ''); const tag = document.createElement('div'); tag.className = 'small muted'; tag.textContent = 'Gemini'; bot.appendChild(tag);
       const tools = document.createElement('div'); const body = document.createElement('div'); bot.appendChild(tools); bot.appendChild(body);
       const ui = { tool: m => { const t = document.createElement('div'); t.className = 'tool'; t.textContent = '⚙ ' + m; tools.appendChild(t); chat.scrollTop = chat.scrollHeight; } };
       const act = parseGeminiReply(text), shown = stripJsonBlocks(text);
       body.innerHTML = md(shown || (act ? '(projeto do fluxograma recebido)' : text));
       history.push({ role: 'assistant', content: text });
-      gemPaste.value = '';
-      if (!act) { add('sys', 'Não encontrei um projeto de fluxograma (bloco json) nesta resposta: mostrei só o texto. Se quiser montar o processo, peça ao Gemini: “devolva o bloco json do SIMULA FÁCIL IA”.'); return; }
+      gemPaste.value = ''; gemPending = false; gemBring.classList.remove('ready'); $('#gemMore').open = false;
+      if (!act) { add('sys', 'Resposta do Gemini trazida para o chat. Ela não traz um fluxograma para montar; se quiser, peça ao Gemini: “monte o fluxograma no SIMULA FÁCIL IA”.'); return; }
       const tool = makeTools(app, ui).find(t => t.name === act.acao);
       if (!tool || (act.acao !== 'construir_fluxograma' && act.acao !== 'modificar_fluxograma')) { add('sys', 'A ação “' + esc(act.acao) + '” não é reconhecida. Use construir_fluxograma ou modificar_fluxograma.'); return; }
       try {
@@ -14806,7 +14826,6 @@ def pfr_transiente(P, nome):
         const nb = app.getState().blocks.length;
         ui.tool('Projeto do Gemini aplicado: ' + nb + ' equipamentos · ' + (out && out.status ? out.status : 'simulado'));
         if (out && out.status === 'erro') add('sys', 'A simulação parou: ' + esc((out.erros || []).join('; ')) + '. Clique em <b>Copiar resultados</b> e cole no Gemini para ele corrigir.');
-        else { store.set('simulafacil.gemHowSeen', '1'); $('#gemHow').open = false; }
         if (out && out.status !== 'erro') add('sys', 'Pronto: o fluxograma foi montado e simulado. Para o Gemini interpretar os números, clique em <b>Copiar resultados</b> e cole na conversa do Gemini.');
       } catch (err) {
         ui.tool('Não foi possível aplicar: ' + err.message);
@@ -14844,7 +14863,7 @@ def pfr_transiente(P, nome):
 
     // explica por que o Claude não responde nesta página e, se o uso foi recusado, oferece o painel de permissões
     async function claudeHelp() {
-      const gem = ' Sem conta do Claude, escolha <b>Gemini UFSJ</b> no menu “IA do agente”.';
+      const gem = ' Sem conta do Claude, escolha <b>Gemini</b> no menu “IA do agente”.';
       if (claudeBlock === 'off') { add('sys', 'O Claude não está disponível para esta conta ou nesta visualização. O simulador continua funcionando normalmente.' + gem); return; }
       if (claudeBlock !== 'denied') { add('sys', 'O Claude não respondeu nesta página. Confira se você entrou na sua conta do Claude (claude.ai) e recarregue a página; quando ela pedir, clique em <b>Permitir</b>.' + gem); return; }
       const d = add('sys', 'O uso do Claude foi <b>recusado</b> nesta página, por isso ele não responde. Para liberar, clique em <b>Permitir o Claude</b> e ative o Claude no painel de permissões (ou recarregue a página e clique em <b>Permitir</b> quando ela pedir).' + gem);
@@ -14875,12 +14894,12 @@ def pfr_transiente(P, nome):
       }
       if (provider === 'claude' && (claudeBlock || (!sample && inViewer))) { claudeHelp(); return; }
       if (provider === 'claude' && !sample) {
-        if (claudeUrl) { const t = input.value.trim(); if (t) copyText(t); window.open(claudeUrl, '_blank', 'noopener'); add('sys', 'Aqui no site o Claude não responde direto: ele funciona na versão do simulador aberta no Claude, com a sua conta do Claude. Abri essa versão numa nova aba' + (t ? ' e copiei o seu pedido: lá, cole na aba Agente IA com <b>Ctrl+V</b>' : '') + '. Se a aba não abriu, <a href="' + claudeUrl + '" target="_blank" rel="noopener"><b>clique aqui</b></a>. Para continuar aqui sem o Claude, escolha <b>Gemini UFSJ</b> no menu “IA do agente”.'); }
-        else add('sys', 'O Claude funciona na versão do simulador aberta no Claude. Para continuar aqui, escolha <b>Gemini UFSJ</b> no menu “IA do agente”.');
+        if (claudeUrl) { const t = input.value.trim(); if (t) copyText(t); window.open(claudeUrl, '_blank', 'noopener'); add('sys', 'Aqui no site o Claude não responde direto: ele funciona na versão do simulador aberta no Claude, com a sua conta do Claude. Abri essa versão numa nova aba' + (t ? ' e copiei o seu pedido: lá, cole na aba Agente IA com <b>Ctrl+V</b>' : '') + '. Se a aba não abriu, <a href="' + claudeUrl + '" target="_blank" rel="noopener"><b>clique aqui</b></a>. Para continuar aqui sem o Claude, escolha <b>Gemini</b> no menu “IA do agente”.'); }
+        else add('sys', 'O Claude funciona na versão do simulador aberta no Claude. Para continuar aqui, escolha <b>Gemini</b> no menu “IA do agente”.');
         return;
       }
       if (!text && !attachments.length) return;
-      if (provider === 'gemini' && !sessionKey) { gemBox.hidden = false; gemBox.open = true; gemStatus.textContent = 'Cole a chave da API do Gemini para conversar.'; gemKey.focus(); add('sys', 'Para usar o Gemini, cole a sua chave da API (gerada grátis no Google AI Studio) no quadro "Configurar o Gemini".'); return; }
+      if (provider === 'gemini' && !sessionKey) { gemBox.hidden = false; gemBox.open = true; gemStatus.textContent = 'Cole a chave da API do Gemini para conversar.'; gemKey.focus(); add('sys', 'Para usar o Gemini com chave, cole a sua chave da API (gerada grátis no Google AI Studio) no quadro "Configurar o Gemini".'); return; }
       $('#quickPrompts').hidden = true;
       const imgs = attachments.slice(); attachments = []; renderAttach(); input.value = '';
       const u = add('user', md(text || '(figura anexada)')); imgs.forEach(f => { const im = document.createElement('img'); im.src = URL.createObjectURL(f); im.alt = 'figura anexada'; u.appendChild(im); });
@@ -14961,7 +14980,7 @@ def pfr_transiente(P, nome):
         const st = perm ? await perm.state('sample').catch(() => '') : '';
         if (st === 'denied') { claudeBlock = 'denied'; setProvider(provider); }
       }
-      if (!claudeReady && !saved && claudeUrl && !window.claude) add('sys', 'O agente preferencial é o <b>Claude</b>: clique em <b>Abrir no Claude</b> para usar a versão do simulador com o Claude (entre com a sua conta do Claude). Sem conta do Claude, escolha <b>Gemini UFSJ</b> no menu “IA do agente” e use o e-mail da UFSJ.');
+      if (!claudeReady && !saved && claudeUrl && !window.claude) add('sys', 'O agente preferencial é o <b>Claude</b>: clique em <b>Abrir no Claude</b> para usar a versão do simulador com o Claude (entre com a sua conta do Claude). Sem conta do Claude, escolha <b>Gemini</b> no menu “IA do agente” e use o e-mail da UFSJ.');
     })();
   }
 
@@ -16089,7 +16108,7 @@ def pfr_transiente(P, nome):
     const C = SF.CREDITS;
     openModal('Sobre o ' + C.title,
       '<div style="max-width:740px">' +
-      '<p style="font-size:16px"><b>' + esc(C.title) + ' – ' + esc(C.subtitle) + '</b> <span class="ver-badge">VERSÃO ' + esc(C.version || '4.2') + '</span><br>Simulador de processos químicos e bioprocessos com agente de inteligência artificial.</p>' +
+      '<p style="font-size:16px"><b>' + esc(C.title) + ' – ' + esc(C.subtitle) + '</b> <span class="ver-badge">VERSÃO ' + esc(C.version || '4.3') + '</span><br>Simulador de processos químicos e bioprocessos com agente de inteligência artificial.</p>' +
       '<div class="subhead">Autor</div><p><b>' + esc(C.author) + '</b> – ' + esc(C.course) + '<br>' + esc(C.program) + ' &amp; CLAUDE<br><span class="small muted">' + esc(C.role) + ' · ' + esc(C.institution) + '</span></p>' +
       '<p>Autor do livro <i>' + esc(C.book) + '</i> (' + esc(C.publisher) + ', 2019), base dos modelos dinâmicos usados aqui.</p>' +
       '<div class="subhead">Coautor</div><p><b>' + esc(C.coauthor) + '</b> – desenvolvimento do código, do motor numérico e do agente.</p>' +

@@ -10,8 +10,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 4.1 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 4.1, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 4.2 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 4.2, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -20,7 +20,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 4.1 – Simulador de processos químicos e bioprocessos com mais de 40 mil compostos">
+<meta property="og:title" content="SIMULA FÁCIL IA 4.2 – Simulador de processos químicos e bioprocessos com mais de 40 mil compostos">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -816,7 +816,7 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>4.1</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>4.2</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -965,7 +965,7 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 4.1</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 4.2</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.0:</b> banco com mais de <b>40 mil compostos químicos</b></p>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1129,7 +1129,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
-    version: '4.1',
+    version: '4.2',
     subtitle: 'Simulador de processos químicos e bioprocessos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -14694,6 +14694,12 @@ def pfr_transiente(P, nome):
     const GM = SF.gemini;
     const history = []; let attachments = [], ctl = null, sample = null, limits = null, busy = false, claudeReady = false;
     let provider = 'claude';
+    // Dentro do Claude a página fica num quadro do claude.ai. Se o Claude não puder responder ali, NÃO abrir a
+    // mesma página de novo numa aba nova (isso virava um ciclo sem resposta): explicar como liberar.
+    const inClaude = !!(window.claude && window.claude.use);
+    const framed = (() => { try { return window.top !== window; } catch (e) { return true; } })();
+    const inViewer = inClaude && framed;
+    let sampleP = null, sampleChecked = !inClaude, claudeBlock = '';   // claudeBlock: 'denied' (uso recusado) ou 'off' (indisponível)
     const QUICK = ['Monte a destilação etanol/água e explique o McCabe-Thiele', 'Como obter etanol anidro a 99,5%? Monte a melhor opção', 'Analise os resultados atuais e sugira otimizações', 'Qual modelo termodinâmico devo usar?', 'Gere o código MATLAB e Python deste processo'];
     const qp = $('#quickPrompts'); QUICK.forEach(q => { const b = document.createElement('button'); b.type = 'button'; b.textContent = q; b.onclick = () => { input.value = q; send(); }; qp.appendChild(b); });
     const claudeUrl = (window.SIMULAFACIL_CONFIG && window.SIMULAFACIL_CONFIG.claudeUrl) || '';
@@ -14737,12 +14743,14 @@ def pfr_transiente(P, nome):
       tierSel.value = store.get(K_TIER + provider) || TIER_DEFAULT[provider];
       if (persist) store.set(K_PROV, provider);
       gemBox.hidden = provider !== 'gemini'; gemUfsjBox.hidden = provider !== 'gem'; tierSel.hidden = provider === 'gem';
-      $('#sendBtn').textContent = provider === 'gem' ? 'Enviar ao Gemini' : (provider === 'claude' && !claudeReady && claudeUrl) ? 'Abrir no Claude ↗' : 'Enviar';
+      $('#sendBtn').textContent = provider === 'gem' ? 'Enviar ao Gemini' : (provider === 'claude' && !claudeReady && claudeUrl && !inViewer) ? 'Abrir no Claude ↗' : 'Enviar';
       if (provider === 'gemini' && !sessionKey) gemBox.open = true;
       $('#attachBtn').hidden = provider === 'claude' ? !(claudeReady && limits && limits.images) : provider === 'gem';
       $('#imgInput').accept = provider === 'gemini' ? GM.IMG_TYPES.join(',') : ((limits && limits.images && limits.images.mediaTypes) || []).join(',');
       if (provider === 'gem') note.innerHTML = 'Gemini da UFSJ, sem chave: usa o aplicativo Gemini com o seu e-mail da UFSJ. Lá, escolha o modo <b>Raciocínio</b> ou <b>Pro</b>.';
       else if (provider === 'gemini') note.textContent = 'Agente com Gemini (Google): monta e simula o fluxograma por ferramentas, usando a sua chave da API do Google AI Studio.';
+      else if (claudeBlock === 'denied') note.innerHTML = '<b>Claude</b>: o uso do Claude foi recusado nesta página. Clique em <b>Enviar</b> para ver como liberar, ou escolha <b>Gemini UFSJ</b>.';
+      else if (claudeBlock === 'off' || (inViewer && !claudeReady)) note.innerHTML = '<b>Claude</b>: entre na sua conta do Claude (claude.ai) e, quando a página pedir, clique em <b>Permitir</b>. Sem conta do Claude, escolha <b>Gemini UFSJ</b>.';
       else if (claudeReady) note.textContent = (limits && limits.tools ? 'Agente com Claude (Anthropic): monta e simula o fluxograma por ferramentas. ' : 'Esta visualização não permite ferramentas: o agente responde em texto. ') + 'Usa a sua conta do Claude.';
       else note.innerHTML = '<b>Claude (preferencial)</b>: funciona na versão do simulador aberta no Claude, com a sua conta do Claude.' + (claudeUrl ? ' <a href="' + claudeUrl + '" target="_blank" rel="noopener"><b>Abrir a versão com o Claude</b></a>.' : '') + ' Sem conta do Claude, escolha <b>Gemini UFSJ</b>.';
     }
@@ -14834,14 +14842,40 @@ def pfr_transiente(P, nome):
     form.addEventListener('submit', e => { e.preventDefault(); send(); });
     $('#stopBtn').onclick = () => { if (ctl) ctl.abort(); };
 
+    // explica por que o Claude não responde nesta página e, se o uso foi recusado, oferece o painel de permissões
+    async function claudeHelp() {
+      const gem = ' Sem conta do Claude, escolha <b>Gemini UFSJ</b> no menu “IA do agente”.';
+      if (claudeBlock === 'off') { add('sys', 'O Claude não está disponível para esta conta ou nesta visualização. O simulador continua funcionando normalmente.' + gem); return; }
+      if (claudeBlock !== 'denied') { add('sys', 'O Claude não respondeu nesta página. Confira se você entrou na sua conta do Claude (claude.ai) e recarregue a página; quando ela pedir, clique em <b>Permitir</b>.' + gem); return; }
+      const d = add('sys', 'O uso do Claude foi <b>recusado</b> nesta página, por isso ele não responde. Para liberar, clique em <b>Permitir o Claude</b> e ative o Claude no painel de permissões (ou recarregue a página e clique em <b>Permitir</b> quando ela pedir).' + gem);
+      const perm = await window.claude.use('permissions').catch(() => null); if (!perm) return;
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'primary'; b.textContent = 'Permitir o Claude';
+      b.onclick = async () => {
+        try { await perm.manage(); } catch (e) { add('sys', 'Não consegui abrir o painel. Use o menu de permissões do artefato, no topo da página do Claude, ou recarregue a página.'); return; }
+        const st = await perm.state('sample').catch(() => '');
+        if (st === 'granted' || st === 'prompt') { claudeBlock = ''; setProvider(provider); add('sys', 'Pronto: o Claude foi liberado. Envie a sua pergunta de novo.'); }
+      };
+      const row = document.createElement('p'); row.appendChild(b); d.appendChild(row); chat.scrollTop = chat.scrollHeight;
+    }
+
     function setBusy(b) { busy = b; $('#sendBtn').disabled = b; $('#stopBtn').hidden = !b; provSel.disabled = b; }
     const ERR = { rate_limited: 'Limite de uso atingido. Tente novamente em alguns instantes.', session_expired: 'Sessão expirada: entre novamente no Claude.', refused: 'O pedido não pôde ser atendido. Reformule a mensagem.', empty_completion: 'O agente não produziu resposta. Simplifique o pedido.', upstream_error: 'Falha temporária de conexão. Tente novamente.', image_rejected: 'Figura não aceita (tipo ou tamanho). Use PNG ou JPEG menor.', prompt_too_large: 'Conversa longa demais: comece uma nova.' };
 
     async function send() {
       const text = input.value.trim(); if (busy) return;
       if (provider === 'gem') { await sendGem(text); return; }
+      if (provider === 'claude' && !sample && !sampleChecked) {   // a ligação com o Claude ainda está carregando: espera em vez de abrir outra aba
+        const wait = add('sys', 'Conectando ao Claude…'); setBusy(true);
+        try { await sampleP; } finally { setBusy(false); wait.remove(); }
+      }
+      if (provider === 'claude' && claudeBlock === 'denied') {   // o usuário pode ter liberado pelo menu de permissões do artefato
+        const perm = await window.claude.use('permissions').catch(() => null);
+        const st = perm ? await perm.state('sample').catch(() => '') : '';
+        if (st === 'granted' || st === 'prompt') { claudeBlock = ''; setProvider(provider); }
+      }
+      if (provider === 'claude' && (claudeBlock || (!sample && inViewer))) { claudeHelp(); return; }
       if (provider === 'claude' && !sample) {
-        if (claudeUrl) { const t = input.value.trim(); if (t) copyText(t); window.open(claudeUrl, '_blank', 'noopener'); add('sys', 'Abri a versão do simulador com o <b>Claude</b> numa nova aba' + (t ? ' e copiei o seu pedido: lá, cole na aba Agente IA com <b>Ctrl+V</b>' : '') + '. Para continuar aqui sem o Claude, escolha <b>Gemini UFSJ</b> no menu “IA do agente”.'); }
+        if (claudeUrl) { const t = input.value.trim(); if (t) copyText(t); window.open(claudeUrl, '_blank', 'noopener'); add('sys', 'Aqui no site o Claude não responde direto: ele funciona na versão do simulador aberta no Claude, com a sua conta do Claude. Abri essa versão numa nova aba' + (t ? ' e copiei o seu pedido: lá, cole na aba Agente IA com <b>Ctrl+V</b>' : '') + '. Se a aba não abriu, <a href="' + claudeUrl + '" target="_blank" rel="noopener"><b>clique aqui</b></a>. Para continuar aqui sem o Claude, escolha <b>Gemini UFSJ</b> no menu “IA do agente”.'); }
         else add('sys', 'O Claude funciona na versão do simulador aberta no Claude. Para continuar aqui, escolha <b>Gemini UFSJ</b> no menu “IA do agente”.');
         return;
       }
@@ -14874,10 +14908,11 @@ def pfr_transiente(P, nome):
         if (res.truncated) body.insertAdjacentHTML('beforeend', '<p class="small muted">Resposta interrompida pelo limite de tamanho — peça a continuação.</p>');
         history.push({ role: 'user', content: userTurn }, { role: 'assistant', content: res.text });
       } catch (e) {
-        if (e && e.text) body.innerHTML = md(e.text); else body.innerHTML = '';
         const code = e && e.code;
+        if (e && e.text) body.innerHTML = md(e.text); else { body.innerHTML = ''; if (code !== 'cancelled' && !tools.childNodes.length) bot.remove(); }   // sem texto: não deixa balão vazio
         if (code === 'cancelled') body.insertAdjacentHTML('beforeend', '<p class="small muted">Interrompido.</p>');
-        else if (code === 'not_granted' || code === 'sampling_disabled' || code === 'not_declared' || code === 'capability_disabled' || code === 'capability_removed') { add('sys', 'O uso do Claude não foi autorizado nesta página. O simulador continua funcionando normalmente; você também pode escolher o Gemini.'); sample = null; claudeReady = false; setProvider(provider); }
+        else if (code === 'not_granted') { claudeBlock = 'denied'; setProvider(provider); claudeHelp(); }
+        else if (code === 'sampling_disabled' || code === 'not_declared' || code === 'capability_disabled' || code === 'capability_removed') { claudeBlock = 'off'; setProvider(provider); claudeHelp(); }
         else if (code === 'images_unavailable') add('sys', 'Envio de figuras indisponível nesta visualização; descreva o processo em texto.');
         else add('sys', ERR[code] || ('Erro do agente: ' + ((e && e.message) || code || e)));
         if (e && e.text) history.push({ role: 'user', content: userTurn }, { role: 'assistant', content: e.text });
@@ -14915,10 +14950,17 @@ def pfr_transiente(P, nome):
 
     // capacidade "sample" do Claude e escolha inicial do modelo de IA
     (async () => {
-      try { sample = window.claude && window.claude.use ? await window.claude.use('sample') : null; } catch (e) { sample = null; }
+      sampleP = inClaude ? Promise.resolve().then(() => window.claude.use('sample')).catch(() => null) : Promise.resolve(null);
+      sample = await sampleP;
       if (sample) { try { limits = await sample.limits(); } catch (e) { limits = null; } claudeReady = true; }
+      sampleChecked = true;
       const saved = store.get(K_PROV);
       setProvider(saved || 'claude');   // o Claude é a opção preferencial
+      if (sample) {   // recusa guardada para este artefato: avisa antes do primeiro envio (só lê, não pergunta nada)
+        const perm = await window.claude.use('permissions').catch(() => null);
+        const st = perm ? await perm.state('sample').catch(() => '') : '';
+        if (st === 'denied') { claudeBlock = 'denied'; setProvider(provider); }
+      }
       if (!claudeReady && !saved && claudeUrl && !window.claude) add('sys', 'O agente preferencial é o <b>Claude</b>: clique em <b>Abrir no Claude</b> para usar a versão do simulador com o Claude (entre com a sua conta do Claude). Sem conta do Claude, escolha <b>Gemini UFSJ</b> no menu “IA do agente” e use o e-mail da UFSJ.');
     })();
   }
@@ -16047,7 +16089,7 @@ def pfr_transiente(P, nome):
     const C = SF.CREDITS;
     openModal('Sobre o ' + C.title,
       '<div style="max-width:740px">' +
-      '<p style="font-size:16px"><b>' + esc(C.title) + ' – ' + esc(C.subtitle) + '</b> <span class="ver-badge">VERSÃO ' + esc(C.version || '4.1') + '</span><br>Simulador de processos químicos e bioprocessos com agente de inteligência artificial.</p>' +
+      '<p style="font-size:16px"><b>' + esc(C.title) + ' – ' + esc(C.subtitle) + '</b> <span class="ver-badge">VERSÃO ' + esc(C.version || '4.2') + '</span><br>Simulador de processos químicos e bioprocessos com agente de inteligência artificial.</p>' +
       '<div class="subhead">Autor</div><p><b>' + esc(C.author) + '</b> – ' + esc(C.course) + '<br>' + esc(C.program) + ' &amp; CLAUDE<br><span class="small muted">' + esc(C.role) + ' · ' + esc(C.institution) + '</span></p>' +
       '<p>Autor do livro <i>' + esc(C.book) + '</i> (' + esc(C.publisher) + ', 2019), base dos modelos dinâmicos usados aqui.</p>' +
       '<div class="subhead">Coautor</div><p><b>' + esc(C.coauthor) + '</b> – desenvolvimento do código, do motor numérico e do agente.</p>' +

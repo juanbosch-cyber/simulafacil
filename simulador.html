@@ -865,7 +865,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '4.0-2026-11-13d',
+  manualVersion: '4.0-2026-11-14b',
   videosAlunos: [
     { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' }
   ]
@@ -1905,6 +1905,11 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'mn-ion', name: 'Íon manganês Mn²⁺ (soluto, M=54,94)', formula: 'Mn2+', mw: 54.938, rho: 7210, nv: true, cpl: 26 },
     { id: 'inert-solid', name: 'Sólido inerte (farelo/torta)', formula: '(C6H10O5)n', mw: 162.14, rho: 1500, solid: true, cpl: 210 },
     { id: 'glucose', name: 'Glicose (soluto não volátil)', formula: 'C6H12O6', mw: 180.156, rho: 1540, nv: true, cpl: 219 },
+    // solutos de bebidas (refrigerantes, energéticos): não voláteis; c_p do sólido
+    { id: 'caffeine', name: 'Cafeína (soluto não volátil)', formula: 'C8H10N4O2', mw: 194.19, rho: 1230, nv: true, cpl: 236, tags: 'bebida refrigerante cola guaraná energético café alcaloide' },
+    { id: 'phosphoric-acid', name: 'Ácido fosfórico (soluto não volátil)', formula: 'H3PO4', mw: 97.995, rho: 1885, nv: true, cpl: 145, tags: 'acidulante refrigerante cola bebida INS 338' },
+    { id: 'citric-acid', name: 'Ácido cítrico (soluto não volátil)', formula: 'C6H8O7', mw: 192.12, rho: 1665, nv: true, cpl: 226, tags: 'acidulante refrigerante guaraná suco energético bebida INS 330' },
+    { id: 'taurine', name: 'Taurina (soluto não volátil)', formula: 'C2H7NO3S', mw: 125.15, rho: 1734, nv: true, cpl: 150, tags: 'energético bebida aminoácido' },
     { id: 'biomass', name: 'Biomassa: células (CH1,8O0,5N0,2)', formula: 'CH1.8O0.5N0.2', mw: 24.62, rho: 1100, solid: true, cpl: 37 },
     { id: 'dry-solids', name: 'Sólidos secos do produto (alimento, leite etc.; genérico)', formula: 'SS', mw: 100, rho: 1500, solid: true, cpl: 150 },
     // sólidos minerais e metalúrgicos (alto-forno, forno de cimento, silo, sedimentador): massas molares pelos pesos atômicos e c_p médios (J/(mol·K))
@@ -1966,19 +1971,80 @@ window.SIMULAFACIL_CONFIG = {
     // lodos da ETE de fábrica de celulose kraft (base seca, literatura): primário = fibras não recuperadas; biológico (secundário) = biomassa + fibras + cinzas
     { id: 'sludge-primario', nome: 'Lodo primário de fábrica de celulose (fibras)', tipo: 'lodo', w: 70, dry: { p: 0, f: 2, c: 0, fi: 85, a: 13 } },
     { id: 'sludge-biologico', nome: 'Lodo biológico (secundário) de fábrica de celulose', tipo: 'lodo', w: 82, dry: { p: 30.7, f: 4.2, c: 11.6, fi: 26.9, a: 26.6 } },
-    { id: 'sludge-misto', nome: 'Lodo misto de fábrica de celulose (70 % primário + 30 % biológico, base seca)', tipo: 'lodo', w: 75, dry: { p: 9.2, f: 2.7, c: 3.5, fi: 67.6, a: 17.0 } }
+    { id: 'sludge-misto', nome: 'Lodo misto de fábrica de celulose (70 % primário + 30 % biológico, base seca)', tipo: 'lodo', w: 75, dry: { p: 9.2, f: 2.7, c: 3.5, fi: 67.6, a: 17.0 } },
+    // dejetos para o biodigestor: umidade e sólidos voláteis típicos (ASAE D384.2; cama de aves e de equinos mais secas), composição seca aproximada;
+    // bio.L = litros de biogás por kg de dejeto fresco da planilha original (C. Guirlanda, Flash MX); bio.B0 = m³ de CH₄ por kg de SV (IPCC 2006, v. 4, cap. 10);
+    // bio.K = correlação de Hashimoto para a constante cinética K de Chen e Hashimoto (bov: esterco bovino; sui: suíno)
+    { id: 'dej-bovino', nome: 'Esterco de bovinos', tipo: 'dejeto', w: 86, dry: { p: 13, f: 3, c: 20, fi: 47, a: 17 }, bio: { L: 36, B0: 0.24, K: 'bov' } },
+    { id: 'dej-suino', nome: 'Esterco de suínos', tipo: 'dejeto', w: 90, dry: { p: 22, f: 8, c: 30, fi: 20, a: 20 }, bio: { L: 52, B0: 0.48, K: 'sui' } },
+    { id: 'dej-equino', nome: 'Esterco de equinos (com cama)', tipo: 'dejeto', w: 72, dry: { p: 9, f: 2, c: 19, fi: 50, a: 20 }, bio: { L: 100, B0: 0.30, K: 'bov' } },
+    { id: 'dej-aves', nome: 'Esterco de aves (cama de frango)', tipo: 'dejeto', w: 45, dry: { p: 25, f: 2, c: 22, fi: 26, a: 25 }, bio: { L: 240, B0: 0.39, K: 'bov' } },
+    { id: 'dej-vegetal', nome: 'Resíduos vegetais', tipo: 'dejeto', w: 85, dry: { p: 12, f: 3, c: 50, fi: 25, a: 10 }, bio: { L: 25, B0: 0.30, K: 'bov' } }
   ];
   FOODS.forEach(fd => {
     let dry; const w = fd.g ? fd.g[0] : fd.w;
     if (fd.g) { const s = fd.g.slice(1).reduce((a, v) => a + v, 0); dry = {}; FOOD_KEYS.forEach((q, i) => { dry[q] = fd.g[i + 1] / s; }); }
     else { const s = FOOD_KEYS.reduce((a, q) => a + (fd.dry[q] || 0), 0); dry = {}; FOOD_KEYS.forEach(q => { dry[q] = (fd.dry[q] || 0) / s; }); }
     fd.dryComp = dry; fd.xw = w / 100;
-    const pS = choiOkos(dry, 25), lodo = fd.tipo === 'lodo';
-    const rot = lodo ? 'matéria seca do lodo' : fd.tipo === 'fruta' ? 'sólidos secos (alimento)' : 'sólidos (alimento)';
-    COMPONENTS.push(Object.assign({ id: fd.id, name: fd.nome + ': ' + rot, formula: lodo ? 'MS-lodo' : 'MS', mw: 100, rho: Math.round(pS.rho),
-      cpl: +(pS.cp * 100).toFixed(2), food: fd, tags: lodo ? 'lodo celulose papel ete efluente secagem solar' : 'alimento ' + (fd.tipo === 'fruta' ? 'fruta fruit secagem' : 'líquido concentrado evaporador spray') },
+    const pS = choiOkos(dry, 25), lodo = fd.tipo === 'lodo', dej = fd.tipo === 'dejeto';
+    const rot = lodo ? 'matéria seca do lodo' : dej ? 'matéria seca' : fd.tipo === 'fruta' ? 'sólidos secos (alimento)' : 'sólidos (alimento)';
+    COMPONENTS.push(Object.assign({ id: fd.id, name: fd.nome + ': ' + rot, formula: lodo ? 'MS-lodo' : dej ? 'MS-dejeto' : 'MS', mw: 100, rho: Math.round(pS.rho),
+      cpl: +(pS.cp * 100).toFixed(2), food: fd, tags: lodo ? 'lodo celulose papel ete efluente secagem solar' : dej ? 'dejeto esterco estrume biodigestor biogás biofertilizante resíduo orgânico' : 'alimento ' + (fd.tipo === 'fruta' ? 'fruta fruit secagem' : 'líquido concentrado evaporador spray') },
       fd.tipo === 'líquido' ? { nv: true } : { solid: true }));
   });
+  // componentes para separar a gordura do leite (centrífuga, batedeira) e o óleo de soja da lecitina (degomagem): composição para Choi–Okos
+  [{ id: 'milk-fat', name: 'Gordura do leite (lipídios)', formula: 'GORD', nome: 'Gordura do leite', dry: { f: 1 }, tags: 'leite gordura nata creme manteiga laticínio alimento' },
+    { id: 'milk-snf', name: 'Sólidos não gordurosos do leite (proteína, lactose e minerais)', formula: 'SNG', nome: 'Sólidos não gordurosos do leite', dry: { p: 36.5, c: 55.7, a: 7.8 }, tags: 'leite extrato seco desengordurado proteína lactose laticínio alimento' },
+    { id: 'lecithin', name: 'Fosfolipídios: lecitina de soja (gomas do óleo)', formula: 'C42H80NO8P', mw: 758.1, nome: 'Lecitina de soja', dry: { f: 1 }, tags: 'soja óleo degomagem gomas fosfatídeos lecitina alimento' },
+    { id: 'drink-extract', name: 'Extrato seco de bebidas (açúcares do malte, dextrinas, proteínas e minerais)', formula: 'EXT', nome: 'Extrato de bebidas', dry: { p: 6, c: 90, a: 4 }, tags: 'bebida cerveja mosto malte extrato plato vinho' }
+  ].forEach(q => {
+    const s = FOOD_KEYS.reduce((a, k) => a + (q.dry[k] || 0), 0), dry = {}; FOOD_KEYS.forEach(k => { dry[k] = (q.dry[k] || 0) / s; });
+    const pS = choiOkos(dry, 25), mw = q.mw || 100;
+    COMPONENTS.push({ id: q.id, name: q.name, formula: q.formula, mw, rho: Math.round(pS.rho), cpl: +(pS.cp * mw).toFixed(2), nv: true, tags: q.tags,
+      food: { id: q.id, nome: q.nome, tipo: 'componente', dryComp: dry, xw: 0 } });
+  });
+  // o óleo de soja (trioleína) também ganha composição de lipídio, para as propriedades das correntes de óleo
+  COMPONENTS.forEach(c => { if (c.id === 'soy-oil') c.food = { id: 'soy-oil', nome: 'Óleo de soja', tipo: 'componente', dryComp: { p: 0, f: 1, c: 0, fi: 0, a: 0 }, xw: 0 }; });
+  // açúcares como carboidrato puro (Choi e Okos): propriedades de xaropes e bebidas sem álcool
+  COMPONENTS.forEach(c => { if (c.id === 'sucrose' || c.id === 'glucose') c.food = { id: c.id, nome: c.id === 'sucrose' ? 'Sacarose' : 'Glicose', tipo: 'componente', dryComp: { p: 0, f: 0, c: 1, fi: 0, a: 0 }, xw: 0 }; });
+  // misturas prontas para o campo "Alimento ou lodo" da corrente de alimentação (frações mássicas)
+  const MIXES = [
+    { nome: 'Leite cru integral (água + gordura + sólidos não gordurosos)', comp: { water: 0.8773, 'milk-fat': 0.035, 'milk-snf': 0.0877 } },
+    { nome: 'Creme de leite (40 % de gordura)', comp: { water: 0.5455, 'milk-fat': 0.40, 'milk-snf': 0.0545 } },
+    { nome: 'Leite desnatado (água + gordura + sólidos não gordurosos)', comp: { water: 0.9085, 'milk-fat': 0.0005, 'milk-snf': 0.091 } },
+    { nome: 'Óleo de soja bruto (óleo + fosfolipídios + umidade)', comp: { 'soy-oil': 0.972, lecithin: 0.025, water: 0.003 } }
+  ];
+  // bebidas: dados por litro (rótulos e literatura) → composição mássica com água, etanol, açúcar, extrato, CO₂, cafeína e acidulantes
+  // alc = teor alcoólico (% v/v a 20 °C), acu = açúcares (sacarose, g/L), ext = extrato (g/L), co2 (g/L), caf (mg/L), fos = ácido fosfórico, cit = ácido cítrico, tau = taurina (g/L), rho (kg/L)
+  const BEBIDAS = [
+    { nome: 'Cerveja pilsen (4,8 % v/v)', d: { alc: 4.8, ext: 38, co2: 5.0, rho: 1.008 }, ref: 'extrato real 3,8 % m/m; 2,5 volumes de CO₂' },
+    { nome: 'Cerveja sem álcool (0,3 % v/v)', d: { alc: 0.3, ext: 55, co2: 5.0, rho: 1.020 }, ref: 'desalcoolizada; até 0,5 % v/v no Brasil' },
+    { nome: 'Mosto cervejeiro (12 °P)', d: { ext: 125.8, rho: 1.0484 }, ref: '12 % m/m de extrato (graus Plato)' },
+    { nome: 'Refrigerante de cola', d: { acu: 106, fos: 0.55, caf: 95, co2: 7.0, rho: 1.040 }, ref: '10,6 g de açúcar e 9,5 mg de cafeína por 100 mL; 3,6 volumes de CO₂' },
+    { nome: 'Refrigerante de guaraná', d: { acu: 100, cit: 1.5, caf: 20, co2: 6.0, rho: 1.038 }, ref: '10 g de açúcar por 100 mL; cafeína do extrato de guaraná' },
+    { nome: 'Bebida energética', d: { acu: 110, caf: 320, tau: 4.0, cit: 3.0, co2: 4.5, rho: 1.045 }, ref: 'até 350 mg/L de cafeína e 4 g/L de taurina (ANVISA)' },
+    { nome: 'Aguardente de cana (cachaça, 40 % v/v)', d: { alc: 40 }, ref: 'de 38 a 48 % v/v a 20 °C (MAPA)' },
+    { nome: 'Vinho de cana fermentado (8 % v/v, para destilar)', d: { alc: 8 }, ref: 'mosto de caldo de cana fermentado, pronto para o alambique ou a coluna' },
+    { nome: 'Vinho tinto seco (12,5 % v/v)', d: { alc: 12.5, ext: 28, acu: 2, rho: 0.994 }, ref: 'extrato seco de 28 g/L' },
+    { nome: 'Xarope simples de açúcar (60 °Brix)', d: { acu: 771.9, rho: 1.2865 }, ref: 'para o xarope composto dos refrigerantes' }
+  ];
+  const BEB_CUSTOM = 'outra bebida (digite os dados abaixo)';
+  // massa específica de água + etanol a 20 °C pelo teor alcoólico (% v/v), tabela da OIML
+  const OIML_A = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100], OIML_R = [0.99820, 0.98533, 0.97353, 0.96142, 0.94812, 0.93182, 0.91381, 0.89409, 0.87253, 0.84838, 0.78924];
+  function rhoHidro(a) { a = Math.max(0, Math.min(100, a || 0)); let k = 0; while (k < 9 && a > OIML_A[k + 1]) k++; const t = (a - OIML_A[k]) / 10; return OIML_R[k] + t * (OIML_R[k + 1] - OIML_R[k]); }
+  // % v/v a partir da fração mássica de etanol na mistura hidroalcoólica (inverte a tabela)
+  function alcVV(wEt) { let lo = 0, hi = 100; for (let k = 0; k < 60; k++) { const a = (lo + hi) / 2, w = a * 0.78924 / (100 * rhoHidro(a)); if (w < wEt) lo = a; else hi = a; } return (lo + hi) / 2; }
+  function bebida(d) {
+    const g = { ethanol: (+d.alc || 0) * 10 * 0.78924, sucrose: +d.acu || 0, 'drink-extract': +d.ext || 0, co2: +d.co2 || 0, caffeine: (+d.caf || 0) / 1000,
+      'phosphoric-acid': +d.fos || 0, 'citric-acid': +d.cit || 0, taurine: +d.tau || 0 };
+    Object.keys(g).forEach(k => { if (!(g[k] >= 0)) throw new Error('os dados da bebida devem ser positivos'); });
+    const sol = g.sucrose + g['drink-extract'] + g.caffeine + g['phosphoric-acid'] + g['citric-acid'] + g.taurine;
+    const rho = +d.rho > 0 ? +d.rho : rhoHidro(+d.alc || 0) + 0.000385 * sol;   // kg/L
+    const tot = 1000 * rho, w = tot - Object.values(g).reduce((a, v) => a + v, 0);
+    if (!(w > 0)) throw new Error('os dados da bebida passam de 1 litro: confira o álcool, os açúcares e a massa específica');
+    const comp = { water: w / tot }; Object.keys(g).forEach(k => { if (g[k] > 0) comp[k] = g[k] / tot; });
+    return { comp, rho, sol, brix: 100 * sol / tot, alcMM: 100 * g.ethanol / tot, alc: +d.alc || 0, kcal: (4 * (g.sucrose + g['drink-extract']) + 7 * g.ethanol) / 10, g };
+  }
   // propriedades do material úmido (fração mássica de água xw) e dos sólidos secos, por Choi–Okos
   function foodProps(id, xw, Tc) {
     const c = COMP[id], fd = c && c.food; if (!fd) return null;
@@ -2208,6 +2274,8 @@ window.SIMULAFACIL_CONFIG = {
     IDEAL: 'Ideal (Raoult)', NRTL: 'NRTL', WILSON: 'Wilson', UNIQUAC: 'UNIQUAC', UNIFAC: 'UNIFAC (preditivo)', PR: 'Peng-Robinson', SRK: 'Soave-Redlich-Kwong', PCSAFT: 'PC-SAFT'
   };
 
+  // constantes de Henry em água a 25 °C, H_cp em mol/(m³·Pa), e d ln H/d(1/T) em K (Sander, 2015); H_x = 55 350/H_cp(T) Pa (fração molar)
+  const HENRY = { co2: [3.3e-4, 2400], oxygen: [1.3e-5, 1500], nitrogen: [6.4e-6, 1600], methane: [1.4e-5, 1600], hydrogen: [7.8e-6, 530], 'cs-hydrogen-sulfide': [1.0e-3, 2100] };
   function Thermo(compIds, model, opts) {
     opts = opts || {};
     this.ids = compIds.slice();
@@ -2215,6 +2283,9 @@ window.SIMULAFACIL_CONFIG = {
     this.n = this.c.length; this.model = model || 'NRTL';
     this.isSAFT = this.model === 'PCSAFT';
     this.isEOS = this.model === 'PR' || this.model === 'SRK' || this.isSAFT;
+    // gases dissolvidos em água (modelos de atividade): lei de Henry ponderada pela fração de água no solvente
+    this.iw = this.ids.indexOf('water'); this.hen = [];
+    if (!this.isEOS && this.iw >= 0) this.ids.forEach((id, i) => { const h = HENRY[id]; if (h) this.hen.push({ i, H0: h[0], B: h[1] }); });
     this.act = []; this.c.forEach((c, i) => { if (!c.nv && !c.solid) this.act.push(i); });
     this.warnings = []; this.pairInfo = [];
     this.userBinary = opts.binary || {};
@@ -2425,6 +2496,11 @@ window.SIMULAFACIL_CONFIG = {
     }
     const g = this.gamma(x, T);
     for (let i = 0; i < n; i++) K[i] = (this.c[i].nv || this.c[i].solid) ? 1e-20 : g[i] * this.psat(i, T) / P;
+    if (this.hen.length && x) {
+      let xg = 0; this.hen.forEach(h => { xg += x[h.i] || 0; });
+      const wv = Math.max(0, Math.min(1, (x[this.iw] || 0) / Math.max(1e-12, 1 - xg)));
+      this.hen.forEach(h => { const Hx = 55350 / (h.H0 * Math.exp(h.B * (1 / T - 1 / 298.15))); K[h.i] = (wv * Hx + (1 - wv) * g[h.i] * this.psat(h.i, T)) / P; });
+    }
     return K;
   };
   Thermo.prototype.Kwilson = function (T, P) {
@@ -2439,6 +2515,11 @@ window.SIMULAFACIL_CONFIG = {
       const e = this._eos(x, T, P || PATM, 'L', 'h'); h += e.frac * e.Hres; return h;
     }
     for (let i = 0; i < this.n; i++) h += x[i] * (hIGcomp(c[i], T) - dHvapComp(c[i], T));
+    if (this.hen.length) { // gás dissolvido em água: entalpia do gás ideal menos o calor de dissolução (R·B da constante de Henry)
+      let xg = 0; this.hen.forEach(q => { xg += x[q.i] || 0; });
+      const wv = Math.max(0, Math.min(1, (x[this.iw] || 0) / Math.max(1e-12, 1 - xg)));
+      this.hen.forEach(q => { if (x[q.i] > 0) h += x[q.i] * wv * (dHvapComp(c[q.i], T) - R * q.B); });
+    }
     if (this.heRK) h += this.hExcess(x, T);
     return h;
   };
@@ -2629,7 +2710,7 @@ window.SIMULAFACIL_CONFIG = {
   }
 
   SF.thermo = { R, T0, PATM, COMPONENTS, COMP, MODELS, Thermo, addComponents, psatComp, hIGcomp, dHvapComp, rachfordRice, pairKey, NRTL_DB, makeUnifac, nrtlGamma, VLE_EXP, vleExp,
-    FOODS, CHOI, choiOkos, foodProps, foodMix };
+    FOODS, MIXES, CHOI, choiOkos, foodProps, foodMix, BEBIDAS, BEB_CUSTOM, bebida, rhoHidro, alcVV };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -2862,6 +2943,7 @@ window.SIMULAFACIL_CONFIG = {
   const sum = N.sum, clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const num = (v, d) => (v === undefined || v === null || v === '' || isNaN(+v) ? d : +v);
   const MAT_NONE = 'nenhum (composição manual)';
+  const bebOutra = q => !!TH.BEB_CUSTOM && q.bebida === TH.BEB_CUSTOM;
 
   /* ------------------------------------------------------------------ correntes */
   function mkStream(th, flows, T, P, fl) {
@@ -2941,6 +3023,19 @@ window.SIMULAFACIL_CONFIG = {
   const SD_CONT = 'contínuo (alimentação → pó)', SD_BAT = 'batelada: um lote de alimentação seco de uma vez', isSdBat = q => /^batelada/.test(q.mode || '');
   const BD_CONT = 'contínuo: CSTR com cinética global de 2ª ordem', BD_BAT = 'batelada: 3 etapas reversíveis (Noureddini & Zhu)';
   const SEMC = ' (só sem corrente conectada; com corrente, vem dela)';
+  // centrífuga de discos
+  // biodigestor anaeróbio: métodos de cálculo da produção de biogás e fatores de equivalência
+  const BD_PLAN = 'planilha original (litros de biogás por kg de dejeto)', BD_CH = 'cinética de Chen e Hashimoto (sólidos voláteis, TRH e temperatura)';
+  const BD_EQ_PL = 'planilha original (Guirlanda)', BD_EQ_PCI = 'poder calorífico inferior (PCI, BEN/EPE)';
+  const bdPlan = q => q.metodo !== BD_CH, bdCH = q => q.metodo === BD_CH;
+  // substratos da planilha original: chave do campo, componente (dejeto) e rótulo
+  const BD_SUBS = [['boi', 'dej-bovino', 'Esterco de bovinos'], ['porco', 'dej-suino', 'Esterco de suínos'], ['cavalo', 'dej-equino', 'Esterco de equinos'],
+    ['galinha', 'dej-aves', 'Esterco de aves'], ['vegetal', 'dej-vegetal', 'Resíduos vegetais']];
+  const CF_LEITE = 'leite: desnate (creme de leite + leite desnatado)', CF_SOJA = 'óleo de soja: degomagem (óleo degomado + gomas para lecitina)';
+  const CF_BAL = 'balanço de gordura (fecha a massa)', CF_ORIG = 'programa original (Brito e Bosch, com eficiência)';
+  const cfMilk = q => !/^óleo/.test(q.app || ''), cfOil = q => /^óleo/.test(q.app || '');
+  const CF_PRESETS = { [CF_LEITE]: { Fv: 100, rhoF: 1030, Tf: 50, rhoL: 905, rhoH: 1025, mu: 0.9, rpm: 5000, Nd: 20, r1: 0.02, r2: 0.06, rec1: 50, rec2: 90, Qm1: 60 },
+    [CF_SOJA]: { Fv: 10000, rhoF: 915, Tf: 70, rhoL: 900, rhoH: 1030, mu: 15, rpm: 5000, Nd: 120, r1: 0.07, r2: 0.2, Qm1: '' } };
   // secador solar
   const SO_CONT = 'contínuo: túnel solar com bandejas (alimentação → produto seco)', SO_BAT = 'batelada: bandejas carregadas uma vez, secando ao longo dos dias';
   const SO_MIX = 'misto: coletor solar + câmara com cobertura transparente', SO_IND = 'indireto: coletor solar + câmara opaca', SO_DIR = 'direto: estufa ou cabine solar, sem coletor';
@@ -2956,7 +3051,17 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'flow', label: 'Vazão total', u: '', def: 100 }, { k: 'flowUnit', label: 'Unidade da vazão', type: 'select', options: ['kmol/h', 'kg/h', 'kg/s', 't/h', 'mol/s', 'L/s', 'm³/h'], def: 'kmol/h' },
       { k: 'basis', label: 'Base da composição', type: 'select', options: ['molar', 'mássica', 'concentração (mol/L)'], def: 'molar' },
       { k: 'solvent', label: 'Solvente (base concentração)', type: 'comp', def: '' },
-      { k: 'material', label: 'Alimento ou lodo (preenche a composição mássica: água + matéria seca)', type: 'select', options: [MAT_NONE].concat(TH.FOODS ? TH.FOODS.map(f => f.nome) : []), def: MAT_NONE },
+      { k: 'material', label: 'Alimento, lodo ou dejeto (preenche a composição mássica: água + matéria seca)', type: 'select', options: [MAT_NONE].concat(TH.FOODS ? TH.FOODS.map(f => f.nome) : [], TH.MIXES ? TH.MIXES.map(f => f.nome) : []), def: MAT_NONE },
+      { k: 'bebida', label: 'Bebida (preenche a composição mássica: água, álcool, açúcar, extrato, CO₂, cafeína e acidulantes)', type: 'select', options: [MAT_NONE].concat(TH.BEBIDAS ? TH.BEBIDAS.map(f => f.nome) : [], TH.BEB_CUSTOM ? [TH.BEB_CUSTOM] : []), def: MAT_NONE },
+      { k: 'bAlc', label: 'Teor alcoólico', u: '% v/v a 20 °C', def: 0, when: bebOutra },
+      { k: 'bAcu', label: 'Açúcares (sacarose)', u: 'g/L', def: 0, when: bebOutra },
+      { k: 'bExt', label: 'Extrato (dextrinas, maltose, proteínas, minerais)', u: 'g/L', def: 0, when: bebOutra },
+      { k: 'bCO2', label: 'CO₂ dissolvido (1 volume ≈ 2 g/L)', u: 'g/L', def: 0, when: bebOutra },
+      { k: 'bCaf', label: 'Cafeína', u: 'mg/L', def: 0, when: bebOutra },
+      { k: 'bFos', label: 'Ácido fosfórico', u: 'g/L', def: 0, when: bebOutra },
+      { k: 'bCit', label: 'Ácido cítrico', u: 'g/L', def: 0, when: bebOutra },
+      { k: 'bTau', label: 'Taurina', u: 'g/L', def: 0, when: bebOutra },
+      { k: 'bRho', label: 'Massa específica (vazio = estimada)', u: 'kg/L', def: '', when: bebOutra },
       { k: 'composition', label: 'Composição', type: 'composition' }] },
     product: { label: 'Produto (saída)', cat: 'Correntes', ins: ['in'], outs: [], params: [] },
     energy: { label: 'Corrente de energia', cat: 'Correntes', ins: [], outs: [], eins: ['ei'], eouts: ['eo'], params: [
@@ -3278,6 +3383,56 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Uc', label: 'Perda de calor da câmara para o ambiente U (por m² de bandeja)', u: 'W/(m²·K)', def: 5 },
       { k: 'Tmax', label: 'Temperatura máxima do ar admitida pelo produto (qualidade)', u: '°C', def: 65 },
       { k: 'vw', label: 'Vento na secagem ao sol aberto (comparação)', u: 'm/s', def: 1.5, when: notCont }] },
+    centrifuge: { label: 'Centrífuga de discos: desnate do leite (creme + leite desnatado) ou degomagem do óleo de soja (óleo degomado + gomas)', cat: 'Separadores/Vasos', ins: ['feed'], outs: ['light', 'heavy', 'sludge'], eins: ['q_in'], params: [
+      { k: 'app', label: 'Aplicação', type: 'select', options: [CF_LEITE, CF_SOJA], def: CF_LEITE, presets: CF_PRESETS },
+      { k: 'model', label: 'Balanço do desnate', type: 'select', options: [CF_BAL, CF_ORIG], def: CF_BAL, when: cfMilk },
+      { k: 'Fv', label: 'Vazão de alimentação' + SEMC, u: 'L/h', def: 100 },
+      { k: 'rhoF', label: 'Massa específica da alimentação' + SEMC, u: 'kg/m³', def: 1030 },
+      { k: 'Tf', label: 'Temperatura de separação' + SEMC, u: '°C', def: 50 },
+      { k: 'fle', label: 'Gordura no leite integral' + SEMC, u: '%', def: 3.5, when: cfMilk },
+      { k: 'fn', label: 'Gordura no creme de leite (nata)', u: '%', type: 'range', min: 18, max: 60, step: 0.5, def: 37, when: cfMilk },
+      { k: 'flm', label: 'Gordura no leite desnatado', u: '%', def: 0.03, when: cfMilk },
+      { k: 'efic', label: 'Eficiência da centrífuga (só no programa original)', u: '%', def: 40, when: q => cfMilk(q) && /^programa/.test(q.model || '') },
+      { k: 'xPL0', label: 'Fosfolipídios no óleo bruto' + SEMC, u: '%', def: 2.5, when: cfOil },
+      { k: 'xW0', label: 'Água na alimentação (umidade + água de hidratação)' + SEMC, u: '%', def: 2.3, when: cfOil },
+      { k: 'xPLd', label: 'Fosfolipídios que ficam no óleo degomado', u: '%', def: 0.2, when: cfOil },
+      { k: 'xWd', label: 'Umidade do óleo degomado', u: '%', def: 0.3, when: cfOil },
+      { k: 'rOil', label: 'Óleo arrastado nas gomas (kg de óleo/kg de fosfolipídio)', u: 'kg/kg', def: 0.5, when: cfOil },
+      { k: 'plodo', label: 'Lodo descarregado (fração da alimentação)', u: '%', def: 0.05 },
+      { k: 'rpm', label: 'Velocidade de rotação', u: 'rpm', type: 'range', min: 1000, max: 12000, step: 100, def: 5000 },
+      { k: 'Nd', label: 'Número de discos', u: '', def: 20 },
+      { k: 'r1', label: 'Raio interno dos discos', u: 'm', def: 0.02 },
+      { k: 'r2', label: 'Raio externo dos discos', u: 'm', def: 0.06 },
+      { k: 'ang', label: 'Semiângulo do cone dos discos (com o eixo)', u: '°', def: 50 },
+      { k: 'rhoL', label: 'Massa específica da fase leve (gordura ou óleo)', u: 'kg/m³', def: 905 },
+      { k: 'rhoH', label: 'Massa específica da fase pesada (leite desnatado ou gomas)', u: 'kg/m³', def: 1025 },
+      { k: 'mu', label: 'Viscosidade da fase contínua', u: 'mPa·s', def: 0.9 },
+      { k: 'rec1', label: 'Módulo I: recuperação atual do componente mais leve', u: '%', def: 50 },
+      { k: 'rec2', label: 'Módulo I: recuperação desejada', u: '%', def: 90 },
+      { k: 'Qm1', label: 'Módulo I: vazão volumétrica (vazio = a da alimentação)', u: 'L/min', def: 60 }] },
+    pasteurizer: { label: 'Pasteurizador contínuo HTST de placas: regeneração, aquecimento, tubo de retenção e resfriamento', cat: 'Trocadores de calor', ins: ['feed'], outs: ['out'], eins: ['q_in'], eouts: ['q_out'], params: [
+      { k: 'Tp', label: 'Temperatura de pasteurização', u: '°C', type: 'range', min: 60, max: 95, step: 0.5, def: 75 },
+      { k: 'th', label: 'Tempo de retenção', u: 's', def: 15 },
+      { k: 'eps', label: 'Eficiência da regeneração (fração do calor recuperado)', u: '0–1', type: 'range', min: 0, max: 0.95, step: 0.01, def: 0.9 },
+      { k: 'Tout', label: 'Temperatura de saída do produto', u: '°C', def: 4 },
+      { k: 'Thw', label: 'Água quente na entrada da seção de aquecimento', u: '°C', def: 85 },
+      { k: 'dThw', label: 'Queda de temperatura da água quente', u: '°C', def: 5 },
+      { k: 'Tcw', label: 'Água gelada na entrada da seção de resfriamento', u: '°C', def: 1 },
+      { k: 'dTcw', label: 'Aumento de temperatura da água gelada', u: '°C', def: 3 },
+      { k: 'Ureg', label: 'U da regeneração (produto–produto)', u: 'W/(m²·K)', def: 3000 },
+      { k: 'Uh', label: 'U da seção de aquecimento', u: 'W/(m²·K)', def: 3500 },
+      { k: 'Uc', label: 'U da seção de resfriamento', u: 'W/(m²·K)', def: 3200 },
+      { k: 'Dh', label: 'Diâmetro interno do tubo de retenção', u: 'm', def: 0.05 },
+      { k: 'muH', label: 'Viscosidade do produto na pasteurização', u: 'mPa·s', def: 0.7 },
+      { k: 'D72', label: 'Microrganismo de referência: D a 72 °C (Coxiella burnetii: 1,88 s)', u: 's', def: 1.88 },
+      { k: 'z', label: 'Microrganismo de referência: valor z (C. burnetii: 4,34 °C)', u: '°C', def: 4.34 },
+      { k: 'nmin', label: 'Reduções decimais exigidas (Codex: 5)', u: 'log', def: 5 }] },
+    butter_churn: { label: 'Batedeira contínua de manteiga: creme de leite → manteiga + leitelho', cat: 'Separadores/Vasos', ins: ['feed'], outs: ['butter', 'buttermilk'], eouts: ['q_out'], params: [
+      { k: 'fb', label: 'Gordura na manteiga', u: '%', def: 82 },
+      { k: 'wb', label: 'Umidade da manteiga', u: '%', def: 16 },
+      { k: 'fbm', label: 'Gordura no leitelho', u: '%', def: 0.5 },
+      { k: 'Tb', label: 'Temperatura de bateção (o creme é resfriado até ela)', u: '°C', def: 12 },
+      { k: 'Pm', label: 'Potência específica do batedor', u: 'kWh/t de creme', def: 3 }] },
     cstr: { label: 'Reator CSTR', cat: 'Reatores', ins: ['in'], outs: ['out'], params: [
       { k: 'V', label: 'Volume', u: 'm³', def: 1 }, { k: 'mode', label: 'Regime', type: 'select', options: ['permanente', 'transiente', 'batelada'], def: 'permanente' },
       { k: 'thermal', label: 'Energia', type: 'select', options: ['isotérmico', 'adiabático', 'camisa'], def: 'isotérmico' },
@@ -3409,6 +3564,40 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'k50', label: 'Constantes a 50 °C, L/(mol·min): k1 k2 (TG⇌DG), k3 k4 (DG⇌MG), k5 k6 (MG⇌GL)', type: 'matrix', def: '0.050 0.110\n0.215 1.228\n0.242 0.007', when: notCont },
       { k: 'Ea', label: 'Energias de ativação (cal/mol), na mesma ordem', type: 'matrix', def: '13145 9932\n19860 14639\n6421 9588', when: notCont },
       { k: 'spec', label: 'Teor mínimo de ésteres exigido no biodiesel (EN 14214 / ANP)', u: '% massa', def: 96.5, when: notCont }] },
+    biodigester: { label: 'Biodigestor anaeróbio (modelo indiano ou chinês, carga diária): dejetos → biogás + biofertilizante', cat: 'Bioprocessos', ins: ['feed', 'water'], outs: ['biogas', 'digestate'], eins: ['q_in'], params: [
+      { k: 'metodo', label: 'Cálculo da produção de biogás', type: 'select', options: [BD_PLAN, BD_CH], def: BD_PLAN },
+      { k: 'boi', label: 'Esterco de bovinos (carga diária)' + SEMC, u: 'kg/dia', def: 10 },
+      { k: 'porco', label: 'Esterco de suínos (carga diária)' + SEMC, u: 'kg/dia', def: 20 },
+      { k: 'cavalo', label: 'Esterco de equinos (carga diária)' + SEMC, u: 'kg/dia', def: 30 },
+      { k: 'galinha', label: 'Esterco de aves (carga diária)' + SEMC, u: 'kg/dia', def: 40 },
+      { k: 'vegetal', label: 'Resíduos vegetais (carga diária)' + SEMC, u: 'kg/dia', def: 100 },
+      { k: 'Tf', label: 'Temperatura da carga' + SEMC, u: '°C', def: 25 },
+      { k: 'dil', label: 'Água de diluição por kg de dejeto (sem corrente de água)', u: 'kg/kg', def: 1.5 },
+      { k: 'TRH', label: 'Tempo de retenção hidráulica (TRH)', u: 'dias', type: 'range', min: 10, max: 90, step: 1, def: 40 },
+      { k: 'Top', label: 'Temperatura do biodigestor (sem aquecimento = ambiente)', u: '°C', type: 'range', min: 15, max: 55, step: 0.5, def: 25 },
+      { k: 'Tamb', label: 'Temperatura ambiente (perdas de calor)', u: '°C', def: 25 },
+      { k: 'U', label: 'Coeficiente global de perda das paredes', u: 'W/(m²·K)', def: 0.6 },
+      { k: 'xCH4', label: 'Metano no biogás', u: '% em volume', def: 60 },
+      { k: 'h2s', label: 'Gás sulfídrico (H₂S) no biogás', u: 'ppm em volume', def: 1500 },
+      { k: 'yBoi', label: 'Rendimento da planilha: esterco de bovinos', u: 'L de biogás/kg', def: 36, when: bdPlan },
+      { k: 'yPorco', label: 'Rendimento da planilha: esterco de suínos', u: 'L de biogás/kg', def: 52, when: bdPlan },
+      { k: 'yCavalo', label: 'Rendimento da planilha: esterco de equinos', u: 'L de biogás/kg', def: 100, when: bdPlan },
+      { k: 'yGalinha', label: 'Rendimento da planilha: esterco de aves', u: 'L de biogás/kg', def: 240, when: bdPlan },
+      { k: 'yVegetal', label: 'Rendimento da planilha: resíduos vegetais', u: 'L de biogás/kg', def: 25, when: bdPlan },
+      { k: 'B0boi', label: 'B₀ do esterco de bovinos', u: 'm³ CH₄/kg SV', def: 0.24, when: bdCH },
+      { k: 'B0porco', label: 'B₀ do esterco de suínos', u: 'm³ CH₄/kg SV', def: 0.48, when: bdCH },
+      { k: 'B0cavalo', label: 'B₀ do esterco de equinos', u: 'm³ CH₄/kg SV', def: 0.30, when: bdCH },
+      { k: 'B0galinha', label: 'B₀ do esterco de aves', u: 'm³ CH₄/kg SV', def: 0.39, when: bdCH },
+      { k: 'B0vegetal', label: 'B₀ dos resíduos vegetais', u: 'm³ CH₄/kg SV', def: 0.30, when: bdCH },
+      { k: 'horas', label: 'Armazenamento no gasômetro', u: 'h de produção', def: 12 },
+      { k: 'etaG', label: 'Rendimento elétrico do motor-gerador', u: '%', def: 30 },
+      { k: 'eqv', label: 'Equivalência com outros combustíveis', type: 'select', options: [BD_EQ_PL, BD_EQ_PCI], def: BD_EQ_PL },
+      { k: 'cLamp', label: 'Consumo do lampião', u: 'L de biogás/h', def: 140 },
+      { k: 'cFog', label: 'Consumo do fogão', u: 'L/dia por pessoa', def: 340 },
+      { k: 'cMot', label: 'Consumo do motor', u: 'L/(hp·h)', def: 450 },
+      { k: 'cGel', label: 'Consumo da geladeira', u: 'L/dia', def: 2000 },
+      { k: 'cInc', label: 'Consumo da incubadora', u: 'L/h por 100 L de capacidade', def: 50 }
+    ] },
     pid_cstr: { label: 'Controle PID de CSTR contínuo (não linear) — sintonia com barras deslizantes', cat: 'Controle', ins: ['feed'], outs: ['product'], params: [
       { k: 'mv', label: 'Variável manipulada', type: 'select', options: ['vazão de alimentação F (não linear, como no código)', 'concentração de alimentação C_A0 (linear, como na figura)'], def: 'vazão de alimentação F (não linear, como no código)' },
       { k: 'Kp', label: 'Ganho proporcional Kp', u: '', type: 'range', min: 0, max: 30, step: 0.1, def: 5 },
@@ -5814,6 +6003,278 @@ window.SIMULAFACIL_CONFIG = {
     plots.push(etaPlot(X0));
     return { out: {}, duty: Pb / etaG, res: decBR(res), warn: decW(warn), plots, mwb: { Mb, Ms, X0, T0, Xf, Xe, Xa, etaM, etaG, cps, Tp, lam: kin.lam, Pb, tf, th: th_, E, Eabs, Eel, e, Dp } };
   };
+  // calor sensível (W) de uma corrente de alimento entre T1 e T2 (°C) pelo c_p de Choi e Okos (regra de Simpson); null se a corrente não for alimento
+  function foodHeat(th, kg, T1, T2) {
+    const a = TH.foodMix ? TH.foodMix(th.ids, kg, T1) : null; if (!a) return bevHeat(th, kg, T1, T2);
+    const b = TH.foodMix(th.ids, kg, T2), m = TH.foodMix(th.ids, kg, (T1 + T2) / 2);
+    return sum(kg) / 3600 * (a.cp + 4 * m.cp + b.cp) / 6 * (T2 - T1) * 1000;
+  }
+  // bebidas e soluções aquosas (água, etanol, açúcares, extrato, ácidos e gases dissolvidos): c_p pela média mássica, em kJ/(kg·K)
+  const GASES_DISS = ['co2', 'oxygen', 'nitrogen', 'methane', 'hydrogen', 'cs-hydrogen-sulfide'];
+  function bevCp(th, kg, T) {
+    let m = 0, q = 0;
+    for (let i = 0; i < th.n; i++) { const w = kg[i]; if (!(w > 0)) continue; const c = th.c[i]; let cp;
+      if (c.id === 'water') cp = 4.18; else if (c.id === 'ethanol') cp = 2.30 + 0.0072 * T;
+      else if (c.food && c.food.dryComp && TH.choiOkos) cp = TH.choiOkos(c.food.dryComp, T).cp;
+      else if (c.nv || c.solid) cp = (c.cpl || 150) / c.mw; else if (GASES_DISS.indexOf(c.id) >= 0) cp = 0.85; else return null;
+      m += w; q += w * cp; }
+    return m > 0 ? q / m : null;
+  }
+  function bevRho(th, kg) {   // kg/m³: água + etanol pela tabela da OIML, mais os sólidos dissolvidos (0,385 kg/L por kg/L)
+    const iw = th.ids.indexOf('water'), ie = th.ids.indexOf('ethanol'), tot = sum(kg); if (iw < 0 || !TH.rhoHidro || !(tot > 0)) return null;
+    const we = ie >= 0 ? kg[ie] / (kg[ie] + kg[iw]) : 0, sol = th.c.reduce((a, c, i) => a + (c.nv || c.solid ? kg[i] : 0), 0) / tot;
+    return 1000 * TH.rhoHidro(we > 0 ? TH.alcVV(we) : 0) / (1 - 0.385 * sol);
+  }
+  function bevHeat(th, kg, T1, T2) {
+    const iw = th.ids.indexOf('water'); if (iw < 0 || !(kg[iw] > 0.3 * sum(kg))) return null;   // só soluções aquosas
+    const a = bevCp(th, kg, T1); if (a == null) return null; const m = bevCp(th, kg, (T1 + T2) / 2), b = bevCp(th, kg, T2);
+    return sum(kg) / 3600 * (a + 4 * m + b) / 6 * (T2 - T1) * 1000;
+  }
+  /* ------------------------------------------------------------------ centrífuga de discos (separador): desnate do leite ou degomagem do óleo de soja.
+     Balanço do desnate (gordura): C = F'(f_L − f_D)/(f_C − f_D), D = F' − C, com F' = F − lodo; o plasma (água + sólidos não gordurosos) se reparte
+     com a mesma proporção da alimentação. Programa original (Gustavo Brito e Juan Bosch, Flash MX): razão = η(f_L − f_D)/(f_C − f_D), D = F/(1 + razão).
+     Degomagem: D = (O − r·P)/(1 − x_PL(1 + r) − x_W) para o óleo degomado; o resto (fosfolipídios hidratados, água e o óleo arrastado) sai nas gomas.
+     Teoria Σ (Ambler): Σ = 2πNω²(r₂³ − r₁³)/(3g·tan θ); glóbulo crítico d_c = [18μQ/(Δρ·g·Σ)]^½. Módulo I do original: ω₂ = ω·(rec₂/rec₁)^½ e Q₂ = Q·rec₁/rec₂. */
+  IMPL.centrifuge = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, milk = cfMilk(p), g = 9.81;
+    const iw = th.ids.indexOf('water'), iF = th.ids.indexOf('milk-fat'), iS = th.ids.indexOf('milk-snf'), iO = th.ids.indexOf('soy-oil'), iP = th.ids.indexOf('lecithin');
+    const conn = connected(s);
+    let kg, F, T, rho, Fv;
+    if (conn) {
+      kg = kgOf(th, s); F = sum(kg); T = K2C(s.T);
+      const fp = TH.foodMix ? TH.foodMix(th.ids, kg, T) : null; rho = fp ? fp.rho : num(p.rhoF, milk ? 1030 : 915); Fv = F / rho * 1000;
+    } else {
+      Fv = num(p.Fv, 100); rho = num(p.rhoF, milk ? 1030 : 915); T = num(p.Tf, milk ? 50 : 70); F = Fv * rho / 1000;
+      if (!(Fv > 0 && rho > 0)) throw new Error('vazão e massa específica da alimentação devem ser positivas');
+    }
+    const plodo = num(p.plodo, 0.05) / 100; if (!(plodo >= 0 && plodo < 0.2)) throw new Error('o lodo deve ficar entre 0 e 20 % da alimentação');
+    const L = F * plodo, Fp = F - L, res = [], plots = [], col = ['#2563c9', '#e8a317', '#2e9e6b', '#8a8f98'];
+    let out = {}, light = 0, heavy = 0, rep = {};
+    if (milk) {
+      // gordura e sólidos não gordurosos da alimentação
+      let fat, snf, water;
+      if (conn) {
+        fat = 0; snf = 0; water = iw >= 0 ? kg[iw] : 0;
+        th.c.forEach((c, i) => { if (i === iw || !(kg[i] > 0)) return; const f = c.food ? c.food.dryComp.f : (c.nv || c.solid ? 0 : NaN); if (isNaN(f)) { warn.push(c.name + ' (volátil) foi tratado como plasma do leite'); snf += kg[i]; return; } fat += kg[i] * f; snf += kg[i] * (1 - f); });
+        if (!(fat > 0)) throw new Error('a alimentação não tem gordura: use o componente "Gordura do leite" (ou a mistura pronta "Leite cru integral" no campo Alimento ou lodo da corrente)');
+      } else { const fl = num(p.fle, 3.5) / 100; fat = F * fl; snf = (F - fat) / 11; water = F - fat - snf; }   // plasma com 1/11 de sólidos, como no programa original
+      const fle = 100 * fat / F, rS = snf / (snf + water), fn = num(p.fn, 37), flm = num(p.flm, 0.03), orig = /^programa/.test(p.model || '');
+      if (!(fn > fle && fle > flm && flm >= 0 && fn < 100)) throw new Error('as gorduras devem obedecer: desnatado (' + flm + ' %) < leite (' + fle.toFixed(2) + ' %) < creme (' + fn + ' %)');
+      let C, D;
+      if (!orig) { C = Fp * (fle - flm) / (fn - flm); D = Fp - C; }
+      else { const efic = num(p.efic, 40); const razao = efic / 100 * (fle - flm) / (fn - flm); D = Fp / (1 + razao); C = Fp - D; }
+      const fatC = C * fn / 100, fatD = D * flm / 100, fatL = L * fle / 100, fatOut = fatC + fatD + fatL;
+      if (orig && Math.abs(fatOut - fat) > 1e-6 * fat) warn.push('programa original: o balanço de gordura não fecha (entram ' + fat.toFixed(3) + ' kg/h e saem ' + fatOut.toFixed(3) + ' kg/h); a eficiência multiplica a razão creme/desnatado. Use o balanço de gordura para fechar a massa');
+      const comp = (M, f) => { const pl = M * (1 - f / 100); return { fat: M * f / 100, snf: pl * rS, water: pl * (1 - rS) }; };
+      const cC = comp(C, fn), cD = comp(D, flm), cL = comp(L, fle);
+      const recF = 100 * fatC / fat, an = 100 * cC.water / C, esn = 100 * cC.snf / C, eslm = 100 * cD.snf / D, esle = 100 * snf / F;
+      light = C; heavy = D;
+      res.push({ k: 'Aplicação', v: 'desnate do leite (' + (orig ? 'programa original de Gustavo Brito e Juan Bosch' : 'balanço de gordura') + ')' + (conn ? ', alimentação pela corrente' : ', alimentação pelos campos'), u: '' },
+        { k: 'Leite integral: vazão / gordura / massa específica', v: Fv.toFixed(1) + ' L/h = ' + F.toFixed(2) + ' kg/h / ' + fle.toFixed(3) + ' % / ' + rho.toFixed(1) + ' kg/m³', u: '' },
+        { k: 'Vazão mássica de creme de leite (nata, ' + br(fn) + ' % de gordura)', v: +C.toFixed(3), u: 'kg/h' },
+        { k: 'Vazão mássica de leite desnatado (' + br(flm) + ' % de gordura)', v: +D.toFixed(3), u: 'kg/h' },
+        { k: 'Lodo descarregado (sedimento: células, sujeira e leite arrastado)', v: +L.toFixed(4), u: 'kg/h' },
+        { k: 'Proporção de creme de leite (C/F)', v: (100 * C / F).toFixed(2) + ' %' + (orig ? ' (fórmula do original, 100(f_L − f_D)/f_C: ' + (100 * (fle - flm) / fn).toFixed(2) + ' %)' : ''), u: '' },
+        { k: 'Recuperação da gordura no creme', v: recF.toFixed(2) + ' %', u: '' },
+        { k: 'Conteúdo de água no creme', v: an.toFixed(2) + ' %', u: '' },
+        { k: 'Extrato seco desengordurado: creme / desnatado / leite integral', v: esn.toFixed(2) + ' / ' + eslm.toFixed(2) + ' / ' + esle.toFixed(2) + ' %', u: '' },
+        { k: 'Sólidos totais: creme / desnatado', v: (fn + esn).toFixed(2) + ' / ' + (flm + eslm).toFixed(2) + ' %', u: '' });
+      rep = { fat, snf, water, fle, fn, flm, C, D, L, cC, cD, cL, rS, orig };
+      if (conn && iF >= 0 && iS >= 0 && iw >= 0) {
+        const mk = (o, T_) => { const k2 = new Array(th.n).fill(0); k2[iF] = o.fat; k2[iS] = o.snf; k2[iw] = o.water; return mkStream(th, flowsOfKg(th, k2), C2K(T_), s.P); };
+        out = { light: mk(cC, T), heavy: mk(cD, T) }; if (L > 0) out.sludge = mk(cL, T);
+      } else if (conn) warn.push('para ver as correntes de saída, use os componentes água, "Gordura do leite" e "Sólidos não gordurosos do leite" (mistura pronta "Leite cru integral" no campo Alimento ou lodo da corrente)');
+      // gráficos
+      plots.push({ kind: 'bars', title: 'Balanço do desnate: vazão total e gordura de cada corrente', data: { categories: ['Leite integral', 'Creme de leite', 'Leite desnatado', 'Lodo'], yLabel: 'kg/h', series: [
+        { name: 'Vazão total (kg/h)', y: [F, C, D, L], color: col[0] }, { name: 'Gordura × 10 (kg/h)', y: [fat * 10, fatC * 10, fatD * 10, fatL * 10], color: col[1] }] } });
+      const fx = [], cy = [], ry = []; for (let i = 0; i <= 80; i++) { const f = Math.max(fle * 1.5, 15) + (60 - Math.max(fle * 1.5, 15)) * i / 80; fx.push(f); const c = Fp * (fle - flm) / (f - flm); cy.push(c); ry.push(100 * c * f / 100 / fat); }
+      plots.push({ kind: 'curves', title: 'Efeito do teor de gordura do creme: vazão de creme (balanço de gordura)', data: { xLabel: 'Gordura no creme (%)', yLabel: 'Creme (kg/h)', series: [
+        { name: 'Vazão de creme', x: fx, y: cy, color: col[1], width: 3.5 }, { name: 'Condição atual', x: [fn], y: [C], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }] } });
+    } else {
+      // degomagem do óleo de soja
+      let O, P, W;
+      if (conn) {
+        if (iO < 0 || iP < 0) throw new Error('para a degomagem, use os componentes "Óleo de soja" e "Fosfolipídios: lecitina de soja" (mistura pronta "Óleo de soja bruto"), mais água de hidratação');
+        O = 0; P = kg[iP] || 0; W = iw >= 0 ? kg[iw] : 0;
+        th.c.forEach((c, i) => { if (i !== iw && i !== iP) O += kg[i]; });
+      } else { const xP = num(p.xPL0, 2.5) / 100, xW = num(p.xW0, 2.3) / 100; P = F * xP; W = F * xW; O = F - P - W; }
+      O *= 1 - plodo; P *= 1 - plodo; W *= 1 - plodo;
+      const xPd = num(p.xPLd, 0.2) / 100, xWd = num(p.xWd, 0.3) / 100, r = num(p.rOil, 0.5);
+      if (!(P > 0)) throw new Error('a alimentação não tem fosfolipídios para remover');
+      const Dg = (O - r * P) / (1 - xPd * (1 + r) - xWd);
+      if (!(Dg > 0)) throw new Error('o óleo arrastado nas gomas passa do óleo disponível: reduza o óleo arrastado (kg/kg)');
+      const PLd = xPd * Dg, Wd = xWd * Dg, Od = Dg - PLd - Wd, PLg = P - PLd, Og = O - Od, Wg = W - Wd, G = PLg + Og + Wg;
+      if (!(PLg > 0)) throw new Error('o óleo degomado ficaria com mais fosfolipídios do que entram: reduza o teor residual');
+      if (!(Wg >= 0)) throw new Error('falta água de hidratação: a água da alimentação (' + W.toFixed(2) + ' kg/h) não cobre a umidade do óleo degomado; acrescente água antes da centrífuga');
+      const ratio = W / P;
+      if (ratio < 0.7) warn.push('água de hidratação de ' + ratio.toFixed(2) + ' kg/kg de fosfolipídio: abaixo de ~0,7 a hidratação fica incompleta (use de 0,75 a 1 kg/kg)');
+      if (ratio > 1.5) warn.push('água de hidratação de ' + ratio.toFixed(2) + ' kg/kg de fosfolipídio: excesso de água aumenta a perda de óleo nas gomas e o custo de secagem');
+      const lec = (PLg + Og) / 0.99, AI = 100 * PLg / (PLg + Og), ppmP = PLd / Dg * 1e6 / 30;
+      light = Dg; heavy = G;
+      res.push({ k: 'Aplicação', v: 'degomagem do óleo de soja com água' + (conn ? ', alimentação pela corrente' : ', alimentação pelos campos'), u: '' },
+        { k: 'Alimentação: óleo / fosfolipídios / água', v: (O / (1 - plodo)).toFixed(2) + ' / ' + (P / (1 - plodo)).toFixed(2) + ' / ' + (W / (1 - plodo)).toFixed(2) + ' kg/h (' + Fv.toFixed(0) + ' L/h)', u: '' },
+        { k: 'Água de hidratação por fosfolipídio', v: +ratio.toFixed(3), u: 'kg/kg' },
+        { k: 'Óleo degomado (fase leve)', v: +Dg.toFixed(3), u: 'kg/h' },
+        { k: 'Óleo degomado: fosfolipídios / fósforo (≈ fosfolipídios ÷ 30) / umidade', v: (100 * xPd).toFixed(2) + ' % / ' + ppmP.toFixed(0) + ' ppm / ' + (100 * xWd).toFixed(2) + ' %', u: '' },
+        { k: 'Gomas úmidas (fase pesada)', v: +G.toFixed(3), u: 'kg/h' },
+        { k: 'Gomas úmidas: fosfolipídios / óleo / água', v: (100 * PLg / G).toFixed(1) + ' / ' + (100 * Og / G).toFixed(1) + ' / ' + (100 * Wg / G).toFixed(1) + ' %', u: '' },
+        { k: 'Fosfolipídios removidos do óleo', v: (100 * PLg / P).toFixed(2) + ' %', u: '' },
+        { k: 'Perda de óleo nas gomas (fração do óleo)', v: (100 * Og / O).toFixed(3) + ' %', u: '' },
+        { k: 'Lecitina obtida ao secar as gomas a 1 % de umidade', v: lec.toFixed(3) + ' kg/h (insolúveis em acetona: ' + AI.toFixed(1) + ' %)', u: '' },
+        { k: 'Lodo descarregado', v: +L.toFixed(4), u: 'kg/h' });
+      if (AI < 60) warn.push('a lecitina teria ' + AI.toFixed(1) + ' % de insolúveis em acetona: a lecitina comercial tem pelo menos 60 a 62 %; reduza o óleo arrastado nas gomas');
+      rep = { O, P, W, Dg, PLd, Wd, Od, G, PLg, Og, Wg, lec, AI, ppmP, ratio, xPd, xWd, r };
+      if (conn && iw >= 0) {
+        const mk = (o, ol, w, T_) => { const k2 = new Array(th.n).fill(0); k2[iP] = o; k2[iO] = ol; k2[iw] = w; return mkStream(th, flowsOfKg(th, k2), C2K(T_), s.P); };
+        out = { light: mk(PLd, Od, Wd, T), heavy: mk(PLg, Og, Wg, T) };
+        if (L > 0) { const k2 = kg.map(v => v * plodo); out.sludge = mkStream(th, flowsOfKg(th, k2), C2K(T), s.P); }
+      } else if (conn) warn.push('inclua a água entre os componentes para ver as correntes de saída');
+      plots.push({ kind: 'bars', title: 'Balanço da degomagem: óleo, fosfolipídios e água em cada corrente', data: { categories: ['Alimentação', 'Óleo degomado', 'Gomas úmidas'], yLabel: 'kg/h', series: [
+        { name: 'Óleo (kg/h ÷ 10)', y: [O / 10, Od / 10, Og / 10], color: col[1] }, { name: 'Fosfolipídios (kg/h)', y: [P, PLd, PLg], color: col[2] }, { name: 'Água (kg/h)', y: [W, Wd, Wg], color: col[0] }] } });
+      const rx = [], ly = [], ay = []; for (let i = 0; i <= 60; i++) { const rr = 0.2 + 1.3 * i / 60; rx.push(rr); const D2 = (O - rr * P) / (1 - xPd * (1 + rr) - xWd), Og2 = O - (D2 - xPd * D2 - xWd * D2); ly.push(100 * Og2 / O); ay.push(100 * (P - xPd * D2) / (P - xPd * D2 + Og2)); }
+      plots.push({ kind: 'curves', title: 'Óleo arrastado nas gomas: perda de óleo e qualidade da lecitina', data: { xLabel: 'Óleo arrastado (kg/kg de fosfolipídio)', yLabel: 'Perda de óleo (%) · insolúveis em acetona (%) ÷ 10', series: [
+        { name: 'Perda de óleo nas gomas (%)', x: rx, y: ly, color: col[1], width: 3.5 }, { name: 'Insolúveis em acetona da lecitina ÷ 10 (%)', x: rx, y: ay.map(v => v / 10), color: col[2], width: 3, dash: 'dash' },
+        { name: 'Condição atual', x: [r], y: [100 * Og / O], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }] } });
+    }
+    // teoria Σ, glóbulo crítico e potência
+    const rpm = num(p.rpm, 5000), Nd = num(p.Nd, 20), r1 = num(p.r1, 0.02), r2 = num(p.r2, 0.06), ang = num(p.ang, 50) * Math.PI / 180;
+    const rhoL = num(p.rhoL, 905), rhoH = num(p.rhoH, 1025), mu = num(p.mu, 0.9) / 1000;
+    if (!(rpm > 0 && Nd >= 1 && r2 > r1 && r1 >= 0 && ang > 0 && ang < Math.PI / 2 && mu > 0)) throw new Error('confira a rotação, os discos (r₂ > r₁), o ângulo (0 a 90°) e a viscosidade');
+    const w = rpm * 2 * Math.PI / 60, Sig = 2 * Math.PI * Nd * w * w * (Math.pow(r2, 3) - Math.pow(r1, 3)) / (3 * g * Math.tan(ang)), Q = Fv / 1000 / 3600, dr = Math.abs(rhoH - rhoL);
+    if (!(dr > 0)) throw new Error('as massas específicas das fases leve e pesada devem ser diferentes');
+    const dc = Math.sqrt(18 * mu * Q / (dr * g * Sig)), vt = w * r2, Pw = F / 3600 * vt * vt, G_ = w * w * r2 / g;
+    if (vt > 200) warn.push('velocidade periférica de ' + vt.toFixed(0) + ' m/s: acima de ~200 m/s o tambor não resiste à tensão; reduza a rotação ou o raio');
+    const Q1 = p.Qm1 === '' || p.Qm1 == null ? Fv / 60 : num(p.Qm1, 60), rec1 = num(p.rec1, 50), rec2 = num(p.rec2, 90);
+    if (!(rec1 > 0 && rec2 > 0 && rec1 <= 100 && rec2 <= 100)) throw new Error('as recuperações do módulo I devem ficar entre 0 e 100 %');
+    const vd = Q1 * rec1 / rec2, w2 = Math.sqrt(rpm * rpm / (vd / Q1));
+    res.push({ k: 'Fator de separação (ω²r₂/g) / velocidade periférica', v: G_.toFixed(0) + ' g / ' + vt.toFixed(1) + ' m/s', u: '' },
+      { k: 'Área equivalente Σ (' + Nd + ' discos, r de ' + br(r1) + ' a ' + br(r2) + ' m)', v: Sig.toFixed(0) + ' m²', u: '' },
+      { k: milk ? 'Diâmetro crítico do glóbulo de gordura (separado por completo)' : 'Diâmetro crítico da partícula de gomas (separada por completo)', v: (dc * 1e6).toFixed(3) + ' µm', u: '' },
+      { k: 'Potência mínima do motor (acelerar o líquido até a periferia, ṁω²r₂²)', v: +(Pw / 1000).toFixed(3), u: 'kW' },
+      { k: 'Módulo I: vazão para a recuperação desejada (mesma rotação)', v: vd.toFixed(3) + ' L/min (com ' + Q1.toFixed(2) + ' L/min e ' + br(rec1) + ' % → ' + br(rec2) + ' %)', u: '' },
+      { k: 'Módulo I: velocidade para a recuperação desejada (mesma vazão)', v: w2.toFixed(1) + ' rpm', u: '' });
+    if (milk && dc > 2e-6) warn.push('o diâmetro crítico (' + (dc * 1e6).toFixed(2) + ' µm) passa de ~1 µm: glóbulos de gordura menores escapam para o desnatado; reduza a vazão ou aumente a rotação');
+    const qx = [], dset = [0.8, 1, 1.2].map(() => []); for (let i = 1; i <= 80; i++) { const qq = Fv * 2.5 * i / 80; qx.push(qq);
+      [0.8, 1, 1.2].forEach((k, j) => { const ww = w * k, SS = 2 * Math.PI * Nd * ww * ww * (Math.pow(r2, 3) - Math.pow(r1, 3)) / (3 * g * Math.tan(ang)); dset[j].push(1e6 * Math.sqrt(18 * mu * qq / 1000 / 3600 / (dr * g * SS))); }); }
+    plots.push({ kind: 'curves', title: 'Teoria Σ: diâmetro crítico × vazão (separação completa acima da curva)', data: { xLabel: 'Vazão (L/h)', yLabel: 'd_c (µm)', series: [
+      { name: (rpm * 0.8).toFixed(0) + ' rpm', x: qx, y: dset[0], color: '#7fa6e8', width: 2.2, dash: 'dash' }, { name: rpm.toFixed(0) + ' rpm', x: qx, y: dset[1], color: col[0], width: 3.5 }, { name: (rpm * 1.2).toFixed(0) + ' rpm', x: qx, y: dset[2], color: '#0b2f80', width: 2.2, dash: 'dash' },
+      { name: 'Operação atual', x: [Fv], y: [dc * 1e6], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }] } });
+    const rx2 = [], wy = [], qy = []; for (let i = 0; i <= 60; i++) { const rr = rec1 + (99 - rec1) * i / 60; rx2.push(rr); wy.push(rpm * Math.sqrt(rr / rec1) / 1000); qy.push(Q1 * rec1 / rr); }
+    plots.push({ kind: 'curves', title: 'Módulo I (programa original): rotação ou vazão para a recuperação desejada', data: { xLabel: 'Recuperação desejada (%)', yLabel: 'rpm ÷ 1000 · vazão (L/min)', series: [
+      { name: 'Rotação, mantida a vazão (rpm ÷ 1000)', x: rx2, y: wy, color: col[0], width: 3.5 }, { name: 'Vazão, mantida a rotação (L/min)', x: rx2, y: qy, color: col[1], width: 3, dash: 'dash' },
+      { name: 'Recuperação desejada', x: [rec2, rec2], y: [w2 / 1000, vd], mode: 'markers', size: 11, symbol: 'diamond', color: '#111' }] } });
+    return { out, duty: Pw, power: true, massUtil: conn ? 0 : F / 3600, res: decBR(res), warn: decW(warn), plots,
+      cen: Object.assign({ milk, F, Fv, T, rho, L, plodo, rpm, Nd, r1, r2, ang: ang * 180 / Math.PI, rhoL, rhoH, mu, Sig, dc, vt, Pw, Q1, rec1, rec2, vd, w2, light, heavy }, rep) };
+  };
+
+  /* ------------------------------------------------------------------ pasteurizador contínuo HTST de placas: regeneração (eficiência ε), aquecimento com água quente,
+     tubo de retenção e resfriamento com água gelada. Produto frio após a regeneração: T₁ = T_e + ε(T_p − T_e); produto quente após a regeneração: T₂ = T_p − ε(T_p − T_e).
+     Letalidade no tubo de retenção: reduções decimais n = t/D(T_p), D(T) = D₇₂·10^((72 − T)/z) (Coxiella burnetii: D₇₂ = 1,88 s e z = 4,34 °C). */
+  IMPL.pasteurizer = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed;
+    if (!connected(s)) throw new Error('conecte a corrente de produto (leite, creme ou suco) na entrada');
+    const Tin = K2C(s.T), Tp = num(p.Tp, 75), th_ = num(p.th, 15), eps0 = num(p.eps, 0.9), Tout = num(p.Tout, 4);
+    if (!(Tp > Tin)) throw new Error('a temperatura de pasteurização (' + Tp + ' °C) deve ser maior que a de entrada do produto (' + Tin.toFixed(1) + ' °C)');
+    if (!(eps0 >= 0 && eps0 < 1)) throw new Error('a eficiência da regeneração deve ficar entre 0 e 1');
+    if (!(th_ > 0)) throw new Error('o tempo de retenção deve ser positivo');
+    if (Tout > Tp) throw new Error('a temperatura de saída não pode passar da de pasteurização');
+    const Pop = Math.max(s.P, 4e5), kgF = kgOf(th, s), isFood = foodHeat(th, kgF, 20, 30) != null;   // alimentos e bebidas: c_p da composição; pasteurizadores trabalham pressurizados: o produto fica líquido
+    const H = T => (isFood ? foodHeat(th, kgF, 0, T) : mkStream(th, s.flows, C2K(T), Pop).H);   // alimentos: c_p de Choi e Okos; demais: entalpia do modelo termodinâmico
+    if (mkStream(th, s.flows, C2K(Tp), Pop).beta > 1e-6) warn.push('parte do produto vaporiza a ' + Tp + ' °C mesmo a 4 bar');
+    let eps = eps0, T1 = Tin + eps * (Tp - Tin), T2 = Tp - eps * (Tp - Tin), cool = true;
+    if (Tout > T2) { eps = (Tp - Tout) / (Tp - Tin); T1 = Tin + eps * (Tp - Tin); T2 = Tout; cool = false; }
+    const Qreg = H(T1) - H(Tin), Qh = H(Tp) - H(T1), Qc = cool ? H(T2) - H(Tout) : 0, M = s.mass * 3600;
+    const cp = (H(Tp) - H(Tin)) / (s.mass * (Tp - Tin)) / 1000;   // kJ/(kg·K) médio
+    const Thw = num(p.Thw, 85), dThw = num(p.dThw, 5), Tcw = num(p.Tcw, 1), dTcw = num(p.dTcw, 3);
+    const Ureg = num(p.Ureg, 3000), Uh = num(p.Uh, 3500), Uc = num(p.Uc, 3200);
+    if (!(Thw > Tp)) throw new Error('a água quente (' + Thw + ' °C) precisa estar acima da temperatura de pasteurização (' + Tp + ' °C)');
+    if (!(Thw - dThw > T1)) throw new Error('a água quente sai a ' + (Thw - dThw) + ' °C, abaixo do produto que entra na seção de aquecimento (' + T1.toFixed(1) + ' °C)');
+    const lmtd = (a, c) => (Math.abs(a - c) < 1e-9 ? a : (a - c) / Math.log(a / c));
+    const dTreg = Tp - T1, Areg = eps > 0 ? Qreg / (Ureg * dTreg) : 0;
+    const dTh = lmtd(Thw - Tp, Thw - dThw - T1), Ah = Qh / (Uh * dTh), mhw = Qh / 1000 / (4.18 * dThw) * 3600;
+    let Ac = 0, mcw = 0, dTc = 0;
+    if (cool) { if (!(Tout > Tcw)) throw new Error('a água gelada (' + Tcw + ' °C) precisa estar abaixo da saída do produto (' + Tout + ' °C)');
+      if (!(T2 > Tcw + dTcw)) throw new Error('a água gelada sai mais quente que o produto que entra no resfriamento');
+      dTc = lmtd(T2 - Tcw - dTcw, Tout - Tcw); Ac = Qc / (Uc * dTc); mcw = Qc / 1000 / (4.18 * dTcw) * 3600; }
+    // tubo de retenção
+    const fp = TH.foodMix ? TH.foodMix(th.ids, kgOf(th, s), Tp) : null, rho = fp ? fp.rho : (bevRho(th, kgOf(th, s)) || 1000), Qv = s.mass / rho, Dh = num(p.Dh, 0.05), muH = num(p.muH, 0.7) / 1000;
+    const Ah_ = Math.PI * Dh * Dh / 4, vel = Qv / Ah_, Lh = vel * th_, Vh = Qv * th_, Re = rho * vel * Dh / muH, fast = Re > 4000 ? 1.22 : Re < 2100 ? 2 : 1.6, tmin = th_ / fast;
+    // letalidade
+    const D72 = num(p.D72, 1.88), z = num(p.z, 4.34), nmin = num(p.nmin, 5), DT = D72 * Math.pow(10, (72 - Tp) / z), nlog = th_ / DT, nfast = tmin / DT, F72 = th_ * Math.pow(10, (Tp - 72) / z);
+    if (Tp < 72) warn.push('abaixo de 72 °C a pasteurização HTST não é aceita pela legislação (72 a 75 °C por 15 a 20 s)');
+    if (nfast < nmin) warn.push('a partícula mais rápida do tubo (' + tmin.toFixed(1) + ' s) recebe só ' + nfast.toFixed(1) + ' reduções decimais, menos que as ' + nmin + ' exigidas: aumente o tubo ou a temperatura');
+    if (Re < 4000) warn.push('escoamento ' + (Re < 2100 ? 'laminar' : 'de transição') + ' no tubo de retenção (Re = ' + Re.toFixed(0) + '): a partícula mais rápida passa em ' + tmin.toFixed(1) + ' s; reduza o diâmetro');
+    const out = { out: mkStream(th, s.flows, C2K(Tout), s.P) };
+    const res = [{ k: 'Produto: vazão / temperatura de entrada / c_p médio' + (isFood ? (fp ? ' (Choi e Okos)' : ' (média mássica: água, etanol e sólidos)') : ''), v: M.toFixed(1) + ' kg/h (' + (Qv * 3.6e6).toFixed(0) + ' L/h) / ' + Tin.toFixed(1) + ' °C / ' + cp.toFixed(3) + ' kJ/(kg·K)', u: '' },
+      { k: 'Temperaturas: após a regeneração (frio) / pasteurização / após a regeneração (quente) / saída', v: T1.toFixed(1) + ' / ' + br(Tp) + ' / ' + T2.toFixed(1) + ' / ' + br(Tout) + ' °C', u: '' },
+      { k: 'Eficiência da regeneração usada', v: (100 * eps).toFixed(1) + ' %' + (cool ? '' : ' (saída quente a ' + br(Tout) + ' °C: a regeneração para em ' + br(Tout) + ' °C e não há seção de resfriamento)'), u: '' },
+      { k: 'Calor recuperado na regeneração', v: +(Qreg / 1000).toFixed(2), u: 'kW' },
+      { k: 'Calor da seção de aquecimento (água quente ' + br(Thw) + ' → ' + br(Thw - dThw) + ' °C)', v: (Qh / 1000).toFixed(2) + ' kW (' + mhw.toFixed(0) + ' kg/h de água quente)', u: '' },
+      { k: 'Calor da seção de resfriamento (água gelada ' + br(Tcw) + ' → ' + br(Tcw + dTcw) + ' °C)', v: cool ? (Qc / 1000).toFixed(2) + ' kW (' + mcw.toFixed(0) + ' kg/h de água gelada)' : '— (sem resfriamento)', u: '' },
+      { k: 'Área de placas: regeneração / aquecimento / resfriamento', v: Areg.toFixed(2) + ' / ' + Ah.toFixed(2) + ' / ' + Ac.toFixed(2) + ' m² (total ' + (Areg + Ah + Ac).toFixed(2) + ' m²)', u: '' },
+      { k: 'Tubo de retenção: volume / comprimento (D = ' + br(Dh) + ' m) / velocidade média', v: (Vh * 1000).toFixed(2) + ' L / ' + Lh.toFixed(2) + ' m / ' + vel.toFixed(3) + ' m/s', u: '' },
+      { k: 'Reynolds no tubo / tempo da partícula mais rápida', v: Re.toFixed(0) + ' / ' + tmin.toFixed(2) + ' s', u: '' },
+      { k: 'D a ' + br(Tp) + ' °C / reduções decimais (tempo médio e partícula mais rápida)', v: DT.toFixed(3) + ' s / ' + nlog.toFixed(1) + ' e ' + nfast.toFixed(1) + ' log', u: '' },
+      { k: 'Tempo equivalente a 72 °C (F₇₂, z = ' + br(z) + ' °C)', v: +F72.toFixed(2), u: 's' },
+      { k: 'Unidades de pasteurização (cerveja e sucos: PU = t·1,393^(T − 60), t em min)', v: (th_ / 60 * Math.pow(1.393, Tp - 60)).toFixed(1) + ' PU (' + (tmin / 60 * Math.pow(1.393, Tp - 60)).toFixed(1) + ' na partícula mais rápida)', u: '' },
+      { k: 'Economia da regeneração (calor que seria gasto sem ela)', v: (Qreg + Qh > 0 ? (100 * Qreg / (Qreg + Qh)).toFixed(1) : '0') + ' %', u: '' }];
+    const col = { T: '#d1302b', c: '#2563c9', g: '#2e9e6b' };
+    const xs = [0, 1, 2, 2.6, 3.6, 4.6], ys = [Tin, T1, Tp, Tp, T2, Tout];
+    const plots = [{ kind: 'curves', title: 'Perfil de temperatura do produto no pasteurizador', data: { xLabel: 'Seções: regeneração (frio) → aquecimento → retenção → regeneração (quente) → resfriamento', yLabel: 'T (°C)', series: [
+      { name: 'Produto', x: xs, y: ys, color: col.T, width: 3.5, mode: 'lines+markers' }, { name: 'Água quente', x: [2, 1], y: [Thw, Thw - dThw], color: '#e8a317', width: 2.5, dash: 'dash' },
+      ...(cool ? [{ name: 'Água gelada', x: [4.6, 3.6], y: [Tcw, Tcw + dTcw], color: col.c, width: 2.5, dash: 'dash' }] : [])] } }];
+    const tx = [], ny = []; for (let i = 0; i <= 80; i++) { const T = 62 + 23 * i / 80; tx.push(T); ny.push(th_ / (D72 * Math.pow(10, (72 - T) / z))); }
+    plots.push({ kind: 'curves', title: 'Letalidade: reduções decimais de C. burnetii × temperatura (' + br(th_) + ' s de retenção)', data: { xLabel: 'Temperatura de pasteurização (°C)', yLabel: 'Reduções decimais (log)', yLog: true, series: [
+      { name: 'Reduções decimais', x: tx, y: ny, color: col.T, width: 3.5 }, { name: 'Mínimo exigido (' + nmin + ' log)', x: [62, 85], y: [nmin, nmin], color: '#111', dash: 'dash', width: 1.6 },
+      { name: 'Condição atual', x: [Tp], y: [nlog], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }] } });
+    const ex = [], hy = [], cy = []; for (let i = 0; i <= 40; i++) { const e = 0.95 * i / 40; ex.push(e); const t1 = Tin + e * (Tp - Tin), t2 = Tp - e * (Tp - Tin); hy.push((H(Tp) - H(t1)) / 1000); cy.push(cool ? Math.max(0, (H(Math.max(t2, Tout)) - H(Tout)) / 1000) : 0); }
+    plots.push({ kind: 'curves', title: 'Efeito da regeneração: calor de aquecimento e de resfriamento', data: { xLabel: 'Eficiência da regeneração ε', yLabel: 'kW', series: [
+      { name: 'Aquecimento', x: ex, y: hy, color: '#e8a317', width: 3.5 }, { name: 'Resfriamento', x: ex, y: cy, color: col.c, width: 3, dash: 'dash' },
+      { name: 'Condição atual', x: [eps], y: [Qh / 1000], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }] } });
+    plots.push({ kind: 'bars', title: 'Calor por seção do pasteurizador', data: { categories: ['Regeneração', 'Aquecimento', 'Resfriamento'], yLabel: 'kW', series: [{ name: 'Calor (kW)', y: [Qreg / 1000, Qh / 1000, Qc / 1000], color: col.T }] } });
+    return { out, duty: Qh, duties: { Qr: Qh, Qc: -Qc }, eports: { q_in: Qh, q_out: Qc }, res: decBR(res), warn: decW(warn), plots,
+      pas: { M, Tin, Tp, th: th_, eps, eps0, Tout, T1, T2, cool, cp, Qreg, Qh, Qc, Thw, dThw, Tcw, dTcw, Ureg, Uh, Uc, Areg, Ah, Ac, rho, Dh, muH, Lh, Vh, vel, Re, tmin, D72, z, nmin, DT, nlog, nfast, F72 } };
+  };
+
+  /* ------------------------------------------------------------------ batedeira contínua de manteiga: o creme maturado é batido, a emulsão se inverte e a gordura
+     forma os grãos de manteiga; o leitelho sai com pouca gordura. Balanço de gordura: B = C(f_c − f_l)/(f_m − f_l); o resto é leitelho. */
+  IMPL.butter_churn = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed;
+    if (!connected(s)) throw new Error('conecte a corrente de creme de leite');
+    const iw = th.ids.indexOf('water'), iF = th.ids.indexOf('milk-fat'), iS = th.ids.indexOf('milk-snf');
+    if (iw < 0 || iF < 0 || iS < 0) throw new Error('use os componentes água, "Gordura do leite" e "Sólidos não gordurosos do leite" (mistura pronta "Creme de leite" no campo Alimento ou lodo)');
+    const kg = kgOf(th, s), C = sum(kg), fat = kg[iF], snf = kg[iS], water = kg[iw], other = C - fat - snf - water;
+    if (other > 1e-6 * C) warn.push('outros componentes no creme (' + other.toFixed(3) + ' kg/h) vão para o leitelho');
+    const fc = 100 * fat / C, fb = num(p.fb, 82), wb = num(p.wb, 16), fbm = num(p.fbm, 0.5), Tb = num(p.Tb, 12), Pm = num(p.Pm, 3);
+    if (!(fb > fc && fc > fbm && fbm >= 0)) throw new Error('as gorduras devem obedecer: leitelho (' + fbm + ' %) < creme (' + fc.toFixed(2) + ' %) < manteiga (' + fb + ' %)');
+    if (!(fb + wb < 100)) throw new Error('gordura + umidade da manteiga devem somar menos de 100 %');
+    if (fc < 30) warn.push('creme com ' + fc.toFixed(1) + ' % de gordura: para manteiga use de 35 a 45 %');
+    const B = C * (fc - fbm) / (fb - fbm), BM = C - B, fatB = B * fb / 100, wB = B * wb / 100, sB = B - fatB - wB;
+    const fatM = fat - fatB, wM = water - wB, sM = snf - sB;
+    if (!(sM >= 0 && wM >= 0)) throw new Error('a manteiga pediria mais sólidos não gordurosos ou água do que o creme tem: reduza a umidade ou confira o creme');
+    const Tin = K2C(s.T), fq = foodHeat(th, kg, Tb, Tin), Qc = fq != null ? fq : mkStream(th, s.flows, C2K(Tin), s.P).H - mkStream(th, s.flows, C2K(Tb), s.P).H;
+    if (Tin > 16) warn.push('o creme chega a ' + Tin.toFixed(1) + ' °C: ele precisa ser resfriado e maturado (algumas horas a 8–12 °C) para a gordura cristalizar antes da bateção; o calor aparece na porta de energia');
+    if (Tb < 6 || Tb > 16) warn.push('temperatura de bateção de ' + Tb + ' °C: a faixa usual é de 8 a 14 °C');
+    const mk = (f, w, sn, T) => { const k2 = new Array(th.n).fill(0); k2[iF] = f; k2[iw] = w; k2[iS] = sn; return mkStream(th, flowsOfKg(th, k2), C2K(T), s.P); };
+    const kM = new Array(th.n).fill(0); th.ids.forEach((id, i) => { if (i !== iF && i !== iw && i !== iS) kM[i] = kg[i]; }); kM[iF] = fatM; kM[iw] = wM; kM[iS] = sM;
+    const out = { butter: mk(fatB, wB, sB, Tb), buttermilk: mkStream(th, flowsOfKg(th, kM), C2K(Tb), s.P) };
+    const Pw = Pm * C / 1000;   // kW
+    const res = [{ k: 'Creme de leite: vazão / gordura / temperatura', v: C.toFixed(2) + ' kg/h / ' + fc.toFixed(2) + ' % / ' + Tin.toFixed(1) + ' °C', u: '' },
+      { k: 'Manteiga (' + br(fb) + ' % de gordura, ' + br(wb) + ' % de umidade)', v: +B.toFixed(3), u: 'kg/h' },
+      { k: 'Leitelho (' + br(fbm) + ' % de gordura)', v: +BM.toFixed(3), u: 'kg/h' },
+      { k: 'Manteiga: sólidos não gordurosos (proteína, lactose, minerais)', v: (100 * sB / B).toFixed(2) + ' %', u: '' },
+      { k: 'Leitelho: sólidos não gordurosos / água', v: (100 * sM / BM).toFixed(2) + ' / ' + (100 * wM / BM).toFixed(2) + ' %', u: '' },
+      { k: 'Recuperação da gordura na manteiga', v: (100 * fatB / fat).toFixed(2) + ' %', u: '' },
+      { k: 'Rendimento: manteiga por creme / creme por kg de manteiga', v: (100 * B / C).toFixed(2) + ' % / ' + (C / B).toFixed(3) + ' kg/kg', u: '' },
+      { k: (Qc >= 0 ? 'Calor retirado para resfriar o creme até ' : 'Calor fornecido para aquecer o creme até ') + br(Tb) + ' °C (c_p de Choi e Okos)', v: +(Math.abs(Qc) / 1000).toFixed(3), u: 'kW' },
+      { k: 'Potência do batedor (' + br(Pm) + ' kWh/t de creme)', v: +Pw.toFixed(3), u: 'kW' }];
+    const plots = [{ kind: 'bars', title: 'Composição: creme, manteiga e leitelho', data: { categories: ['Creme de leite', 'Manteiga', 'Leitelho'], yLabel: '%', series: [
+      { name: 'Gordura (%)', y: [fc, fb, 100 * fatM / BM], color: '#e8a317' }, { name: 'Água (%)', y: [100 * water / C, wb, 100 * wM / BM], color: '#2563c9' }, { name: 'Sólidos não gordurosos (%)', y: [100 * snf / C, 100 * sB / B, 100 * sM / BM], color: '#2e9e6b' }] } }];
+    const fx = [], by = []; for (let i = 0; i <= 60; i++) { const f = 25 + 25 * i / 60; fx.push(f); by.push(100 * (f - fbm) / (fb - fbm)); }
+    plots.push({ kind: 'curves', title: 'Rendimento de manteiga × gordura do creme', data: { xLabel: 'Gordura no creme (%)', yLabel: 'kg de manteiga por 100 kg de creme', series: [
+      { name: 'Rendimento', x: fx, y: by, color: '#e8a317', width: 3.5 }, { name: 'Condição atual', x: [fc], y: [100 * B / C], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }] } });
+    return { out, duty: -Qc, res: decBR(res), warn: decW(warn), plots, bat: { C, fc, fb, wb, fbm, Tb, Tin, B, BM, fatB, wB, sB, fatM, wM, sM, Qc, Pw, fat, snf, water } };
+  };
   /* ------------------------------------------------------------------ secador solar: coletor solar de ar + câmara de bandejas (contínuo: túnel; batelada: dias de sol).
      Irradiância ao longo do dia: I(t) = I_máx·sen(π(t − t_n)/L) do nascer t_n = 12 − L/2 ao pôr do sol, com I_máx = π·H_d/(2L).
      Ar aquecido no coletor: T_h = T_amb + η_c·I·A_c/(G_a·c_s). Secagem nas bandejas: convecção, N_c = h·(T − T_w)/λ_w, mais a radiação
@@ -6072,6 +6533,143 @@ window.SIMULAFACIL_CONFIG = {
     // estado estacionário com controle P puro (desvio permanente), para comparação
     return { t, C, u, iae, ise, over, ts, tr, Cf: C[C.length - 1], uf: u[u.length - 1], umin: Math.min.apply(null, u), umax: Math.max.apply(null, u), tau };
   }
+
+  /* ------------------------------------------------------------------ biodigestor anaeróbio contínuo (carga diária; modelo indiano ou chinês).
+     Produção de biogás: planilha original (C. Guirlanda, Flash MX: litros de biogás por kg de dejeto fresco) ou cinética de Chen e Hashimoto (1978):
+     CH₄ = B₀·SV·[1 − K/(θ·μ_m − 1 + K)], μ_m = 0,013·T − 0,129 (d⁻¹, de 20 a 60 °C), K = 0,8 + 0,0016·e^(0,06·S₀) (bovinos) ou 0,6 + 0,0206·e^(0,051·S₀) (suínos),
+     S₀ = sólidos voláteis na carga (kg/m³). Sólidos voláteis destruídos = massa do biogás seco − água da hidrólise (0,111 kg/kg SV, base celulose).
+     Equivalência com outros combustíveis e consumo de equipamentos como na planilha original. Volumes de gás em m³ normais (0 °C e 1 atm). */
+  const BD = { rhoN: { CH4: 0.7168, CO2: 1.9768, H2S: 1.5392 }, PCI_CH4: 35.88, Vm: 22.414, fHid: 0.111,
+    eqPl: [0.342, 1.45, 0.396, 0.358, 0.312], pci: [34.4, 13.0, 46.5, 35.5, 32.3],   // por m³ de biogás (planilha) e PCI (MJ/L ou MJ/kg; BEN/EPE)
+    fuels: [['Querosene', 'L'], ['Lenha', 'kg'], ['GLP', 'kg'], ['Óleo diesel', 'L'], ['Gasolina', 'L']],
+    B0: { glucose: 0.373, sucrose: 0.393, ethanol: 0.730 } };   // m³ CH₄/kg (estequiometria de Buswell)
+  const bdMu = T => 0.013 * T - 0.129;
+  const bdK = (kind, S0) => (kind === 'sui' ? 0.6 + 0.0206 * Math.exp(0.051 * S0) : 0.8 + 0.0016 * Math.exp(0.06 * S0));
+  const bdFrac = (thR, T, K) => { const a = thR * bdMu(T); return a > 1 ? Math.max(0, 1 - K / (a - 1 + K)) : 0; };
+  IMPL.biodigester = function (th, b, ins) {
+    const p = b.params, warn = [], i = ins || {}, sF = i.feed, sW = i.water, connF = connected(sF), connW = connected(sW), iw = th.ids.indexOf('water');
+    const plan = bdPlan(p), x = num(p.xCH4, 60) / 100, h2s = num(p.h2s, 1500) * 1e-6;
+    if (!(x >= 0.3 && x <= 0.9)) throw new Error('o metano no biogás deve ficar entre 30 e 90 % em volume');
+    if (!(h2s >= 0 && h2s < 0.05)) throw new Error('o H₂S do biogás deve ficar entre 0 e 50 000 ppm');
+    const yK = { boi: 'yBoi', porco: 'yPorco', cavalo: 'yCavalo', galinha: 'yGalinha', vegetal: 'yVegetal' }, bK = { boi: 'B0boi', porco: 'B0porco', cavalo: 'B0cavalo', galinha: 'B0galinha', vegetal: 'B0vegetal' };
+    const fid = {}; BD_SUBS.forEach(([k, id, nome]) => { fid[id] = { k, nome }; });
+    const food = id => (TH.FOODS || []).find(f => f.id === id), COMP = TH.COMP || {};
+    const subs = [], others = {}; let water = 0, Tin;
+    if (connF) {   // corrente de dejetos: água + matéria seca de dejetos, alimentos ou lodos (ou açúcares e etanol)
+      const kg = kgOf(th, sF).map(v => v * 24); Tin = K2C(sF.T);
+      th.c.forEach((c, j) => {
+        const m = kg[j]; if (!(m > 1e-12)) return;
+        if (j === iw) { water += m; return; }
+        const fd = c.food, bk = fid[c.id];
+        if (BD.B0[c.id] != null) subs.push({ id: c.id, nome: c.name.split(/[:(]/)[0].trim(), dry: m, fresh: m, vs: m, L: null, B0: BD.B0[c.id], K: 'bov', rho: c.rho || 1200, cp: c.cpl ? c.cpl / c.mw : 1.5 });
+        else if (fd && fd.dryComp) {
+          const ts = 1 - (fd.xw || 0), bio = fd.bio;
+          subs.push({ id: c.id, nome: bk ? bk.nome : (fd.nome || c.name), dry: m, fresh: ts > 0 ? m / ts : m, vs: m * (1 - (fd.dryComp.a || 0)),
+            L: bk ? num(p[yK[bk.k]], bio.L) : null, B0: bk ? num(p[bK[bk.k]], bio.B0) : (bio ? bio.B0 : 0.30), K: bio ? bio.K : 'bov', rho: c.rho || 1400, cp: (c.cpl || 160) / (c.mw || 100) });
+          if (!bio) warn.push(c.name.split(':')[0] + ': sem dados de biodigestão; usei B₀ = 0,30 m³ CH₄/kg SV');
+        } else { others[c.id] = m; warn.push(c.name + ' não é degradado no biodigestor e sai com o biofertilizante'); }
+      });
+    } else {
+      Tin = num(p.Tf, 25);
+      BD_SUBS.forEach(([k, id, nome]) => {
+        const M = num(p[k], 0); if (M < 0) throw new Error('a carga de ' + nome.toLowerCase() + ' não pode ser negativa'); if (!(M > 0)) return;
+        const fd = food(id), dry = M * (1 - fd.xw), c = COMP[id] || {};
+        subs.push({ id, nome, dry, fresh: M, vs: dry * (1 - fd.dryComp.a), L: num(p[yK[k]], fd.bio.L), B0: num(p[bK[k]], fd.bio.B0), K: fd.bio.K, rho: c.rho || 1400, cp: (c.cpl || 170) / 100 });
+        water += M - dry;
+      });
+    }
+    const freshTot = sum(subs.map(q => q.fresh)), dryTot = sum(subs.map(q => q.dry)), vsTot = sum(subs.map(q => q.vs)), othTot = sum(Object.values(others));
+    if (!(vsTot > 0)) throw new Error('informe a carga diária de dejetos (ou ligue uma corrente com dejetos, alimentos ou lodos)');
+    let wDil, Tw = Tin;
+    if (connW) { const kgw = kgOf(th, sW).map(v => v * 24); wDil = sum(kgw); Tw = K2C(sW.T); if (kgw.some((v, j) => j !== iw && v > 1e-9)) warn.push('a corrente de água de diluição tem outros componentes: eles foram contados como água'); }
+    else { wDil = Math.max(0, num(p.dil, 1.5)) * freshTot; }
+    const Mfeed = water + dryTot + othTot, Mtot = Mfeed + wDil, Tload = (Mfeed * Tin + wDil * Tw) / Mtot;
+    const Wtot = water + wDil, rhoL = Mtot / (Wtot / 997 + sum(subs.map(q => q.dry / q.rho)) + othTot / 1000), cpL = (Wtot * 4.18 + sum(subs.map(q => q.dry * q.cp)) + othTot * 2) / Mtot;
+    const thR = num(p.TRH, 40), T = num(p.Top, 25), Tamb = num(p.Tamb, 25), U = num(p.U, 0.6);
+    if (!(thR > 0)) throw new Error('o tempo de retenção hidráulica deve ser positivo');
+    const Qv = Mtot / rhoL, V = Qv * thR, S0 = vsTot / Qv, OLR = vsTot / V, TSp = 100 * dryTot / Mtot, mu = bdMu(T);
+    // produção de biogás de cada substrato
+    let semPl = [];
+    subs.forEach(q => {
+      q.Kc = bdK(q.K, S0); q.f = bdFrac(thR, T, q.Kc); q.Vch = q.B0 * q.vs * q.f / x;
+      q.Vpl = q.L != null ? q.fresh * q.L / 1000 : null; if (plan && q.L == null) semPl.push(q.nome);
+      q.V = plan && q.Vpl != null ? q.Vpl : q.Vch;
+    });
+    if (semPl.length) warn.push('sem rendimento na planilha para ' + semPl.join(', ') + ': usei a cinética de Chen e Hashimoto');
+    if (!plan && thR * mu <= 1) warn.push('com TRH de ' + thR + ' dias a ' + T + ' °C (μ_m = ' + mu.toFixed(3) + ' d⁻¹) as metanogênicas são lavadas: θ·μ_m ≤ 1 e não há produção. Aumente o TRH ou a temperatura');
+    if (T < 20 || T > 60) warn.push('a correlação μ_m = 0,013·T − 0,129 de Chen e Hashimoto vale de 20 a 60 °C');
+    const Vb = sum(subs.map(q => q.V)), VCH4 = x * Vb, VH2S = h2s * Vb, VCO2 = Vb - VCH4 - VH2S;
+    const rhoG = x * BD.rhoN.CH4 + (1 - x - h2s) * BD.rhoN.CO2 + h2s * BD.rhoN.H2S;
+    let wHyd = 0, vsd = 0;
+    subs.forEach(q => {
+      q.mg = q.V * rhoG; q.vsd = q.mg / (1 + BD.fHid);
+      if (q.vsd > 0.95 * q.vs) { warn.push(q.nome + ': a produção de biogás passa do que os sólidos voláteis permitem (destruiria ' + (100 * q.vsd / q.vs).toFixed(0) + ' % do SV); limitei a 95 % no balanço de massa'); q.vsd = 0.95 * q.vs; }
+      if (q.V * x > q.B0 * q.vs * 1.0001) warn.push(q.nome + ': ' + (q.V * x).toFixed(3) + ' m³/dia de CH₄ passam do potencial B₀·SV = ' + (q.B0 * q.vs).toFixed(3) + ' m³/dia');
+      q.wh = q.mg - q.vsd; wHyd += q.wh; vsd += q.vsd;
+    });
+    const Psat = STEAM.psat(C2K(T)), yv = Math.min(0.5, Psat / 101325), nDry = Vb / BD.Vm, mVap = nDry * yv / (1 - yv) * 18.015;
+    const mGas = Vb * rhoG, wDig = Wtot - wHyd - mVap;
+    if (wDig < 0) throw new Error('falta água: a hidrólise e o vapor do biogás consomem mais água do que entra; aumente a água de diluição');
+    const mDig = wDig + (dryTot - vsd) + othTot;
+    // dimensões, gasômetro e calor
+    const Dd = Math.cbrt(4 * V / Math.PI), A = 1.5 * Math.PI * Dd * Dd, Vg = Vb * num(p.horas, 12) / 24;
+    const Qload = Mtot / 86400 * cpL * (T - Tload), Qloss = U * A * (T - Tamb) / 1000, Qh = Math.max(0, Qload + Qloss);
+    const PCIb = x * BD.PCI_CH4, E = Vb * PCIb, Pw = E / 86.4, etaG = num(p.etaG, 30) / 100, Eel = E / 3.6 * etaG;
+    const usePCI = p.eqv === BD_EQ_PCI, eqF = usePCI ? BD.pci.map(v => PCIb / v) : BD.eqPl, eq = eqF.map(f => f * Vb);
+    const cons = [num(p.cLamp, 140), num(p.cFog, 340), num(p.cMot, 450), num(p.cGel, 2000), num(p.cInc, 50)];
+    if (cons.some(v => !(v > 0))) throw new Error('os consumos dos equipamentos devem ser positivos');
+    const useq = cons.map(c => Vb * 1000 / c);
+    if (TSp > 12) warn.push('carga com ' + TSp.toFixed(1) + ' % de sólidos totais: nos modelos indiano e chinês use de 6 a 10 % (aumente a água de diluição para não entupir)');
+    if (TSp < 3) warn.push('carga muito diluída (' + TSp.toFixed(1) + ' % de sólidos): o biodigestor fica grande para pouco biogás');
+    if (OLR > 4) warn.push('carga orgânica de ' + OLR.toFixed(2) + ' kg SV/(m³·dia): acima de ~4 há risco de acidificação; aumente o TRH');
+    // resultados
+    const f2 = (v, d) => (+v).toFixed(d == null ? 2 : d), PL = plan ? 'planilha original' : 'Chen e Hashimoto';
+    const res = [{ k: 'Cálculo da produção', v: plan ? 'planilha original (C. Guirlanda): litros de biogás por kg de dejeto' : 'cinética de Chen e Hashimoto (sólidos voláteis, TRH e temperatura)', u: '' }];
+    subs.forEach(q => res.push({ k: q.nome + ': carga / sólidos totais / sólidos voláteis', v: f2(q.fresh, 1) + ' / ' + f2(q.dry, 2) + ' / ' + f2(q.vs, 2) + ' kg/dia', u: '' }));
+    res.push({ k: 'Água de diluição' + (connW ? ' (corrente)' : ' (' + br(num(p.dil, 1.5)) + ' kg por kg de dejeto)'), v: f2(wDil, 1) + ' kg/dia', u: '' },
+      { k: 'Carga diária: massa / volume / temperatura', v: f2(Mtot, 1) + ' kg/dia / ' + f2(Qv, 3) + ' m³/dia / ' + f2(Tload, 1) + ' °C', u: '' },
+      { k: 'Sólidos totais na carga / sólidos voláteis (S₀)', v: f2(TSp, 2) + ' % / ' + f2(S0, 2) + ' kg SV/m³', u: '' },
+      { k: 'Volume útil do biodigestor (V = Q·TRH, TRH = ' + thR + ' dias)', v: f2(V, 2) + ' m³ (cilindro com D = H = ' + f2(Dd, 2) + ' m)', u: '' },
+      { k: 'Carga orgânica volumétrica', v: f2(OLR, 3) + ' kg SV/(m³·dia)', u: '' },
+      { k: '<b>Produção de biogás (' + PL + ')</b>', v: '<b>' + f2(Vb, 3) + ' m³/dia</b> (' + f2(Vb * 1000 / 24, 1) + ' L/h)', u: '' });
+    const Vpl = sum(subs.map(q => (q.Vpl != null ? q.Vpl : q.Vch))), Vch = sum(subs.map(q => q.Vch));
+    res.push({ k: plan ? 'Pela cinética de Chen e Hashimoto (para comparar)' : 'Pela planilha original (para comparar)', v: f2(plan ? Vch : Vpl, 3) + ' m³/dia', u: '' },
+      { k: 'Metano / CO₂ no biogás (e H₂S)', v: f2(VCH4, 3) + ' / ' + f2(VCO2, 3) + ' m³/dia (H₂S: ' + (VH2S * 1000).toFixed(2) + ' L/dia)', u: '' },
+      { k: 'Rendimento: biogás e metano por kg de SV', v: f2(Vb / vsTot, 3) + ' e ' + f2(VCH4 / vsTot, 3) + ' m³/kg SV', u: '' },
+      { k: 'Sólidos voláteis destruídos', v: f2(vsd, 2) + ' kg/dia (' + f2(100 * vsd / vsTot, 1) + ' % do SV)', u: '' },
+      { k: 'Chen e Hashimoto: μ_m / K / CH₄ em relação a B₀', v: f2(mu, 4) + ' d⁻¹ / ' + f2(sum(subs.map(q => q.Kc * q.vs)) / vsTot, 3) + ' / ' + f2(100 * sum(subs.map(q => q.f * q.vs * q.B0)) / Math.max(1e-12, sum(subs.map(q => q.vs * q.B0))), 1) + ' %', u: '' },
+      { k: 'Gasômetro (' + br(num(p.horas, 12)) + ' h de produção)', v: f2(Vg, 3) + ' m³', u: '' },
+      { k: 'Energia do biogás (PCI = ' + br(f2(PCIb, 2)) + ' MJ/m³)', v: f2(E, 1) + ' MJ/dia (' + f2(Pw, 3) + ' kW médios)', u: '' },
+      { k: 'Eletricidade no motor-gerador (' + br(num(p.etaG, 30)) + ' %)', v: f2(Eel, 2) + ' kWh/dia', u: '' });
+    BD.fuels.forEach(([n, u], k) => res.push({ k: 'Equivale a ' + (n === 'GLP' ? n : n.toLowerCase()) + (usePCI ? ' (mesma energia, PCI)' : ' (planilha)'), v: f2(eq[k], 3) + ' ' + (u === 'L' ? 'litros' : 'quilos'), u: '' }));
+    [['Lampião', 'horas'], ['Fogão', 'dias para 1 pessoa'], ['Motor', 'hp·h'], ['Geladeira', 'dias'], ['Incubadora', 'horas por 100 L de capacidade']].forEach(([n, u], k) =>
+      res.push({ k: 'Consumo: ' + n.toLowerCase() + ' (' + br(cons[k]) + ' L de biogás por ' + ['hora', 'dia e pessoa', 'hp·h', 'dia', 'hora e 100 L'][k] + ')', v: f2(useq[k], 2) + ' ' + u, u: '' }));
+    res.push({ k: 'Aquecimento: aquecer a carga / perdas pelas paredes', v: f2(Qload, 3) + ' / ' + f2(Qloss, 3) + ' kW', u: '' },
+      { k: 'Calor a fornecer', v: Qh > 0 ? f2(Qh, 3) + ' kW (' + f2(100 * Qh / (0.8 * Math.max(Pw, 1e-12)), 1) + ' % do biogás numa caldeira de 80 %)' : 'nenhum: o biodigestor trabalha na temperatura ambiente', u: '' },
+      { k: 'Biofertilizante (efluente)', v: f2(mDig, 1) + ' kg/dia com ' + f2(100 * (dryTot - vsd + othTot) / mDig, 2) + ' % de sólidos', u: '' },
+      { k: 'Balanço de massa: entra / sai (biogás + vapor + biofertilizante)', v: f2(Mtot, 3) + ' / ' + f2(mGas + mVap + mDig, 3), u: 'kg/dia' });
+    // gráficos
+    const col = ['#2e9e6b', '#e8a317', '#2563c9', '#a33ea1', '#7a4a1f', '#d1302b'];
+    const tx = [], Ts = [Math.max(15, T - 10), T, Math.min(60, T + 10)], ys = Ts.map(() => []);
+    for (let k = 0; k <= 85; k++) { const tt = 5 + k; tx.push(tt); Ts.forEach((TT, m) => ys[m].push(sum(subs.map(q => q.B0 * q.vs * bdFrac(tt, TT, q.Kc))) / x)); }
+    const ser = Ts.map((TT, m) => ({ name: 'Chen e Hashimoto a ' + br(TT) + ' °C', x: tx, y: ys[m], color: ['#7fa6e8', col[2], '#0b2f80'][m], width: m === 1 ? 3.5 : 2.2, dash: m === 1 ? undefined : 'dash' }));
+    if (plan) ser.push({ name: 'Planilha original (não depende do TRH)', x: [5, 90], y: [Vpl, Vpl], color: col[1], width: 2.6, dash: 'dot' });
+    ser.push({ name: 'Operação (' + thR + ' dias)', x: [thR], y: [Vb], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' });
+    const plots = [{ kind: 'curves', title: 'Produção de biogás × tempo de retenção hidráulica', data: { xLabel: 'TRH (dias)', yLabel: 'Biogás (m³/dia)', series: ser } },
+      { kind: 'bars', title: 'Biogás de cada substrato (m³/dia)', data: { categories: subs.map(q => q.nome), yLabel: 'm³/dia', series: [
+        { name: 'Planilha original', y: subs.map(q => (q.Vpl != null ? q.Vpl : 0)), color: col[1] }, { name: 'Chen e Hashimoto', y: subs.map(q => q.Vch), color: col[2] }] } },
+      { kind: 'bars', title: 'Equivalência com outros combustíveis', data: { categories: BD.fuels.map(([n, u]) => n + ' (' + u + ')'), yLabel: 'quantidade', series: [{ name: f2(Vb, 2) + ' m³ de biogás', y: eq, color: col[0] }] } }];
+    // correntes de saída (kg/s)
+    const need = connF || connW, d = 86400, hasH2S = th.ids.indexOf('cs-hydrogen-sulfide') >= 0, gas = { methane: VCH4 * BD.rhoN.CH4 / d, co2: (VCO2 * BD.rhoN.CO2 + (hasH2S ? 0 : VH2S * BD.rhoN.H2S)) / d, water: mVap / d };
+    if (hasH2S) gas['cs-hydrogen-sulfide'] = VH2S * BD.rhoN.H2S / d;
+    const dig = { water: wDig / d }; subs.forEach(q => { dig[q.id] = (dig[q.id] || 0) + (q.dry - q.vsd) / d; }); Object.keys(others).forEach(id => { dig[id] = (dig[id] || 0) + others[id] / d; });
+    const out = {}, sg = massStream(th, gas, C2K(T), 101325, warn, 'biogás', need), sd = massStream(th, dig, C2K(T), 101325, warn, 'biofertilizante', need);
+    if (sg) out.biogas = sg; if (sd) out.digestate = sd;
+    const util = (connF ? 0 : Mfeed) + (connW ? 0 : wDil);
+    return { out, duty: Qh * 1000, massUtil: sg && sd ? util / d : 0, res: decBR(res), warn: decW(warn), plots,
+      bio: { plan, subs: subs.map(q => ({ nome: q.nome, fresh: q.fresh, dry: q.dry, vs: q.vs, L: q.L, B0: q.B0, K: q.K })), wDil, Mtot, rhoL, cpL, Tload, thR, T, Tamb, U, x, h2s, S0, V, Dd, Vb, Vpl, Vch,
+        PCIb, E, Eel, etaG, usePCI, eqF, cons, horas: num(p.horas, 12), Qh, Qload, Qloss } };
+  };
 
   IMPL.pid_cstr = function (th, b, ins) {
     const p = b.params, flowMV = !/^concentra/.test(p.mv || ''), satIn = /^no modelo/.test(p.sat || '');
@@ -7121,6 +7719,53 @@ window.SIMULAFACIL_CONFIG = {
         note: 'As micro-ondas aquecem o produto por dentro (a água é a molécula que mais absorve): o produto chega a T_p e a água evapora com a energia absorvida. Como a absorção cai quando o produto seca, a taxa cai no fim da secagem sem precisar de uma umidade crítica. A espessura da camada deve ficar abaixo de cerca de duas vezes D_p para aquecer por igual; 915 MHz penetra mais que 2450 MHz.'
       };
     },
+    biodigester: (p) => {
+      const ch = /Chen/.test((p && p.metodo) || ''), V = i('V'), Q = i('Q'), th = i('θ'), B0 = sub(i('B'), '0'), SV = i('SV'), K = i('K'), mu = sub(i('μ'), 'm'), S0 = sub(i('S'), '0'), x = sub(i('x'), 'CH₄');
+      const eqs = [ch ? eq(sub(i('V'), 'CH₄') + ' = ' + B0 + '·' + SV + '·[1 − ' + fr(K, th + mu + ' − 1 + ' + K) + '],&nbsp; ' + sub(i('V'), 'biogás') + ' = ' + fr(sub(i('V'), 'CH₄'), x), 'Chen e Hashimoto (1978): metano de cada dejeto')
+          : eq(sub(i('V'), 'biogás') + ' = Σ ' + sub(i('M'), 'j') + '·' + sub(i('y'), 'j') + ' / 1000', 'planilha original (Guirlanda): M_j kg/dia de dejeto e y_j litros de biogás por kg'),
+        eq(mu + ' = 0,013' + i('T') + ' − 0,129,&nbsp; ' + K + ' = 0,8 + 0,0016·' + sup(i('e'), '0,06' + S0) + ' (bovinos),&nbsp; 0,6 + 0,0206·' + sup(i('e'), '0,051' + S0) + ' (suínos)', 'velocidade máxima (d⁻¹, T em °C) e constante cinética'),
+        eq(V + ' = ' + Q + '·' + th + ',&nbsp; ' + S0 + ' = ' + fr('Σ ' + SV, Q) + ',&nbsp; ' + i('COV') + ' = ' + fr('Σ ' + SV, V), 'volume útil, sólidos voláteis na carga e carga orgânica volumétrica'),
+        eq(sub(i('E'), 'biogás') + ' = ' + sub(i('V'), 'biogás') + '·' + x + '·35,88 MJ/m³,&nbsp; ' + sub(i('m'), 'comb') + ' = ' + sub(i('V'), 'biogás') + '·' + sub(i('f'), 'eq'), 'energia (PCI do metano) e equivalência com outros combustíveis'),
+        eq(sub(i('Q'), 'aq') + ' = ' + i('ṁ') + sub(i('c'), 'p') + '(' + i('T') + ' − ' + sub(i('T'), 'carga') + ') + ' + i('UA') + '(' + i('T') + ' − ' + sub(i('T'), 'amb') + ')', 'calor para manter a temperatura do biodigestor')];
+      return { name: 'Biodigestor anaeróbio contínuo (carga diária): dejetos → biogás + biofertilizante', eqs,
+        sym: [[B0, 'potencial de metano do dejeto (m³ CH₄/kg SV)'], [SV + ', ' + S0, 'sólidos voláteis (kg/dia) e sua concentração na carga (kg/m³)'], [th + ', ' + Q, 'tempo de retenção hidráulica (dias) e vazão da carga (m³/dia)'], [x, 'fração de metano no biogás']],
+        note: 'A planilha original e os fatores de equivalência e de consumo (lampião, fogão, motor, geladeira e incubadora) vêm do programa em Flash MX de Christiano Guirlanda (Prova de Modelagem e Simulação, UFSJ). Os sólidos voláteis destruídos fecham o balanço de massa: massa do biogás menos a água consumida na hidrólise.' };
+    },
+    centrifuge: (p) => {
+      const oil = /^óleo/.test((p && p.app) || ''), F = i('F'), C = i('C'), D = i('D'), L_ = i('L'), f = i('f'), Sg = i('Σ'), w = i('ω'), N = i('N'), r1 = sub(i('r'), '1'), r2 = sub(i('r'), '2'), th = i('θ'), mu = i('μ'), dr = 'Δ' + i('ρ'), Q = i('Q'), dc = sub(i('d'), 'c');
+      const eqs = oil ? [eq(i('D') + ' = ' + fr(i('O') + ' − ' + i('r') + i('P'), '1 − ' + sub(i('x'), 'PL') + '(1 + ' + i('r') + ') − ' + sub(i('x'), 'W')), 'óleo degomado (fase leve), com x_PL e x_W fixados no óleo e r kg de óleo arrastado por kg de fosfolipídio'),
+          eq(i('G') + ' = ' + i('F') + ' − ' + i('D') + ' − ' + L_ + ',&nbsp; ' + sub(i('P'), 'G') + ' = ' + i('P') + ' − ' + sub(i('x'), 'PL') + i('D') + ',&nbsp; ' + sub(i('O'), 'G') + ' = ' + i('r') + sub(i('P'), 'G'), 'gomas úmidas (fase pesada)'),
+          eq(sub(i('M'), 'lecitina') + ' = ' + fr(sub(i('P'), 'G') + ' + ' + sub(i('O'), 'G'), '0,99') + ',&nbsp; ' + i('AI') + ' = ' + fr(sub(i('P'), 'G'), sub(i('P'), 'G') + ' + ' + sub(i('O'), 'G')), 'lecitina seca a 1 % de umidade e insolúveis em acetona')]
+        : [eq(C + ' = ' + "F′" + fr(sub(f, 'L') + ' − ' + sub(f, 'D'), sub(f, 'C') + ' − ' + sub(f, 'D')) + ',&nbsp; ' + D + ' = ' + "F′ − " + C + ',&nbsp; ' + "F′ = " + F + ' − ' + L_, 'balanço de gordura: creme (C) e leite desnatado (D)'),
+          eq('razão = ' + i('η') + fr(sub(f, 'L') + ' − ' + sub(f, 'D'), sub(f, 'C') + ' − ' + sub(f, 'D')) + ',&nbsp; ' + D + ' = ' + fr(F, '1 + razão'), 'programa original (Brito e Bosch): a eficiência η não fecha a gordura'),
+          eq(sub(i('ES'), 'C') + ' = ' + fr('100 − ' + sub(f, 'C'), '11') + ',&nbsp; ' + sub(i('a'), 'C') + ' = ' + fr('100 − ' + sub(f, 'C'), '1,1'), 'extrato seco desengordurado e água no creme (plasma com 1/11 de sólidos)')];
+      eqs.push(eq(Sg + ' = ' + fr('2π' + N + sup(w, '2') + '(' + sup(r2, '3') + ' − ' + sup(r1, '3') + ')', '3' + i('g') + ' tan ' + th) + ',&nbsp; ' + dc + ' = ' + sup('[' + fr('18' + mu + Q, dr + ' ' + i('g') + Sg) + ']', '½'), 'teoria Σ (Ambler) e diâmetro crítico'),
+        eq(sub(w, '2') + ' = ' + w + sup('(' + fr(sub('rec', '2'), sub('rec', '1')) + ')', '½') + ',&nbsp; ' + sub(Q, '2') + ' = ' + Q + fr(sub('rec', '1'), sub('rec', '2')), 'módulo I do original: recuperação ∝ ω²/Q'),
+        eq(i('P') + ' ≈ ' + i('ṁ') + sup(w, '2') + sup(r2, '2'), 'potência mínima: acelerar o líquido até a periferia'));
+      return { name: oil ? 'Centrífuga de discos: degomagem do óleo de soja com água (óleo degomado + gomas → lecitina)' : 'Centrífuga de discos (desnatadeira): leite integral → creme de leite + leite desnatado', eqs,
+        sym: [[sub(f, 'L') + ', ' + sub(f, 'C') + ', ' + sub(f, 'D'), 'gordura no leite, no creme e no desnatado (%)'], [N + ', ' + r1 + ', ' + r2 + ', ' + th, 'número de discos, raios e semiângulo do cone'], [w + ', ' + mu + ', ' + dr, 'velocidade angular, viscosidade da fase contínua e diferença de massa específica']],
+        note: 'Os cálculos do módulo I e o balanço com eficiência vêm do programa “Centrífuga” em Flash MX de Gustavo Brito e Juan Bosch; a opção “balanço de gordura” fecha a massa de gordura. A teoria Σ mostra o menor glóbulo (ou partícula de gomas) separado por completo.' };
+    },
+    pasteurizer: () => {
+      const T = i('T'), Tp = sub(T, 'p'), Te = sub(T, 'e'), e = i('ε'), Q = i('Q'), D = i('D'), z = i('z'), t = i('t');
+      return { name: 'Pasteurizador contínuo HTST: regeneração, aquecimento, retenção e resfriamento', eqs: [
+        eq(sub(T, '1') + ' = ' + Te + ' + ' + e + '(' + Tp + ' − ' + Te + '),&nbsp; ' + sub(T, '2') + ' = ' + Tp + ' − ' + e + '(' + Tp + ' − ' + Te + ')', 'regeneração com vazões iguais'),
+        eq(sub(Q, 'aq') + ' = ' + i('ṁ') + sub(i('c'), 'p') + '(' + Tp + ' − ' + sub(T, '1') + '),&nbsp; ' + sub(Q, 'resf') + ' = ' + i('ṁ') + sub(i('c'), 'p') + '(' + sub(T, '2') + ' − ' + sub(T, 's') + ')', 'calor das seções (c_p de Choi e Okos para alimentos)'),
+        eq(i('A') + ' = ' + fr(Q, i('U') + ' ΔT_ml') + ',&nbsp; ' + 'ΔT_reg = (1 − ' + e + ')(' + Tp + ' − ' + Te + ')', 'área de placas de cada seção'),
+        eq(i('L') + ' = ' + fr('4' + i('Q̇') + t, 'π' + sup(i('D'), '2')) + ',&nbsp; ' + sub(t, 'mín') + ' ≈ ' + t + '/1,22 (turbulento) ou ' + t + '/2 (laminar)', 'tubo de retenção e partícula mais rápida'),
+        eq(D + '(' + T + ') = ' + sub(D, '72') + '·' + sup('10', '(72 − ' + T + ')/' + z) + ',&nbsp; ' + i('n') + ' = ' + fr(t, D + '(' + Tp + ')') + ',&nbsp; ' + sub(i('F'), '72') + ' = ' + t + '·' + sup('10', '(' + Tp + ' − 72)/' + z), 'letalidade (Coxiella burnetii: D₇₂ = 1,88 s, z = 4,34 °C)')],
+        sym: [[e, 'eficiência da regeneração'], [Tp + ', ' + t, 'temperatura e tempo de retenção'], [D + ', ' + z, 'tempo de redução decimal e valor z do microrganismo de referência']],
+        note: 'A pasteurização HTST clássica é de 72 °C por 15 s; ela dá cerca de 8 reduções decimais de Coxiella burnetii, acima das 5 exigidas pelo Codex. Saída quente (por exemplo, 50 °C para a centrífuga) limita a regeneração.' };
+    },
+    butter_churn: () => {
+      const f = i('f'), C = i('C'), B = i('B');
+      return { name: 'Batedeira contínua de manteiga: balanço de gordura', eqs: [
+        eq(B + ' = ' + C + fr(sub(f, 'c') + ' − ' + sub(f, 'l'), sub(f, 'm') + ' − ' + sub(f, 'l')) + ',&nbsp; leitelho = ' + C + ' − ' + B, 'manteiga (B) e leitelho'),
+        eq('sólidos não gordurosos da manteiga = 100 − ' + sub(f, 'm') + ' − ' + sub(i('u'), 'm'), 'o resto vai para o leitelho'),
+        eq(i('Q') + ' = ' + i('ṁ') + sub(i('c'), 'p') + '(' + sub(i('T'), 'e') + ' − ' + sub(i('T'), 'b') + ')', 'resfriamento do creme até a temperatura de bateção')],
+        sym: [[sub(f, 'c') + ', ' + sub(f, 'm') + ', ' + sub(f, 'l'), 'gordura no creme, na manteiga e no leitelho (%)'], [sub(i('u'), 'm'), 'umidade da manteiga (%)']],
+        note: 'Na bateção, os glóbulos de gordura do creme maturado se rompem, a emulsão se inverte e a gordura se junta em grãos de manteiga; o leitelho (soro da manteiga) sai com a maior parte da água e dos sólidos não gordurosos.' };
+    },
     solar_dryer: (p) => {
       const cont = /^contínuo/.test((p && p.mode) || ''), X = i('X'), Xe = sub(X, 'e'), Xc = sub(X, 'c'), I = i('I'), Lh = i('L'), Th = sub(T, 'h'), Ta = sub(T, 'amb'), Tw = sub(T, 'w');
       const lw = sub(i('λ'), 'w'), h = i('h'), Ga = sub(i('G'), 'a'), cs = sub(i('c'), 's'), H = i('H'), phi = i('φ'), ta = i('τ') + i('α'), A = i('A'), Ac = sub(A, 'c'), etac = sub(i('η'), 'c'), Nn = i('N'), U = i('U'), E = i('E'), f = i('f');
@@ -7590,7 +8235,8 @@ window.SIMULAFACIL_CONFIG = {
       'Toda simulação começa pela especificação das correntes de entrada. Pela regra das fases de Gibbs, uma corrente de composição conhecida fica totalmente definida por duas variáveis intensivas: temperatura e pressão, ou pressão e fração vaporizada. Com isso o simulador resolve um flash na condição informada e calcula a fase, as composições do líquido e do vapor e a entalpia, que serão usadas por todos os equipamentos a jusante.',
       'A escolha do par de especificações tem consequência física. Informar a fração vaporizada igual a 0 significa líquido saturado (no ponto de bolha); igual a 1, vapor saturado (no ponto de orvalho). Na destilação, essa condição térmica define o parâmetro q da reta de alimentação: q = 1 para líquido saturado e q = 0 para vapor saturado. A vazão pode ser dada em base molar, mássica, volumétrica ou como concentrações, conforme o problema.',
       'No exemplo "Destilação etanol/água — McCabe-Thiele", a alimentação F tem 100 kmol/h com 10 % de etanol, a 1 atm e fração vaporizada 0. O simulador calcula a temperatura de bolha (cerca de 86 °C) e a coluna recebe a carga como líquido saturado, o que deixa a reta q vertical no diagrama de McCabe-Thiele. Experimente mudar a fração vaporizada para 0,5 e observe como a reta q se inclina e o número de estágios muda.',
-      'Para alimentos e lodos, use o campo “Alimento ou lodo”: ele inclui a água e a matéria seca do material na lista de componentes (frutas como abacaxi, morango, uva, banana, manga, maçã, mamão e goiaba; suco de tomate e de laranja; leite integral e desnatado; extrato de café; e os lodos primário, biológico e misto de fábrica de celulose) e preenche a composição mássica in natura. Depois de simular, o detalhe da corrente mostra c_p, ρ, k e a difusividade térmica calculados pela composição (Choi e Okos, 1986).'] },
+      'Para alimentos, lodos e dejetos, use o campo “Alimento, lodo ou dejeto”: ele inclui a água e a matéria seca do material na lista de componentes (frutas como abacaxi, morango, uva, banana, manga, maçã, mamão e goiaba; suco de tomate e de laranja; leite integral e desnatado; extrato de café; e os lodos primário, biológico e misto de fábrica de celulose) e preenche a composição mássica in natura. Depois de simular, o detalhe da corrente mostra c_p, ρ, k e a difusividade térmica calculados pela composição (Choi e Okos, 1986).',
+      'Para bebidas, use o campo “Bebida”: cerveja pilsen e sem álcool, mosto cervejeiro de 12 °P, refrigerantes de cola e de guaraná, bebida energética, cachaça, vinho de cana fermentado, vinho tinto e xarope de açúcar a 60 °Brix. A composição mássica sai dos dados por litro (teor alcoólico em % v/v, açúcares, extrato, CO₂, cafeína, ácido fosfórico ou cítrico e taurina) e da massa específica, que pode ser estimada pela tabela da OIML para água e etanol. A opção “outra bebida” deixa digitar esses dados para qualquer produto. Os gases dissolvidos (CO₂, O₂, N₂, CH₄, H₂S) seguem a lei de Henry em água: a 4 °C, o refrigerante precisa de cerca de 3 bar para guardar 6,7 g/L de CO₂, e aberto a 25 °C fica com só 1,3 g/kg. O detalhe das correntes com água e etanol mostra o teor alcoólico em % v/v a 20 °C (°GL).'] },
     product: { ex: ex('etoh-mccabe', 'Destilação etanol/água — McCabe-Thiele'), p: [
       'O produto é o ponto em que uma corrente deixa o fluxograma. Ele não tem equações próprias, mas é nele que se conferem os balanços globais do processo: a soma das massas que saem deve ser igual à soma das que entram, e cada componente deve ser conservado quando não há reação química.',
       'Verificar os balanços nos produtos é um hábito essencial em simulação. O simulador mostra, na aba Resultados, o fechamento do balanço de massa global do fluxograma; valores muito diferentes de zero indicam reciclo não convergido ou especificações inconsistentes. Para destilação, os balanços F = D + W e F·z = D·x_D + W·x_W permitem conferir as purezas obtidas.',
@@ -7622,6 +8268,25 @@ window.SIMULAFACIL_CONFIG = {
       'O modelo do programa é limitado pela energia: o produto aquece até a temperatura de secagem T_p e, daí em diante, a potência absorvida evapora a água, −dX/dt = η(X)·q/λ, com q = potência emitida por kg de sólido seco. A fração absorvida η(X) = η_máx·[1 − exp(−(X − X_e)/X_a)] cai quando o produto seca, porque o fator de perda dielétrica ε″ diminui com a umidade; é isso que produz o período de taxa decrescente. A equação tem solução analítica, e a potência para chegar a X_f não depende do tempo de residência: o tempo só define a carga na esteira, a potência específica (W/g) e o tamanho do túnel.',
       'Na operação contínua, a fruta úmida entra numa esteira dentro do túnel e sai seca do outro lado; a porta de energia mostra a potência elétrica dos magnétrons (eficiência típica de 0,7 a 2 450 MHz e 0,85 a 915 MHz). Na batelada, uma bandeja fica na cavidade, como num forno doméstico, e o programa calcula o tempo para chegar a X_f e a curva de secagem para três potências.',
       'O exemplo seca 100 kg/h de fatias de maçã com 85,7 % de água (X_i = 6) até X_f = 0,15 em 30 min, a 75 °C: evaporam 83,6 kg/h de água, os magnétrons emitem 78,8 kW (112,6 kW de eletricidade), o produto absorve 75 % disso e o consumo é de 4,85 MJ por kg de água, cerca de duas vezes o calor latente. A esteira de 0,6 m tem 10,4 m e anda a 0,35 m/min; a camada de 13,3 mm fica perto da profundidade de penetração (9,7 mm a 2 450 MHz), por isso o aquecimento é razoavelmente uniforme. Mude a frequência para 915 MHz e veja D_p subir para cerca de 26 mm.'] },
+    biodigester: { ex: ex('biodigestor-rural', 'Biodigestor rural: dejetos de uma propriedade'), p: [
+      'O biodigestor é um reator anaeróbio, sem oxigênio, em que bactérias e arqueias transformam a matéria orgânica dos dejetos em biogás (de 55 a 70 % de metano e o resto CO₂, com um pouco de H₂S) e num efluente estabilizado, o biofertilizante. A degradação passa por quatro etapas: hidrólise (os polímeros viram açúcares, aminoácidos e ácidos graxos), acidogênese, acetogênese (ácido acético, H₂ e CO₂) e metanogênese, a etapa mais lenta, que limita o processo.',
+      'Os modelos rurais mais usados no Brasil são o indiano, com gasômetro flutuante (campânula) sobre a câmara de digestão, que mantém a pressão do gás constante, e o chinês, de cúpula fixa, todo enterrado. Os dois são carregados uma vez por dia pela caixa de entrada; a carga empurra o mesmo volume de efluente pela caixa de saída. O volume útil é a vazão da carga vezes o tempo de retenção hidráulica (V = Q·θ), de 30 a 50 dias sem aquecimento. A carga deve ter de 6 a 10 % de sólidos totais: por isso o esterco é diluído em água.',
+      'A planilha original (programa em Flash de Christiano Guirlanda) estima o biogás por quilo de dejeto fresco: 36 L/kg para esterco de bovinos, 52 para suínos, 100 para equinos, 240 para aves e 25 para resíduos vegetais, e converte o biogás em outros combustíveis e no tempo de uso de lampião, fogão, motor, geladeira e incubadora. A cinética de Chen e Hashimoto (1978), usada para esterco de gado e de suínos, mostra o efeito do tempo de retenção e da temperatura: CH₄ = B₀·SV·[1 − K/(θ·μ_m − 1 + K)], com μ_m = 0,013·T − 0,129 d⁻¹. Se θ·μ_m ≤ 1, as metanogênicas saem do reator mais depressa do que crescem (lavagem) e a produção para.',
+      'O potencial de metano B₀ (m³ de CH₄ por kg de sólidos voláteis) do IPCC é de 0,24 para bovinos de leite, 0,48 para suínos, 0,30 para equinos e 0,39 para aves. O biogás tem PCI de cerca de 21,5 MJ/m³ com 60 % de metano: 1 m³ cozinha as refeições de uma pessoa por dia ou gera de 1,5 a 2 kWh num motor-gerador.',
+      'O exemplo trata 10 kg/dia de esterco de bovinos, 20 de suínos, 30 de equinos, 40 de aves e 100 de resíduos vegetais, os mesmos números da planilha original, diluídos com 1,5 kg de água por kg: produz 16,5 m³/dia de biogás (5,64 L de querosene ou 6,53 kg de GLP por dia), e a cinética de Chen e Hashimoto dá um valor próximo, para 40 dias de retenção a 25 °C.'] },
+    centrifuge: { ex: ex('centrifuga-leite', 'Centrífuga desnatadeira: leite'), p: [
+      'A centrífuga de discos (separador) separa dois líquidos de massas específicas diferentes, e os sólidos finos, num campo centrífugo de milhares de g. O líquido entra pelo tubo central, sobe entre os discos cônicos e se divide: a fase leve (gordura do leite, óleo) corre para o eixo e sai por cima; a fase pesada (leite desnatado, gomas hidratadas) corre para a periferia; o lodo (células, sujeira, sedimentos) se acumula na parede do tambor e é descarregado de tempos em tempos.',
+      'No leite, o balanço de gordura dá as vazões: creme C = F′(f_L − f_D)/(f_C − f_D) e leite desnatado D = F′ − C, com F′ = F − lodo. A água e os sólidos não gordurosos (proteína, lactose e minerais) acompanham o plasma do leite. O bloco reproduz também o programa “Centrífuga” em Flash MX de Gustavo Brito e Juan Bosch: o módulo I (rotação ou vazão para uma nova recuperação, ω₂ = ω·√(rec₂/rec₁)) e o balanço com eficiência, que não fecha a gordura e fica como opção para comparar.',
+      'A teoria Σ (Ambler) diz quanto a máquina separa: Σ = 2πNω²(r₂³ − r₁³)/(3g·tan θ) é a área de um decantador por gravidade equivalente, e o glóbulo crítico, separado por completo, é d_c = √(18μQ/(Δρ·g·Σ)). Os glóbulos de gordura do leite têm de 1 a 10 µm; desnatadeiras deixam passar os menores que cerca de 1 µm, o que dá de 0,03 a 0,06 % de gordura no desnatado.',
+      'Na degomagem do óleo de soja, o óleo bruto (com 1,5 a 3 % de fosfolipídios) recebe de 0,75 a 1 kg de água por kg de fosfolipídio a 60–80 °C; os fosfolipídios se hidratam, ficam insolúveis no óleo e a centrífuga os separa como gomas úmidas, que levam junto um pouco de óleo. Secas a vácuo, as gomas viram a lecitina de soja (pelo menos 60 % de insolúveis em acetona).',
+      'O exemplo separa 1 000 kg/h de leite integral com 3,5 % de gordura a 50 °C em creme com 37 % de gordura e desnatado com 0,03 %. O exemplo da soja degoma 10 000 kg/h de óleo bruto com 2,5 % de fosfolipídios e dá 9 648 kg/h de óleo degomado (67 ppm de fósforo) e 349 kg/h de lecitina. O laticínio completo usa a centrífuga com 10 000 kg/h de leite.'] },
+    pasteurizer: { ex: ex('laticinio-completo', 'Laticínio completo'), p: [
+      'O pasteurizador HTST (alta temperatura, tempo curto) aquece o leite a 72–75 °C, mantém essa temperatura por 15 a 20 s num tubo de retenção e o resfria. É um trocador de placas com três seções: na regeneração, o leite frio que entra é aquecido pelo leite já pasteurizado, que sai resfriado (o mesmo calor é usado duas vezes); na seção de aquecimento, água quente leva o leite à temperatura de pasteurização; na de resfriamento, água gelada o leva a 4 °C. Uma válvula de desvio devolve o leite ao tanque se a temperatura cair abaixo do mínimo.',
+      'Com vazões iguais, o leite frio sai da regeneração a T₁ = T_e + ε(T_p − T_e) e o pasteurizado a T₂ = T_p − ε(T_p − T_e). Com ε = 0,9, só 10 % do calor vem da água quente. A letalidade usa a Coxiella burnetii, o patógeno mais resistente ao calor do leite: D₇₂ = 1,88 s e z = 4,34 °C (Cerf e Condron, 2006); 72 °C por 15 s dão cerca de 8 reduções decimais, acima das 5 do Codex. O tubo de retenção é dimensionado pela partícula mais rápida: no escoamento turbulento ela anda cerca de 1,22 vez a velocidade média.',
+      'No laticínio completo, o leite resfriado a 4 °C é pasteurizado a 75 °C por 15 s e sai a 50 °C para a centrífuga (o desnate é melhor a quente, com a gordura líquida e o leite menos viscoso): a regeneração fica limitada a 35 % e não há resfriamento. Com saída a 4 °C, ela recuperaria 90 % do calor.'] },
+    butter_churn: { ex: ex('laticinio-completo', 'Laticínio completo'), p: [
+      'Na batedeira, o creme de leite maturado (resfriado e mantido algumas horas a 8–12 °C, para a gordura cristalizar em parte) é batido com força. Os glóbulos de gordura se rompem, a emulsão de gordura em água se inverte e a gordura se junta em grãos de manteiga; a fase aquosa sai como leitelho (soro da manteiga), com pouca gordura. Na batedeira contínua, os grãos são lavados, salgados e malaxados até a manteiga ter cerca de 82 % de gordura e 16 % de umidade.',
+      'O balanço de gordura dá a manteiga, B = C(f_c − f_l)/(f_m − f_l), e o leitelho, C − B. No laticínio completo, 863 kg/h de creme com 40 % de gordura dão 418 kg/h de manteiga e 445 kg/h de leitelho: cerca de 2,06 kg de creme por kg de manteiga e 99,4 % da gordura recuperada.'] },
     solar_dryer: { ex: ex('secador-solar-abacaxi', 'Secador solar contínuo: abacaxi'), p: [
       'O secador solar usa o sol para aquecer o ar de secagem. No tipo indireto, um coletor solar de ar (uma caixa com placa absorvedora preta e cobertura de vidro ou plástico) aquece o ar ambiente que o ventilador empurra para a câmara de bandejas, onde o produto fica à sombra, o que preserva a cor e as vitaminas. No tipo misto, a câmara também tem cobertura transparente e o produto recebe sol direto; no direto (estufa ou cabine solar), não há coletor. Comparado à secagem ao sol aberto, o secador protege da chuva, da poeira e dos insetos e seca mais depressa.',
       'A irradiância segue uma senoide ao longo do dia, I(t) = I_máx·sen(π(t − t_n)/L), com I_máx = π·H_d/(2L); a irradiação diária H_d (kWh/(m²·dia)) vem do atlas solarimétrico da região, cerca de 5 a 6 no Brasil. O coletor aquece o ar em ΔT = η_c·I·A_c/(G_a·c_s). Nas bandejas, a secagem tem duas parcelas: a convecção do ar quente, h(T − T_w)/λ_w, como no secador de bandejas, e a radiação absorvida pelo produto, da qual metade evapora água e o resto aquece o ar da câmara (efeito estufa), descontada a perda de calor pela cobertura. Abaixo da umidade crítica X_c as duas parcelas caem linearmente até a umidade de equilíbrio X_e. O ar recolhe a água evaporada e esfria; se chegar à saturação, a secagem para.',
@@ -7837,7 +8502,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   const U = SF.units, N = SF.num;
   // entradas opcionais: sem corrente conectada, esses equipamentos usam os campos (vazão, composição) e ainda geram as correntes de saída
-  const OPTIONAL_IN = { mixer: ['in2', 'in3', 'in4'], column: ['feed2', 'feed3'], crystallizer: ['feed'], tray_dryer: ['feed'], spray_dryer: ['feed'], freeze_dryer: ['feed'], microwave_dryer: ['feed'], solar_dryer: ['feed'],
+  const OPTIONAL_IN = { mixer: ['in2', 'in3', 'in4'], column: ['feed2', 'feed3'], crystallizer: ['feed'], tray_dryer: ['feed'], spray_dryer: ['feed'], freeze_dryer: ['feed'], microwave_dryer: ['feed'], solar_dryer: ['feed'], centrifuge: ['feed'], biodigester: ['feed', 'water'],
     bioreactor_tosetto: ['feed', 'side'], bioreactor_1: ['feed'], bioreactor_2: ['feed', 'side'], bioreactor_monod: ['feed'], bioreactor_verhulst: ['feed'],
     biodiesel_reactor: ['oil', 'alcohol'], pid_cstr: ['feed'],
     blast_furnace: ['ore', 'coke', 'flux', 'blast'], cement_kiln: ['meal', 'fuel', 'air'], silo: ['feed'], thickener: ['feed'], kraft_digester: ['chips', 'white_liquor'] };
@@ -7848,6 +8513,7 @@ window.SIMULAFACIL_CONFIG = {
   // calor que o equipamento troca por uma porta de energia (W; positivo no sentido da corrente)
   function energyAt(b, r, port) {
     if (!r) return null;
+    if (r.eports && r.eports[port] != null) return r.eports[port];   // equipamentos com uma carga por porta (pasteurizador)
     if (port === 'qc') return r.duties && r.duties.Qc != null ? -r.duties.Qc : null;
     if (port === 'qr') return r.duties && r.duties.Qr != null ? r.duties.Qr : null;
     if (port === 'q_pre') return r.duties && r.duties.Qpre != null ? r.duties.Qpre : null;
@@ -7989,7 +8655,11 @@ window.SIMULAFACIL_CONFIG = {
     cement_kiln: { meal: 'farinha crua', fuel: 'combustível', air: 'ar de combustão', gas: 'gases de exaustão', clinker: 'clínquer' },
     silo: { feed: 'alimentação', product: 'descarga' },
     thickener: { feed: 'polpa', overflow: 'overflow (clarificado)', underflow: 'underflow (lama adensada)' },
-    kraft_digester: { chips: 'cavacos', white_liquor: 'licor branco', pulp: 'polpa marrom', black_liquor: 'licor negro', condensate: 'condensado' } };
+    kraft_digester: { chips: 'cavacos', white_liquor: 'licor branco', pulp: 'polpa marrom', black_liquor: 'licor negro', condensate: 'condensado' },
+    biodigester: { feed: 'dejetos (carga diária)', water: 'água de diluição', biogas: 'biogás', digestate: 'biofertilizante (efluente)', q_in: 'aquecimento' },
+    centrifuge: { feed: 'alimentação', light: 'fase leve (creme ou óleo degomado)', heavy: 'fase pesada (leite desnatado ou gomas)', sludge: 'lodo', q_in: 'motor' },
+    pasteurizer: { feed: 'produto cru', out: 'produto pasteurizado', q_in: 'água quente (aquecimento)', q_out: 'água gelada (resfriamento)' },
+    butter_churn: { feed: 'creme de leite', butter: 'manteiga', buttermilk: 'leitelho', q_out: 'resfriamento do creme' } };
   function portLabel(p, type) { return (type && TYPE_PORT_LABELS[type] && TYPE_PORT_LABELS[type][p]) || PORT_LABELS[p] || p; }
 
   SF.flowsheet = { solve, portLabel, PORT_LABELS, isEnergyPort, isEnergyStream };
@@ -8041,6 +8711,10 @@ window.SIMULAFACIL_CONFIG = {
     tray_dryer: { w: 130, h: 100, ports: { feed: P(0, 74, 'l', 'in'), q_in: P(38, 100, 'd', 'ein'), exhaust: P(130, 12, 'r', 'out'), product: P(130, 74, 'r', 'out') } },
     spray_dryer: { w: 120, h: 150, ports: { feed: P(44, 0, 'u', 'in'), q_in: P(0, 14, 'l', 'ein'), exhaust: P(120, 44, 'r', 'out'), product: P(44, 150, 'd', 'out') } },
     microwave_dryer: { w: 140, h: 96, ports: { feed: P(0, 54, 'l', 'in'), q_in: P(70, 0, 'u', 'ein'), vapor: P(140, 28, 'r', 'out'), product: P(140, 54, 'r', 'out') } },
+    biodigester: { w: 160, h: 124, ports: { feed: P(0, 28, 'l', 'in'), water: P(0, 42, 'l', 'in'), biogas: P(80, 0, 'u', 'out'), digestate: P(160, 40, 'r', 'out'), q_in: P(80, 124, 'd', 'ein') } },
+    centrifuge: { w: 110, h: 132, ports: { feed: P(55, 0, 'u', 'in'), light: P(0, 34, 'l', 'out'), heavy: P(110, 34, 'r', 'out'), sludge: P(110, 84, 'r', 'out'), q_in: P(55, 132, 'd', 'ein') } },
+    pasteurizer: { w: 170, h: 104, ports: { feed: P(0, 74, 'l', 'in'), out: P(170, 74, 'r', 'out'), q_in: P(80, 104, 'd', 'ein'), q_out: P(130, 104, 'd', 'eout') } },
+    butter_churn: { w: 130, h: 96, ports: { feed: P(0, 30, 'l', 'in'), butter: P(130, 50, 'r', 'out'), buttermilk: P(65, 96, 'd', 'out'), q_out: P(110, 0, 'u', 'eout') } },
     solar_dryer: { w: 150, h: 112, ports: { feed: P(0, 44, 'l', 'in'), q_in: P(20, 0, 'u', 'ein'), exhaust: P(150, 14, 'r', 'out'), product: P(150, 84, 'r', 'out') } },
     freeze_dryer: { w: 140, h: 114, ports: { feed: P(0, 46, 'l', 'in'), q_in: P(46, 0, 'u', 'ein'), product: P(94, 114, 'd', 'out'), vapor: P(112, 114, 'd', 'out') } },
     crystallizer: { w: 110, h: 124, ports: { feed: P(0, 34, 'l', 'in'), vapor: P(55, 0, 'u', 'out'), q_out: P(30, 124, 'd', 'eout'), liquor: P(110, 40, 'r', 'out'), crystals: P(110, 116, 'r', 'out') } },
@@ -8198,6 +8872,39 @@ window.SIMULAFACIL_CONFIG = {
       [26, 42, 58, 74, 90, 106].forEach(x => o.push(R(x, 49, 10, 5, 1, 'bodyw')));
       o.push(L([[8, 54], [132, 54]]), L([[12, 62], [128, 62]]), C(12, 58, 4), C(128, 58, 4), L([[0, 54], [8, 54]]), L([[132, 54], [140, 54]]),
         L([[118, 28], [140, 28]], 'lnd'), T(70, 86, 'micro-ondas'));
+      return o;
+    },
+    biodigester: () => { // biodigestor modelo indiano: câmara enterrada com o gasômetro flutuante (campânula), caixa de entrada com tubo até o fundo, caixa de saída do biofertilizante
+      const o = [R(46, 52, 68, 64, 6), L([[50, 62], [110, 62]], 'lnd'), R(54, 14, 52, 42, 4, 'bodyw'), L([[80, 14], [80, 0]]), L([[74, 6], [86, 6]])];
+      [[66, 78, 2.6], [84, 72, 2.2], [74, 92, 2.4], [94, 86, 2]].forEach(([x, y, r]) => o.push(C(x, y, r, 'bodyw')));
+      o.push(L([[0, 52], [46, 52]]), L([[114, 52], [160, 52]]));
+      [6, 18, 30, 124, 136, 148].forEach(x => o.push(L([[x, 52], [x + 6, 58]])));
+      o.push(Pg([[8, 22], [36, 22], [32, 48], [12, 48]]), L([[0, 28], [9, 28]]), L([[0, 42], [11, 42]]), L([[26, 48], [56, 108]]),
+        Pg([[126, 32], [154, 32], [150, 48], [130, 48]]), L([[106, 106], [136, 48]]), L([[152, 40], [160, 40]]),
+        L([[56, 112], [62, 106], [68, 112], [74, 106], [80, 112], [86, 106], [92, 112], [98, 106], [104, 112]], 'hot'), L([[80, 116], [80, 124]], 'hot'), T(80, 40, 'CH₄'));
+      return o;
+    },
+    centrifuge: () => { // separador de discos: tambor bicônico com pilha de discos cônicos, tubo central de alimentação, saídas das fases no topo, descarga de lodo e motor
+      const o = [Pg([[30, 28], [80, 28], [93, 58], [80, 88], [30, 88], [17, 58]]), L([[55, 0], [55, 80]])];
+      [0, 1, 2, 3, 4].forEach(k => o.push(L([[34, 46 + k * 8], [55, 36 + k * 8], [76, 46 + k * 8]], 'lnd')));
+      o.push(L([[0, 34], [32, 34]]), L([[78, 34], [110, 34]]), R(13, 54, 6, 8, 1, 'bodyw'), R(91, 54, 6, 8, 1, 'bodyw'), L([[97, 62], [104, 84], [110, 84]], 'lnd'),
+        R(26, 88, 58, 8, 2), L([[55, 96], [55, 106]]), R(40, 106, 30, 20, 3), L([[55, 126], [55, 132]]), T(80, 120, 'ω'));
+      return o;
+    },
+    pasteurizer: () => { // trocador de placas com três seções (regeneração, aquecimento, resfriamento) e tubo de retenção em serpentina
+      const o = [R(20, 40, 130, 50, 3)];
+      for (let x = 26; x <= 144; x += 6) if (x !== 62 && x !== 110) o.push(L([[x, 44], [x, 86]], 'lnd'));
+      o.push(L([[62, 36], [62, 94]]), L([[110, 36], [110, 94]]), L([[0, 74], [20, 74]]), L([[150, 74], [170, 74]]));
+      const pts = []; for (let k = 0; k <= 40; k++) { const x = 66 + 40 * k / 40; pts.push([x, 16 + 7 * Math.sin(k * Math.PI / 5)]); }
+      o.push(L([[86, 40], [86, 30], [66, 30], [66, 16]], 'hot'), L(pts, 'hot'), L([[106, 16], [106, 30], [40, 30], [40, 40]], 'hot'),
+        L([[80, 90], [80, 104]], 'hot'), L([[130, 90], [130, 104]], 'cold'), T(41, 100, 'reg.'), T(146, 30, 'HTST'));
+      return o;
+    },
+    butter_churn: () => { // batedeira: tambor horizontal com batedor, grãos de manteiga, saída de leitelho embaixo e motor em cima
+      const o = [R(20, 20, 90, 50, 22), L([[22, 45], [108, 45]]), L([[40, 30], [48, 60]]), L([[62, 30], [70, 60]]), L([[84, 30], [92, 60]])];
+      [[36, 58], [52, 52], [77, 57], [96, 52], [58, 62]].forEach(([x, y]) => o.push(C(x, y, 2.6, 'hot')));
+      o.push(R(56, 2, 18, 12, 2), L([[65, 14], [65, 20]]), L([[0, 30], [20, 30]]), L([[110, 50], [130, 50]]), L([[65, 70], [65, 96]]),
+        L([[110, 0], [110, 10], [100, 20]], 'cold'), L([[32, 68], [26, 86]]), L([[98, 68], [104, 86]]));
       return o;
     },
     solar_dryer: () => { // sol, coletor solar de ar inclinado (o ar ambiente entra embaixo e sobe aquecido) e câmara de bandejas com cobertura transparente e chaminé
@@ -9126,7 +9833,8 @@ end
     const r = res.blocks[b.id]; if (!r) return null;
     const fname = blockFn(st, b), th = res.th, out = [];
     const header = '% ' + b.name + ' — ' + SF.units.TYPES[b.type].label;
-    const resLines = (r.res || []).map(x => "fprintf('  %-48s %s\\n', " + str(x.k) + ", " + str((typeof x.v === 'number' ? (+x.v.toPrecision(6)).toString() : x.v) + ' ' + (x.u || '')) + ");");
+    const tg = t => String(t).replace(/<[^>]+>/g, '');   // sem as marcas de negrito da tabela de resultados
+    const resLines = (r.res || []).map(x => "fprintf('  %-48s %s\\n', " + str(tg(x.k)) + ", " + str(tg((typeof x.v === 'number' ? (+x.v.toPrecision(6)).toString() : x.v) + ' ' + (x.u || ''))) + ");");
     const printRes = ["fprintf('\\n== %s (resultados do simulador) ==\\n', " + str(b.name) + ");"].concat(resLines);
     if ((b.type === 'column' || b.type === 'column_mt') && r.plots && r.plots.find(p => p.kind === 'mccabe') && td.act) {
       const m = r.plots.find(p => p.kind === 'mccabe').data;
@@ -9430,6 +10138,74 @@ end
         "xlabel('Tempo no túnel (h)', 'FontSize', FS); ylabel('X (kg H_2O/kg ss)', 'FontSize', FS); title('Umidade ao longo do túnel', 'FontSize', FS); set(gca, 'FontSize', FS);",
         "subplot(1, 2, 2); plot(Lv*1000, tv, 'Color', [0.48 0.24 0.72], 'LineWidth', 2.5); hold on; plot(L_camada*1000, t_res_h, 'kd', 'MarkerSize', 10, 'MarkerFaceColor', 'k'); grid on;",
         "xlabel('Espessura da camada (mm)', 'FontSize', FS); ylabel('Tempo de residência (h)', 'FontSize', FS); title('Tempo cresce com L^2', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'biodigester' && r.bio) {
+      const g = r.bio, S = g.subs, vec = f => '[' + S.map(f).map(v => (v == null ? 'NaN' : n2s(v))).join(' ') + ']';
+      out.push('function ' + fname + '(D, FS)', header, '% Biodigestor anaeróbio (carga diária): planilha original (C. Guirlanda) e cinética de Chen e Hashimoto (1978).', printRes.join('\n'),
+        'nome = {' + S.map(q => str(q.nome)).join(', ') + '};',
+        'M = ' + vec(q => q.fresh) + ';   % dejeto fresco (kg/dia)', 'SV = ' + vec(q => q.vs) + ';   % sólidos voláteis (kg/dia)',
+        'y = ' + vec(q => q.L) + ';   % planilha: L de biogás por kg de dejeto (NaN = sem dado)', 'B0 = ' + vec(q => q.B0) + ';   % m^3 CH4/kg SV', 'sui = ' + vec(q => (q.K === 'sui' ? 1 : 0)) + ';',
+        'Mtot = ' + n2s(g.Mtot) + '; rho = ' + n2s(g.rhoL) + '; th = ' + n2s(g.thR) + '; T = ' + n2s(g.T) + '; x = ' + n2s(g.x) + ';   % kg/dia, kg/m^3, dias, °C, fração de CH4',
+        'Qv = Mtot/rho; V = Qv*th; S0 = sum(SV)/Qv; mu = 0.013*T - 0.129;',
+        'K = 0.8 + 0.0016*exp(0.06*S0)*ones(size(SV)); K(sui == 1) = 0.6 + 0.0206*exp(0.051*S0);',
+        'f = max(0, 1 - K./(th*mu - 1 + K)); if th*mu <= 1, f(:) = 0; end',
+        'Vch = B0.*SV.*f/x; Vpl = M.*y/1000; Vpl(isnan(Vpl)) = Vch(isnan(Vpl));',
+        (g.plan ? 'Vb = sum(Vpl);   % planilha original' : 'Vb = sum(Vch);   % Chen e Hashimoto'),
+        'PCI = x*35.88; E = Vb*PCI;   % MJ/m^3 e MJ/dia',
+        'feq = [' + g.eqF.map(n2s).join(' ') + ']; comb = Vb*feq;   % querosene (L), lenha (kg), GLP (kg), diesel (L), gasolina (L)',
+        'cons = [' + g.cons.map(n2s).join(' ') + ']; uso = Vb*1000./cons;   % lampião (h), fogão (dias·pessoa), motor (hp·h), geladeira (dias), incubadora (h/100 L)',
+        "fprintf('  MATLAB: V = %.2f m^3, S0 = %.2f kg/m^3, biogás = %.3f m^3/dia (planilha %.3f, Chen e Hashimoto %.3f), energia = %.1f MJ/dia\\n', V, S0, Vb, sum(Vpl), sum(Vch), E);",
+        "fprintf('  MATLAB: querosene %.3f L, lenha %.3f kg, GLP %.3f kg, diesel %.3f L, gasolina %.3f L\\n', comb);",
+        "fprintf('  MATLAB: lampião %.2f h, fogão %.2f dias, motor %.2f hp·h, geladeira %.2f dias, incubadora %.2f h\\n', uso);",
+        'tv = 5:0.5:90; Tl = [max(15, T - 10) T min(60, T + 10)]; Vt = zeros(numel(Tl), numel(tv));',
+        'for a = 1:numel(Tl), m = 0.013*Tl(a) - 0.129; for k = 1:numel(tv), ff = max(0, 1 - K./(tv(k)*m - 1 + K)); if tv(k)*m <= 1, ff(:) = 0; end; Vt(a, k) = sum(B0.*SV.*ff)/x; end; end',
+        "figure('Name', " + str(b.name + ' — biogás × TRH') + ", 'Color', 'w');",
+        "subplot(1, 2, 1); plot(tv, Vt(1, :), '--', tv, Vt(2, :), '-', tv, Vt(3, :), '--', 'LineWidth', 2.2); hold on; plot(th, Vb, 'kd', 'MarkerFaceColor', 'k'); grid on;",
+        "xlabel('TRH (dias)', 'FontSize', FS); ylabel('Biogás (m^3/dia)', 'FontSize', FS); title('Chen e Hashimoto', 'FontSize', FS); legend(arrayfun(@(t) sprintf('%.1f °C', t), Tl, 'UniformOutput', false), 'Location', 'southeast'); set(gca, 'FontSize', FS);",
+        "subplot(1, 2, 2); bar([Vpl(:) Vch(:)]); set(gca, 'XTickLabel', nome, 'FontSize', FS); ylabel('Biogás (m^3/dia)', 'FontSize', FS); legend('Planilha', 'Chen e Hashimoto'); grid on;", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'centrifuge' && r.cen) {
+      const g = r.cen, L0 = ['function ' + fname + '(D, FS)', header, '% Centrífuga de discos: ' + (g.milk ? 'desnate do leite (balanço de gordura)' : 'degomagem do óleo de soja') + ', teoria Σ e módulo I do programa original (Brito e Bosch).', printRes.join('\n')];
+      if (g.milk) L0.push('F = ' + n2s(g.F) + '; L = ' + n2s(g.L) + '; fL = ' + n2s(g.fle) + '; fC = ' + n2s(g.fn) + '; fD = ' + n2s(g.flm) + ';   % kg/h e % de gordura',
+        g.orig ? 'razao = ' + n2s(g.C / g.D) + '; Dm = (F - L)/(1 + razao); C = F - L - Dm;   % programa original (eficiência)' : 'C = (F - L)*(fL - fD)/(fC - fD); Dm = F - L - C;   % balanço de gordura',
+        'rS = ' + n2s(g.rS) + ';   % sólidos não gordurosos no plasma (água + SNG)',
+        "fprintf('  MATLAB: creme = %.3f kg/h, desnatado = %.3f kg/h, recuperação de gordura = %.2f %%, SNG no creme = %.2f %%\\n', C, Dm, 100*C*fC/(F*fL), (100 - fC)*rS);");
+      else L0.push('O = ' + n2s(g.O) + '; P = ' + n2s(g.P) + '; W = ' + n2s(g.W) + '; xPL = ' + n2s(g.xPd) + '; xW = ' + n2s(g.xWd) + '; r = ' + n2s(g.r) + ';   % kg/h e frações',
+        'Dg = (O - r*P)/(1 - xPL*(1 + r) - xW); PLg = P - xPL*Dg; Og = O - (1 - xPL - xW)*Dg; Wg = W - xW*Dg; G = PLg + Og + Wg; lec = (PLg + Og)/0.99;',
+        "fprintf('  MATLAB: óleo degomado = %.3f kg/h, gomas = %.3f kg/h, lecitina = %.3f kg/h (AI = %.1f %%)\\n', Dg, G, lec, 100*PLg/(PLg + Og));");
+      L0.push('rpm = ' + n2s(g.rpm) + '; N = ' + n2s(g.Nd) + '; r1 = ' + n2s(g.r1) + '; r2 = ' + n2s(g.r2) + '; th = ' + n2s(g.ang) + '*pi/180; mu = ' + n2s(g.mu) + '; drho = ' + n2s(Math.abs(g.rhoH - g.rhoL)) + '; Fv = ' + n2s(g.Fv) + ';',
+        'w = rpm*2*pi/60; Sig = 2*pi*N*w^2*(r2^3 - r1^3)/(3*9.81*tan(th)); Q = Fv/1000/3600; dc = sqrt(18*mu*Q/(drho*9.81*Sig));',
+        'Q1 = ' + n2s(g.Q1) + '; rec1 = ' + n2s(g.rec1) + '; rec2 = ' + n2s(g.rec2) + '; vd = Q1*rec1/rec2; w2 = rpm*sqrt(rec2/rec1);   % módulo I do original',
+        "fprintf('  MATLAB: Sigma = %.0f m^2, d_c = %.3f um, módulo I: %.3f L/min ou %.1f rpm\\n', Sig, dc*1e6, vd, w2);",
+        'q = linspace(0.05, 2.5, 120)*Fv; d = sqrt(18*mu*(q/1000/3600)/(drho*9.81*Sig))*1e6;',
+        "figure('Name', " + str(b.name + ' — teoria Σ') + ", 'Color', 'w'); plot(q, d, 'b-', 'LineWidth', 2.5); hold on; plot(Fv, dc*1e6, 'kd', 'MarkerFaceColor', 'k'); grid on;",
+        "xlabel('Vazão (L/h)', 'FontSize', FS); ylabel('d_c (\\mum)', 'FontSize', FS); title('Diâmetro crítico × vazão', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      out.push(L0.join('\n')); return out.join('\n');
+    }
+    if (b.type === 'pasteurizer' && r.pas) {
+      const g = r.pas;
+      out.push('function ' + fname + '(D, FS)', header, '% Pasteurizador HTST de placas: regeneração, aquecimento, retenção e resfriamento; letalidade de C. burnetii.', printRes.join('\n'),
+        'M = ' + n2s(g.M) + '; cp = ' + n2s(g.cp) + '; Te = ' + n2s(g.Tin) + '; Tp = ' + n2s(g.Tp) + '; eps = ' + n2s(g.eps) + '; Ts = ' + n2s(g.Tout) + ';   % kg/h, kJ/(kg.K) médio, °C',
+        'T1 = Te + eps*(Tp - Te); T2 = Tp - eps*(Tp - Te); m = M/3600;',
+        'Qreg = m*cp*(T1 - Te); Qh = m*cp*(Tp - T1); Qc = max(0, m*cp*(T2 - Ts));   % kW (c_p médio)',
+        't = ' + n2s(g.th) + '; D72 = ' + n2s(g.D72) + '; z = ' + n2s(g.z) + '; n = t/(D72*10^((72 - Tp)/z)); F72 = t*10^((Tp - 72)/z);',
+        "fprintf('  MATLAB: T1 = %.1f °C, T2 = %.1f °C, Qreg = %.1f kW, Qaq = %.1f kW, Qresf = %.1f kW, %.1f reduções decimais, F72 = %.1f s\\n', T1, T2, Qreg, Qh, Qc, n, F72);",
+        'Tv = linspace(62, 85, 100); nv = t./(D72*10.^((72 - Tv)/z));',
+        "figure('Name', " + str(b.name + ' — letalidade') + ", 'Color', 'w'); semilogy(Tv, nv, 'r-', 'LineWidth', 2.5); hold on; semilogy([62 85], [" + n2s(g.nmin) + " " + n2s(g.nmin) + "], 'k--'); semilogy(Tp, n, 'kd', 'MarkerFaceColor', 'k'); grid on;",
+        "xlabel('Temperatura de pasteurização (°C)', 'FontSize', FS); ylabel('Reduções decimais', 'FontSize', FS); title('Coxiella burnetii', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
+    if (b.type === 'butter_churn' && r.bat) {
+      const g = r.bat;
+      out.push('function ' + fname + '(D, FS)', header, '% Batedeira de manteiga: balanço de gordura (manteiga e leitelho).', printRes.join('\n'),
+        'C = ' + n2s(g.C) + '; fc = ' + n2s(g.fc) + '; fm = ' + n2s(g.fb) + '; um = ' + n2s(g.wb) + '; fl = ' + n2s(g.fbm) + ';   % kg/h e %',
+        'B = C*(fc - fl)/(fm - fl); BM = C - B;',
+        "fprintf('  MATLAB: manteiga = %.3f kg/h, leitelho = %.3f kg/h, %.3f kg de creme por kg de manteiga\\n', B, BM, C/B);",
+        'f = linspace(25, 50, 100); y = 100*(f - fl)/(fm - fl);',
+        "figure('Name', " + str(b.name + ' — rendimento') + ", 'Color', 'w'); plot(f, y, 'LineWidth', 2.5, 'Color', [0.9 0.64 0.09]); hold on; plot(fc, 100*B/C, 'kd', 'MarkerFaceColor', 'k'); grid on;",
+        "xlabel('Gordura no creme (%)', 'FontSize', FS); ylabel('kg de manteiga por 100 kg de creme', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
       return out.join('\n');
     }
     if (b.type === 'solar_dryer' && (r.sol || r.solb)) {
@@ -11103,7 +11879,7 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
       "        print(f'{\"x \" + nome:<26}' + ''.join(f'{v:14.5f}' for v in c['x'][i]))"].join('\n');
   }
 
-  const pr = (b, r) => ['    print(f"\\n== {' + str(b.name) + '} (resultados do simulador) ==")'].concat((r.res || []).map(x => '    print(f"  {' + str(x.k) + ':<48} ' + String((typeof x.v === 'number' ? +x.v.toPrecision(6) : x.v) + ' ' + (x.u || '')).replace(/[{}"\\]/g, '') + '")'));
+  const pr = (b, r) => ['    print(f"\\n== {' + str(b.name) + '} (resultados do simulador) ==")'].concat((r.res || []).map(x => '    print(f"  {' + str(String(x.k).replace(/<[^>]+>/g, '')) + ':<48} ' + String((typeof x.v === 'number' ? +x.v.toPrecision(6) : x.v) + ' ' + (x.u || '')).replace(/<[^>]+>/g, '').replace(/[{}"\\]/g, '') + '")'));
 
   function blockCode(st, res, b, td) {
     const r = res.blocks[b.id]; if (!r) return null;
@@ -11424,6 +12200,75 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         '    f1, (a1, a2) = plt.subplots(1, 2, figsize=(15, 6.5))',
         "    a1.plot(t, X, 'b', lw=2.5); a1.plot(t_res_h, X_f, 'ks', ms=9); a1.set_xlabel('Tempo no túnel (h)'); a1.set_ylabel('X (kg H₂O/kg ss)'); a1.set_title('Umidade ao longo do túnel'); a1.grid(True)",
         "    a2.plot(Lv * 1000, tv, color='#7a3db8', lw=2.5); a2.plot(L_camada * 1000, t_res_h, 'kd', ms=9); a2.set_xlabel('Espessura da camada (mm)'); a2.set_ylabel('Tempo de residência (h)'); a2.set_title('O tempo cresce com L²'); a2.grid(True)",
+        '    f1.tight_layout()', '    return [f1]']).join('\n');
+    }
+    if (b.type === 'centrifuge' && r.cen) {
+      const g = r.cen, L0 = head.concat(['    # Centrífuga de discos: ' + (g.milk ? 'desnate do leite' : 'degomagem do óleo de soja') + ', teoria Σ e módulo I do programa original (Brito e Bosch)']);
+      if (g.milk) L0.push('    F, L, fL, fC, fD = ' + [g.F, g.L, g.fle, g.fn, g.flm].map(n2s).join(', ') + '   # kg/h e % de gordura',
+        g.orig ? '    razao = ' + n2s(g.C / g.D) + '; Dm = (F - L) / (1 + razao); C = F - L - Dm   # programa original (eficiência)' : '    C = (F - L) * (fL - fD) / (fC - fD); Dm = F - L - C   # balanço de gordura',
+        '    rS = ' + n2s(g.rS),
+        "    print(f'  Python: creme = {C:.3f} kg/h, desnatado = {Dm:.3f} kg/h, recuperação de gordura = {100*C*fC/(F*fL):.2f} %, SNG no creme = {(100 - fC)*rS:.2f} %')");
+      else L0.push('    O, P, W, xPL, xW, r = ' + [g.O, g.P, g.W, g.xPd, g.xWd, g.r].map(n2s).join(', '),
+        '    Dg = (O - r * P) / (1 - xPL * (1 + r) - xW); PLg = P - xPL * Dg; Og = O - (1 - xPL - xW) * Dg; Wg = W - xW * Dg; G = PLg + Og + Wg; lec = (PLg + Og) / 0.99',
+        "    print(f'  Python: óleo degomado = {Dg:.3f} kg/h, gomas = {G:.3f} kg/h, lecitina = {lec:.3f} kg/h (AI = {100*PLg/(PLg + Og):.1f} %)')");
+      L0.push('    rpm, N, r1, r2, th, mu, drho, Fv = ' + [g.rpm, g.Nd, g.r1, g.r2, g.ang, g.mu, Math.abs(g.rhoH - g.rhoL), g.Fv].map(n2s).join(', ') + '   # rpm, -, m, m, °, Pa·s, kg/m³, L/h',
+        '    w = rpm * 2 * np.pi / 60; Sig = 2 * np.pi * N * w**2 * (r2**3 - r1**3) / (3 * 9.81 * np.tan(np.radians(th))); Q = Fv / 1000 / 3600; dc = np.sqrt(18 * mu * Q / (drho * 9.81 * Sig))',
+        '    Q1, rec1, rec2 = ' + [g.Q1, g.rec1, g.rec2].map(n2s).join(', ') + '; vd = Q1 * rec1 / rec2; w2 = rpm * np.sqrt(rec2 / rec1)   # módulo I do original',
+        "    print(f'  Python: Σ = {Sig:.0f} m², d_c = {dc*1e6:.3f} µm, módulo I: {vd:.3f} L/min ou {w2:.1f} rpm')",
+        '    q = np.linspace(0.05, 2.5, 120) * Fv; d = np.sqrt(18 * mu * (q / 1000 / 3600) / (drho * 9.81 * Sig)) * 1e6',
+        "    f1, a1 = plt.subplots(figsize=(10, 6.5)); a1.plot(q, d, 'b', lw=2.5); a1.plot(Fv, dc * 1e6, 'kd', ms=9); a1.set_xlabel('Vazão (L/h)'); a1.set_ylabel('d_c (µm)'); a1.set_title('Teoria Σ: diâmetro crítico × vazão'); a1.grid(True)",
+        '    f1.tight_layout()', '    return [f1]');
+      return L0.join('\n');
+    }
+    if (b.type === 'biodigester' && r.bio) {
+      const g = r.bio, S = g.subs, arr = f => 'np.array([' + S.map(f).map(v => (v == null ? 'np.nan' : n2s(v))).join(', ') + '])';
+      return head.concat(['    # Biodigestor anaeróbio (carga diária): planilha original (C. Guirlanda) e cinética de Chen e Hashimoto (1978)',
+        '    nome = [' + S.map(q => JSON.stringify(q.nome)).join(', ') + ']',
+        '    M = ' + arr(q => q.fresh) + '   # dejeto fresco (kg/dia)', '    SV = ' + arr(q => q.vs) + '   # sólidos voláteis (kg/dia)',
+        '    y = ' + arr(q => q.L) + '   # planilha: L de biogás por kg (nan = sem dado)', '    B0 = ' + arr(q => q.B0) + '   # m³ CH4/kg SV', '    sui = ' + arr(q => (q.K === 'sui' ? 1 : 0)),
+        '    Mtot, rho, th, T, x = ' + [g.Mtot, g.rhoL, g.thR, g.T, g.x].map(n2s).join(', ') + '   # kg/dia, kg/m³, dias, °C, fração de CH4',
+        '    Qv = Mtot / rho; V = Qv * th; S0 = SV.sum() / Qv',
+        '    K = np.where(sui == 1, 0.6 + 0.0206 * np.exp(0.051 * S0), 0.8 + 0.0016 * np.exp(0.06 * S0))',
+        '    def frac(t, TT):',
+        '        m = 0.013 * TT - 0.129',
+        '        return np.zeros_like(K) if t * m <= 1 else np.maximum(0.0, 1 - K / (t * m - 1 + K))',
+        '    Vch = B0 * SV * frac(th, T) / x; Vpl = np.where(np.isnan(y), Vch, M * np.nan_to_num(y) / 1000)',
+        '    Vb = ' + (g.plan ? 'Vpl.sum()   # planilha original' : 'Vch.sum()   # Chen e Hashimoto'),
+        '    PCI = x * 35.88; E = Vb * PCI   # MJ/m³ e MJ/dia',
+        '    comb = Vb * np.array([' + g.eqF.map(n2s).join(', ') + '])   # querosene (L), lenha (kg), GLP (kg), diesel (L), gasolina (L)',
+        '    uso = Vb * 1000 / np.array([' + g.cons.map(n2s).join(', ') + '])   # lampião (h), fogão (dias·pessoa), motor (hp·h), geladeira (dias), incubadora (h/100 L)',
+        "    print(f'  Python: V = {V:.2f} m³, S0 = {S0:.2f} kg/m³, biogás = {Vb:.3f} m³/dia (planilha {Vpl.sum():.3f}, Chen e Hashimoto {Vch.sum():.3f}), energia = {E:.1f} MJ/dia')",
+        "    print('  Python: querosene %.3f L, lenha %.3f kg, GLP %.3f kg, diesel %.3f L, gasolina %.3f L' % tuple(comb))",
+        "    print('  Python: lampião %.2f h, fogão %.2f dias, motor %.2f hp·h, geladeira %.2f dias, incubadora %.2f h' % tuple(uso))",
+        '    tv = np.arange(5, 90.5, 0.5); f1, (a1, a2) = plt.subplots(1, 2, figsize=(13, 6))',
+        '    for TT, ls in ((max(15, T - 10), "--"), (T, "-"), (min(60, T + 10), "--")):',
+        "        a1.plot(tv, [(B0 * SV * frac(t, TT)).sum() / x for t in tv], ls, lw=2.2, label=f'{TT:.1f} °C')",
+        "    a1.plot(th, Vb, 'kd', ms=9); a1.set_xlabel('TRH (dias)'); a1.set_ylabel('Biogás (m³/dia)'); a1.set_title('Chen e Hashimoto'); a1.legend(); a1.grid(True)",
+        "    k = np.arange(len(nome)); a2.bar(k - 0.2, Vpl, 0.4, label='Planilha'); a2.bar(k + 0.2, Vch, 0.4, label='Chen e Hashimoto')",
+        "    a2.set_xticks(k); a2.set_xticklabels(nome, rotation=25, ha='right'); a2.set_ylabel('Biogás (m³/dia)'); a2.legend(); a2.grid(True, axis='y')",
+        '    f1.tight_layout()', '    return [f1]']).join('\n');
+    }
+    if (b.type === 'pasteurizer' && r.pas) {
+      const g = r.pas;
+      return head.concat(['    # Pasteurizador HTST de placas: regeneração, aquecimento, retenção e resfriamento; letalidade de C. burnetii',
+        '    M, cp, Te, Tp, eps, Ts = ' + [g.M, g.cp, g.Tin, g.Tp, g.eps, g.Tout].map(n2s).join(', ') + '   # kg/h, kJ/(kg·K) médio, °C',
+        '    T1 = Te + eps * (Tp - Te); T2 = Tp - eps * (Tp - Te); m = M / 3600',
+        '    Qreg = m * cp * (T1 - Te); Qh = m * cp * (Tp - T1); Qc = max(0.0, m * cp * (T2 - Ts))   # kW',
+        '    t, D72, z, nmin = ' + [g.th, g.D72, g.z, g.nmin].map(n2s).join(', ') + '; n = t / (D72 * 10**((72 - Tp) / z)); F72 = t * 10**((Tp - 72) / z)',
+        "    print(f'  Python: T1 = {T1:.1f} °C, T2 = {T2:.1f} °C, Qreg = {Qreg:.1f} kW, Qaq = {Qh:.1f} kW, Qresf = {Qc:.1f} kW, {n:.1f} reduções decimais, F72 = {F72:.1f} s')",
+        '    Tv = np.linspace(62, 85, 100); nv = t / (D72 * 10**((72 - Tv) / z))',
+        "    f1, a1 = plt.subplots(figsize=(10, 6.5)); a1.semilogy(Tv, nv, 'r', lw=2.5); a1.axhline(nmin, color='k', ls='--'); a1.semilogy(Tp, n, 'kd', ms=9)",
+        "    a1.set_xlabel('Temperatura de pasteurização (°C)'); a1.set_ylabel('Reduções decimais'); a1.set_title('Letalidade: Coxiella burnetii'); a1.grid(True)",
+        '    f1.tight_layout()', '    return [f1]']).join('\n');
+    }
+    if (b.type === 'butter_churn' && r.bat) {
+      const g = r.bat;
+      return head.concat(['    # Batedeira de manteiga: balanço de gordura',
+        '    C, fc, fm, um, fl = ' + [g.C, g.fc, g.fb, g.wb, g.fbm].map(n2s).join(', ') + '   # kg/h e %',
+        '    B = C * (fc - fl) / (fm - fl); BM = C - B',
+        "    print(f'  Python: manteiga = {B:.3f} kg/h, leitelho = {BM:.3f} kg/h, {C/B:.3f} kg de creme por kg de manteiga')",
+        '    f = np.linspace(25, 50, 100); y = 100 * (f - fl) / (fm - fl)',
+        "    f1, a1 = plt.subplots(figsize=(10, 6.5)); a1.plot(f, y, color='#e8a317', lw=2.5); a1.plot(fc, 100 * B / C, 'kd', ms=9); a1.set_xlabel('Gordura no creme (%)'); a1.set_ylabel('kg de manteiga por 100 kg de creme'); a1.grid(True)",
         '    f1.tight_layout()', '    return [f1]']).join('\n');
     }
     if (b.type === 'solar_dryer' && (r.sol || r.solb)) {
@@ -12860,6 +13705,109 @@ def pfr_transiente(P, nome):
         { id: 'EV', type: 'evap_double', name: 'EV-301', params: { xP: 0.28, Ps: 143.3, PN: 10, U: '2000; 1100', b1: 1, b2: 2, cp0: 4.18, cp1: 2.48 } },
         { id: 'P', type: 'product', name: 'Extrato de tomate (28 %)' }, { id: 'VC', type: 'product', name: 'Vapor ao condensador' }, { id: 'C', type: 'product', name: 'Condensado' }],
       streams: [S('1', 'F', 'out', 'EV', 'feed', '1'), S('E1', 'ES', 'eo', 'EV', 'q_in', 'E1'), S('2', 'EV', 'product', 'P', 'in', '2'), S('3', 'EV', 'vapor', 'VC', 'in', '3'), S('4', 'EV', 'condensate', 'C', 'in', '4')] } },
+    { key: 'laticinio-completo', title: 'Laticínio completo: leite cru → refrigerador → pasteurizador HTST → centrífuga → creme → batedeira (manteiga) e leite desnatado → evaporador de triplo efeito → spray dryer (leite em pó)', fs: {
+      name: 'Laticínio: manteiga e leite em pó desnatado', components: ['water', 'milk-fat', 'milk-snf', 'cs-air'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Leite cru (recepção, 10 °C)', params: { T: 10, P: 3, vf: '', flow: 10000, flowUnit: 'kg/h', basis: 'mássica', material: 'Leite cru integral (água + gordura + sólidos não gordurosos)', composition: { water: 0.8773, 'milk-fat': 0.035, 'milk-snf': 0.0877, 'cs-air': 0 } } },
+        { id: 'RF', type: 'refrigerator', name: 'Resfriador do leite RF-101 (R-134a)', params: { T: 4, fluid: 'R-134a', Tcd: 40, dTev: 5, eta: 0.75, sh: 5, sc: 3 } },
+        { id: 'PAS', type: 'pasteurizer', name: 'Pasteurizador HTST PAS-101', params: { Tp: 75, th: 15, eps: 0.9, Tout: 50, Thw: 85, dThw: 5, Tcw: 1, dTcw: 3, Ureg: 3000, Uh: 3500, Uc: 3200, Dh: 0.05, muH: 0.7, D72: 1.88, z: 4.34, nmin: 5 } },
+        { id: 'EH', type: 'energy', name: 'Água quente', params: { Q: '' } },
+        { id: 'CF', type: 'centrifuge', name: 'Centrífuga desnatadeira CF-101', params: { app: 'leite: desnate (creme de leite + leite desnatado)', model: 'balanço de gordura (fecha a massa)', fn: 40, flm: 0.05, plodo: 0.05,
+          rpm: 4800, Nd: 120, r1: 0.07, r2: 0.2, ang: 50, rhoL: 905, rhoH: 1025, mu: 0.9, rec1: 50, rec2: 90, Qm1: '' } },
+        { id: 'EM', type: 'energy', name: 'Motor da centrífuga', params: { Q: '' } },
+        { id: 'RC', type: 'cooler', name: 'Resfriamento e maturação do creme (10 °C)', params: { mode: 'Temperatura de saída', T: 10, dP: 0 } },
+        { id: 'BAT', type: 'butter_churn', name: 'Batedeira de manteiga BAT-101', params: { fb: 82, wb: 16, fbm: 0.5, Tb: 10, Pm: 3 } },
+        { id: 'EV', type: 'evap_multi', name: 'Evaporador de triplo efeito EV-101', params: { N: 3, xP: 0.5, Ps: 101.325, PN: 10, U: '2500; 2000; 1500', b1: 0.4, b2: 1, cp0: 4.18, cp1: 2.46 } },
+        { id: 'ES', type: 'energy', name: 'Vapor de aquecimento', params: { Q: '' } },
+        { id: 'SD', type: 'spray_dryer', name: 'Spray dryer SD-101', params: { mode: 'contínuo (alimentação → pó)', xp: 4, Tp: 70, cps: 1.6, Tin: 200, Tout: 90, Tamb: 25, Hin: 0.01, P: 101.325, loss: 5,
+          d0: 60, rhoF: 1120, rhoP: 1200, kA: 0.033, tres: 25, Dch: '' } },
+        { id: 'EA', type: 'energy', name: 'Aquecedor de ar', params: { Q: '' } },
+        { id: 'PM', type: 'product', name: 'Manteiga' }, { id: 'PB', type: 'product', name: 'Leitelho' }, { id: 'PL', type: 'product', name: 'Lodo da centrífuga' },
+        { id: 'PP', type: 'product', name: 'Leite em pó desnatado' }, { id: 'PX', type: 'product', name: 'Ar de exaustão' }, { id: 'PV', type: 'product', name: 'Vapor ao condensador' }, { id: 'PC', type: 'product', name: 'Condensados' }],
+      streams: [S('1', 'F', 'out', 'RF', 'in', 'Leite cru'), S('2', 'RF', 'out', 'PAS', 'feed', 'Leite 4 °C'), S('E1', 'EH', 'eo', 'PAS', 'q_in', 'Água quente'),
+        S('3', 'PAS', 'out', 'CF', 'feed', 'Leite pasteurizado 50 °C'), S('E2', 'EM', 'eo', 'CF', 'q_in', 'Motor'),
+        S('4', 'CF', 'light', 'RC', 'in', 'Creme de leite'), S('5', 'RC', 'out', 'BAT', 'feed', 'Creme maturado'), S('6', 'BAT', 'butter', 'PM', 'in', 'Manteiga'), S('7', 'BAT', 'buttermilk', 'PB', 'in', 'Leitelho'),
+        S('8', 'CF', 'sludge', 'PL', 'in', 'Lodo'), S('9', 'CF', 'heavy', 'EV', 'feed', 'Leite desnatado'), S('E3', 'ES', 'eo', 'EV', 'q_in', 'Vapor'),
+        S('10', 'EV', 'product', 'SD', 'feed', 'Concentrado 50 %'), S('11', 'EV', 'vapor', 'PV', 'in', 'Vapor'), S('12', 'EV', 'condensate', 'PC', 'in', 'Condensados'),
+        S('E4', 'EA', 'eo', 'SD', 'q_in', 'Ar quente'), S('13', 'SD', 'product', 'PP', 'in', 'Leite em pó'), S('14', 'SD', 'exhaust', 'PX', 'in', 'Exaustão')] } },
+    { key: 'centrifuga-leite', title: 'Centrífuga desnatadeira: leite integral → creme de leite + leite desnatado (módulos do programa original em Flash de Gustavo Brito e Juan Bosch)', fs: {
+      name: 'Desnate do leite em centrífuga de discos', components: ['water', 'milk-fat', 'milk-snf'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Leite integral (3,5 % de gordura, 50 °C)', params: { T: 50, P: 2, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica', material: 'Leite cru integral (água + gordura + sólidos não gordurosos)', composition: { water: 0.8773, 'milk-fat': 0.035, 'milk-snf': 0.0877 } } },
+        { id: 'CF', type: 'centrifuge', name: 'Centrífuga desnatadeira CF-201', params: { app: 'leite: desnate (creme de leite + leite desnatado)', model: 'balanço de gordura (fecha a massa)', fn: 37, flm: 0.03, plodo: 0.05,
+          rpm: 6000, Nd: 40, r1: 0.03, r2: 0.1, ang: 50, rhoL: 905, rhoH: 1025, mu: 0.9, rec1: 50, rec2: 90, Qm1: 60 } },
+        { id: 'EM', type: 'energy', name: 'Motor', params: { Q: '' } },
+        { id: 'PC', type: 'product', name: 'Creme de leite (nata)' }, { id: 'PD', type: 'product', name: 'Leite desnatado' }, { id: 'PL', type: 'product', name: 'Lodo' }],
+      streams: [S('1', 'F', 'out', 'CF', 'feed', 'Leite integral'), S('E1', 'EM', 'eo', 'CF', 'q_in', 'Motor'), S('2', 'CF', 'light', 'PC', 'in', 'Creme'), S('3', 'CF', 'heavy', 'PD', 'in', 'Desnatado'), S('4', 'CF', 'sludge', 'PL', 'in', 'Lodo')] } },
+    { key: 'degomagem-oleo-soja', title: 'Óleo de soja: degomagem com água em centrífuga de discos → óleo degomado e gomas secas a vácuo → lecitina de soja', fs: {
+      name: 'Degomagem do óleo de soja e produção de lecitina', components: ['soy-oil', 'lecithin', 'water'], model: 'IDEAL',
+      blocks: [
+        { id: 'FO', type: 'feed', name: 'Óleo de soja bruto (70 °C)', params: { T: 70, P: 2, vf: '', flow: 10000, flowUnit: 'kg/h', basis: 'mássica', material: 'Óleo de soja bruto (óleo + fosfolipídios + umidade)', composition: { 'soy-oil': 0.972, lecithin: 0.025, water: 0.003 } } },
+        { id: 'FA', type: 'feed', name: 'Água de hidratação (70 °C)', params: { T: 70, P: 2, vf: '', flow: 220, flowUnit: 'kg/h', basis: 'mássica', composition: { 'soy-oil': 0, lecithin: 0, water: 1 } } },
+        { id: 'MX', type: 'mixer', name: 'Tanque de hidratação (20 a 30 min)', params: { P: '' } },
+        { id: 'CF', type: 'centrifuge', name: 'Centrífuga de degomagem CF-301', params: { app: 'óleo de soja: degomagem (óleo degomado + gomas para lecitina)', xPLd: 0.2, xWd: 0.3, rOil: 0.5, plodo: 0.05,
+          rpm: 5000, Nd: 120, r1: 0.07, r2: 0.2, ang: 50, rhoL: 900, rhoH: 1030, mu: 15, rec1: 50, rec2: 90, Qm1: '' } },
+        { id: 'EM', type: 'energy', name: 'Motor', params: { Q: '' } },
+        { id: 'SEC', type: 'flash', name: 'Secador de lecitina a vácuo (filme)', params: { mode: 'T e P', T: 95, P: 0.06 } },
+        { id: 'PO', type: 'product', name: 'Óleo degomado' }, { id: 'PLE', type: 'product', name: 'Lecitina de soja' }, { id: 'PV', type: 'product', name: 'Vapor ao condensador' }, { id: 'PL', type: 'product', name: 'Lodo' }],
+      streams: [S('1', 'FO', 'out', 'MX', 'in1', 'Óleo bruto'), S('2', 'FA', 'out', 'MX', 'in2', 'Água'), S('3', 'MX', 'out', 'CF', 'feed', 'Óleo hidratado'), S('E1', 'EM', 'eo', 'CF', 'q_in', 'Motor'),
+        S('4', 'CF', 'light', 'PO', 'in', 'Óleo degomado'), S('5', 'CF', 'heavy', 'SEC', 'in', 'Gomas úmidas'), S('6', 'CF', 'sludge', 'PL', 'in', 'Lodo'), S('7', 'SEC', 'liquid', 'PLE', 'in', 'Lecitina'), S('8', 'SEC', 'vapor', 'PV', 'in', 'Vapor')] } },
+    { key: 'refrigerante-cola', title: 'Bebidas: refrigerante de cola — xarope 60 °Brix diluído, resfriado no chiller, carbonatado a 4 bar e o gás que escapa no copo (lei de Henry)', fs: {
+      name: 'Linha de refrigerante: proporcionador, resfriador e carbonatador', components: ['water', 'sucrose', 'phosphoric-acid', 'caffeine', 'co2'], model: 'NRTL',
+      blocks: [
+        { id: 'FX', type: 'feed', name: 'Xarope composto de cola (60 °Brix, com ácido fosfórico e cafeína)', params: { T: 25, P: 3, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica',
+          composition: { water: 0.39635, sucrose: 0.6, 'phosphoric-acid': 0.00312, caffeine: 0.00053, co2: 0 } } },
+        { id: 'FA', type: 'feed', name: 'Água tratada e desaerada', params: { T: 20, P: 3, vf: '', flow: 4888, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'MX', type: 'mixer', name: 'Proporcionador (1 parte de xarope para 4,9 de água)', params: { P: '' } },
+        { id: 'CH', type: 'refrigerator', name: 'Resfriador da bebida (R-134a)', params: { T: 3, fluid: 'R-134a', Tcd: 40, dTev: 5, eta: 0.75, sh: 5, sc: 3, dP: 0 } },
+        { id: 'FC', type: 'feed', name: 'CO₂ para a carbonatação (6,7 g/kg ≈ 3,4 volumes)', params: { T: 3, P: 4, vf: '', flow: 39.45, flowUnit: 'kg/h', basis: 'mássica', composition: { co2: 1 } } },
+        { id: 'CB', type: 'mixer', name: 'Carbonatador (4 bar)', params: { P: 4 } },
+        { id: 'FL', type: 'flash', name: 'Garrafa aberta no copo (25 °C, 1 atm)', params: { mode: 'T e P', T: 25, P: 1.01325 } },
+        { id: 'P1', type: 'product', name: 'Refrigerante no copo' }, { id: 'P2', type: 'product', name: 'CO₂ que escapa (bolhas)' }],
+      streams: [S('1', 'FX', 'out', 'MX', 'in1', 'Xarope'), S('2', 'FA', 'out', 'MX', 'in2', 'Água'), S('3', 'MX', 'out', 'CH', 'in', 'Bebida base'), S('4', 'CH', 'out', 'CB', 'in1', 'Bebida a 3 °C'),
+        S('5', 'FC', 'out', 'CB', 'in2', 'CO₂'), S('6', 'CB', 'out', 'FL', 'in', 'Refrigerante'), S('7', 'FL', 'liquid', 'P1', 'in', 'No copo'), S('8', 'FL', 'vapor', 'P2', 'in', 'Gás')] } },
+    { key: 'cervejaria-mosto-pasteurizacao', title: 'Bebidas: cervejaria — resfriamento do mosto no trocador de placas e pasteurização flash da cerveja (unidades de pasteurização)', fs: {
+      name: 'Cervejaria: resfriamento do mosto e pasteurização flash', components: ['water', 'ethanol', 'drink-extract', 'co2'], model: 'NRTL',
+      blocks: [
+        { id: 'FM', type: 'feed', name: 'Mosto quente do whirlpool (12 °P, 98 °C)', params: { T: 98, P: 2, vf: '', flow: 10000, flowUnit: 'kg/h', basis: 'mássica', bebida: 'Mosto cervejeiro (12 °P)',
+          composition: { water: 0.88001, ethanol: 0, 'drink-extract': 0.11999, co2: 0 } } },
+        { id: 'FW', type: 'feed', name: 'Água gelada (2 °C)', params: { T: 2, P: 3, vf: '', flow: 12000, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'TP', type: 'hx_plate', name: 'Resfriador de mosto (placas)', params: { spec: 'T saída quente', value: 10, U: 3500, plateArea: 0.5 } },
+        { id: 'FC', type: 'feed', name: 'Cerveja filtrada (2 °C, 15 bar)', params: { T: 2, P: 15, vf: '', flow: 10000, flowUnit: 'kg/h', basis: 'mássica', bebida: 'Cerveja pilsen (4,8 % v/v)',
+          composition: { water: 0.91976, ethanol: 0.03758, 'drink-extract': 0.0377, co2: 0.00496 } } },
+        { id: 'PAS', type: 'pasteurizer', name: 'Pasteurizador flash de cerveja (72 °C, 30 s)', params: { Tp: 72, th: 30, eps: 0.94, Tout: 2, Thw: 80, dThw: 5, Tcw: -2, dTcw: 3, Ureg: 3000, Uh: 3500, Uc: 3200,
+          Dh: 0.06, muH: 1.0, D72: 1.12, z: 6.94, nmin: 15 } },
+        { id: 'P1', type: 'product', name: 'Mosto frio para o fermentador (10 °C)' }, { id: 'P2', type: 'product', name: 'Água quente para a próxima brassagem' }, { id: 'P3', type: 'product', name: 'Cerveja pasteurizada para o envase' }],
+      streams: [S('1', 'FM', 'out', 'TP', 'hot_in', 'Mosto quente'), S('2', 'FW', 'out', 'TP', 'cold_in', 'Água gelada'), S('3', 'TP', 'hot_out', 'P1', 'in', 'Mosto frio'), S('4', 'TP', 'cold_out', 'P2', 'in', 'Água quente'),
+        S('5', 'FC', 'out', 'PAS', 'feed', 'Cerveja'), S('6', 'PAS', 'out', 'P3', 'in', 'Cerveja pasteurizada')] } },
+    { key: 'cachaca-coluna', title: 'Bebidas: cachaça — destilação do vinho de cana (8 % v/v) em coluna, resfriamento e diluição a 40 % v/v', fs: {
+      name: 'Destilaria de cachaça em coluna', components: ['water', 'ethanol'], model: 'NRTL',
+      blocks: [
+        { id: 'FV', type: 'feed', name: 'Vinho de cana fermentado (8 % v/v, pré-aquecido a 90 °C)', params: { T: 90, P: 1.2, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica', bebida: 'Vinho de cana fermentado (8 % v/v, para destilar)',
+          composition: { water: 0.93609, ethanol: 0.06391 } } },
+        { id: 'T101', type: 'column', name: 'Coluna de destilação (12 pratos)', params: { N: 12, feedStage: 3, R: 1.5, Dmode: 'Vazão D', D: 7.2, condenser: 'total', P: 1.01325, dP: 0 } },
+        { id: 'E1', type: 'cooler', name: 'Resfriador do destilado', params: { mode: 'Temperatura de saída', T: 20, dP: 0 } },
+        { id: 'FA', type: 'feed', name: 'Água desmineralizada (redução do teor alcoólico)', params: { T: 20, P: 1.2, vf: '', flow: 23.3, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'MX', type: 'mixer', name: 'Tanque de padronização', params: { P: '' } },
+        { id: 'PC', type: 'product', name: 'Cachaça a 40 % v/v (para o envelhecimento ou o envase)' }, { id: 'PV', type: 'product', name: 'Vinhaça (fertirrigação)' }],
+      streams: [S('1', 'FV', 'out', 'T101', 'feed', 'Vinho'), S('2', 'T101', 'distillate', 'E1', 'in', 'Destilado a 45 % v/v'), S('3', 'T101', 'bottoms', 'PV', 'in', 'Vinhaça'), S('4', 'E1', 'out', 'MX', 'in1', 'Destilado frio'),
+        S('5', 'FA', 'out', 'MX', 'in2', 'Água'), S('6', 'MX', 'out', 'PC', 'in', 'Cachaça')] } },
+    { key: 'cafe-soluvel', title: 'Bebidas: café solúvel — extração em percoladores a 150 °C, concentração em evaporador de triplo efeito e secagem em spray dryer', fs: {
+      name: 'Fábrica de café solúvel (spray dried)', components: ['water', 'food-cafe', 'inert-solid', 'cs-air'], model: 'IDEAL',
+      blocks: [
+        { id: 'FC', type: 'feed', name: 'Café torrado e moído (45 % extraível)', params: { T: 25, P: 10, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.02, 'food-cafe': 0.45, 'inert-solid': 0.53, 'cs-air': 0 } } },
+        { id: 'FW', type: 'feed', name: 'Água de extração (150 °C, 10 bar)', params: { T: 150, P: 10, vf: '', flow: 2400, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'X', type: 'leaching', name: 'Bateria de 6 percoladores', params: { N: 6, r: 1.5, T: 150, P: 10 } },
+        { id: 'EC', type: 'cooler', name: 'Resfriador do extrato (30 °C)', params: { mode: 'Temperatura de saída', T: 30, dP: 0 } },
+        { id: 'EV', type: 'evap_multi', name: 'Evaporador de triplo efeito (até 45 %)', params: { N: 3, xP: 0.45, Ps: 101.325, PN: 10, U: '2000; 1500; 1000', b1: 0.4, b2: 1, cp0: 4.18, cp1: 2.46 } },
+        { id: 'ES', type: 'energy', name: 'Vapor de aquecimento', params: { Q: '' } },
+        { id: 'SD', type: 'spray_dryer', name: 'Spray dryer do café', params: { xp: 3.5, Tin: 250, Tout: 105, cps: 1.6, tres: 25 } },
+        { id: 'EA', type: 'energy', name: 'Aquecedor de ar', params: { Q: '' } },
+        { id: 'PB', type: 'product', name: 'Borra de café (combustível da caldeira)' }, { id: 'PV', type: 'product', name: 'Vapor ao condensador' },
+        { id: 'PP', type: 'product', name: 'Café solúvel em pó' }, { id: 'PA', type: 'product', name: 'Ar de exaustão' }],
+      streams: [S('1', 'FC', 'out', 'X', 'solids', 'Café moído'), S('2', 'FW', 'out', 'X', 'solvent', 'Água quente'), S('3', 'X', 'overflow', 'EC', 'in', 'Extrato (22 %)'), S('4', 'X', 'underflow', 'PB', 'in', 'Borra'),
+        S('5', 'EC', 'out', 'EV', 'feed', 'Extrato frio'), S('E1', 'ES', 'eo', 'EV', 'q_in', 'Vapor'), S('6', 'EV', 'product', 'SD', 'feed', 'Concentrado (45 %)'), S('7', 'EV', 'vapor', 'PV', 'in', 'Vapor'),
+        S('E2', 'EA', 'eo', 'SD', 'q_in', 'Ar quente'), S('8', 'SD', 'product', 'PP', 'in', 'Café solúvel'), S('9', 'SD', 'exhaust', 'PA', 'in', 'Exaustão')] } },
     { key: 'extractive', title: 'Destilação extrativa etanol/água com etilenoglicol', fs: {
       name: 'Desidratação de etanol por destilação extrativa', components: ['ethanol', 'water', 'ethylene-glycol'], model: 'NRTL',
       blocks: [
@@ -13083,13 +14031,35 @@ def pfr_transiente(P, nome):
         { id: 'RB', type: 'biodiesel_reactor', name: 'CSTR de biodiesel', params: { mode: 'contínuo: CSTR com cinética global de 2ª ordem', cat: 1, rhoO: 915, rhoA: 792, kr: 0.55,
           cspec: 'conversão desejada (calcula o volume)', Xt: 0.98, Vr: 50, Tc: 60 } },
         { id: 'P', type: 'product', name: 'Biodiesel + glicerina' }],
-      streams: [S('1', 'FO', 'out', 'RB', 'oil', 'Óleo'), S('2', 'FA', 'out', 'RB', 'alcohol', 'Metanol'), S('3', 'RB', 'product', 'P', 'in', 'Produto')] } }
+      streams: [S('1', 'FO', 'out', 'RB', 'oil', 'Óleo'), S('2', 'FA', 'out', 'RB', 'alcohol', 'Metanol'), S('3', 'RB', 'product', 'P', 'in', 'Produto')] } },
+    { key: 'biodigestor-rural', title: 'Bioprocesso: biodigestor rural (modelo indiano) — dejetos de bovinos, suínos, equinos, aves e resíduos vegetais → biogás + biofertilizante (planilha original de Christiano Guirlanda)', fs: {
+      name: 'Biodigestor rural com a carga diária de uma propriedade', components: ['water', 'dej-bovino', 'dej-suino', 'dej-equino', 'dej-aves', 'dej-vegetal', 'methane', 'co2', 'cs-hydrogen-sulfide'], model: 'IDEAL',
+      blocks: [
+        { id: 'FD', type: 'feed', name: 'Dejetos do dia (200 kg)', params: { T: 25, P: 1.01325, vf: '', flow: 200 / 24, flowUnit: 'kg/h', basis: 'mássica',
+          composition: { water: 0.756, 'dej-bovino': 0.007, 'dej-suino': 0.010, 'dej-equino': 0.042, 'dej-aves': 0.110, 'dej-vegetal': 0.075, methane: 0, co2: 0, 'cs-hydrogen-sulfide': 0 } } },
+        { id: 'FA', type: 'feed', name: 'Água de diluição (300 kg/dia)', params: { T: 25, P: 1.01325, vf: '', flow: 300 / 24, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'BD', type: 'biodigester', name: 'Biodigestor indiano BD-101', params: { metodo: 'planilha original (litros de biogás por kg de dejeto)', TRH: 40, Top: 25, Tamb: 25, xCH4: 60, h2s: 1500,
+          eqv: 'planilha original (Guirlanda)' } },
+        { id: 'PG', type: 'product', name: 'Biogás' }, { id: 'PB', type: 'product', name: 'Biofertilizante' }],
+      streams: [S('1', 'FD', 'out', 'BD', 'feed', 'Dejetos'), S('2', 'FA', 'out', 'BD', 'water', 'Água'), S('3', 'BD', 'biogas', 'PG', 'in', 'Biogás'), S('4', 'BD', 'digestate', 'PB', 'in', 'Biofertilizante')] } },
+    { key: 'biodigestor-granja-suinos', title: 'Bioprocesso: biodigestor aquecido de uma granja de suínos (35 °C, cinética de Chen e Hashimoto) — biogás para eletricidade', fs: {
+      name: 'Biodigestor aquecido de granja de suínos', components: ['water', 'dej-suino', 'methane', 'co2', 'cs-hydrogen-sulfide'], model: 'IDEAL',
+      blocks: [
+        { id: 'FD', type: 'feed', name: 'Dejetos de suínos (10 t/dia)', params: { T: 22, P: 1.01325, vf: '', flow: 10000 / 24, flowUnit: 'kg/h', basis: 'mássica',
+          composition: { water: 0.90, 'dej-suino': 0.10, methane: 0, co2: 0, 'cs-hydrogen-sulfide': 0 } } },
+        { id: 'FA', type: 'feed', name: 'Água de lavagem (10 t/dia)', params: { T: 20, P: 1.01325, vf: '', flow: 10000 / 24, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'BD', type: 'biodigester', name: 'Biodigestor aquecido BD-201', params: { metodo: 'cinética de Chen e Hashimoto (sólidos voláteis, TRH e temperatura)', TRH: 20, Top: 35, Tamb: 20, U: 0.6,
+          xCH4: 65, h2s: 2000, etaG: 33, horas: 8, eqv: 'poder calorífico inferior (PCI, BEN/EPE)' } },
+        { id: 'EQ', type: 'energy', name: 'Aquecimento (caldeira a biogás)', params: { Q: '' } },
+        { id: 'PG', type: 'product', name: 'Biogás para o gerador' }, { id: 'PB', type: 'product', name: 'Biofertilizante' }],
+      streams: [S('1', 'FD', 'out', 'BD', 'feed', 'Dejetos'), S('2', 'FA', 'out', 'BD', 'water', 'Água'), S('E1', 'EQ', 'eo', 'BD', 'q_in', 'Aquecimento'),
+        S('3', 'BD', 'biogas', 'PG', 'in', 'Biogás'), S('4', 'BD', 'digestate', 'PB', 'in', 'Biofertilizante')] } }
 
   ];
   // blocos sem parâmetros recebem os valores pré-setados da unidade (secador, cristalizador, biorreatores...)
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && !Object.keys(b.params).length) T.params.forEach(f => { if (f.def !== undefined) b.params[f.k] = f.def; }); }));
   // equipamentos contínuos de sólidos e bioprocessos: os campos que o exemplo não informa recebem o valor pré-setado
-  const FILL = /^(tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester)/;
+  const FILL = /^(tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|centrifuge|biodigester|pasteurizer|butter_churn|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester)/;
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && FILL.test(b.type)) T.params.forEach(f => { if (b.params[f.k] === undefined && f.def !== undefined) b.params[f.k] = f.def; }); }));
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -13880,7 +14850,8 @@ def pfr_transiente(P, nome):
   const $ = s => document.querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B' };
+  const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -14190,6 +15161,34 @@ def pfr_transiente(P, nome):
       ['Tempo e temperatura', 'τ = 30 min na esteira (barra deslizante): define a carga, a potência específica (1,6 W/g) e o tamanho do túnel. T_p = 75 °C é a temperatura do produto durante a secagem.'],
       ['Absorção', 'η_máx = 0,85 da potência emitida é absorvida pelo produto úmido; a absorção cai à medida que ele seca, com a umidade característica X_a = 0,5 kg/kg; X_e = 0,05. Magnétrons com eficiência de 0,7.'],
       ['Dielétricas e camada', 'ε′ = 55 e ε″ = 15 dão a profundidade de penetração D_p = 9,7 mm a 2 450 MHz (cerca de 26 mm a 915 MHz). Carga de 8 kg/m² e massa específica de 600 kg/m³ dão uma camada de 13,3 mm; a esteira tem 0,6 m de largura.']] },
+    biodigester: { ex: 'Biodigestor rural: dejetos de uma propriedade', items: [
+      ['Cálculo da produção', '<b>planilha original</b> (programa em Flash de Christiano Guirlanda): litros de biogás por kg de dejeto fresco, sem depender do tempo nem da temperatura; ou a <b>cinética de Chen e Hashimoto</b>, que usa os sólidos voláteis, o potencial B₀ de cada dejeto, o tempo de retenção e a temperatura. O outro método aparece nos resultados para comparar.'],
+      ['Carga diária', 'kg por dia de esterco fresco de bovinos, suínos, equinos (com cama), aves (cama de frango) e de resíduos vegetais, como na planilha original. Com uma corrente ligada na entrada de dejetos, a carga vem dela (água + matéria seca dos dejetos do banco de componentes; o campo Alimento ou lodo da alimentação preenche a composição).'],
+      ['Água de diluição', 'nos modelos indiano e chinês a carga deve ter de 6 a 10 % de sólidos totais; esterco de bovinos com 1 kg de água por kg dá cerca de 7 %. A cama de frango é mais seca e pede mais água. A segunda entrada recebe uma corrente de água.'],
+      ['TRH e temperatura', 'o tempo de retenção hidráulica dá o volume útil (V = vazão da carga × TRH): de 30 a 50 dias em biodigestores rurais sem aquecimento e de 15 a 25 dias nos aquecidos a 35 °C. Acima da temperatura ambiente o programa calcula o calor para aquecer a carga e as perdas pelas paredes (entrada de energia de aquecimento).'],
+      ['Biogás', 'de 55 a 70 % de metano; o resto é CO₂, com H₂S (de 500 a 5 000 ppm) e vapor de água saturado. Volumes em m³ normais (0 °C e 1 atm).'],
+      ['Rendimentos e B₀', 'os rendimentos da planilha (36, 52, 100, 240 e 25 L/kg) e o potencial de metano B₀ (IPCC 2006: 0,24 bovinos, 0,48 suínos, 0,30 equinos, 0,39 aves; 0,30 para resíduos vegetais) podem ser alterados.'],
+      ['Equivalência e consumos', 'pela planilha original (por m³ de biogás: 0,342 L de querosene, 1,45 kg de lenha, 0,396 kg de GLP, 0,358 L de diesel e 0,312 L de gasolina) ou pela mesma energia (PCI do Balanço Energético Nacional). Os consumos do lampião, do fogão, do motor, da geladeira e da incubadora também vêm da planilha.']] },
+    centrifuge: { ex: 'Centrífuga desnatadeira: leite', items: [
+      ['Aplicação', '<b>leite</b>: desnate em creme de leite (fase leve, saída da esquerda) e leite desnatado (fase pesada, saída da direita); <b>óleo de soja</b>: degomagem em óleo degomado (fase leve) e gomas úmidas (fase pesada). Trocar a aplicação preenche massas específicas, viscosidade e o tamanho da máquina. O lodo sai pela porta de baixo e o motor pela porta de energia.'],
+      ['Balanço do desnate', '<b>balanço de gordura</b> (fecha a massa) ou o <b>programa original</b> de Gustavo Brito e Juan Bosch, com a eficiência de 40 %, para comparar.'],
+      ['Alimentação', '1 000 kg/h de leite integral com 3,5 % de gordura a 50 °C, pela corrente (água + Gordura do leite + Sólidos não gordurosos; mistura pronta “Leite cru integral” no campo Alimento ou lodo). Sem corrente, valem a vazão em L/h, a massa específica e a gordura dos campos.'],
+      ['Gorduras', 'creme com 37 % (barra deslizante) e desnatado com 0,03 %; 0,05 % da alimentação sai como lodo.'],
+      ['Máquina', '6 000 rpm, 40 discos de 0,03 a 0,1 m com semiângulo de 50°; gordura a 905 kg/m³, plasma a 1 025 kg/m³ e viscosidade de 0,9 mPa·s a 50 °C.'],
+      ['Módulo I', 'do programa original: com 50 % de recuperação a 60 L/min, a vazão e a rotação que dão 90 %.'],
+      ['Óleo de soja', 'fosfolipídios residuais no óleo degomado (0,2 %), umidade dele (0,3 %) e óleo arrastado nas gomas (0,5 kg/kg de fosfolipídio).']] },
+    pasteurizer: { ex: 'Laticínio completo', items: [
+      ['Temperatura e tempo', '75 °C (barra deslizante) por 15 s no tubo de retenção; a legislação pede de 72 a 75 °C por 15 a 20 s.'],
+      ['Regeneração', 'eficiência de 0,9 (barra deslizante): a fração do calor que o produto pasteurizado devolve ao produto frio.'],
+      ['Saída', '4 °C para leite de consumo; no laticínio completo, 50 °C para a centrífuga (a regeneração fica limitada e não há resfriamento).'],
+      ['Água quente e gelada', 'água quente de 85 para 80 °C e água gelada de 1 para 4 °C; as portas de energia mostram o calor do aquecimento e o do resfriamento.'],
+      ['Coeficientes U', '3 000 W/(m²·K) na regeneração, 3 500 no aquecimento e 3 200 no resfriamento: dão a área de placas de cada seção.'],
+      ['Tubo de retenção', 'diâmetro de 0,05 m e viscosidade de 0,7 mPa·s a 75 °C: dão o comprimento, o Reynolds e o tempo da partícula mais rápida.'],
+      ['Letalidade', 'Coxiella burnetii: D₇₂ = 1,88 s e z = 4,34 °C; o mínimo do Codex é de 5 reduções decimais.']] },
+    butter_churn: { ex: 'Laticínio completo', items: [
+      ['Manteiga', '82 % de gordura e 16 % de umidade (o resto, 2 %, são sólidos não gordurosos).'],
+      ['Leitelho', '0,5 % de gordura.'],
+      ['Bateção', 'o creme chega a 10 °C, já maturado; se chegar mais quente, o programa mostra o calor para resfriá-lo (porta de energia). Potência do batedor: 3 kWh por tonelada de creme.']] },
     solar_dryer: { ex: 'Secador solar contínuo: abacaxi', items: [
       ['Operação', '<b>contínua</b>: túnel solar ligado ao fluxograma (produto úmido → produto seco + ar úmido; a porta de energia mostra a energia solar aproveitada); <b>batelada</b>: bandejas carregadas uma vez, secando ao longo dos dias, com a comparação com o sol aberto. O editor mostra só os campos do modo escolhido.'],
       ['Tipo de secador solar', '<b>misto</b>: coletor + câmara com cobertura transparente (o produto também recebe sol); <b>indireto</b>: coletor + câmara opaca (produto à sombra, melhor para cor e vitaminas); <b>direto</b>: estufa ou cabine solar, sem coletor.'],
@@ -14366,9 +15365,11 @@ def pfr_transiente(P, nome):
         pushUndo(); const k = inp.dataset.k, f = U.TYPES[b.type].params.find(x => x.k === k);
         b.params[k] = (f.type === 'select' || f.type === 'comp' || f.type === 'matrix') ? inp.value : (inp.value === '' ? '' : +inp.value);
         if (f.presets && f.presets[inp.value]) Object.assign(b.params, f.presets[inp.value]);   // ex.: banco de microrganismos preenche as constantes
-        if (b.type === 'feed' && k === 'material') applyMaterial(b);
+        if (b.type === 'feed' && k === 'material') { applyMaterial(b); if (b.params.material !== MAT_NONE) b.params.bebida = MAT_NONE; }
+        const beb = b.type === 'feed' && (k === 'bebida' || /^b[A-Z]/.test(k));
+        if (beb) applyBebida(b);
         afterChange(false); if (f.type === 'select') renderProps();
-        if (b.type === 'feed' && k === 'material' && $('#thermoBody')) renderThermo();
+        if (b.type === 'feed' && (k === 'material' || beb) && $('#thermoBody')) renderThermo();
       };
     });
     el.querySelectorAll('[data-range]').forEach(inp => { // arrastar = simula ao vivo; soltar = atualiza tudo
@@ -14403,7 +15404,17 @@ def pfr_transiente(P, nome):
       [['Temperatura', nf(s.T - 273.15, 2) + ' °C'], ['Pressão', nf(s.P / 1e5, 4) + ' bar'], ['Fase', s.phase + ' (vf = ' + nf(s.beta, 4) + ')'], ['Vazão molar', nf(s.F * 3.6, 4) + ' kmol/h'], ['Vazão mássica', nf(s.mass * 3600, 2) + ' kg/h'], ['Massa molar', nf(s.mw, 3) + ' g/mol'], ['Entalpia', nf(s.h / 1000, 3) + ' kJ/mol']]
         .map(r => '<tr><td>' + r[0] + '</td><td class="num">' + r[1] + '</td></tr>').join('') + '</tbody></table>' +
       '<div class="subhead">Composição</div><table class="grid"><thead><tr><th>Componente</th><th>x molar</th><th>kmol/h</th></tr></thead><tbody>' +
-      th.ids.map((id, i) => '<tr><td>' + esc(th.c[i].name) + '</td><td class="num">' + nf(s.z[i], 5) + '</td><td class="num">' + nf(s.flows[i] * 3.6, 4) + '</td></tr>').join('') + '</tbody></table>' + foodStreamHTML(s, th);
+      th.ids.map((id, i) => '<tr><td>' + esc(th.c[i].name) + '</td><td class="num">' + nf(s.z[i], 5) + '</td><td class="num">' + nf(s.flows[i] * 3.6, 4) + '</td></tr>').join('') + '</tbody></table>' + foodStreamHTML(s, th) + bebStreamHTML(s, th);
+  }
+  // corrente com água e etanol (bebidas, destilação): teor alcoólico em % v/v a 20 °C (°GL) e sólidos solúveis
+  function bebStreamHTML(s, th) {
+    const ie = th.ids.indexOf('ethanol'), iw = th.ids.indexOf('water'); if (!TH.alcVV || ie < 0 || iw < 0 || !(s.F > 0)) return '';
+    const liq = s.beta > 1e-9 && s.beta < 1 - 1e-9 && s.x ? s.x : s.z, kg = liq.map((x, i) => x * th.c[i].mw), tot = kg.reduce((a, v) => a + v, 0), we = kg[ie] / (kg[ie] + kg[iw]);
+    if (!(kg[ie] > 0) || !(tot > 0)) return '';
+    const sol = th.c.reduce((a, c, i) => a + (c.nv || c.solid ? kg[i] : 0), 0);
+    const rows = [['Teor alcoólico (água + etanol' + (s.beta > 1e-9 && s.beta < 1 - 1e-9 ? ', fase líquida' : '') + ')', nf(TH.alcVV(we), 2) + ' % v/v a 20 °C (°GL); ' + nf(100 * kg[ie] / tot, 2) + ' % m/m']];
+    if (sol > 0) rows.push(['Sólidos dissolvidos (açúcares, extrato, ácidos)', nf(100 * sol / tot, 2) + ' % m/m']);
+    return '<div class="subhead">Bebida ou destilado</div><table class="grid"><tbody>' + rows.map(r => '<tr><td>' + r[0] + '</td><td class="num">' + r[1] + '</td></tr>').join('') + '</tbody></table>';
   }
   // corrente de água + matéria seca de alimentos ou lodos: propriedades pela composição (Choi e Okos)
   function foodStreamHTML(s, th) {
@@ -14416,7 +15427,29 @@ def pfr_transiente(P, nome):
         .map(r => '<tr><td>' + r[0] + '</td><td class="num">' + r[1] + '</td></tr>').join('') + '</tbody></table>';
   }
   // campo "Alimento ou lodo" da corrente de alimentação: inclui água e a matéria seca e preenche a composição mássica
+  // bebida pronta ou digitada: água, etanol, sacarose, extrato, CO₂, cafeína, ácidos e taurina em frações mássicas
+  function bebidaDados(p) {
+    if (!TH.BEBIDAS || !p || !p.bebida || p.bebida === MAT_NONE) return null;
+    if (p.bebida === TH.BEB_CUSTOM) return { nome: 'Outra bebida', d: { alc: p.bAlc, acu: p.bAcu, ext: p.bExt, co2: p.bCO2, caf: p.bCaf, fos: p.bFos, cit: p.bCit, tau: p.bTau, rho: p.bRho } };
+    return TH.BEBIDAS.find(x => x.nome === p.bebida) || null;
+  }
+  function applyBebida(b, quiet) {
+    const B = bebidaDados(b.params); if (!B) return;
+    let r; try { r = TH.bebida(B.d); } catch (e) { toast(e.message); return; }
+    Object.keys(r.comp).forEach(id => { if (state.components.indexOf(id) < 0) state.components.push(id); });
+    const comp = {}; state.components.forEach(id => { comp[id] = +(r.comp[id] || 0).toFixed(6); });
+    b.params.composition = comp; b.params.basis = 'mássica'; b.params.material = MAT_NONE; if (/mol/.test(b.params.flowUnit || '')) b.params.flowUnit = 'kg/h';
+    if (!quiet) toast(B.nome.replace(/ \(.*$/, '') + ': ' + (r.alc ? nf(r.alc, 1) + ' % v/v de álcool, ' : '') + nf(r.brix, 2) + ' % de sólidos solúveis, ρ = ' + nf(r.rho, 3) + ' kg/L, ' + nf(r.kcal, 0) + ' kcal/100 mL');
+  }
   function applyMaterial(b) {
+    const mx = TH.MIXES && TH.MIXES.find(x => x.nome === b.params.material);
+    if (mx) { // mistura pronta (leite com a gordura separada, óleo de soja bruto)
+      Object.keys(mx.comp).forEach(id => { if (state.components.indexOf(id) < 0) state.components.push(id); });
+      const comp = {}; state.components.forEach(id => { comp[id] = mx.comp[id] || 0; });
+      b.params.composition = comp; b.params.basis = 'mássica'; if (/mol/.test(b.params.flowUnit || '')) b.params.flowUnit = 'kg/h';
+      toast(mx.nome.replace(/ \(.*$/, '') + ': ' + Object.keys(mx.comp).map(id => nf(100 * mx.comp[id], 2) + ' % de ' + TH.COMP[id].name.split(/[:(]/)[0].trim().toLowerCase()).join(', '));
+      return;
+    }
     const f = TH.FOODS && TH.FOODS.find(x => x.nome === b.params.material); if (!f) return;
     ['water', f.id].forEach(id => { if (state.components.indexOf(id) < 0) state.components.push(id); });
     const comp = {}; state.components.forEach(id => { comp[id] = 0; }); comp.water = +f.xw.toFixed(4); comp[f.id] = +(1 - f.xw).toFixed(4);
@@ -14596,6 +15629,16 @@ def pfr_transiente(P, nome):
           '<td>' + (on ? '✓' : '<button class="mini" data-usefood="' + f.id + '" title="Incluir água e esta matéria seca na lista de componentes">usar</button>') + '</td></tr>'; }).join('') +
       '</tbody></table></div><p class="small muted">c<sub>p</sub> em kJ/(kg·K), ρ em kg/m³ e k em W/(m·K). Composição in natura em massa (carboidratos sem as fibras). Passe o mouse sobre a linha para ver α e as propriedades da matéria seca. Para outra umidade, as propriedades aparecem no detalhe da corrente (clique nela depois de simular).</p>';
   }
+  function bebTable() { // bebidas prontas: dados por litro e propriedades
+    const sb = pfd.sel && pfd.sel.kind === 'block' ? state.blocks.find(x => x.id === pfd.sel.id) : null, feedSel = sb && sb.type === 'feed';
+    return '<div class="scroll-x"><table class="grid food-tab"><thead><tr><th>Bebida</th><th>Álcool<br>% v/v</th><th>Açúcar<br>g/L</th><th>Extrato<br>g/L</th><th>CO₂<br>g/L</th><th>Cafeína<br>mg/L</th><th>ρ<br>kg/L</th><th>Sólidos<br>% m/m</th><th>kcal/<br>100 mL</th><th></th></tr></thead><tbody>' +
+      TH.BEBIDAS.map((B, i) => { const r = TH.bebida(B.d), d = B.d;
+        return '<tr title="' + esc(B.ref || '') + '"><td>' + esc(B.nome) + '<small class="fcomp">' + Object.keys(r.comp).map(id => nf(100 * r.comp[id], id === 'water' || id === 'ethanol' || id === 'sucrose' || id === 'drink-extract' ? 2 : 3) + ' % ' + esc(TH.COMP[id].name.split(/[:(]/)[0].trim().toLowerCase())).join(' · ') + '</small></td>' +
+          ['alc', 'acu', 'ext', 'co2', 'caf'].map(k => '<td class="num">' + (d[k] ? nf(d[k], k === 'caf' ? 0 : 1) : '—') + '</td>').join('') +
+          '<td class="num">' + nf(r.rho, 4) + '</td><td class="num">' + nf(r.brix, 2) + '</td><td class="num">' + nf(r.kcal, 0) + '</td>' +
+          '<td><button class="mini" data-usebeb="' + i + '" title="' + (feedSel ? 'Preencher a composição da corrente ' + esc(sb.name) : 'Incluir os componentes na lista (selecione uma corrente de alimentação para preencher a composição)') + '">usar</button></td></tr>'; }).join('') +
+      '</tbody></table></div><p class="small muted">Dados típicos por litro de bebida (passe o mouse para ver a fonte). Selecione uma corrente de alimentação e clique em “usar” para preencher a composição dela, ou escolha a bebida no campo “Bebida” da corrente; ali a opção “outra bebida” deixa você digitar o teor alcoólico, os açúcares, o extrato, o CO₂, a cafeína, os ácidos e a taurina de qualquer bebida. A massa específica, quando não é informada, vem da tabela da OIML para água e etanol mais 0,385 kg/L por kg/L de sólidos dissolvidos.</p>';
+  }
   function renderThermo() {
     const el = $('#thermoBody');
     let th = null, err = '';
@@ -14615,6 +15658,11 @@ def pfr_transiente(P, nome):
       h += '<details class="food-props"' + (nSel ? ' open' : '') + '><summary class="subhead">Alimentos e lodos: propriedades pela composição (Choi e Okos)</summary>' +
         '<p class="small muted" style="margin:4px 0 6px">A matéria seca de cada alimento ou lodo é um componente (busque por “alimento”, “fruta” ou “lodo”). O c<sub>p</sub>, a massa específica ρ e a condutividade k saem da composição centesimal pelas correlações de Choi e Okos (1986): c<sub>p</sub> pela média mássica, ρ por 1/Σ(x<sub>i</sub>/ρ<sub>i</sub>) e k pela média em volume. Na corrente de alimentação, o campo “Alimento ou lodo” preenche a composição sozinho. Alimentos: USDA FoodData Central; lodos de fábrica de celulose: literatura (fibras = celulose, hemicelulose e lignina; cinzas = carga mineral).</p>' +
         '<div class="field"><label for="foodT">Temperatura das propriedades<span class="u">°C</span></label><input id="foodT" type="number" step="any" value="' + foodT + '"></div><div id="foodTab"></div></details>';
+    }
+    if (TH.BEBIDAS) { // bebidas: cerveja, refrigerantes, energético, cachaça, vinho e xaropes
+      const onB = ['ethanol', 'sucrose', 'drink-extract', 'caffeine'].filter(id => state.components.indexOf(id) >= 0).length >= 2;
+      h += '<details class="food-props"' + (onB ? ' open' : '') + '><summary class="subhead">Bebidas: cerveja, refrigerantes, energético, cachaça e vinho</summary>' +
+        '<p class="small muted" style="margin:4px 0 6px">Cada bebida é uma mistura de componentes do banco: água, etanol, sacarose, extrato seco (açúcares do malte, dextrinas, proteínas e minerais), CO₂, cafeína, ácido fosfórico, ácido cítrico e taurina. Com álcool, o modelo NRTL dá o equilíbrio líquido-vapor de água e etanol (destilação de cachaça, desalcoolização de cerveja).</p><div id="bebTab">' + bebTable() + '</div></details>';
     }
     if (th && th.pairInfo.length) {
       const isAct = ['NRTL', 'WILSON', 'UNIQUAC'].indexOf(state.model) >= 0;
@@ -14647,6 +15695,11 @@ def pfr_transiente(P, nome):
         '<div class="row-actions"><button id="txyBtn" class="primary">Gerar Txy e xy</button></div><div id="txyOut"></div>';
     } else h += '<p class="small muted">Selecione ao menos dois componentes voláteis.</p>';
     el.innerHTML = h;
+    if ($('#bebTab')) $('#bebTab').querySelectorAll('[data-usebeb]').forEach(bt => { bt.onclick = () => {
+      const B = TH.BEBIDAS[+bt.dataset.usebeb], sb = pfd.sel && pfd.sel.kind === 'block' ? state.blocks.find(x => x.id === pfd.sel.id) : null; pushUndo();
+      if (sb && sb.type === 'feed') { sb.params.bebida = B.nome; applyBebida(sb); afterChange(false); renderProps(); }
+      else { Object.keys(TH.bebida(B.d).comp).forEach(id => { if (state.components.indexOf(id) < 0) state.components.push(id); }); afterChange(false); toast(B.nome + ': componentes na lista. Selecione uma corrente de alimentação e clique em “usar” para preencher a composição.'); }
+      renderThermo(); }; });
     if ($('#foodT')) { const ft = () => { $('#foodTab').innerHTML = foodTable(foodT); $('#foodTab').querySelectorAll('[data-usefood]').forEach(bt => { bt.onclick = () => {
         pushUndo(); ['water', bt.dataset.usefood].forEach(id => { if (state.components.indexOf(id) < 0) state.components.push(id); }); afterChange(false); renderThermo(); toast('Água e ' + TH.COMP[bt.dataset.usefood].name + ' na lista de componentes'); }; }); };
       ft(); $('#foodT').oninput = e => { const v = parseFloat(e.target.value); if (isFinite(v) && v > -20 && v < 150) { foodT = v; ft(); } }; }

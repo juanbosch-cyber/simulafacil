@@ -1,3 +1,91 @@
+SIMULA FÁCIL IA 4.5 – atualização de 15/11/2026
+================================================
+
+A versão 4.5 traz três processos industriais completos, com 17 equipamentos
+novos, cada um com ícone próprio, equações, teoria, ajuda dos campos e
+gráficos. Os 60 exemplos anteriores continuam com os mesmos resultados.
+
+O QUE MUDOU
+
+Mineração (categoria nova na paleta)
+- Britador (mandíbulas, giratório ou cônico): energia pela lei de Bond,
+  razão de redução e granulometria do produto (Rosin–Rammler).
+- Moinho de bolas: energia de Bond, diâmetro e comprimento, carga de bolas,
+  velocidade crítica, maior bola e carga circulante.
+- Classificador espiral: curva de partição, corte d50, areia de volta ao
+  moinho e área da piscina.
+- Bateria de hidrociclones: modelo de Plitt (corte d50c, queda de pressão,
+  partição de vazão e nitidez), com aviso de descarga em cordão.
+- Banco de flotação: cinética de 1ª ordem em células em série, flotação
+  reversa ou direta, teor, recuperação e volume das células.
+- A granulometria segue com a corrente de um equipamento ao seguinte.
+- Exemplo "Mineração: processo completo do minério de ferro": 1 000 t/h de
+  itabirito (44,8 % de Fe) passam por dois britadores, moinho de bolas com
+  classificador espiral, deslamagem em hidrociclones, sedimentador de
+  lamas, flotação reversa (rougher e cleaner) e sedimentador de
+  concentrado. Saem 491 t/h de concentrado com 69,3 % de Fe.
+
+Siderurgia (usina integrada)
+- Coqueria: coque, gás de coqueria e subprodutos pela análise imediata do
+  carvão; calor da bateria e número de fornos.
+- Sinterização: sínter autofundente, basicidade, consumo de moinha de
+  coque, gases e área da esteira.
+- Aciaria LD (convertedor a oxigênio): descarburação, escória, gás e
+  balanço térmico; calcula a sucata que fecha o balanço ou, com a sucata
+  ligada, a temperatura do aço.
+- Lingotamento contínuo: velocidade, casca sólida (s = K√t), comprimento
+  metalúrgico e água do molde.
+- Laminação de fio-máquina: forno de reaquecimento, cadeiras, velocidade
+  de acabamento e potência.
+- Trefilação: passes, encruamento, tensão de trefilação (Siebel), potência
+  e número de máquinas.
+- O alto-forno agora aceita o sínter (com a cal já calcinada) como carga;
+  os códigos MATLAB e Python do alto-forno acompanham a mudança.
+- Exemplo "Siderurgia: usina integrada completa": do carvão e dos finos de
+  minério a 247 t/h de aço, 237 t/h de fio-máquina e arame trefilado.
+
+Papel e celulose (fábrica integrada)
+- Pátio de madeira (descascador e picador), lavagem e depuração da polpa
+  (fator de diluição e fator E de Nordén), branqueamento ECF
+  (O2–D0–EP–D1), máquina de papel, caldeira de recuperação e
+  caustificação com o forno de cal.
+- Exemplo "Papel e celulose: fábrica integrada completa": das toras de
+  eucalipto à celulose branqueada e ao papel, com evaporadores de seis
+  efeitos, caldeira de recuperação e caustificação. O licor branco
+  regenerado repõe 99,7 % do álcali efetivo que o digestor consome.
+
+Outras mudanças
+- Botão Maximizar/Restaurar do fluxograma, na barra de cima do desenho
+  (ao lado de − ⤢ +), igual ao dos gráficos. O fluxograma ocupa a tela
+  inteira, com a barra de zoom e o botão Restaurar, e o zoom se ajusta
+  para caber tudo (bom para a usina siderúrgica e para apresentar em
+  aula). No computador, o duplo clique na barra e a tecla Esc também
+  alternam; no celular o botão é quadrado de 44 px e vira "Restaurar"
+  na tela cheia.
+- Os três exemplos novos abrem logo no começo da lista de exemplos e da
+  tela inicial, com os equipamentos já arrumados no fluxograma.
+- Gráficos de granulometria e de partição com eixo de tamanhos
+  logarítmico.
+- No celular, o botão "Abrir o exemplo" da teoria quebra o texto em vez de
+  passar da tela e tem a altura mínima de toque.
+- O aviso "este equipamento não tem dados para informar" aparecia em
+  quase todos os equipamentos; agora só aparece nos que não têm campos.
+- A barra da concentração do underflow do sedimentador vai até
+  2 000 kg/m³ (polpas densas, como o concentrado de minério de ferro).
+
+LIMITES DESTA VERSÃO
+- Os 17 equipamentos novos calculam no simulador; nos códigos MATLAB e
+  Python eles aparecem com a tabela de resultados, ainda sem o cálculo
+  refeito no código (os demais equipamentos do fluxograma saem completos).
+- A curva de alvura do branqueamento é ilustrativa: ajuste as constantes
+  aos dados da fábrica.
+- Na aciaria LD só o carbono e o ferro oxidam; num convertedor real, o
+  silício, o manganês e o fósforo do gusa também queimam e permitem
+  carregar mais sucata.
+- O modelo de Plitt para hidrociclones é empírico: use os fatores F1 a F4
+  para calibrá-lo com dados da usina.
+
+
 SIMULA FÁCIL IA 4.4 – atualização de 14/11/2026
 ================================================
 

@@ -475,6 +475,8 @@ section p.sub { color: var(--muted); margin: 0 0 26px; max-width: 46em; }
 .stat:nth-child(2) { --c: var(--pop); } .stat:nth-child(3) { --c: var(--sun); } .stat:nth-child(4) { --c: var(--leaf); }
 .stat b { display: block; font: 900 clamp(26px, 4vw, 42px)/1.05 var(--fun); color: var(--ocean); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .stat span { display: block; color: var(--muted); font-size: 15px; line-height: 1.4; margin-top: 4px; }
+.stats + .stats { margin-top: -16px; }
+.stat span strong { display: block; color: var(--ocean); font-weight: 800; font-size: 1.08em; }
 .steps { margin: 0 0 12px; padding-left: 22px; } .steps li { margin-bottom: 6px; }
 .qual { list-style: none; margin: 0 0 14px; padding: 0; } .qual li { display: flex; gap: 10px; align-items: baseline; margin-bottom: 8px; }
 .qual .q { flex: none; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; font: 900 15px var(--fun); color: #fff; background: var(--leaf); }
@@ -615,6 +617,7 @@ nav.bar .links { order: 1; }
 :root[data-theme="dark"] .alunos-mais, :root[data-theme="dark"] .qual .q.qb { background: #0a6f86; color: #fff; }
 :root[data-theme="dark"] .qual .q.qc { background: #5d6d74; }
 :root[data-theme="dark"] .stat b { color: #5cc8e0; }
+:root[data-theme="dark"] .stat span strong { color: #5cc8e0; }
 :root[data-theme="dark"] #banco { background: linear-gradient(180deg, #2a2410 0%, var(--bg) 100%); }
 :root[data-theme="dark"] .book { background: #2a2410; }
 :root[data-theme="dark"] .cite { background: #0f1a1e; }
@@ -710,12 +713,17 @@ nav.bar .links { order: 1; }
   <div class="wrap">
     <p class="kicker">Novo na versão 4.0</p>
     <h2>Mais de 40 mil compostos químicos</h2>
-    <p class="sub">O SIMULA FÁCIL IA 4.0 ganhou um banco ampliado com 39 756 compostos, que se somam aos 632 do banco principal. Cada composto traz propriedades críticas, fator acêntrico, temperatura normal de ebulição, densidade do líquido, Cp de gás ideal e entalpia de vaporização; quando há dado, também pressão de vapor e entalpias e energias de Gibbs de formação. Basta digitar o nome ou o número CAS.</p>
+    <p class="sub">O SIMULA FÁCIL IA 4.0 ganhou um banco ampliado com 39 756 compostos, que se somam aos 632 do banco principal. Cada composto traz propriedades críticas, fator acêntrico, temperatura normal de ebulição, densidade do líquido, Cp de gás ideal e entalpia de vaporização; quando há dado, também pressão de vapor e entalpias e energias de Gibbs de formação. Basta digitar o nome ou o número CAS. E tem mais: bancos prontos de <b>microrganismos</b> para bioprocessos, de <b>alimentos e bebidas</b> para a engenharia de alimentos e de <b>fluidos refrigerantes</b> para a operação de refrigeração.</p>
     <div class="stats">
       <div class="stat"><b>40 358</b><span>compostos no total</span></div>
       <div class="stat"><b>39 756</b><span>no banco ampliado, carregados sob demanda</span></div>
       <div class="stat"><b>602</b><span>no banco principal, com pares binários NRTL, UNIQUAC e Peng-Robinson</span></div>
       <div class="stat"><b>5 378</b><span>com ponto crítico ou pressão de vapor experimentais</span></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>8</b><span><strong>Microrganismos para bioprocessos</strong>com μmáx, Ks, rendimentos e constantes de Luedeking–Piret, cada valor com a fonte: leveduras, E. coli, lodo ativado, nitrificantes e lactobacilos</span></div>
+      <div class="stat"><b>35</b><span><strong>Alimentos e bebidas para a engenharia de alimentos</strong>10 bebidas (cervejas, vinho, cachaça, refrigerantes, energético), 21 alimentos, dejetos e lodos e 4 misturas prontas, com c<sub>p</sub>, densidade e condutividade de Choi e Okos</span></div>
+      <div class="stat"><b>18</b><span><strong>Fluidos refrigerantes para a refrigeração</strong>de R-134a, R-410A, amônia (R-717) e CO₂ (R-744) a R-1234yf, com GWP, ODP e o ciclo de compressão de vapor pronto</span></div>
     </div>
     <div class="two">
       <div>

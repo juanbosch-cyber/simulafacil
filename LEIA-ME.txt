@@ -1,3 +1,6 @@
+Ajuste da página inicial (16/11/2026)
+- O destaque do banco de dados passou a citar também os bancos de microrganismos (bioprocessos), de alimentos e bebidas (engenharia de alimentos) e de fluidos refrigerantes (refrigeração), em novos cards.
+
 Correção 4.6.1 (16/11/2026)
 - Escape contra travamento: nenhum cálculo com PC-SAFT ou soft-SAFT passa de 20 s; ao estourar, o programa para e avisa para trocar o modelo termodinâmico.
 - Se a abertura anterior travou, o projeto salvo é guardado à parte (chave simulafacil.v1.travou) e abre um exemplo limpo, com aviso.

@@ -2987,6 +2987,8 @@ window.SIMULAFACIL_CONFIG = {
     this.ilIdx = this.saftIdx.filter(i => this.c[i].nv);
   };
   Thermo.prototype._saft = function (xfull, T, P, phase, need) {
+    // escape contra laço longo: se o cálculo passou do tempo limite (SF.deadline), interrompe em vez de travar a página
+    if (SF.deadline && performance.now() > SF.deadline) { const te = new Error('Tempo limite do cálculo excedido (equação de estado)'); te.timeout = true; throw te; }
     const idx = this.saftIdx; let s = 0; idx.forEach(i => { s += Math.max(xfull[i], 0); });
     const x = idx.map(i => (s > 0 ? Math.max(xfull[i], 0) / s : 1 / idx.length));
     // memória dos últimos estados (o flash e as colunas repetem muitas vezes as mesmas condições)
@@ -17511,8 +17513,14 @@ def pfr_transiente(P, nome):
   function runSimulation(quiet) {
     if (!state.blocks.length) { if (!quiet) toast('Monte o fluxograma primeiro'); return null; }
     setStatus('run', 'Simulando…');
+    SF.deadline = performance.now() + (SF.limiteMs || 20000);   // escape: nenhum cálculo passa de 20 s
     try { results = SF.flowsheet.solve(JSON.parse(JSON.stringify(state))); }
     catch (e) { results = { ok: false, errors: [{ msg: e.message }] }; }
+    finally { SF.deadline = 0; }
+    if (results && !results.ok && results.errors && results.errors[0] && /Tempo limite/.test(results.errors[0].msg || '')) {
+      results.errors[0].msg = 'Cálculo interrompido (passou de ' + Math.round((SF.limiteMs || 20000) / 1000) + ' s). Troque o modelo termodinâmico (NRTL, Peng-Robinson) ou simplifique o fluxograma.';
+      if (!quiet) toast('Cálculo interrompido: demorou demais. Troque o modelo termodinâmico.', 6000);
+    }
     if (!results.ok) setStatus('err', 'Erro: ' + (results.errors[0] && results.errors[0].msg || '').slice(0, 70));
     else if (!results.converged || results.warnings.length) setStatus('warn', (results.converged ? 'Convergido' : 'Não convergiu') + ' · ' + results.warnings.length + ' aviso(s) · ' + results.ms + ' ms');
     else setStatus('ok', 'Convergido · ' + results.ms + ' ms');
@@ -18683,11 +18691,18 @@ def pfr_transiente(P, nome):
 
   /* ------------------------------------------------------------------ inicialização */
   renderPalette();
-  let restored = false;
+  let restored = false, travouAntes = false;
+  try { travouAntes = localStorage.getItem('simulafacil.boot') === '1'; } catch (e) { /* */ }
+  if (travouAntes) { try { const sv = localStorage.getItem('simulafacil.v1'); if (sv) localStorage.setItem('simulafacil.v1.travou', sv); localStorage.removeItem('simulafacil.v1'); } catch (e) { /* */ } }   // a abertura anterior não terminou: não recarrega o projeto que travou
   try { const s = localStorage.getItem('simulafacil.v1'); if (s) { const fs = JSON.parse(s); if (fs && fs.blocks && fs.blocks.length) { state = Object.assign(blank(), fs); restored = true; } } } catch (e) { /* sem armazenamento */ }
   if (!restored) { const ex = SF.examples[0]; state = Object.assign(blank(), JSON.parse(JSON.stringify(ex.fs))); SF.pfd.autoLayout(state, true); }
   $('#projName').value = state.name; $('#emptyHint').hidden = state.blocks.length > 0; updateCompSummary();
-  requestAnimationFrame(() => withComps(state, () => { pfd.fit(); runSimulation(true); renderProps(); }));
+  try { localStorage.setItem('simulafacil.boot', '1'); } catch (e) { /* */ }
+  requestAnimationFrame(() => withComps(state, () => {
+    SF.limiteMs = 8000;
+    try { pfd.fit(); runSimulation(true); renderProps(); } finally { SF.limiteMs = 20000; try { localStorage.removeItem('simulafacil.boot'); } catch (e) { /* */ } }
+    if (travouAntes) toast('O projeto anterior travou o programa e foi guardado à parte. Abrimos um exemplo limpo; use um modelo termodinâmico mais leve (NRTL ou Peng-Robinson).', 9000);
+  }));
   (function () { let noShow = false; try { noShow = localStorage.getItem('simulafacil.noWelcome') === '1'; } catch (e) { /* */ } if (!noShow) openWelcome(); })();
   /* ------------------------------------------------------------------ versão para celular (mesmo programa, outra arrumação da tela) */
   const VM_KEY = 'simulafacil.viewMode', SIDE_VIEWS = ['props', 'results', 'agent', 'thermo'];

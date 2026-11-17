@@ -1,3 +1,66 @@
+SIMULA FÁCIL IA 4.6 – atualização de 17/11/2026
+================================================
+
+A versão 4.6 traz o pacote termodinâmico soft-SAFT, três equipamentos de
+tratamento de efluentes (com o exemplo de uma ETE de refrigerantes) e a
+operação contínua ou batelada em todos os biorreatores e reatores químicos.
+Os 63 exemplos anteriores continuam com os mesmos resultados.
+
+O QUE MUDOU
+
+Termodinâmica: soft-SAFT (Blas e Vega, 1997)
+- Novo modelo na lista da aba Termodinâmica, ao lado de Peng-Robinson e PC-SAFT.
+  A energia de Helmholtz residual é a soma de três partes: a referência de
+  Lennard-Jones com m segmentos (equação MBWR de Johnson, Zollweg e Gubbins,
+  1993, com as 32 constantes oficiais), o termo de cadeia e a associação de
+  Wertheim (sítios doadores e receptores por molécula).
+- Parâmetros (m, sigma, epsilon/k, epsilonAB/k e kappaAB) para 22 componentes:
+  metano a n-octano, isobutano, ciclohexano, benzeno, tolueno, etilbenzeno,
+  eteno, propeno, N2, CO2, água, metanol, etanol, 1-propanol e isopropanol.
+  Foram ajustados à pressão de vapor e à densidade do líquido (0,58 a 0,88 Tc);
+  o erro máximo na pressão de vapor fica em torno de 5 % (CO2: 20 %, sem
+  quadrupolo). Binários metanol-água, etanol-água, isopropanol-água,
+  etanol-metanol, benzeno-hexano e tolueno-heptano têm kij ajustado ao ELV
+  do NRTL do banco; os demais usam kij = 0.
+- Calculadora na própria aba (Z, P, A_res/NkT e frações de sítios livres em T
+  e densidade molar dadas), com os valores do script MATLAB recebido como
+  ponto de partida. Exemplo novo: "Flash de metanol + água com soft-SAFT".
+- softSAFT_Completo.m: o script MATLAB recebido, conferido e corrigido. As
+  constantes da equação de Johnson estavam erradas a partir da 7ª, faltava
+  dividir A e Z por T, o termo a4 não leva T, e g(sigma) passou a usar o
+  diâmetro de Barker-Henderson (depende de T) com fração de empacotamento
+  calibrada. O arquivo fica na raiz do repositório.
+
+Tratamento de efluentes (categoria nova na paleta)
+- Precipitação química de fósforo (WWP): sulfato de alumínio forma AlPO4 e
+  Al(OH)3; razão molar Al:P por uma curva de Hill (contínua, no lugar da reta
+  por trechos do código recebido), lodo químico, acidez gerada, mistura rápida
+  e floculação.
+- Flotação por ar dissolvido (DAF): relação ar/sólidos A/S, reciclo
+  pressurizado, eficiência de Monod em A/S, área pela taxa hidráulica, lodo
+  flotado e bomba de recirculação.
+- Lodos ativados com decantador (contínuo) ou SBR (batelada): remoção da DQO
+  solúvel, lodo, oxigênio, ar, CO2, nitrogênio dosado e fósforo assimilado,
+  fechando o balanço de massa.
+- Exemplo "ETE de refrigerantes: lodos ativados, precipitação química de
+  fósforo (WWP) com alumínio e flotação por ar dissolvido (DAF)": 800 m3/dia
+  com 3 484 mg/L de DQO, 250 mg/L de SST e 25 mg P/L. O reator biológico tira
+  95 % da DQO solúvel e deixa 14,2 mg P/L; 35 mg Al/L tiram 93 % do fósforo
+  solúvel (1,0 mg P/L); o DAF (R = 12 %, 5 atm, A/S = 0,057) remove 84 % dos
+  sólidos. Os dois lodos se juntam para desidratação.
+
+Operação: só contínuo ou batelada
+- Todos os biorreatores (Tosetto, um, dois e três em série, Monod, Verhulst,
+  biodiesel), o biodigestor e os reatores químicos (CSTR, PFR, conversão e
+  Gibbs) têm o campo Operação com exatamente duas escolhas.
+- Biorreator de dois em série e biodigestor ganharam a batelada. O biodigestor
+  em batelada processa uma carga única (carga diária x TRH), com gráfico do
+  biogás acumulado e da produção diária no ciclo.
+- CSTR e PFR: o regime "permanente/transiente" virou contínuo, com o campo
+  "Contínuo: cálculo" (regime permanente ou partida transiente). O PFR em
+  batelada é um tubo fechado (reator de batelada ideal). Arquivos salvos com
+  "permanente" ou "transiente" são convertidos ao abrir.
+
 SIMULA FÁCIL IA 4.5 – atualização de 15/11/2026
 ================================================
 

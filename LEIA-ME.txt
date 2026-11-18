@@ -25,6 +25,8 @@ COLUNAS DE FLOTAÇÃO (dois novos ícones, categoria Mineração)
   espuma), recuperação máxima do mineral deprimido (R_inf), arraste só no mineral que não flota,
   altura da espuma usada no cálculo, janela de pH do coletor aplicada e % de sólidos calculado.
 - Os parâmetros dos bancos são didáticos (literatura) e devem ser calibrados com ensaios.
+- Manutenção: a biblioteca de gráficos (Plotly 2.35.2) passou a ser hospedada no próprio site, com o CDN como
+  reserva; foram removidos os manuais antigos e os .js soltos da raiz, que as páginas não carregam.
 - Divulgação: página de entrada, descrição para o Google, dados estruturados e perguntas frequentes.
 
 SIMULA FÁCIL IA 4.7 – atualização de 18/11/2026

@@ -17,7 +17,7 @@ Site estático publicado pelo GitHub Pages a partir do branch `main`
 - `simulador.html` — o simulador completo.
 - Os dois são arquivos únicos, com o CSS e o JavaScript embutidos (os blocos trazem
   comentários como `/* css/app.css */` e `/* js/app.js */`). **Edite sempre estes dois
-  arquivos.** Os `.js` soltos na raiz são cópias antigas que as páginas não carregam.
+  arquivos.** Não há `.js` soltos na raiz (as cópias antigas foram removidas). `plotly-2.35.2.min.js` é a biblioteca de gráficos, hospedada no próprio site (com o CDN como reserva).
 - `site.webmanifest`, `icon-192.png`, `icon-512.png` — instalação na tela de início do celular.
 - `LEIA-ME.txt` — notas de cada versão; acrescente a nova versão no topo.
 

@@ -1,3 +1,40 @@
+SIMULA FÁCIL IA 4.7 – atualização de 18/11/2026
+================================================
+
+Pedidos da disciplina Operações Unitárias II (Prof. Alexandre Boscaro, UFSJ).
+
+EVAPORADOR COM SAÍDA DE ENERGIA (novo ícone, categoria Evaporadores)
+- "Evaporador de efeito único com condensador acoplado": o vapor produzido condensa
+  dentro do equipamento (líquido saturado, fração de vapor 0) e o calor latente sai por uma
+  corrente de energia (porta de cima), pronta para ligar à entrada de energia do próximo
+  efeito. Dispensa montar à mão o resfriador, a corrente de energia e a ligação em cada efeito.
+- Sem corrente de energia na entrada, o efeito é aquecido por vapor saturado (como o simples
+  efeito). Com a corrente do efeito anterior, a energia recebida e a pressão do efeito
+  fixam quanto evapora. A corrente de energia leva também a temperatura de condensação.
+- Cruzamento de temperatura: se o vapor do efeito anterior condensar abaixo da ebulição do
+  efeito seguinte, o simulador para e informa a pressão máxima permitida.
+- Resultados: energia liberada na condensação, temperatura de condensação, fração da energia
+  que sai, pressão máxima do próximo efeito, economia de vapor da cascata (água evaporada
+  acumulada / vapor vivo) e, nos efeitos alimentados por energia, a curva de otimização da
+  área em função da pressão.
+- Exemplo novo "Evaporador de triplo efeito com saída de energia" (açúcar de 10 % a 50 %):
+  economia de 2,04 kg/kg, a mesma do triplo efeito clássico.
+
+FILTROS CONTÍNUOS (novos ícones, categoria Sólidos particulados)
+- Filtro-prensa de placas e quadros: filtração a pressão constante (t = K·v²/2 + B·v),
+  área, número de câmaras, espessura da torta e o tempo de filtração que minimiza a área.
+- Filtro rotativo a vácuo de tambor: área, rotação, comprimento do tambor e espessura da torta.
+- Entrada de polpa; saídas de filtrado e torta. Exemplo novo "Filtração contínua".
+
+HIDROCICLONE
+- O hidrociclone (categoria Mineração, modelo de Plitt) já tem entrada de polpa e saídas de
+  overflow e underflow; permanece sem alterações.
+
+CORREÇÃO
+- Nos evaporadores de simples e de duplo efeito, o campo "Pressão no espaço de vapor" tinha o
+  valor padrão como nome interno e não era lido: blocos novos usavam 13,4 kPa. Agora o campo
+  é lido corretamente. Os exemplos continuam com os mesmos resultados.
+
 Ajuste da página inicial (16/11/2026)
 - O destaque do banco de dados passou a citar também os bancos de microrganismos (bioprocessos), de alimentos e bebidas (engenharia de alimentos) e de fluidos refrigerantes (refrigeração), em novos cards.
 

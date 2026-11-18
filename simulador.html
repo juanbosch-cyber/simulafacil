@@ -37,8 +37,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 4.6 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 4.6, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 4.7 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 4.7, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -47,7 +47,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 4.6 – Simulador de processos químicos e bioprocessos com mais de 40 mil compostos">
+<meta property="og:title" content="SIMULA FÁCIL IA 4.7 – Simulador de processos químicos e bioprocessos com mais de 40 mil compostos">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -891,7 +891,7 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>4.6</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>4.7</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -1042,9 +1042,9 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 4.6</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 4.7</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
-        <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.6:</b> <b>soft-SAFT</b>, ETE de refrigerantes com <b>DAF</b> e operação <b>contínua ou batelada</b></p>
+        <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.7:</b> <b>evaporador com saída de energia</b> (triplo efeito) e <b>filtros contínuos</b> (placas e rotativo)</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.5:</b> processos completos de <b>mineração, siderurgia e papel e celulose</b></p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.0:</b> banco com mais de <b>40 mil compostos químicos</b></p>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1209,7 +1209,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
-    version: '4.6',
+    version: '4.7',
     subtitle: 'Simulador de processos químicos e bioprocessos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -3635,7 +3635,7 @@ window.SIMULAFACIL_CONFIG = {
     evap_single: { label: 'Evaporador de simples efeito', cat: 'Evaporadores', ins: ['feed'], outs: ['product', 'vapor'], eins: ['q_in'], params: [
       { k: 'xP', label: 'Fração mássica de soluto no concentrado', u: '0–1', def: 0.015 },
       { k: 'Ps', label: 'Pressão do vapor de aquecimento (saturado)', u: 'kPa abs', def: 143.3 },
-      { k: '101.325', label: 'Pressão no espaço de vapor do evaporador', u: 'kPa abs', def: 101.325 },
+      { k: 'PN', label: 'Pressão no espaço de vapor do evaporador', u: 'kPa abs', def: 101.325 },
       { k: 'U', label: 'Coeficiente global de troca térmica U', u: 'W/m²·K', type: 'matrix', def: '1704' },
       { k: 'b1', label: 'Elevação do ponto de ebulição: BPR = b1·x + b2·x² — coeficiente b1', u: '°C', def: 0 },
       { k: 'b2', label: 'Elevação do ponto de ebulição — coeficiente b2 (b1 = b2 = 0 despreza a BPR)', u: '°C', def: 0 },
@@ -3644,7 +3644,7 @@ window.SIMULAFACIL_CONFIG = {
     evap_double: { label: 'Evaporador de duplo efeito (alimentação para a frente)', cat: 'Evaporadores', ins: ['feed'], outs: ['product', 'vapor', 'condensate'], eins: ['q_in'], params: [
       { k: 'xP', label: 'Fração mássica de soluto no concentrado', u: '0–1', def: 0.5 },
       { k: 'Ps', label: 'Pressão do vapor de aquecimento (saturado)', u: 'kPa abs', def: 205.5 },
-      { k: '13.4', label: 'Pressão no espaço de vapor do 2º efeito (vácuo)', u: 'kPa abs', def: 13.4 },
+      { k: 'PN', label: 'Pressão no espaço de vapor do 2º efeito (vácuo)', u: 'kPa abs', def: 13.4 },
       { k: 'U', label: 'Coeficiente global U de cada efeito (1º e 2º, um por linha)', u: 'W/m²·K', type: 'matrix', def: '3123; 1987' },
       { k: 'b1', label: 'Elevação do ponto de ebulição: BPR = b1·x + b2·x² — coeficiente b1', u: '°C', def: 1.78 },
       { k: 'b2', label: 'Elevação do ponto de ebulição — coeficiente b2 (b1 = b2 = 0 despreza a BPR)', u: '°C', def: 6.22 },
@@ -3656,6 +3656,15 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Ps', label: 'Pressão do vapor de aquecimento (saturado) no 1º efeito', u: 'kPa abs', def: 205.5 },
       { k: 'PN', label: 'Pressão no último efeito (vácuo)', u: 'kPa abs', def: 13.4 },
       { k: 'U', label: 'Coeficiente global U de cada efeito (um valor por linha, do 1º ao último)', u: 'W/m²·K', type: 'matrix', def: '3123; 1987; 1136' },
+      { k: 'b1', label: 'Elevação do ponto de ebulição: BPR = b1·x + b2·x² — coeficiente b1', u: '°C', def: 1.78 },
+      { k: 'b2', label: 'Elevação do ponto de ebulição — coeficiente b2 (b1 = b2 = 0 despreza a BPR)', u: '°C', def: 6.22 },
+      { k: 'cp0', label: 'Calor específico da solução: cp = cp0 − cp1·x — cp0', u: 'kJ/kg·K', def: 4.19 },
+      { k: 'cp1', label: 'Calor específico da solução — cp1', u: 'kJ/kg·K', def: 2.35 }] },
+    evap_cond: { label: 'Evaporador de efeito único com condensador acoplado: a energia liberada pela condensação do vapor sai por uma corrente de energia, pronta para aquecer o próximo efeito', cat: 'Evaporadores', ins: ['feed'], outs: ['product', 'condensate'], eins: ['q_in'], eouts: ['q_out'], params: [
+      { k: 'xP', label: 'Fração mássica de soluto no concentrado (só sem corrente de energia na entrada)', u: '0–1', def: 0.15 },
+      { k: 'Ps', label: 'Pressão do vapor de aquecimento (saturado), só sem corrente de energia na entrada', u: 'kPa abs', def: 205.5 },
+      { k: 'PN', label: 'Pressão no espaço de vapor do efeito (menor que a do efeito anterior)', u: 'kPa abs', def: 101.325 },
+      { k: 'U', label: 'Coeficiente global de troca térmica U', u: 'W/m²·K', type: 'matrix', def: '3000' },
       { k: 'b1', label: 'Elevação do ponto de ebulição: BPR = b1·x + b2·x² — coeficiente b1', u: '°C', def: 1.78 },
       { k: 'b2', label: 'Elevação do ponto de ebulição — coeficiente b2 (b1 = b2 = 0 despreza a BPR)', u: '°C', def: 6.22 },
       { k: 'cp0', label: 'Calor específico da solução: cp = cp0 − cp1·x — cp0', u: 'kJ/kg·K', def: 4.19 },
@@ -4234,7 +4243,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'dp', label: 'Diâmetro médio das partículas', u: 'mm', def: 3 },
       { k: 'rhob', label: 'Massa específica aparente do leito (bulk)', u: 'kg/m³', def: 1400 },
       { k: 'phiw', label: 'Ângulo de atrito partícula–parede φw', u: '°', def: 25 },
-      { k: 'theta', label: 'Semiângulo da tremonha θ, medido a partir da vertical (90° = fundo plano)', u: '°', type: 'range', min: 5, max: 90, step: 1, def: 15 },
+      { k: 'theta', label: 'Semiângulo da tremonha θ, medido a partir da vertical (90° = fundo plano)', u: '°', type: 'range', min: 5, max: 90, step: 1, def: 10 },
       { k: 'angles', label: 'Ângulos θ a comparar nos gráficos (graus, separados por espaço)', type: 'matrix', def: '90 45 30 15' },
       { k: 'Cb', label: 'Constante de Beverloo C', u: '', def: 0.58 },
       { k: 'kb', label: 'Fator do anel vazio k (Beverloo)', u: '', def: 1.5 },
@@ -4258,6 +4267,33 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'cps', label: 'Calor específico dos sólidos', u: 'kJ/(kg·K)', def: 0.85 },
       { k: 'cpf', label: 'Calor específico do líquido', u: 'kJ/(kg·K)', def: 4.184 },
       { k: 'QlT', label: 'Perda térmica para o ambiente', u: 'kW', def: 25 }] },
+    filter_plate: { label: 'Filtro-prensa de placas e quadros: tempo de filtração, área, número de placas e espessura da torta (resistência específica α)', cat: 'Sólidos particulados', ins: ['feed'], outs: ['filtrate', 'cake'], params: [
+      { k: 'dP', label: 'Pressão de filtração (queda de pressão na torta e no meio)', u: 'kPa', type: 'range', min: 50, max: 1600, step: 10, def: 500 },
+      { k: 'alpha', label: 'Resistência específica da torta α', u: 'm/kg', def: 1e11 },
+      { k: 'Rm', label: 'Resistência do meio filtrante R_m', u: '1/m', def: 1e10 },
+      { k: 'mu', label: 'Viscosidade do filtrado', u: 'cP', def: 1.0 },
+      { k: 'rhos', label: 'Massa específica do sólido', u: 'kg/m³', def: 2650 },
+      { k: 'rhof', label: 'Massa específica do líquido', u: 'kg/m³', def: 1000 },
+      { k: 'eps', label: 'Porosidade da torta ε', u: '0–1', def: 0.45 },
+      { k: 'Uc', label: 'Umidade da torta (fração mássica de líquido na torta úmida)', u: '0–1', def: 0.30 },
+      { k: 'eta', label: 'Recuperação dos sólidos na torta', u: '0–1', def: 0.995 },
+      { k: 'tf', label: 'Tempo de filtração por ciclo', u: 'min', type: 'range', min: 2, max: 240, step: 1, def: 10 },
+      { k: 'td', label: 'Tempo morto por ciclo (abrir, descarregar, lavar e fechar)', u: 'min', def: 20 },
+      { k: 'Ap', label: 'Área de filtração de cada câmara (duas faces de cada placa)', u: 'm²', def: 1.2 },
+      { k: 'esp', label: 'Espessura da câmara (quadro)', u: 'mm', def: 80 }] },
+    filter_rotary: { label: 'Filtro rotativo a vácuo de tambor: área, rotação, espessura da torta e dimensões do tambor', cat: 'Sólidos particulados', ins: ['feed'], outs: ['filtrate', 'cake'], params: [
+      { k: 'dP', label: 'Vácuo aplicado (queda de pressão na torta e no meio)', u: 'kPa', type: 'range', min: 10, max: 85, step: 1, def: 60 },
+      { k: 'alpha', label: 'Resistência específica da torta α', u: 'm/kg', def: 5e10 },
+      { k: 'Rm', label: 'Resistência do meio filtrante R_m', u: '1/m', def: 5e9 },
+      { k: 'mu', label: 'Viscosidade do filtrado', u: 'cP', def: 1.0 },
+      { k: 'rhos', label: 'Massa específica do sólido', u: 'kg/m³', def: 2650 },
+      { k: 'rhof', label: 'Massa específica do líquido', u: 'kg/m³', def: 1000 },
+      { k: 'eps', label: 'Porosidade da torta ε', u: '0–1', def: 0.45 },
+      { k: 'Uc', label: 'Umidade da torta (fração mássica de líquido na torta úmida)', u: '0–1', def: 0.25 },
+      { k: 'eta', label: 'Recuperação dos sólidos na torta', u: '0–1', def: 0.99 },
+      { k: 'phi', label: 'Fração da superfície do tambor mergulhada na polpa (formação da torta)', u: '0–1', type: 'range', min: 0.1, max: 0.5, step: 0.01, def: 0.3 },
+      { k: 'rpm', label: 'Rotação do tambor', u: 'rpm', type: 'range', min: 0.1, max: 3, step: 0.05, def: 0.5 },
+      { k: 'D', label: 'Diâmetro do tambor', u: 'm', def: 2.5 }] },
     p_precip: { label: 'Precipitação química de fósforo (WWP) com sal de alumínio: razão molar Al:P, lodo químico (AlPO₄ e Al(OH)₃), acidez gerada, mistura rápida e floculação', cat: 'Tratamento de efluentes', ins: ['feed'], outs: ['out'], params: [
       { k: 'dmode', label: 'Especificação da dose', type: 'select', options: ['dose de alumínio (mg Al/L de efluente)', 'razão molar Al:P (β)'], def: 'dose de alumínio (mg Al/L de efluente)' },
       { k: 'dose', label: 'Dose de alumínio (vem do sulfato de alumínio)', u: 'mg Al/L', type: 'range', min: 0, max: 150, step: 1, def: 25, when: q => !/^razão/.test(q.dmode || '') },
@@ -6522,6 +6558,80 @@ window.SIMULAFACIL_CONFIG = {
   /* evaporadores de simples e de duplo efeito: o mesmo modelo do múltiplo efeito com N = 1 ou N = 2 */
   IMPL.evap_single = (th, b, ins) => IMPL.evap_multi(th, Object.assign({}, b, { params: Object.assign({}, b.params, { N: 1 }) }), ins);
   IMPL.evap_double = (th, b, ins) => IMPL.evap_multi(th, Object.assign({}, b, { params: Object.assign({}, b.params, { N: 2 }) }), ins);
+  /* evaporador de efeito único com o condensador do vapor acoplado.
+     Sem corrente de energia na entrada: aquecido por vapor saturado (como o simples efeito), calcula o concentrado pedido.
+     Com corrente de energia na entrada (q_out do efeito anterior): a energia dada e a pressão do efeito fixam quanto evapora.
+     A corrente de energia de saída leva o calor latente da condensação do vapor produzido (e a temperatura em que ele condensa) */
+  function evapEnergy(o) { // o = {F kg/h, xF, TF °C, Q kJ/h, PN Pa, b1, b2, cp0, cp1}
+    const cp = x => o.cp0 - o.cp1 * x, bprOf = x => o.b1 * x + o.b2 * x * x;
+    const Tv = K2C(STEAM.Tsat(o.PN)), HV = STEAM.hV(C2K(Tv)), hF = cp(o.xF) * o.TF;
+    const bal = V => { const x = o.F * o.xF / (o.F - V), bp = bprOf(x), T = Tv + bp, h = cp(x) * T; return { x, bp, T, e: (o.F - V) * h + V * (HV + 1.884 * bp) - o.F * hF }; };
+    const Vmax = o.F * (1 - o.xF) * 0.9999, e0 = bal(0).e, e1 = bal(Vmax).e;
+    if (o.Q < e0) throw new Error('a energia recebida (' + (o.Q / 3600).toFixed(1) + ' kW) só aquece a alimentação até a ebulição (' + (e0 / 3600).toFixed(1) + ' kW): reduza a pressão do efeito ou aumente a energia');
+    if (o.Q > e1) throw new Error('a energia recebida (' + (o.Q / 3600).toFixed(1) + ' kW) evaporaria toda a água da alimentação (' + (e1 / 3600).toFixed(1) + ' kW): reduza a energia ou aumente a vazão da alimentação');
+    let lo = 0, hi = Vmax;
+    for (let k = 0; k < 100; k++) { const m = (lo + hi) / 2; if (bal(m).e < o.Q) lo = m; else hi = m; }
+    const V = (lo + hi) / 2, r = bal(V);
+    return { V, x: r.x, bpr: r.bp, T: r.T, Tv, H: HV + 1.884 * r.bp };
+  }
+  IMPL.evap_cond = function (th, b, ins) {
+    const s = ins.feed, p = b.params, warn = [];
+    if (!s || !(s.F > 0)) throw new Error('conecte a alimentação');
+    const iw = th.ids.indexOf('water'); if (iw < 0) throw new Error('inclua a água entre os componentes (o solvente evaporado)');
+    const mw = th.c.map(c => c.mw), mass = s.flows.map((f, i) => f * mw[i] * 3.6);   // kg/h
+    const F = mass.reduce((a, v) => a + v, 0), xF = 1 - mass[iw] / F;
+    if (!(xF > 0)) throw new Error('a alimentação não tem soluto (só água)');
+    th.ids.forEach((id, i) => { if (i !== iw && mass[i] > 1e-9 && !th.c[i].nv && !th.c[i].solid) warn.push(th.c[i].name + ' foi tratado como soluto não volátil'); });
+    const U1 = String(p.U == null ? '' : p.U).split(/[;\n\s]+/).map(t => parseFloat(t.replace(',', '.'))).filter(v => isFinite(v) && v > 0)[0] || 3000;
+    const PNk = num(p.PN, 101.325), PN = PNk * 1000, b1 = num(p.b1, 1.78), b2 = num(p.b2, 6.22), cp0 = num(p.cp0, 4.19), cp1 = num(p.cp1, 2.35);
+    if (!(PN > 0)) throw new Error('informe a pressão no espaço de vapor do efeito');
+    const eIn = ins.q_in && ins.q_in.energy && ins.q_in.Q > 0 ? ins.q_in : null;
+    const kmol = kgph => kgph / 3.6 / mw[iw];
+    let V, Tb, Tv, bpr, xo, Qin, S = null, A = null, Th = null, dTa = null, steam = !eIn;
+    if (steam) {   // vapor saturado: o mesmo modelo do simples efeito
+      const base = IMPL.evap_multi(th, { params: Object.assign({}, p, { N: 1, PN: PNk, U: U1 }) }, { feed: s }), r = base.evap.r;
+      V = r.V[0]; Tb = r.T[0]; Tv = r.Tv[0]; bpr = r.bpr[0]; xo = r.x[0]; Qin = base.duty * 3.6; S = r.S; A = r.A[0];
+      Th = K2C(STEAM.Tsat(num(p.Ps, 205.5) * 1000)); dTa = Th - Tb; (base.warn || []).forEach(w => warn.push(w));
+    } else {       // energia recebida de outro efeito
+      const e = evapEnergy({ F, xF, TF: K2C(s.T), Q: eIn.Q * 3.6, PN, b1, b2, cp0, cp1 });
+      V = e.V; Tb = e.T; Tv = e.Tv; bpr = e.bpr; xo = e.x; Qin = eIn.Q * 3.6; Th = eIn.T != null ? eIn.T : null;
+      if (Th != null) {
+        dTa = Th - Tb;
+        if (!(dTa > 0)) throw new Error('cruzamento de temperatura: o vapor do efeito anterior condensa a ' + Th.toFixed(1) + ' °C e a solução ferve a ' + Tb.toFixed(1) + ' °C neste efeito. Reduza a pressão deste efeito (abaixo de ' + (STEAM.psat(C2K(Th - bpr)) / 1000).toFixed(1) + ' kPa)');
+        A = Qin / 3.6 / (U1 * dTa);
+      } else warn.push('a corrente de energia não informa a temperatura de condensação (valor digitado): a área não foi calculada. Ligue a saída de energia do efeito anterior direto à entrada deste');
+    }
+    if (dTa != null && dTa < 5) warn.push('diferença de temperatura de só ' + dTa.toFixed(1) + ' °C: a área de troca fica muito grande. Reduza a pressão deste efeito');
+    const Hv = STEAM.hV(C2K(Tv)) + 1.884 * bpr, Qout = V * (Hv - STEAM.hL(C2K(Tv)));   // kJ/h liberados ao condensar o vapor produzido
+    const fP = s.flows.map((f, i) => (i === iw ? kmol((F - V) * (1 - xo)) : f)), fV = new Array(th.n).fill(0); fV[iw] = kmol(V);
+    const out = { product: mkStream(th, fP, C2K(Tb), Math.max(PN, 101325)) };
+    try { const z = new Array(th.n).fill(0); z[iw] = 1; const fl = th.flashPVF(z, PN, 0); out.condensate = mkStream(th, fV, fl.T, PN, fl); }   // líquido saturado (fração de vapor 0)
+    catch (e) { out.condensate = mkStream(th, fV, C2K(Tv), PN); }
+    const kw = v => +(v / 3600).toFixed(1);
+    const res = [{ k: 'Modo de aquecimento', v: steam ? 'vapor saturado a ' + num(p.Ps, 205.5) + ' kPa (' + Th.toFixed(1) + ' °C)' : 'corrente de energia recebida' + (Th != null ? ' (condensação a ' + Th.toFixed(1) + ' °C)' : ''), u: '' },
+      { k: 'Água evaporada', v: +V.toFixed(1), u: 'kg/h' }, { k: 'Concentrado (fração mássica de soluto)', v: +(F - V).toFixed(1) + ' kg/h (' + (100 * xo).toFixed(2) + ' %)', u: '' },
+      { k: 'Pressão / temperatura de ebulição / BPR', v: PNk.toFixed(2) + ' kPa / ' + Tb.toFixed(2) + ' °C / ' + bpr.toFixed(2) + ' °C', u: '' },
+      { k: 'Calor recebido pelo efeito', v: kw(Qin), u: 'kW' }];
+    if (S != null) res.push({ k: 'Vapor de aquecimento consumido', v: +S.toFixed(1), u: 'kg/h' }, { k: 'Economia de vapor (água evaporada / vapor)', v: +(V / S).toFixed(3), u: 'kg/kg' });
+    if (A != null) res.push({ k: 'Área de troca necessária', v: +A.toFixed(2), u: 'm²' }, { k: 'Diferença de temperatura (condensação − ebulição)', v: +dTa.toFixed(2), u: '°C' });
+    const acc = eIn && eIn.acc ? eIn.acc : null, Vtot = V + (acc ? acc.V : 0), S0 = steam ? S : acc ? acc.S : null;
+    if (acc && S0 > 0) res.push({ k: 'Cascata de efeitos: água evaporada acumulada / vapor vivo / economia', v: Vtot.toFixed(0) + ' kg/h / ' + S0.toFixed(0) + ' kg/h / ' + (Vtot / S0).toFixed(2) + ' kg/kg', u: '' });
+    res.push({ k: 'Energia liberada na condensação do vapor (saída de energia)', v: kw(Qout), u: 'kW' },
+      { k: 'Temperatura de condensação do vapor (potencial térmico para o próximo efeito)', v: +Tv.toFixed(2), u: '°C' },
+      { k: 'Fração da energia recebida que sai pela corrente de energia', v: +(Qout / Qin).toFixed(3), u: '' },
+      { k: 'Pressão máxima do próximo efeito (ΔT mínimo de 5 °C, sem BPR)', v: +(STEAM.psat(C2K(Tv - 5)) / 1000).toFixed(2), u: 'kPa' },
+      { k: 'Condensado (líquido saturado, fração de vapor 0)', v: +V.toFixed(1), u: 'kg/h' });
+    const plots = [{ kind: 'bars', title: 'Aproveitamento da energia (kW)', data: { categories: ['Calor recebido', 'Calor liberado na condensação (vai ao próximo efeito)'], xLabel: '', yLabel: 'kW',
+      series: [{ name: 'kW', y: [Qin / 3600, Qout / 3600], color: '#e07b39' }] } }];
+    if (!steam && Th != null) {   // otimização: quanto mais baixa a pressão do efeito, menor a área, mas maior o vácuo exigido
+      const Pmax = STEAM.psat(C2K(Th)), xs = [], ys = [];
+      for (let k = 0; k < 40; k++) { const Pk = Math.max(2000, Pmax) * Math.pow(2000 / Math.max(2000, Pmax), k / 39); try { const e = evapEnergy({ F, xF, TF: K2C(s.T), Q: Qin, PN: Pk, b1, b2, cp0, cp1 }), d = Th - e.T; if (d > 0.3) { xs.push(Pk / 1000); ys.push(Qin / 3.6 / (U1 * d)); } } catch (e2) { /* pressão fora da faixa */ } }
+      if (xs.length > 2) plots.push({ kind: 'curves', title: 'Otimização: área do efeito × pressão no efeito (a energia recebida é a mesma)', data: { xLabel: 'Pressão no espaço de vapor (kPa)', yLabel: 'Área de troca (m²)', series: [
+        { name: 'Área necessária', x: xs, y: ys, color: '#2563c9', width: 3 }, { name: 'Operação', x: [PNk], y: [A], mode: 'markers', size: 12, symbol: 'circle', color: '#d1302b' }] } });
+    }
+    return { out, res: decBR(res), warn: decW(warn), plots, duty: steam ? Qin / 3.6 : null, eports: { q_in: Qin / 3.6, q_out: Qout / 3.6 }, eT: { q_out: Tv }, eAcc: { q_out: { V: Vtot, S: S0 } } };
+  };
+
   /* um biorreator (batelada ou quimiostato) e dois biorreatores em série: o mesmo modelo de Tosetto com N = 1 ou N = 2 e vazão única */
   IMPL.bioreactor_1 = function (th, b, ins) {
     const p = b.params, cont = /^contínuo/.test(p.mode || '');
@@ -8294,6 +8404,86 @@ window.SIMULAFACIL_CONFIG = {
     return { out, massUtil: !conn && solFrac ? mF : 0, res: decBR(res), warn: decW(warn), plots,
       tf: { QF, wF, rhos, rhof, TF, H0, C0, v0, tL, kc, Cu, eta, Hs, cps, cpf, Ql, cons } };
   };
+
+  /* filtração contínua de suspensões (filtro-prensa de placas e filtro rotativo a vácuo): equação de filtração a pressão constante
+     t = (μ·α·c/(2·ΔP))·v² + (μ·R_m/ΔP)·v, com v o volume de filtrado por área e c os kg de sólido depositados por m³ de filtrado.
+     O balanço de massa usa a recuperação dos sólidos e a umidade da torta */
+  function filterModel(kind) {
+    return function (th, b, ins) {
+      const p = b.params, warn = [], s = ins && ins.feed, rot = kind === 'rotary';
+      if (!connected(s)) throw new Error('conecte a corrente de polpa (suspensão) na entrada');
+      const kg = kgOf(th, s);
+      let sol = th.c.map(c => !!c.solid);
+      if (!kg.some((m, i) => sol[i] && m > 1e-12)) { sol = th.c.map(c => !!(c.nv || c.solid)); warn.push('nenhum componente sólido na alimentação: os não voláteis foram tratados como sólidos'); }
+      const ms = sum(kg.filter((m, i) => sol[i])), ml = sum(kg.filter((m, i) => !sol[i]));   // kg/h
+      if (!(ms > 1e-9)) throw new Error('a alimentação não tem sólidos (use um componente sólido, como a sílica)');
+      if (!(ml > 1e-9)) throw new Error('a alimentação não tem líquido');
+      const eta = num(p.eta, rot ? 0.99 : 0.995), Uc = num(p.Uc, rot ? 0.25 : 0.30), mu = num(p.mu, 1) / 1000, alpha = num(p.alpha, rot ? 5e10 : 1e11), Rm = num(p.Rm, rot ? 5e9 : 1e10);
+      const dP = num(p.dP, rot ? 60 : 500) * 1000, rhoL = num(p.rhof, 1000), rhoS = num(p.rhos, 2650), eps = num(p.eps, 0.45);
+      if (!(eta > 0 && eta <= 1)) throw new Error('a recuperação de sólidos deve ficar entre 0 e 1');
+      if (!(Uc > 0 && Uc < 1)) throw new Error('a umidade da torta deve ficar entre 0 e 1');
+      if (!(dP > 0 && alpha > 0 && Rm >= 0 && mu > 0 && eps > 0 && eps < 1)) throw new Error('pressão, resistências, viscosidade e porosidade devem ser positivas');
+      const msC = eta * ms, mC = msC / (1 - Uc), mlC = mC - msC;
+      if (mlC > ml) throw new Error('a torta pediria mais líquido (' + mlC.toFixed(1) + ' kg/h) do que a alimentação tem (' + ml.toFixed(1) + ' kg/h): reduza a umidade da torta');
+      const kC = kg.map((m, i) => (sol[i] ? eta * m : m * mlC / ml)), kFil = kg.map((m, i) => m - kC[i]);
+      const mFil = sum(kFil), Qf = (ml - mlC) / 3600 / rhoL;                  // m³/s de filtrado
+      const c = (msC / 3600) / Qf, K = mu * alpha * c / dP, B = mu * Rm / dP;  // kg/m³; s/m²; s/m
+      const vOf = t => (K > 0 ? (-B + Math.sqrt(B * B + 2 * K * t)) / K : t / B);   // m³/m² filtrados em t segundos
+      const rhoD = rhoS * (1 - eps);
+      let tf, td = 0, v, A, n = 0, extra = [], plots = [];
+      if (rot) {
+        const phi = num(p.phi, 0.3), rpm = num(p.rpm, 0.5), Dd = num(p.D, 2.5);
+        if (!(phi > 0 && phi < 0.7 && rpm > 0 && Dd > 0)) throw new Error('fração mergulhada (0 a 0,7), rotação e diâmetro devem ser positivos');
+        tf = phi * 60 / rpm; v = vOf(tf); A = Qf / (v * rpm / 60);
+        const Ld = A / (Math.PI * Dd), dl = c * v / rhoD;
+        extra = [{ k: 'Tempo de formação da torta t_f = φ/n', v: tf.toFixed(1) + ' s (' + (tf / 60).toFixed(2) + ' min por volta)', u: '' },
+          { k: 'Dimensões do tambor: diâmetro × comprimento', v: Dd.toFixed(2) + ' m × ' + Ld.toFixed(2) + ' m (L/D = ' + (Ld / Dd).toFixed(2) + ')', u: '' },
+          { k: 'Espessura da torta', v: +(dl * 1000).toFixed(1), u: 'mm' }];
+        if (num(p.dP, 60) > 85) warn.push('vácuo de ' + num(p.dP, 60).toFixed(0) + ' kPa passa do que uma bomba de vácuo entrega (cerca de 85 kPa)');
+        if (dl * 1000 < 3) warn.push('torta de ' + (dl * 1000).toFixed(1) + ' mm é fina demais para a faca raspar: reduza a rotação');
+        if (dl * 1000 > 50) warn.push('torta de ' + (dl * 1000).toFixed(0) + ' mm é grossa demais para um filtro de tambor: aumente a rotação');
+        if (Ld / Dd > 3 || Ld / Dd < 0.4) warn.push('relação L/D = ' + (Ld / Dd).toFixed(2) + ' fora da faixa usual (0,5 a 2,5): ajuste o diâmetro do tambor');
+        const xs = [], yA = [], yD = []; for (let k = 0; k <= 50; k++) { const r2 = 0.1 + 2.9 * k / 50, t2 = phi * 60 / r2, v2 = vOf(t2); xs.push(+r2.toFixed(3)); yA.push(Qf / (v2 * r2 / 60)); yD.push(c * v2 / rhoD * 1000); }
+        plots.push({ kind: 'curves', title: 'Otimização: área e espessura da torta × rotação', data: { xLabel: 'Rotação do tambor (rpm)', yLabel: 'Área (m²) e espessura da torta (mm)', series: [
+          { name: 'Área necessária (m²)', x: xs, y: yA, color: '#2563c9', width: 3 }, { name: 'Espessura da torta (mm)', x: xs, y: yD, color: '#d1302b', width: 3 },
+          { name: 'Operação', x: [rpm, rpm], y: [A, dl * 1000], mode: 'markers', size: 11, symbol: 'circle', color: '#111' }] } });
+      } else {
+        tf = num(p.tf, 10) * 60; td = num(p.td, 20) * 60; const Ap = num(p.Ap, 1.2), esp = num(p.esp, 80);
+        if (!(tf > 0 && td >= 0 && Ap > 0 && esp > 0)) throw new Error('tempos, área da câmara e espessura devem ser positivos');
+        v = vOf(tf); A = Qf * (tf + td) / v; n = Math.ceil(A / Ap);
+        const dl = c * v / rhoD, wC = c * v * A;   // m e kg de sólido por ciclo
+        extra = [{ k: 'Ciclo completo (filtração + tempo morto)', v: ((tf + td) / 60).toFixed(0) + ' min', u: '' },
+          { k: 'Número de câmaras (placas) de ' + br(Ap) + ' m²', v: n, u: '' },
+          { k: 'Espessura da torta em cada face / espessura mínima da câmara', v: (dl * 1000).toFixed(1) + ' mm / ' + (2 * dl * 1000).toFixed(1) + ' mm', u: '' },
+          { k: 'Sólidos secos retidos por ciclo', v: +wC.toFixed(0), u: 'kg' }];
+        if (2 * dl * 1000 > esp) warn.push('a torta (2 × ' + (dl * 1000).toFixed(1) + ' mm) não cabe na câmara de ' + esp + ' mm: reduza o tempo de filtração ou use quadros mais grossos');
+        if (2 * dl * 1000 < 0.5 * esp) warn.push('a câmara fica menos da metade cheia: aumente o tempo de filtração para aproveitar o quadro');
+        if (num(p.dP, 500) > 1600) warn.push('pressão acima de 1 600 kPa passa do limite dos filtros-prensa comuns');
+        let best = null; const xs = [], ys = [];
+        for (let k = 0; k <= 60; k++) { const t2 = (2 + 238 * Math.pow(k / 60, 2)) * 60, a2 = Qf * (t2 + td) / vOf(t2); xs.push(+(t2 / 60).toFixed(2)); ys.push(a2); if (!best || a2 < best[1]) best = [t2 / 60, a2]; }
+        plots.push({ kind: 'curves', title: 'Otimização: área × tempo de filtração (o tempo morto é fixo)', data: { xLabel: 'Tempo de filtração por ciclo (min)', yLabel: 'Área de filtração (m²)', series: [
+          { name: 'Área necessária', x: xs, y: ys, color: '#2563c9', width: 3 }, { name: 'Operação', x: [tf / 60], y: [A], mode: 'markers', size: 12, symbol: 'circle', color: '#d1302b' },
+          { name: 'Mínimo: ' + br(best[0].toFixed(0)) + ' min', x: [best[0]], y: [best[1]], mode: 'markers', size: 12, symbol: 'square', color: '#e0b000' }] } });
+        extra.push({ k: 'Tempo de filtração que minimiza a área', v: +best[0].toFixed(0) + ' min (' + best[1].toFixed(1) + ' m²)', u: '' });
+      }
+      const tv = []; for (let k = 0; k <= 40; k++) { const t2 = tf * 1.6 * k / 40; tv.push([t2 / 60, vOf(t2)]); }
+      plots.unshift({ kind: 'curves', title: 'Filtrado por área × tempo (a pressão constante)', data: { xLabel: 'Tempo (min)', yLabel: 'Volume de filtrado por área v (m³/m²)', series: [
+        { name: 'v(t)', x: tv.map(q => q[0]), y: tv.map(q => q[1]), color: '#2563c9', width: 3 }, { name: 'Fim da filtração', x: [tf / 60], y: [v], mode: 'markers', size: 12, symbol: 'circle', color: '#d1302b' }] } });
+      plots.push({ kind: 'bars', title: 'Balanço de massa (kg/h)', data: { categories: ['Alimentação', 'Torta', 'Filtrado'], yLabel: 'kg/h', series: [
+        { name: 'Sólidos', y: [ms, msC, ms - msC], color: '#e07b39' }, { name: 'Líquido', y: [ml, mlC, ml - mlC], color: '#2563c9' }] } });
+      const res = [{ k: 'Alimentação (polpa)', v: (ms + ml).toFixed(1) + ' kg/h (' + (100 * ms / (ms + ml)).toFixed(1) + ' % de sólidos)', u: '' },
+        { k: 'Torta úmida', v: mC.toFixed(1) + ' kg/h (' + (100 * Uc).toFixed(1) + ' % de líquido)', u: '' },
+        { k: 'Filtrado', v: mFil.toFixed(1) + ' kg/h (' + (Qf * 3600).toFixed(2) + ' m³/h)', u: '' },
+        { k: 'Sólidos depositados por volume de filtrado c', v: +c.toFixed(2), u: 'kg/m³' },
+        { k: 'Constantes da equação: K = μαc/ΔP e B = μR_m/ΔP', v: K.toExponential(3) + ' s/m² e ' + B.toExponential(3) + ' s/m', u: '' },
+        { k: 'Volume de filtrado por área no fim da filtração v', v: +v.toFixed(4), u: 'm³/m²' },
+        { k: rot ? 'Área filtrante do tambor' : 'Área filtrante total', v: +A.toFixed(2), u: 'm²' }].concat(extra,
+        [{ k: 'Potência hidráulica ΔP·Q_filtrado/η (η = 0,6)', v: +(dP * Qf / 0.6 / 1000).toFixed(2), u: 'kW' }]);
+      return { out: { filtrate: mkStream(th, flowsOfKg(th, kFil), s.T, 101325), cake: mkStream(th, flowsOfKg(th, kC), s.T, 101325) }, res: decBR(res), warn: decW(warn), plots };
+    };
+  }
+  IMPL.filter_plate = filterModel('plate');
+  IMPL.filter_rotary = filterModel('rotary');
 
   /* digestor contínuo kraft (cavacos de eucalipto), como no código de referência: rendimento Y = a + b·κ, lignina residual = c·κ,
      licor branco pela carga de álcali efetivo, vapor para aquecer cavacos e licor até T_cook; a polpa e o licor negro saem a T_blow,
@@ -10288,6 +10478,21 @@ window.SIMULAFACIL_CONFIG = {
       (m.note ? '<p class="small muted">' + m.note + '</p>' : '') + '</details>';
   }
   ['evap_single', 'evap_double'].forEach(k => { M[k] = M.evap_multi; });
+  M.evap_cond = p => { const m = M.evap_multi(Object.assign({}, p, { N: 1 })); return Object.assign({}, m, { name: 'Evaporador de efeito único com condensador acoplado: balanços de massa e energia e energia liberada na condensação',
+    eqs: m.eqs.concat([eq(sub(Q, 'saída') + ' = ' + i('V') + '·(' + sub(i('H'), 'V') + ' − ' + sub(i('h'), 'L,sat') + ')', 'calor latente liberado ao condensar o vapor produzido: é a corrente de energia que aquece o próximo efeito'),
+      eq(sub(Q, 'entrada') + ' = ' + F + '(' + sub(i('h'), 'L') + ' − ' + sub(i('h'), 'F') + ') + ' + i('V') + '(' + sub(i('H'), 'V') + ' − ' + sub(i('h'), 'L') + ')', 'com a energia dada (efeito 2 em diante) esta equação fixa quanto evapora'),
+      eq(sub(i('T'), 'cond') + ' &gt; ' + sub(i('T'), 'ebulição') + ',&nbsp; ' + i('A') + ' = ' + fr(sub(Q, 'entrada'), i('U') + '(' + sub(i('T'), 'cond') + ' − ' + sub(i('T'), 'ebulição') + ')'), 'o calor só flui se a condensação do efeito anterior estiver mais quente: por isso os efeitos seguintes operam sob vácuo')]) }); };
+  const filtEq = rot => ({ name: rot ? 'Filtro rotativo a vácuo: filtração a pressão constante' : 'Filtro-prensa de placas: filtração a pressão constante',
+    eqs: [eq(t + ' = ' + fr(i('μ') + i('α') + i('c'), '2Δ' + P) + sup(i('v'), '2') + ' + ' + fr(i('μ') + sub(i('R'), 'm'), 'Δ' + P) + i('v'), 'tempo para filtrar o volume v por área'),
+      eq(i('c') + ' = ' + fr(sub(i('ṁ'), 's,torta'), sub(i('Q'), 'filtrado')), 'sólido depositado por volume de filtrado'),
+      rot ? eq(sub(t, 'f') + ' = ' + fr(i('φ'), i('n')) + ',&nbsp; ' + i('A') + ' = ' + fr(sub(i('Q'), 'filtrado'), i('v') + i('n')), 'formação da torta em cada volta e área do tambor')
+          : eq(i('A') + ' = ' + fr(sub(i('Q'), 'filtrado') + '(' + sub(t, 'f') + ' + ' + sub(t, 'morto') + ')', i('v')), 'área para o ciclo de filtração e tempo morto'),
+      eq(i('δ') + ' = ' + fr(i('c') + i('v'), sub(i('ρ'), 's') + '(1 − ' + i('ε') + ')'), 'espessura da torta'),
+      eq(sub(i('ṁ'), 'torta') + ' = ' + fr(i('η') + sub(i('ṁ'), 's'), '1 − ' + sub(i('U'), 'c')), 'torta úmida (η = recuperação, U_c = umidade da torta)')],
+    sym: [[i('α'), 'resistência específica da torta (m/kg)'], [sub(i('R'), 'm'), 'resistência do meio filtrante (1/m)'], [i('μ'), 'viscosidade do filtrado'], ['Δ' + P, 'pressão de filtração ou vácuo']],
+    note: rot ? 'A rotação é o parâmetro de projeto: girar mais rápido reduz a área, mas a torta fica fina e difícil de raspar.' : 'O tempo morto (abrir, descarregar e fechar) é fixo; por isso existe um tempo de filtração que minimiza a área total.' });
+  M.filter_plate = () => filtEq(false); M.filter_rotary = () => filtEq(true);
+
   ['bioreactor_1', 'bioreactor_2'].forEach(k => { M[k] = M.bioreactor_tosetto; });
   SF.models = { get, html, types: Object.keys(M) };
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -10377,6 +10582,16 @@ window.SIMULAFACIL_CONFIG = {
     evap_single: { ex: ex('evaporador-simples', 'Evaporador de simples efeito (Geankoplis 8.4-1)'), p: [
       'No evaporador de simples efeito, o vapor de aquecimento condensa na calandra e a água evaporada da solução vai direto ao condensador. Cada kg de vapor evapora no máximo cerca de 1 kg de água, por isso a economia fica abaixo de 1 quando a alimentação entra fria.',
       'O exemplo reproduz o Exemplo 8.4-1 de Geankoplis: 9 072 kg/h de solução salina a 1 % e 311 K concentrada a 1,5 % a 1 atm, com vapor saturado a 143,3 kPa e U = 1 704 W/(m²·K). Evaporam-se 3 024 kg/h, a área é 149,4 m² (o livro dá 149,3 m²) e o vapor consumido é cerca de 4 110 kg/h, com economia de 0,74.'] },
+    evap_cond: { ex: ex('evaporador-energia', 'Evaporador de triplo efeito com saída de energia'), p: [
+      'Este ícone já traz o condensador acoplado ao evaporador. O vapor produzido condensa dentro do próprio equipamento e o calor latente sai por uma corrente de energia (porta de cima), pronta para ser ligada à entrada de energia do próximo efeito. Assim não é preciso montar à mão o resfriador com fração de vapor 0 e a corrente de energia de cada efeito.',
+      'O 1º efeito, sem corrente de energia na entrada, é aquecido por vapor saturado (campo "Pressão do vapor de aquecimento") e calcula o concentrado pedido. Do 2º efeito em diante, ligue a saída de energia do efeito anterior à entrada de energia: a energia recebida e a pressão do efeito fixam quanto evapora. O calor só flui se o vapor do efeito anterior condensar em temperatura maior que a da ebulição da solução; por isso cada efeito opera a uma pressão menor (vácuo). Se isso não acontecer, o simulador avisa do cruzamento de temperatura e indica a pressão máxima.',
+      'No exemplo, 22 680 kg/h de solução de açúcar a 10 % passam por três efeitos (101,3, 60 e 20 kPa). O vapor vivo, 8 906 kg/h, evapora 18 143 kg/h de água no total: economia de 2,04 kg/kg, a mesma do triplo efeito clássico. A otimização do aproveitamento da carga energética está nos resultados: a energia liberada em cada efeito, a temperatura de condensação, a pressão máxima do próximo efeito e a curva da área em função da pressão. Quanto mais baixa a pressão, menor a área, mas maior o vácuo a manter.'] },
+    filter_plate: { ex: ex('filtracao-continua', 'Filtração contínua: filtro-prensa e filtro rotativo'), p: [
+      'O filtro-prensa de placas e quadros retém os sólidos de uma polpa em tortas formadas sobre o pano, enquanto o filtrado sai por canais. A filtração a pressão constante segue t = ½·K·v² + B·v, com K = μαc/ΔP e B = μR_m/ΔP. O ciclo soma o tempo de filtração e o tempo morto (abrir, descarregar, lavar e fechar), por isso há um tempo de filtração que minimiza a área total, mostrado nos resultados.',
+      'Informe a resistência específica da torta α, a do meio filtrante, a umidade da torta e a recuperação de sólidos. O simulador calcula a área, o número de câmaras e a espessura da torta, e avisa se ela não cabe no quadro. Ligue a polpa (água e um componente sólido, como a sílica) na entrada; saem o filtrado e a torta.'] },
+    filter_rotary: { ex: ex('filtracao-continua', 'Filtração contínua: filtro-prensa e filtro rotativo'), p: [
+      'No filtro rotativo a vácuo, o tambor gira parcialmente mergulhado na polpa; o vácuo forma a torta sobre a superfície e uma faca a raspa. O tempo de formação da torta é t_f = φ/n, com φ a fração mergulhada e n a rotação. Com a mesma equação de filtração do filtro-prensa, o simulador calcula a área, o comprimento do tambor e a espessura da torta.',
+      'A rotação é o parâmetro de projeto: girar mais rápido reduz a área, mas a torta fica fina e difícil de raspar (abaixo de cerca de 3 mm). O vácuo não passa de cerca de 85 kPa. Saem o filtrado e a torta.'] },
     evap_double: { ex: ex('evaporador-duplo', 'Evaporador de duplo efeito'), p: [
       'No duplo efeito, o vapor gerado no 1º efeito aquece o 2º, que opera a uma pressão menor (vácuo) para que a solução ferva numa temperatura mais baixa. O mesmo vapor de aquecimento evapora quase o dobro de água: a economia sobe para perto de 2, ao custo de mais área de troca.',
       'O exemplo concentra a mesma solução de açúcar do triplo efeito (22 680 kg/h, de 10 % a 50 %). Com dois efeitos, a economia é 1,54 kg/kg e o vapor consumido é 11 780 kg/h; com três, a economia é 2,03 e o vapor cai para 8 954 kg/h. A área total, porém, passa de 154 m² para 315 m²: o número ótimo de efeitos vem do balanço entre o custo do vapor e o custo dos equipamentos.',
@@ -10736,12 +10951,12 @@ window.SIMULAFACIL_CONFIG = {
         catch (e) { return { ok: false, errors: [{ block: id, msg: (b.name || id) + ': ' + e.message }], th, streams: S, blocks: blockRes, log, order }; }
         blockRes[id] = r;
         // correntes de energia: saídas de calor do equipamento e valor calculado nas entradas de energia
-        Object.keys(outOf[id]).forEach(port => { if (isEnergyPort(port) && port !== 'eo') S[outOf[id][port].id] = { energy: true, Q: energyAt(b, r, port) }; });
+        Object.keys(outOf[id]).forEach(port => { if (isEnergyPort(port) && port !== 'eo') S[outOf[id][port].id] = { energy: true, Q: energyAt(b, r, port), T: r.eT && r.eT[port] != null ? r.eT[port] : undefined, acc: r.eAcc && r.eAcc[port] }; });
         Object.keys(inOf[id]).forEach(port => {
           if (!isEnergyPort(port) || port === 'ei') return;
           const c = inOf[id][port], prev = S[c.id] || {};
           if (prev.spec && b.type !== 'heater' && b.type !== 'column_mt' && b.type !== 'column_reflux' && it === 0) r.warn = (r.warn || []).concat('o valor informado na corrente de energia ' + (c.name || c.id) + ' não é usado: a carga é calculada pelo equipamento');
-          S[c.id] = { energy: true, Q: energyAt(b, r, port), spec: !!prev.spec };
+          S[c.id] = { energy: true, Q: energyAt(b, r, port), spec: !!prev.spec, T: prev.T, acc: prev.acc };
         });
         Object.keys(r.out || {}).forEach(port => {
           const c = outOf[id][port];
@@ -10836,7 +11051,9 @@ window.SIMULAFACIL_CONFIG = {
     biodigester: { feed: 'dejetos (carga diária)', water: 'água de diluição', biogas: 'biogás', digestate: 'biofertilizante (efluente)', q_in: 'aquecimento' },
     centrifuge: { feed: 'alimentação', light: 'fase leve (creme ou óleo degomado)', heavy: 'fase pesada (leite desnatado ou gomas)', sludge: 'lodo', q_in: 'motor' },
     pasteurizer: { feed: 'produto cru', out: 'produto pasteurizado', q_in: 'água quente (aquecimento)', q_out: 'água gelada (resfriamento)' },
-    butter_churn: { feed: 'creme de leite', butter: 'manteiga', buttermilk: 'leitelho', q_out: 'resfriamento do creme' } };
+    butter_churn: { feed: 'creme de leite', butter: 'manteiga', buttermilk: 'leitelho', q_out: 'resfriamento do creme' },
+    evap_cond: { feed: 'alimentação (solução diluída)', product: 'concentrado', condensate: 'condensado (líquido saturado)', q_in: 'energia de aquecimento (vapor ou efeito anterior)', q_out: 'energia da condensação do vapor (para o próximo efeito)' },
+    filter_plate: { feed: 'polpa (suspensão)', filtrate: 'filtrado', cake: 'torta' }, filter_rotary: { feed: 'polpa (suspensão)', filtrate: 'filtrado', cake: 'torta' } };
   function portLabel(p, type) { return (type && TYPE_PORT_LABELS[type] && TYPE_PORT_LABELS[type][p]) || PORT_LABELS[p] || p; }
 
   SF.flowsheet = { solve, portLabel, PORT_LABELS, isEnergyPort, isEnergyStream };
@@ -10869,6 +11086,9 @@ window.SIMULAFACIL_CONFIG = {
     evap_single: { w: 64, h: 96, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 62, 'l', 'in'), vapor: P(64, 10, 'r', 'out'), product: P(64, 88, 'r', 'out') } },
     evap_double: { w: 112, h: 96, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 62, 'l', 'in'), vapor: P(112, 10, 'r', 'out'), product: P(112, 88, 'r', 'out'), condensate: P(76, 96, 'd', 'out') } },
     evap_multi: { w: 160, h: 96, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 62, 'l', 'in'), vapor: P(160, 10, 'r', 'out'), product: P(160, 88, 'r', 'out'), condensate: P(124, 96, 'd', 'out') } },
+    evap_cond: { w: 110, h: 100, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 70, 'l', 'in'), q_out: P(78, 0, 'u', 'eout'), condensate: P(110, 16, 'r', 'out'), product: P(110, 96, 'r', 'out') } },
+    filter_plate: { w: 130, h: 100, ports: { feed: P(0, 40, 'l', 'in'), filtrate: P(130, 6, 'r', 'out'), cake: P(65, 100, 'd', 'out') } },
+    filter_rotary: { w: 140, h: 100, ports: { feed: P(0, 78, 'l', 'in'), filtrate: P(140, 6, 'r', 'out'), cake: P(140, 40, 'r', 'out') } },
     pump_system: { w: 170, h: 112, ports: { in: P(0, 40, 'l', 'in'), out: P(170, 32, 'r', 'out'), q_in: P(98, 112, 'd', 'ein') } },
     pump: { w: 56, h: 52, ports: { in: P(0, 30, 'l', 'in'), out: P(56, 12, 'r', 'out'), q_in: P(26, 52, 'd', 'ein') } },
     compressor: { w: 60, h: 56, ports: { in: P(0, 28, 'l', 'in'), out: P(60, 28, 'r', 'out'), q_in: P(30, 56, 'd', 'ein') } },
@@ -10999,6 +11219,18 @@ window.SIMULAFACIL_CONFIG = {
     evap_multi: () => evapBodies(3),
     evap_single: () => evapBodies(1),
     evap_double: () => evapBodies(2),
+    evap_cond: () => [ // um corpo de evaporação (feixe aquecido) e, no vapor de topo, o condensador acoplado: a energia da condensação sai pelo alto
+      L([[6, 0], [6, 64], [12, 64]], 'hot'), L([[0, 70], [12, 70]]), R(12, 26, 30, 58, 7), L([[15, 60], [39, 60]], 'hot'), L([[15, 68], [39, 68]], 'hot'), T(27, 48, 'EV'),
+      L([[27, 26], [27, 16], [60, 16]], 'lnd'), R(60, 8, 36, 16, 8, 'bodyw'), L([[65, 16], [71, 11], [77, 21], [83, 11], [89, 16]], 'cold'),
+      L([[78, 8], [78, 0]], 'hot'), L([[96, 16], [110, 16]]), L([[27, 84], [27, 96], [110, 96]])],
+    filter_plate: () => [ // filtro-prensa: cabeçote fixo, pacote de placas, cabeçote móvel com o cilindro, coletor de filtrado e tremonha da torta
+      L([[0, 40], [18, 40]]), R(18, 16, 8, 56, 1, 'bodyw'), R(32, 20, 6, 48, 1), R(44, 20, 6, 48, 1), R(56, 20, 6, 48, 1), R(68, 20, 6, 48, 1), R(80, 20, 6, 48, 1), R(92, 20, 6, 48, 1), R(104, 16, 8, 56, 1, 'bodyw'),
+      L([[26, 12], [104, 12]]), L([[26, 76], [104, 76]]), R(112, 36, 14, 16, 2), L([[36, 20], [36, 6], [130, 6]], 'lnd'), L([[62, 20], [62, 6]], 'lnd'), L([[90, 20], [90, 6]], 'lnd'),
+      Pg([[40, 78], [90, 78], [78, 92], [52, 92]], 'bodyw'), L([[65, 92], [65, 100]]), C(60, 84, 2, 'bodyw'), C(70, 86, 2, 'bodyw'), T(65, 58, 'ΔP')],
+    filter_rotary: () => [ // filtro rotativo a vácuo: cuba com a polpa, tambor com a torta, tubo de vácuo pelo eixo, faca raspadora e saída da torta
+      L([[0, 78], [18, 78]]), Pg([[14, 64], [126, 64], [114, 96], [26, 96]], 'bodyw'), L([[20, 72], [120, 72]], 'lnd'), C(70, 50, 34), C(70, 50, 8, 'bodyw'),
+      L([[70, 16], [70, 6], [140, 6]], 'lnd'), L([[36, 50], [104, 50]], 'lnd'), L([[46, 26], [94, 74]], 'lnd'), L([[94, 26], [46, 74]], 'lnd'), L([[100, 34], [112, 38], [140, 40]]), T(70, 88, 'polpa')],
+
     heater: () => [C(28, 28, 24), zig(8, 28, 40, 'hot')],
     cooler: () => [C(28, 28, 24), zig(8, 28, 40, 'cold')],
     refrigerator: () => [R(8, 2, 40, 60, 5), L([[8, 22], [48, 22]]), L([[41, 8], [41, 16]]), L([[41, 28], [41, 38]]), L([[0, 42], [8, 42]]), L([[48, 42], [56, 42]]),
@@ -16092,6 +16324,28 @@ def pfr_transiente(P, nome):
         { id: 'EV', type: 'evap_double', name: 'EV-201', params: { xP: 0.5, Ps: 205.5, PN: 13.4, U: '3123; 1987', b1: 1.78, b2: 6.22, cp0: 4.19, cp1: 2.35 } },
         { id: 'P', type: 'product', name: 'Concentrado (50 %)' }, { id: 'VC', type: 'product', name: 'Vapor ao condensador' }, { id: 'C', type: 'product', name: 'Condensado' }],
       streams: [S('1', 'F', 'out', 'EV', 'feed', '1'), S('E1', 'ES', 'eo', 'EV', 'q_in', 'E1'), S('2', 'EV', 'product', 'P', 'in', '2'), S('3', 'EV', 'vapor', 'VC', 'in', '3'), S('4', 'EV', 'condensate', 'C', 'in', '4')] } },
+    { key: 'evaporador-energia', title: 'Evaporador de triplo efeito com saída de energia: o calor latente do vapor de cada efeito aquece o seguinte (solução de açúcar de 10 % a cerca de 50 %)', fs: {
+      name: 'Triplo efeito com correntes de energia', components: ['water', 'sucrose'], model: 'IDEAL',
+      blocks: [
+        { id: 'F', type: 'feed', name: 'Solução de açúcar', params: { T: 26.7, P: 2.5, vf: '', flow: 22680, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.90, sucrose: 0.10 } } },
+        { id: 'EV1', type: 'evap_cond', name: 'Efeito 1 (vapor vivo)', params: { xP: 0.134, Ps: 205.5, PN: 101.325, U: '3000', b1: 1.78, b2: 6.22, cp0: 4.19, cp1: 2.35 } },
+        { id: 'EV2', type: 'evap_cond', name: 'Efeito 2 (energia do efeito 1)', params: { xP: 0.3, Ps: 205.5, PN: 60, U: '2000', b1: 1.78, b2: 6.22, cp0: 4.19, cp1: 2.35 } },
+        { id: 'EV3', type: 'evap_cond', name: 'Efeito 3 (energia do efeito 2)', params: { xP: 0.5, Ps: 205.5, PN: 20, U: '1400', b1: 1.78, b2: 6.22, cp0: 4.19, cp1: 2.35 } },
+        { id: 'EQ', type: 'energy', name: 'Energia do último efeito (ao condensador)', params: { Q: '' } },
+        { id: 'P', type: 'product', name: 'Concentrado final' }, { id: 'C1', type: 'product', name: 'Condensado 1' }, { id: 'C2', type: 'product', name: 'Condensado 2' }, { id: 'C3', type: 'product', name: 'Condensado 3' }],
+      streams: [S('1', 'F', 'out', 'EV1', 'feed', '1'), S('2', 'EV1', 'product', 'EV2', 'feed', '2'), S('3', 'EV2', 'product', 'EV3', 'feed', '3'), S('4', 'EV3', 'product', 'P', 'in', '4'),
+        S('E1', 'EV1', 'q_out', 'EV2', 'q_in', 'E1'), S('E2', 'EV2', 'q_out', 'EV3', 'q_in', 'E2'), S('E3', 'EV3', 'q_out', 'EQ', 'ei', 'E3'),
+        S('5', 'EV1', 'condensate', 'C1', 'in', '5'), S('6', 'EV2', 'condensate', 'C2', 'in', '6'), S('7', 'EV3', 'condensate', 'C3', 'in', '7')] } },
+    { key: 'filtracao-continua', title: 'Filtração contínua: filtro-prensa de placas e filtro rotativo a vácuo para a mesma polpa de sílica (compare áreas e tortas)', fs: {
+      name: 'Filtro de placas e filtro rotativo', components: ['water', 'silica'], model: 'IDEAL',
+      blocks: [
+        { id: 'F1', type: 'feed', name: 'Polpa 1 (25 % de sólidos)', params: { T: 25, P: 1.01325, vf: '', flow: 20000, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.75, silica: 0.25 } } },
+        { id: 'F2', type: 'feed', name: 'Polpa 2 (25 % de sólidos)', params: { T: 25, P: 1.01325, vf: '', flow: 20000, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.75, silica: 0.25 } } },
+        { id: 'FP', type: 'filter_plate', name: 'Filtro-prensa FP-1', params: {} }, { id: 'FR', type: 'filter_rotary', name: 'Filtro rotativo FR-1', params: {} },
+        { id: 'T1', type: 'product', name: 'Torta do filtro-prensa' }, { id: 'A1', type: 'product', name: 'Filtrado do filtro-prensa' },
+        { id: 'T2', type: 'product', name: 'Torta do filtro rotativo' }, { id: 'A2', type: 'product', name: 'Filtrado do filtro rotativo' }],
+      streams: [S('1', 'F1', 'out', 'FP', 'feed', '1'), S('2', 'FP', 'cake', 'T1', 'in', '2'), S('3', 'FP', 'filtrate', 'A1', 'in', '3'),
+        S('4', 'F2', 'out', 'FR', 'feed', '4'), S('5', 'FR', 'cake', 'T2', 'in', '5'), S('6', 'FR', 'filtrate', 'A2', 'in', '6')] } },
     { key: 'evaporador-triplo', title: 'Evaporador de triplo efeito: solução de açúcar de 10 % a 50 % (alimentação para a frente)', fs: {
       name: 'Evaporador de triplo efeito', components: ['water', 'sucrose'], model: 'IDEAL',
       blocks: [
@@ -16523,7 +16777,7 @@ def pfr_transiente(P, nome):
   // blocos sem parâmetros recebem os valores pré-setados da unidade (secador, cristalizador, biorreatores...)
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && !Object.keys(b.params).length) T.params.forEach(f => { if (f.def !== undefined) b.params[f.k] = f.def; }); }));
   // equipamentos contínuos de sólidos e bioprocessos: os campos que o exemplo não informa recebem o valor pré-setado
-  const FILL = /^(tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|centrifuge|biodigester|pasteurizer|butter_churn|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester|crusher|ball_mill|spiral_classifier|hydrocyclone|flotation|coke_oven|sinter_plant|bof|caster|rolling_mill|wire_drawing|wood_yard|pulp_washer|bleach_plant|paper_machine|recovery_boiler|causticizing|p_precip|daf|act_sludge)/;
+  const FILL = /^(evap_cond|filter_plate|filter_rotary|tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|centrifuge|biodigester|pasteurizer|butter_churn|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester|crusher|ball_mill|spiral_classifier|hydrocyclone|flotation|coke_oven|sinter_plant|bof|caster|rolling_mill|wire_drawing|wood_yard|pulp_washer|bleach_plant|paper_machine|recovery_boiler|causticizing|p_precip|daf|act_sludge)/;
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && FILL.test(b.type)) T.params.forEach(f => { if (b.params[f.k] === undefined && f.def !== undefined) b.params[f.k] = f.def; }); }));
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -17374,7 +17628,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -17872,6 +18126,16 @@ def pfr_transiente(P, nome):
     evap_single: { ex: 'Evaporador de simples efeito (Geankoplis 8.4-1)', items: [
       ['Concentrado e pressões', 'x_P = 0,015; vapor de aquecimento saturado a 143,3 kPa; evaporador a 101,325 kPa.'],
       ['U, BPR e c_p', 'U = 1 704 W/(m²·K); BPR desprezada (b1 = b2 = 0); c_p = 4,14 kJ/(kg·K), como no livro.']] },
+    evap_cond: { ex: 'Evaporador de triplo efeito com saída de energia', items: [
+      ['Ligações', 'efeito 1 → concentrado → efeito 2 → efeito 3; a saída de energia (em cima) de cada efeito vai para a entrada de energia do seguinte; o último envia a sua energia a um bloco de energia (condensador).'],
+      ['Pressões', '101,325, 60 e 20 kPa: a temperatura de condensação de cada efeito (100, 86 e 60 °C) fica acima da ebulição do seguinte.'],
+      ['U, BPR e c_p', 'U = 3 000, 2 000 e 1 400 W/(m²·K); BPR = 1,78x + 6,22x² °C; c_p = 4,19 − 2,35x kJ/(kg·K) (açúcar). O 1º efeito usa vapor saturado a 205,5 kPa e concentra a 13,4 %.']] },
+    filter_plate: { ex: 'Filtração contínua: filtro-prensa e filtro rotativo', items: [
+      ['Polpa', '20 000 kg/h com 25 % de sílica, a 25 °C.'],
+      ['Torta', 'α = 10¹¹ m/kg, R_m = 10¹⁰ 1/m, ΔP = 500 kPa, torta com 30 % de líquido e recuperação de 99,5 %; ciclo de 10 min de filtração + 20 min de tempo morto.']] },
+    filter_rotary: { ex: 'Filtração contínua: filtro-prensa e filtro rotativo', items: [
+      ['Polpa', 'a mesma polpa do filtro-prensa, para comparar as áreas.'],
+      ['Tambor', 'α = 5·10¹⁰ m/kg, vácuo de 60 kPa, 30 % do tambor mergulhado, 0,5 rpm e diâmetro de 2,5 m; torta com 25 % de líquido.']] },
     evap_double: { ex: 'Evaporador de duplo efeito', items: [
       ['Concentrado e pressões', 'x_P = 0,50; vapor a 205,5 kPa no 1º efeito; 13,4 kPa no 2º (vácuo).'],
       ['U, BPR e c_p', 'U = 3 123 e 1 987 W/(m²·K); BPR = 1,78x + 6,22x² °C; c_p = 4,19 − 2,35x kJ/(kg·K) (solução de açúcar).']] },

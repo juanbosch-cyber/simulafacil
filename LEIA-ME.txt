@@ -3,6 +3,10 @@ SIMULA FÁCIL IA 4.7 – atualização de 18/11/2026
 
 Pedidos da disciplina Operações Unitárias II (Prof. Alexandre Boscaro, UFSJ).
 
+CORREÇÃO NO EXEMPLO "Evaporador de triplo efeito com saída de energia"
+- O Efeito 1 agora recebe a corrente de energia Q-101 (vapor vivo, E4), calculada pelo equipamento
+  (5440,7 kW); antes o exemplo não mostrava o calor entrando no primeiro efeito.
+
 EVAPORADOR COM SAÍDA DE ENERGIA (novo ícone, categoria Evaporadores)
 - "Evaporador de efeito único com condensador acoplado": o vapor produzido condensa
   dentro do equipamento (líquido saturado, fração de vapor 0) e o calor latente sai por uma

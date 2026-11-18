@@ -664,7 +664,7 @@ nav.bar .links { order: 1; }
       <a class="nav-cta" href="simulador.html">Abrir<span class="nc-long"> o simulador</span></a>
       <button type="button" class="theme-btn" id="themeBtn" data-theme-toggle aria-pressed="false" aria-label="Modo escuro" title="Ligar o modo escuro"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.7A8.4 8.4 0 0 1 9.3 3.8a8.4 8.4 0 1 0 10.9 10.9z" fill="currentColor"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.3" fill="currentColor"/><path d="M12 2.4v2.4M12 19.2v2.4M2.4 12h2.4M19.2 12h2.4M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M5.2 18.8l1.7-1.7M17.1 6.9l1.7-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Abrir o menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
-      <div class="links" id="navLinks"><a href="#tutoriais">🎬 Tutoriais</a><a href="#alunos" class="nav-alunos" id="alunosNav" hidden>🎓 Vídeos dos alunos</a><a href="#banco">40 mil compostos</a><a href="#recursos">Recursos</a><a href="#codigos">MATLAB e Python</a><a href="#autor">Autor</a><a href="#turma">Para a turma</a><a href="#perguntas">Perguntas</a><a class="nav-open" href="simulador.html">Abrir o simulador</a></div>
+      <div class="links" id="navLinks"><a href="#tutoriais">🎬 Tutoriais</a><a href="#alunos" class="nav-alunos" id="alunosNav" hidden>🎓 Vídeos dos alunos</a><a href="#mineracao">⛏ Flotação</a><a href="#banco">40 mil compostos</a><a href="#recursos">Recursos</a><a href="#codigos">MATLAB e Python</a><a href="#autor">Autor</a><a href="#turma">Para a turma</a><a href="#perguntas">Perguntas</a><a class="nav-open" href="simulador.html">Abrir o simulador</a></div>
     </nav>
   </div>
 </div>
@@ -674,6 +674,7 @@ nav.bar .links { order: 1; }
       <div class="hero-txt">
         <p class="eyebrow">Engenharia Química · UFSJ</p>
         <h1>SIMULA FÁCIL IA <em class="ver">VERSÃO 4.8</em><span>Simulador de processos químicos e bioprocessos</span></h1>
+        <a class="new-pill" href="#mineracao"><span aria-hidden="true">✨</span> <b>Novo na 4.8:</b> coluna de flotação de bancada e industrial para Engenharia de Minas <span aria-hidden="true">→</span></a>
         <a class="new-pill" href="#banco"><span aria-hidden="true">✨</span> <b>Novo na 4.0:</b> mais de 40 mil compostos químicos <span aria-hidden="true">→</span></a>
         <p class="lead">Monte fluxogramas de processos químicos e bioprocessos direto no navegador e de graça: destilação com McCabe-Thiele, reatores CSTR e PFR transientes, trocadores de calor, extratores, secadores, cristalizadores, biorreatores, reator de biodiesel, centrífuga, pasteurizador, alto-forno, forno de cimento, silo, sedimentador e digestor kraft contínuos, com mais de 40 mil compostos químicos e 63 exemplos prontos, inclusive os processos completos de mineração de ferro, de uma usina siderúrgica integrada e de uma fábrica de papel e celulose, biodigestor, fabricação de cerveja, cachaça e refrigerante, café solúvel e uma refinaria de petróleo simplificada. Um agente de inteligência artificial conversa sobre o processo, lê figuras e sugere melhorias.</p>
         <div class="cta">
@@ -720,6 +721,40 @@ nav.bar .links { order: 1; }
   </div>
 </section>
 
+<section id="mineracao" class="band">
+  <div class="wrap">
+    <p class="kicker">Novo na versão 4.8 · Engenharia de Minas e Tratamento de Minérios</p>
+    <h2>Coluna de flotação de bancada e industrial</h2>
+    <p class="sub">Dois novos ícones simulam a <b>coluna de flotação de bancada</b> (ensaio em batelada) e a <b>coluna de flotação industrial</b> (contínua, com entrada e saídas), com bancos de dados de misturas minerais, de coletores e de depressores. O resultado traz a <b>recuperação metalúrgica</b>, o teor do produto, o balanço de massa, gráficos e os <b>parâmetros ideais de operação</b>. O primeiro caso é o minério de ferro e sílica na flotação catiônica reversa, com amina e amido.</p>
+    <div class="stats">
+      <div class="stat"><b>12</b><span><strong>Misturas minerais</strong>minério de ferro e sílica, cobre e pirita, fosfato, carvão, fluorita, lítio, estanho, chumbo e zinco, cobre e molibdênio, grafita, carbonatito e silvinita</span></div>
+      <div class="stat"><b>12</b><span><strong>Coletores</strong>éter-amina, diamina, amina primária, xantatos (PAX e SIPX), ditiofosfato, tionocarbamato, ácidos graxos, hidroxamato, querosene e outros</span></div>
+      <div class="stat"><b>10</b><span><strong>Depressores</strong>amido, polímero catiônico, CMC, dextrina, silicato de sódio, cal, sulfato de zinco, NaHS e goma guar</span></div>
+      <div class="stat"><b>18</b><span><strong>Minerais no banco de componentes</strong>hematita, quartzo, calcopirita, pirita, apatita, fluorita, espodumênio, cassiterita, galena, esfalerita, molibdenita, grafita, carvão, silvita, halita e outros</span></div>
+    </div>
+    <div class="two">
+      <div>
+        <h3>Como usar</h3>
+        <ol class="steps">
+          <li>No simulador, abra o menu <b>Exemplos</b> e escolha a coluna de flotação de bancada, a industrial ou a de cobre.</li>
+          <li>Na categoria <b>Mineração</b>, arraste o ícone da coluna e escolha a <b>mistura mineral</b>: o pH, as dosagens, o coletor e o depressor ideais são preenchidos.</li>
+          <li>Troque os reagentes pelos do banco, ajuste J<sub>g</sub>, a água de lavagem e as dimensões, e clique em <b>Simular</b>.</li>
+        </ol>
+        <p><a class="btn sun" href="simulador.html">Abrir o simulador</a></p>
+      </div>
+      <div>
+        <h3>O que a simulação entrega</h3>
+        <ul class="qual">
+          <li><span class="q">1</span><span><b>Recuperação metalúrgica e mássica</b>, teor do produto e eficiência de Schulz</span></li>
+          <li><span class="q qb">2</span><span><b>Balanço de massa</b> e 5 gráficos: cinética ou perfil axial, teor × recuperação, partição, aderência ao ideal e sensibilidade ao pH</span></li>
+          <li><span class="q qc">3</span><span><b>Parâmetros ideais</b>, alertas de operação e a condição de máxima eficiência de Schulz</span></li>
+        </ul>
+        <p class="src">Os parâmetros dos bancos são valores didáticos de literatura, para calibrar com ensaios.</p>
+        <div class="chips"><span>Flotação reversa</span><span>Flotação direta</span><span>Wehner e Wilhelm</span><span>Langmuir</span><span>Eficiência de Schulz</span><span>Engenharia de Minas</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 <section id="banco">
   <div class="wrap">
     <p class="kicker">Novo na versão 4.0</p>

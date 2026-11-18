@@ -1,3 +1,32 @@
+SIMULA FÁCIL IA 4.8 – atualização de 18/11/2026
+================================================
+
+Aplicação para Engenharia de Minas e Tratamento de Minérios (pedido do Prof. Juan).
+
+COLUNAS DE FLOTAÇÃO (dois novos ícones, categoria Mineração)
+- "Coluna de flotação de bancada (batelada)": ensaio em batelada com massa do lote, tempo, curva cinética,
+  tempo ótimo (máxima eficiência de Schulz), curva teor x recuperação e sensibilidade ao pH.
+- "Coluna de flotação industrial (contínua)": entrada de polpa e saídas de espuma e afundado, com diâmetro,
+  altura da zona de coleta e da espuma, água de lavagem (J_w), gás (J_g), bias, tempo de residência e
+  dispersão axial de Wehner e Wilhelm. Resultado: recuperação metalúrgica e mássica, teor do produto,
+  balanço de massa (conserva a massa no fluxograma), gráficos e alertas de operação.
+- Bancos de dados: 12 misturas minerais (minério de ferro + sílica na flotação catiônica reversa, cobre +
+  pirita, fosfato + silicatos, carvão, fluorita, espodumênio, cassiterita, galena + esfalerita, Cu-Mo,
+  grafita, apatita + carbonatos, silvinita), 12 coletores (aminas, xantatos, ditiofosfato, tionocarbamato,
+  ácidos graxos, hidroxamato, querosene) e 10 depressores (amido, polímero catiônico, CMC, dextrina,
+  silicato, cal, ZnSO4, NaHS, guar). Ao escolher a mistura, o simulador preenche coletor, depressor, pH,
+  dosagens e teor ideais; qualquer reagente pode ser trocado.
+- Parâmetros ideais: aderência (%) ao ideal, diagnóstico (pH, janela do coletor, compatibilidade, overdose,
+  J_g, S_b, bias, tempo de residência) e busca da condição de máxima eficiência de Schulz.
+- Exemplos prontos: bancada de itabirito, coluna industrial de itabirito (150 t/h) e coluna de cobre.
+- Novos componentes sólidos: calcopirita, pirita, apatita, fluorita, espodumênio, cassiterita, turmalina,
+  galena, esfalerita, molibdenita, grafita, carvão fino, cinzas, silvita e halita.
+- Modelo portado do programa MATLAB do autor, com correções: balanço de água real (água de lavagem e
+  espuma), recuperação máxima do mineral deprimido (R_inf), arraste só no mineral que não flota,
+  altura da espuma usada no cálculo, janela de pH do coletor aplicada e % de sólidos calculado.
+- Os parâmetros dos bancos são didáticos (literatura) e devem ser calibrados com ensaios.
+- Divulgação: página de entrada, descrição para o Google, dados estruturados e perguntas frequentes.
+
 SIMULA FÁCIL IA 4.7 – atualização de 18/11/2026
 ================================================
 

@@ -3560,8 +3560,8 @@ window.SIMULAFACIL_CONFIG = {
   // visibilidade dos campos conforme o modo de operação (o editor esconde os campos que o modo não usa)
   const isCont = q => /^contínuo/.test(q.mode || ''), notCont = q => !isCont(q), isLab = q => /dados/.test(q.mode || '');
   // reatores químicos: a operação tem só duas opções, contínuo ou batelada (a partida transiente do contínuo é uma escolha de cálculo)
-  const RX_CONT = 'contínuo', RX_BAT = 'batelada';
-  const rxMode = p => /^bat/.test(p.mode || '') ? 'batelada' : (/^trans/.test(p.mode || '') || /partida/.test(p.start || '') ? 'transiente' : 'permanente');
+  const RX_CONT = 'contínuo', RX_BAT = 'batelada', RX_PERM = 'permanente'; // RX_PERM: rótulo do PFR (mantém o cálculo do antigo "batelada")
+  const rxMode = p => /^(bat|perm)/.test(p.mode || '') ? 'batelada' : (/^trans/.test(p.mode || '') || /partida/.test(p.start || '') ? 'transiente' : 'permanente');
   const rxNotBat = q => rxMode(q) !== 'batelada';
   SF.rxMode = rxMode;
   const TD_CONT = 'contínuo: túnel de bandejas (alimentação → produto)', TD_MOD = 'batelada: modelo, taxa constante (convecção do ar) + taxa decrescente', TD_LAB = 'batelada: dados de laboratório (tempo × massa da bandeja)';
@@ -4069,7 +4069,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'tEnd', label: 'Tempo de simulação', u: 's', def: 3600 }, { k: 'init', label: 'Conteúdo inicial (transiente)', type: 'select', options: ['solvente puro', 'igual à alimentação'], def: 'solvente puro' }, RXN] },
     pfr: { label: 'Reator PFR', cat: 'Reatores', ins: ['in'], outs: ['out'], params: [
       { k: 'V', label: 'Volume', u: 'm³', def: 0.1 }, { k: 'D', label: 'Diâmetro', u: 'm', def: 0.1 },
-      { k: 'mode', label: 'Operação', type: 'select', options: [RX_CONT, RX_BAT], def: RX_CONT },
+      { k: 'mode', label: 'Operação', type: 'select', options: [RX_CONT, RX_PERM], def: RX_CONT },
       { k: 'start', label: 'Contínuo: cálculo', type: 'select', options: ['regime permanente', 'partida (transiente)'], def: 'regime permanente', when: rxNotBat },
       { k: 'phase', label: 'Fase reacional', type: 'select', options: ['líquida', 'gasosa'], def: 'líquida' },
       { k: 'thermal', label: 'Energia', type: 'select', options: ['isotérmico', 'adiabático', 'parede'], def: 'isotérmico' },

@@ -16331,10 +16331,11 @@ def pfr_transiente(P, nome):
         { id: 'EV1', type: 'evap_cond', name: 'Efeito 1 (vapor vivo)', params: { xP: 0.134, Ps: 205.5, PN: 101.325, U: '3000', b1: 1.78, b2: 6.22, cp0: 4.19, cp1: 2.35 } },
         { id: 'EV2', type: 'evap_cond', name: 'Efeito 2 (energia do efeito 1)', params: { xP: 0.3, Ps: 205.5, PN: 60, U: '2000', b1: 1.78, b2: 6.22, cp0: 4.19, cp1: 2.35 } },
         { id: 'EV3', type: 'evap_cond', name: 'Efeito 3 (energia do efeito 2)', params: { xP: 0.5, Ps: 205.5, PN: 20, U: '1400', b1: 1.78, b2: 6.22, cp0: 4.19, cp1: 2.35 } },
+        { id: 'EQ0', type: 'energy', name: 'Q-101', params: { Q: '' } },
         { id: 'EQ', type: 'energy', name: 'Energia do último efeito (ao condensador)', params: { Q: '' } },
         { id: 'P', type: 'product', name: 'Concentrado final' }, { id: 'C1', type: 'product', name: 'Condensado 1' }, { id: 'C2', type: 'product', name: 'Condensado 2' }, { id: 'C3', type: 'product', name: 'Condensado 3' }],
       streams: [S('1', 'F', 'out', 'EV1', 'feed', '1'), S('2', 'EV1', 'product', 'EV2', 'feed', '2'), S('3', 'EV2', 'product', 'EV3', 'feed', '3'), S('4', 'EV3', 'product', 'P', 'in', '4'),
-        S('E1', 'EV1', 'q_out', 'EV2', 'q_in', 'E1'), S('E2', 'EV2', 'q_out', 'EV3', 'q_in', 'E2'), S('E3', 'EV3', 'q_out', 'EQ', 'ei', 'E3'),
+        S('E1', 'EV1', 'q_out', 'EV2', 'q_in', 'E1'), S('E2', 'EV2', 'q_out', 'EV3', 'q_in', 'E2'), S('E3', 'EV3', 'q_out', 'EQ', 'ei', 'E3'), S('E4', 'EQ0', 'eo', 'EV1', 'q_in', 'E4'),
         S('5', 'EV1', 'condensate', 'C1', 'in', '5'), S('6', 'EV2', 'condensate', 'C2', 'in', '6'), S('7', 'EV3', 'condensate', 'C3', 'in', '7')] } },
     { key: 'filtracao-continua', title: 'Filtração contínua: filtro-prensa de placas e filtro rotativo a vácuo para a mesma polpa de sílica (compare áreas e tortas)', fs: {
       name: 'Filtro de placas e filtro rotativo', components: ['water', 'silica'], model: 'IDEAL',

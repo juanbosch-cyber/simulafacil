@@ -10404,11 +10404,12 @@ window.SIMULAFACIL_CONFIG = {
     // diagrama T–s: domo de saturação (até 350 °C) e o estado de cada corrente de água
     const sl = [], sv = [], tt = [];
     for (let k = 0; k <= 40; k++) { const TK = 274 + (623 - 274) * k / 40, Pb = STEAM.psat(TK) / 1e5; tt.push(TK - 273.15); sl.push(IF97.s1(Pb / 10, TK)); sv.push(IF97.s(Pb / 10, TK)); }
-    const px = [], py = [], pt = [];
-    (conns || []).forEach(c => { const s = S[c.id]; if (!s || !s.stm) return; const q = H2O.fromPH(s.stm.P, s.stm.h); px.push(q.s); py.push(K2C(q.T)); pt.push(String(c.name || c.id)); });
+    const px = [], py = [], pt = [], key = [];
+    (conns || []).forEach(c => { const s = S[c.id]; if (!s || !s.stm) return; const q = H2O.fromPH(s.stm.P, s.stm.h); px.push(q.s); py.push(K2C(q.T)); pt.push(String(c.id)); key.push(c.id + ' ' + (c.name || c.id)); });
+    if (key.length) r.res.push({ k: 'Pontos do diagrama T–s (número da corrente)', v: key.join('; '), u: '' });
     if (px.length) r.plots.push({ kind: 'curves', title: 'Diagrama T–s do ciclo (correntes de água do fluxograma)', data: { xLabel: 'Entropia (kJ/kg·K)', yLabel: 'Temperatura (°C)', series: [
       { name: 'Líquido saturado', x: sl, y: tt, color: '#2563c9', width: 2 }, { name: 'Vapor saturado', x: sv, y: tt, color: '#d1302b', width: 2 },
-      { name: 'Correntes', x: px, y: py, mode: 'markers+text', text: pt, size: 10, symbol: 'circle', color: '#111111' }] } });
+      { name: 'Correntes (número)', x: px, y: py, mode: 'markers+text', text: pt, size: 10, symbol: 'circle', color: '#7a3db8' }] } });
   };
 
   SF.units = { MICROBES, TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn, ponchonSavarit, STEAM, multiEffect, IF97, H2O, tagH2O, POST };

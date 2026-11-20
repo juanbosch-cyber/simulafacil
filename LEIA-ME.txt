@@ -1,3 +1,16 @@
+SIMULA FÁCIL IA 4.9 – manual atualizado (20/11/2026)
+=====================================================
+
+- O manual em PDF passa a se chamar "Manual do SIMULA FÁCIL IA (Versão 4.9)".
+- As Novidades, no início do manual, ganharam dois itens: a flotação
+  (banco de flotação da 4.5 e colunas de flotação com os bancos de dados
+  de misturas minerais, coletores e depressores da 4.8) e o gerador de
+  vapor com a turbina a vapor (4.9).
+- O suplemento das versões 4.8 e 4.9 continua no fim (112 páginas no total).
+- O endereço do manual mudou para ?v=4.9-2026-11-20b, para o navegador não
+  mostrar a cópia antiga guardada.
+
+
 SIMULA FÁCIL IA 4.9 – atualização de 20/11/2026
 ================================================
 

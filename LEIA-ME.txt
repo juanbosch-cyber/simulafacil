@@ -14,6 +14,8 @@ GERADOR DE VAPOR (novo ícone, categoria "Utilidades (vapor)")
   sem e com recuperação, ar, gases (vazão, temperatura e composição), cinzas, CO2 (biomassa como neutra), perdas
   (chaminé, radiação, não queimado, cinzas e purga), calor do economizador e do pré-aquecedor, gráficos de calor
   e de consumo e eficiência x excesso de ar. O balanço de massa do fluxograma fecha.
+- Pressão (5 a 140 bar) e temperatura (até 560 °C) do vapor livres, para caldeiras de alta pressão de papel e celulose
+  (por exemplo 100 bar e 520 °C), e combustível secundário (co-firing) com a parcela de energia escolhida.
 - Exemplo pronto: "Gerador de vapor a cavaco de eucalipto" (30 t/h, 42 bar, com condensador).
 - Melhorias sobre o programa MATLAB de partida: o consumo sai de um balanço de energia fechado (sem eficiência
   arbitrária), entalpias pela tabela de vapor, purga contínua, combustível não queimado, estequiometria pela

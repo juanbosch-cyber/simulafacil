@@ -1177,7 +1177,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '5.1-2026-11-20',
+  manualVersion: '5.2-2026-11-20',
   videosAlunos: [
     { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' },
     { titulo: 'Como funciona o SIMULA FÁCIL IA - Exemplo: DESTILAÇÃO', autor: 'Bruno Gontijo de Carvalho – Engenharia Química UFSJ', url: 'https://youtu.be/H2lDGKUrdPA' }
@@ -2468,8 +2468,8 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'phosphoric-acid', name: 'Ácido fosfórico (soluto não volátil)', formula: 'H3PO4', mw: 97.995, rho: 1885, nv: true, cpl: 145, tags: 'acidulante refrigerante cola bebida INS 338' },
     { id: 'citric-acid', name: 'Ácido cítrico (soluto não volátil)', formula: 'C6H8O7', mw: 192.12, rho: 1665, nv: true, cpl: 226, tags: 'acidulante refrigerante guaraná suco energético bebida INS 330' },
     { id: 'taurine', name: 'Taurina (soluto não volátil)', formula: 'C2H7NO3S', mw: 125.15, rho: 1734, nv: true, cpl: 150, tags: 'energético bebida aminoácido' },
-    { id: 'k2co3', name: 'Carbonato de potássio (soluto não volátil, álcali do cacau)', formula: 'K2CO3', mw: 138.205, rho: 2430, nv: true, cpl: 114.4, tags: 'álcali alcalinização cacau processo holandês potássio carbonato chocolate' },
-    { id: 'potassium-acetate', name: 'Acetato de potássio (soluto não volátil)', formula: 'CH3COOK', mw: 98.142, rho: 1570, nv: true, cpl: 110, tags: 'sal acetato potássio cacau alcalinização' },
+    { id: 'k2co3', name: 'Carbonato de potássio', formula: 'K2CO3', mw: 138.205, rho: 2430, nv: true, cpl: 114.4, tags: 'álcali alcalinização cacau processo holandês potássio carbonato chocolate soluto não volátil' },
+    { id: 'potassium-acetate', name: 'Acetato de potássio', formula: 'CH3COOK', mw: 98.142, rho: 1570, nv: true, cpl: 110, tags: 'sal acetato potássio cacau alcalinização soluto não volátil' },
     { id: 'biomass', name: 'Biomassa: células (CH1,8O0,5N0,2)', formula: 'CH1.8O0.5N0.2', mw: 24.62, rho: 1100, solid: true, cpl: 37 },
     { id: 'aluminium-sulfate', name: 'Sulfato de alumínio (coagulante, soluto não volátil)', formula: 'Al2(SO4)3', mw: 342.15, rho: 2710, nv: true, cpl: 259, tags: 'coagulante tratamento efluente ete wwtp fósforo precipitação' },
     { id: 'sulfuric-acid', name: 'Ácido sulfúrico (soluto não volátil)', formula: 'H2SO4', mw: 98.079, rho: 1830, nv: true, cpl: 138.9, tags: 'ácido acidez tratamento efluente ete' },
@@ -2583,9 +2583,9 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'lecithin', name: 'Fosfolipídios: lecitina de soja (gomas do óleo)', formula: 'C42H80NO8P', mw: 758.1, nome: 'Lecitina de soja', dry: { f: 1 }, tags: 'soja óleo degomagem gomas fosfatídeos lecitina alimento' },
     { id: 'drink-extract', name: 'Extrato seco de bebidas (açúcares do malte, dextrinas, proteínas e minerais)', formula: 'EXT', nome: 'Extrato de bebidas', dry: { p: 6, c: 90, a: 4 }, tags: 'bebida cerveja mosto malte extrato plato vinho' },
     { id: 'starch', name: 'Amido e dextrinas (malte, milho, mandioca; por unidade de glicose)', formula: 'C6H10O5', mw: 162.14, nome: 'Amido e dextrinas', dry: { c: 1 }, tags: 'amido dextrina malte mostura cerveja milho mandioca hidrólise' },
-    { id: 'cocoa-butter', name: 'Manteiga de cacau (gordura do cacau: triglicerídeos POS, SOS e POP)', formula: 'MC', mw: 860, nome: 'Manteiga de cacau', dry: { f: 1 }, tags: 'cacau chocolate manteiga gordura temperagem prensa alimento' },
-    { id: 'cocoa-solids', name: 'Sólidos de cacau isentos de gordura (proteínas, fibras, amido, polifenóis e minerais)', formula: 'SIG', nome: 'Sólidos de cacau isentos de gordura', dry: { p: 19.6, c: 20.9, fi: 37, a: 5.8 }, tags: 'cacau chocolate nibs liquor torta cacau em pó alimento' },
-    { id: 'cocoa-shell', name: 'Casca de cacau (fibras)', formula: 'CASCA', nome: 'Casca de cacau', dry: { p: 16, f: 3, c: 12, fi: 59, a: 10 }, tags: 'cacau casca amêndoa descasque fibra alimento' }
+    { id: 'cocoa-butter', name: 'Manteiga de cacau', formula: 'MC', mw: 860, nome: 'Manteiga de cacau', dry: { f: 1 }, tags: 'cacau chocolate manteiga gordura temperagem prensa alimento triglicerídeos POS SOS POP' },
+    { id: 'cocoa-solids', name: 'Sólidos de cacau isentos de gordura', formula: 'SIG', nome: 'Sólidos de cacau isentos de gordura', dry: { p: 19.6, c: 20.9, fi: 37, a: 5.8 }, tags: 'cacau chocolate nibs liquor torta cacau em pó alimento proteínas fibras amido polifenóis minerais' },
+    { id: 'cocoa-shell', name: 'Casca de cacau', formula: 'CASCA', nome: 'Casca de cacau', dry: { p: 16, f: 3, c: 12, fi: 59, a: 10 }, tags: 'cacau casca amêndoa descasque fibra alimento' }
   ].forEach(q => {
     const s = FOOD_KEYS.reduce((a, k) => a + (q.dry[k] || 0), 0), dry = {}; FOOD_KEYS.forEach(k => { dry[k] = (q.dry[k] || 0) / s; });
     const pS = choiOkos(dry, 25), mw = q.mw || 100;

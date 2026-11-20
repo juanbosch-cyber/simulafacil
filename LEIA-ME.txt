@@ -35,6 +35,11 @@ NOVA CATEGORIA "Chocolate e cacau", com 6 ícones:
 - Componentes novos: manteiga de cacau, sólidos de cacau isentos de gordura e casca de cacau (Choi e Okos), carbonato de
   potássio e acetato de potássio; misturas prontas de amêndoas de cacau, liquor de cacau e leite em pó integral.
 - Site: novidades da 5.2 no início da página, na tela de boas-vindas e nas perguntas frequentes.
+- Manual: suplemento da versão 5.2 no fim do PDF (18 páginas: processo, componentes e receita, os seis equipamentos com
+  equações, campos, resultados e gráficos, correntes, abertura e valsa, limites e referências), página de novidades das
+  versões 5.1 e 5.2 no início e capa e cabeçalhos com Versão 5.2. Endereço do manual: ?v=5.2-2026-11-20.
+- Nomes curtos dos componentes novos (manteiga de cacau, sólidos de cacau isentos de gordura, casca de cacau, carbonato e
+  acetato de potássio), para não sobrepor os números na tabela de correntes do Fluxograma final.
 
 
 SIMULA FÁCIL IA 5.1 – cinética e segurança do reator (20/11/2026)

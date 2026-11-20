@@ -1,3 +1,36 @@
+SIMULA FÁCIL IA 5.0 – usina nuclear PWR (20/11/2026)
+====================================================
+
+NOVA CATEGORIA "Usina nuclear (PWR)", com 5 ícones:
+- Reator nuclear PWR: potência térmica, pressão do pressurizador e balanço de energia do circuito primário
+  pela IAPWS-IF97 (região 1, líquido comprimido, conferida com os valores oficiais de verificação), com aviso
+  da margem até a ebulição. Núcleo: elementos combustíveis, varetas, taxa linear de calor média e máxima.
+  Combustível: urânio no núcleo, queima de descarga, lotes, ciclo (dias a plena potência e meses), elementos
+  trocados por recarga e por ano, U-235 fissionado e consumido (200 MeV por fissão), urânio natural, U3O8 e
+  trabalho de separação (SWU) do enriquecimento, calor de decaimento (Way-Wigner) e carvão e CO2 equivalentes.
+  Gráficos: perfil axial da taxa linear de calor, temperatura da água no canal e calor de decaimento.
+- Gerador de vapor do PWR (tubos em U): calor do primário, vapor saturado com umidade residual, área de troca
+  e diagrama T-Q.
+- Separador de umidade e reaquecedor (MSR): retira a água do escape da turbina de alta e reaquece o vapor com
+  vapor vivo (ou calcula o vapor necessário para a temperatura pedida).
+- Condensador de superfície: vácuo, calor rejeitado, água de resfriamento (mar, rio ou torre), diferença
+  terminal e área.
+- Desaerador (pré-aquecedor de mistura): extração, condensado e drenos; avisa falta ou excesso de vapor.
+- Balanço da usina mostrado no reator depois da simulação: potência elétrica das turbinas, consumo das bombas,
+  potência líquida, eficiência, heat rate, calor rejeitado, energia por ano, fechamento do balanço de energia
+  e diagrama T-s do ciclo com as correntes do fluxograma.
+- As correntes de água levam o estado exato (entalpia e título) de um equipamento ao seguinte, também através
+  dos reciclos: o vapor úmido das turbinas chega ao separador e ao condensador com a umidade certa. A turbina
+  a vapor aceita vapor saturado ou úmido na entrada, o divisor mantém o título e a bomba usa a água pela
+  IAPWS-IF97 quando a corrente vem desses equipamentos (os 72 exemplos anteriores dão os mesmos números).
+- Exemplo pronto: "Usina nuclear PWR completa (tipo Angra 2)": 3 765 MWt, 18 800 kg/s no primário a 158 bar
+  (291 -> 326 °C), 2 063 kg/s de vapor a 64,5 bar, turbinas de alta e baixa, MSR, condensador a água do mar
+  (64 m3/s, 26 -> 35,6 °C), desaerador a 23 bar e bombas: 1 222 MW elétricos brutos (32,4 %).
+- Manual: capítulo da versão 5.0 (usina nuclear PWR) no fim do PDF e novidades no início.
+- Site: novidades da versão 5.0 no início da página e na tela de boas-vindas do simulador.
+- O endereço do manual mudou para ?v=5.0-2026-11-20.
+
+
 SIMULA FÁCIL IA 4.9 – manual atualizado (20/11/2026)
 =====================================================
 

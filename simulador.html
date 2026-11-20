@@ -4684,7 +4684,11 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'dh', label: 'Entalpia absorvida pelo vapor (por exemplo, 85 bar e 485 °C a partir da água a 120 °C)', u: 'kJ/kg', def: 2870 }] },
     steam_gen: { label: 'Gerador de vapor (caldeira): combustível, pressão da caldeira, economizador, pré-aquecedor de ar e condensador opcional (saída em vapor ou energética)', cat: 'Utilidades (vapor)', ins: ['water'], outs: ['steam', 'condensate', 'gas'], eouts: ['q_out'], params: [
       { k: 'fuel', label: 'Combustível', type: 'select', options: ['Cavaco de eucalipto (50 % de umidade)', 'Casca de eucalipto (resíduo do pátio de madeira)', 'Casquinha de arroz', 'Bagaço de cana', 'Lenha (25 % de umidade)', 'Carvão mineral', 'Óleo diesel', 'Óleo combustível (BPF)', 'Gás natural', 'GLP'], def: 'Cavaco de eucalipto (50 % de umidade)' },
-      { k: 'cls', label: 'Tipo de caldeira (classe de pressão)', type: 'select', options: ['Baixa pressão (10 bar, saturado)', 'Média pressão (42 bar, 400 °C)', 'Alta pressão (85 bar, 480 °C)'], def: 'Média pressão (42 bar, 400 °C)' },
+      { k: 'cls', label: 'Tipo de caldeira (classe de pressão; a pressão e a temperatura personalizadas substituem a classe)', type: 'select', options: ['Baixa pressão (10 bar, saturado)', 'Média pressão (42 bar, 400 °C)', 'Alta pressão (85 bar, 480 °C)'], def: 'Média pressão (42 bar, 400 °C)' },
+      { k: 'Pcus', label: 'Pressão do vapor personalizada (0 = usar a classe; de 5 a 140 bar)', u: 'bar', def: 0 },
+      { k: 'Tcus', label: 'Temperatura do vapor personalizada (0 = usar a classe; não pode ficar abaixo da saturação)', u: '°C', def: 0 },
+      { k: 'fuel2', label: 'Combustível secundário (co-firing: queima conjunta com o principal)', type: 'select', options: ['Nenhum (só o combustível principal)', 'Cavaco de eucalipto (50 % de umidade)', 'Casca de eucalipto (resíduo do pátio de madeira)', 'Casquinha de arroz', 'Bagaço de cana', 'Lenha (25 % de umidade)', 'Carvão mineral', 'Óleo diesel', 'Óleo combustível (BPF)', 'Gás natural', 'GLP'], def: 'Nenhum (só o combustível principal)' },
+      { k: 'fr2', label: 'Parcela da energia do combustível secundário', u: '%', def: 0 },
       { k: 'mS', label: 'Produção de vapor' + SEMC, u: 't/h', def: 30 },
       { k: 'TFW', label: 'Temperatura da água de alimentação (desaerada)' + SEMC, u: '°C', def: 105 },
       { k: 'sai', label: 'Saída do sistema (o modo automático liga o condensador quando a porta de energia está ligada ou a do condensado está ligada)', type: 'select', options: ['Vapor direto (corrente material)', 'Condensador acoplado (saída energética)', 'Automático (pelas ligações do fluxograma)'], def: 'Vapor direto (corrente material)' },
@@ -4699,6 +4703,15 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'PCI', label: 'Poder calorífico inferior do combustível (0 = usar o valor do banco de dados)', u: 'MJ/kg', def: 0 },
       { k: 'Tcw1', label: 'Água de resfriamento do condensador: temperatura de entrada', u: '°C', def: 25 },
       { k: 'Tcw2', label: 'Água de resfriamento do condensador: temperatura de saída', u: '°C', def: 40 }] },
+    steam_turbine: { label: 'Turbina a vapor (contrapressão ou extração): potência elétrica gerada, vapor de extração e de escape para o processo (cogeração)', cat: 'Utilidades (vapor)', ins: ['steam'], outs: ['extraction', 'exhaust'], eouts: ['q_out'], params: [
+      { k: 'mS', label: 'Vazão de vapor vivo' + SEMC, u: 't/h', def: 30 },
+      { k: 'Pin', label: 'Pressão do vapor vivo' + SEMC, u: 'bar', def: 100 },
+      { k: 'Tin', label: 'Temperatura do vapor vivo' + SEMC, u: '°C', def: 520 },
+      { k: 'fext', label: 'Fração da vazão retirada na extração (0 = só contrapressão ou condensação)', u: '%', def: 45 },
+      { k: 'Pext', label: 'Pressão da extração (vapor de média pressão para o processo)', u: 'bar', def: 10 },
+      { k: 'Pex', label: 'Pressão de escape (4,5 bar: contrapressão; 0,1 bar: condensação)', u: 'bar', def: 4.5 },
+      { k: 'etaT', label: 'Eficiência isentrópica das seções', u: '%', def: 80 },
+      { k: 'etaG', label: 'Eficiência mecânica e do gerador elétrico', u: '%', def: 97 }] },
     causticizing: { label: 'Caustificação e forno de cal: fundido + água → licor branco (NaOH + Na₂S); ciclo da cal e CO₂ do forno', cat: 'Papel e celulose', ins: ['smelt'], outs: ['white_liquor', 'gas'], params: [
       { k: 'mSm', label: 'Vazão de fundido (smelt)' + SEMC, u: 'kg/s', def: 17 },
       { k: 'wNa2S', label: 'Na₂S no fundido' + SEMC, u: '0–1', def: 0.19 },
@@ -9828,6 +9841,36 @@ window.SIMULAFACIL_CONFIG = {
     return { out: o.out, massUtil: o.ok ? wUtil + (I.conn ? 0 : I.m) : 0, res: decBR(res), warn: decW(warn), plots };
   };
 
+  /* vapor superaquecido: equações IAPWS-IF97, região 2 (energia livre de Gibbs adimensional); T em K, P em MPa; h em kJ/kg, s em kJ/(kg·K) */
+  const IF97 = (function () {
+    const J0 = [0, 1, -5, -4, -3, -2, -1, 2, 3], n0 = [-9.6927686500217, 10.086655968018, -0.005608791128302, 0.071452738081455, -0.40710498223928, 1.4240819171444, -4.383951131945, -0.28408632460772, 0.021268463753307];
+    const Ir = [1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 6, 6, 6, 7, 7, 7, 8, 8, 9, 10, 10, 10, 16, 16, 18, 20, 20, 20, 21, 22, 23, 24, 24, 24];
+    const Jr = [0, 1, 2, 3, 6, 1, 2, 4, 7, 36, 0, 1, 3, 6, 35, 1, 2, 3, 7, 3, 16, 35, 0, 11, 25, 8, 36, 13, 4, 10, 14, 29, 50, 57, 20, 35, 48, 21, 53, 39, 26, 40, 58];
+    const nr = [-0.0017731742473213, -0.017834862292358, -0.045996013696365, -0.057581259083432, -0.05032527872793, -3.3032641670203e-05, -0.00018948987516315, -0.0039392777243355, -0.043797295650573, -2.6674547914087e-05, 2.0481737692309e-08, 4.3870667284435e-07, -3.227767723857e-05, -0.0015033924542148, -0.040668253562649, -7.8847309559367e-10, 1.2790717852285e-08, 4.8225372718507e-07, 2.2922076337661e-06, -1.6714766451061e-11, -0.0021171472321355, -23.895741934104, -5.905956432427e-18, -1.2621808899101e-06, -0.038946842435739, 1.1256211360459e-11, -8.2311340897998, 1.9809712802088e-08, 1.0406965210174e-19, -1.0234747095929e-13, -1.0018179379511e-09, -8.0882908646985e-11, 0.10693031879409, -0.33662250574171, 8.9185845355421e-25, 3.0629316876232e-13, -4.2002467698208e-06, -5.9056029685639e-26, 3.7826947613457e-06, -1.2768608934681e-15, 7.3087610595061e-29, 5.5414715350778e-17, -9.4369707241210e-07];
+    const R = 0.461526;
+    function g(P, T) { const tau = 540 / T, t5 = tau - 0.5; let g0 = Math.log(P), g0t = 0, gr = 0, grt = 0;
+      for (let k = 0; k < 9; k++) { g0 += n0[k] * Math.pow(tau, J0[k]); g0t += n0[k] * J0[k] * Math.pow(tau, J0[k] - 1); }
+      for (let k = 0; k < 43; k++) { const a = nr[k] * Math.pow(P, Ir[k]); gr += a * Math.pow(t5, Jr[k]); grt += a * Jr[k] * Math.pow(t5, Jr[k] - 1); }
+      return { g0, gr, gt: g0t + grt, tau }; }
+    const h = (P, T) => { const q = g(P, T); return R * T * q.tau * q.gt; };
+    const s = (P, T) => { const q = g(P, T); return R * (q.tau * q.gt - (q.g0 + q.gr)); };
+    return { h, s };
+  })();
+  /* estados de turbina: saturação (hL da tabela, vapor saturado pela região 2) e expansão com eficiência isentrópica */
+  const STM = (function () {
+    const sat = Pbar => { const TK = STEAM.Tsat(Pbar * 1e5), hL = STEAM.hL(TK), hV = IF97.h(Pbar / 10, TK), sV = IF97.s(Pbar / 10, TK); return { TK, hL, hV, sV, sL: sV - (hV - hL) / TK }; };
+    const invT = (f, target, lo, hi) => { for (let k = 0; k < 60; k++) { const m = 0.5 * (lo + hi); if (f(m) < target) lo = m; else hi = m; } return 0.5 * (lo + hi); };
+    // estado (P bar, h) → { T (K), s, x (título; 1 = vapor), ... }
+    const fromH = (Pbar, h) => { const q = sat(Pbar); if (h <= q.hV) { const x = Math.max(0, (h - q.hL) / (q.hV - q.hL)); return { T: q.TK, h, x, s: q.sL + x * (q.sV - q.sL) }; }
+      const T = invT(t => IF97.h(Pbar / 10, t), h, q.TK, 1073); return { T, h, x: 1, s: IF97.s(Pbar / 10, T) }; };
+    const fromS = (Pbar, s) => { const q = sat(Pbar); if (s <= q.sV) { const x = Math.max(0, (s - q.sL) / (q.sV - q.sL)); return { T: q.TK, h: q.hL + x * (q.hV - q.hL), x, s }; }
+      const T = invT(t => IF97.s(Pbar / 10, t), s, q.TK, 1073); return { T, h: IF97.h(Pbar / 10, T), x: 1, s }; };
+    const fromTP = (Pbar, TK) => { const q = sat(Pbar); if (TK <= q.TK + 0.5) return { T: q.TK, h: q.hV, x: 1, s: q.sV }; return { T: TK, h: IF97.h(Pbar / 10, TK), x: 1, s: IF97.s(Pbar / 10, TK) }; };
+    // expansão de P1 a P2 com eficiência isentrópica eta
+    const expand = (st, P2, eta) => { const iso = fromS(P2, st.s), h2 = st.h - eta * (st.h - iso.h); return Object.assign(fromH(P2, h2), { hs: iso.h }); };
+    return { sat, fromH, fromS, fromTP, expand };
+  })();
+
   /* gerador de vapor: combustível (composição elementar, base úmida) queima com excesso de ar; os gases saem da caldeira numa temperatura que depende da
      classe de pressão; o economizador aquece a água e o pré-aquecedor aquece o ar com esses gases, sem deixar a chaminé abaixo da temperatura mínima.
      Balanço: ṁc·[PCI(1 − perda_rad) + q_ar − R_g·cp_g·(T_g − T_amb) − perda_cinzas] = Q_água − Q_eco; consumo e eficiência saem dele.
@@ -9851,11 +9894,22 @@ window.SIMULAFACIL_CONFIG = {
   };
   IMPL.steam_gen = function (th, b, ins, ctx) {
     const p = b.params, warn = [];
-    const fn = SG_FUEL[p.fuel] ? p.fuel : 'Cavaco de eucalipto (50 % de umidade)', fu = SG_FUEL[fn];
-    const cn = SG_CLS[p.cls] ? p.cls : 'Média pressão (42 bar, 400 °C)', cl = SG_CLS[cn];
+    const fn = SG_FUEL[p.fuel] ? p.fuel : 'Cavaco de eucalipto (50 % de umidade)', fA = SG_FUEL[fn];
+    // combustível secundário (co-firing): a parcela de energia fixa a fração mássica; composição e PCI são médias ponderadas pela massa
+    const fn2 = SG_FUEL[p.fuel2] && p.fuel2 !== fn ? p.fuel2 : null, e2 = fn2 ? Math.min(0.95, Math.max(0, num(p.fr2, 0) / 100)) : 0, fB = fn2 && e2 > 0 ? SG_FUEL[fn2] : null;
+    const pA = num(p.PCI, 0) > 0 ? num(p.PCI, 0) : fA.pci, x2 = fB ? e2 * pA / (fB.pci * (1 - e2) + e2 * pA) : 0, mx = k => (1 - x2) * fA[k] + x2 * (fB ? fB[k] : 0);
+    const fu = { C: mx('C'), H: mx('H'), O: mx('O'), N: mx('N'), ash: mx('ash'), unb: mx('unb'), pci: mx('pci') + (1 - x2) * (pA - fA.pci), rhoN: fB ? 0 : fA.rhoN };
+    const bioC = ((1 - x2) * (fA.bio ? fA.C : 0) + x2 * (fB && fB.bio ? fB.C : 0)) / fu.C;
+    const cn0 = SG_CLS[p.cls] ? p.cls : 'Média pressão (42 bar, 400 °C)', cl0 = SG_CLS[cn0], Pcus = num(p.Pcus, 0), Tcus = num(p.Tcus, 0), custom = Pcus > 0 || Tcus > 0;
+    if (Pcus > 0 && (Pcus < 5 || Pcus > 140)) throw new Error('a pressão personalizada deve ficar entre 5 e 140 bar');
+    const Pb = Pcus > 0 ? Pcus : cl0.P;
     const CPG = 1.08, CPA = 1.01, TA = 25, TASH = 300, CPASH = 1.0, CPW = 4.186;
-    const Pb = cl.P, Ppa = Pb * 1e5, TsK = STEAM.Tsat(Ppa), Ts = K2C(TsK), hLs = STEAM.hL(TsK), hVs = STEAM.hV(TsK);
-    const Tsh = cl.T == null ? Ts : cl.T, hS = cl.h == null ? hVs : cl.h;
+    const Ppa = Pb * 1e5, TsK = STEAM.Tsat(Ppa), Ts = K2C(TsK), hLs = STEAM.hL(TsK), hVs = STEAM.hV(TsK);
+    const Treq = Tcus > 0 ? Tcus : (cl0.T == null ? Ts : cl0.T);
+    if (Treq < Ts - 0.5) throw new Error('a temperatura do vapor (' + Treq.toFixed(0) + ' °C) está abaixo da saturação a ' + Pb + ' bar (' + Ts.toFixed(0) + ' °C)');
+    if (Treq > 560) throw new Error('a temperatura do vapor passa do limite de 560 °C');
+    const Tsh = Math.max(Ts, Treq), sat = Tsh - Ts < 1, hS = sat ? hVs : IF97.h(Pb / 10, C2K(Tsh));   // vapor superaquecido pela IAPWS-IF97
+    const cl = { Tg: custom ? Math.max(260, 0.5 * Tsh + 140) : cl0.Tg }, cn = custom ? 'Personalizada (' + Pb.toFixed(0) + ' bar, ' + (sat ? 'saturado' : Tsh.toFixed(0) + ' °C') + ')' : cn0;
     const bd = Math.max(0, num(p.bd, 2)) / 100, rad = Math.max(0, num(p.rad, 1.5)) / 100, exc0 = num(p.exc, 30);
     if (!(exc0 >= 0 && exc0 <= 300)) throw new Error('o excesso de ar deve ficar entre 0 e 300 %');
     // água de alimentação: da corrente (se conectada) ou dos campos
@@ -9866,7 +9920,7 @@ window.SIMULAFACIL_CONFIG = {
     const hfw = STEAM.hL(C2K(TFW)) + 0.001 * (Ppa - STEAM.psat(C2K(TFW))) / 1000;
     const Qs = ms * (hS - hfw), Qbd = mbd * (hLs - hfw), Qw = Qs + Qbd;   // kW
     // combustível: estequiometria pela composição elementar (por kg de combustível)
-    const pciK = (num(p.PCI, 0) > 0 ? num(p.PCI, 0) : fu.pci) * 1000, wat = Math.max(0, 1 - fu.C - fu.H - fu.O - fu.N - fu.ash);
+    const pciK = fu.pci * 1000, wat = Math.max(0, 1 - fu.C - fu.H - fu.O - fu.N - fu.ash);
     const nO2 = fu.C / 12.011 + fu.H / 4.032 - fu.O / 31.998;
     if (!(nO2 > 0)) throw new Error('combustível sem oxigênio estequiométrico positivo');
     const mO2 = nO2 * 31.998, AFst = mO2 / 0.2331;
@@ -9904,10 +9958,11 @@ window.SIMULAFACIL_CONFIG = {
     const Qf = mf * pciK, Qstack = mg * CPG * (Tst - TA), Qrad = rad * Qf, Qunb = fu.unb * Qf, Qash = mash * CPASH * (TASH - TA), Qpre = mf * c.qpre;
     const eta = c.eta, etaB = c0.eta;
     if (eta > 0.95 || eta < 0.4) warn.push('a eficiência calculada (' + (100 * eta).toFixed(0) + ' %) está fora da faixa usual de caldeiras (cerca de 70 a 92 %): confira os dados');
-    if (cl.T == null && !cond) warn.push('vapor saturado: qualquer perda de calor na tubulação forma condensado. Use purgadores ou superaqueça levemente');
+    if (sat && !cond) warn.push('vapor saturado: qualquer perda de calor na tubulação forma condensado. Use purgadores ou superaqueça levemente');
     const fmt = (v, d) => (+v).toFixed(d), pc = v => (100 * v).toFixed(1);
-    const fossil = fu.bio ? 0 : gas.co2 * 3600, strCons = fu.rhoN ? fmt(mfh, 1) + ' kg/h (' + fmt(mfh / fu.rhoN, 0) + ' Nm³/h)' : fmt(mfh, 1) + ' kg/h (' + fmt(mfh / 1000, 2) + ' t/h)';
-    const res = [{ k: 'Combustível / caldeira', v: fn + ' / ' + cn, u: '' },
+    const fossil = gas.co2 * 3600 * (1 - bioC), part = (nm, kg, ff) => nm + ': ' + fmt(kg, 0) + ' kg/h' + (ff.rhoN ? ' (' + fmt(kg / ff.rhoN, 0) + ' Nm³/h)' : ''),
+      strCons = fB ? fmt(mfh, 1) + ' kg/h (' + fmt(mfh / 1000, 2) + ' t/h) = ' + part(fn, mfh * (1 - x2), fA) + '; ' + part(fn2, mfh * x2, fB) : fu.rhoN ? fmt(mfh, 1) + ' kg/h (' + fmt(mfh / fu.rhoN, 0) + ' Nm³/h)' : fmt(mfh, 1) + ' kg/h (' + fmt(mfh / 1000, 2) + ' t/h)';
+    const res = [{ k: 'Combustível / caldeira', v: fn + (fB ? ' + ' + fn2 + ' (' + br(pc(e2).replace(/\.0$/, '')) + ' % da energia)' : '') + ' / ' + cn, u: '' },
       { k: 'Consumo de combustível', v: strCons, u: '' },
       { k: 'Consumo específico', v: fmt(mfh / (ms * 3.6), 0) + ' kg de combustível por t de vapor', u: '' },
       { k: 'Poder calorífico inferior (PCI)', v: fmt(pciK / 1000, 1), u: 'MJ/kg' },
@@ -9922,7 +9977,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Gases de combustão: vazão / temperatura na chaminé (saem da caldeira a ' + cl.Tg + ' °C)', v: fmt(mg * 3.6, 2) + ' t/h / ' + fmt(Tst, 0) + ' °C', u: '' },
       { k: 'Gases: CO₂ / H₂O / O₂ / N₂ (base úmida)', v: [nk.co2, nk.water, nk.oxygen, nk.nitrogen].map(v => pc(v / nt)).join(' / ') + ' % em volume; O₂ seco ' + pc(nk.oxygen / nd) + ' %', u: '' },
       { k: 'Cinzas', v: fmt(mash * 3600, 1) + ' kg/h', u: '' },
-      { k: 'Emissão de CO₂', v: fu.bio ? fmt(gas.co2 * 3600, 0) + ' kg/h (biogênico: ciclo neutro, 0 de origem fóssil)' : fmt(fossil, 0) + ' kg/h (origem fóssil)', u: '' },
+      { k: 'Emissão de CO₂', v: fmt(gas.co2 * 3600, 0) + ' kg/h no total: ' + fmt(fossil, 0) + ' kg/h de origem fóssil e ' + fmt(gas.co2 * 3600 - fossil, 0) + ' kg/h biogênico (ciclo neutro)', u: '' },
       { k: 'Perdas: gases na chaminé / radiação / combustível não queimado / cinzas / purga', v: [Qstack, Qrad, Qunb, Qash, Qbd].map(v => fmt(v / 1000, 2)).join(' / '), u: 'MW' }];
     if (cond) {
       res.push({ k: 'SAÍDA ENERGÉTICA: condensador acoplado (saída em energia)', v: fmt(Qc / 1000, 2) + ' MW (' + fmt(Qc, 0) + ' kW)', u: '' },
@@ -9940,10 +9995,53 @@ window.SIMULAFACIL_CONFIG = {
       { kind: 'curves', title: 'Eficiência térmica × excesso de ar', data: { xLabel: 'Excesso de ar (%)', yLabel: 'Eficiência (%)', series: [{ name: 'Eficiência (PCI)', x: xs, y: es, color: '#2563c9', width: 3 }, { name: 'Operação', x: [exc0], y: [100 * eta], mode: 'markers', size: 12, symbol: 'circle', color: '#d1302b' }] } }];
     const defs = [{ port: 'gas', kg: gas, T: C2K(Tst), what: 'gases de combustão' }];
     if (cond) defs.unshift({ port: 'condensate', kg: { water: ms }, T: TsK - 0.05, P: Ppa, what: 'condensado' });
-    else defs.unshift({ port: 'steam', kg: { water: ms }, T: C2K(Tsh) + (cl.T == null ? 0.05 : 0), P: Ppa, what: 'vapor' });
+    else defs.unshift({ port: 'steam', kg: { water: ms }, T: C2K(Tsh) + (sat ? 0.05 : 0), P: Ppa, what: 'vapor' });
     const o = procOut(th, defs, warn, I.conn);
     return { out: o.out, massUtil: o.ok ? mf + mair - mbd - mash + (I.conn ? 0 : mfw) : 0, res: decBR(res), warn: decW(warn), plots,
       duty: Qs * 1000, eports: { q_out: cond ? Qc * 1000 : 0 }, eT: { q_out: Ts } };
+  };
+
+  /* turbina a vapor: expansão adiabática com eficiência isentrópica (vapor pela IAPWS-IF97); retira parte da vazão na pressão de extração
+     e o restante segue ao escape. Potência = Σ ṁ·Δh × rendimento do gerador. O calor de processo é o que o vapor entrega até virar líquido saturado. */
+  IMPL.steam_turbine = function (th, b, ins) {
+    const p = b.params, warn = [];
+    const I = procIn(th, ins && ins.steam, 'vapor vivo', ['water'], () => ({ kg: { water: num(p.mS, 30) / 3.6 }, T: num(p.Tin, 520) }));
+    if (!(I.m > 0)) throw new Error('informe a vazão de vapor vivo (ou ligue a corrente de vapor)');
+    const m = I.m, P1 = I.conn ? I.P / 1e5 : num(p.Pin, 100), T1 = I.T;
+    if (!(P1 >= 2 && P1 <= 140)) throw new Error('a pressão do vapor vivo deve ficar entre 2 e 140 bar');
+    const q1 = STM.sat(P1); if (T1 < q1.TK - 1) throw new Error('a corrente de entrada não é vapor: ' + K2C(T1).toFixed(0) + ' °C está abaixo da saturação a ' + P1.toFixed(0) + ' bar (' + K2C(q1.TK).toFixed(0) + ' °C)');
+    if (T1 > 1073) throw new Error('temperatura do vapor acima de 800 °C');
+    const eta = Math.min(1, Math.max(0.3, num(p.etaT, 80) / 100)), etaG = Math.min(1, Math.max(0.5, num(p.etaG, 97) / 100)), fe = Math.min(0.95, Math.max(0, num(p.fext, 45) / 100));
+    const Pex = num(p.Pex, 4.5), Pxt = num(p.Pext, 10);
+    if (!(Pex > 0.02 && Pex < P1)) throw new Error('a pressão de escape deve ficar entre 0,02 bar e a pressão do vapor vivo');
+    if (fe > 0 && !(Pxt > Pex && Pxt < P1)) throw new Error('a pressão da extração deve ficar entre a do escape e a do vapor vivo');
+    const calc = f => { const s1 = STM.fromTP(P1, T1); let s2 = null, s3, W;
+      if (f > 0) { s2 = STM.expand(s1, Pxt, eta); s3 = STM.expand(s2, Pex, eta); W = m * (s1.h - s2.h) + m * (1 - f) * (s2.h - s3.h); }
+      else { s3 = STM.expand(s1, Pex, eta); W = m * (s1.h - s3.h); }
+      return { s1, s2, s3, W }; };
+    const r = calc(fe), Wel = r.W * etaG, mx = m * fe, me = m * (1 - fe);
+    const qx = fe > 0 ? STM.sat(Pxt) : null, qe = STM.sat(Pex);
+    const Qx = fe > 0 ? mx * (r.s2.h - qx.hL) : 0, Qe = me * (r.s3.h - qe.hL);
+    if (r.s3.x < 0.88) warn.push('título de ' + (100 * r.s3.x).toFixed(0) + ' % no escape: abaixo de cerca de 88 % há erosão das pás. Aumente a pressão de escape ou superaqueça mais o vapor vivo');
+    if (r.s2 && r.s2.x < 0.88) warn.push('título de ' + (100 * r.s2.x).toFixed(0) + ' % na extração: vapor muito úmido');
+    if (r.s3.x < 1 - 1e-6) warn.push('o escape sai úmido (título ' + r.s3.x.toFixed(3) + '): a corrente é mostrada como vapor saturado na pressão de escape');
+    const fmt = (v, d) => (+v).toFixed(d), Tc = K2C;
+    const res = [{ k: 'Vapor vivo', v: fmt(m * 3.6, 2) + ' t/h a ' + fmt(P1, 1) + ' bar e ' + fmt(Tc(T1), 0) + ' °C (h = ' + fmt(r.s1.h, 0) + ' kJ/kg)', u: '' },
+      { k: 'Potência elétrica gerada', v: fmt(Wel / 1000, 2) + ' MW (eixo: ' + fmt(r.W / 1000, 2) + ' MW)', u: '' },
+      { k: 'Consumo específico de vapor vivo', v: fmt(m * 3600 / Math.max(Wel, 1e-9), 2) + ' kg/kWh', u: '' }];
+    if (fe > 0) res.push({ k: 'Extração (' + br(fmt(Pxt, 1)) + ' bar)', v: fmt(mx * 3.6, 2) + ' t/h a ' + fmt(Tc(r.s2.T), 0) + ' °C (título ' + fmt(r.s2.x, 3) + '); seção de alta: ' + fmt(m * (r.s1.h - r.s2.h) / 1000, 2) + ' MW', u: '' });
+    res.push({ k: 'Escape (' + br(fmt(Pex, 2)) + ' bar)', v: fmt(me * 3.6, 2) + ' t/h a ' + fmt(Tc(r.s3.T), 0) + ' °C (título ' + fmt(r.s3.x, 3) + ')', u: '' },
+      { k: 'Calor de processo disponível (extração / escape)', v: fmt(Qx / 1000, 2) + ' / ' + fmt(Qe / 1000, 2) + ' MW', u: '' },
+      { k: 'Relação potência / calor de processo', v: fmt(Wel / Math.max(Qx + Qe, 1e-9), 3), u: '' },
+      { k: 'Entalpia: entrada / após isentrópica ao escape', v: fmt(r.s1.h, 0) + ' / ' + fmt(STM.fromS(Pex, r.s1.s).h, 0) + ' kJ/kg', u: '' });
+    const xs = [], ys = [], qs = []; for (let k = 0; k <= 19; k++) { const f = 0.95 * k / 19, c = calc(f); xs.push(100 * f); ys.push(c.W * etaG / 1000); qs.push((f * m * (c.s2 ? c.s2.h - STM.sat(Pxt).hL : 0) + (1 - f) * m * (c.s3.h - qe.hL)) / 1000); }
+    const plots = [{ kind: 'bars', title: 'Potência e calor de processo (MW)', data: { categories: ['Potência elétrica', 'Calor da extração', 'Calor do escape'], yLabel: 'MW', series: [{ name: 'MW', y: [Wel / 1000, Qx / 1000, Qe / 1000], color: '#2563c9' }] } },
+      { kind: 'curves', title: 'Potência × fração extraída', data: { xLabel: 'Fração do vapor retirada na extração (%)', yLabel: 'Potência elétrica (MW)', series: [{ name: 'Potência', x: xs, y: ys, color: '#7a3db8', width: 3 }, { name: 'Operação', x: [100 * fe], y: [Wel / 1000], mode: 'markers', size: 12, symbol: 'circle', color: '#d1302b' }] } }];
+    const defs = [{ port: 'exhaust', kg: { water: me }, T: r.s3.T, P: Pex * 1e5, what: 'vapor de escape' }];
+    if (fe > 0) defs.unshift({ port: 'extraction', kg: { water: mx }, T: r.s2.T + (r.s2.x < 1 ? 0.05 : 0), P: Pxt * 1e5, what: 'vapor de extração' });
+    defs.forEach(d => { if (d.T <= STEAM.Tsat(d.P) + 0.01) d.T = STEAM.Tsat(d.P) + 0.05; });
+    const o = procOut(th, defs, warn, I.conn);
+    return { out: o.out, massUtil: o.ok && !I.conn ? m : 0, res: decBR(res), warn: decW(warn), plots, duty: Wel * 1000, power: true, eports: { q_out: Wel * 1000 } };
   };
 
   SF.units = { MICROBES, TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn, ponchonSavarit, STEAM, multiEffect };
@@ -10852,6 +10950,18 @@ window.SIMULAFACIL_CONFIG = {
         note: 'As entalpias vêm da água saturada (IAPWS-95) e, no vapor superaquecido, de valores de tabela. Com o condensador acoplado, a saída deixa de ser uma corrente de vapor e passa a ser a energia útil (porta de energia) mais o condensado saturado. Sem o condensador, o vapor segue como corrente material para turbina, processo ou rede de vapor. Os dados dos combustíveis são típicos de literatura, em base úmida.'
       };
     },
+    steam_turbine: () => {
+      const m = s2 => sub(i('ṁ'), s2), h = s2 => sub(i('h'), s2);
+      return {
+        name: 'Turbina a vapor de extração e contrapressão: expansão com eficiência isentrópica e cogeração',
+        eqs: [eq(sub(i('s'), '2s') + ' = ' + sub(i('s'), '1') + ',&nbsp; ' + h('2') + ' = ' + h('1') + ' − ' + i('η') + sub('', 'T') + '(' + h('1') + ' − ' + h('2s') + ')', 'expansão adiabática até a pressão da extração (e depois até a do escape)'),
+          eq(sub(Q, 'eixo') + ' = ' + m('') + '(' + h('1') + ' − ' + h('2') + ') + (1 − ' + i('f') + ')' + m('') + '(' + h('2') + ' − ' + h('3') + ')', 'trabalho no eixo (' + i('f') + ' = fração extraída)'),
+          eq(sub(i('W'), 'el') + ' = ' + i('η') + sub('', 'G') + sub(Q, 'eixo'), 'potência elétrica'),
+          eq(sub(Q, 'proc') + ' = ' + sub(m('ext'), '') + '(' + h('2') + ' − ' + sub(h(''), 'líq,sat') + ') + ' + m('esc') + '(' + h('3') + ' − ' + sub(h(''), 'líq,sat') + ')', 'calor de processo entregue pelo vapor até o líquido saturado')],
+        sym: [[i('η') + sub('', 'T'), 'eficiência isentrópica de cada seção (75 a 85 %)'], [h('2s'), 'entalpia no fim de uma expansão isentrópica'], ['título', 'fração de vapor no escape (abaixo de cerca de 88 % há erosão das pás)']],
+        note: 'As propriedades do vapor superaquecido vêm das equações IAPWS-IF97 (região 2), conferidas com os valores oficiais de verificação. Na celulose, o vapor do gerador de alta pressão passa pela turbina, gera energia elétrica e sai em média e baixa pressão para o processo: é a cogeração.'
+      };
+    },
     causticizing: () => {
       return {
         name: 'Caustificação e forno de cal: do licor verde ao licor branco',
@@ -11272,6 +11382,10 @@ window.SIMULAFACIL_CONFIG = {
       'O gerador de vapor transforma a energia química de um combustível em vapor. Escolha o combustível (cavaco ou casca de eucalipto, casquinha de arroz, bagaço, lenha, carvão, diesel, óleo combustível, gás natural ou GLP) e a classe da caldeira: baixa pressão (10 bar, vapor saturado), média (42 bar, 400 °C) ou alta (85 bar, 480 °C). A água de alimentação entra pela porta da esquerda ou pelos campos.',
       'O cálculo parte da composição elementar do combustível: o ar estequiométrico e o excesso de ar dão a vazão de gases. O balanço de energia fecha o consumo: o calor do combustível menos as perdas (gases, radiação, cinzas e purga) é o calor do vapor. O economizador aquece a água e o pré-aquecedor aquece o ar usando os gases, mas a recuperação é limitada para a chaminé não ficar abaixo da temperatura mínima (condensação ácida).',
       'A saída pode ser vapor direto (corrente material) ou, com o condensador acoplado, a energia útil em MW pela porta de energia mais o condensado saturado e a água de resfriamento necessária. No modo automático, o condensador liga sozinho quando a porta de energia ou a do condensado está ligada no fluxograma. O resultado traz consumo de combustível, eficiência, ar, gases, cinzas, emissão de CO₂ (biomassa conta como neutra) e as perdas.'] },
+    steam_turbine: { ex: ex('cogeracao-biomassa', 'Cogeração a biomassa: gerador de vapor de alta pressão + turbina de extração'), p: [
+      'A turbina a vapor transforma a energia do vapor de alta pressão em eletricidade e entrega vapor de média e baixa pressão ao processo. É a base da cogeração das fábricas de papel e celulose, onde a caldeira de biomassa e a de recuperação alimentam turbinas de contrapressão ou de extração.',
+      'Informe o vapor vivo (pela corrente ligada ao gerador de vapor ou pelos campos), a fração retirada na extração e as pressões de extração e de escape. Cada seção expande o vapor com a eficiência isentrópica escolhida. Com escape em 0,1 bar o equipamento opera em condensação; o título do escape é avisado quando fica abaixo de 88 %.',
+      'O resultado traz a potência elétrica, o consumo específico de vapor (kg/kWh), as vazões e temperaturas da extração e do escape, o calor de processo que cada uma entrega e a relação potência/calor. O gráfico mostra como a potência cai à medida que se extrai mais vapor.'] },
     causticizing: { ex: ex('papel-celulose-fabrica-integrada', 'Papel e celulose: fábrica integrada completa'), p: [
       'O fundido da caldeira, dissolvido em água, forma o licor verde: Na₂S, que já é reagente de cozimento, e Na₂CO₃, que ainda não é. A caustificação converte o carbonato em hidróxido com cal: a cal viva é apagada no próprio licor e o Ca(OH)₂ reage com o Na₂CO₃, dando NaOH e carbonato de cálcio insolúvel (a lama de cal). O licor clarificado é o licor branco, que volta ao digestor. A lama é lavada e calcinada no forno de cal, que regenera a cal viva: é o segundo ciclo fechado do processo kraft.',
       'A reação é de equilíbrio e não se completa: a eficiência de caustificação fica entre 80 e 85 %, e o carbonato que sobra circula como carga morta. O bloco converte essa fração, soma os álcalis do licor branco (efetivo, ativo e total titulável, todos como NaOH), calcula a água para a concentração pedida, a cal em circulação e o combustível do forno de cal. Como a cal se regenera, o saldo do conjunto é Na₂CO₃ + H₂O → 2 NaOH + CO₂.',
@@ -11301,7 +11415,7 @@ window.SIMULAFACIL_CONFIG = {
     blast_furnace: ['ore', 'coke', 'flux', 'blast'], cement_kiln: ['meal', 'fuel', 'air'], silo: ['feed'], thickener: ['feed'], kraft_digester: ['chips', 'white_liquor'],
     crusher: ['feed'], ball_mill: ['feed', 'recycle'], spiral_classifier: ['feed'], hydrocyclone: ['feed'], flotation: ['feed'], flot_col_bench: ['feed'], flot_col_ind: ['feed'],
     coke_oven: ['coal'], sinter_plant: ['ore', 'flux', 'fuel'], bof: ['hot_metal', 'scrap'], caster: ['steel'], rolling_mill: ['billet'], wire_drawing: ['rod'],
-    wood_yard: ['logs'], pulp_washer: ['pulp'], bleach_plant: ['pulp'], paper_machine: ['stock'], recovery_boiler: ['liquor'], causticizing: ['smelt'] };
+    wood_yard: ['logs'], pulp_washer: ['pulp'], bleach_plant: ['pulp'], paper_machine: ['stock'], recovery_boiler: ['liquor'], causticizing: ['smelt'], steam_gen: ['water'], steam_turbine: ['steam'] };
   // portas de energia (correntes de energia): não carregam matéria
   const ENERGY_PORTS = { ei: 1, eo: 1, q_in: 1, q_out: 1, qc: 1, qr: 1, q_pre: 1 };
   const isEnergyPort = p => !!ENERGY_PORTS[p];
@@ -11474,6 +11588,7 @@ window.SIMULAFACIL_CONFIG = {
     paper_machine: { stock: 'massa (polpa)', paper: 'papel', white_water: 'água branca excedente', vapor: 'vapor da secaria' },
     recovery_boiler: { liquor: 'licor negro concentrado', smelt: 'fundido (smelt)', gas: 'gases de combustão' },
     steam_gen: { water: 'água de alimentação', steam: 'vapor produzido', condensate: 'condensado (com condensador)', gas: 'gases de combustão', q_out: 'energia útil do condensador' },
+    steam_turbine: { steam: 'vapor vivo (alta pressão)', extraction: 'vapor de extração (média pressão)', exhaust: 'vapor de escape (baixa pressão)', q_out: 'potência elétrica gerada' },
     causticizing: { smelt: 'fundido (smelt)', white_liquor: 'licor branco', gas: 'CO₂ do forno de cal' },
     biodigester: { feed: 'dejetos (carga diária)', water: 'água de diluição', biogas: 'biogás', digestate: 'biofertilizante (efluente)', q_in: 'aquecimento' },
     centrifuge: { feed: 'alimentação', light: 'fase leve (creme ou óleo degomado)', heavy: 'fase pesada (leite desnatado ou gomas)', sludge: 'lodo', q_in: 'motor' },
@@ -11582,6 +11697,7 @@ window.SIMULAFACIL_CONFIG = {
     paper_machine: { w: 190, h: 100, ports: { stock: P(0, 40, 'l', 'in'), vapor: P(130, 0, 'u', 'out'), paper: P(190, 40, 'r', 'out'), white_water: P(53, 100, 'd', 'out') } },
     recovery_boiler: { w: 120, h: 150, ports: { liquor: P(0, 96, 'l', 'in'), gas: P(120, 12, 'r', 'out'), smelt: P(120, 138, 'r', 'out') } },
     steam_gen: { w: 170, h: 130, ports: { water: P(0, 28, 'l', 'in'), steam: P(75, 0, 'u', 'out'), condensate: P(170, 31, 'r', 'out'), q_out: P(170, 70, 'r', 'eout'), gas: P(170, 92, 'r', 'out') } },
+    steam_turbine: { w: 150, h: 96, ports: { steam: P(0, 40, 'l', 'in'), extraction: P(70, 0, 'u', 'out'), exhaust: P(100, 96, 'd', 'out'), q_out: P(150, 40, 'r', 'eout') } },
     causticizing: { w: 180, h: 110, ports: { smelt: P(0, 20, 'l', 'in'), white_liquor: P(180, 28, 'r', 'out'), gas: P(180, 100, 'r', 'out') } }
   };
 
@@ -11980,6 +12096,10 @@ window.SIMULAFACIL_CONFIG = {
       L([[144, 31], [170, 31]], 'cold'), L([[128, 42], [128, 70], [170, 70]], 'lnd'),
       L([[110, 92], [170, 92]], 'hot'), R(124, 82, 26, 20, 3, 'bodyw'), L([[128, 86], [146, 98]], 'hot'), L([[128, 98], [146, 86]], 'hot'), T(137, 114, 'PA'),
       L([[16, 100], [40, 100]], 'cold'), T(14, 94, 'ar', 'lblb'), L([[75, 130], [75, 116]], 'hot'), T(108, 126, 'combustível')],
+    steam_turbine: () => [ // turbina a vapor: carcaça que se alarga, palhetas, extração intermediária, escape e gerador elétrico
+      L([[0, 40], [30, 40]], 'hot'), Pg([[30, 26], [110, 8], [110, 72], [30, 54]]),
+      L([[45, 29], [45, 51]], 'lnd'), L([[60, 25], [60, 55]], 'lnd'), L([[75, 22], [75, 58]], 'lnd'), L([[90, 18], [90, 62]], 'lnd'), L([[104, 14], [104, 66]], 'lnd'),
+      L([[70, 17], [70, 0]], 'hot'), L([[100, 69], [100, 96]], 'hot'), L([[110, 40], [116, 40]]), C(130, 40, 14, 'bodyb'), T(130, 45, 'G', 'lblb'), L([[144, 40], [150, 40]], 'lnd'), T(70, 92, 'vapor'), T(10, 34, 'vapor vivo')],
     causticizing: () => [ // caustificação e forno de cal: tanque dissolvedor do fundido, apagador e caustificadores agitados, clarificador do licor branco, forno rotativo de cal
       L([[0, 20], [12, 20]]), R(12, 12, 26, 30, 4), L([[38, 30], [52, 30]]),
       R(52, 18, 18, 26, 3), L([[61, 12], [61, 36]]), L([[56, 36], [66, 36]]), L([[70, 30], [76, 30]]), R(76, 18, 18, 26, 3), L([[85, 12], [85, 36]]), L([[80, 36], [90, 36]]), L([[94, 30], [100, 30]]),
@@ -16690,6 +16810,16 @@ def pfr_transiente(P, nome):
         { id: 'EQ', x: 640, y: 135, type: 'energy', name: 'Energia útil', params: { Q: '' } },
         { id: 'PC', x: 640, y: 30, type: 'product', name: 'Condensado' }, { id: 'PG', x: 640, y: 250, type: 'product', name: 'Gases de chaminé' }],
       streams: [S('1', 'FW', 'out', 'GV', 'water', 'Água de alimentação'), S('2', 'GV', 'condensate', 'PC', 'in', 'Condensado'), S('E1', 'GV', 'q_out', 'EQ', 'ei', 'Q'), S('3', 'GV', 'gas', 'PG', 'in', 'Gases')] } },
+    { key: 'cogeracao-biomassa', title: 'Cogeração a biomassa: gerador de vapor a casca e gás (100 bar, 520 °C) com turbina de extração (10 bar) e escape de contrapressão (4,5 bar)', fs: {
+      name: 'Cogeração a biomassa com turbina de extração', components: ['water', 'co2', 'nitrogen', 'oxygen'], model: 'IDEAL',
+      blocks: [
+        { id: 'FW', x: 40, y: 140, type: 'feed', name: 'Água de alimentação', params: { T: 130, P: 1.01325, vf: '', flow: 12.2, flowUnit: 'kg/s', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'GV', x: 230, y: 100, type: 'steam_gen', name: 'Gerador de vapor GV-101 (casca + gás)', params: { fuel: 'Casca de eucalipto (resíduo do pátio de madeira)', fuel2: 'Gás natural', fr2: 20, Pcus: 100, Tcus: 520, TFW: 130, sai: 'Vapor direto (corrente material)' } },
+        { id: 'TV', x: 540, y: 90, type: 'steam_turbine', name: 'Turbina de extração TV-101', params: {} },
+        { id: 'PG', x: 540, y: 300, type: 'product', name: 'Gases de chaminé' }, { id: 'PX', x: 800, y: 40, type: 'product', name: 'Vapor de média pressão (10 bar)' },
+        { id: 'PE', x: 800, y: 230, type: 'product', name: 'Vapor de baixa pressão (4,5 bar)' }, { id: 'EQ', x: 800, y: 140, type: 'energy', name: 'Energia elétrica', params: { Q: '' } }],
+      streams: [S('1', 'FW', 'out', 'GV', 'water', 'Água de alimentação'), S('2', 'GV', 'steam', 'TV', 'steam', 'Vapor vivo'), S('3', 'GV', 'gas', 'PG', 'in', 'Gases'),
+        S('4', 'TV', 'extraction', 'PX', 'in', 'Extração'), S('5', 'TV', 'exhaust', 'PE', 'in', 'Escape'), S('E1', 'TV', 'q_out', 'EQ', 'ei', 'Potência')] } },
     { key: 'cristalizador-msmpr', title: 'Cristalizador contínuo MSMPR: produção, tempo de residência, nucleação e distribuição de tamanhos (soluto genérico)', fs: {
       name: 'Cristalização contínua MSMPR', components: ['water', 'comp-A'], model: 'IDEAL',
       blocks: [
@@ -17261,7 +17391,7 @@ def pfr_transiente(P, nome):
   // blocos sem parâmetros recebem os valores pré-setados da unidade (secador, cristalizador, biorreatores...)
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && !Object.keys(b.params).length) T.params.forEach(f => { if (f.def !== undefined) b.params[f.k] = f.def; }); }));
   // equipamentos contínuos de sólidos e bioprocessos: os campos que o exemplo não informa recebem o valor pré-setado
-  const FILL = /^(evap_cond|filter_plate|filter_rotary|tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|centrifuge|biodigester|pasteurizer|butter_churn|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester|crusher|ball_mill|spiral_classifier|hydrocyclone|flotation|flot_col_|coke_oven|sinter_plant|bof|caster|rolling_mill|wire_drawing|wood_yard|pulp_washer|bleach_plant|paper_machine|recovery_boiler|causticizing|steam_gen|p_precip|daf|act_sludge)/;
+  const FILL = /^(evap_cond|filter_plate|filter_rotary|tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|centrifuge|biodigester|pasteurizer|butter_churn|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester|crusher|ball_mill|spiral_classifier|hydrocyclone|flotation|flot_col_|coke_oven|sinter_plant|bof|caster|rolling_mill|wire_drawing|wood_yard|pulp_washer|bleach_plant|paper_machine|recovery_boiler|causticizing|steam_gen|steam_turbine|p_precip|daf|act_sludge)/;
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && FILL.test(b.type)) T.params.forEach(f => { if (b.params[f.k] === undefined && f.def !== undefined) b.params[f.k] = f.def; }); }));
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -18112,7 +18242,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -18615,9 +18745,13 @@ def pfr_transiente(P, nome):
       ['Perdas e vapor', 'gases a 180 °C, 1 350 kJ/kg no fundido e 3 % de perdas por radiação; o vapor absorve 2 870 kJ/kg (85 bar e 485 °C).']] },
     steam_gen: { ex: 'Gerador de vapor a cavaco de eucalipto (média pressão)', items: [
       ['Correntes', 'entrada opcional de <b>água de alimentação</b> (Água); saídas <b>vapor</b>, <b>condensado</b> (só com o condensador) e <b>gases</b>; porta de energia <b>q_out</b> com a potência do condensador. O combustível e o ar entram pelo equipamento.'],
-      ['Combustível e caldeira', 'escolha o combustível (biomassa, carvão, óleo ou gás) e a classe: baixa (10 bar saturado), média (42 bar, 400 °C) ou alta pressão (85 bar, 480 °C).'],
+      ['Combustível e caldeira', 'escolha o combustível (biomassa, carvão, óleo ou gás) e a classe: baixa (10 bar saturado), média (42 bar, 400 °C) ou alta pressão (85 bar, 480 °C). Para fábricas modernas, digite a <b>pressão</b> (5 a 140 bar) e a <b>temperatura</b> (até 560 °C) do vapor. O <b>combustível secundário</b> faz a queima conjunta (co-firing) com a parcela de energia que você escolher, por exemplo casca de eucalipto com 30 % de gás natural.'],
       ['Condensador', 'vapor direto, condensador acoplado (saída em energia) ou automático, que liga o condensador quando a porta de energia ou a do condensado está ligada.'],
       ['Resultados', 'consumo de combustível, eficiência, ar, gases, cinzas, CO₂, perdas, água de resfriamento e gráficos de calor e de excesso de ar.']] },
+    steam_turbine: { ex: 'Cogeração a biomassa: gerador de vapor de alta pressão + turbina de extração', items: [
+      ['Correntes', 'entrada de <b>vapor vivo</b> (Água, como vapor superaquecido); saídas <b>extração</b> e <b>escape</b>; porta de energia <b>q_out</b> com a potência elétrica.'],
+      ['Seções', 'fração extraída, pressão de extração, pressão de escape (4,5 bar contrapressão; 0,1 bar condensação) e eficiência isentrópica (barra de 80 %).'],
+      ['Resultados', 'potência elétrica, kg de vapor por kWh, calor de processo da extração e do escape, título e gráficos.']] },
     causticizing: { ex: 'Papel e celulose: fábrica integrada completa', items: [
       ['Correntes', 'entrada de <b>fundido</b> (Na₂CO₃, Na₂S e Na₂SO₄); saídas <b>licor branco</b> e <b>CO₂</b> do forno de cal. A água entra pelo equipamento.'],
       ['Caustificação', 'eficiência de 82 % (barra deslizante); licor branco com 115 g/L de álcali efetivo e 1 150 kg/m³, a 85 °C.'],

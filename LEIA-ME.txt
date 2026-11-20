@@ -1,3 +1,42 @@
+SIMULA FÁCIL IA 5.2 – A Fábrica de Chocolate dos Sonhos (20/11/2026)
+=====================================================================
+
+NOVO EXEMPLO, o primeiro da lista e o que abre o programa: "A Fábrica de Chocolate dos Sonhos", uma fábrica de chocolate
+ao leite do cacau à barra a partir de 1 t/h de amêndoas fermentadas e secas: torra, descasque, moinho de cacau (liquor),
+alcalinização com carbonato de potássio (processo holandês), prensa de cacau (manteiga + cacau em pó alcalino com 11 % de
+gordura), mistura com açúcar e leite em pó integral, refinadora de cinco cilindros, conchagem com lecitina e o restante da
+manteiga, temperagem, moldagem e túnel de resfriamento. Saem cerca de 15 mil barras de 100 g por hora e 334 kg/h de cacau em
+pó; a composição do chocolate é conferida com os mínimos do Codex Alimentarius para chocolate ao leite.
+- Abertura animada ao abrir o exemplo (canvas, sem arquivo de vídeo): rio e cachoeira de chocolate, silhueta da fábrica com
+  janelas acesas e chaminés, varal de luzes que piscam devagar (menos de uma vez por segundo, seguro para quem é sensível a
+  luzes), amêndoas de cacau caindo e o título em letras douradas. Botões "Sem música" e "Entrar na fábrica" (ou Esc).
+- Valsa ao piano, composição original (fá maior, 3/4), sintetizada pelo próprio programa com a Web Audio API (sem arquivo de
+  áudio). Toca ao abrir o exemplo e para ao trocar de projeto; no fluxograma, os botões "Tocar/Pausar a valsa" e "Abertura".
+  Por direitos autorais, o programa não usa músicas, nomes nem personagens de filmes.
+- No fluxograma do exemplo, as correntes ficam cor de chocolate e o chocolate "escorre" por elas (animação desligada quando o
+  sistema pede menos movimento).
+
+NOVA CATEGORIA "Chocolate e cacau", com 6 ícones:
+- Torrador contínuo de cacau: amêndoa como corpo de parâmetros concentrados (convecção do ar, secagem de 1ª ordem até a umidade
+  de equilíbrio e perda do ácido acético, com Arrhenius), integrada por Runge-Kutta de 4ª ordem; ar quente com recirculação,
+  queimador, gás natural e rendimento térmico. Gráficos: temperatura da amêndoa, umidade e ácido acético ao longo da torra.
+- Alcalinizador (processo holandês): solução de K₂CO₃ pela corrente ou pela dose; K₂CO₃ + 2 CH₃COOH → 2 CH₃COOK + H₂O + CO₂;
+  secagem até a umidade final; pH estimado por um tampão linear (β ajustável) com as classes de Miller et al. (2008); aviso
+  acima de 5 partes de K₂CO₃ por 100 partes de cacau (base isenta de gordura). Gráfico: pH × dose.
+- Moinho de cacau (nibs → liquor) ou refinadora de cinco cilindros: energia de Rittinger, granulometria de Rosin–Rammler,
+  camisa de água, capacidade da refinadora (Q = ρ·v·L·δ) e número de máquinas; avisos de gordura e de partículas acima de 30 µm.
+- Prensa hidráulica de cacau: curva de prensagem exponencial com constante de tempo inversa à pressão (Darcy), manteiga,
+  torta, tempo e ciclo, capacidade por prensa e número de prensas.
+- Conchadeira: umidade e ácido acético com cinética de 1ª ordem e Arrhenius, ar de ventilação, potência, camisa, número de
+  conchadeiras, lecitina e manteiga na fase líquida e composição em base seca pelo Codex (chocolate ao leite ou amargo).
+- Temperadeira com moldagem e túnel de resfriamento: zonas de fusão, cristalização e reaquecimento com calor sensível e
+  latente, sementes da forma V, túnel (tempo e comprimento), barras por hora e calor retirado. Gráfico do caminho da
+  temperatura com as seis formas cristalinas da manteiga de cacau (Wille e Lutton, 1966).
+- Componentes novos: manteiga de cacau, sólidos de cacau isentos de gordura e casca de cacau (Choi e Okos), carbonato de
+  potássio e acetato de potássio; misturas prontas de amêndoas de cacau, liquor de cacau e leite em pó integral.
+- Site: novidades da 5.2 no início da página, na tela de boas-vindas e nas perguntas frequentes.
+
+
 SIMULA FÁCIL IA 5.1 – cinética e segurança do reator (20/11/2026)
 =================================================================
 

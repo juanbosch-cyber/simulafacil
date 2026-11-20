@@ -37,8 +37,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 5.1 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos e usina nuclear | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 5.1, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 5.2 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, usina nuclear e fábrica de chocolate | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 5.2, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -47,7 +47,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 5.1 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos e usina nuclear">
+<meta property="og:title" content="SIMULA FÁCIL IA 5.2 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, usina nuclear e fábrica de chocolate">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -872,6 +872,43 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
 .food-tab tr.on td { background: rgba(37, 99, 201, .08); font-weight: 600; }
 .food-tab button.mini { padding: 1px 8px; font-size: 12px; line-height: 1.5; }
 
+/* versão 5.2 — exemplo da fábrica de chocolate: correntes com chocolate escorrendo, botões da valsa e abertura animada */
+#pfd.choc { --stream: #7a3e17; }
+:root[data-theme="dark"] #pfd.choc { --stream: #e3a468; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #pfd.choc { --stream: #e3a468; } }
+#pfd.choc .str:not(.sel) { stroke-width: 3; stroke-linecap: round; stroke-dasharray: 18 7; animation: chocFlow 1.4s linear infinite; }
+@keyframes chocFlow { to { stroke-dashoffset: -25; } }
+.choc-ctl { position: absolute; top: 10px; right: 10px; z-index: 6; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; max-width: calc(100% - 20px); }
+.choc-ctl[hidden] { display: none; }
+.choc-ctl button { min-height: var(--tap); padding: 0 14px; border-radius: 999px; border: 1px solid #b07a3c; background: linear-gradient(180deg, #fff4de, #f4d6a2); color: #4a230c; font: 700 14px var(--font); cursor: pointer; box-shadow: 0 2px 8px rgba(74, 35, 12, .18); white-space: nowrap; }
+body.mobile .choc-ctl { top: auto; right: auto; left: 10px; bottom: 12px; }
+body.mobile .choc-ctl button { width: var(--tap); padding: 0; justify-content: center; font-size: 18px; }
+body.mobile .choc-ctl .cc-t { display: none; }
+.choc-ctl button:hover { background: linear-gradient(180deg, #fff8ea, #f7dfb3); }
+.choc-ctl button:focus-visible { outline: 3px solid #e0a12f; outline-offset: 2px; }
+:root[data-theme="dark"] .choc-ctl button { background: linear-gradient(180deg, #4a2610, #2e1608); color: #ffe2b8; border-color: #a8682f; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .choc-ctl button { background: linear-gradient(180deg, #4a2610, #2e1608); color: #ffe2b8; border-color: #a8682f; } }
+.choc-intro { position: fixed; inset: 0; z-index: 10000; background: #160904; overflow: hidden; opacity: 1; transition: opacity .6s ease; }
+.choc-intro.out { opacity: 0; }
+.choc-intro canvas { position: absolute; inset: 0; display: block; }
+.ci-txt { position: absolute; left: 0; right: 0; top: 21%; text-align: center; padding: 0 18px; pointer-events: none; }
+.ci-k { margin: 0 0 12px; font: 600 14px/1.3 var(--font); letter-spacing: .2em; text-transform: uppercase; color: #f3cf9a; opacity: 0; animation: ciIn .9s .3s ease forwards; }
+.ci-txt h2 { margin: 0; font: italic 700 clamp(34px, 7vw, 84px)/1.06 Georgia, "Times New Roman", serif; background: linear-gradient(100deg, #f2c661 0%, #fff3c4 20%, #d9a441 40%, #fff3c4 60%, #f2c661 80%); background-size: 240% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 4px 18px rgba(0, 0, 0, .6)); opacity: 0; transform: scale(.92); animation: ciIn 1.4s 1s ease forwards, ciShine 5s 1.2s linear infinite; }
+.ci-txt h2 em { font-size: .8em; }
+.ci-s { margin: 18px auto 0; max-width: 640px; font: 500 clamp(16px, 2.2vw, 19px)/1.45 var(--font); color: #f8e3c3; opacity: 0; animation: ciIn 1s 2.6s ease forwards; }
+.ci-m { margin: 10px 0 0; font: 600 15px var(--font); color: #f3cf9a; opacity: 0; animation: ciIn 1s 3.6s ease forwards; }
+@keyframes ciIn { to { opacity: 1; transform: none; } }
+@keyframes ciShine { from { background-position: 100% 0; } to { background-position: -140% 0; } }
+.ci-btns { position: absolute; left: 16px; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.ci-btns button { min-height: var(--tap); padding: 0 18px; border-radius: 999px; font: 700 16px var(--font); cursor: pointer; }
+.ci-mute { background: rgba(255, 240, 220, .12); color: #ffe7c4; border: 1px solid rgba(255, 220, 170, .5); }
+.ci-go { background: linear-gradient(180deg, #ffd978, #e5a93a); color: #3a1a06; border: 0; box-shadow: 0 4px 16px rgba(0, 0, 0, .4); }
+.ci-btns button:focus-visible { outline: 3px solid #fff3c4; outline-offset: 3px; }
+.wexc.wexc-choc { --c: #b8742f; background: linear-gradient(135deg, #fff5e2, #f6deb2); }
+:root[data-theme="dark"] .wexc.wexc-choc { background: linear-gradient(135deg, #3b1e0c, #22110a); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wexc.wexc-choc { background: linear-gradient(135deg, #3b1e0c, #22110a); } }
+.wex-new { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 999px; background: #e0a12f; color: #2c1505; font-size: 11px; letter-spacing: .06em; vertical-align: 2px; }
+@media (prefers-reduced-motion: reduce) { #pfd.choc .str:not(.sel) { animation: none; } .ci-k, .ci-txt h2, .ci-s, .ci-m { animation: none; opacity: 1; transform: none; } .choc-intro { transition: none; } }
 </style>
 </head>
 <body>
@@ -893,7 +930,7 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.1</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.2</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -1044,8 +1081,9 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.1</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.2</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
+        <p class="wnew"><span aria-hidden="true">🍫</span> <b>Novo na 5.2:</b> exemplo <b>A Fábrica de Chocolate dos Sonhos</b>, do cacau à barra, com abertura animada e valsa ao piano, e a categoria <b>Chocolate e cacau</b>: <b>torrador</b>, <b>alcalinizador</b> com carbonato de potássio, <b>moinho e refinadora</b>, <b>prensa</b> (manteiga e cacau em pó), <b>conchadeira</b> e <b>temperadeira</b> com túnel de resfriamento</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 5.1:</b> <b>cinética pontual do reator</b> com 6 grupos de nêutrons atrasados e o <b>modelo com moderação de Parreira e Bosch Neto (2022)</b>, validado com o reator TRIGA/UFMG; reatividade, desligamento (SCRAM) e realimentação de temperatura; <b>parada do reator</b> com xenônio-135, calor residual e perda do resfriamento</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 5.0:</b> <b>usina nuclear PWR completa</b> (tipo Angra 2): <b>reator</b> com combustível, recarga, enriquecimento e calor de decaimento, <b>gerador de vapor</b> de tubos em U, <b>separador de umidade e reaquecedor</b>, <b>condensador</b> e <b>desaerador</b>, com água pela IAPWS-IF97, balanço da usina e diagrama T–s</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.9:</b> <b>gerador de vapor</b> (caldeira) com escolha do combustível, da classe de pressão e <b>condensador opcional</b> (saída em vapor ou energética), com consumo de combustível e eficiência</p>
@@ -1215,7 +1253,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
-    version: '5.1',
+    version: '5.2',
     subtitle: 'Simulador de processos químicos e bioprocessos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -2430,6 +2468,8 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'phosphoric-acid', name: 'Ácido fosfórico (soluto não volátil)', formula: 'H3PO4', mw: 97.995, rho: 1885, nv: true, cpl: 145, tags: 'acidulante refrigerante cola bebida INS 338' },
     { id: 'citric-acid', name: 'Ácido cítrico (soluto não volátil)', formula: 'C6H8O7', mw: 192.12, rho: 1665, nv: true, cpl: 226, tags: 'acidulante refrigerante guaraná suco energético bebida INS 330' },
     { id: 'taurine', name: 'Taurina (soluto não volátil)', formula: 'C2H7NO3S', mw: 125.15, rho: 1734, nv: true, cpl: 150, tags: 'energético bebida aminoácido' },
+    { id: 'k2co3', name: 'Carbonato de potássio (soluto não volátil, álcali do cacau)', formula: 'K2CO3', mw: 138.205, rho: 2430, nv: true, cpl: 114.4, tags: 'álcali alcalinização cacau processo holandês potássio carbonato chocolate' },
+    { id: 'potassium-acetate', name: 'Acetato de potássio (soluto não volátil)', formula: 'CH3COOK', mw: 98.142, rho: 1570, nv: true, cpl: 110, tags: 'sal acetato potássio cacau alcalinização' },
     { id: 'biomass', name: 'Biomassa: células (CH1,8O0,5N0,2)', formula: 'CH1.8O0.5N0.2', mw: 24.62, rho: 1100, solid: true, cpl: 37 },
     { id: 'aluminium-sulfate', name: 'Sulfato de alumínio (coagulante, soluto não volátil)', formula: 'Al2(SO4)3', mw: 342.15, rho: 2710, nv: true, cpl: 259, tags: 'coagulante tratamento efluente ete wwtp fósforo precipitação' },
     { id: 'sulfuric-acid', name: 'Ácido sulfúrico (soluto não volátil)', formula: 'H2SO4', mw: 98.079, rho: 1830, nv: true, cpl: 138.9, tags: 'ácido acidez tratamento efluente ete' },
@@ -2542,7 +2582,10 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'milk-snf', name: 'Sólidos não gordurosos do leite (proteína, lactose e minerais)', formula: 'SNG', nome: 'Sólidos não gordurosos do leite', dry: { p: 36.5, c: 55.7, a: 7.8 }, tags: 'leite extrato seco desengordurado proteína lactose laticínio alimento' },
     { id: 'lecithin', name: 'Fosfolipídios: lecitina de soja (gomas do óleo)', formula: 'C42H80NO8P', mw: 758.1, nome: 'Lecitina de soja', dry: { f: 1 }, tags: 'soja óleo degomagem gomas fosfatídeos lecitina alimento' },
     { id: 'drink-extract', name: 'Extrato seco de bebidas (açúcares do malte, dextrinas, proteínas e minerais)', formula: 'EXT', nome: 'Extrato de bebidas', dry: { p: 6, c: 90, a: 4 }, tags: 'bebida cerveja mosto malte extrato plato vinho' },
-    { id: 'starch', name: 'Amido e dextrinas (malte, milho, mandioca; por unidade de glicose)', formula: 'C6H10O5', mw: 162.14, nome: 'Amido e dextrinas', dry: { c: 1 }, tags: 'amido dextrina malte mostura cerveja milho mandioca hidrólise' }
+    { id: 'starch', name: 'Amido e dextrinas (malte, milho, mandioca; por unidade de glicose)', formula: 'C6H10O5', mw: 162.14, nome: 'Amido e dextrinas', dry: { c: 1 }, tags: 'amido dextrina malte mostura cerveja milho mandioca hidrólise' },
+    { id: 'cocoa-butter', name: 'Manteiga de cacau (gordura do cacau: triglicerídeos POS, SOS e POP)', formula: 'MC', mw: 860, nome: 'Manteiga de cacau', dry: { f: 1 }, tags: 'cacau chocolate manteiga gordura temperagem prensa alimento' },
+    { id: 'cocoa-solids', name: 'Sólidos de cacau isentos de gordura (proteínas, fibras, amido, polifenóis e minerais)', formula: 'SIG', nome: 'Sólidos de cacau isentos de gordura', dry: { p: 19.6, c: 20.9, fi: 37, a: 5.8 }, tags: 'cacau chocolate nibs liquor torta cacau em pó alimento' },
+    { id: 'cocoa-shell', name: 'Casca de cacau (fibras)', formula: 'CASCA', nome: 'Casca de cacau', dry: { p: 16, f: 3, c: 12, fi: 59, a: 10 }, tags: 'cacau casca amêndoa descasque fibra alimento' }
   ].forEach(q => {
     const s = FOOD_KEYS.reduce((a, k) => a + (q.dry[k] || 0), 0), dry = {}; FOOD_KEYS.forEach(k => { dry[k] = (q.dry[k] || 0) / s; });
     const pS = choiOkos(dry, 25), mw = q.mw || 100;
@@ -2558,7 +2601,10 @@ window.SIMULAFACIL_CONFIG = {
     { nome: 'Leite cru integral (água + gordura + sólidos não gordurosos)', comp: { water: 0.8773, 'milk-fat': 0.035, 'milk-snf': 0.0877 } },
     { nome: 'Creme de leite (40 % de gordura)', comp: { water: 0.5455, 'milk-fat': 0.40, 'milk-snf': 0.0545 } },
     { nome: 'Leite desnatado (água + gordura + sólidos não gordurosos)', comp: { water: 0.9085, 'milk-fat': 0.0005, 'milk-snf': 0.091 } },
-    { nome: 'Óleo de soja bruto (óleo + fosfolipídios + umidade)', comp: { 'soy-oil': 0.972, lecithin: 0.025, water: 0.003 } }
+    { nome: 'Óleo de soja bruto (óleo + fosfolipídios + umidade)', comp: { 'soy-oil': 0.972, lecithin: 0.025, water: 0.003 } },
+    { nome: 'Amêndoas de cacau fermentadas e secas (umidade, ácido acético, manteiga, sólidos e casca)', comp: { water: 0.07, 'acetic-acid': 0.006, 'cocoa-butter': 0.44, 'cocoa-solids': 0.364, 'cocoa-shell': 0.12 } },
+    { nome: 'Liquor de cacau (massa de cacau com 54 % de gordura)', comp: { water: 0.015, 'acetic-acid': 0.003, 'cocoa-butter': 0.54, 'cocoa-solids': 0.437, 'cocoa-shell': 0.005 } },
+    { nome: 'Leite em pó integral (água + gordura + sólidos não gordurosos)', comp: { water: 0.025, 'milk-fat': 0.267, 'milk-snf': 0.708 } }
   ];
   // bebidas: dados por litro (rótulos e literatura) → composição mássica com água, etanol, açúcar, extrato, CO₂, cafeína e acidulantes
   // alc = teor alcoólico (% v/v a 20 °C), acu = açúcares (sacarose, g/L), ext = extrato (g/L), co2 (g/L), caf (mg/L), fos = ácido fosfórico, cit = ácido cítrico, tau = taurina (g/L), rho (kg/L)
@@ -3580,6 +3626,7 @@ window.SIMULAFACIL_CONFIG = {
   // versão 4.5: mineração, siderurgia integrada e papel e celulose
   const SEMG = ' (só se a corrente não trouxer a granulometria de um equipamento anterior)';
   const BR_JAW = 'britador de mandíbulas (primário)', BR_GYR = 'britador giratório (primário)', BR_CONE = 'britador cônico (secundário ou terciário)';
+  const CH_NIBS = 'moinho de nibs (pinos + bolas): nibs → liquor de cacau', CH_REF = 'refinadora de cinco cilindros: massa → chocolate fino';
   const FL_REV = 'reversa: a ganga flota e o mineral útil afunda (minério de ferro, com amina e amido)', FL_DIR = 'direta: o mineral útil flota (sulfetos com xantato, fosfato com ácido graxo)';
   /* ---- versão 4.8: colunas de flotação (bancada em batelada e industrial contínua) ----
      bancos de misturas minerais, coletores e depressores. Valores didáticos de literatura (Wills; Fuerstenau; Bulatovic; Finch e Dobby;
@@ -4813,7 +4860,83 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'exc', label: 'Excesso de cal sobre o estequiométrico', u: '%', def: 5 },
       { k: 'qK', label: 'Consumo de calor do forno de cal', u: 'GJ/t de CaO', def: 6.0 },
       { k: 'LHV', label: 'Poder calorífico inferior do combustível do forno (gás natural)', u: 'MJ/kg', def: 47 },
-      { k: 'Tkg', label: 'Temperatura do CO₂ e dos gases na saída do forno de cal', u: '°C', def: 250 }] }
+      { k: 'Tkg', label: 'Temperatura do CO₂ e dos gases na saída do forno de cal', u: '°C', def: 250 }] },
+    cocoa_roaster: { label: 'Torrador contínuo de cacau (ar quente): aquecimento das amêndoas, perda de umidade e de ácido acético, ar e queimador', cat: 'Chocolate e cacau', ins: ['feed'], outs: ['product', 'vapor'], eins: ['q_in'], params: [
+      { k: 'Ta', label: 'Temperatura do ar quente na entrada', u: '°C', type: 'range', min: 100, max: 250, step: 1, def: 150 },
+      { k: 'tr', label: 'Tempo de torra (residência no torrador)', u: 'min', type: 'range', min: 5, max: 60, step: 0.5, def: 25 },
+      { k: 'h', label: 'Coeficiente efetivo de convecção ar–amêndoa (leito em movimento)', u: 'W/(m²·K)', def: 8 },
+      { k: 'd', label: 'Diâmetro equivalente da amêndoa (esfera de mesmo volume)', u: 'mm', def: 12 },
+      { k: 'rhoB', label: 'Massa específica da amêndoa', u: 'kg/m³', def: 1050 },
+      { k: 'kw', label: 'Constante de secagem k_w a 120 °C', u: '1/min', def: 0.12 },
+      { k: 'Ew', label: 'Energia de ativação da secagem', u: 'kJ/mol', def: 30 },
+      { k: 'Xe', label: 'Umidade de equilíbrio (base úmida)', u: '%', def: 1 },
+      { k: 'ka', label: 'Constante de perda do ácido acético k_a a 120 °C', u: '1/min', def: 0.03 },
+      { k: 'Ea', label: 'Energia de ativação da perda do ácido acético', u: 'kJ/mol', def: 40 },
+      { k: 'Tao', label: 'Temperatura do ar na saída do torrador', u: '°C', def: 110 },
+      { k: 'Tamb', label: 'Temperatura do ar ambiente, antes do queimador', u: '°C', def: 25 },
+      { k: 'Hin', label: 'Umidade absoluta do ar ambiente', u: 'kg água/kg ar seco', def: 0.012 },
+      { k: 'rec', label: 'Fração do ar de exaustão que volta ao queimador (recirculação)', u: '0–1', def: 0.6 },
+      { k: 'eta', label: 'Rendimento do queimador e do isolamento do torrador', u: '0–1', def: 0.85 }] },
+    cocoa_alkalizer: { label: 'Alcalinizador de cacau (processo holandês): carbonato de potássio neutraliza os ácidos, escurece o cacau; pH e secagem', cat: 'Chocolate e cacau', ins: ['feed', 'alkali'], outs: ['product', 'vapor'], eins: ['q_in'], params: [
+      { k: 'dose', label: 'K₂CO₃ adicionado, sobre a matéria isenta de gordura' + SEMC, u: '%', def: 2.5 },
+      { k: 'wsol', label: 'Concentração da solução de K₂CO₃' + SEMC, u: '% m/m', def: 40 },
+      { k: 'Tr', label: 'Temperatura de alcalinização', u: '°C', type: 'range', min: 60, max: 130, step: 1, def: 100 },
+      { k: 'tr', label: 'Tempo de reação', u: 'min', def: 60 },
+      { k: 'Xf', label: 'Umidade final do liquor alcalinizado (a água é evaporada)', u: '%', def: 1.5 },
+      { k: 'pH0', label: 'pH do cacau natural', u: '', def: 5.5 },
+      { k: 'beta', label: 'Capacidade tampão do cacau β (ajuste com o laboratório)', u: 'eq/(kg·pH)', def: 0.2 }] },
+    cocoa_mill: { label: 'Moinho de cacau (nibs → liquor) ou refinadora de cinco cilindros (massa → chocolate fino): energia de Rittinger, granulometria e capacidade', cat: 'Chocolate e cacau', ins: ['feed'], outs: ['product'], eins: ['q_in'], params: [
+      { k: 'mode', label: 'Equipamento', type: 'select', options: [CH_NIBS, CH_REF], def: CH_NIBS },
+      { k: 'x1n', label: 'Tamanho dos nibs na alimentação (x₉₀)', u: 'µm', def: 3000, when: q => q.mode !== CH_REF },
+      { k: 'x2n', label: 'Tamanho das partículas no liquor (x₉₀)', u: 'µm', def: 35, when: q => q.mode !== CH_REF },
+      { k: 'CRn', label: 'Constante de Rittinger dos nibs', u: 'kWh·µm/t', def: 1200, when: q => q.mode !== CH_REF },
+      { k: 'Tn', label: 'Temperatura do liquor na saída (camisa de água)', u: '°C', def: 70, when: q => q.mode !== CH_REF },
+      { k: 'x1r', label: 'Tamanho das partículas na massa de entrada (x₉₀)', u: 'µm', def: 120, when: q => q.mode === CH_REF },
+      { k: 'x2r', label: 'Tamanho das partículas no chocolate refinado (x₉₀)', u: 'µm', type: 'range', min: 10, max: 40, step: 0.5, def: 22, when: q => q.mode === CH_REF },
+      { k: 'CRr', label: 'Constante de Rittinger da massa de chocolate', u: 'kWh·µm/t', def: 700, when: q => q.mode === CH_REF },
+      { k: 'Tr', label: 'Temperatura das lâminas na saída (água nos cilindros)', u: '°C', def: 40, when: q => q.mode === CH_REF },
+      { k: 'L', label: 'Comprimento dos cilindros', u: 'm', def: 1.8, when: q => q.mode === CH_REF },
+      { k: 'Dr', label: 'Diâmetro dos cilindros', u: 'm', def: 0.4, when: q => q.mode === CH_REF },
+      { k: 'N', label: 'Rotação do último cilindro', u: 'rpm', type: 'range', min: 100, max: 600, step: 5, def: 400, when: q => q.mode === CH_REF },
+      { k: 'rhoF', label: 'Massa específica do filme de chocolate', u: 'kg/m³', def: 1300, when: q => q.mode === CH_REF },
+      { k: 'nRR', label: 'Módulo de Rosin–Rammler da granulometria', u: '', def: 1.2 },
+      { k: 'eta', label: 'Rendimento do motor', u: '0–1', def: 0.9 }] },
+    cocoa_press: { label: 'Prensa hidráulica de cacau: liquor → manteiga de cacau + torta (cacau em pó); tempo de prensagem, potes e capacidade', cat: 'Chocolate e cacau', ins: ['feed'], outs: ['butter', 'cake'], params: [
+      { k: 'fc', label: 'Gordura que fica na torta (cacau em pó)', u: '%', type: 'range', min: 9, max: 26, step: 0.5, def: 11 },
+      { k: 'Pp', label: 'Pressão de prensagem', u: 'bar', type: 'range', min: 200, max: 900, step: 10, def: 600 },
+      { k: 'tau', label: 'Constante de tempo da prensagem τ_ref a 600 bar', u: 'min', def: 4 },
+      { k: 'finf', label: 'Gordura residual no limite de tempo longo f∞', u: '%', def: 8 },
+      { k: 'Np', label: 'Número de potes por prensa', u: '', def: 14 },
+      { k: 'mp', label: 'Carga de liquor por pote', u: 'kg', def: 12 },
+      { k: 'tl', label: 'Tempo de carga e descarga por ciclo', u: 'min', def: 4 }] },
+    conche: { label: 'Conchadeira: retira umidade e ácido acético, envolve as partículas com a manteiga; lecitina e manteiga no fim; Codex', cat: 'Chocolate e cacau', ins: ['feed', 'fat', 'emulsifier'], outs: ['product', 'vapor'], eins: ['q_in'], params: [
+      { k: 'Tc', label: 'Temperatura de conchagem', u: '°C', type: 'range', min: 40, max: 95, step: 1, def: 70 },
+      { k: 'tc', label: 'Tempo de conchagem', u: 'h', type: 'range', min: 1, max: 24, step: 0.5, def: 8 },
+      { k: 'kw', label: 'Constante de secagem k_w a 70 °C', u: '1/h', def: 0.3 },
+      { k: 'Ew', label: 'Energia de ativação da secagem', u: 'kJ/mol', def: 40 },
+      { k: 'Xe', label: 'Umidade de equilíbrio do chocolate', u: '%', def: 0.5 },
+      { k: 'ka', label: 'Constante de perda do ácido acético k_a a 70 °C', u: '1/h', def: 0.09 },
+      { k: 'Ea', label: 'Energia de ativação da perda do ácido acético', u: 'kJ/mol', def: 40 },
+      { k: 'ecs', label: 'Energia específica de mistura (depende da conchadeira)', u: 'kWh/t', def: 80 },
+      { k: 'cap', label: 'Capacidade de cada conchadeira (batelada)', u: 't', def: 6 },
+      { k: 'tlc', label: 'Tempo de carga e descarga', u: 'h', def: 1 },
+      { k: 'Hin', label: 'Umidade absoluta do ar de ventilação na entrada', u: 'kg/kg', def: 0.008 },
+      { k: 'Hout', label: 'Umidade absoluta do ar na saída', u: 'kg/kg', def: 0.02 }] },
+    temperer: { label: 'Temperadeira (pré-cristalização da forma V), moldagem e túnel de resfriamento: zonas, calor latente e formas cristalinas', cat: 'Chocolate e cacau', ins: ['feed'], outs: ['product'], eouts: ['q_out'], params: [
+      { k: 'T1', label: 'Zona 1: fusão de todos os cristais', u: '°C', def: 45 },
+      { k: 'T2', label: 'Zona 2: resfriamento (formação dos cristais)', u: '°C', type: 'range', min: 22, max: 31, step: 0.1, def: 27 },
+      { k: 'T3', label: 'Zona 3: reaquecimento (funde as formas instáveis)', u: '°C', type: 'range', min: 26, max: 34, step: 0.1, def: 29.5 },
+      { k: 'f2', label: 'Gordura cristalizada na zona 2', u: '%', def: 4 },
+      { k: 'fs', label: 'Sementes da forma V que restam na zona 3', u: '% da gordura', def: 2 },
+      { k: 'dH', label: 'Calor latente de cristalização da manteiga de cacau (forma V, aproximado)', u: 'kJ/kg', def: 150 },
+      { k: 'tunnel', label: 'Depois da temperagem', type: 'select', options: ['com moldagem e túnel de resfriamento', 'só temperagem (chocolate líquido temperado)'], def: 'com moldagem e túnel de resfriamento' },
+      { k: 'Tt', label: 'Temperatura do ar do túnel', u: '°C', def: 12, when: q => !/^só/.test(q.tunnel || '') },
+      { k: 'Tf', label: 'Temperatura das barras na saída do túnel', u: '°C', def: 16, when: q => !/^só/.test(q.tunnel || '') },
+      { k: 'fcr', label: 'Gordura cristalizada nas barras na saída', u: '%', def: 70, when: q => !/^só/.test(q.tunnel || '') },
+      { k: 'mb', label: 'Massa de cada barra', u: 'g', def: 100, when: q => !/^só/.test(q.tunnel || '') },
+      { k: 'e', label: 'Espessura da barra', u: 'mm', def: 8, when: q => !/^só/.test(q.tunnel || '') },
+      { k: 'hT', label: 'Coeficiente de convecção no túnel', u: 'W/(m²·K)', def: 20, when: q => !/^só/.test(q.tunnel || '') },
+      { k: 'vb', label: 'Velocidade da esteira de moldes', u: 'm/min', def: 1.5, when: q => !/^só/.test(q.tunnel || '') }] }
   };
   Object.keys(TYPES).forEach(k => { TYPES[k].type = k; });
 
@@ -10627,6 +10750,351 @@ window.SIMULAFACIL_CONFIG = {
     return { out: {}, res: decBR(decK(res)), warn: decW(warn), plots, massUtil: 0 };
   };
 
+  /* ================================================================== versão 5.2: fábrica de chocolate (do cacau à barra)
+     Torrador de cacau, alcalinizador (processo holandês, K₂CO₃), moinho de cacau e refinadora de cinco cilindros, prensa de cacau
+     (manteiga + torta), conchadeira e temperadeira com moldagem e túnel de resfriamento. Calor específico dos sólidos pelo modelo de
+     Choi e Okos (1986); formas cristalinas da manteiga de cacau de Wille e Lutton (1966); composição mínima do Codex Alimentarius. */
+  const CH_FAT = ['cocoa-butter', 'milk-fat', 'lecithin', 'soy-oil'];
+  const CH_FORMS = [['I', 17.3], ['II', 23.3], ['III', 25.5], ['IV', 27.5], ['V', 33.8], ['VI', 36.3]];
+  // calor específico da mistura (kJ/(kg·K)), média mássica: água, ácido acético, alimentos (Choi e Okos) e sais
+  function chCp(th, kg, Tc) {
+    let m = 0, q = 0;
+    for (let i = 0; i < th.n; i++) {
+      const w = kg[i]; if (!(w > 0)) continue; const c = th.c[i]; let cp;
+      if (c.id === 'water') cp = 4.18; else if (c.id === 'acetic-acid') cp = 2.05;
+      else if (c.food && c.food.dryComp && TH.choiOkos) cp = TH.choiOkos(c.food.dryComp, Tc).cp;
+      else if (c.nv || c.solid) cp = (c.cpl || 150) / c.mw; else cp = 1.0;
+      m += w; q += w * cp;
+    }
+    return m > 0 ? q / m : 2;
+  }
+  const chHeat = (th, kg, T1, T2) => sum(kg) * chCp(th, kg, (T1 + T2) / 2) * (T2 - T1) / 3600;   // kW para aquecer de T1 a T2 (°C)
+  const chIdx = (th, id) => th.ids.indexOf(id);
+  const chG = (th, kg, id) => { const i = chIdx(th, id); return i >= 0 ? kg[i] : 0; };
+  const chFat = (th, kg) => CH_FAT.reduce((a, id) => a + chG(th, kg, id), 0);
+  const chOut = (th, kg, Tc, P) => mkStream(th, flowsOfKg(th, kg), C2K(Tc), P);
+  const chPct = (a, b) => (b > 0 ? 100 * a / b : 0);
+  const chArr = (k, E, T, Tref) => k * Math.exp(-E / R * (1 / C2K(T) - 1 / C2K(Tref)));   // constante de Arrhenius referida a Tref (°C)
+  // integração de Runge-Kutta de 4ª ordem com passo fixo; guarda ~200 pontos para os gráficos
+  function chRK4(f, y0, tEnd, n) {
+    const h = tEnd / n, ts = [0], ys = [y0.slice()], every = Math.max(1, Math.round(n / 200)); let y = y0.slice();
+    for (let k = 0; k < n; k++) {
+      const k1 = f(y), y2 = y.map((v, j) => v + h / 2 * k1[j]), k2 = f(y2), y3 = y.map((v, j) => v + h / 2 * k2[j]), k3 = f(y3), y4 = y.map((v, j) => v + h * k3[j]), k4 = f(y4);
+      y = y.map((v, j) => v + h / 6 * (k1[j] + 2 * k2[j] + 2 * k3[j] + k4[j]));
+      if ((k + 1) % every === 0 || k === n - 1) { ts.push((k + 1) * h); ys.push(y.slice()); }
+    }
+    return { ts, ys, y };
+  }
+  // ar úmido de exaustão (ar seco Ga em kg/h + umidade Hin·Ga + água evaporada E + ácido acético Ea)
+  function chAir(th, Ga, Hin, E, Ea, Tc, warn) {
+    const split = airSplit(th), iw = chIdx(th, 'water'), ia = chIdx(th, 'acetic-acid');
+    const kg = split ? split(Ga) : new Array(th.n).fill(0);
+    if (!split) warn.push('sem o componente ar na lista (Air, do banco ChemSep): a exaustão leva só os vapores retirados');
+    kg[iw] += (split ? Hin * Ga : 0) + E; if (ia >= 0) kg[ia] += Ea;
+    return { s: chOut(th, kg, Tc, 101325), util: split ? Ga * (1 + Hin) / 3600 : 0 };
+  }
+
+  /* torrador contínuo de cacau (ar quente): modelo de parâmetros concentrados para uma amêndoa, por kg de matéria seca
+     (c_p,s + X·c_p,w + A·c_p,a)·dT/dt = h·a_s·(T_ar − T) − λ(T)·r_w − λ_a·r_a;  dX/dt = −r_w = −k_w(T)·(X − X_e);  dA/dt = −r_a = −k_a(T)·A */
+  IMPL.cocoa_roaster = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed;
+    if (!connected(s)) throw new Error('conecte a corrente de amêndoas de cacau');
+    const iw = chIdx(th, 'water'), ia = chIdx(th, 'acetic-acid');
+    if (iw < 0) throw new Error('inclua a água entre os componentes (é a umidade das amêndoas)');
+    const kg = kgOf(th, s), M = sum(kg), W0 = kg[iw], A0 = ia >= 0 ? kg[ia] : 0, D = M - W0 - A0, Tin = K2C(s.T);
+    if (!(D > 0)) throw new Error('as amêndoas não têm matéria seca');
+    if (ia < 0) warn.push('sem o ácido acético na lista: o torrador calcula só a secagem (inclua "Ácido acético" para acompanhar a acidez volátil)');
+    const Ta = num(p.Ta, 150), tr = num(p.tr, 25), h = num(p.h, 8), d = num(p.d, 12) / 1000, rho = num(p.rhoB, 1050);
+    const kw = num(p.kw, 0.12) / 60, Ew = num(p.Ew, 30) * 1000, Xe = num(p.Xe, 1) / 100, ka = num(p.ka, 0.03) / 60, Ea = num(p.Ea, 40) * 1000;
+    const Tao = num(p.Tao, 110), Tamb = num(p.Tamb, 25), Hin = num(p.Hin, 0.012), eta = clamp(num(p.eta, 0.85), 0.2, 1), rec = clamp(num(p.rec, 0.6), 0, 0.95);
+    if (!(tr > 0 && h > 0 && d > 0 && rho > 0)) throw new Error('tempo, coeficiente de convecção, diâmetro e massa específica devem ser positivos');
+    if (!(Xe >= 0 && Xe < W0 / M)) throw new Error('a umidade de equilíbrio deve ficar entre 0 e a umidade da alimentação (' + chPct(W0, M).toFixed(1) + ' %)');
+    if (!(Tao < Ta && Tao > Tamb)) throw new Error('a temperatura do ar na saída deve ficar entre a do ambiente e a do ar quente');
+    if (Ta < 110 || Ta > 250) warn.push('ar a ' + Ta + ' °C: torradores de cacau usam ar de 110 a 250 °C (amêndoas de 120 a 140 °C)');
+    const kgD = kg.map((m, i) => (i === iw || i === ia ? 0 : m)), cpD = chCp(th, kgD, 80);
+    const mB = rho * Math.PI * d * d * d / 6, aS = Math.PI * d * d / (mB * D / M), XeD = Xe / (1 - Xe);   // m² por kg de matéria seca
+    const lam = T => 2501 - 2.37 * T, lamA = 395;
+    const f = y => {
+      const T = y[0], rw = chArr(kw, Ew, T, 120) * Math.max(0, y[1] - XeD), ra = chArr(ka, Ea, T, 120) * Math.max(0, y[2]);
+      return [(h * aS * (Ta - T) / 1000 - lam(T) * rw - lamA * ra) / (cpD + 4.18 * y[1] + 2.05 * y[2]), -rw, -ra];
+    };
+    const sim = chRK4(f, [Tin, W0 / D, A0 / D], tr * 60, Math.max(600, Math.round(tr * 60)));
+    const Tout = sim.y[0], Wf = sim.y[1] * D, Af = sim.y[2] * D, Ew_ = W0 - Wf, Ea_ = A0 - Af;
+    if (Tout < 115) warn.push('as amêndoas saem a ' + Tout.toFixed(0) + ' °C: abaixo de 115 °C a torra fica fraca (pouco sabor e ácido acético alto); aumente o tempo ou a temperatura do ar');
+    if (Tout > 145) warn.push('as amêndoas saem a ' + Tout.toFixed(0) + ' °C: acima de cerca de 140 °C o cacau queima e a manteiga escurece');
+    // calor para as amêndoas: aquecimento + evaporação da água e do ácido (vapores saem na temperatura do ar de exaustão)
+    const kgP = kgD.slice(); kgP[iw] = Wf; if (ia >= 0) kgP[ia] = Af;
+    const Qb = chHeat(th, kgP, Tin, Tout) + Ew_ * (2501 + 1.88 * Tao - 4.18 * Tin) / 3600 + Ea_ * (lamA + 2.05 * (Tao - Tin)) / 3600;   // kW
+    const cpH = 1.005 + 1.88 * Hin, Ga = Qb * 3600 / (cpH * (Ta - Tao)), Gv = (1 - rec) * Ga, Hout = Hin + Ew_ / Gv;
+    const Qq = Ga * cpH * ((1 - rec) * (Ta - Tamb) + rec * (Ta - Tao)) / 3600 / eta;   // o queimador reaquece o ar recirculado e o ar novo
+    const ex = chAir(th, Gv, Hin, Ew_, Ea_, Tao, warn);
+    const out = { product: chOut(th, kgP, Tout, s.P), vapor: ex.s };
+    const pw = v => chPct(v, sum(kgP));
+    const res = [{ k: 'Amêndoas na entrada', v: M.toFixed(1) + ' kg/h com ' + chPct(W0, M).toFixed(2) + ' % de umidade e ' + chPct(A0, M).toFixed(2) + ' % de ácido acético, a ' + Tin.toFixed(1) + ' °C', u: '' },
+      { k: 'Amêndoas torradas na saída', v: sum(kgP).toFixed(1) + ' kg/h a ' + Tout.toFixed(1) + ' °C, com ' + pw(Wf).toFixed(2) + ' % de umidade e ' + pw(Af).toFixed(3) + ' % de ácido acético', u: '' },
+      { k: 'Água evaporada / ácido acético retirado', v: Ew_.toFixed(2) + ' / ' + Ea_.toFixed(3) + ' kg/h (' + chPct(Ea_, A0).toFixed(0) + ' % da acidez volátil)', u: '' },
+      { k: 'Constante de tempo do aquecimento (c_p/(h·a_s))', v: +(cpD * 1000 / (h * aS) / 60).toFixed(2), u: 'min' },
+      { k: 'Área por kg de matéria seca (amêndoa de ' + br(d * 1000) + ' mm)', v: +aS.toFixed(3), u: 'm²/kg' },
+      { k: 'Calor recebido pelas amêndoas (aquecimento + evaporação)', v: +Qb.toFixed(2), u: 'kW' },
+      { k: 'Ar quente: circulação / ar novo e exaustão (' + br(Math.round(rec * 100)) + ' % recirculado)', v: Ga.toFixed(0) + ' / ' + Gv.toFixed(0) + ' kg/h de ar seco; umidade na exaustão ' + Hout.toFixed(4) + ' kg/kg', u: '' },
+      { k: 'Queimador (aquece o ar até ' + br(Ta) + ' °C, rendimento ' + br(eta) + ')', v: Qq.toFixed(1) + ' kW (' + (Qq * 3.6 / 36).toFixed(2) + ' Nm³/h de gás natural, PCI ≈ 36 MJ/Nm³)', u: '' },
+      { k: 'Rendimento térmico do torrador (calor útil / queimador)', v: chPct(Qb, Qq).toFixed(1), u: '%' },
+      { k: 'Consumo específico', v: +(Qq * 3600 / M).toFixed(0), u: 'kJ/kg de amêndoas' }];
+    const tm = sim.ts.map(t => t / 60);
+    const plots = [{ kind: 'curves', title: 'Torra: temperatura da amêndoa ao longo do tempo', data: { xLabel: 'Tempo (min)', yLabel: 'Temperatura (°C)', xRange: [0, tr], series: [
+        { name: 'Amêndoa', x: tm, y: sim.ys.map(y => y[0]), color: '#8b4513', width: 3.5 },
+        { name: 'Saída: ' + Tout.toFixed(0) + ' °C', x: [tr], y: [Tout], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }],
+        hlines: [{ y: Ta, name: 'Ar quente (' + br(Ta) + ' °C)', color: '#d1302b' }, { y: 120, name: 'Início da torra (≈ 120 °C)', color: '#e8a317' }] } },
+      { kind: 'curves', title: 'Torra: umidade e ácido acético da amêndoa', data: { xLabel: 'Tempo (min)', yLabel: '% em base úmida', xRange: [0, tr], series: [
+        { name: 'Umidade (%)', x: tm, y: sim.ys.map(y => 100 * y[1] / (1 + y[1] + y[2])), color: '#2563c9', width: 3.5 },
+        { name: 'Ácido acético × 10 (%)', x: tm, y: sim.ys.map(y => 1000 * y[2] / (1 + y[1] + y[2])), color: '#7a3db8', width: 3, dash: 'dash' }],
+        hlines: [{ y: Xe * 100, name: 'Umidade de equilíbrio (' + br(Xe * 100) + ' %)', color: '#8a8f98' }] } }];
+    return { out, duty: Qq * 1000, massUtil: ex.util, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* alcalinizador (processo holandês): liquor + solução de K₂CO₃ a 80–120 °C, depois a água é evaporada
+     K₂CO₃ + 2 CH₃COOH → 2 CH₃COOK + H₂O + CO₂; pH estimado por um tampão linear: pH = pH₀ + 2·n(K₂CO₃)/(β·m_isenta de gordura) */
+  IMPL.cocoa_alkalizer = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, sa = ins && ins.alkali;
+    if (!connected(s)) throw new Error('conecte a corrente de liquor de cacau (ou de nibs)');
+    const iK = chIdx(th, 'k2co3'), iKA = chIdx(th, 'potassium-acetate'), iC = chIdx(th, 'co2'), iw = chIdx(th, 'water'), ia = chIdx(th, 'acetic-acid');
+    if (iK < 0 || iKA < 0 || iC < 0 || iw < 0) throw new Error('inclua os componentes água, "Carbonato de potássio", "Acetato de potássio" e dióxido de carbono');
+    const kg = kgOf(th, s), Mf = sum(kg), Tin = K2C(s.T);
+    const fat = chFat(th, kg), FF = Mf - fat - kg[iw] - (ia >= 0 ? kg[ia] : 0) - kg[iK] - kg[iKA];   // matéria isenta de gordura (sólidos do cacau)
+    if (!(FF > 0)) throw new Error('a alimentação não tem sólidos isentos de gordura');
+    let K = 0, Wa = 0, util = 0, Ta = 25;
+    if (connected(sa)) { const ka = kgOf(th, sa); K = ka[iK]; Wa = sum(ka) - K; ka.forEach((v, i) => { kg[i] += v; }); Ta = K2C(sa.T); if (!(K > 0)) warn.push('a corrente de álcali não tem K₂CO₃'); }
+    else { const dose = num(p.dose, 2.5), ws = num(p.wsol, 40); if (!(ws > 0 && ws <= 53)) throw new Error('a solução de K₂CO₃ deve ter de 0 a 53 % (saturação a 20 °C)');
+      K = dose / 100 * FF; Wa = K * (100 - ws) / ws; kg[iK] += K; kg[iw] += Wa; util = (K + Wa) / 3600; }
+    const Tr = num(p.Tr, 100), tr = num(p.tr, 60), Xf = num(p.Xf, 1.5), pH0 = num(p.pH0, 5.5), beta = num(p.beta, 0.2);
+    if (!(Xf >= 0 && Xf < 10)) throw new Error('a umidade final deve ficar entre 0 e 10 %');
+    if (!(beta > 0)) throw new Error('a capacidade tampão deve ser positiva');
+    const doseFF = chPct(K, FF);
+    if (doseFF > 5) warn.push('dose de ' + doseFF.toFixed(2) + ' % de K₂CO₃ sobre a matéria isenta de gordura: legislações como a do Canadá limitam o álcali ao equivalente a 5 partes de K₂CO₃ por 100 partes de cacau (base isenta de gordura); confira a legislação vigente');
+    if (Tr < 70 || Tr > 130) warn.push('alcalinização a ' + Tr + ' °C: a faixa usual é de 80 a 120 °C');
+    // neutralização do ácido acético
+    const nA = ia >= 0 ? kg[ia] / 60.052 : 0, nK = kg[iK] / 138.205, xi = Math.min(nK, nA / 2);   // kmol/h
+    kg[iK] -= xi * 138.205; if (ia >= 0) kg[ia] -= 2 * xi * 60.052; kg[iKA] += 2 * xi * 98.142; kg[iw] += xi * 18.015;
+    const CO2 = xi * 44.01 + kg[iC]; kg[iC] = 0;
+    // secagem até a umidade final
+    const Mnw = sum(kg) - kg[iw], Wf = Xf / (100 - Xf) * Mnw, E = kg[iw] - Wf;
+    if (E < 0) warn.push('o liquor já chega com menos de ' + br(Xf) + ' % de umidade: nada é evaporado');
+    kg[iw] = Math.min(kg[iw], Wf);
+    const Ev = Math.max(0, E);
+    const pH = pH0 + 2 * nK * 1000 / (beta * FF), cls = pH < 6.5 ? 'natural ou quase natural (cacau natural: pH 5,3 a 5,8)' : pH <= 7.2 ? 'levemente alcalinizado (pH 6,50 a 7,20)' : pH <= 7.6 ? 'medianamente alcalinizado (pH 7,21 a 7,60)' : 'fortemente alcalinizado (pH acima de 7,61)';
+    const kgIn = kgOf(th, s), Q = chHeat(th, kgIn, Tin, Tr) + (0.83 * K + 4.18 * Wa) * (Tr - Ta) / 3600 + Ev * (2501 - 2.37 * Tr) / 3600;
+    const kV = new Array(th.n).fill(0); kV[iw] = Ev; kV[iC] = CO2;
+    const out = { product: chOut(th, kg, Tr, s.P), vapor: chOut(th, kV, Tr, 101325) };
+    const M2 = sum(kg), V = M2 * tr / 60 / 1100;
+    const res = [{ k: 'Liquor na entrada', v: Mf.toFixed(1) + ' kg/h: ' + chPct(fat, Mf).toFixed(1) + ' % de gordura e ' + FF.toFixed(1) + ' kg/h de matéria isenta de gordura', u: '' },
+      { k: 'K₂CO₃ adicionado' + (connected(sa) ? ' (da corrente de álcali)' : ' (dos campos)'), v: K.toFixed(2) + ' kg/h em ' + (K + Wa).toFixed(2) + ' kg/h de solução: ' + chPct(K, Mf).toFixed(2) + ' % do liquor, ' + doseFF.toFixed(2) + ' % da matéria isenta de gordura', u: '' },
+      { k: 'Ácido acético neutralizado (K₂CO₃ + 2 CH₃COOH → 2 CH₃COOK + H₂O + CO₂)', v: (2 * xi * 60.052).toFixed(3) + ' kg/h (' + (nA > 0 ? chPct(2 * xi, nA).toFixed(0) : '0') + ' %), formando ' + (2 * xi * 98.142).toFixed(3) + ' kg/h de acetato de potássio', u: '' },
+      { k: 'K₂CO₃ em excesso (reage com outros ácidos e polifenóis e escurece o cacau)', v: +kg[iK].toFixed(3), u: 'kg/h' },
+      { k: 'pH estimado do cacau (tampão linear, β = ' + br(beta) + ' eq/(kg·pH))', v: pH.toFixed(2) + ': ' + cls, u: '' },
+      { k: 'Água evaporada / CO₂ liberado', v: Ev.toFixed(2) + ' / ' + CO2.toFixed(3) + ' kg/h', u: '' },
+      { k: 'Liquor alcalinizado na saída', v: M2.toFixed(1) + ' kg/h a ' + br(Tr) + ' °C com ' + chPct(kg[iw], M2).toFixed(2) + ' % de umidade', u: '' },
+      { k: 'Calor (aquecimento até ' + br(Tr) + ' °C e evaporação)', v: +Q.toFixed(2), u: 'kW' },
+      { k: 'Volume útil do reator (' + br(tr) + ' min de residência, ρ ≈ 1 100 kg/m³)', v: +(V * 1000).toFixed(0), u: 'L' }];
+    const dx = [], dp = []; for (let k = 0; k <= 60; k++) { const dd = 6 * k / 60; dx.push(dd); dp.push(pH0 + 2 * (dd / 100) / 0.138205 / beta); }
+    const plots = [{ kind: 'curves', title: 'Alcalinização: pH estimado × dose de K₂CO₃', data: { xLabel: 'K₂CO₃ (% da matéria isenta de gordura)', yLabel: 'pH do cacau', xRange: [0, 6], series: [
+        { name: 'pH = pH₀ + 2·n(K₂CO₃)/(β·m)', x: dx, y: dp, color: '#7a3db8', width: 3.5 }, { name: 'Operação: pH ' + pH.toFixed(2).replace('.', ','), x: [doseFF], y: [pH], mode: 'markers', size: 13, symbol: 'diamond', color: '#111' }],
+        hlines: [{ y: 6.5, name: 'leve (6,50)', color: '#e8a317' }, { y: 7.21, name: 'médio (7,21)', color: '#d1302b' }, { y: 7.61, name: 'forte (7,61)', color: '#5a2d12' }] } }];
+    return { out, duty: Q * 1000, massUtil: util, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* moinho de cacau (nibs → liquor) e refinadora de cinco cilindros (massa → chocolate fino): energia pela lei de Rittinger,
+     E = C_R·(1/x₉₀,p − 1/x₉₀,a); granulometria de Rosin–Rammler; capacidade da refinadora Q = ρ·v·L·δ, com δ ≈ x₉₀ do produto */
+  IMPL.cocoa_mill = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, ref = p.mode === CH_REF;
+    if (!connected(s)) throw new Error(ref ? 'conecte a corrente de massa de chocolate' : 'conecte a corrente de nibs de cacau');
+    const kg = kgOf(th, s), M = sum(kg), Tin = K2C(s.T), fat = chPct(chFat(th, kg), M);
+    const x1 = num(ref ? p.x1r : p.x1n, ref ? 120 : 3000), x2 = num(ref ? p.x2r : p.x2n, ref ? 22 : 35), CR = num(ref ? p.CRr : p.CRn, ref ? 700 : 1200);
+    const Tout = num(ref ? p.Tr : p.Tn, ref ? 40 : 70), eta = clamp(num(p.eta, 0.9), 0.3, 1), nRR = num(p.nRR, 1.2);
+    if (!(x1 > x2 && x2 > 0 && CR > 0)) throw new Error('o tamanho do produto deve ser positivo e menor que o da alimentação');
+    const E = CR * (1 / x2 - 1 / x1), Pw = E * M / 1000, Qh = chHeat(th, kg, Tin, Tout), Qj = Pw - Qh;   // kWh/t, kW
+    const res = [{ k: ref ? 'Massa na entrada' : 'Nibs na entrada', v: M.toFixed(1) + ' kg/h a ' + Tin.toFixed(1) + ' °C, com ' + fat.toFixed(1) + ' % de gordura', u: '' },
+      { k: 'Tamanho x₉₀: alimentação → produto', v: x1 + ' µm → ' + x2 + ' µm (razão de redução ' + (x1 / x2).toFixed(1) + ')', u: '' },
+      { k: 'Energia específica (Rittinger, C_R = ' + CR + ' kWh·µm/t)', v: +E.toFixed(1), u: 'kWh/t' },
+      { k: 'Potência de moagem / do motor (rendimento ' + br(eta) + ')', v: Pw.toFixed(2) + ' / ' + (Pw / eta).toFixed(2), u: 'kW' },
+      { k: 'Camisa de água: ' + (Qj >= 0 ? 'retira' : 'fornece') + ' para o produto sair a ' + br(Tout) + ' °C', v: Math.abs(Qj).toFixed(2) + ' kW (' + (Math.abs(Qj) * 3600 / (4.18 * 10)).toFixed(0) + ' kg/h de água com 10 °C de variação)', u: '' }];
+    const plots = [];
+    if (ref) {
+      const L = num(p.L, 1.8), Dr = num(p.Dr, 0.4), N = num(p.N, 400), rhoF = num(p.rhoF, 1300), v = Math.PI * Dr * N / 60, cap = rhoF * v * L * x2 * 1e-6 * 3600, nR = Math.ceil(M / cap - 1e-9);
+      res.push({ k: 'Velocidade periférica do último cilindro', v: +v.toFixed(2), u: 'm/s' },
+        { k: 'Capacidade de uma refinadora (Q = ρ·v·L·δ, filme de ' + x2 + ' µm)', v: +cap.toFixed(0), u: 'kg/h' },
+        { k: 'Refinadoras em paralelo', v: nR + ' (ocupação de ' + chPct(M, nR * cap).toFixed(0) + ' %)', u: '' });
+      if (fat < 23 || fat > 30) warn.push('massa com ' + fat.toFixed(1) + ' % de gordura: a refinadora trabalha bem com 23 a 30 %; com menos o filme não se forma, com mais a massa escorrega nos cilindros (o restante da manteiga entra na conchagem)');
+      if (x2 > 30) warn.push('partículas de ' + x2 + ' µm: acima de cerca de 30 µm a língua sente o chocolate arenoso');
+      if (x2 < 15) warn.push('partículas de ' + x2 + ' µm: muito finas, o chocolate fica viscoso e pegajoso e gasta mais manteiga e energia');
+      const xs = [], cs = []; for (let k = 0; k <= 50; k++) { const xx = 10 + 30 * k / 50; xs.push(xx); cs.push(rhoF * v * L * xx * 1e-6 * 3600); }
+      plots.push({ kind: 'curves', title: 'Refinadora: capacidade × tamanho das partículas', data: { xLabel: 'x₉₀ do chocolate (µm)', yLabel: 'kg/h por refinadora', series: [
+        { name: 'Q = ρ·v·L·δ (' + N + ' rpm)', x: xs, y: cs, color: '#8b4513', width: 3.5 }, { name: 'Operação', x: [x2], y: [cap], mode: 'markers', size: 13, symbol: 'diamond', color: '#111' }],
+        hlines: [{ y: M / nR, name: 'Vazão por refinadora (' + (M / nR).toFixed(0) + ' kg/h)', color: '#2563c9' }] } });
+    } else {
+      res.push({ k: 'Liquor de cacau', v: 'massa líquida a ' + br(Tout) + ' °C: o atrito rompe as células e libera a manteiga de cacau', u: '' });
+      if (fat < 47 || fat > 60) warn.push('liquor com ' + fat.toFixed(1) + ' % de gordura: o Codex pede de 47 a 60 % de manteiga de cacau na massa de cacau');
+      if (Tout < 50) warn.push('a ' + Tout + ' °C a manteiga de cacau ainda está parcialmente sólida: o liquor sai a 60–80 °C');
+    }
+    const rr = (x90, x) => 1 - Math.exp(-Math.pow(x / (x90 / Math.pow(Math.log(10), 1 / nRR)), nRR));
+    const xs = [], fa = [], fp = []; for (let k = 0; k <= 80; k++) { const xx = Math.pow(10, Math.log10(x2 / 8) + (Math.log10(x1 * 3) - Math.log10(x2 / 8)) * k / 80); xs.push(xx); fa.push(100 * rr(x1, xx)); fp.push(100 * rr(x2, xx)); }
+    plots.unshift({ kind: 'curves', title: (ref ? 'Refino' : 'Moagem') + ': granulometria da alimentação e do produto (Rosin–Rammler)', data: { xLabel: 'Tamanho (µm)', yLabel: 'Passante acumulado (%)', xLog: true, series: [
+      { name: 'Alimentação (x₉₀ = ' + x1 + ' µm)', x: xs, y: fa, color: '#2563c9', width: 3 }, { name: 'Produto (x₉₀ = ' + x2 + ' µm)', x: xs, y: fp, color: '#8b4513', width: 3.5 }],
+      hlines: [{ y: 90, name: '90 % passante', color: '#8a8f98' }] } });
+    const ex = [], ey = []; for (let k = 0; k <= 60; k++) { const xx = Math.max(5, x2 / 3) + (Math.min(x1 / 1.5, x2 * 6) - Math.max(5, x2 / 3)) * k / 60; ex.push(xx); ey.push(CR * (1 / xx - 1 / x1)); }
+    plots.push({ kind: 'curves', title: 'Energia específica × tamanho do produto (Rittinger)', data: { xLabel: 'x₉₀ do produto (µm)', yLabel: 'kWh/t', series: [
+      { name: 'E = C_R·(1/x₉₀,p − 1/x₉₀,a)', x: ex, y: ey, color: '#7a3db8', width: 3 }, { name: 'Operação', x: [x2], y: [E], mode: 'markers', size: 12, symbol: 'circle', color: '#d1302b' }] } });
+    return { out: { product: chOut(th, kg, Tout, s.P) }, duty: Pw / eta * 1000, power: true, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* prensa hidráulica de cacau: liquor → manteiga de cacau + torta (cacau em pó). Gordura na torta ao longo da prensagem:
+     f(t) = f∞ + (f₀ − f∞)·exp(−t/τ), com τ = τ_ref·(P_ref/P) (a vazão de manteiga pela torta é proporcional à pressão, lei de Darcy) */
+  IMPL.cocoa_press = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed;
+    if (!connected(s)) throw new Error('conecte a corrente de liquor de cacau');
+    const kg = kgOf(th, s), M = sum(kg), Tin = K2C(s.T), F = chFat(th, kg), NF = M - F, f0 = chPct(F, M);
+    const fc = num(p.fc, 11), Pp = num(p.Pp, 600), tau0 = num(p.tau, 4), finf = num(p.finf, 8), Np = Math.max(1, Math.round(num(p.Np, 14))), mp = num(p.mp, 12), tl = num(p.tl, 4);
+    if (!(F > 0)) throw new Error('o liquor não tem gordura para prensar');
+    if (!(fc > finf && fc < f0)) throw new Error('a gordura da torta (' + br(fc) + ' %) deve ficar entre a residual f∞ (' + br(finf) + ' %) e a do liquor (' + f0.toFixed(1) + ' %)');
+    if (!(Pp > 0 && tau0 > 0 && mp > 0 && tl >= 0)) throw new Error('pressão, constante de tempo e carga por pote devem ser positivas');
+    if (Pp > 900) warn.push('prensas hidráulicas de cacau trabalham até cerca de 900 bar');
+    if (Tin < 85) warn.push('liquor a ' + Tin.toFixed(0) + ' °C: a prensagem é feita a 90–100 °C, com a manteiga bem fluida');
+    const tau = tau0 * 600 / Pp, tp = tau * Math.log((f0 - finf) / (fc - finf)), tc = tp + tl, cap = Np * mp * 60 / tc, nP = Math.ceil(M / cap - 1e-9);
+    const Fc = fc / (100 - fc) * NF, B = F - Fc;
+    const kB = kg.map((m, i) => (CH_FAT.indexOf(th.ids[i]) >= 0 ? m * B / F : 0)), kC = kg.map((m, i) => m - kB[i]);
+    const res = [{ k: 'Liquor na entrada', v: M.toFixed(1) + ' kg/h com ' + f0.toFixed(1) + ' % de gordura, a ' + Tin.toFixed(0) + ' °C', u: '' },
+      { k: 'Manteiga de cacau', v: B.toFixed(1) + ' kg/h (' + chPct(B, M).toFixed(1) + ' kg por 100 kg de liquor; recupera ' + chPct(B, F).toFixed(1) + ' % da gordura)', u: '' },
+      { k: 'Torta (cacau em pó com ' + br(fc) + ' % de gordura)', v: (M - B).toFixed(1) + ' kg/h, com ' + chPct(chG(th, kC, 'water'), M - B).toFixed(2) + ' % de umidade', u: '' },
+      { k: 'Constante de tempo a ' + br(Pp) + ' bar (τ = τ_ref·600/P)', v: +tau.toFixed(2), u: 'min' },
+      { k: 'Tempo de prensagem até ' + br(fc) + ' % de gordura / ciclo com carga e descarga', v: tp.toFixed(1) + ' / ' + tc.toFixed(1) + ' min', u: '' },
+      { k: 'Capacidade de uma prensa (' + Np + ' potes × ' + br(mp) + ' kg)', v: +cap.toFixed(0), u: 'kg/h de liquor' },
+      { k: 'Prensas necessárias', v: nP + ' (ocupação de ' + chPct(M, nP * cap).toFixed(0) + ' %)', u: '' }];
+    if (fc >= 20) res.push({ k: 'Tipo de cacau em pó', v: 'rico em gordura (20 a 22 %): mais sabor, para bebidas e confeitaria', u: '' });
+    else res.push({ k: 'Tipo de cacau em pó', v: 'com pouca gordura (10 a 12 %): o mais comum, para achocolatados e bolos', u: '' });
+    const ts = [], series = [], tEnd = Math.max(tp * 1.6, 5);
+    [[Pp / 1.5, '#2563c9'], [Pp, '#8b4513'], [Math.min(Pp * 1.5, 1200), '#d1302b']].forEach(([P2, col]) => { const t2 = tau0 * 600 / P2, x = [], y = []; for (let k = 0; k <= 80; k++) { const t = tEnd * k / 80; x.push(t); y.push(finf + (f0 - finf) * Math.exp(-t / t2)); }
+      series.push({ name: P2.toFixed(0) + ' bar', x, y, color: col, width: P2 === Pp ? 3.5 : 2.5 }); });
+    series.push({ name: 'Operação: ' + tp.toFixed(1).replace('.', ',') + ' min', x: [tp], y: [fc], mode: 'markers', size: 13, symbol: 'diamond', color: '#111' });
+    const yx = [], yy = []; for (let k = 0; k <= 60; k++) { const f = finf + 0.5 + (Math.min(30, f0 - 1) - finf - 0.5) * k / 60; yx.push(f); yy.push(100 * (F - f / (100 - f) * NF) / M); }
+    const plots = [{ kind: 'curves', title: 'Prensagem: gordura na torta ao longo do tempo', data: { xLabel: 'Tempo de prensagem (min)', yLabel: 'Gordura na torta (%)', xRange: [0, tEnd], series,
+        hlines: [{ y: fc, name: 'Meta: ' + br(fc) + ' %', color: '#2e9e6b' }, { y: finf, name: 'Residual f∞ = ' + br(finf) + ' %', color: '#8a8f98' }] } },
+      { kind: 'curves', title: 'Rendimento de manteiga × gordura deixada na torta', data: { xLabel: 'Gordura na torta (%)', yLabel: 'kg de manteiga por 100 kg de liquor', series: [
+        { name: 'Balanço de gordura', x: yx, y: yy, color: '#e8a317', width: 3.5 }, { name: 'Operação', x: [fc], y: [chPct(B, M)], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }] } }];
+    return { out: { butter: chOut(th, kB, Tin, s.P), cake: chOut(th, kC, Tin, s.P) }, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  // composição do chocolate em base seca e as exigências mínimas do Codex Alimentarius (CXS 87-1981)
+  function chCodex(th, kg) {
+    const W = chG(th, kg, 'water'), Dm = sum(kg) - W, cb = chG(th, kg, 'cocoa-butter'), ffc = chG(th, kg, 'cocoa-solids') + chG(th, kg, 'cocoa-shell') + chG(th, kg, 'k2co3') + chG(th, kg, 'potassium-acetate');
+    const mf = chG(th, kg, 'milk-fat'), ms = mf + chG(th, kg, 'milk-snf'), pc = v => chPct(v, Dm), cocoa = pc(cb + ffc), list = [], milk = pc(ms) >= 1;
+    const chk = (ok, txt) => list.push((ok ? '✔ ' : '✘ ') + txt);
+    if (milk) {
+      chk(cocoa >= 25, 'sólidos de cacau ' + cocoa.toFixed(1) + ' % (mínimo 25 %)'); chk(pc(ffc) >= 2.5, 'cacau isento de gordura ' + pc(ffc).toFixed(1) + ' % (mínimo 2,5 %)');
+      chk(pc(ms) >= 14, 'sólidos do leite ' + pc(ms).toFixed(1) + ' % (mínimo de 12 a 14 %)'); chk(pc(mf) >= 3.5, 'gordura do leite ' + pc(mf).toFixed(1) + ' % (mínimo de 2,5 a 3,5 %)');
+    } else {
+      chk(cocoa >= 35, 'sólidos de cacau ' + cocoa.toFixed(1) + ' % (mínimo 35 %)'); chk(pc(cb) >= 18, 'manteiga de cacau ' + pc(cb).toFixed(1) + ' % (mínimo 18 %)'); chk(pc(ffc) >= 14, 'cacau isento de gordura ' + pc(ffc).toFixed(1) + ' % (mínimo 14 %)');
+    }
+    return { milk, cocoa, list, ok: list.every(t => t[0] === '✔') };
+  }
+
+  /* conchadeira: mistura demorada que retira umidade e ácidos voláteis e envolve as partículas com a manteiga.
+     dX/dt = −k_w(T)·(X − X_e);  dA/dt = −k_a(T)·A (Arrhenius referida a 70 °C); a lecitina e o restante da manteiga entram na fase líquida, no fim */
+  IMPL.conche = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed;
+    if (!connected(s)) throw new Error('conecte a corrente de massa refinada');
+    const iw = chIdx(th, 'water'), ia = chIdx(th, 'acetic-acid'); if (iw < 0) throw new Error('inclua a água entre os componentes');
+    const kg = kgOf(th, s), kIn = kg.slice(), Tin = K2C(s.T); let Hin_ = chHeat(th, kg, 25, Tin);
+    const adds = [['fat', 'manteiga de cacau'], ['emulsifier', 'lecitina']].filter(o => connected(ins[o[0]]));
+    adds.forEach(o => { const ka = kgOf(th, ins[o[0]]); ka.forEach((v, i) => { kg[i] += v; }); Hin_ += chHeat(th, ka, 25, K2C(ins[o[0]].T)); });
+    const M = sum(kg), W0 = kg[iw], A0 = ia >= 0 ? kg[ia] : 0, D = M - W0 - A0;
+    const Tc = num(p.Tc, 70), tc = num(p.tc, 8), kw = num(p.kw, 0.3), ka = num(p.ka, 0.09), Ew = num(p.Ew, 40) * 1000, Ea = num(p.Ea, 40) * 1000, Xe = num(p.Xe, 0.5) / 100;
+    const ecs = num(p.ecs, 80), cap = num(p.cap, 6), tlc = num(p.tlc, 1), Hin = num(p.Hin, 0.008), Hout = num(p.Hout, 0.02);
+    if (!(tc > 0 && kw > 0 && ka >= 0 && cap > 0)) throw new Error('tempo, constantes e capacidade devem ser positivos');
+    if (!(Hout > Hin)) throw new Error('a umidade do ar na saída deve ser maior que a da entrada');
+    const milkF = chPct(chG(th, kg, 'milk-fat') + chG(th, kg, 'milk-snf'), M) > 1;
+    if (milkF && (Tc < 50 || Tc > 82)) warn.push('chocolate ao leite conchado a ' + Tc + ' °C: a faixa usual é de 50 a 80 °C (acima disso o leite carameliza demais)');
+    if (!milkF && (Tc < 60 || Tc > 95)) warn.push('chocolate amargo conchado a ' + Tc + ' °C: a faixa usual é de 70 a 90 °C');
+    const XeD = Xe / (1 - Xe), kW_ = chArr(kw, Ew, Tc, 70), kA_ = chArr(ka, Ea, Tc, 70);
+    const X0 = W0 / D, XL = (t) => XeD + (X0 - XeD) * Math.exp(-kW_ * t), AL = t => (A0 / D) * Math.exp(-kA_ * t);
+    if (X0 <= XeD) warn.push('a massa já chega com umidade abaixo da de equilíbrio: a conchagem não retira água');
+    const Xf = X0 > XeD ? XL(tc) : X0, Af = AL(tc), Wf = Xf * D, Ev = W0 - Wf, Afk = Af * D, Ea_ = A0 - Afk;
+    kg[iw] = Wf; if (ia >= 0) kg[ia] = Afk;
+    const Ga = Ev / (Hout - Hin), ex = chAir(th, Ga, Hin, Ev, Ea_, Tc, warn);
+    const Pm = ecs * M / 1000, Qh = chHeat(th, kg, 25, Tc) - Hin_ + Ev * (2501 - 2.37 * Tc) / 3600, Qj = Pm - Qh;
+    const nC = Math.ceil(M / 1000 * (tc + tlc) / cap - 1e-9);
+    const cx = chCodex(th, kg), fatF = chPct(chFat(th, kg), sum(kg)), lec = chPct(chG(th, kg, 'lecithin'), sum(kg));
+    const res = [{ k: 'Massa refinada + adições', v: sum(kIn).toFixed(1) + ' kg/h' + adds.map(o => ' + ' + sum(kgOf(th, ins[o[0]])).toFixed(1) + ' kg/h de ' + o[1]).join('') + ' = ' + M.toFixed(1) + ' kg/h', u: '' },
+      { k: 'Umidade: entrada → saída', v: chPct(W0, M).toFixed(2) + ' % → ' + chPct(Wf, sum(kg)).toFixed(2) + ' %', u: '' },
+      { k: 'Ácido acético: entrada → saída', v: chPct(A0, M).toFixed(4) + ' % → ' + chPct(Afk, sum(kg)).toFixed(4) + ' % (retira ' + chPct(Ea_, A0).toFixed(0) + ' %)', u: '' },
+      { k: 'Constantes a ' + br(Tc) + ' °C: k_w / k_a', v: kW_.toFixed(3) + ' / ' + kA_.toFixed(3), u: '1/h' },
+      { k: 'Chocolate na saída', v: sum(kg).toFixed(1) + ' kg/h a ' + br(Tc) + ' °C: ' + fatF.toFixed(1) + ' % de gordura e ' + lec.toFixed(2) + ' % de lecitina', u: '' },
+      { k: 'Ar de ventilação (umidade de ' + br(Hin) + ' a ' + br(Hout) + ' kg/kg)', v: +Ga.toFixed(0), u: 'kg/h de ar seco' },
+      { k: 'Potência de mistura (' + br(ecs) + ' kWh/t)', v: +Pm.toFixed(1), u: 'kW' },
+      { k: 'Camisa: ' + (Qj >= 0 ? 'retira' : 'fornece') + ' para manter ' + br(Tc) + ' °C', v: +Math.abs(Qj).toFixed(1), u: 'kW' },
+      { k: 'Conchadeiras de ' + br(cap) + ' t (' + br(tc) + ' h de conchagem + ' + br(tlc) + ' h de carga e descarga)', v: nC, u: '' },
+      { k: 'Tipo de chocolate e composição em base seca (Codex)', v: (cx.milk ? 'ao leite: ' : 'amargo: ') + cx.list.join('; '), u: '' }];
+    if (!cx.ok) warn.push('a receita não atende a uma exigência do Codex para chocolate ' + (cx.milk ? 'ao leite' : '') + ': ' + cx.list.filter(t => t[0] === '✘').join('; ').replace(/✘ /g, ''));
+    if (fatF < 28 || fatF > 36) warn.push('chocolate com ' + fatF.toFixed(1) + ' % de gordura: para moldar barras use de 30 a 34 %');
+    if (lec > 0.7) warn.push('lecitina acima de 0,5–0,7 % deixa de reduzir a viscosidade e pode aumentar o limite de escoamento');
+    const ts = [], xs = [], as = []; for (let k = 0; k <= 100; k++) { const t = tc * 1.3 * k / 100; ts.push(t); xs.push(100 * (X0 > XeD ? XL(t) : X0) * D / (D + (X0 > XeD ? XL(t) : X0) * D)); as.push(A0 > 0 ? 100 * AL(t) / AL(0) : 0); }
+    const plots = [{ kind: 'curves', title: 'Conchagem: umidade da massa ao longo do tempo', data: { xLabel: 'Tempo de conchagem (h)', yLabel: 'Umidade (%)', series: [
+        { name: 'Umidade (' + br(Tc) + ' °C)', x: ts, y: xs, color: '#2563c9', width: 3.5 }, { name: 'Fim da conchagem', x: [tc], y: [chPct(Wf, D + Wf)], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }],
+        hlines: [{ y: Xe * 100, name: 'Equilíbrio (' + br(Xe * 100) + ' %)', color: '#8a8f98' }] } }];
+    if (A0 > 0) plots.push({ kind: 'curves', title: 'Conchagem: ácido acético que fica no chocolate', data: { xLabel: 'Tempo de conchagem (h)', yLabel: '% do ácido acético inicial', series: [
+      { name: 'Ácido acético (' + br(Tc) + ' °C)', x: ts, y: as, color: '#7a3db8', width: 3.5 }, { name: 'Fim da conchagem', x: [tc], y: [100 * AL(tc) / AL(0)], mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }] } });
+    return { out: { product: chOut(th, kg, Tc, s.P), vapor: ex.s }, duty: Pm * 1000, power: true, massUtil: ex.util, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* temperadeira (pré-cristalização) com moldagem e túnel de resfriamento: zona 1 funde todos os cristais, zona 2 resfria e forma
+     cristais (formas IV e V), zona 3 reaquece e funde os instáveis, deixando as sementes da forma V; no túnel a gordura cristaliza.
+     Q = ṁ·c_p·ΔT ∓ ṁ_gordura·Δf·ΔH_cr; tempo no túnel por parâmetros concentrados: t = m(c_pΔT + x_g·Δf·ΔH)/(h·A·ΔT_ml) */
+  IMPL.temperer = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed;
+    if (!connected(s)) throw new Error('conecte a corrente de chocolate conchado');
+    const kg = kgOf(th, s), M = sum(kg), Tin = K2C(s.T), xF = chFat(th, kg) / M, xMF = chG(th, kg, 'milk-fat') / Math.max(chFat(th, kg), 1e-9);
+    const T1 = num(p.T1, 45), T2 = num(p.T2, 27), T3 = num(p.T3, 29.5), f2 = num(p.f2, 4) / 100, fs = num(p.fs, 2) / 100, dH = num(p.dH, 150);
+    const tun = !/^só/.test(p.tunnel || ''), Tt = num(p.Tt, 12), Tf = num(p.Tf, 16), fcr = num(p.fcr, 70) / 100, e = num(p.e, 8) / 1000, hT = num(p.hT, 20), mb = num(p.mb, 100) / 1000, vb = num(p.vb, 1.5), rhoC = 1280;
+    if (!(T1 > T3 && T3 > T2)) throw new Error('as temperaturas das zonas devem obedecer: fusão (zona 1) > reaquecimento (zona 3) > resfriamento (zona 2)');
+    if (!(f2 >= fs && fs >= 0 && fcr > fs)) throw new Error('as frações cristalizadas devem obedecer: sementes ≤ zona 2 e sementes < barras');
+    if (tun && !(Tf > Tt && Tf < T3)) throw new Error('as barras devem sair entre a temperatura do ar do túnel e a da zona 3');
+    const milk = xMF > 0.05;
+    if (T1 < 40) warn.push('zona 1 a ' + T1 + ' °C: abaixo de 40–45 °C sobram cristais instáveis da forma VI e de outras');
+    if (T2 > (milk ? 28.5 : 29.5)) warn.push('zona 2 a ' + T2 + ' °C: quente demais, quase não se formam cristais; o chocolate sai sem temperagem');
+    if (T2 < 24) warn.push('zona 2 a ' + T2 + ' °C: frio demais, forma muitos cristais instáveis e a massa engrossa');
+    if (T3 > 32) warn.push('zona 3 a ' + T3 + ' °C: acima de cerca de 32 °C as sementes da forma V também fundem e a temperagem se perde');
+    if (T3 < 27.5) warn.push('zona 3 a ' + T3 + ' °C: abaixo de 27,5 °C a forma IV não funde; o chocolate fica sem brilho e com manchas (fat bloom)');
+    if (milk && T3 > 31) warn.push('chocolate ao leite: a gordura do leite amolece a manteiga de cacau; reaqueça a 29–31 °C (o amargo vai a 31–32 °C)');
+    const cp = chCp(th, kg, 30), fatH = M * xF * dH / 3600;   // kW por fração cristalizada
+    const Q1 = M * cp * (T1 - Tin) / 3600, Q2 = M * cp * (T2 - T1) / 3600 - fatH * f2, Q3 = M * cp * (T3 - T2) / 3600 + fatH * (f2 - fs);
+    const Q4 = tun ? M * cp * (Tf - T3) / 3600 - fatH * (fcr - fs) : 0, Qt = Q1 + Q2 + Q3 + Q4;
+    const z = q => (q >= 0 ? 'aquece ' : 'resfria ') + Math.abs(q).toFixed(2) + ' kW';
+    const res = [{ k: 'Chocolate na entrada', v: M.toFixed(1) + ' kg/h a ' + Tin.toFixed(1) + ' °C, ' + (100 * xF).toFixed(1) + ' % de gordura (' + (100 * xMF).toFixed(0) + ' % dela é gordura do leite)', u: '' },
+      { k: 'Zona 1: fusão total a ' + br(T1) + ' °C', v: z(Q1), u: '' },
+      { k: 'Zona 2: resfriamento a ' + br(T2) + ' °C (' + br(f2 * 100) + ' % da gordura cristaliza nas formas IV e V)', v: z(Q2), u: '' },
+      { k: 'Zona 3: reaquecimento a ' + br(T3) + ' °C (fundem as formas instáveis; ficam ' + br(fs * 100) + ' % de sementes da forma V)', v: z(Q3), u: '' }];
+    let tT = 0, LT = 0;
+    if (tun) {
+      const A = 2 * mb / (rhoC * e), dT1 = T3 - Tt, dT2 = Tf - Tt, dTml = (dT1 - dT2) / Math.log(dT1 / dT2);
+      tT = mb * (cp * (T3 - Tf) + xF * (fcr - fs) * dH) * 1000 / (hT * A * dTml) / 60; LT = vb * tT;   // min, m
+      res.push({ k: 'Moldagem e túnel: ar a ' + br(Tt) + ' °C, barras saem a ' + br(Tf) + ' °C com ' + br(fcr * 100) + ' % da gordura cristalizada', v: z(Q4), u: '' },
+        { k: 'Barras de ' + br(mb * 1000) + ' g (' + br(e * 1000) + ' mm de espessura)', v: (M / mb).toFixed(0) + ' barras por hora', u: '' },
+        { k: 'Tempo no túnel (h = ' + br(hT) + ' W/(m²·K), duas faces)', v: +tT.toFixed(1), u: 'min' },
+        { k: 'Comprimento do túnel (esteira a ' + br(vb) + ' m/min)', v: +LT.toFixed(1), u: 'm' });
+    }
+    res.push({ k: 'Calor líquido retirado (água gelada)', v: +(-Qt).toFixed(2), u: 'kW' },
+      { k: 'Calor latente de cristalização (forma V)', v: br(dH) + ' kJ/kg de gordura: ' + (fatH * (tun ? fcr : f2)).toFixed(2) + ' kW liberados', u: '' });
+    // caminho da temperatura × formas cristalinas
+    const tx = [], ty = [], e4 = Math.exp(-4), seg = (Ta, Tb, t0, dt) => { for (let k = 0; k <= 20; k++) { tx.push(t0 + dt * k / 20); ty.push(Tb + (Ta - Tb) * (Math.exp(-4 * k / 20) - e4) / (1 - e4)); } };
+    seg(Tin, T1, 0, 3); seg(T1, T2, 3, 4); seg(T2, T3, 7, 3); if (tun) { seg(T3, T3, 10, 1); seg(T3, Tf, 11, Math.max(tT, 2)); }
+    const fcol = ['#9aa5ad', '#9aa5ad', '#e8a317', '#d1302b', '#2e9e6b', '#5a2d12'];
+    const plots = [{ kind: 'curves', title: 'Temperagem: caminho da temperatura e as formas cristalinas da manteiga de cacau', data: { xLabel: 'Tempo de passagem (min)', yLabel: 'Temperatura (°C)', series: [
+        { name: 'Chocolate', x: tx, y: ty, color: '#8b4513', width: 4 }],
+        hlines: CH_FORMS.map((f, k) => ({ y: f[1], name: 'Forma ' + f[0] + ' (' + br(f[1]) + ' °C)', color: fcol[k] })) } },
+      { kind: 'bars', title: 'Temperagem: calor de cada etapa', data: { categories: ['Zona 1 (fusão)', 'Zona 2 (resfria)', 'Zona 3 (reaquece)'].concat(tun ? ['Túnel'] : []), yLabel: 'kW (+ aquece, − resfria)', series: [
+        { name: 'Calor sensível', y: [Q1, M * cp * (T2 - T1) / 3600, M * cp * (T3 - T2) / 3600].concat(tun ? [M * cp * (Tf - T3) / 3600] : []), color: '#2563c9' },
+        { name: 'Calor latente (cristalização e fusão)', y: [0, -fatH * f2, fatH * (f2 - fs)].concat(tun ? [-fatH * (fcr - fs)] : []), color: '#e8a317' }] } }];
+    return { out: { product: chOut(th, kg, tun ? Tf : T3, s.P) }, duty: Qt * 1000, res: decBR(res), warn: decW(warn), plots };
+  };
+
   SF.units = { MICROBES, TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn, ponchonSavarit, STEAM, multiEffect, IF97, H2O, tagH2O, POST };
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -11618,6 +12086,78 @@ window.SIMULAFACIL_CONFIG = {
         note: 'O desaerador aquece a água com vapor tirado da turbina (regeneração): o calor volta ao ciclo em vez de ir para o condensador, e a eficiência aumenta. Perto da saturação, o oxigênio e o CO₂ dissolvidos saem pelo respiro, o que protege os tubos do gerador de vapor da corrosão.'
       };
     },
+    cocoa_roaster: () => {
+      const X = i('X'), A = i('A'), cp = s2 => sub(i('c'), s2);
+      return {
+        name: 'Torrador de cacau: aquecimento da amêndoa, secagem e perda de ácido acético (parâmetros concentrados)',
+        eqs: [eq('(' + cp('p,s') + ' + ' + X + cp('p,w') + ' + ' + A + cp('p,a') + ')' + od(T, t) + ' = ' + i('h') + sub(i('a'), 's') + '(' + sub(T, 'ar') + ' − ' + T + ') − λ(' + T + ')' + sub(i('r'), 'w') + ' − ' + sub('λ', 'a') + sub(i('r'), 'a'), 'energia por kg de matéria seca'),
+          eq(od(X, t) + ' = −' + sub(i('r'), 'w') + ' = −' + sub(i('k'), 'w') + '(' + T + ')(' + X + ' − ' + sub(X, 'e') + '),&nbsp; ' + od(A, t) + ' = −' + sub(i('k'), 'a') + '(' + T + ')' + A, 'secagem e perda da acidez volátil'),
+          eq(i('k') + '(' + T + ') = ' + sub(i('k'), '120') + '·exp[−' + fr(i('E'), i('R')) + '(' + fr('1', T) + ' − ' + fr('1', '393,15 K') + ')]', 'Arrhenius, referência a 120 °C'),
+          eq(sub(i('a'), 's') + ' = ' + fr('π' + sup(i('d'), '2'), sub(i('m'), 'seca')) + ',&nbsp; ' + sub('Ṁ', 'ar') + ' = ' + fr(sub(Q, 'amêndoas'), cp('u') + '(' + sub(T, 'ar') + ' − ' + sub(T, 'saída') + ')') + ',&nbsp; ' + sub(Q, 'queimador') + ' = ' + fr(sub('Ṁ', 'ar') + cp('u') + '[(1 − ' + i('r') + ')(' + sub(T, 'ar') + ' − ' + sub(T, 'amb') + ') + ' + i('r') + '(' + sub(T, 'ar') + ' − ' + sub(T, 'saída') + ')]', 'η'), 'área, ar quente e queimador')],
+        sym: [[sub(i('a'), 's'), 'área da amêndoa por kg de matéria seca'], [X + ', ' + A, 'água e ácido acético por kg de matéria seca'], [cp('u'), 'calor específico do ar úmido, 1,005 + 1,88·H (kJ/(kg·K))'], [i('r'), 'fração do ar recirculado ao queimador']],
+        note: 'Integração por Runge-Kutta de 4ª ordem. No começo a amêndoa esquenta mais devagar porque a evaporação da água consome parte do calor. O coeficiente h é efetivo: num leito em movimento cada amêndoa recebe só parte do ar.'
+      };
+    },
+    cocoa_alkalizer: () => {
+      const nK = sub(i('n'), 'K₂CO₃'), nA = sub(i('n'), 'ác');
+      return {
+        name: 'Alcalinizador (processo holandês): neutralização, pH e secagem do liquor',
+        eqs: [eq('K₂CO₃ + 2 CH₃COOH → 2 CH₃COOK + H₂O + CO₂', 'neutralização do ácido acético'),
+          eq('ξ = min(' + nK + ', ' + fr(nA, '2') + ')', 'avanço da reação, limitado pelo reagente que acaba primeiro'),
+          eq('pH = ' + sub('pH', '0') + ' + ' + fr('2' + nK, 'β·' + sub(i('m'), 'ig')), 'tampão linear (estimativa)'),
+          eq(i('E') + ' = ' + sub(i('W'), 'ent') + ' − ' + fr(sub(i('X'), 'f'), '100 − ' + sub(i('X'), 'f')) + sub(i('M'), 'seca') + ',&nbsp; ' + Q + ' = ' + sub(i('Q'), 'aquec') + ' + ' + i('E') + 'λ(' + sub(T, 'r') + ')', 'água evaporada e calor')],
+        sym: [[sub(i('m'), 'ig'), 'matéria isenta de gordura (sólidos do cacau)'], ['β', 'capacidade tampão do cacau (eq por kg e por unidade de pH)'], [sub(i('X'), 'f'), 'umidade final do liquor (%)']],
+        note: 'O carbonato que sobra reage com outros ácidos e com os polifenóis, escurece o cacau e reduz os flavanóis. Faixas de pH de Miller et al. (2008): natural 5,3 a 5,8; leve 6,50 a 7,20; médio 7,21 a 7,60; forte acima de 7,61. β não é universal: ajuste com o pH medido no laboratório.'
+      };
+    },
+    cocoa_mill: () => {
+      const x9 = s2 => sub(i('x'), s2 ? '90,' + s2 : '90');
+      return {
+        name: 'Moinho de cacau e refinadora de cinco cilindros: energia, granulometria e capacidade',
+        eqs: [eq(i('E') + ' = ' + sub(i('C'), 'R') + '(' + fr('1', x9('p')) + ' − ' + fr('1', x9('a')) + '),&nbsp; ' + i('P') + ' = ' + i('E') + i('ṁ'), 'lei de Rittinger: energia proporcional à nova superfície'),
+          eq(sub(Q, 'camisa') + ' = ' + i('P') + ' − ' + i('ṁ') + sub(i('c'), 'p') + '(' + sub(T, 's') + ' − ' + sub(T, 'e') + ')', 'o atrito vira calor; a água tira o excesso'),
+          eq(i('F') + '(' + x + ') = 1 − exp[−' + sup('(' + x + '/' + sub(x, '0') + ')', i('n')) + '],&nbsp; ' + sub(x, '0') + ' = ' + fr(x9(''), sup('(ln 10)', '1/' + i('n'))), 'granulometria de Rosin–Rammler'),
+          eq(sub(Q, 'refinadora') + ' = ρ' + i('v') + L + 'δ,&nbsp; ' + i('v') + ' = ' + fr('π' + i('D') + i('N'), '60') + ',&nbsp; δ ≈ ' + x9('p'), 'capacidade de uma refinadora (filme no último cilindro)')],
+        sym: [[sub(i('C'), 'R'), 'constante de Rittinger (kWh·µm/t)'], [x9('p') + ', ' + x9('a'), 'tamanho abaixo do qual passam 90 % das partículas, no produto e na alimentação'], ['δ', 'espessura do filme de chocolate']],
+        note: 'Abaixo de cerca de 30 µm a língua não sente as partículas e o chocolate fica liso; refinar mais fino gasta mais energia e manteiga e reduz a capacidade de cada refinadora.'
+      };
+    },
+    cocoa_press: () => {
+      const f = s2 => sub(i('f'), s2);
+      return {
+        name: 'Prensa hidráulica de cacau: gordura na torta, manteiga e capacidade',
+        eqs: [eq(i('f') + '(' + t + ') = ' + f('∞') + ' + (' + f('0') + ' − ' + f('∞') + ')exp(−' + t + '/τ),&nbsp; τ = ' + sub('τ', 'ref') + fr('600 bar', P), 'curva de prensagem (vazão de manteiga ∝ pressão)'),
+          eq(sub(t, 'p') + ' = τ ln' + fr(f('0') + ' − ' + f('∞'), f('c') + ' − ' + f('∞')), 'tempo para chegar à gordura pedida na torta'),
+          eq(sub(i('m'), 'g,torta') + ' = ' + fr(f('c'), '100 − ' + f('c')) + sub(i('m'), 'ng') + ',&nbsp; ' + sub(i('ṁ'), 'manteiga') + ' = ' + sub(i('ṁ'), 'g') + ' − ' + sub(i('m'), 'g,torta'), 'balanço de gordura'),
+          eq('capacidade = ' + fr(sub(i('N'), 'p') + sub(i('m'), 'p') + '·60', sub(t, 'p') + ' + ' + sub(t, 'cd')), 'kg/h de liquor por prensa')],
+        sym: [[f('c'), 'gordura que fica na torta (%)'], [sub(i('m'), 'ng'), 'matéria não gordurosa do liquor'], [sub(i('N'), 'p') + ', ' + sub(i('m'), 'p'), 'potes por prensa e carga de cada pote']],
+        note: 'A manteiga escoa pelos poros da torta, que vão se fechando: a gordura cai depressa no começo e depois quase para. Prensar até 10–12 % é rápido; chegar perto de f∞ exigiria muito mais tempo.'
+      };
+    },
+    conche: () => {
+      const X = i('X'), A = i('A'), k = s2 => sub(i('k'), s2);
+      return {
+        name: 'Conchadeira: umidade, ácido acético, ventilação e energia',
+        eqs: [eq(X + '(' + t + ') = ' + sub(X, 'e') + ' + (' + sub(X, '0') + ' − ' + sub(X, 'e') + ')exp(−' + k('w') + t + '),&nbsp; ' + A + '(' + t + ') = ' + sub(A, '0') + 'exp(−' + k('a') + t + ')', 'secagem e perda dos ácidos voláteis'),
+          eq(i('k') + '(' + T + ') = ' + k('70') + '·exp[−' + fr(i('E'), i('R')) + '(' + fr('1', T) + ' − ' + fr('1', '343,15 K') + ')]', 'Arrhenius, referência a 70 °C'),
+          eq(sub('Ṁ', 'ar') + ' = ' + fr(i('E'), sub(i('H'), 's') + ' − ' + sub(i('H'), 'e')) + ',&nbsp; ' + i('P') + ' = ' + sub(i('e'), 'cs') + i('ṁ') + ',&nbsp; ' + sub(Q, 'camisa') + ' = ' + i('P') + ' − (Δ' + i('H') + ' + ' + i('E') + 'λ)', 'ar de ventilação, potência e camisa'),
+          eq(i('n') + ' = ⌈' + fr(i('ṁ') + '(' + sub(t, 'c') + ' + ' + sub(t, 'cd') + ')', 'capacidade') + '⌉', 'conchadeiras em batelada')],
+        sym: [[sub(i('e'), 'cs'), 'energia específica de mistura (kWh/t)'], [sub(i('H'), 'e') + ', ' + sub(i('H'), 's'), 'umidade absoluta do ar na entrada e na saída']],
+        note: 'Na fase seca a massa é amassada e aquecida e perde umidade e ácidos; na fase líquida, a lecitina e o restante da manteiga deixam o chocolate fluido. A composição mínima do Codex Alimentarius (CXS 87-1981) é conferida em base seca.'
+      };
+    },
+    temperer: () => {
+      const f = s2 => sub(i('f'), s2), mg = sub(i('ṁ'), 'g'), cpT = s2 => i('ṁ') + sub(i('c'), 'p') + '(' + s2 + ')';
+      return {
+        name: 'Temperadeira, moldagem e túnel de resfriamento: calor sensível e latente da manteiga de cacau',
+        eqs: [eq(sub(Q, '1') + ' = ' + cpT(sub(T, '1') + ' − ' + sub(T, 'e')) + ',&nbsp; ' + sub(Q, '2') + ' = ' + cpT(sub(T, '2') + ' − ' + sub(T, '1')) + ' − ' + mg + f('2') + 'Δ' + sub(i('H'), 'cr'), 'zonas 1 e 2: fusão e cristalização'),
+          eq(sub(Q, '3') + ' = ' + cpT(sub(T, '3') + ' − ' + sub(T, '2')) + ' + ' + mg + '(' + f('2') + ' − ' + f('s') + ')Δ' + sub(i('H'), 'cr'), 'zona 3: fundem as formas instáveis, ficam as sementes'),
+          eq(sub(Q, 'túnel') + ' = ' + cpT(sub(T, 'f') + ' − ' + sub(T, '3')) + ' − ' + mg + '(' + f('cr') + ' − ' + f('s') + ')Δ' + sub(i('H'), 'cr'), 'a gordura cristaliza na forma V nos moldes'),
+          eq(sub(t, 'túnel') + ' = ' + fr(sub(i('m'), 'b') + '[' + sub(i('c'), 'p') + '(' + sub(T, '3') + ' − ' + sub(T, 'f') + ') + ' + sub(i('x'), 'g') + '(' + f('cr') + ' − ' + f('s') + ')Δ' + sub(i('H'), 'cr') + ']', i('h') + i('A') + 'Δ' + sub(T, 'ml')), 'tempo de resfriamento de uma barra')],
+        sym: [[mg, 'vazão de gordura'], [f('2') + ', ' + f('s') + ', ' + f('cr'), 'frações da gordura cristalizadas na zona 2, nas sementes e nas barras'], ['Δ' + sub(i('H'), 'cr'), 'calor latente de cristalização da manteiga de cacau']],
+        note: 'A manteiga de cacau cristaliza em seis formas (Wille e Lutton, 1966): I 17,3; II 23,3; III 25,5; IV 27,5; V 33,8; VI 36,3 °C. Só a forma V dá brilho, estalo e derrete na boca: a temperagem cria sementes dessa forma para que o resto da gordura cristalize nela no túnel.'
+      };
+    },
     steam_turbine: () => {
       const m = s2 => sub(i('ṁ'), s2), h = s2 => sub(i('h'), s2);
       return {
@@ -12070,6 +12610,30 @@ window.SIMULAFACIL_CONFIG = {
       'Como o vapor do PWR é saturado, a expansão na turbina de alta já produz água: o escape sai com 12 a 14 % de umidade. O separador de umidade e reaquecedor (MSR), um casco horizontal entre as turbinas de alta e de baixa, retira essa água em placas onduladas (chevrons) e depois superaquece o vapor seco num feixe de tubos aquecido por vapor vivo.',
       'O bloco retira a fração da água dada pela eficiência do separador e condensa o vapor de aquecimento até líquido saturado. Com a corrente de aquecimento ligada, a temperatura de saída vem do balanço; sem ela, o bloco calcula quanto vapor vivo é preciso para a temperatura pedida. A temperatura de reaquecimento fica limitada à saturação do vapor de aquecimento menos uma aproximação mínima.',
       'No exemplo, 7,2 % do vapor vivo reaquece 1 159 kg/s de vapor de 184 para 264 °C a 10,6 bar; os separadores retiram cerca de 180 kg/s de água. Assim, o escape da turbina de baixa termina com título de 0,883, dentro do limite de erosão das pás.'] },
+    cocoa_roaster: { ex: ex('fabrica-chocolate', 'A Fábrica de Chocolate dos Sonhos'), p: [
+      'A torra desenvolve o sabor e o aroma do chocolate. Nas amêndoas fermentadas e secas, os açúcares redutores e os aminoácidos formados na fermentação reagem a 120–140 °C (reação de Maillard) e criam centenas de compostos de aroma. Ao mesmo tempo a umidade cai de 6–8 % para 1,5–2,5 %, parte do ácido acético da fermentação evapora, a casca se solta e os micro-organismos morrem.',
+      'O bloco segue uma amêndoa no torrador contínuo como um corpo de parâmetros concentrados: o ar quente a aquece por convecção, a água evapora com cinética de primeira ordem em direção à umidade de equilíbrio e o ácido acético se volatiliza, ambos com constantes de Arrhenius. As equações diferenciais são integradas por Runge-Kutta de 4ª ordem. Com o calor recebido pelas amêndoas, o balanço do ar dá a vazão de ar quente, a parte renovada e o consumo do queimador.',
+      'No exemplo, 1 t/h de amêndoas com 7 % de umidade passa 25 min com ar a 150 °C e sai a 124 °C com 2,0 % de umidade; 33 % do ácido acético evapora. O queimador consome 195 kW (cerca de 19 Nm³/h de gás natural), 700 kJ por kg de amêndoas, com 60 % do ar recirculado.'] },
+    cocoa_alkalizer: { ex: ex('fabrica-chocolate', 'A Fábrica de Chocolate dos Sonhos'), p: [
+      'A alcalinização, ou processo holandês, vem de Coenraad van Houten, em 1828. Uma solução de carbonato de potássio é misturada aos nibs, ao liquor ou à torta: o álcali neutraliza os ácidos do cacau, o pH sobe de cerca de 5,5 para 7 a 8, a cor escurece do marrom-claro ao quase preto e o pó passa a se dispersar melhor no leite. Em troca, parte dos flavanóis antioxidantes se perde.',
+      'O bloco soma a solução de álcali ao liquor, neutraliza o ácido acético pela reação K₂CO₃ + 2 CH₃COOH → 2 CH₃COOK + H₂O + CO₂ até acabar o reagente limitante e evapora a água até a umidade final, com o calor de aquecimento e de evaporação. O pH é estimado por um tampão linear com a capacidade tampão β do cacau: é uma estimativa, a ajustar com o pH medido no laboratório. As faixas de classificação são as de Miller et al. (2008).',
+      'No exemplo, 17 kg/h de solução a 40 % levam 6,8 kg/h de K₂CO₃ a 632 kg/h de liquor (2,4 % da matéria isenta de gordura). Todo o ácido acético é neutralizado, 3,8 kg/h de carbonato ficam em excesso e o pH estimado chega a 7,26, um cacau medianamente alcalinizado. O liquor sai a 100 °C com 1,5 % de umidade e segue para a prensa.'] },
+    cocoa_mill: { ex: ex('fabrica-chocolate', 'A Fábrica de Chocolate dos Sonhos'), p: [
+      'Os nibs têm cerca de 55 % de gordura presa dentro das células. No moinho de pinos e depois no moinho de bolas, o atrito rompe as células, a manteiga se libera e os nibs viram uma pasta líquida, o liquor ou massa de cacau. Já no chocolate, a refinadora de cinco cilindros passa a massa entre rolos cada vez mais rápidos e reduz o açúcar, o leite em pó e o cacau a partículas de 15 a 30 µm, que a língua não sente.',
+      'O bloco usa a lei de Rittinger para a moagem fina (a energia é proporcional à nova superfície criada) e a distribuição de Rosin–Rammler para a granulometria. A potência vira calor: a camisa de água tira o excesso para o produto sair na temperatura pedida. Na refinadora, a capacidade de cada máquina vem do filme de chocolate no último cilindro, Q = ρ·v·L·δ, com δ próximo do tamanho das partículas.',
+      'No exemplo, 817 kg/h de nibs viram liquor de 35 µm com 34 kWh/t (31 kW no motor). A refinadora recebe 1 444 kg/h de massa com 27 % de gordura e chega a 22 µm com 26 kWh/t; uma refinadora de 1,8 m a 400 rpm faz 1 553 kg/h e fica 93 % ocupada.'] },
+    cocoa_press: { ex: ex('fabrica-chocolate', 'A Fábrica de Chocolate dos Sonhos'), p: [
+      'Na prensa hidráulica, o liquor quente (90 a 100 °C) é bombeado para potes com fundo de filtro e comprimido por pistões a até cerca de 900 bar. A manteiga de cacau escoa pelos filtros e a torta fica nos potes; moída e resfriada, ela é o cacau em pó, com 10–12 % ou 20–22 % de gordura. A manteiga volta para a fábrica de chocolate.',
+      'O bloco descreve a curva de prensagem por uma aproximação exponencial da gordura residual f∞, com constante de tempo inversamente proporcional à pressão (a manteiga escoa pela torta como num meio poroso, lei de Darcy). Daí vêm o tempo de prensagem, o ciclo com carga e descarga, a capacidade de uma prensa e o número de prensas; o balanço de gordura dá a manteiga e a torta.',
+      'No exemplo, 634 kg/h de liquor alcalinizado com 53 % de gordura dão 300 kg/h de manteiga (89 % da gordura) e 334 kg/h de torta com 11 %. A 600 bar a prensagem leva 10,8 min e o ciclo 14,8 min: uma prensa de 14 potes basta, com 93 % de ocupação.'] },
+    conche: { ex: ex('fabrica-chocolate', 'A Fábrica de Chocolate dos Sonhos'), p: [
+      'A conchagem, criada por Rodolphe Lindt em 1879, mistura o chocolate durante horas a 50–90 °C. Na fase seca, a massa refinada é amassada, perde umidade e ácidos voláteis (sobretudo o ácido acético) e o sabor fica mais suave; na fase líquida entram a lecitina e o restante da manteiga, que envolvem as partículas e deixam o chocolate fluido para a moldagem.',
+      'O bloco soma a massa às adições e calcula a perda de umidade (até a umidade de equilíbrio) e de ácido acético com cinética de primeira ordem e Arrhenius, o ar de ventilação que leva esses vapores, a potência de mistura e o calor da camisa. Também confere a composição em base seca com os mínimos do Codex Alimentarius para chocolate ao leite ou amargo.',
+      'No exemplo, 1 443 kg/h de massa refinada recebem 90 kg/h de manteiga e 7,7 kg/h de lecitina e são conchados por 8 h a 70 °C: a umidade cai de 0,74 % para 0,52 % e metade do ácido acético sai com 282 kg/h de ar. O chocolate tem 31,8 % de gordura e 0,5 % de lecitina e atende ao Codex (31,5 % de sólidos de cacau e 19,6 % de sólidos do leite); são precisas 3 conchadeiras de 6 t.'] },
+    temperer: { ex: ex('fabrica-chocolate', 'A Fábrica de Chocolate dos Sonhos'), p: [
+      'A manteiga de cacau pode cristalizar em seis formas, da I à VI. Só a forma V, que funde a 33,8 °C, dá brilho, estalo e derrete na boca; as outras deixam o chocolate mole, sem brilho e com manchas brancas (fat bloom). A temperagem funde todos os cristais, resfria a massa para formar cristais e reaquece um pouco para fundir os instáveis: sobram sementes da forma V, que guiam a cristalização no túnel.',
+      'O bloco faz o balanço de energia de cada zona e do túnel com o calor sensível (c_p de Choi e Okos) e o calor latente da fração de gordura que cristaliza ou funde. O tempo no túnel vem de um balanço de parâmetros concentrados para uma barra resfriada pelas duas faces, e o gráfico mostra o caminho da temperatura junto às temperaturas de fusão das seis formas.',
+      'No exemplo, 1 537 kg/h de chocolate ao leite passam por 45, 27 e 29,5 °C e são moldados em 15 374 barras de 100 g por hora. No túnel, com ar a 12 °C, as barras levam 26 min para chegar a 16 °C, o que pede 40 m de túnel a 1,5 m/min. A água gelada retira 55 kW, dos quais 14 kW são calor latente da cristalização da gordura.'] },
     steam_condenser: { ex: ex('usina-nuclear-pwr', 'Usina nuclear PWR completa (tipo Angra 2)'), p: [
       'O condensador de superfície fecha o ciclo de Rankine: o vapor que sai da turbina de baixa condensa sobre tubos com água fria, e o volume do vapor, milhares de vezes maior que o do líquido, desaparece. Isso cria o vácuo que permite à turbina expandir o vapor até cerca de 8 kPa e tirar dele muito mais trabalho.',
       'O bloco condensa o vapor de escape e os drenos ligados a ele até o condensado levemente subresfriado e entrega o calor à água de resfriamento, que sai mais quente pelo balanço de energia. A diferença terminal (saturação menos saída da água) e a média logarítmica dão a área de troca; sem corrente de água ligada, a vazão é calculada pelo aquecimento escolhido.',
@@ -12112,7 +12676,7 @@ window.SIMULAFACIL_CONFIG = {
     crusher: ['feed'], ball_mill: ['feed', 'recycle'], spiral_classifier: ['feed'], hydrocyclone: ['feed'], flotation: ['feed'], flot_col_bench: ['feed'], flot_col_ind: ['feed'],
     coke_oven: ['coal'], sinter_plant: ['ore', 'flux', 'fuel'], bof: ['hot_metal', 'scrap'], caster: ['steel'], rolling_mill: ['billet'], wire_drawing: ['rod'],
     wood_yard: ['logs'], pulp_washer: ['pulp'], bleach_plant: ['pulp'], paper_machine: ['stock'], recovery_boiler: ['liquor'], causticizing: ['smelt'], steam_gen: ['water'], steam_turbine: ['steam'],
-    nuclear_reactor: ['cold_leg'], pwr_steam_gen: ['primary_in', 'feedwater'], msr: ['heating'], steam_condenser: ['cw_in', 'drain'], deaerator: ['drain1', 'drain2'] };
+    nuclear_reactor: ['cold_leg'], pwr_steam_gen: ['primary_in', 'feedwater'], msr: ['heating'], steam_condenser: ['cw_in', 'drain'], deaerator: ['drain1', 'drain2'], cocoa_alkalizer: ['alkali'], conche: ['fat', 'emulsifier'] };
   // portas de energia (correntes de energia): não carregam matéria
   const ENERGY_PORTS = { ei: 1, eo: 1, q_in: 1, q_out: 1, qc: 1, qr: 1, q_pre: 1 };
   const isEnergyPort = p => !!ENERGY_PORTS[p];
@@ -12260,6 +12824,12 @@ window.SIMULAFACIL_CONFIG = {
     out1: 'saída 1', out2: 'saída 2', out3: 'saída 3', hot_in: 'entrada quente', cold_in: 'entrada fria', ei: 'entrada de energia', eo: 'saída de energia', q_in: 'entrada de energia', q_out: 'saída de energia (calor retirado)', qc: 'calor do condensador', qr: 'calor do refervedor', q_pre: 'calor do pré-aquecedor da carga', feed: 'alimentação', feed2: 'alimentação 2', feed3: 'alimentação 3', product: 'produto', exhaust: 'ar de saída', liquor: 'água-mãe', crystals: 'cristais', condensate: 'condensado', gas: 'gás (CO₂)', oil: 'óleo', alcohol: 'metanol', solvent: 'solvente', solids: 'sólidos', gas_in: 'gás', liq_in: 'líquido', in1: 'entrada 1', in2: 'entrada 2', in3: 'entrada 3', in4: 'entrada 4' };
   // nomes de porta que mudam conforme o equipamento (a mesma porta 'overflow' é extrato na lixiviação e líquido clarificado no sedimentador)
   const TYPE_PORT_LABELS = {
+    cocoa_roaster: { feed: 'amêndoas de cacau', product: 'amêndoas torradas', vapor: 'exaustão (ar, vapor e ácido acético)', q_in: 'queimador' },
+    cocoa_alkalizer: { feed: 'liquor de cacau', alkali: 'solução de K₂CO₃', product: 'liquor alcalinizado', vapor: 'vapor e CO₂', q_in: 'vapor de aquecimento' },
+    cocoa_mill: { feed: 'nibs ou massa', product: 'liquor ou chocolate refinado', q_in: 'motor' },
+    cocoa_press: { feed: 'liquor de cacau', butter: 'manteiga de cacau', cake: 'torta (cacau em pó)' },
+    conche: { feed: 'massa refinada', fat: 'manteiga de cacau', emulsifier: 'lecitina', product: 'chocolate conchado', vapor: 'ar de exaustão', q_in: 'motores' },
+    temperer: { feed: 'chocolate conchado', product: 'barras de chocolate', q_out: 'água gelada' },
     blast_furnace: { ore: 'minério', coke: 'coque', flux: 'fundente', blast: 'ar de sopro', gas: 'gás de topo', slag: 'escória', pig_iron: 'gusa' },
     cement_kiln: { meal: 'farinha crua', fuel: 'combustível', air: 'ar de combustão', gas: 'gases de exaustão', clinker: 'clínquer' },
     silo: { feed: 'alimentação', product: 'descarga' },
@@ -12409,7 +12979,13 @@ window.SIMULAFACIL_CONFIG = {
     steam_condenser: { w: 160, h: 100, ports: { steam: P(80, 0, 'u', 'in'), drain: P(0, 26, 'l', 'in'), cw_in: P(0, 62, 'l', 'in'), cw_out: P(160, 62, 'r', 'out'), condensate: P(80, 100, 'd', 'out') } },
     deaerator: { w: 150, h: 110, ports: { condensate: P(30, 0, 'u', 'in'), drain1: P(60, 0, 'u', 'in'), drain2: P(90, 0, 'u', 'in'), steam: P(0, 78, 'l', 'in'), out: P(150, 92, 'r', 'out') } },
     reactor_kinetics: { w: 150, h: 110, ports: {} },
-    reactor_shutdown: { w: 150, h: 110, ports: {} }
+    reactor_shutdown: { w: 150, h: 110, ports: {} },
+    cocoa_roaster: { w: 150, h: 100, ports: { feed: P(22, 0, 'u', 'in'), vapor: P(124, 0, 'u', 'out'), product: P(150, 74, 'r', 'out'), q_in: P(75, 100, 'd', 'ein') } },
+    cocoa_alkalizer: { w: 120, h: 110, ports: { feed: P(0, 46, 'l', 'in'), alkali: P(34, 0, 'u', 'in'), vapor: P(86, 0, 'u', 'out'), product: P(120, 96, 'r', 'out'), q_in: P(60, 110, 'd', 'ein') } },
+    cocoa_mill: { w: 120, h: 110, ports: { feed: P(0, 86, 'l', 'in'), product: P(120, 22, 'r', 'out'), q_in: P(60, 110, 'd', 'ein') } },
+    cocoa_press: { w: 130, h: 110, ports: { feed: P(0, 36, 'l', 'in'), butter: P(130, 70, 'r', 'out'), cake: P(65, 110, 'd', 'out') } },
+    conche: { w: 160, h: 100, ports: { feed: P(0, 66, 'l', 'in'), fat: P(46, 0, 'u', 'in'), emulsifier: P(76, 0, 'u', 'in'), vapor: P(132, 0, 'u', 'out'), product: P(160, 84, 'r', 'out'), q_in: P(80, 100, 'd', 'ein') } },
+    temperer: { w: 190, h: 100, ports: { feed: P(0, 20, 'l', 'in'), product: P(190, 84, 'r', 'out'), q_out: P(36, 100, 'd', 'eout') } }
   };
 
   /* primitivas: rect (x,y,w,h,r), circ (cx,cy,r), line (polilinha aberta), poly (polígono fechado), text.
@@ -12467,6 +13043,37 @@ window.SIMULAFACIL_CONFIG = {
   }
 
   const PRIMS = {
+    cocoa_roaster: () => [ // torrador: tremonha, tambor rotativo com as amêndoas rolando, roletes, chama do queimador e chaminé da exaustão
+      Pg([[10, 0], [34, 0], [28, 14], [16, 14]], 'bodyw'), L([[22, 14], [22, 26]]), L([[124, 0], [124, 26]], 'lnd'), R(116, 6, 16, 6, 2, 'bodyw'),
+      R(8, 26, 134, 40, 20), C(30, 57, 3.4, 'hot'), C(40, 60, 3.4, 'hot'), C(50, 57, 3.4, 'hot'), C(36, 52, 3.4, 'hot'), C(46, 52, 3.4, 'hot'),
+      L([[94, 32], [104, 60]], 'lnd'), L([[110, 32], [120, 60]], 'lnd'), C(32, 73, 5), C(118, 73, 5), L([[142, 50], [146, 50], [146, 74], [150, 74]]),
+      Pg([[64, 96], [69, 86], [73, 90], [77, 80], [81, 89], [86, 96]], 'hot'), L([[75, 96], [75, 100]], 'hot'), T(75, 42, 'torrador')],
+    cocoa_alkalizer: () => [ // alcalinizador: reator com camisa de vapor, agitador de pás, entrada do álcali e saída do vapor e do CO₂
+      L([[34, 0], [34, 16]]), L([[86, 0], [86, 16]], 'lnd'), R(53, 0, 14, 9, 2, 'bodyw'), L([[60, 9], [60, 72]]),
+      R(14, 16, 92, 82, 14), R(8, 42, 6, 44, 2, 'bodyw'), R(106, 42, 6, 44, 2, 'bodyw'),
+      L([[42, 72], [78, 72]]), L([[42, 66], [42, 78]]), L([[78, 66], [78, 78]]),
+      L([[0, 46], [14, 46]]), L([[106, 96], [120, 96]]), L([[60, 98], [60, 110]], 'hot'), T(60, 40, 'K₂CO₃'), T(60, 93, 'pH ↑')],
+    cocoa_mill: () => [ // moinho de cacau e refinadora: cilindros em escada; a massa sobe de cilindro em cilindro e a faca raspa o último
+      L([[0, 86], [15, 86]]), C(26, 86, 11), C(42, 70, 11), C(58, 54, 11), C(74, 38, 11), C(90, 22, 11),
+      C(26, 86, 3, 'hot'), C(42, 70, 3, 'cold'), C(58, 54, 3, 'hot'), C(74, 38, 3, 'cold'), C(90, 22, 3, 'hot'),
+      L([[100, 12], [110, 6]]), L([[101, 22], [120, 22]]), R(46, 90, 30, 18, 3, 'bodyw'), L([[60, 108], [60, 110]]), T(61, 103, 'M')],
+    cocoa_press: () => [ // prensa hidráulica: cilindro e pistão no alto, potes de liquor, manteiga escorrendo pela lateral e torta embaixo
+      R(52, 0, 26, 14, 3, 'bodyw'), L([[65, 14], [65, 24]]), R(14, 24, 102, 8, 2), L([[14, 32], [14, 92]]), L([[116, 32], [116, 92]]),
+      R(26, 36, 78, 12, 3), R(26, 52, 78, 12, 3), R(26, 68, 78, 12, 3), L([[0, 36], [8, 36], [26, 42]]),
+      L([[104, 70], [130, 70]], 'hot'), C(110, 60, 2, 'hot'), C(110, 65, 1.6, 'hot'),
+      R(10, 92, 110, 8, 2), Pg([[48, 100], [82, 100], [72, 108], [58, 108]], 'bodyw'), L([[65, 108], [65, 110]]), T(65, 62, 'prensa')],
+    conche: () => [ // conchadeira: cuba longa com camisa, dois rotores de pás, entradas da manteiga e da lecitina e ventilação
+      L([[46, 0], [46, 22]], 'hot'), L([[76, 0], [76, 22]]), L([[132, 0], [132, 22]], 'lnd'), R(20, 22, 124, 8, 3, 'bodyw'),
+      R(12, 30, 140, 62, 26), R(6, 50, 6, 30, 2, 'bodyw'), R(152, 50, 6, 30, 2, 'bodyw'),
+      C(54, 64, 15), C(110, 64, 15), L([[54, 49], [54, 79]]), L([[39, 64], [69, 64]]), L([[110, 49], [110, 79]]), L([[95, 64], [125, 64]]),
+      L([[0, 66], [12, 66]]), L([[152, 84], [160, 84]]), L([[80, 92], [80, 100]], 'hot'), T(82, 44, 'concha')],
+    temperer: () => [ // temperadeira de três zonas (quente, fria, morna), moldes na esteira e túnel de resfriamento
+      L([[0, 20], [10, 20]]), R(10, 6, 52, 84, 8), L([[16, 28], [56, 28]], 'hot'), L([[16, 32], [56, 32]], 'hot'),
+      L([[16, 54], [56, 54]], 'cold'), L([[16, 58], [56, 58]], 'cold'), L([[16, 78], [56, 78]], 'hot'), T(36, 47, '1 2 3'),
+      L([[62, 84], [70, 84], [70, 88]]), L([[72, 92], [184, 92]]), C(76, 92, 4), C(184, 92, 4),
+      R(80, 82, 12, 7, 1, 'bodyw'), R(98, 82, 12, 7, 1, 'bodyw'), R(130, 80, 12, 7, 1, 'bodyw'), R(152, 80, 12, 7, 1, 'bodyw'),
+      R(118, 52, 64, 36, 6), L([[124, 62], [176, 62]], 'cold'), L([[124, 70], [176, 70]], 'cold'), T(150, 48, 'túnel'),
+      L([[182, 84], [190, 84]]), L([[36, 90], [36, 100]], 'cold')],
     feed: () => [Pg([[2, 6], [36, 6], [50, 15], [36, 24], [2, 24]], 'bodyb'), T(22, 19, 'F', 'lblb')],
     product: () => [Pg([[4, 6], [38, 6], [52, 15], [38, 24], [4, 24]], 'bodyw'), T(24, 19, 'P', 'lblb')],
     mixer: () => [Pg([[4, 4], [52, 26], [52, 38], [4, 60]])],
@@ -17468,6 +18075,45 @@ def pfr_transiente(P, nome):
   const bioFeed = (Q, X, Sg, sub, rho) => { const M = Q * rho / 1000, x = X * Q / 1000 / M, sg = Sg * Q / 1000 / M, c = { water: 1 - x - sg };
     c[sub] = sg; if (x > 0) c.biomass = x; return { T: 30, P: 1.01325, vf: '', flow: M, flowUnit: 'kg/h', basis: 'mássica', composition: c }; };
   const EX = [
+    { key: 'fabrica-chocolate', title: 'A Fábrica de Chocolate dos Sonhos: do cacau à barra de chocolate ao leite — torra, descasque, moagem, alcalinização com K₂CO₃, prensa (manteiga e cacau em pó), mistura, refino, conchagem, temperagem e túnel de resfriamento', fs: {
+      name: 'A Fábrica de Chocolate dos Sonhos', theme: 'chocolate', fixedLayout: true,
+      components: ['water', 'acetic-acid', 'cocoa-butter', 'cocoa-solids', 'cocoa-shell', 'k2co3', 'potassium-acetate', 'co2', 'sucrose', 'milk-fat', 'milk-snf', 'lecithin', 'cs-air'], model: 'IDEAL',
+      blocks: [
+        { id: 'FC', x: 20, y: 40, type: 'feed', name: 'Amêndoas de cacau (1 t/h)', params: { T: 25, P: 1.01325, vf: '', flow: 1000, flowUnit: 'kg/h', basis: 'mássica',
+          composition: { water: 0.07, 'acetic-acid': 0.006, 'cocoa-butter': 0.44, 'cocoa-solids': 0.364, 'cocoa-shell': 0.12 } } },
+        { id: 'TOR', x: 120, y: 80, type: 'cocoa_roaster', name: 'Torrador TOR-101', params: {} },
+        { id: 'EQ', type: 'energy', name: 'Queimador', params: { Q: '' } },
+        { id: 'DES', x: 330, y: 120, type: 'separator', name: 'Descascador DES-101', params: { splits: { water: 0.85, 'acetic-acid': 0.85, 'cocoa-butter': 0.99, 'cocoa-solids': 0.985, 'cocoa-shell': 0.03,
+          k2co3: 1, 'potassium-acetate': 1, co2: 1, sucrose: 1, 'milk-fat': 1, 'milk-snf': 1, lecithin: 1, 'cs-air': 1 } } },
+        { id: 'MOI', x: 470, y: 50, type: 'cocoa_mill', name: 'Moinho de cacau MOI-101', params: { mode: 'moinho de nibs (pinos + bolas): nibs → liquor de cacau' } },
+        { id: 'EM', type: 'energy', name: 'Motor do moinho', params: { Q: '' } },
+        { id: 'DIV', x: 660, y: 40, type: 'splitter', name: 'Divisão do liquor', params: { f1: 0.227, f2: 0.773 } },
+        { id: 'FK', x: 680, y: 0, type: 'feed', name: 'Solução de K₂CO₃ (40 %)', params: { T: 25, P: 1.01325, vf: '', flow: 17, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.6, k2co3: 0.4 } } },
+        { id: 'ALC', x: 800, y: 80, type: 'cocoa_alkalizer', name: 'Alcalinizador ALC-101', params: {} },
+        { id: 'PRE', x: 990, y: 140, type: 'cocoa_press', name: 'Prensa PRE-101', params: {} },
+        { id: 'RP', x: 1170, y: 290, type: 'cooler', name: 'Pulverizador e resfriador', params: { mode: 'Temperatura de saída', T: 20, dP: 0 } },
+        { id: 'DM', x: 1180, y: 180, type: 'splitter', name: 'Divisor da manteiga', params: { f1: 0.7, f2: 0.3 } },
+        { id: 'FA', x: 520, y: 444, type: 'feed', name: 'Açúcar', params: { T: 25, P: 1.01325, vf: '', flow: 740, flowUnit: 'kg/h', basis: 'mássica', composition: { sucrose: 1 } } },
+        { id: 'FL', x: 520, y: 504, type: 'feed', name: 'Leite em pó integral', params: { T: 25, P: 1.01325, vf: '', flow: 308, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.025, 'milk-fat': 0.267, 'milk-snf': 0.708 } } },
+        { id: 'MIS', x: 660, y: 440, type: 'mixer', name: 'Misturador MIS-101', params: { P: '' } },
+        { id: 'REF', x: 780, y: 400, type: 'cocoa_mill', name: 'Refinadora REF-101', params: { mode: 'refinadora de cinco cilindros: massa → chocolate fino' } },
+        { id: 'FLE', x: 930, y: 330, type: 'feed', name: 'Lecitina de soja', params: { T: 25, P: 1.01325, vf: '', flow: 7.7, flowUnit: 'kg/h', basis: 'mássica', composition: { lecithin: 1 } } },
+        { id: 'CON', x: 1010, y: 420, type: 'conche', name: 'Conchadeiras CON-101', params: {} },
+        { id: 'EC', type: 'energy', name: 'Motores das conchadeiras', params: { Q: '' } },
+        { id: 'TEM', x: 1230, y: 484, type: 'temperer', name: 'Temperadeira e túnel TEM-101', params: {} },
+        { id: 'EF', type: 'energy', name: 'Água gelada', params: { Q: '' } },
+        { id: 'P1', x: 440, y: 262, type: 'product', name: 'Casca de cacau' }, { id: 'P2', x: 300, y: 0, type: 'product', name: 'Exaustão do torrador' },
+        { id: 'P3', x: 930, y: 0, type: 'product', name: 'Vapor e CO₂' }, { id: 'P4', x: 1300, y: 303, type: 'product', name: 'Cacau em pó alcalino' },
+        { id: 'P5', x: 1160, y: 340, type: 'product', name: 'Exaustão das conchas' }, { id: 'P6', x: 1480, y: 553, type: 'product', name: 'Barras de chocolate ao leite' }],
+      streams: [S('1', 'FC', 'out', 'TOR', 'feed', 'Amêndoas'), S('E1', 'EQ', 'eo', 'TOR', 'q_in', 'Gás natural'), S('2', 'TOR', 'vapor', 'P2', 'in', 'Exaustão'),
+        S('3', 'TOR', 'product', 'DES', 'in', 'Torradas'), S('4', 'DES', 'out2', 'P1', 'in', 'Casca'), S('5', 'DES', 'out1', 'MOI', 'feed', 'Nibs'),
+        S('E2', 'EM', 'eo', 'MOI', 'q_in', 'Motor'), S('6', 'MOI', 'product', 'DIV', 'in', 'Liquor'), S('7', 'DIV', 'out2', 'ALC', 'feed', 'Liquor'),
+        S('8', 'FK', 'out', 'ALC', 'alkali', 'K₂CO₃'), S('9', 'ALC', 'vapor', 'P3', 'in', 'Vapor'), S('10', 'ALC', 'product', 'PRE', 'feed', 'Alcalino'),
+        S('11', 'PRE', 'cake', 'RP', 'in', 'Torta'), S('12', 'RP', 'out', 'P4', 'in', 'Pó'), S('13', 'PRE', 'butter', 'DM', 'in', 'Manteiga'),
+        S('14', 'DIV', 'out1', 'MIS', 'in1', 'Liquor'), S('15', 'FA', 'out', 'MIS', 'in2', 'Açúcar'), S('16', 'FL', 'out', 'MIS', 'in3', 'Leite'), S('17', 'DM', 'out1', 'MIS', 'in4', 'Manteiga'),
+        S('18', 'MIS', 'out', 'REF', 'feed', 'Massa'), S('19', 'REF', 'product', 'CON', 'feed', 'Refinada'), S('20', 'DM', 'out2', 'CON', 'fat', 'Manteiga'),
+        S('21', 'FLE', 'out', 'CON', 'emulsifier', 'Lecitina'), S('E3', 'EC', 'eo', 'CON', 'q_in', 'Motores'), S('22', 'CON', 'vapor', 'P5', 'in', 'Exaustão'),
+        S('23', 'CON', 'product', 'TEM', 'feed', 'Conchado'), S('E4', 'TEM', 'q_out', 'EF', 'ei', 'Água gelada'), S('24', 'TEM', 'product', 'P6', 'in', 'Barras')] } },
     { key: 'etoh-mccabe', title: 'Destilação etanol/água — McCabe-Thiele', fs: {
       name: 'Destilação etanol-água', components: ['ethanol', 'water'], model: 'NRTL',
       blocks: [
@@ -18274,7 +18920,7 @@ def pfr_transiente(P, nome):
   // blocos sem parâmetros recebem os valores pré-setados da unidade (secador, cristalizador, biorreatores...)
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && !Object.keys(b.params).length) T.params.forEach(f => { if (f.def !== undefined) b.params[f.k] = f.def; }); }));
   // equipamentos contínuos de sólidos e bioprocessos: os campos que o exemplo não informa recebem o valor pré-setado
-  const FILL = /^(evap_cond|filter_plate|filter_rotary|tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|centrifuge|biodigester|pasteurizer|butter_churn|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester|crusher|ball_mill|spiral_classifier|hydrocyclone|flotation|flot_col_|coke_oven|sinter_plant|bof|caster|rolling_mill|wire_drawing|wood_yard|pulp_washer|bleach_plant|paper_machine|recovery_boiler|causticizing|steam_gen|steam_turbine|nuclear_reactor|pwr_steam_gen|msr|steam_condenser|deaerator|reactor_kinetics|reactor_shutdown|p_precip|daf|act_sludge)/;
+  const FILL = /^(evap_cond|filter_plate|filter_rotary|tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|centrifuge|biodigester|pasteurizer|butter_churn|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester|crusher|ball_mill|spiral_classifier|hydrocyclone|flotation|flot_col_|coke_oven|sinter_plant|bof|caster|rolling_mill|wire_drawing|wood_yard|pulp_washer|bleach_plant|paper_machine|recovery_boiler|causticizing|steam_gen|steam_turbine|nuclear_reactor|pwr_steam_gen|msr|steam_condenser|deaerator|reactor_kinetics|reactor_shutdown|p_precip|daf|act_sludge|cocoa_|conche|temperer)/;
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && FILL.test(b.type)) T.params.forEach(f => { if (b.params[f.k] === undefined && f.def !== undefined) b.params[f.k] = f.def; }); }));
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -18674,7 +19320,7 @@ def pfr_transiente(P, nome):
     const claudeUrl = (window.SIMULAFACIL_CONFIG && window.SIMULAFACIL_CONFIG.claudeUrl) || '';
 
     function add(kind, html) { const d = document.createElement('div'); d.className = 'msg ' + kind; d.innerHTML = html; chat.appendChild(d); chat.scrollTop = chat.scrollHeight; return d; }
-    add('bot', md('Olá! Sou o agente do **SIMULA FÁCIL IA**. Descreva o processo (vazões, composições, temperaturas, pureza desejada) ou anexe uma figura do fluxograma, e eu monto, simulo e sugiro melhorias. Escolha abaixo o modelo de IA: **Claude** ou **Gemini**. Um exemplo de destilação etanol/água já está carregado.'));
+    add('bot', md('Olá! Sou o agente do **SIMULA FÁCIL IA**. Descreva o processo (vazões, composições, temperaturas, pureza desejada) ou anexe uma figura do fluxograma, e eu monto, simulo e sugiro melhorias. Escolha abaixo o modelo de IA: **Claude** ou **Gemini**. Na primeira visita, o exemplo **A Fábrica de Chocolate dos Sonhos** já vem carregado.'));
 
     /* ---- configuração do Gemini */
     let sessionKey = store.get(K_KEY) || '';
@@ -19115,6 +19761,245 @@ def pfr_transiente(P, nome):
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
+<script>/* js/chocolate.js */
+/* SIMULA FÁCIL IA — exemplo "A Fábrica de Chocolate dos Sonhos" (versão 5.2): abertura animada em canvas, valsa ao piano
+   sintetizada com a Web Audio API e correntes do fluxograma com chocolate escorrendo. Tudo é gerado por código, sem arquivos de
+   áudio, vídeo ou imagem. A valsa é uma composição original (fá maior, compasso 3/4), feita para o programa. */
+(function (root) {
+  'use strict';
+  const SF = root.SF = root.SF || {};
+  const doc = root.document;
+  if (!doc) return;
+  const reduced = () => !!(root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const $ = s => doc.querySelector(s);
+
+  /* ---------------------------------------------------------------- piano */
+  // cada compasso: [baixo, acorde dos tempos 2 e 3, melodia [[nota MIDI, tempos]], brilho de celesta no 3º tempo]
+  const SONG = [
+    [41, [57, 60, 65], [[69, 2], [72, 1]]],
+    [38, [57, 62, 65], [[77, 2], [76, 1]]],
+    [46, [58, 62, 65], [[74, 1], [72, 1], [70, 1]]],
+    [36, [58, 60, 64], [[72, 3]], [84, 88, 91]],
+    [41, [57, 60, 65], [[69, 1], [70, 1], [72, 1]]],
+    [45, [57, 60, 64], [[76, 2], [74, 1]]],
+    [43, [58, 62, 65], [[74, 1], [72, 1], [70, 1]]],
+    [36, [55, 60, 64], [[67, 3]], [84, 88, 91]],
+    [38, [57, 62, 65], [[69, 1], [74, 1], [77, 1]]],
+    [46, [58, 62, 65], [[77, 2], [74, 1]]],
+    [45, [57, 60, 65], [[72, 1], [77, 1], [81, 1]]],
+    [43, [58, 62, 67], [[79, 2], [77, 1]], [86, 89, 91]],
+    [46, [58, 62, 65], [[74, 1], [77, 1], [82, 1]]],
+    [48, [58, 60, 64], [[81, 1], [79, 1], [76, 1]]],
+    [41, [57, 60, 65], [[77, 3]], [89, 93, 96]],
+    [36, [55, 58, 64], [[72, 1], [74, 1], [76, 1]]]
+  ];
+  const BEAT = 60 / 84, VOL = 1.5;
+  let ac = null, out = null, dry = null, wet = null, bus = null, timer = null, on = false, nextBar = 0, barIdx = 0, loop = 0;
+  function ensure() {
+    if (ac) return true;
+    const A = root.AudioContext || root.webkitAudioContext; if (!A) return false;
+    try { ac = new A(); } catch (e) { ac = null; return false; }
+    const comp = ac.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 3;
+    out = ac.createGain(); out.gain.value = VOL; out.connect(comp); comp.connect(ac.destination);
+    dry = ac.createGain(); dry.gain.value = 0.85; dry.connect(out);
+    const rv = ac.createConvolver(), n = Math.floor(ac.sampleRate * 2.8), buf = ac.createBuffer(2, n, ac.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = buf.getChannelData(c); for (let k = 0; k < n; k++) d[k] = (Math.random() * 2 - 1) * Math.pow(1 - k / n, 3.4); }
+    rv.buffer = buf; wet = ac.createGain(); wet.gain.value = 0.3; wet.connect(rv); rv.connect(out);
+    return true;
+  }
+  // uma nota de piano: parciais levemente inarmônicas, ataque rápido, decaimento mais curto nos agudos e abafador ao soltar a tecla
+  function note(m, t, dur, vel, cel) {
+    const f = 440 * Math.pow(2, (m - 69) / 12), g = ac.createGain(), lp = ac.createBiquadFilter(), end = t + dur + 1.6;
+    lp.type = 'lowpass'; lp.Q.value = 0.5;
+    lp.frequency.setValueAtTime(Math.min(12000, f * (cel ? 14 : 7)), t); lp.frequency.setTargetAtTime(Math.max(500, f * 2.4), t + 0.02, 0.5);
+    const tau = cel ? 0.45 : 1.5 * Math.pow(262 / f, 0.5);
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(vel, t + 0.005);
+    g.gain.setTargetAtTime(vel * 0.5, t + 0.005, 0.09); g.gain.setTargetAtTime(0, t + 0.12, tau); g.gain.setTargetAtTime(0, t + dur, 0.16);
+    const parts = cel ? [[1, 1], [4, 0.2], [8.2, 0.06]] : [[1, 1], [2, 0.45], [3, 0.2], [4, 0.1], [5, 0.05], [6, 0.025]];
+    parts.forEach((q, j) => {
+      const o = ac.createOscillator(), og = ac.createGain(); o.type = 'sine'; o.frequency.value = f * q[0] * Math.sqrt(1 + 0.0004 * q[0] * q[0]);
+      if (j === 0 && !cel) o.detune.value = 2;
+      og.gain.value = q[1] * 0.55; o.connect(og); og.connect(g); o.start(t); o.stop(end);
+    });
+    g.connect(lp); lp.connect(bus);
+  }
+  function playBar(b, t0) {
+    const at = k => t0 + k * BEAT + (k ? 0.015 : 0);   // segundo e terceiro tempos levemente atrasados, como numa valsa
+    note(b[0], t0, BEAT * 2.7, 0.17); note(b[0] + 12, t0 + 0.008, BEAT * 0.9, 0.05);
+    b[1].forEach(m => { note(m, at(1), BEAT * 0.75, 0.06); note(m, at(2), BEAT * 0.75, 0.05); });
+    let k = 0;
+    b[2].forEach(q => { const v = 0.2 + 0.03 * Math.sin(barIdx + k); note(q[0], t0 + k * BEAT, q[1] * BEAT * 0.97, v); if (loop % 2) note(q[0] + 12, t0 + k * BEAT + 0.005, q[1] * BEAT * 0.9, 0.045); k += q[1]; });
+    if (b[3]) b[3].forEach((m, j) => note(m, t0 + 2 * BEAT + j * BEAT / 3, BEAT / 3, 0.05, true));
+  }
+  function schedule() {
+    if (!on) return;
+    while (nextBar < ac.currentTime + 2.4) { playBar(SONG[barIdx], nextBar); nextBar += 3 * BEAT; barIdx = (barIdx + 1) % SONG.length; if (!barIdx) loop++; }
+  }
+  function start() {
+    if (!ensure()) return false;
+    if (ac.state === 'suspended' && ac.resume) { try { const r = ac.resume(); if (r && r.catch) r.catch(() => {}); } catch (e) { /* */ } }
+    if (on) return true;
+    on = true; barIdx = 0; loop = 0; nextBar = ac.currentTime + 0.2;
+    bus = ac.createGain(); bus.gain.setValueAtTime(0, ac.currentTime); bus.gain.linearRampToValueAtTime(1, ac.currentTime + 1.5); bus.connect(dry); bus.connect(wet);
+    schedule(); timer = setInterval(schedule, 300); paint(); return true;
+  }
+  function stop() {
+    if (!on) return; on = false; clearInterval(timer); timer = null;
+    if (ac && bus) { const b = bus, t = ac.currentTime; b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(b.gain.value, t); b.gain.linearRampToValueAtTime(0, t + 0.9); setTimeout(() => { try { b.disconnect(); } catch (e) { /* */ } }, 1400); }
+    bus = null; paint();
+  }
+
+  /* ---------------------------------------------------------------- botões no fluxograma */
+  let ctl = null, active = false;
+  function paint() {
+    if (!ctl) return;
+    const bm = ctl.querySelector('.cc-music');
+    bm.setAttribute('aria-pressed', on ? 'true' : 'false');
+    bm.innerHTML = (on ? '<span aria-hidden="true">⏸</span><span class="cc-t"> Pausar a valsa</span>' : '<span aria-hidden="true">🎹</span><span class="cc-t"> Tocar a valsa</span>');
+    bm.title = on ? 'Pausar a valsa ao piano' : 'Tocar a valsa ao piano (composição original)'; bm.setAttribute('aria-label', bm.title);
+  }
+  function makeCtl() {
+    if (ctl) return ctl;
+    const wrap = $('#canvasWrap'); if (!wrap) return null;
+    ctl = doc.createElement('div'); ctl.className = 'choc-ctl'; ctl.hidden = true; ctl.setAttribute('role', 'group'); ctl.setAttribute('aria-label', 'Música e abertura do exemplo da fábrica de chocolate');
+    ctl.innerHTML = '<button type="button" class="cc-music" aria-pressed="false"></button><button type="button" class="cc-intro" title="Ver de novo a abertura animada" aria-label="Ver de novo a abertura animada"><span aria-hidden="true">✨</span><span class="cc-t"> Abertura</span></button>';
+    ctl.querySelector('.cc-music').onclick = () => { if (on) stop(); else start(); };
+    ctl.querySelector('.cc-intro').onclick = () => { start(); intro(); };
+    wrap.appendChild(ctl); paint(); return ctl;
+  }
+  function sync(isChoc) {
+    active = !!isChoc;
+    const svg = $('#pfd'); if (svg) svg.classList.toggle('choc', active);
+    const c = makeCtl(); if (c) c.hidden = !active;
+    if (!active) { stop(); closeIntro(true); }
+  }
+
+  /* ---------------------------------------------------------------- abertura animada */
+  let lay = null, raf = 0, t0 = 0, resizeFn = null, keyFn = null, closing = false;
+  const LIGHTS = ['#ffd45e', '#ff9fbf', '#8fe8cc', '#a6cfff', '#ffb877'];
+  function closeIntro(now) {
+    if (!lay || closing) return;
+    const l = lay; closing = true;
+    const done = () => { cancelAnimationFrame(raf); raf = 0; if (l.parentNode) l.parentNode.removeChild(l); lay = null; closing = false;
+      root.removeEventListener('resize', resizeFn); doc.removeEventListener('keydown', keyFn, true); const b = ctl && ctl.querySelector('.cc-music'); if (b && active && !now) b.focus({ preventScroll: true }); };
+    if (now || reduced()) done(); else { l.classList.add('out'); setTimeout(done, 650); }
+  }
+  function intro() {
+    if (lay) return;
+    lay = doc.createElement('div'); lay.className = 'choc-intro'; lay.setAttribute('role', 'dialog'); lay.setAttribute('aria-modal', 'true'); lay.setAttribute('aria-labelledby', 'ciTitle');
+    lay.innerHTML = '<canvas aria-hidden="true"></canvas><div class="ci-txt"><p class="ci-k">SIMULA FÁCIL IA apresenta</p>' +
+      '<h2 id="ciTitle">A Fábrica de Chocolate<br><em>dos Sonhos</em></h2><p class="ci-s">do cacau à barra: torra, alcalinização, prensa, refino, conchagem e temperagem</p>' +
+      '<p class="ci-m"><span aria-hidden="true">🎹</span> valsa original ao piano</p></div>' +
+      '<div class="ci-btns"><button type="button" class="ci-mute"></button><button type="button" class="ci-go">Entrar na fábrica <span aria-hidden="true">▸</span></button></div>';
+    doc.body.appendChild(lay);
+    const cv = lay.querySelector('canvas'), cx = cv.getContext('2d'), mute = lay.querySelector('.ci-mute');
+    const paintMute = () => { mute.innerHTML = on ? '<span aria-hidden="true">🔇</span> Sem música' : '<span aria-hidden="true">🎹</span> Com música'; };
+    mute.onclick = () => { if (on) stop(); else start(); paintMute(); }; paintMute();
+    lay.querySelector('.ci-go').onclick = () => closeIntro();
+    keyFn = e => { if (e.key === 'Escape' || e.key === 'Enter') { e.preventDefault(); closeIntro(); } };
+    doc.addEventListener('keydown', keyFn, true);
+    setTimeout(() => { const g = lay && lay.querySelector('.ci-go'); if (g) g.focus({ preventScroll: true }); }, 60);
+    let W = 0, H = 0, dpr = 1, beans = [], stars = [], bulbs = [], blds = [];
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    resizeFn = () => {
+      dpr = Math.min(2, root.devicePixelRatio || 1); W = root.innerWidth; H = root.innerHeight;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.width = W + 'px'; cv.style.height = H + 'px'; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const nB = Math.max(8, Math.round(W / 70));
+      beans = []; for (let k = 0; k < nB; k++) beans.push({ x: rnd(0.05, 0.95) * W, y: rnd(-1.2, -0.05) * H, v: rnd(40, 90), s: rnd(13, 22), a: rnd(0, 6.3), w: rnd(-1.6, 1.6), d: rnd(0, 2.5) });
+      stars = []; for (let k = 0; k < Math.round(W / 22); k++) stars.push({ x: rnd(0, 1) * W, y: rnd(0.08, 0.6) * H, r: rnd(1.2, 3.2), f: rnd(0.3, 0.9), p: rnd(0, 6.3) });
+      blds = []; for (let x = -10, k = 0; x < W * 0.72; k++) { const w = rnd(70, 150), h = rnd(0.09, 0.2) * H, saw = k % 3 !== 1, win = [];
+        for (let wy = 14; wy < h - 12; wy += 18) for (let wx = 10; wx < w - 14; wx += 20) win.push({ x: wx, y: wy, on: Math.random() < 0.72, f: rnd(0.05, 0.2), p: rnd(0, 6.3) });
+        blds.push({ x, w, h, saw, win, ch: k % 2 === 0 ? { x: x + w * rnd(0.55, 0.8), h: rnd(0.07, 0.12) * H } : null }); x += w + rnd(-12, 8); }
+      bulbs = []; [[0.06, 0.07], [0.12, 0.05]].forEach(([y0, sag], row) => { const n = Math.max(10, Math.round(W / 46)); for (let k = 0; k <= n; k++) { const u = k / n; bulbs.push({ x: u * W, y: (y0 + 4 * sag * u * (1 - u)) * H, row, c: LIGHTS[(k + row * 2) % LIGHTS.length], f: rnd(0.35, 0.85), p: rnd(0, 6.3) }); } });
+    };
+    resizeFn(); root.addEventListener('resize', resizeFn);
+    const riverY = () => H * 0.78;
+    const wave = (x, t, A, L, sp, ph) => A * Math.sin(2 * Math.PI * (x / L) - sp * t + ph);
+    function bean(b) {
+      cx.save(); cx.translate(b.x, b.y); cx.rotate(b.a);
+      const g = cx.createRadialGradient(-b.s * 0.25, -b.s * 0.2, 1, 0, 0, b.s);
+      g.addColorStop(0, '#b06a3b'); g.addColorStop(0.55, '#6e3617'); g.addColorStop(1, '#3a1a0a');
+      cx.fillStyle = g; cx.beginPath(); cx.ellipse(0, 0, b.s, b.s * 0.62, 0, 0, Math.PI * 2); cx.fill();
+      cx.strokeStyle = 'rgba(255,214,170,.35)'; cx.lineWidth = 1.4; cx.beginPath(); cx.moveTo(-b.s * 0.75, 0); cx.quadraticCurveTo(0, b.s * 0.18, b.s * 0.75, 0); cx.stroke();
+      cx.restore();
+    }
+    function star(x, y, r, a) {
+      cx.save(); cx.globalAlpha = a; cx.fillStyle = '#ffe9a8'; cx.beginPath();
+      for (let k = 0; k < 8; k++) { const ang = k * Math.PI / 4, rr = k % 2 ? r * 0.35 : r * 2.2; cx.lineTo(x + rr * Math.cos(ang), y + rr * Math.sin(ang)); }
+      cx.closePath(); cx.fill(); cx.restore();
+    }
+    function frame(ms) {
+      if (!lay) return;
+      if (!t0) t0 = ms;
+      const t = reduced() ? 3 : (ms - t0) / 1000, dt = 1 / 60;
+      // céu da fábrica: do chocolate amargo ao caramelo
+      const bg = cx.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#160904'); bg.addColorStop(0.5, '#34190b'); bg.addColorStop(1, '#4e2610');
+      cx.fillStyle = bg; cx.fillRect(0, 0, W, H);
+      const vg = cx.createRadialGradient(W / 2, H * 0.42, Math.min(W, H) * 0.1, W / 2, H * 0.42, Math.max(W, H) * 0.75);
+      vg.addColorStop(0, 'rgba(255,190,110,.18)'); vg.addColorStop(1, 'rgba(0,0,0,0)'); cx.fillStyle = vg; cx.fillRect(0, 0, W, H);
+      // estrelas de açúcar
+      stars.forEach(s => star(s.x, s.y + Math.sin(t * 0.4 + s.p) * 3, s.r, 0.25 + 0.55 * (0.5 + 0.5 * Math.sin(2 * Math.PI * s.f * t + s.p))));
+      // varal de luzes: piscam devagar (menos de uma vez por segundo, seguro para quem é sensível a luzes)
+      [0, 1].forEach(row => { const bs = bulbs.filter(q => q.row === row); cx.strokeStyle = 'rgba(255,230,190,.35)'; cx.lineWidth = 1.2; cx.beginPath(); bs.forEach((q, k) => (k ? cx.lineTo(q.x, q.y) : cx.moveTo(q.x, q.y))); cx.stroke(); });
+      bulbs.forEach(q => {
+        const a = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(2 * Math.PI * q.f * t + q.p)), gl = cx.createRadialGradient(q.x, q.y + 6, 0, q.x, q.y + 6, 18);
+        gl.addColorStop(0, q.c); gl.addColorStop(1, 'rgba(0,0,0,0)'); cx.globalAlpha = a * 0.55; cx.fillStyle = gl; cx.fillRect(q.x - 18, q.y - 12, 36, 36);
+        cx.globalAlpha = 0.55 + 0.45 * a; cx.fillStyle = q.c; cx.beginPath(); cx.ellipse(q.x, q.y + 6, 3.6, 5, 0, 0, Math.PI * 2); cx.fill(); cx.globalAlpha = 1;
+      });
+      // silhueta da fábrica: galpões com telhado em serra, janelas acesas e chaminés soltando o aroma da torra
+      const base = riverY() + 6;
+      blds.forEach(q => {
+        const y0 = base - q.h; cx.fillStyle = '#1f0d04'; cx.beginPath(); cx.moveTo(q.x, base); cx.lineTo(q.x, y0);
+        if (q.saw) { const n = Math.max(2, Math.round(q.w / 34)); for (let k = 0; k < n; k++) { const xa = q.x + q.w * k / n, xb = q.x + q.w * (k + 1) / n; cx.lineTo(xa + (xb - xa) * 0.7, y0 - 16); cx.lineTo(xb, y0); } }
+        else cx.lineTo(q.x + q.w, y0);
+        cx.lineTo(q.x + q.w, base); cx.closePath(); cx.fill();
+        q.win.forEach(w2 => { const a = w2.on ? 0.55 + 0.35 * Math.sin(2 * Math.PI * w2.f * t + w2.p) : 0.08; cx.fillStyle = 'rgba(255,199,110,' + a.toFixed(3) + ')'; cx.fillRect(q.x + w2.x, y0 + w2.y, 9, 10); });
+        if (q.ch) { const cy0 = y0 - q.ch.h; cx.fillStyle = '#1f0d04'; cx.fillRect(q.ch.x, cy0, 14, q.ch.h + 2); cx.fillStyle = '#3a1a0a'; cx.fillRect(q.ch.x - 2, cy0, 18, 5);
+          for (let k = 0; k < 6; k++) { const ph = (t * 0.35 + k / 6) % 1; cx.fillStyle = 'rgba(255,236,214,' + (0.16 * (1 - ph)).toFixed(3) + ')'; cx.beginPath(); cx.arc(q.ch.x + 7 + Math.sin(ph * 5 + k) * 10 + ph * 26, cy0 - ph * 90, 6 + ph * 16, 0, Math.PI * 2); cx.fill(); } }
+      });
+      // cachoeira de chocolate saindo de um cano de cobre
+      const nar = W < 700, fx = W * (nar ? 0.9 : 0.86), fw = Math.max(nar ? 26 : 40, W * 0.045), top = H * (nar ? 0.64 : 0.5), ry = riverY();
+      const fg = cx.createLinearGradient(fx - fw / 2, 0, fx + fw / 2, 0); fg.addColorStop(0, '#3d1c0b'); fg.addColorStop(0.45, '#8a4a22'); fg.addColorStop(0.6, '#b56c3a'); fg.addColorStop(1, '#3d1c0b');
+      cx.fillStyle = fg; cx.beginPath(); cx.moveTo(fx - fw / 2, top);
+      for (let y = top; y <= ry; y += 8) cx.lineTo(fx - fw / 2 + Math.sin(y / 23 + t * 3) * 3 - (y - top) * 0.04, y);
+      for (let y = ry; y >= top; y -= 8) cx.lineTo(fx + fw / 2 + Math.sin(y / 19 - t * 3) * 3 + (y - top) * 0.04, y);
+      cx.closePath(); cx.fill();
+      const ph = fw * 1.15, pg = cx.createLinearGradient(0, top - ph - 6, 0, top + 4); pg.addColorStop(0, '#5e3216'); pg.addColorStop(0.35, '#d0925a'); pg.addColorStop(0.6, '#a5653a'); pg.addColorStop(1, '#4a2410');
+      cx.fillStyle = pg; cx.fillRect(fx - fw * 0.62, top - ph, W - fx + fw, ph);
+      cx.fillStyle = '#7b4523'; cx.fillRect(fx - fw * 0.78, top - ph - 6, fw * 0.3, ph + 12);
+      cx.strokeStyle = 'rgba(255,226,190,.35)'; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(fx - fw * 0.45, top - ph * 0.7); cx.lineTo(W, top - ph * 0.7); cx.stroke();
+      cx.strokeStyle = 'rgba(255,220,180,.28)'; cx.lineWidth = 2;
+      for (let k = 0; k < 4; k++) { const yy = top + ((t * 140 + k * (ry - top) / 4) % (ry - top)); cx.beginPath(); cx.moveTo(fx - fw * 0.2, yy); cx.lineTo(fx - fw * 0.05, yy + 26); cx.stroke(); }
+      // amêndoas de cacau caindo no rio
+      beans.forEach(b => {
+        if (t < b.d) return;
+        b.v += 120 * dt; b.y += b.v * dt; b.a += b.w * dt;
+        if (b.y > ry + 10) { b.y = rnd(-0.6, -0.05) * H; b.x = rnd(0.05, 0.75) * W; b.v = rnd(40, 90); }
+        bean(b);
+      });
+      // rio de chocolate em três camadas, com o brilho da superfície
+      [['#2d1407', 14, 260, 0.9, 0], ['#56290f', 11, 190, 1.4, 1.3], ['#7b3f1d', 7, 140, 2.1, 2.2]].forEach(([c, A, Lw, sp, ph], k) => {
+        const y0 = ry + k * 16; cx.fillStyle = c; cx.beginPath(); cx.moveTo(0, H);
+        for (let x = 0; x <= W + 10; x += 10) cx.lineTo(x, y0 + wave(x, t, A, Lw, sp, ph) + wave(x, t, A * 0.4, Lw * 0.37, sp * 1.7, ph));
+        cx.lineTo(W, H); cx.closePath(); cx.fill();
+        if (k === 2) { cx.strokeStyle = 'rgba(255,214,170,.32)'; cx.lineWidth = 2; cx.beginPath();
+          for (let x = 0; x <= W + 10; x += 10) { const y = y0 + wave(x, t, A, Lw, sp, ph) + wave(x, t, A * 0.4, Lw * 0.37, sp * 1.7, ph) + 3; x ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.stroke(); }
+      });
+      // espuma onde a cachoeira cai
+      cx.fillStyle = 'rgba(255,225,190,.22)'; for (let k = 0; k < 7; k++) { const a = t * 2 + k; cx.beginPath(); cx.ellipse(fx + Math.sin(a) * fw * 0.7, ry + 6 + Math.cos(a * 1.3) * 4, 8 + 4 * Math.sin(a * 2), 3, 0, 0, Math.PI * 2); cx.fill(); }
+      if (reduced()) { raf = 0; return; }
+      if (t > 9.5) { closeIntro(); return; }
+      raf = requestAnimationFrame(frame);
+    }
+    t0 = 0; raf = requestAnimationFrame(frame);
+    if (reduced()) setTimeout(() => closeIntro(), 4500);
+  }
+
+  // abre o exemplo pelo clique do usuário: liga a música (o navegador só permite som depois de um gesto) e mostra a abertura
+  function open() { sync(true); start(); intro(); }
+  SF.choc = { open, sync, start, stop, intro, isPlaying: () => on, SONG };
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
 <script>/* js/app.js */
 /* SIMULA FÁCIL IA — aplicação: estado, paleta, propriedades, resultados, termodinâmica, relatórios e arquivos */
 (function () {
@@ -19125,7 +20010,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', reactor_kinetics: 'CIN', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', reactor_kinetics: 'CIN', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -19243,6 +20128,7 @@ def pfr_transiente(P, nome):
   function afterChange(structural) {
     results = null; setStatus('idle', 'Alterado — simule novamente');
     $('#emptyHint').hidden = state.blocks.length > 0; $('#projName').value = state.name;
+    if (SF.choc) SF.choc.sync(state.theme === 'chocolate');   // exemplo da fábrica de chocolate: correntes de chocolate e botões da valsa
     pfd.render(); persist(); updateCompSummary();
     if (structural) renderProps();
     if ($('#autoSim') && $('#autoSim').checked && state.blocks.length) { clearTimeout(autoTimer); autoTimer = setTimeout(() => runSimulation(true), 700); }
@@ -19378,7 +20264,7 @@ def pfr_transiente(P, nome):
     const rxh = el.querySelector('.rx-help:not(.field-help)'); if (rxh) rxh.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.rxHelpOpen', rxh.open ? '1' : '0'); } catch (e) { /* */ } });
     const fh = el.querySelector('.field-help'); if (fh) fh.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.fieldHelpOpen', fh.open ? '1' : '0'); } catch (e) { /* */ } });
     const tdet = el.querySelector('.model-eq.theory'); if (tdet) tdet.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.thOpen', tdet.open ? '1' : '0'); } catch (e) { /* */ } });
-    el.querySelectorAll('[data-open-example]').forEach(btn => { btn.onclick = () => { const exm = SF.examples.find(x => x.key === btn.dataset.openExample); if (!exm) return; loadFlowsheet(exm.fs); runSimulation(true); toast('Exemplo carregado: ' + exm.title); if (SF.mobile) setMView('flow'); }; });
+    el.querySelectorAll('[data-open-example]').forEach(btn => { btn.onclick = () => { const exm = SF.examples.find(x => x.key === btn.dataset.openExample); if (!exm) return; loadFlowsheet(exm.fs); runSimulation(true); chocOpen(exm); toast('Exemplo carregado: ' + exm.title); if (SF.mobile) setMView('flow'); }; });
     bindFields(b);
   }
   function blockName(id) { const b = state.blocks.find(x => x.id === id); return b ? b.name : id; }
@@ -19414,6 +20300,24 @@ def pfr_transiente(P, nome):
   }
   // o que significa cada campo de dados de entrada, com os valores do exemplo pronto
   const FIELD_HELP = {
+    cocoa_roaster: { ex: 'A Fábrica de Chocolate dos Sonhos', items: [
+      ['Correntes', 'entrada <b>amêndoas de cacau</b> (água, ácido acético, manteiga, sólidos e casca); saídas <b>amêndoas torradas</b> e <b>exaustão</b> (ar, vapor e ácido acético); porta de energia <b>q_in</b> com o queimador.'],
+      ['Operação', 'ar quente a 150 °C por 25 min, com 60 % do ar recirculado; h = 8 W/(m²·K) no leito; amêndoa de 12 mm; constantes de secagem e de perda do ácido acético a 120 °C, com Arrhenius.']] },
+    cocoa_alkalizer: { ex: 'A Fábrica de Chocolate dos Sonhos', items: [
+      ['Correntes', 'entradas <b>liquor de cacau</b> e <b>solução de K₂CO₃</b> (opcional: sem ela, a dose vem dos campos); saídas <b>liquor alcalinizado</b> e <b>vapor e CO₂</b>.'],
+      ['Operação', '100 °C por 60 min, secagem até 1,5 % de umidade; pH do cacau natural 5,5 e capacidade tampão β = 0,2 eq/(kg·pH).']] },
+    cocoa_mill: { ex: 'A Fábrica de Chocolate dos Sonhos', items: [
+      ['Correntes', 'entrada <b>nibs</b> (moinho) ou <b>massa</b> (refinadora); saída <b>liquor</b> ou <b>chocolate refinado</b>; porta <b>q_in</b> com a potência do motor.'],
+      ['Operação', 'moinho: nibs de 3 000 µm a liquor de 35 µm a 70 °C; refinadora: de 120 a 22 µm, cilindros de 1,8 m × 0,4 m a 400 rpm.']] },
+    cocoa_press: { ex: 'A Fábrica de Chocolate dos Sonhos', items: [
+      ['Correntes', 'entrada <b>liquor</b> (de preferência alcalinizado, para o cacau em pó); saídas <b>manteiga de cacau</b> e <b>torta</b> (cacau em pó).'],
+      ['Operação', 'torta com 11 % de gordura a 600 bar; τ = 4 min e f∞ = 8 %; 14 potes de 12 kg e 4 min de carga e descarga.']] },
+    conche: { ex: 'A Fábrica de Chocolate dos Sonhos', items: [
+      ['Correntes', 'entradas <b>massa refinada</b>, <b>manteiga de cacau</b> e <b>lecitina</b> (as duas últimas opcionais, entram no fim); saídas <b>chocolate conchado</b> e <b>ar de exaustão</b>; porta <b>q_in</b> com os motores.'],
+      ['Operação', '70 °C por 8 h (chocolate ao leite); 80 kWh/t de mistura; conchadeiras de 6 t; o resultado confere a composição do Codex.']] },
+    temperer: { ex: 'A Fábrica de Chocolate dos Sonhos', items: [
+      ['Correntes', 'entrada <b>chocolate conchado</b>; saída <b>barras de chocolate</b>; porta <b>q_out</b> com o calor retirado pela água gelada.'],
+      ['Operação', 'zonas a 45, 27 e 29,5 °C (ao leite), 4 % de gordura cristalizada e 2 % de sementes da forma V; túnel com ar a 12 °C, barras de 100 g e 8 mm, esteira a 1,5 m/min.']] },
     refrigerator: { ex: 'Chiller de água gelada com R-134a', items: [
       ['Temperatura de saída do produto (°C)', 'temperatura que a corrente deve atingir: 7 °C no exemplo (água gelada que volta a 12 °C).'],
       ['Fluido refrigerante', 'o gás que circula no ciclo, entre 18: HFCs (R-134a, R-32, R-125, R-143a, R-152a, R-23, R-245fa e as misturas R-404A, R-407C, R-410A e R-507A), HFOs de baixo GWP (R-1234yf e R-1234ze(E)), o R-22 e os naturais (amônia, propano, isobutano e CO₂). R-134a no exemplo; troque por R-1234yf ou R-1234ze(E) e compare pressões, vazão, COP e GWP. R-23 e CO₂ só condensam abaixo de 26 e 31 °C (cascata).'],
@@ -20330,6 +21234,8 @@ def pfr_transiente(P, nome):
   }
 
   /* ------------------------------------------------------------------ projeto: novo, exemplos, salvar, abrir */
+  // a abertura animada e a valsa só começam com o clique do usuário (o navegador só libera o som depois de um gesto)
+  const chocOpen = ex => { if (SF.choc && ex && ex.fs && ex.fs.theme === 'chocolate') SF.choc.open(); };
   function loadFlowsheet(fs, keepPositions, then) {
     if ((fs.components || []).some(id => !TH.COMP[id]) && SF.dbx) return withComps(fs = JSON.parse(JSON.stringify(fs)), () => { loadFlowsheet(fs, keepPositions); if (then) then(); });
     loadFlowsheetNow(fs, keepPositions); if (then) then();
@@ -20348,7 +21254,7 @@ def pfr_transiente(P, nome):
   }
   function defaultParamsSafe(type, st) { const saved = state; state = st; try { return U.TYPES[type] ? defaultParams(type) : {}; } finally { state = saved; } }
   SF.examples.forEach(e => { const o = document.createElement('option'); o.value = e.key; o.textContent = e.title; $('#exampleSel').appendChild(o); });
-  $('#exampleSel').onchange = e => { const ex = SF.examples.find(x => x.key === e.target.value); e.target.value = ''; if (!ex) return; loadFlowsheet(ex.fs, false, () => { runSimulation(true); toast('Exemplo carregado: ' + ex.title); }); };
+  $('#exampleSel').onchange = e => { const ex = SF.examples.find(x => x.key === e.target.value); e.target.value = ''; if (!ex) return; chocOpen(ex); loadFlowsheet(ex.fs, false, () => { runSimulation(true); toast('Exemplo carregado: ' + ex.title); }); };
   $('#btnNew').onclick = () => { pushUndo(); state = blank(); results = null; pfd.sel = null; afterChange(true); pfd.fit(); renderCharts(null, []); };
   $('#btnUndo').onclick = undo;
   $('#btnRun').onclick = () => runSimulation();
@@ -20409,8 +21315,9 @@ def pfr_transiente(P, nome):
     SF.examples.forEach(ex => {
       const main = (ex.fs.blocks.find(b => b.type !== 'feed' && b.type !== 'product') || ex.fs.blocks[0]).type;
       const b = document.createElement('button'); b.className = 'wexc'; b.type = 'button';
-      b.innerHTML = IC.paletteIcon(main) + '<span>' + esc(ex.title) + '</span>';
-      b.onclick = () => { closeWelcome(); loadFlowsheet(ex.fs); runSimulation(true); toast('Exemplo carregado: ' + ex.title); };
+      const choc = ex.fs.theme === 'chocolate'; if (choc) b.classList.add('wexc-choc');
+      b.innerHTML = IC.paletteIcon(main) + '<span>' + (choc ? '<b class="wex-new">NOVO</b>' : '') + esc(ex.title) + '</span>';
+      b.onclick = () => { closeWelcome(); loadFlowsheet(ex.fs); runSimulation(true); chocOpen(ex); toast('Exemplo carregado: ' + ex.title); };
       grid.appendChild(b);
     });
     exAll = false; $('#wExSearch').value = ''; filterExamples();
@@ -20504,8 +21411,9 @@ def pfr_transiente(P, nome):
   try { travouAntes = localStorage.getItem('simulafacil.boot') === '1'; } catch (e) { /* */ }
   if (travouAntes) { try { const sv = localStorage.getItem('simulafacil.v1'); if (sv) localStorage.setItem('simulafacil.v1.travou', sv); localStorage.removeItem('simulafacil.v1'); } catch (e) { /* */ } }   // a abertura anterior não terminou: não recarrega o projeto que travou
   try { const s = localStorage.getItem('simulafacil.v1'); if (s) { const fs = JSON.parse(s); if (fs && fs.blocks && fs.blocks.length) { state = Object.assign(blank(), fs); restored = true; } } } catch (e) { /* sem armazenamento */ }
-  if (!restored) { const ex = SF.examples[0]; state = Object.assign(blank(), JSON.parse(JSON.stringify(ex.fs))); SF.pfd.autoLayout(state, true); }
+  if (!restored) { const ex = SF.examples[0]; state = Object.assign(blank(), JSON.parse(JSON.stringify(ex.fs))); SF.pfd.autoLayout(state, !state.fixedLayout); delete state.fixedLayout; }
   $('#projName').value = state.name; $('#emptyHint').hidden = state.blocks.length > 0; updateCompSummary();
+  if (SF.choc) SF.choc.sync(state.theme === 'chocolate');
   try { localStorage.setItem('simulafacil.boot', '1'); } catch (e) { /* */ }
   requestAnimationFrame(() => withComps(state, () => {
     SF.limiteMs = 8000;

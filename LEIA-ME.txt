@@ -1,3 +1,24 @@
+SIMULA FÁCIL IA 4.9 – atualização de 20/11/2026
+================================================
+
+GERADOR DE VAPOR (novo ícone, categoria "Utilidades (vapor)")
+- Combustível: cavaco de eucalipto, casca de eucalipto, casquinha de arroz, bagaço de cana, lenha, carvão mineral,
+  óleo diesel, óleo combustível (BPF), gás natural e GLP (composição elementar e PCI típicos).
+- Tipo de caldeira: baixa pressão (10 bar, saturado), média (42 bar, 400 °C) e alta (85 bar, 480 °C).
+- Economizador e pré-aquecedor de ar opcionais; a recuperação de calor é limitada pela temperatura mínima da
+  chaminé (evita a condensação ácida).
+- Saída: vapor direto (corrente material) ou condensador acoplado (saída energética em MW pela porta de energia,
+  condensado saturado e vazão de água de resfriamento). No modo automático o condensador liga quando a porta de
+  energia ou a do condensado está ligada no fluxograma.
+- Resultados: consumo de combustível (kg/h, t/h ou Nm³/h) e específico (kg por t de vapor), eficiência térmica
+  sem e com recuperação, ar, gases (vazão, temperatura e composição), cinzas, CO2 (biomassa como neutra), perdas
+  (chaminé, radiação, não queimado, cinzas e purga), calor do economizador e do pré-aquecedor, gráficos de calor
+  e de consumo e eficiência x excesso de ar. O balanço de massa do fluxograma fecha.
+- Exemplo pronto: "Gerador de vapor a cavaco de eucalipto" (30 t/h, 42 bar, com condensador).
+- Melhorias sobre o programa MATLAB de partida: o consumo sai de um balanço de energia fechado (sem eficiência
+  arbitrária), entalpias pela tabela de vapor, purga contínua, combustível não queimado, estequiometria pela
+  composição elementar, recuperação limitada pela chaminé e modo automático do condensador.
+
 SIMULA FÁCIL IA 4.8 – atualização de 18/11/2026
 ================================================
 

@@ -37,8 +37,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 5.0 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos e usina nuclear | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 5.0, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também usina nuclear PWR completa, colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 5.1 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos e usina nuclear | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 5.1, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -47,7 +47,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 5.0 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos e usina nuclear">
+<meta property="og:title" content="SIMULA FÁCIL IA 5.1 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos e usina nuclear">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -293,6 +293,8 @@ body.mobile .drawer-head .max-btn { display: none; }
 table.grid { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
 table.grid th, table.grid td { border-bottom: 1px solid var(--line); padding: 4px 6px; text-align: right; white-space: nowrap; }
 table.grid th:first-child, table.grid td:first-child { text-align: left; white-space: normal; }
+table.grid td.txt { white-space: normal; text-align: left; overflow-wrap: anywhere; font-family: inherit; }
+table.res-tbl td:first-child { width: 42%; }
 table.grid thead th { position: sticky; top: 0; background: var(--panel-2); font-weight: 600; }
 table.grid input { width: 84px; text-align: right; font-family: var(--mono); font-size: 12px; padding: 3px 5px; }
 .scroll-x { overflow-x: auto; }
@@ -891,7 +893,7 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.0</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.1</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -1042,8 +1044,9 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.0</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.1</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
+        <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 5.1:</b> <b>cinética pontual do reator</b> com 6 grupos de nêutrons atrasados e o <b>modelo com moderação de Parreira e Bosch Neto (2022)</b>, validado com o reator TRIGA/UFMG; reatividade, desligamento (SCRAM) e realimentação de temperatura; <b>parada do reator</b> com xenônio-135, calor residual e perda do resfriamento</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 5.0:</b> <b>usina nuclear PWR completa</b> (tipo Angra 2): <b>reator</b> com combustível, recarga, enriquecimento e calor de decaimento, <b>gerador de vapor</b> de tubos em U, <b>separador de umidade e reaquecedor</b>, <b>condensador</b> e <b>desaerador</b>, com água pela IAPWS-IF97, balanço da usina e diagrama T–s</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.9:</b> <b>gerador de vapor</b> (caldeira) com escolha do combustível, da classe de pressão e <b>condensador opcional</b> (saída em vapor ou energética), com consumo de combustível e eficiência</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.8:</b> <b>colunas de flotação de bancada e industrial</b> para <b>Engenharia de Minas</b>, com <b>bancos de dados</b> de misturas minerais, coletores e depressores</p>
@@ -1136,7 +1139,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '5.0-2026-11-20',
+  manualVersion: '5.1-2026-11-20',
   videosAlunos: [
     { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' },
     { titulo: 'Como funciona o SIMULA FÁCIL IA - Exemplo: DESTILAÇÃO', autor: 'Bruno Gontijo de Carvalho – Engenharia Química UFSJ', url: 'https://youtu.be/H2lDGKUrdPA' }
@@ -1212,7 +1215,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
-    version: '5.0',
+    version: '5.1',
     subtitle: 'Simulador de processos químicos e bioprocessos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -4752,6 +4755,51 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Tcw1', label: 'Temperatura da água de resfriamento na entrada' + SEMC, u: '°C', def: 26 },
       { k: 'dTcw', label: 'Aquecimento da água de resfriamento (define a vazão sem corrente)', u: '°C', def: 9 }] },
     deaerator: { label: 'Desaerador (pré-aquecedor de mistura): vapor de extração, condensado e drenos se misturam e a água sai perto da saturação, sem gases dissolvidos', cat: 'Usina nuclear (PWR)', ins: ['steam', 'condensate', 'drain1', 'drain2'], outs: ['out'], params: [] },
+    reactor_kinetics: { label: 'Cinética pontual do reator: 6 grupos de nêutrons atrasados, modelo com moderação de Parreira e Bosch Neto (2022), reatividade, desligamento (SCRAM) e realimentação de temperatura', cat: 'Cinética e segurança nuclear', ins: [], outs: [], params: [
+      { k: 'model', label: 'Modelo', type: 'select', options: ['Duderstadt e Hamilton (cinética pontual clássica)', 'Parreira e Bosch Neto (2022): programa Octave dos Anexos E e G (reproduz as figuras)', 'Parreira e Bosch Neto (2022): equações 12 a 14 do texto'], def: 'Duderstadt e Hamilton (cinética pontual clássica)' },
+      { k: 'grp', label: 'Dados dos nêutrons atrasados (λi e βi)', type: 'select', options: ['Bennet e Thomson (1989), como no programa de Parreira e Bosch Neto (βi dos Anexos; β = 0,007)', 'Bennet e Thomson (1989), Tabela 8 de Parreira e Bosch Neto (soma 0,007)', 'Keepin, U-235 com nêutrons térmicos (β = 0,0065)'], def: 'Bennet e Thomson (1989), como no programa de Parreira e Bosch Neto (βi dos Anexos; β = 0,007)' },
+      { k: 'tu', label: 'Unidade de tempo (em horas, as constantes λi passam a 1/h)', type: 'select', options: ['segundos', 'horas (como na validação com o TRIGA)'], def: 'segundos' },
+      { k: 'L', label: 'Tempo de geração dos nêutrons Λ (na unidade de tempo escolhida)', u: 's ou h', def: 0.0005 },
+      { k: 'rhoMode', label: 'Reatividade inserida', type: 'select', options: ['degrau', 'rampa ρ = a·t', 'rampa quadrática ρ = a·t + b·t² (Zandona et al., 2020)', 'desligamento (SCRAM) a partir da potência estável'], def: 'degrau' },
+      { k: 'rho', label: 'Reatividade do degrau ρ (absoluta; 0,001 = 100 pcm)', u: '', def: 0.0099 },
+      { k: 't1', label: 'Instante da inserção (ou do desligamento)', u: 's ou h', def: 0 },
+      { k: 'ra', label: 'Coeficiente a das rampas', u: '1/(s ou h)', def: 0.0001 },
+      { k: 'rb', label: 'Coeficiente b da rampa quadrática', u: '1/(s² ou h²)', def: 0 },
+      { k: 'A', label: 'Constante de atraso da potência A (modelo de Parreira e Bosch Neto)', u: '', def: 1 },
+      { k: 'Nmod', label: 'Constante de moderação Nmod (modelo de Parreira e Bosch Neto)', u: '', def: 1.01 },
+      { k: 'N0', label: 'Densidade de nêutrons inicial N₀', u: '', def: 0.001 },
+      { k: 'P0', label: 'Potência inicial P₀', u: '', def: 0.001 },
+      { k: 'C0', label: 'Precursores no início', type: 'select', options: ['zero (como em Parreira e Bosch Neto, 2022)', 'equilíbrio com N₀ (reator crítico antes da perturbação)'], def: 'zero (como em Parreira e Bosch Neto, 2022)' },
+      { k: 'tEnd', label: 'Tempo final da simulação', u: 's ou h', def: 10 },
+      { k: 'tZoom', label: 'Gráfico extra do início do transiente até (0 = sem)', u: 's ou h', def: 0 },
+      { k: 'trip', label: 'Desligamento automático por sobrepotência (% de N₀; 0 = sem)', u: '%', def: 0 },
+      { k: 'rhoScram', label: 'Reatividade das barras de controle no desligamento (antirreatividade)', u: '', def: 0.05 },
+      { k: 'tDel', label: 'Atraso até as barras começarem a cair', u: 's', def: 0.3 },
+      { k: 'tIns', label: 'Tempo de queda das barras', u: 's', def: 2 },
+      { k: 'fb', label: 'Realimentação de temperatura (coeficientes de reatividade)', type: 'select', options: ['sem realimentação', 'com realimentação de temperatura (Doppler e moderador)'], def: 'sem realimentação' },
+      { k: 'aF', label: 'Coeficiente de temperatura do combustível (Doppler)', u: 'pcm/K', def: -2.5 },
+      { k: 'aM', label: 'Coeficiente de temperatura do moderador', u: 'pcm/K', def: -20 },
+      { k: 'dTf0', label: 'Diferença inicial entre o combustível e a água', u: 'K', def: 300 },
+      { k: 'dTc0', label: 'Aquecimento inicial da água até a temperatura média do núcleo', u: 'K', def: 17 },
+      { k: 'tauF', label: 'Constante de tempo térmica do combustível', u: 's', def: 5 },
+      { k: 'tauC', label: 'Constante de tempo térmica da água no núcleo', u: 's', def: 2 },
+      { k: 'Pnom', label: 'Potência nominal para mostrar a potência final em MW (0 = só valores relativos)', u: 'MW', def: 0 },
+      { k: 'data', label: 'Dados experimentais sobrepostos', type: 'select', options: ['nenhum', 'TRIGA/UFMG (digitalizados de Parreira e Bosch Neto, 2022, Figura 28)'], def: 'nenhum' }] },
+    reactor_shutdown: { label: 'Parada do reator: xenônio-135 e tempo morto, calor residual, resfriamento residual e perda do resfriamento', cat: 'Cinética e segurança nuclear', ins: [], outs: [], params: [
+      { k: 'Pnom', label: 'Potência térmica antes da parada', u: 'MWt', def: 3765 },
+      { k: 'tOp', label: 'Tempo de operação antes da parada', u: 'dias', def: 352 },
+      { k: 'phi', label: 'Fluxo médio de nêutrons térmicos', u: 'n/(cm²·s)', def: 3e13 },
+      { k: 'sigX', label: 'Seção de choque de absorção do xenônio-135', u: 'barn', def: 2.65e6 },
+      { k: 'gI', label: 'Rendimento de fissão do iodo-135', u: '%', def: 6.39 },
+      { k: 'gX', label: 'Rendimento direto de fissão do xenônio-135', u: '%', def: 0.237 },
+      { k: 'nu', label: 'Nêutrons por fissão ν', u: '', def: 2.43 },
+      { k: 'rhoEx', label: 'Reatividade disponível para partir de novo (barras e boro; pequena no fim do ciclo)', u: '', def: 0.003 },
+      { k: 'tEnd', label: 'Tempo depois da parada', u: 'h', def: 72 },
+      { k: 'Prhr', label: 'Capacidade do resfriamento residual', u: 'MW', def: 40 },
+      { k: 'tLoss', label: 'Perda total do resfriamento depois da parada', u: 'h', def: 24 },
+      { k: 'Mw', label: 'Água no circuito na hora da perda', u: 't', def: 250 },
+      { k: 'T0', label: 'Temperatura da água na hora da perda (pressão de 1 atm)', u: '°C', def: 50 },
+      { k: 'Mab', label: 'Água acima do topo do núcleo', u: 't', def: 100 }] },
     causticizing: { label: 'Caustificação e forno de cal: fundido + água → licor branco (NaOH + Na₂S); ciclo da cal e CO₂ do forno', cat: 'Papel e celulose', ins: ['smelt'], outs: ['white_liquor', 'gas'], params: [
       { k: 'mSm', label: 'Vazão de fundido (smelt)' + SEMC, u: 'kg/s', def: 17 },
       { k: 'wNa2S', label: 'Na₂S no fundido' + SEMC, u: '0–1', def: 0.19 },
@@ -10412,6 +10460,173 @@ window.SIMULAFACIL_CONFIG = {
       { name: 'Correntes (número)', x: px, y: py, mode: 'markers+text', text: pt, size: 10, symbol: 'circle', color: '#7a3db8' }] } });
   };
 
+  /* ================================================================== versão 5.1: cinética e segurança do reator
+     Cinética pontual com 6 grupos de nêutrons atrasados: modelo clássico de Duderstadt e Hamilton e o modelo com moderação de
+     Parreira e Bosch Neto (2022), PPGEQ/UFSJ, nas duas formas (equações 12 a 14 do texto e programa Octave dos Anexos E e G).
+     Reatividade em degrau, rampa, rampa quadrática ou desligamento (SCRAM), desligamento automático por sobrepotência e realimentação
+     de temperatura (Doppler e moderador). Parada do reator: xenônio-135, calor residual e perda do resfriamento. */
+  const KIN_GROUPS = {
+    'Bennet e Thomson (1989), como no programa de Parreira e Bosch Neto (βi dos Anexos; β = 0,007)': { lam: [0.0127, 0.0317, 0.155, 0.311, 1.4, 3.87], bi: [0.000285, 0.0015975, 0.001410, 0.0030525, 0.00096, 0.000195], beta: 0.007 },   // os Anexos usam β = 0,007 em (ρ − β), embora os βi somem 0,0075
+    'Bennet e Thomson (1989), Tabela 8 de Parreira e Bosch Neto (soma 0,007)': { lam: [0.0127, 0.0317, 0.155, 0.311, 1.4, 3.87], bi: [0.000266, 0.001491, 0.001316, 0.002849, 0.000896, 0.000182] },
+    'Keepin, U-235 com nêutrons térmicos (β = 0,0065)': { lam: [0.0124, 0.0305, 0.111, 0.301, 1.14, 3.01], bi: [0.033, 0.219, 0.196, 0.395, 0.115, 0.042].map(a => a * 0.0065) }
+  };
+  const KIN_MODELS = ['Duderstadt e Hamilton (cinética pontual clássica)', 'Parreira e Bosch Neto (2022): programa Octave dos Anexos E e G (reproduz as figuras)', 'Parreira e Bosch Neto (2022): equações 12 a 14 do texto'];
+  // pontos digitalizados da Figura 28 de Parreira e Bosch Neto (2022): dados do reator TRIGA IPR-R1 (CDTN/UFMG) de Mesquita (Rezende, 2010). Valores aproximados.
+  const TRIGA_P = [[0.03, 81.8], [0.14, 85.0], [0.21, 86.2], [0.38, 90.5], [0.54, 92.9], [0.68, 93.0], [0.78, 94.3], [0.94, 96.2], [1.10, 97.2], [1.25, 99.2], [1.55, 101.5], [1.84, 101.8], [2.16, 102.1], [2.56, 102.1], [2.74, 102.1], [3.00, 100.3], [3.24, 100.7], [3.37, 103.8],
+    [3.61, 100.4], [3.73, 100.4], [3.81, 99.4], [3.94, 97.6], [4.04, 96.1], [4.17, 98.6], [4.24, 100.1], [4.30, 98.7], [4.40, 98.7], [4.54, 104.1], [4.63, 101.5], [4.77, 102.4], [4.91, 101.9], [5.07, 101.3], [5.17, 101.2], [5.31, 102.1], [5.42, 104.1], [5.54, 107.1],
+    [5.70, 101.0], [5.86, 104.0], [5.94, 103.5], [6.17, 103.5], [6.23, 103.9], [6.30, 104.0], [6.42, 104.4], [6.58, 103.4], [6.70, 104.2], [6.82, 104.2], [6.85, 104.6], [6.93, 104.8], [7.03, 104.8], [7.10, 104.8], [7.19, 105.0], [7.24, 107.8], [7.34, 107.2]];
+  const TRIGA_N = [[0, 40.1], [0.013, 73.9], [0.07, 100.3], [0.64, 101.0], [1.0, 100.5], [1.5, 99.8], [2.0, 100.1], [2.5, 100.0], [3.0, 100.1], [3.5, 100.1], [4.0, 100.1], [4.5, 100.1], [5.0, 100.1], [5.5, 100.1], [6.0, 100.1], [6.5, 100.1]];
+  // interpolação linear numa curva calculada
+  const interp = (xs, ys, x) => { if (x <= xs[0]) return ys[0]; for (let k = 1; k < xs.length; k++) if (x <= xs[k]) { const f = (x - xs[k - 1]) / (xs[k] - xs[k - 1]); return ys[k - 1] + f * (ys[k] - ys[k - 1]); } return ys[ys.length - 1]; };
+  const corrR = (a, b) => { const n = a.length, ma = sum(a) / n, mb = sum(b) / n; let sab = 0, saa = 0, sbb = 0; for (let k = 0; k < n; k++) { sab += (a[k] - ma) * (b[k] - mb); saa += (a[k] - ma) ** 2; sbb += (b[k] - mb) ** 2; } return saa > 0 && sbb > 0 ? sab / Math.sqrt(saa * sbb) : NaN; };
+
+  IMPL.reactor_kinetics = function (th, b) {
+    const p = b.params, warn = [];
+    const model = KIN_MODELS.indexOf(p.model) >= 0 ? KIN_MODELS.indexOf(p.model) : 0, G = KIN_GROUPS[p.grp] || KIN_GROUPS[Object.keys(KIN_GROUPS)[0]];
+    const hours = /^horas/.test(p.tu || ''), tf = hours ? 3600 : 1, tu = hours ? 'h' : 's';   // na unidade de horas, as constantes de decaimento passam a 1/h
+    const lam = G.lam.map(v => v * tf), bi = G.bi.slice(), beta = G.beta != null ? G.beta : sum(bi);
+    const L = num(p.L, 0.0005), A = num(p.A, 1), Nmod = num(p.Nmod, 1.01), tEnd = num(p.tEnd, 10), tZ = Math.min(tEnd, Math.max(0, num(p.tZoom, 0)));
+    if (!(L > 0)) throw new Error('o tempo de geração dos nêutrons Λ deve ser positivo');
+    if (!(tEnd > 0)) throw new Error('informe o tempo final da simulação');
+    if (model > 0 && !(Nmod > 0)) throw new Error('a constante de moderação Nmod deve ser positiva');
+    const mode = p.rhoMode || 'degrau', rho1 = num(p.rho, 0.0099), t1 = num(p.t1, 0), ra = num(p.ra, 0), rb = num(p.rb, 0);
+    const scramW = Math.abs(num(p.rhoScram, 0.05)), tIns = Math.max(1e-6, num(p.tIns, 2) / tf), tDel = Math.max(0, num(p.tDel, 0.3) / tf), trip = num(p.trip, 0) / 100;
+    const fb = /^com/.test(p.fb || ''), aF = num(p.aF, -2.5) * 1e-5, aM = num(p.aM, -20) * 1e-5, dTf0 = num(p.dTf0, 300), dTc0 = num(p.dTc0, 17), tauF = Math.max(1e-6, num(p.tauF, 5) / tf), tauC = Math.max(1e-6, num(p.tauC, 2) / tf);
+    const N0 = num(p.N0, 0.001), P0 = num(p.P0, N0), eq = /^equil/.test(p.C0 || ''), Pnom = num(p.Pnom, 0);
+    if (fb && model > 0) warn.push('a realimentação de temperatura soma-se ao termo de moderação do modelo de Parreira e Bosch Neto: confira se os dois efeitos não estão contados em dobro');
+    // reatividade externa (sem a realimentação) e desligamento
+    let tTrip = (mode === 'desligamento (SCRAM) a partir da potência estável') ? t1 : Infinity;
+    const rhoScram = t => (t <= tTrip + tDel ? 0 : -scramW * Math.min(1, (t - tTrip - tDel) / tIns));
+    const rhoExt = t => {
+      let r = 0;
+      if (mode === 'degrau') r = t >= t1 ? rho1 : 0;
+      else if (mode === 'rampa ρ = a·t') r = t >= t1 ? ra * (t - t1) : 0;
+      else if (mode === 'rampa quadrática ρ = a·t + b·t² (Zandona et al., 2020)') r = t >= t1 ? ra * (t - t1) + rb * (t - t1) ** 2 : 0;
+      return r + rhoScram(t);
+    };
+    // estado: N, C1..C6, P, Tf − Tf0, Tc − Tc0
+    const rhs = (t, y) => {
+      const Nn = y[0], Pp = y[7], dF = y[8], dC = y[9]; let s = 0; for (let i = 0; i < 6; i++) s += lam[i] * y[i + 1];
+      const rho = rhoExt(t) + (fb ? aF * dF + aM * dC : 0), d = new Array(10).fill(0);
+      if (model === 0) { d[0] = (rho - beta) / L * Nn + s; d[7] = (rho - beta) / L * Pp + s; }   // como na Tabela 9 e no Anexo C
+      else if (model === 1) { d[0] = ((rho - beta) / L * Nn + s) * (1 - Nn / Nmod); d[7] = ((rho - beta) * A * Pp + s) * (1 - Pp / (1.02 * Nmod)); }
+      else { d[0] = (rho - beta) / L * Nn * (1 - Nn / Nmod) + s; d[7] = (A * (rho - beta) / L * Pp + s) * (1 - Nn / Nmod); }
+      for (let i = 0; i < 6; i++) d[i + 1] = bi[i] / L * Nn - lam[i] * y[i + 1];
+      if (fb) { const q = 1 + (dF - dC) / dTf0;   // calor do combustível para a água ÷ nominal
+        d[8] = dTf0 * (Nn / Math.max(N0, 1e-300) - q) / tauF; d[9] = dTc0 * (q - (1 + dC / dTc0)) / tauC; }
+      return d;
+    };
+    const y0 = [N0].concat(bi.map((v, i) => (eq ? v * N0 / (L * lam[i]) : 0)), [P0, 0, 0]);
+    // integração por trechos (Runge–Kutta 4/5 adaptativo, como o ode45 do Octave), parando no desligamento automático
+    const run = (ta, tb, y, nOut) => { const r = N.rk45(rhs, ta, y, tb, { nOut, rtol: 1e-8, atol: 1e-12 * Math.max(1, Math.abs(N0)), maxSteps: 2000000, h0: Math.min(L, (tb - ta) / 1000) }); if (!r) throw new Error('a integração não convergiu: reduza o tempo final ou confira Λ'); return r; };
+    let T = [], Y = [];
+    const push = r => { r.t.forEach((t, k) => { if (T.length && t <= T[T.length - 1]) return; T.push(t); Y.push(r.y[k]); }); };
+    const cuts = [0]; if (tZ > 0 && tZ < tEnd) cuts.push(tZ); if (t1 > 0 && t1 < tEnd) cuts.push(t1); cuts.push(tEnd); cuts.sort((a, b2) => a - b2);
+    let y = y0.slice(), tripNote = '';
+    for (let k = 0; k < cuts.length - 1; k++) {
+      const ta = cuts[k], tb = cuts[k + 1]; if (tb - ta < 1e-12) continue;
+      let r = run(ta, tb, y, 400);
+      if (trip > 0 && tTrip === Infinity) {   // procura a primeira passagem pelo limite de sobrepotência
+        const kx = r.y.findIndex(v => v[0] / Math.max(N0, 1e-300) >= trip);
+        if (kx > 0) { tTrip = r.t[kx]; tripNote = 'desligamento automático em ' + (tTrip).toPrecision(4) + ' ' + tu + ' (potência a ' + (100 * trip).toFixed(0) + ' %)';
+          const r1 = { t: r.t.slice(0, kx + 1), y: r.y.slice(0, kx + 1) }; push(r1); r = run(tTrip, tb, r.y[kx], 400); }
+      }
+      push(r); y = r.y[r.y.length - 1];
+    }
+    const Ns = Y.map(v => v[0]), Ps = Y.map(v => v[7]), Cs = Y.map(v => v.slice(1, 7)), rhoS = T.map((t, k) => rhoExt(t) + (fb ? aF * Y[k][8] + aM * Y[k][9] : 0));
+    if (!Ns.every(isFinite)) throw new Error('a solução divergiu: a reatividade é alta demais para o tempo simulado');
+    const last = Y[Y.length - 1], Nend = last[0], Pend = last[7], Cend = last.slice(1, 7), Ct = sum(Cend);
+    const Nmax = Math.max(...Ns), kMax = Ns.indexOf(Nmax), fmt = (v, d) => (+v).toFixed(d), sci = v => (Math.abs(v) >= 1e4 || (Math.abs(v) < 1e-3 && v !== 0) ? (+v).toExponential(3) : (+v).toPrecision(5));
+    // período estável (inhour para degrau), resposta imediata (salto pronto) e reatividade em dólares
+    const rhoStep = mode === 'degrau' ? rho1 : null;
+    let Tp = null;
+    if (rhoStep != null && model === 0 && Math.abs(rhoStep) > 1e-9) { const fI = w => w * L + sum(bi.map((v, i) => v * w / (w + lam[i]))) - rhoStep; let lo, hi;
+      if (rhoStep > 0) { lo = 1e-12; hi = 1e6; } else { lo = -lam[0] * (1 - 1e-12); hi = -1e-14; }
+      for (let it = 0; it < 200; it++) { const m = rhoStep > 0 ? Math.sqrt(lo * hi) : 0.5 * (lo + hi); if (fI(m) > 0) hi = m; else lo = m; } Tp = 1 / (0.5 * (lo + hi)); }
+    const res = [{ k: 'Modelo', v: KIN_MODELS[model], u: '' },
+      { k: 'Nêutrons atrasados', v: (p.grp || Object.keys(KIN_GROUPS)[0]) + '; β = ' + fmt(beta, 5) + (Math.abs(sum(bi) - beta) > 1e-9 ? ' (Σβi = ' + fmt(sum(bi), 5) + ')' : '') + '; Λ = ' + sci(L) + ' ' + tu, u: '' },
+      { k: 'Reatividade', v: mode + (rhoStep != null ? ': ρ = ' + sci(rhoStep) + ' = ' + fmt(rhoStep / beta, 3) + ' $ (' + fmt(rhoStep * 1e5, 0) + ' pcm)' + (rhoStep > beta ? ', acima de β: supercrítico pronto' : '') : ''), u: '' },
+      { k: 'Densidade de nêutrons: inicial / final / máxima', v: sci(N0) + ' / ' + sci(Nend) + ' / ' + sci(Nmax) + ' (em ' + sci(T[kMax]) + ' ' + tu + ')', u: '' },
+      { k: 'Potência: inicial / final', v: sci(P0) + ' / ' + sci(Pend) + (Pnom > 0 ? ' (' + fmt(Pnom * Pend / Math.max(P0, 1e-300), 1) + ' MW)' : ''), u: '' },
+      { k: 'Precursores no fim: C1 a C6', v: Cend.map(sci).join(' / '), u: '' },
+      { k: 'Fração de cada grupo no fim (Ci/ΣC)', v: Cend.map(c => fmt(Ct > 0 ? c / Ct : 0, 3)).join(' / '), u: '' }];
+    if (Tp != null) res.push({ k: 'Período estável (equação inhour)', v: Math.abs(Tp) > 1e5 ? 'infinito (crítico)' : sci(Tp) + ' ' + tu + (rhoStep < beta && rhoStep > 0 ? '; salto pronto: n⁺/n₀ = β/(β − ρ) = ' + fmt(beta / (beta - rhoStep), 3) : ''), u: '' });
+    if (model > 0) { const Nss = model === 1 ? Nmod : Nmod * rho1 / Math.max(rho1 - beta, 1e-12); res.push({ k: 'Estado estacionário previsto pelo termo de moderação', v: 'N = ' + sci(Nss) + (model === 1 ? ' (= Nmod) e P = 1,02·Nmod = ' + sci(1.02 * Nmod) : ' (= Nmod·ρ/(ρ − β), com o degrau)'), u: '' }); }
+    if (fb) res.push({ k: 'Realimentação no fim: ΔT do combustível / do moderador / reatividade', v: fmt(last[8], 1) + ' K / ' + fmt(last[9], 2) + ' K / ' + fmt((aF * last[8] + aM * last[9]) * 1e5, 0) + ' pcm', u: '' });
+    if (tTrip < Infinity) res.push({ k: 'Desligamento (SCRAM)', v: (tripNote || 'inserção em ' + sci(tTrip) + ' ' + tu) + '; barras com ' + fmt(scramW * 1e5, 0) + ' pcm (' + fmt(scramW / beta, 1) + ' $) inseridas em ' + sci(tIns * tf) + ' s após ' + sci(tDel * tf) + ' s', u: '' });
+    // dados do TRIGA/UFMG
+    const plots = [];
+    const tri = /^TRIGA/.test(p.data || '');
+    if (tri) {
+      const pm = TRIGA_P.map(q => interp(T, Ps, q[0])), nm = TRIGA_N.map(q => interp(T, Ns, q[0]));
+      res.push({ k: 'TRIGA/UFMG: coeficiente de correlação R (potência / densidade de nêutrons)', v: fmt(corrR(TRIGA_P.map(q => q[1]), pm), 3) + ' / ' + fmt(corrR(TRIGA_N.map(q => q[1]), nm), 3) + ' (' + TRIGA_P.length + ' e ' + TRIGA_N.length + ' pontos digitalizados)', u: '' });
+      if (!hours) warn.push('os dados do TRIGA estão em horas: escolha a unidade de tempo "horas"');
+    }
+    const col = ['#2563c9', '#d1302b', '#e07b00', '#7a3db8', '#1a9e6f', '#0aa5b8'];
+    const nSer = [{ name: 'Densidade de nêutrons N', x: T, y: Ns, color: '#2563c9', width: 3 }, { name: 'Potência P', x: T, y: Ps, color: '#d1302b', width: 3, dash: model === 0 ? 'dot' : 'dash' }];
+    if (tri) nSer.push({ name: 'TRIGA/UFMG: potência (kW)', x: TRIGA_P.map(q => q[0]), y: TRIGA_P.map(q => q[1]), mode: 'markers', size: 7, symbol: 'asterisk-open', color: '#2563c9' },
+      { name: 'TRIGA/UFMG: densidade de nêutrons', x: TRIGA_N.map(q => q[0]), y: TRIGA_N.map(q => q[1]), mode: 'markers', size: 10, symbol: 'diamond', color: '#d1302b' });
+    plots.push({ kind: 'curves', title: 'Densidade de nêutrons e potência' + (tri ? ' com os dados do TRIGA/UFMG' : ''), data: { xLabel: 'Tempo (' + tu + ')', yLabel: tri ? 'Potência (kW) e densidade de nêutrons' : 'N e P', series: nSer } });
+    if (tZ > 0 && tZ < tEnd) { const kz = T.findIndex(t => t > tZ + 1e-12), e = kz < 0 ? T.length : kz;
+      plots.push({ kind: 'curves', title: 'Início do transiente (até ' + br(sci(tZ)) + ' ' + tu + ')', data: { xLabel: 'Tempo (' + tu + ')', yLabel: 'N e P', series: [{ name: 'N', x: T.slice(0, e), y: Ns.slice(0, e), color: '#2563c9', width: 3 }, { name: 'P', x: T.slice(0, e), y: Ps.slice(0, e), color: '#d1302b', width: 3, dash: 'dash' }] } }); }
+    plots.push({ kind: 'curves', title: 'Concentração dos 6 grupos de precursores de nêutrons atrasados', data: { xLabel: 'Tempo (' + tu + ')', yLabel: 'Ci', series: [0, 1, 2, 3, 4, 5].map(i => ({ name: 'Grupo ' + (i + 1), x: T, y: Cs.map(c => c[i]), color: col[i], width: 2.5 })) } },
+      { kind: 'curves', title: 'Fração de cada grupo de precursores (Ci/ΣC)', data: { xLabel: 'Tempo (' + tu + ')', yLabel: 'Fração', series: [0, 1, 2, 3, 4, 5].map(i => ({ name: 'Grupo ' + (i + 1), x: T.slice(1), y: Cs.slice(1).map(c => { const s = sum(c); return s > 0 ? c[i] / s : 0; }), color: col[i], width: 2.5 })) } });
+    if (mode !== 'degrau' || fb || tTrip < Infinity) plots.push({ kind: 'curves', title: 'Reatividade total', data: { xLabel: 'Tempo (' + tu + ')', yLabel: 'ρ (pcm)', series: [{ name: 'ρ', x: T, y: rhoS.map(v => v * 1e5), color: '#7a3db8', width: 3 }], hlines: [{ y: beta * 1e5, name: 'β (1 $)' }] } });
+    if (fb) plots.push({ kind: 'curves', title: 'Temperaturas (variação desde o estado inicial)', data: { xLabel: 'Tempo (' + tu + ')', yLabel: 'ΔT (K)', series: [{ name: 'Combustível', x: T, y: Y.map(v => v[8]), color: '#d1302b', width: 3 }, { name: 'Moderador (água)', x: T, y: Y.map(v => v[9]), color: '#2563c9', width: 3 }] } });
+    const kin = { model, lam, bi, beta, L, A, Nmod, mode: ['degrau', 'rampa ρ = a·t', 'rampa quadrática ρ = a·t + b·t² (Zandona et al., 2020)'].indexOf(mode) + 1, rho1, t1, ra, rb, scramW, tIns, tDel, tTrip: tTrip < Infinity ? tTrip : -1,
+      fb: fb ? 1 : 0, aF, aM, dTf0, dTc0, tauF, tauC, N0, y0, tEnd, tu, tri, TP: TRIGA_P, TN: TRIGA_N };
+    return { out: {}, res: decBR(decK(res)), warn: decW(warn), plots, massUtil: 0, kin };
+  };
+
+  /* parada do reator: xenônio-135 (iodo-135 → xenônio-135, queima pelo fluxo), reatividade do xenônio e tempo morto; calor de decaimento
+     (Way–Wigner) contra o resfriamento residual; perda do resfriamento: aquecimento da água até a ebulição e evaporação até descobrir o núcleo */
+  IMPL.reactor_shutdown = function (th, b) {
+    const p = b.params, warn = [];
+    const Q = num(p.Pnom, 3765), tOp = num(p.tOp, 352) * 86400, phi = num(p.phi, 3e13), sX = num(p.sigX, 2.65e6) * 1e-24, nu = num(p.nu, 2.43), gI = num(p.gI, 6.39) / 100, gX = num(p.gX, 0.237) / 100;
+    const lI = Math.LN2 / (6.57 * 3600), lX = Math.LN2 / (9.14 * 3600), tEnd = num(p.tEnd, 72) * 3600, rEx = num(p.rhoEx, 0.003);
+    if (!(Q > 0 && phi > 0 && tEnd > 0)) throw new Error('informe a potência, o fluxo de nêutrons e o tempo depois da parada');
+    // equilíbrio durante a operação (por Σf: I e X em átomos por fissão·s⁻¹ de fluxo), a partir do zero durante tOp
+    const Ieq = gI * phi / lI, Xeq = (gI + gX) * phi / (lX + sX * phi);
+    // formação durante a operação, a partir do reator limpo (passos de 1 min; depois de 5 dias usa o equilíbrio)
+    let I0 = Ieq, Xop = Xeq;
+    if (tOp < 5 * 86400) { let ii = 0, xx = 0; const h = 60; for (let s2 = 0; s2 < tOp; s2 += h) { const di = gI * phi - lI * ii, dx = gX * phi + lI * ii - (lX + sX * phi) * xx; ii += h * di; xx += h * dx; } I0 = ii; Xop = xx;
+      warn.push('com ' + (tOp / 86400).toFixed(1) + ' dias de operação, o xenônio ainda não chegou ao equilíbrio'); }
+    const rhoX = x => -sX * x / nu;   // ρ ≈ −σX·X/(ν·Σf), com X por unidade de Σf
+    const Xt = t => Xop * Math.exp(-lX * t) + lI * I0 / (lX - lI) * (Math.exp(-lI * t) - Math.exp(-lX * t)), It = t => I0 * Math.exp(-lI * t);
+    const n = 600, ts = [], xs = [], is = [], rs = [];
+    for (let k = 0; k <= n; k++) { const t = tEnd * k / n; ts.push(t / 3600); const x = Xt(t); xs.push(x / Xop); is.push(It(t) / I0); rs.push(rhoX(x) * 1e5); }
+    const rEq = rhoX(Xop) * 1e5, rMin = Math.min(...rs), kP = rs.indexOf(rMin), tPk = ts[kP];
+    // tempo morto: intervalo em que a reatividade negativa extra do xenônio passa da reatividade disponível
+    const extra = rs.map(r => rEq - r), dead = extra.map(e => e > rEx * 1e5);
+    const d0 = dead.indexOf(true), d1 = d0 >= 0 ? dead.lastIndexOf(true) : -1;
+    // calor residual e resfriamento
+    const dk = t => 0.0622 * (Math.pow(Math.max(t, 1), -0.2) - Math.pow(Math.max(t, 1) + tOp, -0.2));
+    const Prhr = num(p.Prhr, 40), tLoss = num(p.tLoss, 24) * 3600, Mw = num(p.Mw, 250) * 1000, T0 = num(p.T0, 50), Mab = num(p.Mab, 100) * 1000, cp = 4.2, hfg = 2257;
+    let tRhr = null; for (let k = 0; k <= 2000; k++) { const t = Math.pow(10, 0 + 7 * k / 2000); if (Q * dk(t) <= Prhr) { tRhr = t; break; } }
+    // perda de resfriamento: integra o calor de decaimento (MJ) a partir de tLoss
+    let E = 0, t = tLoss, tBoil = null, tUnc = null; const Eb = Mw * cp * Math.max(0, 100 - T0) / 1000, Eu = Eb + Mab * hfg / 1000;   // MJ
+    const tl = [], Tl = [], ml = [];
+    for (let k = 0; k < 200000 && t < tLoss + 30 * 86400; k++) { const dt = Math.max(1, (t - tLoss) * 0.002 + 5); const Pd = Q * dk(t); E += Pd * dt; t += dt;
+      if (tBoil == null && E >= Eb) tBoil = t; if (tUnc == null && E >= Eu) { tUnc = t; }
+      if (k % 50 === 0) { tl.push((t - tLoss) / 3600); Tl.push(E < Eb ? T0 + (100 - T0) * E / Eb : 100); ml.push(E < Eb ? Mab / 1000 : Math.max(0, Mab - (E - Eb) * 1000 / hfg) / 1000); }
+      if (tUnc != null && t > tUnc * 1.2) break; }
+    const fmt = (v, d) => (+v).toFixed(d), hm = s => (s < 3600 ? fmt(s / 60, 0) + ' min' : s < 172800 ? fmt(s / 3600, 1) + ' h' : fmt(s / 86400, 1) + ' dias');
+    const res = [{ k: 'Xenônio-135 antes da parada (fluxo de ' + phi.toExponential(2).replace('e+', '·10^') + ' n/cm²·s)', v: 'reatividade de ' + fmt(rEq, 0) + ' pcm; iodo-135 e xenônio-135 com meias-vidas de 6,57 h e 9,14 h', u: '' },
+      { k: 'Pico do xenônio depois da parada', v: fmt(tPk, 1) + ' h após o desligamento: ' + fmt(rMin, 0) + ' pcm (' + fmt(rEq - rMin, 0) + ' pcm a mais que no equilíbrio; ' + fmt(xs[kP], 2) + ' vezes o xenônio de equilíbrio)', u: '' },
+      { k: 'Tempo morto (reatividade disponível de ' + fmt(rEx * 1e5, 0) + ' pcm)', v: d0 >= 0 ? 'o reator não pode partir de ' + fmt(ts[d0], 1) + ' h a ' + fmt(ts[d1], 1) + ' h após a parada (' + fmt(ts[d1] - ts[d0], 1) + ' h)' : 'não há: a reatividade disponível cobre o pico do xenônio', u: '' },
+      { k: 'Calor de decaimento: 1 min / 1 h / 1 dia / 1 semana / 1 mês', v: [60, 3600, 86400, 604800, 2592000].map(s => fmt(Q * dk(s), 1)).join(' / ') + ' MW', u: '' },
+      { k: 'Resfriamento residual (' + fmt(Prhr, 1) + ' MW) basta a partir de', v: tRhr ? hm(tRhr) + ' após o desligamento' : 'mais de 100 dias', u: '' },
+      { k: 'Perda total do resfriamento ' + hm(tLoss) + ' após a parada', v: 'calor de decaimento de ' + fmt(Q * dk(tLoss), 1) + ' MW; ' + fmt(Mw / 1000, 0) + ' t de água a ' + fmt(T0, 0) + ' °C (1 atm)', u: '' },
+      { k: 'Tempo até a água ferver / até descobrir o núcleo', v: (tBoil ? hm(tBoil - tLoss) : '—') + ' / ' + (tUnc ? hm(tUnc - tLoss) : 'mais de 30 dias') + ' (' + fmt(Mab / 1000, 0) + ' t de água acima do núcleo)', u: '' }];
+    if (d0 >= 0) warn.push('tempo morto do xenônio: entre ' + fmt(ts[d0], 1) + ' e ' + fmt(ts[d1], 1) + ' h após a parada não há reatividade para partir de novo');
+    const tdk = [], pdk = []; for (let k = 0; k <= 80; k++) { const s = Math.pow(10, 7 * k / 80); tdk.push(s / 3600); pdk.push(Q * dk(s)); }
+    const plots = [{ kind: 'curves', title: 'Iodo-135 e xenônio-135 depois da parada', data: { xLabel: 'Tempo depois do desligamento (h)', yLabel: 'Concentração ÷ equilíbrio', series: [{ name: 'Xenônio-135', x: ts, y: xs, color: '#7a3db8', width: 3 }, { name: 'Iodo-135', x: ts, y: is, color: '#e07b00', width: 3 }] } },
+      { kind: 'curves', title: 'Reatividade do xenônio-135', data: { xLabel: 'Tempo depois do desligamento (h)', yLabel: 'ρ (pcm)', series: [{ name: 'ρ do xenônio', x: ts, y: rs, color: '#7a3db8', width: 3 }], hlines: [{ y: rEq - rEx * 1e5, name: 'Limite para partir (equilíbrio − reatividade disponível)' }] } },
+      { kind: 'curves', title: 'Calor de decaimento e resfriamento residual', data: { xLabel: 'Tempo depois do desligamento (h)', yLabel: 'Potência (MW)', xLog: true, yLog: true, series: [{ name: 'Calor de decaimento', x: tdk, y: pdk, color: '#d1302b', width: 3 }], hlines: [{ y: Prhr, name: 'Resfriamento residual' }] } },
+      { kind: 'curves', title: 'Perda do resfriamento: temperatura e água acima do núcleo', data: { xLabel: 'Tempo depois da perda (h)', yLabel: '°C e t de água', series: [{ name: 'Temperatura da água (°C)', x: tl, y: Tl, color: '#d1302b', width: 3 }, { name: 'Água acima do núcleo (t)', x: tl, y: ml, color: '#2563c9', width: 3 }] } }];
+    return { out: {}, res: decBR(decK(res)), warn: decW(warn), plots, massUtil: 0 };
+  };
+
   SF.units = { MICROBES, TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn, ponchonSavarit, STEAM, multiEffect, IF97, H2O, tagH2O, POST };
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -11318,6 +11533,32 @@ window.SIMULAFACIL_CONFIG = {
         note: 'As entalpias vêm da água saturada (IAPWS-95) e, no vapor superaquecido, de valores de tabela. Com o condensador acoplado, a saída deixa de ser uma corrente de vapor e passa a ser a energia útil (porta de energia) mais o condensado saturado. Sem o condensador, o vapor segue como corrente material para turbina, processo ou rede de vapor. Os dados dos combustíveis são típicos de literatura, em base úmida.'
       };
     },
+    reactor_kinetics: () => {
+      const Ci = sub(i('C'), i('i')), li = sub(i('λ'), i('i')), bi = sub(i('β'), i('i')), Lm = i('Λ'), rb = '(' + i('ρ') + ' − ' + i('β') + ')', S = sum('i=1…6') + li + Ci;
+      return {
+        name: 'Cinética pontual com 6 grupos de nêutrons atrasados: Duderstadt e Hamilton e o modelo com moderação de Parreira e Bosch Neto (2022)',
+        eqs: [eq(od(i('N'), t) + ' = ' + fr(rb, Lm) + i('N') + ' + ' + S + ',&nbsp; ' + od(Ci, t) + ' = ' + fr(bi, Lm) + i('N') + ' − ' + li + Ci, 'Duderstadt e Hamilton (cinética pontual clássica)'),
+          eq(od(i('N'), t) + ' = [' + fr(rb, Lm) + i('N') + ' + ' + S + '](1 − ' + fr(i('N'), sub(i('N'), 'mod')) + ')', 'Parreira e Bosch Neto (2022), programa Octave: o termo de moderação freia o crescimento, como na equação logística de Verhulst'),
+          eq(od(i('P'), t) + ' = [' + i('A') + rb + i('P') + ' + ' + S + '](1 − ' + fr(i('P'), '1,02' + sub(i('N'), 'mod')) + ')', 'potência com a constante de atraso ' + i('A') + ' (programa Octave)'),
+          eq(od(i('N'), t) + ' = ' + fr(rb, Lm) + i('N') + '(1 − ' + fr(i('N'), sub(i('N'), 'mod')) + ') + ' + S + ',&nbsp; ' + od(i('P'), t) + ' = [' + i('A') + fr(rb, Lm) + i('P') + ' + ' + S + '](1 − ' + fr(i('N'), sub(i('N'), 'mod')) + ')', 'Parreira e Bosch Neto (2022), equações 12 e 13 do texto'),
+          eq(i('ρ') + ' = ' + sub(i('ρ'), 'ext') + '(' + t + ') + ' + sub(i('α'), 'D') + 'Δ' + sub(T, 'comb') + ' + ' + sub(i('α'), 'M') + 'Δ' + sub(T, 'mod'), 'realimentação de temperatura (Doppler e moderador)'),
+          eq(i('ρ') + ' = ' + Lm + i('ω') + ' + ' + sum('i') + fr(bi + i('ω'), i('ω') + ' + ' + li) + ',&nbsp; ' + i('T') + ' = 1/' + i('ω'), 'equação inhour: período estável depois de um degrau')],
+        sym: [[i('N'), 'densidade de nêutrons'], [Ci, 'concentração do grupo ' + i('i') + ' de precursores de nêutrons atrasados'], [bi + ', ' + li, 'fração e constante de decaimento do grupo ' + i('i')], [Lm, 'tempo de geração dos nêutrons'], [sub(i('N'), 'mod'), 'constante de moderação (densidade máxima estabelecida para o reator)'], [i('A'), 'constante de atraso da conversão da densidade de nêutrons em potência']],
+        note: 'O modelo com moderação foi desenvolvido na dissertação de mestrado de Carla Cristina Araújo Parreira, orientada pelo Prof. Juan Canellas Bosch Neto (PPGEQ/UFSJ, 2022), e validado com o reator TRIGA IPR-R1 do CDTN/UFMG. O programa Octave dos Anexos E e G (o termo de moderação multiplica todo o lado direito e a potência usa 1,02·Nmod) reproduz as figuras da dissertação; as equações 12 e 13 do texto também podem ser escolhidas. As equações são integradas por Runge–Kutta 4/5 adaptativo, como o ode45 do Octave. A realimentação usa um modelo de duas temperaturas (combustível e água) com constantes de tempo.'
+      };
+    },
+    reactor_shutdown: () => {
+      const I = i('I'), X = i('X'), ph = i('φ');
+      return {
+        name: 'Parada do reator: xenônio-135, calor residual e perda do resfriamento',
+        eqs: [eq(od(I, t) + ' = ' + sub(i('γ'), 'I') + sub(i('Σ'), 'f') + ph + ' − ' + sub(i('λ'), 'I') + I + ',&nbsp; ' + od(X, t) + ' = ' + sub(i('γ'), 'X') + sub(i('Σ'), 'f') + ph + ' + ' + sub(i('λ'), 'I') + I + ' − ' + sub(i('λ'), 'X') + X + ' − ' + sub(i('σ'), 'X') + ph + X, 'iodo-135 e xenônio-135 (com φ = 0 depois da parada)'),
+          eq(X + '(' + t + ') = ' + sub(X, '0') + sup('e', '−' + sub(i('λ'), 'X') + t) + ' + ' + fr(sub(i('λ'), 'I') + sub(I, '0'), sub(i('λ'), 'X') + ' − ' + sub(i('λ'), 'I')) + '(' + sup('e', '−' + sub(i('λ'), 'I') + t) + ' − ' + sup('e', '−' + sub(i('λ'), 'X') + t) + ')', 'xenônio depois da parada: o iodo continua decaindo e o xenônio sobe até o pico'),
+          eq(sub(i('ρ'), 'Xe') + ' ≈ −' + fr(sub(i('σ'), 'X') + X, i('ν') + sub(i('Σ'), 'f')), 'reatividade do xenônio'),
+          eq(fr(i('P') + '(' + t + ')', sub(i('P'), '0')) + ' = 0,0622[' + sup(t, '−0,2') + ' − (' + t + ' + ' + sub(T, 'op') + ')' + sup('', '−0,2') + ']', 'calor de decaimento (Way–Wigner)')],
+        sym: [[sub(i('γ'), 'I') + ', ' + sub(i('γ'), 'X'), 'rendimentos de fissão do iodo-135 e do xenônio-135'], [sub(i('σ'), 'X'), 'seção de choque de absorção do xenônio-135 (2,65·10⁶ barn)'], [sub(T, 'op'), 'tempo de operação antes da parada']],
+        note: 'O tempo morto é o intervalo em que a reatividade negativa extra do xenônio passa da reatividade disponível (barras e boro), e o reator não consegue partir de novo; ele é mais longo no fim do ciclo, quando sobra pouco boro. Na perda do resfriamento, o calor de decaimento esquenta a água até 100 °C e depois a evapora; o tempo até descobrir o núcleo usa a água acima do topo do combustível.'
+      };
+    },
     nuclear_reactor: () => {
       const m = s2 => sub(i('ṁ'), s2), h = s2 => sub(i('h'), s2), x = s2 => sub(i('x'), s2), FP = fr(i('F'), i('P'));
       return {
@@ -11809,6 +12050,14 @@ window.SIMULAFACIL_CONFIG = {
       'O gerador de vapor transforma a energia química de um combustível em vapor. Escolha o combustível (cavaco ou casca de eucalipto, casquinha de arroz, bagaço, lenha, carvão, diesel, óleo combustível, gás natural ou GLP) e a classe da caldeira: baixa pressão (10 bar, vapor saturado), média (42 bar, 400 °C) ou alta (85 bar, 480 °C). A água de alimentação entra pela porta da esquerda ou pelos campos.',
       'O cálculo parte da composição elementar do combustível: o ar estequiométrico e o excesso de ar dão a vazão de gases. O balanço de energia fecha o consumo: o calor do combustível menos as perdas (gases, radiação, cinzas e purga) é o calor do vapor. O economizador aquece a água e o pré-aquecedor aquece o ar usando os gases, mas a recuperação é limitada para a chaminé não ficar abaixo da temperatura mínima (condensação ácida).',
       'A saída pode ser vapor direto (corrente material) ou, com o condensador acoplado, a energia útil em MW pela porta de energia mais o condensado saturado e a água de resfriamento necessária. No modo automático, o condensador liga sozinho quando a porta de energia ou a do condensado está ligada no fluxograma. O resultado traz consumo de combustível, eficiência, ar, gases, cinzas, emissão de CO₂ (biomassa conta como neutra) e as perdas.'] },
+    reactor_kinetics: { ex: ex('cinetica-parreira-bosch-neto', 'Cinética com moderação de Parreira e Bosch Neto (2022)'), p: [
+      'A cinética pontual descreve como a população de nêutrons de um reator muda no tempo quando a reatividade ρ muda. Cada fissão libera nêutrons prontos, em microssegundos, e uma pequena fração β (cerca de 0,7 %) de nêutrons atrasados, emitidos segundos depois pelo decaimento de produtos de fissão, os precursores, agrupados em seis grupos. São esses nêutrons atrasados que tornam o reator controlável: enquanto ρ fica abaixo de β, o crescimento é lento; acima de β (um dólar), o reator fica supercrítico pronto e a potência cresce em milissegundos.',
+      'O bloco resolve as equações de Duderstadt e Hamilton e o modelo com moderação de Parreira e Bosch Neto (2022), dissertação de mestrado do PPGEQ/UFSJ, que acrescenta o termo (1 − N/Nmod) para representar a ação dos moderadores e a constante A de atraso da potência, como na equação logística de Verhulst. A reatividade pode ser um degrau, uma rampa, uma rampa quadrática ou um desligamento (SCRAM), com desligamento automático por sobrepotência e realimentação de temperatura pelos coeficientes Doppler e do moderador.',
+      'No exemplo, com ρ = 0,0099, Λ = 0,0005 s, A = 1 e Nmod = 1,01, a densidade de nêutrons sobe de 0,001 até 1,01 em cerca de 2 s e para aí, enquanto o modelo clássico cresceria sem limite; no regime permanente o grupo 2 tem 55 % dos precursores. Os exemplos da validação com o reator TRIGA/UFMG e do desligamento de um PWR com realimentação mostram as outras opções.'] },
+    reactor_shutdown: { ex: ex('parada-xenonio-angra2', 'Parada de um PWR do porte de Angra 2: xenônio e calor residual'), p: [
+      'Depois do desligamento, o reator continua exigindo atenção. O iodo-135, produzido na fissão, continua decaindo em xenônio-135, um absorvedor de nêutrons fortíssimo que deixa de ser queimado pelo fluxo; por isso o xenônio sobe por algumas horas e pode impedir uma nova partida (o tempo morto). Ao mesmo tempo, os produtos de fissão continuam liberando calor: cerca de 6 % da potência logo após o desligamento, 1 % depois de uma hora.',
+      'O bloco calcula o iodo e o xenônio antes e depois da parada, a reatividade do xenônio e o tempo morto para a reatividade disponível, o calor de decaimento comparado com a capacidade do resfriamento residual e, numa perda total do resfriamento, o tempo até a água ferver e até descobrir o núcleo.',
+      'No exemplo, um PWR de 3 765 MWt com fluxo de 3·10¹³ n/cm²·s tem 2 156 pcm de xenônio no equilíbrio; o pico chega 8,4 h depois da parada, com 1 944 pcm a mais. Com só 300 pcm disponíveis, como no fim do ciclo, o reator não parte entre 0,6 h e 23,9 h. Um dia depois do desligamento, o núcleo ainda gera 16,7 MW: sem resfriamento, 250 t de água a 50 °C fervem em 53 min.'] },
     nuclear_reactor: { ex: ex('usina-nuclear-pwr', 'Usina nuclear PWR completa (tipo Angra 2)'), p: [
       'No reator de água pressurizada (PWR), a fissão do urânio-235 libera cerca de 200 MeV por núcleo partido, quase tudo como energia cinética dos fragmentos, que vira calor dentro das pastilhas de UO₂. Cada pastilha fica em varetas de zircaloy agrupadas em elementos combustíveis; a água do circuito primário passa entre as varetas, retira o calor e desacelera os nêutrons (moderação), mantendo a reação em cadeia. A pressão de cerca de 158 bar, imposta pelo pressurizador, impede que essa água ferva, mesmo a 326 °C.',
       'O bloco faz o balanço de energia do primário pela IAPWS-IF97: a água entra pela perna fria, recebe a potência térmica e sai pela perna quente; a margem até a saturação é avisada quando fica pequena. Ele também calcula a taxa linear de calor nas varetas, a duração do ciclo e o número de elementos trocados a cada recarga pela queima de descarga, o U-235 fissionado, o urânio natural e o trabalho de separação (SWU) do enriquecimento e o calor de decaimento depois do desligamento, que explica por que o núcleo precisa de resfriamento mesmo com o reator parado.',
@@ -12158,7 +12407,9 @@ window.SIMULAFACIL_CONFIG = {
     pwr_steam_gen: { w: 90, h: 180, ports: { steam: P(45, 0, 'u', 'out'), feedwater: P(0, 72, 'l', 'in'), primary_in: P(0, 160, 'l', 'in'), primary_out: P(90, 160, 'r', 'out') } },
     msr: { w: 170, h: 80, ports: { wet: P(0, 40, 'l', 'in'), heating: P(120, 0, 'u', 'in'), reheated: P(170, 40, 'r', 'out'), drain: P(45, 80, 'd', 'out'), heat_drain: P(125, 80, 'd', 'out') } },
     steam_condenser: { w: 160, h: 100, ports: { steam: P(80, 0, 'u', 'in'), drain: P(0, 26, 'l', 'in'), cw_in: P(0, 62, 'l', 'in'), cw_out: P(160, 62, 'r', 'out'), condensate: P(80, 100, 'd', 'out') } },
-    deaerator: { w: 150, h: 110, ports: { condensate: P(30, 0, 'u', 'in'), drain1: P(60, 0, 'u', 'in'), drain2: P(90, 0, 'u', 'in'), steam: P(0, 78, 'l', 'in'), out: P(150, 92, 'r', 'out') } }
+    deaerator: { w: 150, h: 110, ports: { condensate: P(30, 0, 'u', 'in'), drain1: P(60, 0, 'u', 'in'), drain2: P(90, 0, 'u', 'in'), steam: P(0, 78, 'l', 'in'), out: P(150, 92, 'r', 'out') } },
+    reactor_kinetics: { w: 150, h: 110, ports: {} },
+    reactor_shutdown: { w: 150, h: 110, ports: {} }
   };
 
   /* primitivas: rect (x,y,w,h,r), circ (cx,cy,r), line (polilinha aberta), poly (polígono fechado), text.
@@ -12591,7 +12842,16 @@ window.SIMULAFACIL_CONFIG = {
       L([[0, 62], [4, 62]], 'cold'), L([[156, 62], [160, 62]], 'cold'), L([[0, 26], [14, 26]]), R(64, 80, 32, 12, 3, 'bodyw'), L([[80, 92], [80, 100]], 'cold'), T(80, 42, 'condensador')],
     deaerator: () => [ // desaerador: cabeça com bandejas sobre o tanque de água de alimentação e borrifador de vapor
       L([[30, 0], [30, 6]], 'cold'), L([[60, 0], [60, 6]]), L([[90, 0], [90, 6]]), R(20, 6, 80, 34, 8), L([[26, 17], [70, 17]], 'lnd'), L([[50, 28], [94, 28]], 'lnd'),
-      L([[60, 40], [60, 50]]), R(8, 50, 134, 46, 23), L([[0, 78], [8, 78]], 'hot'), L([[8, 78], [124, 78]], 'lnd'), L([[138, 92], [150, 92]], 'cold'), T(75, 68, 'desaerador')]
+      L([[60, 40], [60, 50]]), R(8, 50, 134, 46, 23), L([[0, 78], [8, 78]], 'hot'), L([[8, 78], [124, 78]], 'lnd'), L([[138, 92], [150, 92]], 'cold'), T(75, 68, 'desaerador')],
+    reactor_kinetics: () => [ // cinética pontual: tela com a curva da densidade de nêutrons, núcleo com barras de controle e os 6 grupos
+      R(4, 4, 142, 102, 8, 'bodyw'), L([[14, 90], [136, 90]]), L([[14, 90], [14, 14]]),
+      L([[14, 88], [30, 87], [42, 82], [52, 66], [60, 40], [68, 26], [80, 22], [136, 22]], 'hot'), L([[14, 22], [136, 22]], 'lnd'),
+      R(98, 40, 34, 40, 3), L([[106, 34], [106, 62]], 'cold'), L([[124, 34], [124, 62]], 'cold'), L([[113, 46], [113, 76]], 'hot'), L([[117, 46], [117, 76]], 'hot'),
+      T(76, 102, 'N(t), 6 grupos'), T(116, 36, 'ρ')],
+    reactor_shutdown: () => [ // parada: vaso com as barras inseridas, curva do xenônio com pico e do calor residual
+      R(10, 18, 50, 84, 20), L([[22, 10], [22, 80]], 'cold'), L([[35, 6], [35, 82]], 'cold'), L([[48, 10], [48, 80]], 'cold'), R(18, 56, 34, 36, 3, 'bodyw'),
+      L([[70, 96], [146, 96]]), L([[70, 96], [70, 14]]), L([[70, 70], [84, 40], [96, 30], [110, 40], [126, 58], [146, 66]], 'hot'), L([[70, 22], [80, 54], [96, 72], [146, 86]], 'lnd'),
+      T(108, 24, 'Xe-135'), T(35, 108, 'parada')]
   };
   function prims(t) { return PRIMS[t] ? PRIMS[t]() : [R(0, 0, G[t] ? G[t].w : 60, G[t] ? G[t].h : 60, 6)]; }
 
@@ -14181,6 +14441,26 @@ end
         "plot(p.Ts, tpd/3600, 'kd', 'MarkerSize', 10, 'MarkerFaceColor', 'k'); grid on; xlabel('T_s (°C)', 'FontSize', FS); ylabel('Secagem primária (h)', 'FontSize', FS); legend({'5 Pa', '10 Pa', '15 Pa', '20 Pa', 'atual'}); title('Espaço de projeto', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
       return out.join('\n');
     }
+    if (b.type === 'reactor_kinetics' && r.kin) {
+      const g = r.kin, V = a => '[' + a.map(n2s).join(' ') + ']';
+      out.push('function ' + fname + '(D, FS)', header, '% Cinética pontual com 6 grupos de nêutrons atrasados. Modelo: ' + ['Duderstadt e Hamilton', 'Parreira e Bosch Neto (2022), programa Octave', 'Parreira e Bosch Neto (2022), equações 12 a 14'][g.model] + '.', printRes.join('\n'),
+        'o.model = ' + g.model + ';   % 0 = Duderstadt e Hamilton; 1 = Parreira e Bosch Neto (programa Octave); 2 = Parreira e Bosch Neto (texto)',
+        'o.lambi = ' + V(g.lam) + ';   % constantes de decaimento (1/' + g.tu + ')', 'o.bi = ' + V(g.bi) + ';   % frações dos grupos', 'o.beta = ' + n2s(g.beta) + ';',
+        'o.tempo = ' + n2s(g.L) + ';   % tempo de geração dos nêutrons Λ (' + g.tu + ')', 'o.A = ' + n2s(g.A) + '; o.Nmod = ' + n2s(g.Nmod) + ';   % constantes de atraso da potência e de moderação',
+        'o.modo = ' + g.mode + '; o.ro = ' + n2s(g.rho1) + '; o.t1 = ' + n2s(g.t1) + '; o.a = ' + n2s(g.ra) + '; o.b = ' + n2s(g.rb) + ';   % 1 degrau, 2 rampa, 3 rampa quadrática, 0 só desligamento',
+        'o.tTrip = ' + n2s(g.tTrip) + '; o.roScram = ' + n2s(g.scramW) + '; o.tDel = ' + n2s(g.tDel) + '; o.tIns = ' + n2s(g.tIns) + ';   % desligamento (tTrip < 0: sem)',
+        'o.fb = ' + g.fb + '; o.aF = ' + n2s(g.aF) + '; o.aM = ' + n2s(g.aM) + '; o.dTf0 = ' + n2s(g.dTf0) + '; o.dTc0 = ' + n2s(g.dTc0) + '; o.tauF = ' + n2s(g.tauF) + '; o.tauC = ' + n2s(g.tauC) + '; o.N0 = ' + n2s(g.N0) + ';',
+        'y0 = ' + V(g.y0) + ';   % [N C1..C6 P dTcomb dTagua]',
+        "opts = odeset('RelTol', 1e-8, 'AbsTol', 1e-12, 'MaxStep', " + n2s(g.tEnd / 400) + ");",
+        (g.L < 1e-4 ? "[t, Y] = ode15s(@(t, y) cinetica_rhs(t, y, o), [0 " : "[t, Y] = ode45(@(t, y) cinetica_rhs(t, y, o), [0 ") + n2s(g.tEnd) + "], y0, opts);",
+        "fprintf('  MATLAB: no fim, N = %.5g e P = %.5g\\n', Y(end, 1), Y(end, 8));",
+        "figure('Name', " + str(b.name) + ", 'Color', 'w', 'Position', [40 60 1400 650]);",
+        "subplot(1, 2, 1); plot(t, Y(:, 1), 'b', 'LineWidth', 3); hold on; plot(t, Y(:, 8), 'r--', 'LineWidth', 3); grid on;" + (g.tri ? " plot(" + V(g.TP.map(q => q[0])) + ", " + V(g.TP.map(q => q[1])) + ", 'b*', 'MarkerSize', 8); plot(" + V(g.TN.map(q => q[0])) + ", " + V(g.TN.map(q => q[1])) + ", 'rd', 'MarkerSize', 9, 'MarkerFaceColor', 'r');" : ''),
+        "xlabel('Tempo (" + g.tu + ")', 'FontSize', FS); ylabel('N e P', 'FontSize', FS); legend(" + (g.tri ? "{'N', 'P', 'TRIGA: potência', 'TRIGA: N'}" : "{'N', 'P'}") + ", 'Location', 'southeast'); title('Densidade de nêutrons e potência', 'FontSize', FS); set(gca, 'FontSize', FS);",
+        "subplot(1, 2, 2); C = Y(:, 2:7); plot(t, C ./ max(sum(C, 2), 1e-300), 'LineWidth', 2.5); grid on; xlabel('Tempo (" + g.tu + ")', 'FontSize', FS); ylabel('C_i / \\Sigma C', 'FontSize', FS);",
+        "legend({'Grupo 1', 'Grupo 2', 'Grupo 3', 'Grupo 4', 'Grupo 5', 'Grupo 6'}, 'Location', 'east'); title('Fração dos 6 grupos de precursores', 'FontSize', FS); set(gca, 'FontSize', FS);", 'end');
+      return out.join('\n');
+    }
     if ((b.type === 'bioreactor_monod' || b.type === 'bioreactor_verhulst') && r.micro) {
       const g = r.micro, o = g.o;
       out.push('function ' + fname + '(D, FS)', header, '% Biorreator com a equação de ' + (g.kin === 'monod' ? 'Monod' : 'Verhulst (logística)') + ', ' + (g.cont ? 'contínuo (quimiostato)' : 'em batelada') + '; produto por Luedeking–Piret.', printRes.join('\n'),
@@ -14751,6 +15031,38 @@ plot(ax, x(2), y(2), '>', 'Color', cor, 'MarkerFaceColor', cor, 'MarkerSize', 10
 end
 `;
 
+  const NUC_FUNCS = `% --- cinética pontual: Duderstadt e Hamilton e Parreira e Bosch Neto (2022), PPGEQ/UFSJ ---
+function f = cinetica_rhs(t, Y, o)
+ro = 0;
+if o.modo == 1 && t >= o.t1, ro = o.ro; end
+if o.modo == 2 && t >= o.t1, ro = o.a*(t - o.t1); end
+if o.modo == 3 && t >= o.t1, ro = o.a*(t - o.t1) + o.b*(t - o.t1)^2; end
+if o.tTrip >= 0 && t > o.tTrip + o.tDel, ro = ro - o.roScram*min(1, (t - o.tTrip - o.tDel)/o.tIns); end
+if o.fb, ro = ro + o.aF*Y(9) + o.aM*Y(10); end
+somalambc = 0;
+for i = 1:6
+    somalambc = somalambc + o.lambi(i)*Y(i+1);
+end
+f = zeros(10, 1);
+if o.model == 0        % Duderstadt e Hamilton
+    f(1) = (ro - o.beta)/o.tempo*Y(1) + somalambc;
+    f(8) = (ro - o.beta)/o.tempo*Y(8) + somalambc;
+elseif o.model == 1    % Parreira e Bosch Neto (2022), programa dos Anexos E e G
+    f(1) = ((ro - o.beta)/o.tempo*Y(1) + somalambc)*(1 - Y(1)/o.Nmod);
+    f(8) = ((ro - o.beta)*o.A*Y(8) + somalambc)*(1 - Y(8)/(1.02*o.Nmod));
+else                   % Parreira e Bosch Neto (2022), equações 12 e 13
+    f(1) = (ro - o.beta)/o.tempo*Y(1)*(1 - Y(1)/o.Nmod) + somalambc;
+    f(8) = (o.A*(ro - o.beta)/o.tempo*Y(8) + somalambc)*(1 - Y(1)/o.Nmod);
+end
+for i = 1:6
+    f(i+1) = Y(1)*(o.bi(i)/o.tempo) - o.lambi(i)*Y(i+1);
+end
+if o.fb                % temperaturas do combustível e da água (variações)
+    q = 1 + (Y(9) - Y(10))/o.dTf0;
+    f(9) = o.dTf0*(Y(1)/o.N0 - q)/o.tauF;
+    f(10) = o.dTc0*(q - (1 + Y(10)/o.dTc0))/o.tauC;
+end
+end`;
   const SEC_FUNCS = `% --- secagem, cristalização e microrganismos ---
 function ps = sf_psat(T)
 % pressão de vapor da água (Pa), T em °C (Antoine, 1 a 100 °C)
@@ -15250,7 +15562,7 @@ end`;
     const parts = [head.join('\n'), td.code, streamTableCode(st, res), pfdCode(st, res), PFD_HEAD, iconLibMatlab(types)]
       .concat(blocks.map(x => x.code))
       .concat(needVLE ? [VLE_FUNCS] : []).concat(needFlash ? [FLASH_FUNC] : []).concat(needCSTR ? [CSTR_RHS] : []).concat(needPFR ? [PFR_TRANS] : [])
-      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []).concat(blocks.some(x => /gibbs_rand/.test(x.code)) ? [GIBBS_FUNCS] : []).concat(blocks.some(x => /ell_cross/.test(x.code)) ? [ELL_FUNCS] : []).concat(blocks.some(x => /steam_Tsat/.test(x.code)) ? [EVAP_FUNCS] : []).concat(blocks.some(x => /pid_simula/.test(x.code)) ? [PID_FUNCS] : []).concat(blocks.some(x => /tosetto_rhs|biodiesel_rhs/.test(x.code)) ? [BIO_FUNCS] : []).concat(blocks.some(x => /sf_bulbo_umido|cris_bal|lyo_ciclo|micro_rhs/.test(x.code)) ? [SEC_FUNCS] : []).concat(blocks.some(x => /mccabe_refluxo_gui/.test(x.code)) ? [MR_FUNCS] : []).concat(blocks.some(x => /bomba_sistema/.test(x.code)) ? [PUMP_FUNCS] : []).concat(blocks.some(x => /blast_furnace_block|cement_kiln_block/.test(x.code)) ? [MET_FUNCS] : []).concat(blocks.some(x => /hopper_block/.test(x.code)) ? [SILO_FUNCS] : []).concat(blocks.some(x => /talmadge_fitch_block/.test(x.code)) ? [TF_FUNCS] : []).concat(blocks.some(x => /eucalyptus_kraft_digester_block/.test(x.code)) ? [KRAFT_FUNCS] : []);
+      .concat(blocks.some(x => /ads_pde/.test(x.code)) ? [ADS_FUNCS] : []).concat(blocks.some(x => /emb_pde/.test(x.code)) ? [EMB_FUNCS] : []).concat(blocks.some(x => /gibbs_rand/.test(x.code)) ? [GIBBS_FUNCS] : []).concat(blocks.some(x => /ell_cross/.test(x.code)) ? [ELL_FUNCS] : []).concat(blocks.some(x => /steam_Tsat/.test(x.code)) ? [EVAP_FUNCS] : []).concat(blocks.some(x => /pid_simula/.test(x.code)) ? [PID_FUNCS] : []).concat(blocks.some(x => /tosetto_rhs|biodiesel_rhs/.test(x.code)) ? [BIO_FUNCS] : []).concat(blocks.some(x => /sf_bulbo_umido|cris_bal|lyo_ciclo|micro_rhs/.test(x.code)) ? [SEC_FUNCS] : []).concat(blocks.some(x => /cinetica_rhs/.test(x.code)) ? [NUC_FUNCS] : []).concat(blocks.some(x => /mccabe_refluxo_gui/.test(x.code)) ? [MR_FUNCS] : []).concat(blocks.some(x => /bomba_sistema/.test(x.code)) ? [PUMP_FUNCS] : []).concat(blocks.some(x => /blast_furnace_block|cement_kiln_block/.test(x.code)) ? [MET_FUNCS] : []).concat(blocks.some(x => /hopper_block/.test(x.code)) ? [SILO_FUNCS] : []).concat(blocks.some(x => /talmadge_fitch_block/.test(x.code)) ? [TF_FUNCS] : []).concat(blocks.some(x => /eucalyptus_kraft_digester_block/.test(x.code)) ? [KRAFT_FUNCS] : []);
     return parts.join('\n\n') + '\n';
   }
 
@@ -16262,6 +16574,26 @@ def seta(ax, x0, y0, x1, y1, cor=AZUL):
         "    a2.plot(p['Ts'], tpd / 3600, 'kd', ms=10, label='atual'); a2.set_xlabel('T_s (°C)'); a2.set_ylabel('Secagem primária (h)'); a2.legend(); a2.set_title('Espaço de projeto'); a2.grid(True)",
         '    f1.tight_layout()', '    return [f1]']).join('\n');
     }
+    if (b.type === 'reactor_kinetics' && r.kin) {
+      const g = r.kin, V = a => '[' + a.map(n2s).join(', ') + ']';
+      return head.concat([
+        '    # Cinética pontual com 6 grupos de nêutrons atrasados. Modelo: ' + ['Duderstadt e Hamilton', 'Parreira e Bosch Neto (2022), programa Octave', 'Parreira e Bosch Neto (2022), equações 12 a 14'][g.model],
+        '    o = dict(model=' + g.model + ', lambi=np.array(' + V(g.lam) + '), bi=np.array(' + V(g.bi) + '), beta=' + n2s(g.beta) + ', tempo=' + n2s(g.L) + ', A=' + n2s(g.A) + ', Nmod=' + n2s(g.Nmod) + ',',
+        '             modo=' + g.mode + ', ro=' + n2s(g.rho1) + ', t1=' + n2s(g.t1) + ', a=' + n2s(g.ra) + ', b=' + n2s(g.rb) + ', tTrip=' + n2s(g.tTrip) + ', roScram=' + n2s(g.scramW) + ', tDel=' + n2s(g.tDel) + ', tIns=' + n2s(g.tIns) + ',',
+        '             fb=' + g.fb + ', aF=' + n2s(g.aF) + ', aM=' + n2s(g.aM) + ', dTf0=' + n2s(g.dTf0) + ', dTc0=' + n2s(g.dTc0) + ', tauF=' + n2s(g.tauF) + ', tauC=' + n2s(g.tauC) + ', N0=' + n2s(g.N0) + ')',
+        '    y0 = ' + V(g.y0) + '   # [N, C1..C6, P, dTcomb, dTagua]',
+        "    s = solve_ivp(lambda t, y: cinetica_rhs(t, y, o), [0, " + n2s(g.tEnd) + "], y0, method='" + (g.L < 1e-4 ? 'LSODA' : 'RK45') + "', rtol=1e-8, atol=1e-12, max_step=" + n2s(g.tEnd / 400) + ", dense_output=True)",
+        '    t = np.linspace(0, ' + n2s(g.tEnd) + ', 800); Y = s.sol(t)',
+        "    print(f'  Python: no fim, N = {Y[0, -1]:.5g} e P = {Y[7, -1]:.5g}')",
+        '    f1, (a1, a2) = plt.subplots(1, 2, figsize=(15, 6.5))',
+        "    a1.plot(t, Y[0], 'b', lw=3, label='N'); a1.plot(t, Y[7], 'r--', lw=3, label='P')"].concat(g.tri ? [
+        "    a1.plot(" + V(g.TP.map(q => q[0])) + ", " + V(g.TP.map(q => q[1])) + ", 'b*', ms=8, label='TRIGA: potência')",
+        "    a1.plot(" + V(g.TN.map(q => q[0])) + ", " + V(g.TN.map(q => q[1])) + ", 'rd', ms=9, label='TRIGA: N')"] : [], [
+        "    a1.set_xlabel('Tempo (" + g.tu + ")'); a1.set_ylabel('N e P'); a1.legend(); a1.set_title('Densidade de nêutrons e potência'); a1.grid(True)",
+        '    C = Y[1:7]; a2.plot(t, (C / np.maximum(C.sum(axis=0), 1e-300)).T, lw=2.5)',
+        "    a2.set_xlabel('Tempo (" + g.tu + ")'); a2.set_ylabel('Ci/ΣC'); a2.legend([f'Grupo {i}' for i in range(1, 7)]); a2.set_title('Fração dos 6 grupos de precursores'); a2.grid(True)",
+        '    f1.tight_layout()', '    return [f1]'])).join('\n');
+    }
     if ((b.type === 'bioreactor_monod' || b.type === 'bioreactor_verhulst') && r.micro) {
       const g = r.micro, o = g.o, lines = [
         '    # Biorreator com a equação de ' + (g.kin === 'monod' ? 'Monod' : 'Verhulst (logística)') + ', ' + (g.cont ? 'contínuo (quimiostato)' : 'em batelada') + '; produto por Luedeking–Piret',
@@ -16670,6 +17002,27 @@ def mccabe_refluxo_gui(P, nome):
     desenha()
     fig._sliders = [sl, sq]   # mantém referência aos controles
     return fig
+`;
+  const NUC_FUNCS = `
+# --- cinética pontual: Duderstadt e Hamilton e Parreira e Bosch Neto (2022), PPGEQ/UFSJ ---
+def cinetica_rhs(t, Y, o):
+    ro = 0.0
+    if o['modo'] == 1 and t >= o['t1']: ro = o['ro']
+    if o['modo'] == 2 and t >= o['t1']: ro = o['a'] * (t - o['t1'])
+    if o['modo'] == 3 and t >= o['t1']: ro = o['a'] * (t - o['t1']) + o['b'] * (t - o['t1']) ** 2
+    if o['tTrip'] >= 0 and t > o['tTrip'] + o['tDel']: ro -= o['roScram'] * min(1.0, (t - o['tTrip'] - o['tDel']) / o['tIns'])
+    if o['fb']: ro += o['aF'] * Y[8] + o['aM'] * Y[9]
+    somalambc = float(np.dot(o['lambi'], Y[1:7])); f = np.zeros(10); rb = ro - o['beta']
+    if o['model'] == 0:
+        f[0] = rb / o['tempo'] * Y[0] + somalambc; f[7] = rb / o['tempo'] * Y[7] + somalambc
+    elif o['model'] == 1:
+        f[0] = (rb / o['tempo'] * Y[0] + somalambc) * (1 - Y[0] / o['Nmod']); f[7] = (rb * o['A'] * Y[7] + somalambc) * (1 - Y[7] / (1.02 * o['Nmod']))
+    else:
+        f[0] = rb / o['tempo'] * Y[0] * (1 - Y[0] / o['Nmod']) + somalambc; f[7] = (o['A'] * rb / o['tempo'] * Y[7] + somalambc) * (1 - Y[0] / o['Nmod'])
+    f[1:7] = Y[0] * o['bi'] / o['tempo'] - o['lambi'] * Y[1:7]
+    if o['fb']:
+        q = 1 + (Y[8] - Y[9]) / o['dTf0']; f[8] = o['dTf0'] * (Y[0] / o['N0'] - q) / o['tauF']; f[9] = o['dTc0'] * (q - (1 + Y[9] / o['dTc0'])) / o['tauC']
+    return f
 `;
   const SEC_FUNCS = `
 
@@ -17087,7 +17440,7 @@ def pfr_transiente(P, nome):
       .concat(["    if os.environ.get('SIMULA_SALVAR') == '1':", '        for k, f in enumerate(figs):', "            f.savefig(f'" + fn + "_fig{k + 1}.png', dpi=130)", '        print(f"{len(figs)} figuras salvas em PNG.")', '    plt.show()', '', '', "if __name__ == '__main__':", '    main()']).join('\n');
     const types = Array.from(new Set(st.blocks.map(b => b.type)));
     return [head, td.code, needVLE ? VLE : '', needFlash ? FLASH : '', '', streamsCode(st, res), PFD_HELPERS, iconLibPy(types), pfdCode(st, res), '']
-      .concat(blocks.map(x => x.code + '\n')).concat(needPFR ? [PFR_TRANS] : []).concat(blocks.some(x => /pid_simula/.test(x.code)) ? [PID_FUNCS] : []).concat(blocks.some(x => /tosetto_rhs|biodiesel_rhs/.test(x.code)) ? [BIO_FUNCS] : []).concat(blocks.some(x => /sf_bulbo_umido|cris_bal|lyo_ciclo|micro_rhs/.test(x.code)) ? [SEC_FUNCS] : []).concat(blocks.some(x => /mccabe_refluxo_gui/.test(x.code)) ? [MR_FUNCS] : []).concat(blocks.some(x => /bomba_sistema/.test(x.code)) ? [PUMP_FUNCS] : []).concat(blocks.some(x => /blast_furnace_block|cement_kiln_block/.test(x.code)) ? [MET_FUNCS] : []).concat(blocks.some(x => /hopper_block/.test(x.code)) ? [SILO_FUNCS] : []).concat(blocks.some(x => /talmadge_fitch_block/.test(x.code)) ? [TF_FUNCS] : []).concat(blocks.some(x => /kraft_digester_block/.test(x.code)) ? [KRAFT_FUNCS] : []).concat(['', main]).filter(s => s !== null).join('\n\n').replace(/\n{4,}/g, '\n\n\n') + '\n';
+      .concat(blocks.map(x => x.code + '\n')).concat(needPFR ? [PFR_TRANS] : []).concat(blocks.some(x => /pid_simula/.test(x.code)) ? [PID_FUNCS] : []).concat(blocks.some(x => /tosetto_rhs|biodiesel_rhs/.test(x.code)) ? [BIO_FUNCS] : []).concat(blocks.some(x => /sf_bulbo_umido|cris_bal|lyo_ciclo|micro_rhs/.test(x.code)) ? [SEC_FUNCS] : []).concat(blocks.some(x => /cinetica_rhs/.test(x.code)) ? [NUC_FUNCS] : []).concat(blocks.some(x => /mccabe_refluxo_gui/.test(x.code)) ? [MR_FUNCS] : []).concat(blocks.some(x => /bomba_sistema/.test(x.code)) ? [PUMP_FUNCS] : []).concat(blocks.some(x => /blast_furnace_block|cement_kiln_block/.test(x.code)) ? [MET_FUNCS] : []).concat(blocks.some(x => /hopper_block/.test(x.code)) ? [SILO_FUNCS] : []).concat(blocks.some(x => /talmadge_fitch_block/.test(x.code)) ? [TF_FUNCS] : []).concat(blocks.some(x => /kraft_digester_block/.test(x.code)) ? [KRAFT_FUNCS] : []).concat(['', main]).filter(s => s !== null).join('\n\n').replace(/\n{4,}/g, '\n\n\n') + '\n';
   }
 
   function readme(st, fn) {
@@ -17330,6 +17683,26 @@ def pfr_transiente(P, nome):
         S('13', 'MAR', 'out', 'CD', 'cw_in', 'Água do mar'), S('14', 'CD', 'cw_out', 'RET', 'in', 'Retorno ao mar'), S('15', 'CD', 'condensate', 'B2', 'in', 'Condensado'),
         S('16', 'B2', 'out', 'DA', 'condensate', 'Condensado (25 bar)'), S('17', 'DA', 'out', 'B3', 'in', 'Alimentação'), S('18', 'B3', 'out', 'GV', 'feedwater', 'Alimentação (75 bar)'),
         S('E1', 'TA', 'q_out', 'E1', 'ei', 'Potência TA'), S('E2', 'TB', 'q_out', 'E2', 'ei', 'Potência TB')] } },
+    { key: 'cinetica-sem-moderador', title: 'Cinética pontual de um reator genérico sem moderador (Duderstadt e Hamilton): densidade de nêutrons, potência e 6 grupos de precursores', fs: {
+      name: 'Cinética pontual sem moderador', components: ['water'], model: 'IDEAL', fixedLayout: true,
+      blocks: [{ id: 'CIN', x: 80, y: 80, type: 'reactor_kinetics', name: 'Cinética pontual CIN-101 (sem moderador)', params: { model: 'Duderstadt e Hamilton (cinética pontual clássica)', L: 0.0005, rho: 0.0099, N0: 1, P0: 0.001, tEnd: 0.3 } }],
+      streams: [] } },
+    { key: 'cinetica-parreira-bosch-neto', title: 'Cinética com moderação de Parreira e Bosch Neto (2022): densidade de nêutrons, potência e frações dos 6 grupos de precursores de um reator genérico', fs: {
+      name: 'Modelo de Parreira e Bosch Neto (2022)', components: ['water'], model: 'IDEAL', fixedLayout: true,
+      blocks: [{ id: 'CIN', x: 80, y: 80, type: 'reactor_kinetics', name: 'Cinética moderada CIN-101 (Parreira e Bosch Neto, 2022)', params: { model: 'Parreira e Bosch Neto (2022): programa Octave dos Anexos E e G (reproduz as figuras)', L: 0.0005, rho: 0.0099, A: 1, Nmod: 1.01, N0: 0.001, P0: 0.001, tEnd: 250, tZoom: 10 } }],
+      streams: [] } },
+    { key: 'cinetica-triga-ufmg', title: 'Validação do modelo de Parreira e Bosch Neto (2022) com o reator TRIGA IPR-R1 (CDTN/UFMG): potência e densidade de nêutrons', fs: {
+      name: 'Validação com o reator TRIGA/UFMG', components: ['water'], model: 'IDEAL', fixedLayout: true,
+      blocks: [{ id: 'CIN', x: 80, y: 80, type: 'reactor_kinetics', name: 'Reator TRIGA IPR-R1 (CDTN/UFMG)', params: { model: 'Parreira e Bosch Neto (2022): programa Octave dos Anexos E e G (reproduz as figuras)', tu: 'horas (como na validação com o TRIGA)', L: 0.0014, rho: 0.04, A: 0.01, Nmod: 100, N0: 40, P0: 80, tEnd: 7.4, tZoom: 0.5, data: 'TRIGA/UFMG (digitalizados de Parreira e Bosch Neto, 2022, Figura 28)' } }],
+      streams: [] } },
+    { key: 'cinetica-scram-pwr', title: 'Transiente de um PWR com realimentação de temperatura: inserção de reatividade, desligamento automático por sobrepotência e queda das barras (SCRAM)', fs: {
+      name: 'Transiente e desligamento de um PWR', components: ['water'], model: 'IDEAL', fixedLayout: true,
+      blocks: [{ id: 'CIN', x: 80, y: 80, type: 'reactor_kinetics', name: 'Cinética do PWR CIN-201 (3 765 MWt)', params: { model: 'Duderstadt e Hamilton (cinética pontual clássica)', grp: 'Keepin, U-235 com nêutrons térmicos (β = 0,0065)', L: 0.00002, rhoMode: 'rampa ρ = a·t', ra: 0.0001, t1: 1, N0: 1, P0: 1, C0: 'equilíbrio com N₀ (reator crítico antes da perturbação)', tEnd: 60, tZoom: 0, trip: 110, rhoScram: 0.07, tDel: 0.3, tIns: 2, fb: 'com realimentação de temperatura (Doppler e moderador)', Pnom: 3765 } }],
+      streams: [] } },
+    { key: 'parada-xenonio-angra2', title: 'Parada de um PWR do porte de Angra 2: xenônio-135 e tempo morto, calor residual e perda do resfriamento', fs: {
+      name: 'Parada do reator: xenônio e calor residual', components: ['water'], model: 'IDEAL', fixedLayout: true,
+      blocks: [{ id: 'PAR', x: 80, y: 80, type: 'reactor_shutdown', name: 'Parada do reator PAR-101 (3 765 MWt)', params: {} }],
+      streams: [] } },
     { key: 'cristalizador-msmpr', title: 'Cristalizador contínuo MSMPR: produção, tempo de residência, nucleação e distribuição de tamanhos (soluto genérico)', fs: {
       name: 'Cristalização contínua MSMPR', components: ['water', 'comp-A'], model: 'IDEAL',
       blocks: [
@@ -17901,7 +18274,7 @@ def pfr_transiente(P, nome):
   // blocos sem parâmetros recebem os valores pré-setados da unidade (secador, cristalizador, biorreatores...)
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && !Object.keys(b.params).length) T.params.forEach(f => { if (f.def !== undefined) b.params[f.k] = f.def; }); }));
   // equipamentos contínuos de sólidos e bioprocessos: os campos que o exemplo não informa recebem o valor pré-setado
-  const FILL = /^(evap_cond|filter_plate|filter_rotary|tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|centrifuge|biodigester|pasteurizer|butter_churn|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester|crusher|ball_mill|spiral_classifier|hydrocyclone|flotation|flot_col_|coke_oven|sinter_plant|bof|caster|rolling_mill|wire_drawing|wood_yard|pulp_washer|bleach_plant|paper_machine|recovery_boiler|causticizing|steam_gen|steam_turbine|nuclear_reactor|pwr_steam_gen|msr|steam_condenser|deaerator|p_precip|daf|act_sludge)/;
+  const FILL = /^(evap_cond|filter_plate|filter_rotary|tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|centrifuge|biodigester|pasteurizer|butter_churn|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester|crusher|ball_mill|spiral_classifier|hydrocyclone|flotation|flot_col_|coke_oven|sinter_plant|bof|caster|rolling_mill|wire_drawing|wood_yard|pulp_washer|bleach_plant|paper_machine|recovery_boiler|causticizing|steam_gen|steam_turbine|nuclear_reactor|pwr_steam_gen|msr|steam_condenser|deaerator|reactor_kinetics|reactor_shutdown|p_precip|daf|act_sludge)/;
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && FILL.test(b.type)) T.params.forEach(f => { if (b.params[f.k] === undefined && f.def !== undefined) b.params[f.k] = f.def; }); }));
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -18752,7 +19125,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', reactor_kinetics: 'CIN', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -19258,6 +19631,15 @@ def pfr_transiente(P, nome):
       ['Combustível e caldeira', 'escolha o combustível (biomassa, carvão, óleo ou gás) e a classe: baixa (10 bar saturado), média (42 bar, 400 °C) ou alta pressão (85 bar, 480 °C). Para fábricas modernas, digite a <b>pressão</b> (5 a 140 bar) e a <b>temperatura</b> (até 560 °C) do vapor. O <b>combustível secundário</b> faz a queima conjunta (co-firing) com a parcela de energia que você escolher, por exemplo casca de eucalipto com 30 % de gás natural.'],
       ['Condensador', 'vapor direto, condensador acoplado (saída em energia) ou automático, que liga o condensador quando a porta de energia ou a do condensado está ligada.'],
       ['Resultados', 'consumo de combustível, eficiência, ar, gases, cinzas, CO₂, perdas, água de resfriamento e gráficos de calor e de excesso de ar.']] },
+    reactor_kinetics: { ex: 'Cinética com moderação de Parreira e Bosch Neto (2022)', items: [
+      ['Modelo', 'Duderstadt e Hamilton (clássico) ou Parreira e Bosch Neto (2022), como no programa Octave (reproduz as figuras da dissertação) ou como nas equações 12 a 14 do texto.'],
+      ['Nêutrons atrasados', 'Bennet e Thomson (1989), como nos Anexos da dissertação (β = 0,007), a Tabela 8 da dissertação ou Keepin (U-235 térmico, β = 0,0065).'],
+      ['Reatividade', 'degrau, rampa, rampa quadrática ou desligamento (SCRAM); desligamento automático por sobrepotência; realimentação Doppler e do moderador.'],
+      ['Resultados', 'densidade de nêutrons, potência, 6 grupos de precursores e suas frações, período estável, temperaturas, reatividade e correlação com os dados do TRIGA/UFMG.']] },
+    reactor_shutdown: { ex: 'Parada de um PWR do porte de Angra 2: xenônio e calor residual', items: [
+      ['Xenônio', 'potência, tempo de operação, fluxo térmico, seção de choque e rendimentos; reatividade disponível para o tempo morto.'],
+      ['Resfriamento', 'capacidade do resfriamento residual; perda total do resfriamento com a água do circuito e a água acima do núcleo.'],
+      ['Resultados', 'pico do xenônio, tempo morto, calor de decaimento, tempo até ferver e até descobrir o núcleo, com 4 gráficos.']] },
     nuclear_reactor: { ex: 'Usina nuclear PWR completa (tipo Angra 2)', items: [
       ['Correntes', 'entrada <b>perna fria</b> e saída <b>perna quente</b> (Água líquida do primário). Sem a perna fria ligada, a vazão sai das temperaturas de projeto.'],
       ['Núcleo', '3 765 MWt a 158 bar; 193 elementos de 236 varetas com 3,9 m ativos e 0,55 t de urânio cada; fator de pico de 2.'],
@@ -19452,7 +19834,9 @@ def pfr_transiente(P, nome):
     if ($('#rxAdd')) $('#rxAdd').onclick = () => { pushUndo(); b.params.reactions = b.params.reactions || []; const a = state.components[1] || state.components[0], c = state.components[2] || state.components[0]; b.params.reactions.push({ stoich: { [a]: -1, [c]: 1 }, orders: { [a]: 1 }, k: 0.01, Tref: 25, Ea: 0, dH: 0, key: a, conversion: 0.9 }); afterChange(false); renderProps(); };
   }
   function resTable(r) {
-    return '<table class="grid"><tbody>' + (r.res || []).map(x => '<tr><td>' + esc(x.k) + '</td><td class="num">' + esc(nf(x.v, 4)) + ' ' + esc(x.u || '') + '</td></tr>').join('') + '</tbody></table>' +
+    // valores em texto longo (frases com vários números) quebram a linha; os números curtos ficam alinhados à direita
+    return '<table class="grid res-tbl"><tbody>' + (r.res || []).map(x => { const v = nf(x.v, 4) + ' ' + (x.u || ''), long = typeof x.v === 'string' && v.length > 14;
+      return '<tr><td>' + esc(x.k) + '</td><td class="num' + (long ? ' txt' : '') + '">' + esc(v) + '</td></tr>'; }).join('') + '</tbody></table>' +
       (r.warn || []).map(w => '<div class="note warn small">' + esc(w) + '</div>').join('');
   }
   function streamDetail(s) {

@@ -899,7 +899,7 @@ body.mobile .choc-ctl { top: auto; right: auto; left: 10px; bottom: 12px; }
 body.mobile .choc-ctl button { width: var(--tap); padding: 0; justify-content: center; font-size: 18px; }
 body.mobile .choc-ctl .cc-t { display: none; }
 .choc-pip { position: fixed; right: 18px; bottom: 18px; z-index: 9000; width: 240px; background: #1e0e06; border: 1px solid #b07a3c; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 28px rgba(0, 0, 0, .35); }
-.choc-pip .cp-h { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding-left: 12px; color: #ffe2b8; font: 700 13px var(--font); }
+.choc-pip .cp-h { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding-left: 12px; color: #ffe2b8; font: 700 12.5px/1.25 var(--font); }
 .choc-pip .cp-x { width: var(--tap); height: var(--tap); border: 0; background: transparent; color: #ffe2b8; font-size: 26px; line-height: 1; cursor: pointer; }
 .choc-pip .cp-x:focus-visible { outline: 3px solid #e0a12f; outline-offset: -4px; }
 .choc-pip video { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; background: #000; }
@@ -907,6 +907,15 @@ body.mobile .choc-pip { width: 168px; right: 8px; bottom: calc(132px + env(safe-
 body.mobile .choc-ctl { flex-direction: column; }
 .choc-ctl button[aria-pressed="true"].cc-video { background: linear-gradient(180deg, #ffe7b0, #efc274); }
 .ci-vid { background: rgba(255, 240, 220, .12); color: #ffe7c4; border: 1px solid rgba(255, 220, 170, .5); }
+.wopen { justify-self: start; align-self: start; margin: 6px 0 4px; min-height: 58px; padding: 0 34px; border: 0; border-radius: 99px; background: var(--sun, #ffc93c); color: #2a1b00; font: 900 21px/1 var(--font); letter-spacing: .06em; cursor: pointer; box-shadow: 0 6px 18px rgba(0, 0, 0, .22); }
+.wopen:hover { filter: brightness(1.05); transform: translateY(-1px); }
+.wopen:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+body.mobile .wopen { grid-column: 1 / -1; width: 100%; min-height: 54px; font-size: 19px; margin-top: 10px; }
+.music-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 14px; border-radius: 99px; border: 1.5px solid #b07a3c; background: linear-gradient(180deg, #fff4de, #f4d6a2); color: #4a230c; font: 800 14px var(--font); cursor: pointer; white-space: nowrap; flex: none; }
+.music-btn[hidden] { display: none; }
+.music-btn:focus-visible { outline: 3px solid #e0a12f; outline-offset: 2px; }
+body.mobile .music-btn { width: var(--tap); height: var(--tap); min-height: var(--tap); padding: 0; justify-content: center; font-size: 18px; border-radius: var(--r-md); }
+body.mobile .music-btn .mu-t { display: none; }
 .choc-ctl button:hover { background: linear-gradient(180deg, #fff8ea, #f7dfb3); }
 .choc-ctl button:focus-visible { outline: 3px solid #e0a12f; outline-offset: 2px; }
 :root[data-theme="dark"] .choc-ctl button { background: linear-gradient(180deg, #4a2610, #2e1608); color: #ffe2b8; border-color: #a8682f; }
@@ -957,6 +966,7 @@ body.mobile .choc-ctl { flex-direction: column; }
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
+  <button id="btnMusic" class="music-btn" type="button" hidden title="Parar a música (improviso sobre o tema Pure Imagination)" aria-label="Parar a música"><span aria-hidden="true">⏹</span><span class="mu-t"> Parar a música</span></button>
   <button id="btnAlunos" class="alunos-btn" type="button" hidden title="Vídeos feitos pelos alunos de Engenharia Química da UFSJ (YouTube)"><span class="al-new">NOVO</span>🎓 <span class="al-t">Vídeos dos alunos</span><span class="al-tm">Alunos</span> <span class="al-n"></span></button>
   <div class="tools" id="tools">
     <button id="btnNew" title="Novo fluxograma">Novo</button>
@@ -1107,13 +1117,7 @@ body.mobile .choc-ctl { flex-direction: column; }
         <p class="weyebrow">Engenharia Química · UFSJ</p>
         <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.2</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
-        <p class="wnew"><span aria-hidden="true">🍫</span> <b>Novo na 5.2:</b> exemplo <b>A Fábrica de Chocolate dos Sonhos</b>, do cacau à barra, com abertura animada e um improviso ao piano, e a categoria <b>Chocolate e cacau</b>: <b>torrador</b>, <b>alcalinizador</b> com carbonato de potássio, <b>moinho e refinadora</b>, <b>prensa</b> (manteiga e cacau em pó), <b>conchadeira</b> e <b>temperadeira</b> com túnel de resfriamento. E as <b>correntes animadas</b>: em todos os fluxogramas, o pontilhado anda no sentido do escoamento, mais rápido onde passa mais massa, quando a simulação dá certo</p>
-        <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 5.1:</b> <b>cinética pontual do reator</b> com 6 grupos de nêutrons atrasados e o <b>modelo com moderação de Parreira e Bosch Neto (2022)</b>, validado com o reator TRIGA/UFMG; reatividade, desligamento (SCRAM) e realimentação de temperatura; <b>parada do reator</b> com xenônio-135, calor residual e perda do resfriamento</p>
-        <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 5.0:</b> <b>usina nuclear PWR completa</b> (tipo Angra 2): <b>reator</b> com combustível, recarga, enriquecimento e calor de decaimento, <b>gerador de vapor</b> de tubos em U, <b>separador de umidade e reaquecedor</b>, <b>condensador</b> e <b>desaerador</b>, com água pela IAPWS-IF97, balanço da usina e diagrama T–s</p>
-        <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.9:</b> <b>gerador de vapor</b> (caldeira) com escolha do combustível, da classe de pressão e <b>condensador opcional</b> (saída em vapor ou energética), com consumo de combustível e eficiência</p>
-        <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.8:</b> <b>colunas de flotação de bancada e industrial</b> para <b>Engenharia de Minas</b>, com <b>bancos de dados</b> de misturas minerais, coletores e depressores</p>
-        <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.5:</b> processos completos de <b>mineração, siderurgia e papel e celulose</b></p>
-        <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.0:</b> banco com mais de <b>40 mil compostos químicos</b></p>
+        <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
         <p class="wdevice"><span aria-hidden="true">💻</span> Versão para notebook (preferencial) · <span aria-hidden="true">📱</span> também funciona no celular</p>
         <div class="whero-links"><a class="wman-top manual-href" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener"><span aria-hidden="true">📘</span> Manual do programa (PDF)</a>
@@ -1201,7 +1205,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '5.2-2026-11-21',
+  manualVersion: '5.2-2026-11-21b',
   videosAlunos: [
     { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' },
     { titulo: 'Como funciona o SIMULA FÁCIL IA - Exemplo: DESTILAÇÃO', autor: 'Bruno Gontijo de Carvalho – Engenharia Química UFSJ', url: 'https://youtu.be/H2lDGKUrdPA' }
@@ -19798,7 +19802,7 @@ def pfr_transiente(P, nome):
 </script>
 <script>/* js/chocolate.js */
 /* SIMULA FÁCIL IA — exemplo "A Fábrica de Chocolate dos Sonhos" (versão 5.2): abertura animada em canvas, improviso ao piano
-   ao fundo (midia/improviso-piano.mp3, em repetição com emenda suave), janelinha com o vídeo do improviso
+   sobre o tema Pure Imagination ao fundo (midia/improviso-piano.mp3, em repetição com emenda suave), janelinha com o vídeo
    (midia/improviso-piano.mp4) e correntes do fluxograma cor de chocolate. */
 (function (root) {
   'use strict';
@@ -19860,8 +19864,8 @@ def pfr_transiente(P, nome):
   function video() {
     if (pip) { closeVideo(); return; }
     resumeAfter = on; stop();   // a música de fundo pausa enquanto o vídeo toca e volta quando ele fecha
-    pip = doc.createElement('div'); pip.className = 'choc-pip'; pip.setAttribute('role', 'dialog'); pip.setAttribute('aria-label', 'Vídeo do improviso ao piano');
-    pip.innerHTML = '<div class="cp-h"><span>Improviso ao piano</span><button type="button" class="cp-x" aria-label="Fechar o vídeo" title="Fechar o vídeo">×</button></div>' +
+    pip = doc.createElement('div'); pip.className = 'choc-pip'; pip.setAttribute('role', 'dialog'); pip.setAttribute('aria-label', 'Vídeo do improviso sobre o tema Pure Imagination');
+    pip.innerHTML = '<div class="cp-h"><span>Improviso sobre o tema <i>Pure Imagination</i></span><button type="button" class="cp-x" aria-label="Fechar o vídeo" title="Fechar o vídeo">×</button></div>' +
       '<video src="' + VID + '" controls playsinline preload="metadata"></video>';
     doc.body.appendChild(pip);
     const v = pip.querySelector('video'); v.onended = closeVideo;
@@ -19874,14 +19878,17 @@ def pfr_transiente(P, nome):
 
   /* ---------------------------------------------------------------- botões no fluxograma */
   let ctl = null, active = false;
+  const hdrBtn = $('#btnMusic');
+  if (hdrBtn) hdrBtn.onclick = () => stop();
   function paint() {
+    if (hdrBtn) hdrBtn.hidden = !on;   // "Parar a música" no cabeçalho, só enquanto toca
     if (!ctl) return;
     const bm = ctl.querySelector('.cc-music');
     bm.setAttribute('aria-pressed', on ? 'true' : 'false');
     bm.innerHTML = (on ? '<span aria-hidden="true">⏸</span><span class="cc-t"> Pausar o improviso</span>' : '<span aria-hidden="true">🎹</span><span class="cc-t"> Tocar o improviso</span>');
-    bm.title = on ? 'Pausar o improviso ao piano' : 'Tocar o improviso ao piano'; bm.setAttribute('aria-label', bm.title);
+    bm.title = on ? 'Pausar o improviso sobre o tema Pure Imagination' : 'Tocar o improviso sobre o tema Pure Imagination'; bm.setAttribute('aria-label', bm.title);
     const bv = ctl.querySelector('.cc-video'); bv.setAttribute('aria-pressed', pip ? 'true' : 'false');
-    bv.title = pip ? 'Fechar o vídeo do improviso' : 'Ver o vídeo do improviso ao piano, numa janelinha'; bv.setAttribute('aria-label', bv.title);
+    bv.title = pip ? 'Fechar o vídeo do improviso' : 'Ver o vídeo do improviso sobre o tema Pure Imagination, numa janelinha'; bv.setAttribute('aria-label', bv.title);
   }
   function makeCtl() {
     if (ctl) return ctl;
@@ -19915,7 +19922,7 @@ def pfr_transiente(P, nome):
     lay = doc.createElement('div'); lay.className = 'choc-intro'; lay.setAttribute('role', 'dialog'); lay.setAttribute('aria-modal', 'true'); lay.setAttribute('aria-labelledby', 'ciTitle');
     lay.innerHTML = '<canvas aria-hidden="true"></canvas><div class="ci-txt"><p class="ci-k">SIMULA FÁCIL IA apresenta</p>' +
       '<h2 id="ciTitle">A Fábrica de Chocolate<br><em>dos Sonhos</em></h2><p class="ci-s">do cacau à barra: torra, alcalinização, prensa, refino, conchagem e temperagem</p>' +
-      '<p class="ci-m"><span aria-hidden="true">🎹</span> improviso ao piano</p></div>' +
+      '<p class="ci-m"><span aria-hidden="true">🎹</span> improviso ao piano sobre o tema <i>Pure Imagination</i></p></div>' +
       '<div class="ci-btns"><button type="button" class="ci-mute"></button><button type="button" class="ci-vid"><span aria-hidden="true">🎬</span> Vídeo do improviso</button><button type="button" class="ci-go">Entrar na fábrica <span aria-hidden="true">▸</span></button></div>';
     doc.body.appendChild(lay);
     const cv = lay.querySelector('canvas'), cx = cv.getContext('2d'), mute = lay.querySelector('.ci-mute');
@@ -21359,9 +21366,19 @@ def pfr_transiente(P, nome):
     exAll = false; $('#wExSearch').value = ''; filterExamples();
     let noShow = false; try { noShow = localStorage.getItem('simulafacil.noWelcome') === '1'; } catch (e) { /* */ }
     $('#wNoShow').checked = noShow;
-    $('#welcome').hidden = false; $('#welcome').scrollTop = 0; setTimeout(() => { $('#wClaude').focus({ preventScroll: true }); $('#welcome').scrollTop = 0; }, 30);
+    $('#welcome').hidden = false; $('#welcome').scrollTop = 0; setTimeout(() => { ($('#wOpen') || $('#wClaude')).focus({ preventScroll: true }); $('#welcome').scrollTop = 0; }, 30);
   }
   function closeWelcome() { $('#welcome').hidden = true; setTimeout(() => pfd.fit(), 30); }
+  // ABRIR SIMULADOR: abre a Fábrica de Chocolate dos Sonhos com a abertura e o improviso (o clique libera o som). Se o
+  // aluno estiver com um projeto próprio na tela, o projeto fica como está e a tela inicial só fecha.
+  if ($('#wOpen')) $('#wOpen').onclick = () => {
+    closeWelcome();
+    const ex = SF.examples.find(e => e.key === 'fabrica-chocolate'); if (!ex) return;
+    if (state.theme !== 'chocolate' && state.blocks.length) return;
+    if (state.theme !== 'chocolate') loadFlowsheet(ex.fs);
+    if (!(results && results.ok)) runSimulation(true);
+    chocOpen(ex);
+  };
   // exemplos da tela inicial: busca pelo nome; no celular a lista começa recolhida (o CSS esconde o excedente de .collapsed)
   let exAll = false;
   function filterExamples() {

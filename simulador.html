@@ -210,6 +210,20 @@ input[type=search] { -webkit-appearance: none; appearance: none; }
 .str-lbl text { font: 600 11px var(--mono); fill: var(--stream); text-anchor: middle; }
 .str-lbl.info text.sub { font: 10px var(--mono); fill: var(--muted); }
 .energy { stroke: var(--energy); stroke-width: 2; fill: none; }
+/* correntes animadas: o pontilhado anda no sentido do escoamento (só com a simulação convergida); a duração de cada
+   corrente vem do programa, proporcional à vazão (mais massa ou energia, mais rápido) */
+#pfd .str.fl:not(.sel) { stroke-dasharray: 13 7; stroke-linecap: round; animation: sfFlow 1.6s linear infinite; }
+#pfd .estr.fl, #pfd .energy.fl { stroke-dasharray: 7 4; animation: sfFlowE 1.6s linear infinite; }
+@keyframes sfFlow { to { stroke-dashoffset: -20; } }
+@keyframes sfFlowE { to { stroke-dashoffset: -11; } }
+@media (prefers-reduced-motion: reduce) { #pfd .fl { animation: none !important; } }
+.canvas-bar .anim-btn { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--teal, #10a8a0); color: #0a6f86; background: #fff; border-radius: 99px; padding: 3px 12px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+.canvas-bar .anim-btn:hover { background: #e3f5f3; }
+.canvas-bar .anim-btn[aria-pressed="true"] { background: #d4f1ec; }
+.canvas-bar .anim-btn[aria-pressed="false"] { color: #5c6b72; border-color: #9fb0b7; }
+.canvas-bar .anim-btn .mx-i { width: 15px; height: 15px; flex: none; }
+body.mobile .canvas-bar .anim-btn { flex: none; width: var(--tap); height: var(--tap); padding: 0; justify-content: center; border-radius: var(--r-md); }
+body.mobile .canvas-bar .anim-btn .mx-t { display: none; } body.mobile .canvas-bar .anim-btn .mx-i { width: 20px; height: 20px; }
 .energy-lbl { font: 600 11px var(--mono); fill: var(--energy); }
 .rubber { stroke: var(--accent); stroke-dasharray: 6 4; stroke-width: 2; fill: none; pointer-events: none; }
 
@@ -876,8 +890,8 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
 #pfd.choc { --stream: #7a3e17; }
 :root[data-theme="dark"] #pfd.choc { --stream: #e3a468; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #pfd.choc { --stream: #e3a468; } }
-#pfd.choc .str:not(.sel) { stroke-width: 3; stroke-linecap: round; stroke-dasharray: 18 7; animation: chocFlow 1.4s linear infinite; }
-@keyframes chocFlow { to { stroke-dashoffset: -25; } }
+#pfd.choc .str:not(.sel) { stroke-width: 3; stroke-linecap: round; }
+#pfd.choc .str.fl:not(.sel) { stroke-dasharray: 15 5; }
 .choc-ctl { position: absolute; top: 10px; right: 10px; z-index: 6; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; max-width: calc(100% - 20px); }
 .choc-ctl[hidden] { display: none; }
 .choc-ctl button { min-height: var(--tap); padding: 0 14px; border-radius: 999px; border: 1px solid #b07a3c; background: linear-gradient(180deg, #fff4de, #f4d6a2); color: #4a230c; font: 700 14px var(--font); cursor: pointer; box-shadow: 0 2px 8px rgba(74, 35, 12, .18); white-space: nowrap; }
@@ -908,7 +922,7 @@ body.mobile .choc-ctl .cc-t { display: none; }
 :root[data-theme="dark"] .wexc.wexc-choc { background: linear-gradient(135deg, #3b1e0c, #22110a); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wexc.wexc-choc { background: linear-gradient(135deg, #3b1e0c, #22110a); } }
 .wex-new { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 999px; background: #e0a12f; color: #2c1505; font-size: 11px; letter-spacing: .06em; vertical-align: 2px; }
-@media (prefers-reduced-motion: reduce) { #pfd.choc .str:not(.sel) { animation: none; } .ci-k, .ci-txt h2, .ci-s, .ci-m { animation: none; opacity: 1; transform: none; } .choc-intro { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .ci-k, .ci-txt h2, .ci-s, .ci-m { animation: none; opacity: 1; transform: none; } .choc-intro { transition: none; } }
 </style>
 </head>
 <body>
@@ -977,6 +991,7 @@ body.mobile .choc-ctl .cc-t { display: none; }
       <button class="icon" id="zoomOut" type="button" title="Afastar" aria-label="Afastar">−</button>
       <button class="icon" id="zoomFit" type="button" title="Ajustar à tela" aria-label="Ajustar o fluxograma à tela">⤢</button>
       <button class="icon" id="zoomIn" type="button" title="Aproximar" aria-label="Aproximar">+</button>
+      <button id="btnFlowAnim" class="anim-btn" type="button" aria-pressed="true"><svg class="mx-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h3M8 12h3M14 12h3M17 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="mx-t">Animar correntes</span></button>
       <button id="pfdMax" class="max-btn" type="button" aria-pressed="false" aria-label="Maximizar o fluxograma" title="Maximizar o fluxograma em tela cheia (duplo clique na barra também) · Esc volta"><svg class="mx-i mx-max" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="mx-i mx-res" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="mx-t">Maximizar</span></button>
       <button class="pp-btn" id="btnPP" type="button" title="Imagens com setas vermelhas mostrando cada passo (4 tutoriais)">🧭 Passo a passo</button>
     </div>
@@ -1083,7 +1098,7 @@ body.mobile .choc-ctl .cc-t { display: none; }
         <p class="weyebrow">Engenharia Química · UFSJ</p>
         <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.2</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
-        <p class="wnew"><span aria-hidden="true">🍫</span> <b>Novo na 5.2:</b> exemplo <b>A Fábrica de Chocolate dos Sonhos</b>, do cacau à barra, com abertura animada e valsa ao piano, e a categoria <b>Chocolate e cacau</b>: <b>torrador</b>, <b>alcalinizador</b> com carbonato de potássio, <b>moinho e refinadora</b>, <b>prensa</b> (manteiga e cacau em pó), <b>conchadeira</b> e <b>temperadeira</b> com túnel de resfriamento</p>
+        <p class="wnew"><span aria-hidden="true">🍫</span> <b>Novo na 5.2:</b> exemplo <b>A Fábrica de Chocolate dos Sonhos</b>, do cacau à barra, com abertura animada e valsa ao piano, e a categoria <b>Chocolate e cacau</b>: <b>torrador</b>, <b>alcalinizador</b> com carbonato de potássio, <b>moinho e refinadora</b>, <b>prensa</b> (manteiga e cacau em pó), <b>conchadeira</b> e <b>temperadeira</b> com túnel de resfriamento. E as <b>correntes animadas</b>: em todos os fluxogramas, o pontilhado anda no sentido do escoamento, mais rápido onde passa mais massa, quando a simulação dá certo</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 5.1:</b> <b>cinética pontual do reator</b> com 6 grupos de nêutrons atrasados e o <b>modelo com moderação de Parreira e Bosch Neto (2022)</b>, validado com o reator TRIGA/UFMG; reatividade, desligamento (SCRAM) e realimentação de temperatura; <b>parada do reator</b> com xenônio-135, calor residual e perda do resfriamento</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 5.0:</b> <b>usina nuclear PWR completa</b> (tipo Angra 2): <b>reator</b> com combustível, recarga, enriquecimento e calor de decaimento, <b>gerador de vapor</b> de tubos em U, <b>separador de umidade e reaquecedor</b>, <b>condensador</b> e <b>desaerador</b>, com água pela IAPWS-IF97, balanço da usina e diagrama T–s</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.9:</b> <b>gerador de vapor</b> (caldeira) com escolha do combustível, da classe de pressão e <b>condensador opcional</b> (saída em vapor ou energética), com consumo de combustível e eficiência</p>
@@ -1177,7 +1192,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '5.2-2026-11-20',
+  manualVersion: '5.2-2026-11-20b',
   videosAlunos: [
     { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' },
     { titulo: 'Como funciona o SIMULA FÁCIL IA - Exemplo: DESTILAÇÃO', autor: 'Bruno Gontijo de Carvalho – Engenharia Química UFSJ', url: 'https://youtu.be/H2lDGKUrdPA' }
@@ -13616,6 +13631,17 @@ window.SIMULAFACIL_CONFIG = {
     let h = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--stream)"/></marker>' +
       '<marker id="arrE" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--energy)"/></marker></defs>';
     h += '<g id="vp" transform="translate(' + this.tx + ',' + this.ty + ') scale(' + this.s + ')">';
+    // correntes animadas: só quando a simulação deu certo (resultado válido e convergido) e o botão está ligado.
+    // Duração de 2,6 s (vazões até 1000 vezes menores que a maior) a 0,8 s (a maior vazão), em escala logarítmica.
+    const anim = SF.flowAnim !== false && !!(res && res.ok && res.converged && res.streams);
+    const qOf = s => { if (!anim) return 0; if (isE(s)) { const e = res.energy && res.energy[s.id]; return e && isFinite(e.Q) ? Math.abs(e.Q) : 0; } const q = res.streams[s.id]; return q && isFinite(q.mass) ? q.mass : 0; };
+    let qM = 0, qE = 0;
+    if (anim) {
+      st.streams.forEach(s => { const q = qOf(s); if (isE(s)) qE = Math.max(qE, q); else qM = Math.max(qM, q); });
+      (res.extraStreams || []).forEach(x => { const q = res.streams[x.id]; if (q && isFinite(q.mass)) qM = Math.max(qM, q.mass); });
+      if (res.blocks) st.blocks.forEach(b => energyMarks(b, res.blocks[b.id], st.streams).forEach(m => { if (isFinite(m.Q)) qE = Math.max(qE, Math.abs(m.Q)); }));
+    }
+    const flow = (q, qmax) => { if (!anim || !(q > 0) || !(qmax > 0)) return ''; const t = (Math.max(-3, Math.min(0, Math.log10(q / qmax))) + 3) / 3; return ' fl" style="animation-duration:' + (2.6 - 1.8 * t).toFixed(2) + 's'; };
     // correntes
     st.streams.forEach(s => {
       const a = bmap[s.from], b = bmap[s.to]; if (!a || !b) return;
@@ -13624,7 +13650,7 @@ window.SIMULAFACIL_CONFIG = {
       const ss = res && res.streams && res.streams[s.id], en = isE(s);
       const tip = en ? 'Corrente de energia ' + esc(eLabel(s, res)) : ss ? esc(s.name) + ': ' + fmt(ss.T - 273.15, 1) + ' °C, ' + fmt(ss.P / 1e5, 3) + ' bar, ' + fmt(ss.F * 3.6, 3) + ' kmol/h, vf ' + fmt(ss.beta, 3) : esc(s.name);
       const lab = en ? eLabel(s, res) : String(s.name);
-      h += '<g data-stream="' + esc(s.id) + '"><title>' + tip + '</title><path class="' + (en ? 'estr' : 'str') + (sel ? ' sel' : '') + '" d="' + d + '" marker-end="url(#' + (en ? 'arrE' : 'arr') + ')"/><path class="str-hit" d="' + d + '"/>';
+      h += '<g data-stream="' + esc(s.id) + '"><title>' + tip + '</title><path class="' + (en ? 'estr' : 'str') + (sel ? ' sel' : '') + flow(qOf(s), en ? qE : qM) + '" d="' + d + '" marker-end="url(#' + (en ? 'arrE' : 'arr') + ')"/><path class="str-hit" d="' + d + '"/>';
       const m = longestSeg(pts), w = Math.max(22, lab.length * 7 + 10);
       h += '<g class="str-lbl' + (en ? ' e' : '') + '"><rect x="' + (m.x - w / 2) + '" y="' + (m.y - 9) + '" width="' + w + '" height="18" rx="4"/><text x="' + m.x + '" y="' + (m.y + 4) + '">' + esc(lab) + '</text></g></g>';
     });
@@ -13633,7 +13659,7 @@ window.SIMULAFACIL_CONFIG = {
       const b = bmap[x.from]; if (!b) return; const p = portPos(b, x.fromPort); if (!p) return;
       const e = { x: p.x + p.dir[0] * 46, y: p.y + p.dir[1] * 46 };
       const ss = res.streams[x.id];
-      h += '<g><title>' + esc(x.name) + (ss ? ': ' + fmt(ss.T - 273.15, 1) + ' °C, ' + fmt(ss.F * 3.6, 3) + ' kmol/h' : '') + '</title><path class="str" d="M' + p.x + ' ' + p.y + ' L' + e.x + ' ' + e.y + '" marker-end="url(#arr)"/>' +
+      h += '<g><title>' + esc(x.name) + (ss ? ': ' + fmt(ss.T - 273.15, 1) + ' °C, ' + fmt(ss.F * 3.6, 3) + ' kmol/h' : '') + '</title><path class="str' + flow(ss && ss.mass, qM) + '" d="M' + p.x + ' ' + p.y + ' L' + e.x + ' ' + e.y + '" marker-end="url(#arr)"/>' +
         '<text class="energy-lbl" style="fill:var(--stream)" x="' + (e.x + (p.dir[0] >= 0 ? 4 : -4)) + '" y="' + (e.y + 4) + '" text-anchor="' + (p.dir[0] >= 0 ? 'start' : 'end') + '">' + esc(x.name) + '</text></g>';
     });
     // energia
@@ -13641,7 +13667,7 @@ window.SIMULAFACIL_CONFIG = {
       if (m.Q == null || !isFinite(m.Q)) return;
       const into = m.Q > 0, y0 = m.up ? m.y - 30 : m.y + 30, y1 = m.y;
       const d = into ? 'M' + m.x + ' ' + y0 + ' L' + m.x + ' ' + y1 : 'M' + m.x + ' ' + y1 + ' L' + m.x + ' ' + y0;
-      h += '<path class="energy" d="' + d + '" marker-end="url(#arrE)"/><text class="energy-lbl" x="' + (m.left ? m.x - 6 : m.x + 6) + '" y="' + ((y0 + y1) / 2 + 4) + '"' + (m.left ? ' style="text-anchor:end"' : '') + '>' + m.label + ' = ' + fmt(m.Q / 1000, 1) + ' kW</text>';
+      h += '<path class="energy' + flow(Math.abs(m.Q), qE) + '" d="' + d + '" marker-end="url(#arrE)"/><text class="energy-lbl" x="' + (m.left ? m.x - 6 : m.x + 6) + '" y="' + ((y0 + y1) / 2 + 4) + '"' + (m.left ? ' style="text-anchor:end"' : '') + '>' + m.label + ' = ' + fmt(m.Q / 1000, 1) + ' kW</text>';
     }));
     // blocos
     const bad = res && res.errors ? new Set(res.errors.map(e => e.block)) : new Set();
@@ -20932,6 +20958,15 @@ def pfr_transiente(P, nome):
   $('.drawer-head').addEventListener('dblclick', e => { if (!e.target.closest('button') && !SF.mobile) setChartsMax(!chartsMax); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && chartsMax && !document.querySelector('.tut-ov')) { e.preventDefault(); setChartsMax(false); } });
   if ($('#pfdMax')) $('#pfdMax').onclick = () => setFlowMax(!flowMax);
+  // correntes animadas (ligadas por padrão; a escolha fica guardada no navegador)
+  try { SF.flowAnim = localStorage.getItem('simulafacil.flowAnim') !== '0'; } catch (e) { SF.flowAnim = true; }
+  const paintFlowAnim = () => { const b = $('#btnFlowAnim'); if (!b) return; b.setAttribute('aria-pressed', SF.flowAnim ? 'true' : 'false');
+    b.title = SF.flowAnim ? 'Correntes animadas: o pontilhado anda no sentido do escoamento, mais rápido onde passa mais massa ou energia (só com a simulação convergida). Clique para parar.' : 'Animar as correntes (só com a simulação convergida)';
+    b.setAttribute('aria-label', SF.flowAnim ? 'Parar a animação das correntes' : 'Animar as correntes'); };
+  if ($('#btnFlowAnim')) $('#btnFlowAnim').onclick = () => { SF.flowAnim = !SF.flowAnim; try { localStorage.setItem('simulafacil.flowAnim', SF.flowAnim ? '1' : '0'); } catch (e) { /* */ }
+    paintFlowAnim(); pfd.render();
+    toast(SF.flowAnim ? (results && results.ok && results.converged ? 'Correntes animadas' : 'Correntes animadas: aparecem quando a simulação convergir') : 'Animação das correntes desligada'); };
+  paintFlowAnim();
   $('.canvas-bar').addEventListener('dblclick', e => { if (!e.target.closest('button, input, label, select') && !SF.mobile) setFlowMax(!flowMax); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && flowMax && !chartsMax && !document.querySelector('.tut-ov')) { e.preventDefault(); setFlowMax(false); } });
   $('#drawerToggle').onclick = () => { setDrawer($('#drawer').classList.contains('closed')); setTimeout(() => { pfd.render(); window.dispatchEvent(new Event('resize')); }, 50); };

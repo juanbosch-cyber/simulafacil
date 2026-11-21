@@ -10,8 +10,12 @@ pó; a composição do chocolate é conferida com os mínimos do Codex Alimentar
 - Abertura animada ao abrir o exemplo (canvas, sem arquivo de vídeo): rio e cachoeira de chocolate, silhueta da fábrica com
   janelas acesas e chaminés, varal de luzes que piscam devagar (menos de uma vez por segundo, seguro para quem é sensível a
   luzes), amêndoas de cacau caindo e o título em letras douradas. Botões "Sem música" e "Entrar na fábrica" (ou Esc).
-- Valsa ao piano, composição original (fá maior, 3/4), sintetizada pelo próprio programa com a Web Audio API (sem arquivo de
-  áudio). Toca ao abrir o exemplo e para ao trocar de projeto; no fluxograma, os botões "Tocar/Pausar a valsa" e "Abertura".
+- Improviso ao piano ao fundo (midia/improviso-piano.mp3, 2 min 16 s, no volume de fundo), em repetição com uma emenda
+  suave de 3 s (no iPhone, repete sem a emenda). Começa ao abrir o exemplo e para ao trocar de projeto. Botões no
+  fluxograma: "Tocar/Pausar o improviso", "Vídeo" e "Abertura" (no celular, só os ícones, empilhados).
+- Vídeo do improviso (midia/improviso-piano.mp4, 320×240, 1,8 MB) numa janelinha no canto da tela, pelo botão "Vídeo" ou
+  "Vídeo do improviso" da abertura; só carrega quando é aberto. A música de fundo pausa enquanto o vídeo toca e volta quando
+  ele fecha. (Atualização de 21/11/2026: substitui a música que o programa sintetizava.)
   Por direitos autorais, o programa não usa músicas, nomes nem personagens de filmes.
 - No fluxograma do exemplo, as correntes ficam cor de chocolate e o chocolate "escorre" por elas (animação desligada quando o
   sistema pede menos movimento).
@@ -47,9 +51,10 @@ NOVA CATEGORIA "Chocolate e cacau", com 6 ícones:
   potássio e acetato de potássio; misturas prontas de amêndoas de cacau, liquor de cacau e leite em pó integral.
 - Site: novidades da 5.2 no início da página, na tela de boas-vindas e nas perguntas frequentes.
 - Manual: suplemento da versão 5.2 no fim do PDF (18 páginas: processo, componentes e receita, os seis equipamentos com
-  equações, campos, resultados e gráficos, correntes, abertura e valsa, limites e referências), página de novidades das
+  equações, campos, resultados e gráficos, correntes, abertura e música, limites e referências), página de novidades das
   versões 5.1 e 5.2 no início e capa e cabeçalhos com Versão 5.2. Endereço do manual: ?v=5.2-2026-11-20.
   Manual atualizado com as correntes animadas (novidades e seções E.2 e E.11): ?v=5.2-2026-11-20b.
+  Manual atualizado com o improviso ao piano e o vídeo (novidades e seções E.2 e E.11): ?v=5.2-2026-11-21.
 - Nomes curtos dos componentes novos (manteiga de cacau, sólidos de cacau isentos de gordura, casca de cacau, carbonato e
   acetato de potássio), para não sobrepor os números na tabela de correntes do Fluxograma final.
 

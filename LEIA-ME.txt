@@ -16,6 +16,17 @@ pó; a composição do chocolate é conferida com os mínimos do Codex Alimentar
 - No fluxograma do exemplo, as correntes ficam cor de chocolate e o chocolate "escorre" por elas (animação desligada quando o
   sistema pede menos movimento).
 
+CORRENTES ANIMADAS em todos os fluxogramas (atualização da noite de 20/11/2026):
+- Quando a simulação dá certo (resultado válido e convergido), o pontilhado das correntes anda no sentido do escoamento, da
+  saída de um equipamento para a entrada do outro. A velocidade é proporcional à vazão, em escala logarítmica: a maior vazão
+  completa o ciclo em 0,8 s e as até mil vezes menores em até 2,6 s. As correntes de energia (amarelas) e as setas de calor
+  também andam, pela potência.
+- Com erro, sem convergência ou com o resultado desatualizado ("Alterado — simule novamente"), as correntes ficam paradas:
+  o movimento indica que o resultado na tela vale.
+- Botão "Animar correntes" na barra do fluxograma (no celular, só o ícone), ligado por padrão; a escolha fica guardada no
+  navegador. Feito só com CSS (stroke-dasharray e stroke-dashoffset); para quando o sistema pede menos movimento.
+- No exemplo da fábrica de chocolate, as correntes continuam cor de chocolate, agora com a mesma regra.
+
 NOVA CATEGORIA "Chocolate e cacau", com 6 ícones:
 - Torrador contínuo de cacau: amêndoa como corpo de parâmetros concentrados (convecção do ar, secagem de 1ª ordem até a umidade
   de equilíbrio e perda do ácido acético, com Arrhenius), integrada por Runge-Kutta de 4ª ordem; ar quente com recirculação,
@@ -38,6 +49,7 @@ NOVA CATEGORIA "Chocolate e cacau", com 6 ícones:
 - Manual: suplemento da versão 5.2 no fim do PDF (18 páginas: processo, componentes e receita, os seis equipamentos com
   equações, campos, resultados e gráficos, correntes, abertura e valsa, limites e referências), página de novidades das
   versões 5.1 e 5.2 no início e capa e cabeçalhos com Versão 5.2. Endereço do manual: ?v=5.2-2026-11-20.
+  Manual atualizado com as correntes animadas (novidades e seções E.2 e E.11): ?v=5.2-2026-11-20b.
 - Nomes curtos dos componentes novos (manteiga de cacau, sólidos de cacau isentos de gordura, casca de cacau, carbonato e
   acetato de potássio), para não sobrepor os números na tabela de correntes do Fluxograma final.
 

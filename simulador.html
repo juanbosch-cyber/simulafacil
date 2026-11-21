@@ -886,7 +886,7 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
 .food-tab tr.on td { background: rgba(37, 99, 201, .08); font-weight: 600; }
 .food-tab button.mini { padding: 1px 8px; font-size: 12px; line-height: 1.5; }
 
-/* versão 5.2 — exemplo da fábrica de chocolate: correntes com chocolate escorrendo, botões da valsa e abertura animada */
+/* versão 5.2 — exemplo da fábrica de chocolate: correntes cor de chocolate, botões do improviso e do vídeo e abertura animada */
 #pfd.choc { --stream: #7a3e17; }
 :root[data-theme="dark"] #pfd.choc { --stream: #e3a468; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #pfd.choc { --stream: #e3a468; } }
@@ -898,6 +898,15 @@ body.mobile #btnAlunos { display: none !important; } /* no celular o botão fica
 body.mobile .choc-ctl { top: auto; right: auto; left: 10px; bottom: 12px; }
 body.mobile .choc-ctl button { width: var(--tap); padding: 0; justify-content: center; font-size: 18px; }
 body.mobile .choc-ctl .cc-t { display: none; }
+.choc-pip { position: fixed; right: 18px; bottom: 18px; z-index: 9000; width: 240px; background: #1e0e06; border: 1px solid #b07a3c; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 28px rgba(0, 0, 0, .35); }
+.choc-pip .cp-h { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding-left: 12px; color: #ffe2b8; font: 700 13px var(--font); }
+.choc-pip .cp-x { width: var(--tap); height: var(--tap); border: 0; background: transparent; color: #ffe2b8; font-size: 26px; line-height: 1; cursor: pointer; }
+.choc-pip .cp-x:focus-visible { outline: 3px solid #e0a12f; outline-offset: -4px; }
+.choc-pip video { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; background: #000; }
+body.mobile .choc-pip { width: 168px; right: 8px; bottom: calc(132px + env(safe-area-inset-bottom, 0px)); }
+body.mobile .choc-ctl { flex-direction: column; }
+.choc-ctl button[aria-pressed="true"].cc-video { background: linear-gradient(180deg, #ffe7b0, #efc274); }
+.ci-vid { background: rgba(255, 240, 220, .12); color: #ffe7c4; border: 1px solid rgba(255, 220, 170, .5); }
 .choc-ctl button:hover { background: linear-gradient(180deg, #fff8ea, #f7dfb3); }
 .choc-ctl button:focus-visible { outline: 3px solid #e0a12f; outline-offset: 2px; }
 :root[data-theme="dark"] .choc-ctl button { background: linear-gradient(180deg, #4a2610, #2e1608); color: #ffe2b8; border-color: #a8682f; }
@@ -1098,7 +1107,7 @@ body.mobile .choc-ctl .cc-t { display: none; }
         <p class="weyebrow">Engenharia Química · UFSJ</p>
         <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.2</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
-        <p class="wnew"><span aria-hidden="true">🍫</span> <b>Novo na 5.2:</b> exemplo <b>A Fábrica de Chocolate dos Sonhos</b>, do cacau à barra, com abertura animada e valsa ao piano, e a categoria <b>Chocolate e cacau</b>: <b>torrador</b>, <b>alcalinizador</b> com carbonato de potássio, <b>moinho e refinadora</b>, <b>prensa</b> (manteiga e cacau em pó), <b>conchadeira</b> e <b>temperadeira</b> com túnel de resfriamento. E as <b>correntes animadas</b>: em todos os fluxogramas, o pontilhado anda no sentido do escoamento, mais rápido onde passa mais massa, quando a simulação dá certo</p>
+        <p class="wnew"><span aria-hidden="true">🍫</span> <b>Novo na 5.2:</b> exemplo <b>A Fábrica de Chocolate dos Sonhos</b>, do cacau à barra, com abertura animada e um improviso ao piano, e a categoria <b>Chocolate e cacau</b>: <b>torrador</b>, <b>alcalinizador</b> com carbonato de potássio, <b>moinho e refinadora</b>, <b>prensa</b> (manteiga e cacau em pó), <b>conchadeira</b> e <b>temperadeira</b> com túnel de resfriamento. E as <b>correntes animadas</b>: em todos os fluxogramas, o pontilhado anda no sentido do escoamento, mais rápido onde passa mais massa, quando a simulação dá certo</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 5.1:</b> <b>cinética pontual do reator</b> com 6 grupos de nêutrons atrasados e o <b>modelo com moderação de Parreira e Bosch Neto (2022)</b>, validado com o reator TRIGA/UFMG; reatividade, desligamento (SCRAM) e realimentação de temperatura; <b>parada do reator</b> com xenônio-135, calor residual e perda do resfriamento</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 5.0:</b> <b>usina nuclear PWR completa</b> (tipo Angra 2): <b>reator</b> com combustível, recarga, enriquecimento e calor de decaimento, <b>gerador de vapor</b> de tubos em U, <b>separador de umidade e reaquecedor</b>, <b>condensador</b> e <b>desaerador</b>, com água pela IAPWS-IF97, balanço da usina e diagrama T–s</p>
         <p class="wnew"><span aria-hidden="true">✨</span> <b>Novo na 4.9:</b> <b>gerador de vapor</b> (caldeira) com escolha do combustível, da classe de pressão e <b>condensador opcional</b> (saída em vapor ou energética), com consumo de combustível e eficiência</p>
@@ -1192,7 +1201,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '5.2-2026-11-20b',
+  manualVersion: '5.2-2026-11-21',
   videosAlunos: [
     { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' },
     { titulo: 'Como funciona o SIMULA FÁCIL IA - Exemplo: DESTILAÇÃO', autor: 'Bruno Gontijo de Carvalho – Engenharia Química UFSJ', url: 'https://youtu.be/H2lDGKUrdPA' }
@@ -19788,9 +19797,9 @@ def pfr_transiente(P, nome):
 
 </script>
 <script>/* js/chocolate.js */
-/* SIMULA FÁCIL IA — exemplo "A Fábrica de Chocolate dos Sonhos" (versão 5.2): abertura animada em canvas, valsa ao piano
-   sintetizada com a Web Audio API e correntes do fluxograma com chocolate escorrendo. Tudo é gerado por código, sem arquivos de
-   áudio, vídeo ou imagem. A valsa é uma composição original (fá maior, compasso 3/4), feita para o programa. */
+/* SIMULA FÁCIL IA — exemplo "A Fábrica de Chocolate dos Sonhos" (versão 5.2): abertura animada em canvas, improviso ao piano
+   ao fundo (midia/improviso-piano.mp3, em repetição com emenda suave), janelinha com o vídeo do improviso
+   (midia/improviso-piano.mp4) e correntes do fluxograma cor de chocolate. */
 (function (root) {
   'use strict';
   const SF = root.SF = root.SF || {};
@@ -19799,80 +19808,68 @@ def pfr_transiente(P, nome):
   const reduced = () => !!(root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const $ = s => doc.querySelector(s);
 
-  /* ---------------------------------------------------------------- piano */
-  // cada compasso: [baixo, acorde dos tempos 2 e 3, melodia [[nota MIDI, tempos]], brilho de celesta no 3º tempo]
-  const SONG = [
-    [41, [57, 60, 65], [[69, 2], [72, 1]]],
-    [38, [57, 62, 65], [[77, 2], [76, 1]]],
-    [46, [58, 62, 65], [[74, 1], [72, 1], [70, 1]]],
-    [36, [58, 60, 64], [[72, 3]], [84, 88, 91]],
-    [41, [57, 60, 65], [[69, 1], [70, 1], [72, 1]]],
-    [45, [57, 60, 64], [[76, 2], [74, 1]]],
-    [43, [58, 62, 65], [[74, 1], [72, 1], [70, 1]]],
-    [36, [55, 60, 64], [[67, 3]], [84, 88, 91]],
-    [38, [57, 62, 65], [[69, 1], [74, 1], [77, 1]]],
-    [46, [58, 62, 65], [[77, 2], [74, 1]]],
-    [45, [57, 60, 65], [[72, 1], [77, 1], [81, 1]]],
-    [43, [58, 62, 67], [[79, 2], [77, 1]], [86, 89, 91]],
-    [46, [58, 62, 65], [[74, 1], [77, 1], [82, 1]]],
-    [48, [58, 60, 64], [[81, 1], [79, 1], [76, 1]]],
-    [41, [57, 60, 65], [[77, 3]], [89, 93, 96]],
-    [36, [55, 58, 64], [[72, 1], [74, 1], [76, 1]]]
-  ];
-  const BEAT = 60 / 84, VOL = 1.5;
-  let ac = null, out = null, dry = null, wet = null, bus = null, timer = null, on = false, nextBar = 0, barIdx = 0, loop = 0;
+  /* ---------------------------------------------------------------- música: improviso ao piano (MP3 em repetição) */
+  // Duas cópias do áudio: perto do fim, a outra começa do início e os volumes se cruzam em XF segundos (emenda suave).
+  // No iPhone o volume é só do aparelho: aí o áudio repete sozinho (loop), sem a emenda.
+  const SRC = 'midia/improviso-piano.mp3', VID = 'midia/improviso-piano.mp4', VOL = 0.8, XF = 3;
+  let els = null, cur = 0, on = false, tick = null, canVol = true;
+  function ramp(a, to, sec, then) {
+    clearInterval(a._r); a._r = null;
+    if (!canVol) { if (then) then(); return; }
+    const from = a.volume, n = Math.max(1, Math.round(sec * 20)); let k = 0;
+    a._r = setInterval(() => { k++; a.volume = Math.max(0, Math.min(1, from + (to - from) * k / n)); if (k >= n) { clearInterval(a._r); a._r = null; if (then) then(); } }, 50);
+  }
   function ensure() {
-    if (ac) return true;
-    const A = root.AudioContext || root.webkitAudioContext; if (!A) return false;
-    try { ac = new A(); } catch (e) { ac = null; return false; }
-    const comp = ac.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 3;
-    out = ac.createGain(); out.gain.value = VOL; out.connect(comp); comp.connect(ac.destination);
-    dry = ac.createGain(); dry.gain.value = 0.85; dry.connect(out);
-    const rv = ac.createConvolver(), n = Math.floor(ac.sampleRate * 2.8), buf = ac.createBuffer(2, n, ac.sampleRate);
-    for (let c = 0; c < 2; c++) { const d = buf.getChannelData(c); for (let k = 0; k < n; k++) d[k] = (Math.random() * 2 - 1) * Math.pow(1 - k / n, 3.4); }
-    rv.buffer = buf; wet = ac.createGain(); wet.gain.value = 0.3; wet.connect(rv); rv.connect(out);
+    if (els) return true;
+    try { els = [new Audio(SRC), new Audio(SRC)]; } catch (e) { els = null; return false; }
+    els[0].volume = 0.5; canVol = Math.abs(els[0].volume - 0.5) < 0.01;
+    els.forEach(a => { a.preload = 'auto'; a.volume = canVol ? 0 : 1; a.loop = !canVol; });
     return true;
   }
-  // uma nota de piano: parciais levemente inarmônicas, ataque rápido, decaimento mais curto nos agudos e abafador ao soltar a tecla
-  function note(m, t, dur, vel, cel) {
-    const f = 440 * Math.pow(2, (m - 69) / 12), g = ac.createGain(), lp = ac.createBiquadFilter(), end = t + dur + 1.6;
-    lp.type = 'lowpass'; lp.Q.value = 0.5;
-    lp.frequency.setValueAtTime(Math.min(12000, f * (cel ? 14 : 7)), t); lp.frequency.setTargetAtTime(Math.max(500, f * 2.4), t + 0.02, 0.5);
-    const tau = cel ? 0.45 : 1.5 * Math.pow(262 / f, 0.5);
-    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(vel, t + 0.005);
-    g.gain.setTargetAtTime(vel * 0.5, t + 0.005, 0.09); g.gain.setTargetAtTime(0, t + 0.12, tau); g.gain.setTargetAtTime(0, t + dur, 0.16);
-    const parts = cel ? [[1, 1], [4, 0.2], [8.2, 0.06]] : [[1, 1], [2, 0.45], [3, 0.2], [4, 0.1], [5, 0.05], [6, 0.025]];
-    parts.forEach((q, j) => {
-      const o = ac.createOscillator(), og = ac.createGain(); o.type = 'sine'; o.frequency.value = f * q[0] * Math.sqrt(1 + 0.0004 * q[0] * q[0]);
-      if (j === 0 && !cel) o.detune.value = 2;
-      og.gain.value = q[1] * 0.55; o.connect(og); og.connect(g); o.start(t); o.stop(end);
-    });
-    g.connect(lp); lp.connect(bus);
+  function watch() {
+    if (!on || !canVol) return;
+    const a = els[cur];
+    if (a.duration && a.currentTime > a.duration - XF && !a._x) {
+      a._x = true; const b = els[1 - cur]; b._x = false; try { b.currentTime = 0; } catch (e) { /* */ } b.volume = 0;
+      const p = b.play(); if (p && p.catch) p.catch(() => {});
+      ramp(b, VOL, XF); ramp(a, 0, XF, () => { a.pause(); a._x = false; }); cur = 1 - cur;
+    }
   }
-  function playBar(b, t0) {
-    const at = k => t0 + k * BEAT + (k ? 0.015 : 0);   // segundo e terceiro tempos levemente atrasados, como numa valsa
-    note(b[0], t0, BEAT * 2.7, 0.17); note(b[0] + 12, t0 + 0.008, BEAT * 0.9, 0.05);
-    b[1].forEach(m => { note(m, at(1), BEAT * 0.75, 0.06); note(m, at(2), BEAT * 0.75, 0.05); });
-    let k = 0;
-    b[2].forEach(q => { const v = 0.2 + 0.03 * Math.sin(barIdx + k); note(q[0], t0 + k * BEAT, q[1] * BEAT * 0.97, v); if (loop % 2) note(q[0] + 12, t0 + k * BEAT + 0.005, q[1] * BEAT * 0.9, 0.045); k += q[1]; });
-    if (b[3]) b[3].forEach((m, j) => note(m, t0 + 2 * BEAT + j * BEAT / 3, BEAT / 3, 0.05, true));
-  }
-  function schedule() {
-    if (!on) return;
-    while (nextBar < ac.currentTime + 2.4) { playBar(SONG[barIdx], nextBar); nextBar += 3 * BEAT; barIdx = (barIdx + 1) % SONG.length; if (!barIdx) loop++; }
-  }
-  function start() {
+  function start(fromStart) {
     if (!ensure()) return false;
-    if (ac.state === 'suspended' && ac.resume) { try { const r = ac.resume(); if (r && r.catch) r.catch(() => {}); } catch (e) { /* */ } }
     if (on) return true;
-    on = true; barIdx = 0; loop = 0; nextBar = ac.currentTime + 0.2;
-    bus = ac.createGain(); bus.gain.setValueAtTime(0, ac.currentTime); bus.gain.linearRampToValueAtTime(1, ac.currentTime + 1.5); bus.connect(dry); bus.connect(wet);
-    schedule(); timer = setInterval(schedule, 300); paint(); return true;
+    on = true; const a = els[cur];
+    if (fromStart) { els.forEach(x => { x.pause(); x._x = false; }); try { a.currentTime = 0; } catch (e) { /* */ } }
+    const p = a.play(); if (p && p.catch) p.catch(() => { on = false; clearInterval(tick); paint(); });
+    ramp(a, VOL, 1.2); clearInterval(tick); tick = setInterval(watch, 250); paint(); return true;
   }
   function stop() {
-    if (!on) return; on = false; clearInterval(timer); timer = null;
-    if (ac && bus) { const b = bus, t = ac.currentTime; b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(b.gain.value, t); b.gain.linearRampToValueAtTime(0, t + 0.9); setTimeout(() => { try { b.disconnect(); } catch (e) { /* */ } }, 1400); }
-    bus = null; paint();
+    if (!on) return; on = false; clearInterval(tick); tick = null;
+    els.forEach(a => { if (!a.paused) ramp(a, 0, 0.8, () => a.pause()); });
+    paint();
+  }
+
+  /* ---------------------------------------------------------------- vídeo do improviso, numa janelinha no canto */
+  let pip = null, resumeAfter = false, pipKey = null;
+  function closeVideo() {
+    if (!pip) return;
+    const v = pip.querySelector('video'); try { v.pause(); } catch (e) { /* */ }
+    pip.remove(); pip = null; doc.removeEventListener('keydown', pipKey, true); paint();
+    if (resumeAfter && active) start(); resumeAfter = false;
+  }
+  function video() {
+    if (pip) { closeVideo(); return; }
+    resumeAfter = on; stop();   // a música de fundo pausa enquanto o vídeo toca e volta quando ele fecha
+    pip = doc.createElement('div'); pip.className = 'choc-pip'; pip.setAttribute('role', 'dialog'); pip.setAttribute('aria-label', 'Vídeo do improviso ao piano');
+    pip.innerHTML = '<div class="cp-h"><span>Improviso ao piano</span><button type="button" class="cp-x" aria-label="Fechar o vídeo" title="Fechar o vídeo">×</button></div>' +
+      '<video src="' + VID + '" controls playsinline preload="metadata"></video>';
+    doc.body.appendChild(pip);
+    const v = pip.querySelector('video'); v.onended = closeVideo;
+    pip.querySelector('.cp-x').onclick = closeVideo;
+    pipKey = e => { if (e.key === 'Escape' && !lay) { e.preventDefault(); closeVideo(); } };
+    doc.addEventListener('keydown', pipKey, true);
+    const p = v.play(); if (p && p.catch) p.catch(() => {});
+    paint();
   }
 
   /* ---------------------------------------------------------------- botões no fluxograma */
@@ -19881,23 +19878,26 @@ def pfr_transiente(P, nome):
     if (!ctl) return;
     const bm = ctl.querySelector('.cc-music');
     bm.setAttribute('aria-pressed', on ? 'true' : 'false');
-    bm.innerHTML = (on ? '<span aria-hidden="true">⏸</span><span class="cc-t"> Pausar a valsa</span>' : '<span aria-hidden="true">🎹</span><span class="cc-t"> Tocar a valsa</span>');
-    bm.title = on ? 'Pausar a valsa ao piano' : 'Tocar a valsa ao piano (composição original)'; bm.setAttribute('aria-label', bm.title);
+    bm.innerHTML = (on ? '<span aria-hidden="true">⏸</span><span class="cc-t"> Pausar o improviso</span>' : '<span aria-hidden="true">🎹</span><span class="cc-t"> Tocar o improviso</span>');
+    bm.title = on ? 'Pausar o improviso ao piano' : 'Tocar o improviso ao piano'; bm.setAttribute('aria-label', bm.title);
+    const bv = ctl.querySelector('.cc-video'); bv.setAttribute('aria-pressed', pip ? 'true' : 'false');
+    bv.title = pip ? 'Fechar o vídeo do improviso' : 'Ver o vídeo do improviso ao piano, numa janelinha'; bv.setAttribute('aria-label', bv.title);
   }
   function makeCtl() {
     if (ctl) return ctl;
     const wrap = $('#canvasWrap'); if (!wrap) return null;
     ctl = doc.createElement('div'); ctl.className = 'choc-ctl'; ctl.hidden = true; ctl.setAttribute('role', 'group'); ctl.setAttribute('aria-label', 'Música e abertura do exemplo da fábrica de chocolate');
-    ctl.innerHTML = '<button type="button" class="cc-music" aria-pressed="false"></button><button type="button" class="cc-intro" title="Ver de novo a abertura animada" aria-label="Ver de novo a abertura animada"><span aria-hidden="true">✨</span><span class="cc-t"> Abertura</span></button>';
+    ctl.innerHTML = '<button type="button" class="cc-music" aria-pressed="false"></button><button type="button" class="cc-video" aria-pressed="false"><span aria-hidden="true">🎬</span><span class="cc-t"> Vídeo</span></button><button type="button" class="cc-intro" title="Ver de novo a abertura animada" aria-label="Ver de novo a abertura animada"><span aria-hidden="true">✨</span><span class="cc-t"> Abertura</span></button>';
     ctl.querySelector('.cc-music').onclick = () => { if (on) stop(); else start(); };
-    ctl.querySelector('.cc-intro').onclick = () => { start(); intro(); };
+    ctl.querySelector('.cc-video').onclick = () => video();
+    ctl.querySelector('.cc-intro').onclick = () => { closeVideo(); start(); intro(); };
     wrap.appendChild(ctl); paint(); return ctl;
   }
   function sync(isChoc) {
     active = !!isChoc;
     const svg = $('#pfd'); if (svg) svg.classList.toggle('choc', active);
     const c = makeCtl(); if (c) c.hidden = !active;
-    if (!active) { stop(); closeIntro(true); }
+    if (!active) { resumeAfter = false; closeVideo(); stop(); closeIntro(true); }
   }
 
   /* ---------------------------------------------------------------- abertura animada */
@@ -19915,13 +19915,14 @@ def pfr_transiente(P, nome):
     lay = doc.createElement('div'); lay.className = 'choc-intro'; lay.setAttribute('role', 'dialog'); lay.setAttribute('aria-modal', 'true'); lay.setAttribute('aria-labelledby', 'ciTitle');
     lay.innerHTML = '<canvas aria-hidden="true"></canvas><div class="ci-txt"><p class="ci-k">SIMULA FÁCIL IA apresenta</p>' +
       '<h2 id="ciTitle">A Fábrica de Chocolate<br><em>dos Sonhos</em></h2><p class="ci-s">do cacau à barra: torra, alcalinização, prensa, refino, conchagem e temperagem</p>' +
-      '<p class="ci-m"><span aria-hidden="true">🎹</span> valsa original ao piano</p></div>' +
-      '<div class="ci-btns"><button type="button" class="ci-mute"></button><button type="button" class="ci-go">Entrar na fábrica <span aria-hidden="true">▸</span></button></div>';
+      '<p class="ci-m"><span aria-hidden="true">🎹</span> improviso ao piano</p></div>' +
+      '<div class="ci-btns"><button type="button" class="ci-mute"></button><button type="button" class="ci-vid"><span aria-hidden="true">🎬</span> Vídeo do improviso</button><button type="button" class="ci-go">Entrar na fábrica <span aria-hidden="true">▸</span></button></div>';
     doc.body.appendChild(lay);
     const cv = lay.querySelector('canvas'), cx = cv.getContext('2d'), mute = lay.querySelector('.ci-mute');
     const paintMute = () => { mute.innerHTML = on ? '<span aria-hidden="true">🔇</span> Sem música' : '<span aria-hidden="true">🎹</span> Com música'; };
     mute.onclick = () => { if (on) stop(); else start(); paintMute(); }; paintMute();
     lay.querySelector('.ci-go').onclick = () => closeIntro();
+    lay.querySelector('.ci-vid').onclick = () => { closeIntro(true); video(); };
     keyFn = e => { if (e.key === 'Escape' || e.key === 'Enter') { e.preventDefault(); closeIntro(); } };
     doc.addEventListener('keydown', keyFn, true);
     setTimeout(() => { const g = lay && lay.querySelector('.ci-go'); if (g) g.focus({ preventScroll: true }); }, 60);
@@ -20021,9 +20022,9 @@ def pfr_transiente(P, nome):
     if (reduced()) setTimeout(() => closeIntro(), 4500);
   }
 
-  // abre o exemplo pelo clique do usuário: liga a música (o navegador só permite som depois de um gesto) e mostra a abertura
-  function open() { sync(true); start(); intro(); }
-  SF.choc = { open, sync, start, stop, intro, isPlaying: () => on, SONG };
+  // abre o exemplo pelo clique do usuário: liga a música do início (o navegador só permite som depois de um gesto) e mostra a abertura
+  function open() { sync(true); closeVideo(); stop(); start(true); intro(); }
+  SF.choc = { open, sync, start, stop, intro, video, closeVideo, isPlaying: () => on, hasVideo: () => !!pip };
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
 <script>/* js/app.js */
@@ -20154,7 +20155,7 @@ def pfr_transiente(P, nome):
   function afterChange(structural) {
     results = null; setStatus('idle', 'Alterado — simule novamente');
     $('#emptyHint').hidden = state.blocks.length > 0; $('#projName').value = state.name;
-    if (SF.choc) SF.choc.sync(state.theme === 'chocolate');   // exemplo da fábrica de chocolate: correntes de chocolate e botões da valsa
+    if (SF.choc) SF.choc.sync(state.theme === 'chocolate');   // exemplo da fábrica de chocolate: correntes de chocolate e botões do improviso
     pfd.render(); persist(); updateCompSummary();
     if (structural) renderProps();
     if ($('#autoSim') && $('#autoSim').checked && state.blocks.length) { clearTimeout(autoTimer); autoTimer = setTimeout(() => runSimulation(true), 700); }
@@ -21269,7 +21270,7 @@ def pfr_transiente(P, nome):
   }
 
   /* ------------------------------------------------------------------ projeto: novo, exemplos, salvar, abrir */
-  // a abertura animada e a valsa só começam com o clique do usuário (o navegador só libera o som depois de um gesto)
+  // a abertura animada e o improviso ao piano só começam com o clique do usuário (o navegador só libera o som depois de um gesto)
   const chocOpen = ex => { if (SF.choc && ex && ex.fs && ex.fs.theme === 'chocolate') SF.choc.open(); };
   function loadFlowsheet(fs, keepPositions, then) {
     if ((fs.components || []).some(id => !TH.COMP[id]) && SF.dbx) return withComps(fs = JSON.parse(JSON.stringify(fs)), () => { loadFlowsheet(fs, keepPositions); if (then) then(); });

@@ -20,6 +20,19 @@ dissolvidos (10 de 10 atendem no exemplo).
   pelo tanque de recuperação (equalização e clarificador com polímero) e voltam à entrada da estação (2,9 % da vazão), por um
   misturador antes da calha Parshall. Com a recirculação, a água bruta caiu de 1 030 para 1 001 m³/h.
 
+VÍDEO "McCabe e Thiele: a história do diagrama (artigo de 1925)" (atualização de 22/11/2026), 4 min 02 s, com a Marina:
+- Abre sozinho ao escolher o exemplo "Destilação etanol/água — McCabe-Thiele" (o 2º da lista), no player dos tutoriais, com o
+  botão "Pular" (ou Esc); depois, o botão "Vídeo: McCabe e Thiele" no fluxograma mostra de novo (no celular, só o ícone 🎬).
+  Também é o tutorial 6, na tela inicial ("Aprenda rapidinho") e na página de apresentação.
+- Conteúdo: o pai da engenharia química (George E. Davis, 1887, e Warren K. Lewis, pai da engenharia química moderna, no MIT);
+  o cálculo prato a prato antes de 1925 (Sorel e Lewis); as biografias de Warren L. McCabe (1899–1982) e Ernest W. Thiele
+  (1895–1993); a primeira página do artigo "Graphical Design of Fractionating Columns" (Ind. Eng. Chem., v. 17, n. 6,
+  p. 605–611, 1925); a construção dos degraus animada; as Figuras 6 e 7 do exemplo álcool–água (10 % → 94,5 % em massa,
+  refluxo 5, azeótropo perto de 89 % mol, 34⅓ pratos teóricos); a Figura 4 com os refluxos mínimo e total; o que McCabe e
+  Thiele representam para a engenharia química; e a Figura 6 lado a lado com o diagrama que o simulador desenha hoje.
+- Arquivos: midia/mccabe-thiele.mp4 (1280×720, 6,8 MB) e midia/mccabe-thiele.jpg. A narração é a voz do navegador, como nos
+  outros tutoriais, e as legendas estão no vídeo. O artigo de 1925 está em domínio público nos Estados Unidos desde 2021.
+
 NOVA CATEGORIA "Tratamento de água (ETA)", com 10 ícones:
 - Captação: grade (perda de carga de Kirschmer, limpa e com 50 % de obstrução), caixa de areia (remoção de Hazen de cada grão, areia
   log-normal, velocidade de sedimentação com o arrasto de uma esfera) e elevatória de água bruta (potência e kWh/m³).

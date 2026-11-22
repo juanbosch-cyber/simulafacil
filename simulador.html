@@ -772,6 +772,15 @@ body.mobile .mobcard { padding: 22px 18px 18px; border-radius: var(--r-lg); }
 /* versão do programa e aviso de dispositivo */
 .ver-badge { display: inline-block; vertical-align: middle; margin: 0 8px; padding: 2px 8px; border-radius: 99px; background: var(--sun); color: #2a1b00; font: 900 11px var(--font-fun); letter-spacing: .06em; }
 .ver-badge.big { font-size: 15px; padding: 4px 12px; margin-left: 10px; position: relative; top: -4px; }
+/* selo "em testes" (aviso de uso acadêmico e de ensino); no cabeçalho é um botão que abre o aviso completo */
+.test-badge { display: inline-flex; align-items: center; padding: 0; margin: 0 8px 0 0; border: 0; background: transparent; cursor: pointer; vertical-align: middle; }
+.test-badge span, .test-badge-txt { display: inline-block; padding: 2px 8px; border-radius: 99px; border: 1.5px solid #ffb4a6; color: #fff; background: rgba(180, 53, 42, .55); font: 900 11px var(--font-fun); letter-spacing: .06em; white-space: nowrap; }
+.test-badge:hover span, .test-badge:focus-visible span { background: rgba(180, 53, 42, .85); }
+.test-badge-txt.big { font-size: 13px; padding: 3px 10px; margin-left: 6px; position: relative; top: -4px; vertical-align: middle; }
+.aviso-box { border: 1px solid var(--err); background: var(--err-bg); border-radius: 10px; padding: 10px 12px; }
+.aviso-box p { margin: 0 0 6px; } .aviso-box p:last-child { margin: 0; }
+body.mobile #btnAviso { display: none !important; }   /* no celular o aviso fica no menu ☰ (Aviso de uso) e na tela de boas-vindas */
+body.mobile .whero h1 .test-badge-txt.big { display: table; font-size: 10px; padding: 2px 8px; margin: 6px 0 0; top: 0; }
 .brand-title { flex-wrap: wrap; }
 .wnew { margin: -4px 0 4px; display: inline-block; padding: 6px 14px; border-radius: 99px; background: var(--sun); color: #2a1b00; font-weight: 700; font-size: 14.5px; }
 .wdevice { margin: 10px 0 0; display: inline-block; padding: 6px 12px; border-radius: 99px; background: rgba(255,255,255,.14); color: #fff; font-weight: 700; font-size: 14px; }
@@ -1107,6 +1116,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
     <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.6</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
+  <button type="button" class="test-badge" id="btnAviso" title="Uso acadêmico e de ensino · versão em fase de testes (clique para ler o aviso)"><span>EM TESTES</span></button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
   <button id="btnMusic" class="music-btn" type="button" hidden title="Parar a música (improviso sobre o tema Pure Imagination)" aria-label="Parar a música"><span aria-hidden="true">⏹</span><span class="mu-t"> Parar a música</span></button>
   <button id="btnAlunos" class="alunos-btn" type="button" hidden title="Vídeos feitos pelos alunos de Engenharia Química da UFSJ (YouTube)"><span class="al-new">NOVO</span>🎓 <span class="al-t">Vídeos dos alunos</span><span class="al-tm">Alunos</span> <span class="al-n"></span></button>
@@ -1128,6 +1138,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
     <button id="btnTut" class="tut-btn" type="button" title="Tutoriais em vídeo curtos, com narração, e imagens de passo a passo">🎬 Vídeos</button>
     <a id="btnManual" class="btn manual-link" href="Manual_SIMULA_FACIL_IA.pdf" target="_blank" rel="noopener" title="Abrir ou baixar o manual em PDF">📘 Manual</a>
     <button id="btnAbout" title="Sobre o SIMULA FÁCIL IA e autoria">Sobre</button>
+    <button id="btnAvisoM" class="m-only" type="button" title="Uso acadêmico e de ensino · versão em fase de testes">Aviso de uso (em testes)</button>
     <button type="button" class="theme-btn theme-row m-only" id="themeBtnM" data-theme-toggle aria-pressed="false" aria-label="Modo escuro" title="Ligar o modo escuro"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.7A8.4 8.4 0 0 1 9.3 3.8a8.4 8.4 0 1 0 10.9 10.9z" fill="currentColor"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.3" fill="currentColor"/><path d="M12 2.4v2.4M12 19.2v2.4M2.4 12h2.4M19.2 12h2.4M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M5.2 18.8l1.7-1.7M17.1 6.9l1.7-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span class="tr-txt">Modo escuro: <span class="tr-off" aria-hidden="true">desligado</span><span class="tr-on" aria-hidden="true">ligado</span></span></button>
     <button id="btnThermoM" class="m-only" type="button">Componentes e termodinâmica</button>
     <button id="btnViewMode" type="button" hidden>📱 Versão para celular</button>
@@ -1257,7 +1268,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.6</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.6</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1432,6 +1443,11 @@ window.SIMULAFACIL_CONFIG = {
     program: 'PPGEQ-DEQUI-CAP-UFSJ',
     institution: 'Universidade Federal de São João del-Rei (UFSJ)',
     coauthor: 'CLAUDE (Anthropic)',
+    // aviso de uso (pedido do autor): programa acadêmico e de ensino, em fase de testes
+    noticeTitle: 'Uso acadêmico e de ensino · versão em fase de testes',
+    notice: 'O SIMULA FÁCIL IA é um programa para uso acadêmico e de ensino de Engenharia Química. Por ser recente, está em fase de testes e pode conter erros. Os resultados são didáticos: não os use para projetar, operar ou avaliar a segurança de instalações reais sem verificação independente. O programa é fornecido sem garantia.',
+    noticeLine: 'Uso acadêmico e de ensino; versão em fase de testes. Resultados didáticos: não use para projetar, operar ou avaliar a segurança de instalações reais sem verificação independente. Sem garantia.',
+    issues: 'https://github.com/juanbosch-cyber/simulafacil/issues',
     book: 'Modelagem e Simulação de Processos Dinâmicos',
     publisher: 'Editora Appris',
     bookRef: 'BOSCH NETO, J. C. et al. Modelagem e simulação de processos dinâmicos aplicada às engenharias química, de bioprocessos, elétrica, mecânica, de controle, aeroespacial e fluidodinâmica computacional. Curitiba: Appris, 2019.',
@@ -15909,13 +15925,14 @@ window.SIMULAFACIL_CONFIG = {
         tH += rowH * (rows.length + 1) + 16;
       }
     }
-    const W = Math.max(W0, 900), H = titleH + (y1 - y0) + tH + 44;
+    const W = Math.max(W0, 900), H = titleH + (y1 - y0) + tH + 60;
     const date = new Date().toLocaleString('pt-BR');
     return '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" font-family="Arial, Helvetica, sans-serif">' +
       '<defs><marker id="xa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="' + C.stream + '"/></marker><marker id="xe" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="' + C.energy + '"/></marker></defs>' +
       '<rect width="100%" height="100%" fill="#ffffff"/>' +
       '<text x="16" y="28" font-size="20" font-weight="700" fill="' + C.ink + '">' + esc(opts.title || 'Fluxograma do processo') + '</text>' +
       '<text x="16" y="47" font-size="12.5" fill="' + C.muted + '">SIMULA FÁCIL IA · modelo ' + esc(opts.model || '') + ' · ' + esc(date) + '</text>' +
+      '<text x="16" y="' + (H - 26) + '" font-size="11.5" fill="#b4352a">' + esc((SF.CREDITS && SF.CREDITS.noticeLine) || '') + '</text>' +   // aviso de uso
       '<text x="16" y="' + (H - 10) + '" font-size="11.5" fill="' + C.muted + '">' + esc((SF.CREDITS && SF.CREDITS.short) || '') + '</text>' +
       '<g transform="translate(' + (-x0) + ',' + (titleH - y0) + ')">' + body + '</g>' +
       '<g transform="translate(16,' + (titleH + (y1 - y0) + 10) + ')">' + table + '</g></svg>';
@@ -18255,6 +18272,7 @@ end`;
       '%   Autor: ' + SF.CREDITS.author + ' – ' + SF.CREDITS.course,
       '%          ' + SF.CREDITS.program + ' & CLAUDE',
       '%   Livro: ' + SF.CREDITS.book + ' (' + SF.CREDITS.publisher + ', 2019)',
+      '%   AVISO: ' + SF.CREDITS.noticeLine,
       '%   Modelo termodinâmico: ' + TH.MODELS[st.model] + (td.act ? ' (' + td.note + ')' : ' — recálculo de ELV não exportado para equações de estado'),
       '%   Componentes: ' + st.components.map(id => TH.COMP[id].name).join(', '),
       '%   Compatível com MATLAB R2016b+ e GNU Octave 6+ (salve como ' + fn + '.m e execute).',
@@ -18277,7 +18295,7 @@ end`;
   }
 
   function readme(st, fn) {
-    return ['SIMULA FÁCIL IA – Simulador de processos químicos e bioprocessos — pacote MATLAB/Octave', '', 'Processo: ' + st.name, '', SF.CREDITS.short, 'Livro: ' + SF.CREDITS.bookRef, '',
+    return ['SIMULA FÁCIL IA – Simulador de processos químicos e bioprocessos — pacote MATLAB/Octave', '', 'Processo: ' + st.name, '', SF.CREDITS.short, 'Livro: ' + SF.CREDITS.bookRef, '', 'AVISO: ' + SF.CREDITS.notice, 'Relatar um erro: ' + SF.CREDITS.issues, '',
       '1. Extraia ' + fn + '.m numa pasta e abra essa pasta no MATLAB (R2016b ou superior) ou no GNU Octave (6 ou superior).',
       '2. Execute:  ' + fn, '3. A janela de comandos mostra a tabela de correntes; as figuras mostram o fluxograma e os gráficos (fonte 18).',
       '4. Para exportar as figuras: print(gcf, \'-dpng\', \'-r150\', \'figura.png\').', '',
@@ -20135,6 +20153,7 @@ def pfr_transiente(P, nome):
       'Processo: ' + st.name,
       'Autor: ' + (C.author || '') + ' – ' + (C.course || ''), '       ' + (C.program || '') + ' & CLAUDE',
       'Livro: ' + (C.book || '') + ' (' + (C.publisher || '') + ', 2019)',
+      'AVISO: ' + (C.noticeLine || ''),
       'Modelo termodinâmico: ' + TH.MODELS[st.model] + (td.act ? ' (' + td.note + ')' : ' — recálculo de ELV não exportado para equações de estado'),
       'Componentes: ' + st.components.map(id => TH.COMP[id].name).join(', '), '',
       'Requisitos: Python 3.9+ com numpy, scipy e matplotlib  (pip install numpy scipy matplotlib)',
@@ -23908,8 +23927,15 @@ def pfr_transiente(P, nome):
       '<div class="kpis" style="margin-top:12px"><div class="kpi"><b>' + nf(t.heat / 1000, 1) + '</b><span>aquecimento total, kW</span></div><div class="kpi"><b>' + nf(Math.abs(t.cool) / 1000, 1) + '</b><span>resfriamento total, kW</span></div><div class="kpi"><b>' + nf(t.power / 1000, 2) + '</b><span>potência, kW</span></div></div>' +
       '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:10px">' + blocks.map(b => '<div><div class="subhead">' + esc(b.name) + ' — ' + esc(U.TYPES[b.type].label) + '</div>' + resTable(results.blocks[b.id]) + '</div>').join('') + '</div>' +
       (results.warnings.length ? '<div class="subhead">Avisos</div>' + results.warnings.map(w => '<div class="note warn small">' + esc(w) + '</div>').join('') : '') +
-      '<p class="small muted" style="margin-top:14px">' + esc(SF.CREDITS.long) + '</p>';
+      '<p class="small" style="margin-top:14px;color:var(--err)"><b>' + esc(SF.CREDITS.noticeTitle) + '.</b> ' + esc(SF.CREDITS.notice) + '</p><p class="small muted">' + esc(SF.CREDITS.long) + '</p>';
   }
+  // aviso de uso (acadêmico e de ensino, versão em fase de testes) com o link para relatar erros
+  function avisoHTML() {
+    const C = SF.CREDITS;
+    return '<div class="aviso-box"><p><b>' + esc(C.noticeTitle) + '</b></p><p>' + esc(C.notice) + '</p><p>Encontrou um erro? <a href="' + esc(C.issues) + '" target="_blank" rel="noopener">Relate na página de problemas do projeto no GitHub</a> (precisa de uma conta no GitHub).</p></div>';
+  }
+  function openAviso() { openModal('Aviso de uso', '<div style="max-width:640px">' + avisoHTML() + '</div>', []); }
+  $('#btnAviso').onclick = openAviso; $('#btnAvisoM').onclick = () => { if (typeof closeSheets === 'function') closeSheets(); openAviso(); };
   function openAbout() {
     const C = SF.CREDITS;
     openModal('Sobre o ' + C.title,
@@ -23918,6 +23944,7 @@ def pfr_transiente(P, nome):
       '<div class="subhead">Autor</div><p><b>' + esc(C.author) + '</b> – ' + esc(C.course) + '<br>' + esc(C.program) + ' &amp; CLAUDE<br><span class="small muted">' + esc(C.role) + ' · ' + esc(C.institution) + '</span></p>' +
       '<p>Autor do livro <i>' + esc(C.book) + '</i> (' + esc(C.publisher) + ', 2019), base dos modelos dinâmicos usados aqui.</p>' +
       '<div class="subhead">Coautor</div><p><b>' + esc(C.coauthor) + '</b> – desenvolvimento do código, do motor numérico e do agente.</p>' +
+      '<div class="subhead" id="aboutAviso">Aviso de uso</div>' + avisoHTML() +
       '<div class="subhead">Recursos</div><ul class="small"><li>Termodinâmica: Ideal, NRTL, Wilson, UNIQUAC, UNIFAC, Peng-Robinson, SRK, PC-SAFT (inclusive líquidos iônicos) e soft-SAFT.</li>' +
       '<li>Colunas rigorosas pelo método do ponto de bolha (Wang–Henke + θ) com Newton simultâneo (Naphtali–Sandholm).</li>' +
       '<li>Reatores CSTR e PFR em regime permanente e transiente; trocadores, extratores, vasos e máquinas.</li>' +
@@ -23932,7 +23959,7 @@ def pfr_transiente(P, nome):
     return '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>' + esc(state.name) + ' — SIMULA FÁCIL IA</title><style>body{font:14px Arial,sans-serif;margin:24px;color:#15232a}h1{font-size:22px}h2{font-size:16px;margin:18px 0 6px}table{border-collapse:collapse;font-size:13px}td{border-bottom:1px solid #ddd;padding:3px 8px}.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}.w{background:#fbf0dc;padding:6px 10px;margin:4px 0;border-left:3px solid #9a6512}</style></head><body>' +
       '<h1>' + esc(state.name) + '</h1><p>Modelo termodinâmico: ' + esc(TH.MODELS[state.model]) + ' · Componentes: ' + state.components.map(id => esc(TH.COMP[id].name)).join(', ') + '</p>' + svg +
       '<div class="g">' + blocks.map(b => '<div><h2>' + esc(b.name) + ' — ' + esc(U.TYPES[b.type].label) + '</h2>' + tbl(results.blocks[b.id]) + '</div>').join('') + '</div>' +
-      results.warnings.map(w => '<div class="w">' + esc(w) + '</div>').join('') + '<p style="color:#5a6a72;font-size:12px">Gerado por SIMULA FÁCIL IA em ' + new Date().toLocaleString('pt-BR') + '.<br>' + esc(SF.CREDITS.long) + '</p></body></html>';
+      results.warnings.map(w => '<div class="w">' + esc(w) + '</div>').join('') + '<p style="color:#b4352a;font-size:12px"><b>' + esc(SF.CREDITS.noticeTitle) + '.</b> ' + esc(SF.CREDITS.notice) + '</p><p style="color:#5a6a72;font-size:12px">Gerado por SIMULA FÁCIL IA em ' + new Date().toLocaleString('pt-BR') + '.<br>' + esc(SF.CREDITS.long) + '</p></body></html>';
   }
   function openReport() {
     if (!results || !results.ok) runSimulation(true);

@@ -37,8 +37,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 5.3 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, usina nuclear, fábrica de chocolate e estação de tratamento de água | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 5.3, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 5.4 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e estação de tratamento de água | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 5.4, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também fábrica de cimento completa, fábricas de ácido sulfúrico (enxofre e gás metalúrgico), usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -47,7 +47,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 5.3 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, usina nuclear, fábrica de chocolate e ETA">
+<meta property="og:title" content="SIMULA FÁCIL IA 5.4 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e ETA">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -1003,7 +1003,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.3</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.4</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -1156,7 +1156,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.3</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.4</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1323,7 +1323,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
-    version: '5.3',
+    version: '5.4',
     subtitle: 'Simulador de processos químicos e bioprocessos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -2584,6 +2584,11 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'coal-ash', name: 'Cinzas e argilas do carvão (ganga)', formula: 'CINZA', mw: 60, rho: 2550, solid: true, cpl: 45, tags: 'flotação carvão cinzas mineração' },
     { id: 'sylvite', name: 'Silvita (cloreto de potássio, KCl)', formula: 'KCl', mw: 74.551, rho: 1984, solid: true, cpl: 51.5, tags: 'flotação potássio fertilizante mineração' },
     { id: 'halite', name: 'Halita (cloreto de sódio, NaCl)', formula: 'NaCl', mw: 58.443, rho: 2165, solid: true, cpl: 50.5, tags: 'flotação potássio sal mineração' },
+    // versão 5.4: cimento (gesso e MgO da escória) e ácido sulfúrico (enxofre fundido e calcinado de zinco da ustulação)
+    { id: 'gypsum', name: 'Gipsita: sulfato de cálcio di-hidratado (gesso do cimento)', formula: 'CaSO4·2H2O', mw: 172.17, rho: 2320, solid: true, cpl: 186, tags: 'gesso gipsita cimento sulfato de cálcio pega moinho de cimento' },
+    { id: 'mgo', name: 'Óxido de magnésio (periclásio, MgO; escória e clínquer)', formula: 'MgO', mw: 40.304, rho: 3580, solid: true, cpl: 37.2, tags: 'magnésio escória de alto-forno cimento clínquer' },
+    { id: 'sulfur', name: 'Enxofre elementar (fundido acima de cerca de 115 °C; queima no forno de enxofre)', formula: 'S', mw: 32.06, rho: 1800, nv: true, cpl: 31.5, tags: 'enxofre ácido sulfúrico forno de enxofre queima so2' },
+    { id: 'zno', name: 'Óxido de zinco (calcinado da ustulação da blenda)', formula: 'ZnO', mw: 81.38, rho: 5610, solid: true, cpl: 40.3, tags: 'zinco calcinado ustulação ácido sulfúrico metalurgia' },
     // versão 5.3: tratamento de água (ETA): sólidos da água bruta, sistema carbonato, produtos da coagulação, da desinfecção e da fluoretação
     { id: 'clay', name: 'Argila e silte (sólidos suspensos da água bruta, turbidez)', formula: 'Al2Si2O5(OH)4', mw: 258.16, rho: 2600, solid: true, cpl: 246, tags: 'argila silte caulinita turbidez água bruta rio eta tratamento de água sólidos suspensos' },
     { id: 'ca-bicarbonate', name: 'Bicarbonato de cálcio (alcalinidade da água, soluto não volátil)', formula: 'Ca(HCO3)2', mw: 162.11, rho: 2000, nv: true, cpl: 200, tags: 'alcalinidade bicarbonato dureza carbonato água eta tratamento de água' },
@@ -3709,6 +3714,11 @@ window.SIMULAFACIL_CONFIG = {
   const BR_JAW = 'britador de mandíbulas (primário)', BR_GYR = 'britador giratório (primário)', BR_CONE = 'britador cônico (secundário ou terciário)';
   const ETA_W = ['3" (7,6 cm)', '6" (15,2 cm)', '9" (22,9 cm)', "1' (30,5 cm)", "1½' (45,7 cm)", "2' (61,0 cm)", "3' (91,5 cm)", "4' (122 cm)"];   // gargantas da calha Parshall (ETA)
   const CH_NIBS = 'moinho de nibs (pinos + bolas): nibs → liquor de cacau', CH_REF = 'refinadora de cinco cilindros: massa → chocolate fino';
+  // versão 5.4: fábrica de cimento completa e fábricas de ácido sulfúrico (queima de enxofre e gás metalúrgico)
+  const MM_CEM = 'moinho de cimento: clínquer + gesso + adições', MM_RAW = 'moinho de cru: mistura crua → farinha (com secagem)';
+  const CIM_TIPOS = ['CP II-E (com escória de alto-forno)', 'CP II-F (com fíler calcário)', 'CP III (de alto-forno)', 'CP V-ARI (alta resistência inicial)', 'CP I (comum)'];
+  const SB_S = 'forno de enxofre: S + O₂ → SO₂ (chama adiabática)', SB_R = 'ustulador de leito fluidizado: sulfetos (ZnS, FeS₂) + O₂ → óxidos + SO₂';
+  const AT_DRY = 'torre de secagem: o ácido retira a umidade do gás', AT_ABS = 'torre de absorção de SO₃ (intermediária ou final)';
   const FL_REV = 'reversa: a ganga flota e o mineral útil afunda (minério de ferro, com amina e amido)', FL_DIR = 'direta: o mineral útil flota (sulfetos com xantato, fosfato com ácido graxo)';
   /* ---- versão 4.8: colunas de flotação (bancada em batelada e industrial contínua) ----
      bancos de misturas minerais, coletores e depressores. Valores didáticos de literatura (Wills; Fuerstenau; Bulatovic; Finch e Dobby;
@@ -4415,7 +4425,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Cext', label: 'Concentração externa Cext (se informar)', u: 'mol/m³', def: 8.6 },
       { k: 'tEnd', label: 'Tempo de simulação', u: 'h', def: 24 },
       { k: 'nodes', label: 'Pontos da malha espacial', u: '', def: 60 }] },
-    blast_furnace: { label: 'Alto-forno contínuo (siderurgia): minério + coque + fundente + ar de sopro → gusa, escória e gás de topo; balanços de massa e energia', cat: 'Siderurgia e cimento', ins: ['ore', 'coke', 'flux', 'blast'], outs: ['gas', 'slag', 'pig_iron'], params: [
+    blast_furnace: { label: 'Alto-forno contínuo (siderurgia): minério + coque + fundente + ar de sopro → gusa, escória e gás de topo; balanços de massa e energia', cat: 'Siderurgia', ins: ['ore', 'coke', 'flux', 'blast'], outs: ['gas', 'slag', 'pig_iron'], params: [
       { k: 'mOre', label: 'Vazão de minério' + SEMC, u: 'kg/s', def: 100 },
       { k: 'wFe2O3', label: 'Fração mássica de Fe₂O₃ no minério (o restante é ganga, SiO₂)' + SEMC, u: '0–1', def: 0.94 },
       { k: 'mCoke', label: 'Vazão de coque' + SEMC, u: 'kg/s', def: 36 },
@@ -4430,7 +4440,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Ts', label: 'Temperatura da escória', u: '°C', def: 1550 },
       { k: 'Tgas', label: 'Temperatura do gás de topo', u: '°C', def: 150 },
       { k: 'Qloss', label: 'Perdas térmicas pelas paredes', u: 'kW', def: 25000 }] },
-    cement_kiln: { label: 'Forno de cimento contínuo (calcinação e clinquerização): farinha crua + combustível + ar → clínquer e gases; balanços de massa e energia', cat: 'Siderurgia e cimento', ins: ['meal', 'fuel', 'air'], outs: ['gas', 'clinker'], params: [
+    cement_kiln: { label: 'Forno de cimento contínuo (calcinação e clinquerização): farinha crua + combustível + ar → clínquer e gases; balanços de massa e energia', cat: 'Cimento', ins: ['meal', 'fuel', 'air'], outs: ['gas', 'clinker'], params: [
       { k: 'mMeal', label: 'Vazão de farinha crua' + SEMC, u: 'kg/s', def: 100 },
       { k: 'xCaCO3', label: 'Farinha: fração mássica de CaCO₃' + SEMC, u: '0–1', def: 0.78 },
       { k: 'xSiO2', label: 'Farinha: fração mássica de SiO₂' + SEMC, u: '0–1', def: 0.14 },
@@ -4450,6 +4460,77 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Tcl', label: 'Temperatura do clínquer', u: '°C', def: 1450 },
       { k: 'Tgk', label: 'Temperatura dos gases de exaustão', u: '°C', def: 350 },
       { k: 'QlossK', label: 'Perdas térmicas pelas paredes (radiação e convecção)', u: 'kW', def: 5000 }] },
+    // versão 5.4: fábrica de cimento completa (torre de ciclones com pré-calcinador, resfriador de clínquer e moinho de cimento ou de cru)
+    cyclone_preheater: { label: 'Torre de ciclones com pré-calcinador: farinha aquecida pelos gases do forno, calcinação e temperaturas por estágio', cat: 'Cimento', ins: ['meal', 'kiln_gas', 'fuel', 'ter_air'], outs: ['hot_meal', 'gas'], params: [
+      { k: 'nSt', label: 'Número de estágios de ciclones (o inferior fica junto do pré-calcinador)', type: 'select', options: ['3', '4', '5', '6'], def: '5' },
+      { k: 'Tc', label: 'Temperatura do pré-calcinador e do ciclone inferior', u: '°C', type: 'range', min: 820, max: 950, step: 5, def: 880 },
+      { k: 'Xmax', label: 'Grau de calcinação máximo no pré-calcinador (acima dele, o calor que sobra aquece demais o gás)', u: '0–1', def: 0.95 },
+      { k: 'QlossP', label: 'Perdas térmicas da torre e do pré-calcinador', u: 'kW', def: 4000 },
+      { k: 'dPst', label: 'Perda de carga de cada estágio (ciclone e duto)', u: 'kPa', def: 1.2 },
+      { k: 'etaF', label: 'Rendimento do exaustor da torre', u: '0–1', def: 0.8 },
+      { k: 'LHVp', label: 'Poder calorífico inferior do combustível (para o consumo específico)', u: 'kJ/kg', def: 32000 },
+      { k: 'mMeal', label: 'Vazão de farinha crua: 78 % CaCO₃, 14 % SiO₂, 4 % Al₂O₃, 2 % Fe₂O₃ e 2 % de umidade' + SEMC, u: 'kg/s', def: 53 },
+      { k: 'Tmeal', label: 'Temperatura da farinha crua' + SEMC, u: '°C', def: 80 },
+      { k: 'mKg', label: 'Vazão dos gases do forno: 29 % CO₂, 2,5 % H₂O, 2,4 % O₂ e 66,1 % N₂ em massa' + SEMC, u: 'kg/s', def: 21 },
+      { k: 'TKg', label: 'Temperatura dos gases do forno na entrada da torre' + SEMC, u: '°C', def: 1100 },
+      { k: 'mFuelP', label: 'Combustível do pré-calcinador: 85 % C, 4 % H e 11 % de cinzas' + SEMC, u: 'kg/s', def: 2.6 },
+      { k: 'mTa', label: 'Vazão de ar terciário (vem do resfriador de clínquer)' + SEMC, u: 'kg/s', def: 28.5 },
+      { k: 'TTa', label: 'Temperatura do ar terciário' + SEMC, u: '°C', def: 600 }] },
+    clinker_cooler: { label: 'Resfriador de clínquer de grelha: ar secundário e terciário quentes de volta ao forno e ao pré-calcinador', cat: 'Cimento', ins: ['clinker', 'air'], outs: ['product', 'sec_air', 'ter_air', 'exhaust'], params: [
+      { k: 'mSec', label: 'Ar secundário (vai ao forno pelo cabeçote)', u: 'kg/s', def: 17 },
+      { k: 'mTer', label: 'Ar terciário (vai ao pré-calcinador; 0 = forno sem pré-calcinador)', u: 'kg/s', def: 22 },
+      { k: 'nComp', label: 'Número de compartimentos de ar sob a grelha', u: '', def: 10 },
+      { k: 'eps', label: 'Efetividade de cada compartimento (quanto o ar se aproxima da temperatura média do clínquer)', u: '0–1', type: 'range', min: 0.5, max: 0.98, step: 0.01, def: 0.9 },
+      { k: 'beta', label: 'Concentração do ar na zona quente β (0 = mesmo ar em todos os compartimentos)', u: '', type: 'range', min: 0, max: 5, step: 0.1, def: 2 },
+      { k: 'QlossC', label: 'Perdas térmicas do resfriador (radiação na zona quente)', u: 'kW', def: 1500 },
+      { k: 'load', label: 'Carga específica da grelha', u: 't/(d·m²)', def: 45 },
+      { k: 'mAirC', label: 'Ar de resfriamento (ventiladores sob a grelha)' + SEMC, u: 'kg/s', def: 75 },
+      { k: 'TairC', label: 'Temperatura do ar de resfriamento' + SEMC, u: '°C', def: 25 }] },
+    cement_mill: { label: 'Moinho de cimento ou de cru: energia de Bond, finura Blaine e composição do cimento (NBR 16697)', cat: 'Cimento', ins: ['feed', 'gypsum', 'slag', 'filler'], outs: ['product', 'vapor'], eins: ['q_in'], params: [
+      { k: 'mode', label: 'Moinho', type: 'select', options: [MM_CEM, MM_RAW], def: MM_CEM },
+      { k: 'tipo', label: 'Tipo de cimento a conferir (NBR 16697)', type: 'select', options: CIM_TIPOS, def: CIM_TIPOS[0], when: q => q.mode !== MM_RAW },
+      { k: 'blaine', label: 'Finura Blaine do cimento', u: 'cm²/g', type: 'range', min: 2600, max: 5500, step: 50, def: 3800, when: q => q.mode !== MM_RAW },
+      { k: 'Kb', label: 'Relação P80 × Blaine do cimento (P80 = K/Blaine)', u: 'µm·cm²/g', def: 125000, when: q => q.mode !== MM_RAW },
+      { k: 'P80r', label: 'P80 da farinha crua (cerca de 12 % retidos na peneira de 90 µm)', u: 'µm', type: 'range', min: 40, max: 150, step: 1, def: 75, when: q => q.mode === MM_RAW },
+      { k: 'F80', label: 'F80 da alimentação principal (clínquer ou mistura crua)' + SEMG, u: 'mm', def: 15 },
+      { k: 'F80s', label: 'F80 da escória granulada, do gesso e do fíler', u: 'mm', def: 3, when: q => q.mode !== MM_RAW },
+      { k: 'WiF', label: 'Índice de trabalho de Bond da alimentação principal (clínquer ≈ 14; mistura crua ≈ 11)', u: 'kWh/t', def: 14 },
+      { k: 'WiS', label: 'Índice de trabalho de Bond da escória granulada', u: 'kWh/t', def: 22, when: q => q.mode !== MM_RAW },
+      { k: 'WiA', label: 'Índice de trabalho de Bond do gesso e do fíler calcário', u: 'kWh/t', def: 9, when: q => q.mode !== MM_RAW },
+      { k: 'EF', label: 'Fator de eficiência de Rowland (moagem a seco ≈ 1,3)', u: '', def: 1.3 },
+      { k: 'fH', label: 'Fração da energia de moagem que aquece o material (o resto sai com o ar de ventilação)', u: '0–1', def: 0.7 },
+      { k: 'Tmax', label: 'Temperatura máxima do cimento (acima dela pulveriza-se água, senão o gesso desidrata e a pega fica falsa)', u: '°C', def: 110, when: q => q.mode !== MM_RAW },
+      { k: 'Xr', label: 'Umidade da farinha na saída', u: '%', def: 0.5, when: q => q.mode === MM_RAW },
+      { k: 'Tgas', label: 'Temperatura dos gases quentes de secagem (vêm da torre de ciclones)', u: '°C', def: 320, when: q => q.mode === MM_RAW },
+      { k: 'Tgo', label: 'Temperatura da farinha e dos gases na saída do moinho', u: '°C', def: 90, when: q => q.mode === MM_RAW },
+      { k: 'J', label: 'Enchimento de bolas (fração do volume interno)', u: '0–1', def: 0.30 },
+      { k: 'phiC', label: 'Rotação como fração da velocidade crítica', u: '0–1', def: 0.75 },
+      { k: 'LD', label: 'Relação comprimento/diâmetro L/D (moinho de duas câmaras)', u: '', def: 3.2 },
+      { k: 'Dmax', label: 'Diâmetro interno máximo de um moinho (acima disso, moinhos em paralelo)', u: 'm', def: 5 },
+      { k: 'nRR', label: 'Módulo de Rosin–Rammler do produto', u: '', def: 1.0 },
+      { k: 'eff', label: 'Rendimento do motor e da transmissão', u: '0–1', def: 0.95 }] },
+    // versão 5.4: ácido sulfúrico (queima de enxofre ou ustulação de sulfetos, conversor catalítico e torres de ácido)
+    sulfur_burner: { label: 'Forno de enxofre ou ustulador de sulfetos: gás com SO₂ para a fábrica de ácido', cat: 'Ácido sulfúrico', ins: ['feed', 'air'], outs: ['gas', 'calcine'], eouts: ['q_out'], params: [
+      { k: 'mode', label: 'Equipamento', type: 'select', options: [SB_S, SB_R], def: SB_S },
+      { k: 'Tbed', label: 'Temperatura do leito fluidizado (o calor que sobra vai para as serpentinas de vapor)', u: '°C', type: 'range', min: 850, max: 1000, step: 5, def: 950, when: q => q.mode === SB_R },
+      { k: 'QlossB', label: 'Perdas térmicas pelas paredes', u: 'kW', def: 800 }] },
+    so2_converter: { label: 'Conversor catalítico de SO₂ (leitos de V₂O₅): equilíbrio, retas adiabáticas e resfriamento entre os leitos', cat: 'Ácido sulfúrico', ins: ['gas_in'], outs: ['gas_out'], eouts: ['q_out'], params: [
+      { k: 'nB', label: 'Número de leitos neste conversor', type: 'select', options: ['1', '2', '3', '4', '5'], def: '3' },
+      { k: 'bed0', label: 'Número do primeiro leito (1; ou 4 depois da absorção intermediária)', u: '', def: 1 },
+      { k: 'Tin', label: 'Temperatura do gás na entrada de cada leito (°C, separadas por ponto e vírgula)', type: 'matrix', def: '420; 440; 430' },
+      { k: 'fEq', label: 'Fração da conversão de equilíbrio atingida em cada leito (sobre a reta adiabática)', u: '0–1', def: 0.97 },
+      { k: 'ToutC', label: 'Temperatura do gás na saída, depois do trocador ou economizador (vazio = saída do último leito)', u: '°C', def: '' },
+      { k: 'GHSV', label: 'Velocidade espacial em cada leito, para o volume de catalisador (Nm³/h por m³; separadas por ponto e vírgula)', type: 'matrix', def: '2200; 1800; 1700; 1400' }] },
+    acid_tower: { label: 'Torre de ácido sulfúrico: secagem do gás ou absorção do SO₃ em ácido 98,5 %', cat: 'Ácido sulfúrico', ins: ['gas_in', 'liq_in'], outs: ['gas_out', 'liq_out'], eouts: ['q_out'], params: [
+      { k: 'mode', label: 'Torre', type: 'select', options: [AT_DRY, AT_ABS], def: AT_ABS },
+      { k: 'w', label: 'Concentração do ácido de circulação (vazio = 98,5 % na absorção e 96 % na secagem)', u: '% H₂SO₄', def: '' },
+      { k: 'eta', label: 'Eficiência de absorção do SO₃', u: '%', def: 99.9, when: q => q.mode !== AT_DRY },
+      { k: 'resid', label: 'Umidade residual no gás seco', u: 'mg/Nm³', def: 50, when: q => q.mode === AT_DRY },
+      { k: 'TaIn', label: 'Temperatura do ácido na entrada da torre, depois do resfriador (vazio = 75 °C na absorção e 50 °C na secagem)', u: '°C', def: '' },
+      { k: 'TaOut', label: 'Temperatura do ácido na saída da torre (vazio = 110 °C na absorção e 65 °C na secagem)', u: '°C', def: '' },
+      { k: 'Tgo', label: 'Temperatura do gás na saída da torre (vazio = 5 °C acima do ácido que entra)', u: '°C', def: '' },
+      { k: 'ug', label: 'Velocidade superficial do gás na torre', u: 'm/s', def: 1.5 },
+      { k: 'HTU', label: 'Altura de uma unidade de transferência do recheio (HTU)', u: 'm', def: 0.6 }] },
     silo: { label: 'Silo com tremonha cônica, descarga contínua por gravidade: vazão de Beverloo, regime de Jenike e efeito do ângulo da tremonha', cat: 'Sólidos particulados', ins: ['feed'], outs: ['product'], params: [
       { k: 'Fs', label: 'Vazão de sólidos na alimentação' + SEMC, u: 'kg/s', def: 30 },
       { k: 'Ds', label: 'Diâmetro do silo (seção cilíndrica)', u: 'm', def: 3.0 },
@@ -4654,7 +4735,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'dosD', label: 'Dosagem do depressor (amido gelatinizado na flotação de minério de ferro)', u: 'g/t', def: 500 }] },
     flot_col_bench: { label: 'Coluna de flotação de bancada (batelada): banco de misturas minerais, coletores e depressores, recuperação metalúrgica, tempo ótimo e parâmetros ideais', cat: 'Mineração', ins: ['feed'], outs: ['froth', 'sink'], params: fcParams(false) },
     flot_col_ind: { label: 'Coluna de flotação industrial (contínua): entrada e saídas, hidrodinâmica (J_g, J_w, bias), dispersão axial, recuperação metalúrgica e parâmetros ideais', cat: 'Mineração', ins: ['feed'], outs: ['froth', 'sink'], params: fcParams(true) },
-    coke_oven: { label: 'Coqueria (bateria de fornos + planta de subprodutos): carvão mineral → coque, gás de coqueria e alcatrão', cat: 'Siderurgia e cimento', ins: ['coal'], outs: ['coke', 'gas', 'tar'], params: [
+    coke_oven: { label: 'Coqueria (bateria de fornos + planta de subprodutos): carvão mineral → coque, gás de coqueria e alcatrão', cat: 'Siderurgia', ins: ['coal'], outs: ['coke', 'gas', 'tar'], params: [
       { k: 'mCoal', label: 'Vazão de carvão úmido' + SEMC, u: 'kg/s', def: 50 },
       { k: 'moist', label: 'Umidade do carvão (base úmida)' + SEMC, u: '0–1', def: 0.08 },
       { k: 'VM', label: 'Matéria volátil (base seca)' + SEMC, u: '0–1', def: 0.25 },
@@ -4667,7 +4748,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'qH', label: 'Consumo de calor no aquecimento da bateria', u: 'MJ/t de carvão úmido', def: 2700 },
       { k: 'Tcoke', label: 'Temperatura do coque depois do apagamento', u: '°C', def: 25 },
       { k: 'Tgas', label: 'Temperatura do gás limpo e dos subprodutos', u: '°C', def: 35 }] },
-    sinter_plant: { label: 'Sinterização (esteira Dwight–Lloyd): finos de minério + fundente + moinha de coque + ar → sínter e gases', cat: 'Siderurgia e cimento', ins: ['ore', 'flux', 'fuel'], outs: ['sinter', 'gas'], params: [
+    sinter_plant: { label: 'Sinterização (esteira Dwight–Lloyd): finos de minério + fundente + moinha de coque + ar → sínter e gases', cat: 'Siderurgia', ins: ['ore', 'flux', 'fuel'], outs: ['sinter', 'gas'], params: [
       { k: 'mOre', label: 'Vazão de finos de minério úmidos (sinter feed)' + SEMC, u: 'kg/s', def: 110 },
       { k: 'wHem', label: 'Hematita (Fe₂O₃) no minério seco; o restante é sílica' + SEMC, u: '0–1', def: 0.92 },
       { k: 'wH2O', label: 'Umidade da mistura a sinterizar (base úmida)' + SEMC, u: '0–1', def: 0.06 },
@@ -4680,7 +4761,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'prod', label: 'Produtividade da esteira', u: 't/(m²·dia)', def: 36 },
       { k: 'Tsin', label: 'Temperatura do sínter na saída do resfriador', u: '°C', def: 100 },
       { k: 'Tgas', label: 'Temperatura dos gases na chaminé', u: '°C', def: 130 }] },
-    bof: { label: 'Aciaria LD (convertedor a oxigênio, BOF): gusa + sucata + O₂ + cal → aço líquido, escória e gás; balanço térmico', cat: 'Siderurgia e cimento', ins: ['hot_metal', 'scrap'], outs: ['steel', 'slag', 'gas'], params: [
+    bof: { label: 'Aciaria LD (convertedor a oxigênio, BOF): gusa + sucata + O₂ + cal → aço líquido, escória e gás; balanço térmico', cat: 'Siderurgia', ins: ['hot_metal', 'scrap'], outs: ['steel', 'slag', 'gas'], params: [
       { k: 'mHM', label: 'Vazão de gusa líquido' + SEMC, u: 'kg/s', def: 66 },
       { k: 'wCg', label: 'Carbono no gusa' + SEMC, u: '% massa', def: 4.5 },
       { k: 'THM', label: 'Temperatura do gusa na saída do alto-forno' + SEMC, u: '°C', def: 1500 },
@@ -4693,7 +4774,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Tgas', label: 'Temperatura do gás na boca do convertedor', u: '°C', def: 1450 },
       { k: 'Qloss', label: 'Perdas térmicas (radiação, refratário e água de refrigeração)', u: 'kW', def: 3000 },
       { k: 'heat', label: 'Tamanho da corrida', u: 't de aço', def: 220 }] },
-    caster: { label: 'Lingotamento contínuo de tarugos: velocidade, solidificação (s = K√t), comprimento metalúrgico e água de refrigeração', cat: 'Siderurgia e cimento', ins: ['steel'], outs: ['billet', 'loss'], params: [
+    caster: { label: 'Lingotamento contínuo de tarugos: velocidade, solidificação (s = K√t), comprimento metalúrgico e água de refrigeração', cat: 'Siderurgia', ins: ['steel'], outs: ['billet', 'loss'], params: [
       { k: 'mS', label: 'Vazão de aço líquido' + SEMC, u: 'kg/s', def: 66 },
       { k: 'wCs', label: 'Carbono no aço' + SEMC, u: '% massa', def: 0.10 },
       { k: 'TS', label: 'Temperatura do aço no vazamento' + SEMC, u: '°C', def: 1650 },
@@ -4708,7 +4789,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'spray', label: 'Água da refrigeração secundária (sprays)', u: 'L/kg de aço', def: 1.2 },
       { k: 'Tout', label: 'Temperatura média do tarugo no corte', u: '°C', def: 900 },
       { k: 'yield', label: 'Rendimento metálico (o restante: carepa e pontas, sucata de retorno)', u: '0–1', def: 0.975 }] },
-    rolling_mill: { label: 'Laminação a quente de fio-máquina: forno de reaquecimento, sequência de cadeiras, velocidade e potência', cat: 'Siderurgia e cimento', ins: ['billet'], outs: ['wire_rod', 'scale'], params: [
+    rolling_mill: { label: 'Laminação a quente de fio-máquina: forno de reaquecimento, sequência de cadeiras, velocidade e potência', cat: 'Siderurgia', ins: ['billet'], outs: ['wire_rod', 'scale'], params: [
       { k: 'mB', label: 'Vazão de tarugos' + SEMC, u: 'kg/s', def: 64 },
       { k: 'TB', label: 'Temperatura dos tarugos' + SEMC, u: '°C', def: 900 },
       { k: 'charge', label: 'Enfornamento', type: 'select', options: [RM_HOT, RM_COLD], def: RM_HOT },
@@ -4725,7 +4806,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'etaM', label: 'Rendimento dos motores e acionamentos', u: '0–1', def: 0.92 },
       { k: 'loss', label: 'Perdas por carepa e pontas', u: '0–1', def: 0.017 },
       { k: 'Tout', label: 'Temperatura das bobinas depois do resfriamento controlado', u: '°C', def: 80 }] },
-    wire_drawing: { label: 'Trefilação de arame: passes, tensão de trefilação (Siebel), encruamento, potência e número de máquinas', cat: 'Siderurgia e cimento', ins: ['rod'], outs: ['wire'], params: [
+    wire_drawing: { label: 'Trefilação de arame: passes, tensão de trefilação (Siebel), encruamento, potência e número de máquinas', cat: 'Siderurgia', ins: ['rod'], outs: ['wire'], params: [
       { k: 'mR', label: 'Vazão de fio-máquina' + SEMC, u: 'kg/s', def: 12 },
       { k: 'TR', label: 'Temperatura do fio-máquina' + SEMC, u: '°C', def: 25 },
       { k: 'd0', label: 'Diâmetro do fio-máquina', u: 'mm', def: 5.5 },
@@ -8687,16 +8768,16 @@ window.SIMULAFACIL_CONFIG = {
      cinzas do combustível (SiO₂) e óxidos da farinha vão para o clínquer; a umidade da farinha sai como vapor */
   function kilnCalc(I, o) {
     const MW = MET.MWk, Hf = MET.Hf, cp = MET.cpK, Tr = MET.Tr;
-    const n = { CaCO3: I.meal.kg.CaCO3 / MW.CaCO3, SiO2: I.meal.kg.SiO2 / MW.SiO2, Al2O3: I.meal.kg.Al2O3 / MW.Al2O3, Fe2O3: I.meal.kg.Fe2O3 / MW.Fe2O3, H2O: I.meal.kg.H2O / MW.H2O };
+    const n = { CaCO3: I.meal.kg.CaCO3 / MW.CaCO3, SiO2: I.meal.kg.SiO2 / MW.SiO2, Al2O3: I.meal.kg.Al2O3 / MW.Al2O3, Fe2O3: I.meal.kg.Fe2O3 / MW.Fe2O3, H2O: I.meal.kg.H2O / MW.H2O, CaO: (I.meal.kg.CaO || 0) / MW.CaO };   // CaO: farinha pré-calcinada (versão 5.4)
     const nC = I.fuel.kg.C / MW.C, nH2 = I.fuel.kg.H2 / MW.H2, nAsh = I.fuel.kg.ash / MW.SiO2, nO2 = I.air.kg.O2 / MW.O2, nN2 = I.air.kg.N2 / MW.N2;
-    const nCaO = n.CaCO3, nCO2c = n.CaCO3, nO2req = nC + 0.5 * nH2, nO2ex = nO2 - nO2req;
+    const nCaO = n.CaCO3 + n.CaO, nCO2c = n.CaCO3, nO2req = nC + 0.5 * nH2, nO2ex = nO2 - nO2req;
     const m = { CaO: nCaO * MW.CaO, SiO2: (n.SiO2 + nAsh) * MW.SiO2, Al2O3: n.Al2O3 * MW.Al2O3, Fe2O3: n.Fe2O3 * MW.Fe2O3 };
     const mcl = m.CaO + m.SiO2 + m.Al2O3 + m.Fe2O3;
     const g = { CO2: nCO2c + nC, H2O: n.H2O + nH2, O2: Math.max(0, nO2ex), N2: nN2 }, ng = g.CO2 + g.H2O + g.O2 + g.N2;
     const mg = g.CO2 * MW.CO2 + g.H2O * MW.H2O + g.O2 * MW.O2 + g.N2 * MW.N2;
     const Tm = I.meal.T, Tf = I.fuel.T, Ta = I.air.T;
     const Hin = n.CaCO3 * (Hf.CaCO3 + cp.CaCO3 * (Tm - Tr)) + n.SiO2 * (Hf.SiO2 + cp.SiO2 * (Tm - Tr)) + n.Al2O3 * (Hf.Al2O3 + cp.Al2O3 * (Tm - Tr)) + n.Fe2O3 * (Hf.Fe2O3 + cp.Fe2O3 * (Tm - Tr))
-      + n.H2O * (Hf.H2Ol + cp.H2Ol * (Tm - Tr)) + nC * cp.C * (Tf - Tr) + nH2 * cp.H2 * (Tf - Tr) + nAsh * (Hf.SiO2 + cp.SiO2 * (Tf - Tr)) + nO2 * cp.O2 * (Ta - Tr) + nN2 * cp.N2 * (Ta - Tr);
+      + n.H2O * (Hf.H2Ol + cp.H2Ol * (Tm - Tr)) + n.CaO * (Hf.CaO + cp.CaO * (Tm - Tr)) + nC * cp.C * (Tf - Tr) + nH2 * cp.H2 * (Tf - Tr) + nAsh * (Hf.SiO2 + cp.SiO2 * (Tf - Tr)) + nO2 * cp.O2 * (Ta - Tr) + nN2 * cp.N2 * (Ta - Tr);
     const Hout = nCaO * (Hf.CaO + cp.CaO * (o.Tcl - Tr)) + (n.SiO2 + nAsh) * (Hf.SiO2 + cp.SiO2 * (o.Tcl - Tr)) + n.Al2O3 * (Hf.Al2O3 + cp.Al2O3 * (o.Tcl - Tr)) + n.Fe2O3 * (Hf.Fe2O3 + cp.Fe2O3 * (o.Tcl - Tr))
       + g.CO2 * (Hf.CO2 + cp.CO2 * (o.Tg - Tr)) + g.H2O * (Hf.H2Og + cp.H2Og * (o.Tg - Tr)) + g.O2 * cp.O2 * (o.Tg - Tr) + g.N2 * cp.N2 * (o.Tg - Tr);
     return { n, nC, nH2, nAsh, nO2, nN2, nCaO, nCO2c, nO2req, nO2ex, m, mcl, g, ng, mg, Hin, Hout, resid: Hin - Hout - o.Qloss };
@@ -8704,14 +8785,14 @@ window.SIMULAFACIL_CONFIG = {
   IMPL.cement_kiln = function (th, b, ins) {
     const p = b.params, warn = [], i = ins || {};
     const I = {
-      meal: furnaceIn(th, i.meal, 'farinha', { caco3: 'CaCO3', silica: 'SiO2', alumina: 'Al2O3', hematite: 'Fe2O3', water: 'H2O' }, () => { const m = num(p.mMeal, 100);
+      meal: furnaceIn(th, i.meal, 'farinha', { caco3: 'CaCO3', silica: 'SiO2', alumina: 'Al2O3', hematite: 'Fe2O3', water: 'H2O', cao: 'CaO' }, () => { const m = num(p.mMeal, 100);
         return { kg: { CaCO3: m * num(p.xCaCO3, 0.78), SiO2: m * num(p.xSiO2, 0.14), Al2O3: m * num(p.xAl2O3, 0.04), Fe2O3: m * num(p.xFe2O3, 0.02), H2O: m * num(p.xH2O, 0.02) }, T: num(p.Tmeal, 70) }; }),
       fuel: furnaceIn(th, i.fuel, 'combustível', { carbon: 'C', hydrogen: 'H2', silica: 'ash' }, () => { const m = num(p.mFuel, 6.34); return { kg: { C: m * num(p.fC, 0.85), H2: m * num(p.fH, 0.04), ash: m * num(p.fAsh, 0.11) }, T: num(p.Tfuel, 25) }; }),
       air: furnaceIn(th, i.air, 'ar de combustão', { oxygen: 'O2', nitrogen: 'N2' }, () => { const m = num(p.mAir, 82), w = num(p.wO2a, 0.233); return { kg: { O2: m * w, N2: m * (1 - w) }, T: num(p.Tair, 800) }; }) };
-    ['CaCO3', 'SiO2', 'Al2O3', 'Fe2O3', 'H2O'].forEach(k => { if (I.meal.kg[k] == null) I.meal.kg[k] = 0; });
+    ['CaCO3', 'SiO2', 'Al2O3', 'Fe2O3', 'H2O', 'CaO'].forEach(k => { if (I.meal.kg[k] == null) I.meal.kg[k] = 0; });
     ['C', 'H2', 'ash'].forEach(k => { if (I.fuel.kg[k] == null) I.fuel.kg[k] = 0; });
     const o = { Tcl: C2K(num(p.Tcl, 1450)), Tg: C2K(num(p.Tgk, 350)), Qloss: num(p.QlossK, 5000), LHV: num(p.LHV, 32000) };
-    if (!(I.meal.kg.CaCO3 > 0)) throw new Error('a farinha crua precisa de CaCO₃ (calcário)');
+    if (!(I.meal.kg.CaCO3 + I.meal.kg.CaO > 0)) throw new Error('a farinha crua precisa de CaCO₃ (calcário) ou, se vier do pré-calcinador, de CaO');
     if (!(I.fuel.m > 0 && I.air.kg.O2 > 0)) throw new Error('informe o combustível e o ar de combustão');
     const r = kilnCalc(I, o), MW = MET.MWk;
     if (r.nO2ex < 0) throw new Error('ar de combustão insuficiente para a combustão completa: faltam ' + (-r.nO2ex * MW.O2 / (I.air.kg.O2 / I.air.m)).toFixed(2) + ' kg/s de ar (a combustão seria incompleta, com CO)');
@@ -8764,7 +8845,8 @@ window.SIMULAFACIL_CONFIG = {
     const util = ['meal', 'fuel', 'air'].reduce((a, k) => a + (I[k].conn ? 0 : I[k].m), 0);
     const gen = k => ({ m: I[k].m, kg: I[k].kg, T: I[k].T });
     return { out, massUtil: sg && sc ? util : 0, res: decBR(res), warn: decW(warn), plots,
-      kiln: { meal: gen('meal'), fuel: gen('fuel'), air: gen('air'), Tcl: o.Tcl, Tg: o.Tg, Qloss: o.Qloss, LHV: o.LHV, mClose, f1, f2: f2m } };
+      // com farinha pré-calcinada (CaO), o código MATLAB/Python de referência do forno não se aplica: o bloco exporta só os resultados
+      kiln: I.meal.kg.CaO > 0 ? null : { meal: gen('meal'), fuel: gen('fuel'), air: gen('air'), Tcl: o.Tcl, Tg: o.Tg, Qloss: o.Qloss, LHV: o.LHV, mClose, f1, f2: f2m } };
   };
 
   /* silo com tremonha cônica: vazão de Beverloo W = C ρ_b √g (D_o − k d_p)^2,5, corrigida pelo fator de Rose e Tanaka (tg θ · tg χ)^−0,35
@@ -11798,6 +11880,491 @@ window.SIMULAFACIL_CONFIG = {
     return { out: { cake: etaOut(th, r.kA, s), centrate: etaOut(th, r.kB, s) }, duty: Pop * 1000, power: true, massUtil: 0, res: decBR(res), warn: decW(warn), plots };
   };
 
+  /* ================================================================== versão 5.4: fábrica de cimento completa
+     Torre de ciclones com pré-calcinador, resfriador de clínquer de grelha e moinho de cimento (ou de cru). A torre e o resfriador
+     usam as mesmas entalpias de formação e os mesmos c_p médios do forno (MET), para que os balanços dos três fechem entre si. */
+  const CEM_CP = { cao: 52, silica: 55, alumina: 115, hematite: 110, caco3: 90, mgo: 45, oxygen: 31, nitrogen: 30, co2: 45, water: 38 };   // kJ/(kmol·K)
+  const cemCp = (th, id) => (CEM_CP[id] != null ? CEM_CP[id] : ((th.c[th.ids.indexOf(id)] || {}).cpl || 50));
+  const cemC = (th, kg) => Object.keys(kg).reduce((a, id) => { const k = th.ids.indexOf(id); return a + (k >= 0 && kg[id] > 0 ? kg[id] / th.c[k].mw * cemCp(th, id) : 0); }, 0);   // kW/K
+  const kgById = (th, s) => { const o = {}; s.flows.forEach((f, k) => { const m = f * th.c[k].mw / 1000; if (m > 1e-12) o[th.ids[k]] = m; }); return o; };   // kg/s
+  // sistema tridiagonal (algoritmo de Thomas): a = subdiagonal, b = diagonal, c = superdiagonal
+  function triSolve(a, b, c, d) {
+    const n = b.length, cc = new Array(n), dd = new Array(n), x = new Array(n);
+    cc[0] = c[0] / b[0]; dd[0] = d[0] / b[0];
+    for (let k = 1; k < n; k++) { const m = b[k] - a[k] * cc[k - 1]; cc[k] = c[k] / m; dd[k] = (d[k] - a[k] * dd[k - 1]) / m; }
+    x[n - 1] = dd[n - 1]; for (let k = n - 2; k >= 0; k--) x[k] = dd[k] - cc[k] * x[k + 1];
+    return x;
+  }
+  /* estágios de ciclones acima do pré-calcinador: em cada ciclone o gás que sobe e a farinha que desce saem à mesma temperatura.
+     Estágio i (1 = topo): Ċ_g·(T_{i+1} − T_i) = Ċ_f·(T_i − T_{i−1}) [+ evaporação da umidade no estágio 1], com T_0 = farinha crua
+     e T_{m+1} = T_c (gás do pré-calcinador); Ċ_f e Ċ_g são as capacidades caloríficas (kW/K) da farinha seca e do gás */
+  function phStages(m, Mc, Gc, T0, Tc, nW) {
+    const cp = MET.cpK, Tr = MET.Tr, dHv = MET.Hf.H2Og - MET.Hf.H2Ol, a = [], b = [], c = [], d = [];
+    for (let k = 0; k < m; k++) { a.push(-Mc); b.push(Mc + Gc); c.push(-Gc); d.push(0); }
+    a[0] = 0; b[0] += nW * cp.H2Og; d[0] = Mc * T0 - nW * (dHv - cp.H2Og * Tr - cp.H2Ol * (T0 - Tr));
+    c[m - 1] = 0; d[m - 1] += Gc * Tc;
+    return triSolve(a, b, c, d);
+  }
+  /* pré-calcinador + ciclone inferior a T_c: o combustível queima com o ar terciário e o O₂ que sobra do forno; o grau de calcinação X
+     sai do balanço de energia (limitado a X_máx). Como o CO₂ da calcinação muda o gás que aquece os estágios de cima, X e as
+     temperaturas dos estágios são resolvidos juntos por substituição sucessiva. Com Xfix, X é imposto (para achar o combustível). */
+  function phCalc(I, o, Xfix) {
+    const MW = MET.MWk, Hf = MET.Hf, cp = MET.cpK, Tr = MET.Tr;
+    const n = { CaCO3: I.meal.kg.CaCO3 / MW.CaCO3, SiO2: I.meal.kg.SiO2 / MW.SiO2, Al2O3: I.meal.kg.Al2O3 / MW.Al2O3, Fe2O3: I.meal.kg.Fe2O3 / MW.Fe2O3, H2O: I.meal.kg.H2O / MW.H2O };
+    const g = { CO2: I.kg.kg.CO2 / MW.CO2, H2O: I.kg.kg.H2O / MW.H2O, O2: I.kg.kg.O2 / MW.O2, N2: I.kg.kg.N2 / MW.N2 };
+    const nC = I.fuel.kg.C / MW.C, nH2 = I.fuel.kg.H2 / MW.H2, nAsh = I.fuel.kg.ash / MW.SiO2, aO2 = I.ta.kg.O2 / MW.O2, aN2 = I.ta.kg.N2 / MW.N2;
+    const req0 = nC + 0.5 * nH2, phi = req0 > 0 ? Math.min(1, (g.O2 + aO2) / req0) : 1;   // se faltar O₂, só a fração φ do combustível queima
+    const unC = (1 - phi) * nC, unH = (1 - phi) * nH2, req = phi * req0, ex = g.O2 + aO2 - req, dT = o.Tc - Tr;
+    const Mc = n.CaCO3 * cp.CaCO3 + n.SiO2 * cp.SiO2 + n.Al2O3 * cp.Al2O3 + n.Fe2O3 * cp.Fe2O3;
+    const dHc = Hf.CaO + cp.CaO * dT + Hf.CO2 + cp.CO2 * dT - Hf.CaCO3 - cp.CaCO3 * dT;   // kJ por kmol de CaCO₃ calcinado a T_c
+    const gasAt = X => ({ CO2: g.CO2 + phi * nC + X * n.CaCO3, H2O: g.H2O + phi * nH2, O2: Math.max(0, ex), N2: g.N2 + aN2 });
+    const Cg = q => q.CO2 * cp.CO2 + q.H2O * cp.H2Og + q.O2 * cp.O2 + q.N2 * cp.N2 + unC * cp.C + unH * cp.H2;
+    const Hs = (q, T) => q.CO2 * (Hf.CO2 + cp.CO2 * (T - Tr)) + q.H2O * (Hf.H2Og + cp.H2Og * (T - Tr)) + (q.O2 * cp.O2 + q.N2 * cp.N2) * (T - Tr);
+    const Hmeal = T => n.CaCO3 * (Hf.CaCO3 + cp.CaCO3 * (T - Tr)) + n.SiO2 * (Hf.SiO2 + cp.SiO2 * (T - Tr)) + n.Al2O3 * (Hf.Al2O3 + cp.Al2O3 * (T - Tr)) + n.Fe2O3 * (Hf.Fe2O3 + cp.Fe2O3 * (T - Tr));
+    const Hfix = Hs(g, I.kg.T) + (aO2 * cp.O2 + aN2 * cp.N2) * (I.ta.T - Tr) + nC * cp.C * (I.fuel.T - Tr) + nH2 * cp.H2 * (I.fuel.T - Tr) + nAsh * (Hf.SiO2 + cp.SiO2 * (I.fuel.T - Tr));
+    const H0 = Hmeal(o.Tc) + nAsh * (Hf.SiO2 + cp.SiO2 * dT) + Hs(gasAt(0), o.Tc) + (unC * cp.C + unH * cp.H2) * dT;   // saída com X = 0
+    const m = o.nSt - 1;
+    let X = Xfix != null ? Xfix : 0.9, T = null, Xraw = X, Hin = 0;
+    for (let it = 0; it < 80; it++) {
+      T = phStages(m, Mc, Cg(gasAt(X)), I.meal.T, o.Tc, n.H2O); Hin = Hmeal(T[m - 1]) + Hfix;
+      Xraw = (Hin - H0 - o.Qloss) / (n.CaCO3 * dHc);
+      if (Xfix != null) break;
+      const Xn = clamp(Xraw, 0, o.Xmax); if (Math.abs(Xn - X) < 1e-12) { X = Xn; break; } X = Xn;
+    }
+    if (Xfix == null) T = phStages(m, Mc, Cg(gasAt(X)), I.meal.T, o.Tc, n.H2O), Hin = Hmeal(T[m - 1]) + Hfix;
+    const q = gasAt(X), resid = Hin - (H0 + X * n.CaCO3 * dHc) - o.Qloss;
+    const hot = { CaCO3: (1 - X) * n.CaCO3 * MW.CaCO3, CaO: X * n.CaCO3 * MW.CaO, SiO2: (n.SiO2 + nAsh) * MW.SiO2, Al2O3: n.Al2O3 * MW.Al2O3, Fe2O3: n.Fe2O3 * MW.Fe2O3 };
+    const gx = { CO2: q.CO2, H2O: q.H2O + n.H2O, O2: q.O2, N2: q.N2 }, ng = gx.CO2 + gx.H2O + gx.O2 + gx.N2;
+    return { n, g, nC, nH2, nAsh, req, ex, phi, unC, unH, X, Xraw, T, Tex: T[0], q, gx, ng, hot, resid, Hin, dHc, Mc, Gc: Cg(q),
+      mHot: sum(Object.values(hot)), mGas: gx.CO2 * MW.CO2 + gx.H2O * MW.H2O + gx.O2 * MW.O2 + gx.N2 * MW.N2 + unC * MW.C + unH * MW.H2,
+      clk: n.CaCO3 * MW.CaO + (n.SiO2 + nAsh) * MW.SiO2 + n.Al2O3 * MW.Al2O3 + n.Fe2O3 * MW.Fe2O3 };
+  }
+  IMPL.cyclone_preheater = function (th, b, ins) {
+    const p = b.params, warn = [], i = ins || {};
+    const I = {
+      meal: furnaceIn(th, i.meal, 'farinha crua', { caco3: 'CaCO3', silica: 'SiO2', alumina: 'Al2O3', hematite: 'Fe2O3', water: 'H2O' }, () => { const m = num(p.mMeal, 54);
+        return { kg: { CaCO3: 0.78 * m, SiO2: 0.14 * m, Al2O3: 0.04 * m, Fe2O3: 0.02 * m, H2O: 0.02 * m }, T: num(p.Tmeal, 80) }; }),
+      kg: furnaceIn(th, i.kiln_gas, 'gases do forno', { co2: 'CO2', water: 'H2O', oxygen: 'O2', nitrogen: 'N2' }, () => { const m = num(p.mKg, 20);
+        return { kg: { CO2: 0.29 * m, H2O: 0.025 * m, O2: 0.024 * m, N2: 0.661 * m }, T: num(p.TKg, 1100) }; }),
+      fuel: furnaceIn(th, i.fuel, 'combustível', { carbon: 'C', hydrogen: 'H2', silica: 'ash' }, () => { const m = num(p.mFuelP, 2.1); return { kg: { C: 0.85 * m, H2: 0.04 * m, ash: 0.11 * m }, T: 25 }; }),
+      ta: furnaceIn(th, i.ter_air, 'ar terciário', { oxygen: 'O2', nitrogen: 'N2' }, () => { const m = num(p.mTa, 22); return { kg: { O2: 0.233 * m, N2: 0.767 * m }, T: num(p.TTa, 850) }; }) };
+    [['meal', ['CaCO3', 'SiO2', 'Al2O3', 'Fe2O3', 'H2O']], ['kg', ['CO2', 'H2O', 'O2', 'N2']], ['fuel', ['C', 'H2', 'ash']], ['ta', ['O2', 'N2']]].forEach(q => q[1].forEach(k => { if (I[q[0]].kg[k] == null) I[q[0]].kg[k] = 0; }));
+    const nSt = Math.round(clamp(num(p.nSt, 5), 2, 8));
+    const o = { nSt, Tc: C2K(num(p.Tc, 880)), Xmax: clamp(num(p.Xmax, 0.95), 0.05, 1), Qloss: num(p.QlossP, 4000) };
+    const LHV = num(p.LHVp, 32000), dPst = num(p.dPst, 1.2), etaF = clamp(num(p.etaF, 0.8), 0.1, 1), MW = MET.MWk;
+    if (!(I.meal.kg.CaCO3 > 0)) throw new Error('a farinha crua precisa de CaCO₃ (calcário)');
+    if (!(o.Tc > I.meal.T)) throw new Error('a temperatura do pré-calcinador deve ser maior que a da farinha crua');
+    const req = I.fuel.kg.C / MW.C + 0.5 * I.fuel.kg.H2 / MW.H2, avail = I.kg.kg.O2 / MW.O2 + I.ta.kg.O2 / MW.O2;
+    const r = phCalc(I, o);
+    if (r.phi < 1) warn.push('falta oxigênio no pré-calcinador: o combustível pede ' + (req * MW.O2).toFixed(2) + ' kg/s de O₂, mas o ar terciário e o O₂ que sobra do forno só trazem ' + (avail * MW.O2).toFixed(2) + ' kg/s; ' + (100 * (1 - r.phi)).toFixed(1) + ' % do combustível não queima (na prática vira CO e fuligem); aumente o ar terciário');
+    if (r.Xraw < 0) throw new Error('o pré-calcinador não tem energia nem para aquecer a farinha até ' + K2C(o.Tc).toFixed(0) + ' °C: aumente o combustível do pré-calcinador ou o ar terciário quente');
+    // combustível (mesma composição) que faria X = X_máx com resíduo zero
+    const fz = I.fuel.kg, mF = I.fuel.m, atFuel = (sc, X) => phCalc(Object.assign({}, I, { fuel: { kg: { C: fz.C * sc, H2: fz.H2 * sc, ash: fz.ash * sc }, T: I.fuel.T, m: mF * sc } }), o, X);
+    const scMax = req > 0 ? avail / req : 0;
+    let mClose = null;
+    if (mF > 0 && scMax > 0 && atFuel(1e-6, o.Xmax).Xraw < o.Xmax && atFuel(scMax, o.Xmax).Xraw > o.Xmax) {
+      let a = 1e-6, c = scMax; for (let k = 0; k < 80; k++) { const mm = 0.5 * (a + c); if (atFuel(mm, o.Xmax).Xraw < o.Xmax) a = mm; else c = mm; } mClose = 0.5 * (a + c) * mF;
+    }
+    const m = nSt - 1, f2 = v => v.toFixed(2), Tex = K2C(r.Tex), pct = (a, bb) => (bb > 0 ? 100 * a / bb : 0);
+    const Vn = r.ng * 22.414, Vr = Vn * r.Tex / 273.15, dP = nSt * dPst, Pfan = Vr * dP / etaF, Qf = mF * LHV;
+    if (r.Xraw > o.Xmax + 1e-6) warn.push('sobra energia no pré-calcinador: com ' + br(f2(mF)) + ' kg/s de combustível a calcinação passaria de ' + br(Math.round(o.Xmax * 100)) + ' % e o gás esquentaria além de ' + K2C(o.Tc).toFixed(0) + ' °C (risco de colagens); ' + (mClose != null ? 'use cerca de ' + mClose.toFixed(2) + ' kg/s' : 'reduza o combustível'));
+    if (r.X < 0.85) warn.push('calcinação de só ' + (100 * r.X).toFixed(1) + ' % no pré-calcinador: o forno recebe muito CaCO₃ e precisa de mais combustível (o usual é de 90 a 95 %)');
+    if (Tex > 400) warn.push('gases saindo da torre a ' + Tex.toFixed(0) + ' °C: com mais estágios de ciclones (ou mais farinha) o calor seria melhor aproveitado');
+    if (r.phi >= 1 && r.ex / Math.max(r.req, 1e-12) < 0.05) warn.push('quase sem O₂ em excesso no pré-calcinador (' + (100 * r.ex / Math.max(r.req, 1e-12)).toFixed(1) + ' %): a combustão fica incompleta e forma CO; aumente o ar terciário');
+    const mIn = I.meal.m + I.kg.m + I.fuel.m + I.ta.m, mOut = r.mHot + r.mGas;
+    const P = Math.min.apply(null, [101325].concat(['meal', 'kg', 'fuel', 'ta'].filter(k => I[k].conn).map(k => I[k].P)));
+    const res = [{ k: 'Entradas: farinha crua / gases do forno / combustível / ar terciário', v: [I.meal.m, I.kg.m, I.fuel.m, I.ta.m].map(f2).join(' / ') + ' kg/s', u: '' },
+      { k: 'Farinha quente para o forno', v: r.mHot.toFixed(3) + ' kg/s a ' + K2C(o.Tc).toFixed(0) + ' °C', u: '' },
+      { k: 'Grau de calcinação no pré-calcinador X', v: (100 * r.X).toFixed(2) + ' %' + (r.Xraw > o.Xmax + 1e-6 ? ' (limitado ao máximo)' : ''), u: '' },
+      { k: 'Gases de saída da torre (para o moinho de cru e o filtro)', v: r.mGas.toFixed(3) + ' kg/s a ' + Tex.toFixed(1) + ' °C (' + f2(Vn) + ' Nm³/s)', u: '' },
+      { k: 'Composição molar dos gases de saída: CO₂ / H₂O / O₂ / N₂', v: ['CO2', 'H2O', 'O2', 'N2'].map(k => f2(pct(r.gx[k], r.ng))).join(' / '), u: '%' },
+      { k: 'Temperatura de saída de cada estágio (1 = topo; o último é o pré-calcinador)', v: r.T.map(t => K2C(t).toFixed(0)).concat([K2C(o.Tc).toFixed(0)]).join(' / '), u: '°C' },
+      { k: 'Capacidades caloríficas: farinha / gás (Ċ_f/Ċ_g = ' + (r.Mc / r.Gc).toFixed(3) + ')', v: f2(r.Mc) + ' / ' + f2(r.Gc), u: 'kW/K' },
+      { k: 'O₂ em excesso no pré-calcinador', v: (r.ex * MW.O2).toFixed(3) + ' kg/s (' + pct(r.ex, r.req).toFixed(1) + ' % do necessário)', u: '' },
+      { k: 'CO₂ liberado pela calcinação no pré-calcinador', v: +(r.X * r.n.CaCO3 * MW.CO2).toFixed(3), u: 'kg/s' },
+      { k: 'Calor absorvido pela calcinação', v: +(r.X * r.n.CaCO3 * r.dHc / 1000).toFixed(2), u: 'MW' },
+      { k: 'Combustível do pré-calcinador (PCI de ' + br(LHV) + ' kJ/kg)', v: (Qf / 1000).toFixed(2) + ' MW, ' + (Qf / r.clk).toFixed(0) + ' kJ/kg de clínquer (' + (Qf / r.clk / 4.184).toFixed(0) + ' kcal/kg)', u: '' },
+      { k: 'Clínquer que a farinha pode formar (óxidos depois da calcinação completa)', v: r.clk.toFixed(3) + ' kg/s (' + (r.clk * 86.4).toFixed(0) + ' t/d)', u: '' },
+      { k: 'Exaustor da torre: ΔP de ' + nSt + ' estágios / vazão real / potência', v: br(dP.toFixed(1)) + ' kPa / ' + Vr.toFixed(1) + ' m³/s / ' + Pfan.toFixed(0) + ' kW', u: '' },
+      { k: 'Combustível que daria X = ' + br(Math.round(o.Xmax * 100)) + ' % com o balanço fechado', v: mClose != null ? mClose.toFixed(3) + ' kg/s' : 'fora da faixa (O₂ disponível)', u: '' },
+      { k: 'Resíduo térmico (≠ 0 só se X chegou ao limite)', v: +r.resid.toFixed(1), u: 'kW' },
+      { k: 'Balanço de massa: entradas / saídas', v: mIn.toFixed(4) + ' / ' + mOut.toFixed(4), u: 'kg/s' }];
+    // gráficos: perfil de temperatura, efeito do número de estágios e da vazão de combustível
+    const xs = r.T.map((_, k) => k + 1).concat([m + 1]), ys = r.T.map(K2C).concat([K2C(o.Tc)]);
+    const plots = [{ kind: 'curves', title: 'Torre de ciclones: temperatura na saída de cada estágio', data: { xLabel: 'Estágio (1 = topo; ' + (m + 1) + ' = pré-calcinador e ciclone inferior)', yLabel: 'Temperatura (°C)', series: [
+      { name: 'Gás e farinha (saem juntos de cada ciclone)', x: xs, y: ys, color: '#d1302b', width: 3.2, mode: 'lines+markers', size: 9 },
+      { name: 'Farinha crua (' + K2C(I.meal.T).toFixed(0) + ' °C)', x: [0.6], y: [K2C(I.meal.T)], mode: 'markers', size: 12, symbol: 'triangle-down', color: '#2563c9' },
+      { name: 'Gases do forno (' + K2C(I.kg.T).toFixed(0) + ' °C)', x: [m + 1.4], y: [K2C(I.kg.T)], mode: 'markers', size: 12, symbol: 'triangle-up', color: '#e07b39' }] } }];
+    const cats = [], tE = [], xC = [];
+    [3, 4, 5, 6].forEach(ns => { try { const q = phCalc(I, Object.assign({}, o, { nSt: ns })); cats.push(ns + ' estágios'); tE.push(K2C(q.Tex)); xC.push(100 * q.X); } catch (e) { /* fora da faixa */ } });
+    plots.push({ kind: 'bars', title: 'Número de estágios × temperatura dos gases de saída', data: { categories: cats, yLabel: 'Gases de saída (°C)', series: [{ name: 'Temperatura dos gases de saída', y: tE, color: '#e07b39' }] } });
+    if (mF > 0 && scMax > 0) {
+      const fx = [], fy = [], ft = []; for (let k = 0; k <= 60; k++) { const sc = Math.min(scMax * 0.999, 0.5 + k / 60); const q = atFuel(sc); fx.push(mF * sc); fy.push(100 * clamp(q.Xraw, 0, 1)); ft.push(K2C(q.Tex)); }
+      plots.push({ kind: 'curves', title: 'Combustível do pré-calcinador × grau de calcinação', data: { xLabel: 'Combustível do pré-calcinador (kg/s)', yLabel: 'Grau de calcinação (%)', series: [
+        { name: 'X (sem o limite de ' + br(Math.round(o.Xmax * 100)) + ' %)', x: fx, y: fy, color: '#2e9e6b', width: 3 },
+        { name: 'Operação (' + br(f2(mF)) + ' kg/s)', x: [mF], y: [100 * r.X], mode: 'markers', size: 12, symbol: 'circle', color: '#d1302b' }], hlines: [{ y: 100 * o.Xmax, name: 'X máximo', color: '#8a8f98' }] } });
+    }
+    const need = ['meal', 'kg', 'fuel', 'ta'].some(k => I[k].conn), out = {};
+    const sh = massStream(th, { caco3: r.hot.CaCO3, cao: r.hot.CaO, silica: r.hot.SiO2, alumina: r.hot.Al2O3, hematite: r.hot.Fe2O3 }, o.Tc, P, warn, 'farinha quente', need);
+    const sg = massStream(th, { co2: r.gx.CO2 * MW.CO2, water: r.gx.H2O * MW.H2O, oxygen: r.gx.O2 * MW.O2, nitrogen: r.gx.N2 * MW.N2, carbon: r.unC * MW.C, hydrogen: r.unH * MW.H2 }, r.Tex, P, warn, 'gases de saída', need);
+    if (sh) out.hot_meal = sh; if (sg) out.gas = sg;
+    const util = ['meal', 'kg', 'fuel', 'ta'].reduce((a, k) => a + (I[k].conn ? 0 : I[k].m), 0);
+    return { out, massUtil: sh && sg ? util : 0, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* resfriador de clínquer de grelha: N compartimentos em corrente cruzada, cada um com a mesma vazão de ar. No compartimento,
+     o ar sai a T_a + ε·(T̄_cl − T_a), com T̄_cl a média do clínquer que entra e sai: ΔT_cl = Ċ_a·ε·(T_cl − T_a)/(Ċ_cl + Ċ_a·ε/2).
+     O ar dos primeiros compartimentos (o mais quente) vai ao forno (secundário), o seguinte ao pré-calcinador (terciário) e o resto à exaustão */
+  function coolCalc(Ccl, Tin, Ta, mAir, Cair, mSec, mTer, N, eps, Qloss, beta) {
+    // distribuição do ar: peso exp(−β·posição); β > 0 concentra o ar na zona quente (zona de recuperação), como nos resfriadores modernos
+    const wt = []; for (let k = 0; k < N; k++) wt.push(Math.exp(-(beta || 0) * (k + 0.5) / N)); const sw = sum(wt);
+    const cpa = Cair / mAir, zone = [], mAk = wt.map(v => mAir * v / sw);
+    let T = Tin - Qloss / Ccl; const Tcl = [Tin, T], Tair = [];
+    for (let k = 0; k < N; k++) { const Ca = mAk[k] * cpa, x = Ca * eps * (T - Ta) / (Ccl + Ca * eps / 2), ta = Ta + eps * (T - x / 2 - Ta); T -= x; Tcl.push(T); Tair.push(ta); }
+    const bk = [{ m: 0, h: 0, cap: mSec }, { m: 0, h: 0, cap: mTer }, { m: 0, h: 0, cap: Infinity }];
+    let j = 0;
+    Tair.forEach((ta, kk) => { let left = mAk[kk], main = -1, mainM = 0; while (left > 1e-12) { while (j < 2 && bk[j].m >= bk[j].cap - 1e-12) j++; const take = Math.min(left, bk[j].cap - bk[j].m); bk[j].m += take; bk[j].h += take * ta; left -= take; if (take > mainM) { mainM = take; main = j; } } zone.push(main); });
+    const Tz = q => (q.m > 1e-12 ? q.h / q.m : Ta);
+    return { Tcl, Tair, zone, mAk, Tout: T, Tsec: Tz(bk[0]), Tter: Tz(bk[1]), Tex: Tz(bk[2]), mEx: bk[2].m, cpa,
+      Qsec: mSec * cpa * (Tz(bk[0]) - Ta), Qter: mTer * cpa * (Tz(bk[1]) - Ta), Qex: bk[2].m * cpa * (Tz(bk[2]) - Ta), Qcl: Ccl * (Tin - T) };
+  }
+  IMPL.clinker_cooler = function (th, b, ins) {
+    const p = b.params, warn = [], i = ins || {}, s = i.clinker;
+    if (!connected(s)) throw new Error('conecte a corrente de clínquer quente (saída do forno)');
+    const kgC = kgById(th, s), mCl = sum(Object.values(kgC)), Ccl = cemC(th, kgC), Tin = s.T;
+    const A = furnaceIn(th, i.air, 'ar de resfriamento', { oxygen: 'O2', nitrogen: 'N2' }, () => { const m = num(p.mAirC, 75); return { kg: { O2: 0.233 * m, N2: 0.767 * m }, T: num(p.TairC, 25) }; });
+    ['O2', 'N2'].forEach(k => { if (A.kg[k] == null) A.kg[k] = 0; });
+    const MW = MET.MWk, Cair = A.kg.O2 / MW.O2 * 31 + A.kg.N2 / MW.N2 * 30, Ta = A.T;
+    const mSec = Math.max(0, num(p.mSec, 17)), mTer = Math.max(0, num(p.mTer, 22)), N = Math.round(clamp(num(p.nComp, 10), 2, 40)), eps = clamp(num(p.eps, 0.85), 0.05, 1), Qloss = Math.max(0, num(p.QlossC, 1500)), load = num(p.load, 45);
+    if (!(A.m > 0 && Cair > 0)) throw new Error('informe o ar de resfriamento');
+    if (!(Ccl > 0)) throw new Error('a corrente de clínquer não tem sólidos');
+    if (mSec + mTer > A.m) throw new Error('o ar secundário e o terciário (' + (mSec + mTer).toFixed(1) + ' kg/s) passam do ar de resfriamento (' + A.m.toFixed(1) + ' kg/s)');
+    if (!(Tin - Qloss / Ccl > Ta)) throw new Error('as perdas térmicas são maiores que o calor do clínquer');
+    const beta = clamp(num(p.beta, 2), 0, 6), r = coolCalc(Ccl, Tin, Ta, A.m, Cair, mSec, mTer, N, eps, Qloss, beta), C = K2C;
+    const Qav = Ccl * (Tin - Ta), eta = (r.Qsec + r.Qter) / Qav, area = mCl * 86.4 / load;
+    if (C(r.Tout) > 120) warn.push('clínquer saindo a ' + C(r.Tout).toFixed(0) + ' °C: acima de cerca de 100 a 120 °C ele aquece as correias e o moinho; aumente o ar de resfriamento ou a efetividade (grelha mais longa)');
+    if (C(r.Tex) > 350) warn.push('ar de exaustão a ' + C(r.Tex).toFixed(0) + ' °C: muito calor perdido; desvie mais ar para o terciário ou aumente o ar de resfriamento');
+    if (mSec > 0 && C(r.Tsec) < 900) warn.push('ar secundário a só ' + C(r.Tsec).toFixed(0) + ' °C: o forno vai gastar mais combustível (o usual é de 1 000 a 1 200 °C)');
+    const mIn = mCl + A.m, frac = v => ({ O2: A.kg.O2 * v / A.m, N2: A.kg.N2 * v / A.m });
+    const res = [{ k: 'Clínquer na entrada', v: mCl.toFixed(3) + ' kg/s (' + (mCl * 86.4).toFixed(0) + ' t/d) a ' + C(Tin).toFixed(0) + ' °C', u: '' },
+      { k: 'Clínquer na saída', v: C(r.Tout).toFixed(1), u: '°C' },
+      { k: 'Ar de resfriamento', v: A.m.toFixed(2) + ' kg/s a ' + C(Ta).toFixed(0) + ' °C (' + (A.m / mCl).toFixed(2) + ' kg/kg de clínquer, ' + ((A.kg.O2 / MW.O2 + A.kg.N2 / MW.N2) * 22.414 / mCl).toFixed(2) + ' Nm³/kg)', u: '' },
+      { k: 'Ar secundário (para o forno)', v: mSec > 0 ? mSec.toFixed(2) + ' kg/s a ' + C(r.Tsec).toFixed(0) + ' °C' : '—', u: '' },
+      { k: 'Ar terciário (para o pré-calcinador)', v: mTer > 0 ? mTer.toFixed(2) + ' kg/s a ' + C(r.Tter).toFixed(0) + ' °C' : '—', u: '' },
+      { k: 'Ar de exaustão (para o filtro e a chaminé)', v: r.mEx.toFixed(2) + ' kg/s a ' + C(r.Tex).toFixed(0) + ' °C', u: '' },
+      { k: 'Calor recuperado no ar secundário + terciário', v: ((r.Qsec + r.Qter) / 1000).toFixed(2) + ' MW (' + ((r.Qsec + r.Qter) / mCl).toFixed(0) + ' kJ/kg de clínquer)', u: '' },
+      { k: 'Eficiência de recuperação (calor devolvido ao forno e ao pré-calcinador / calor do clínquer)', v: +(100 * eta).toFixed(1), u: '%' },
+      { k: 'Calor perdido: exaustão / clínquer na saída / paredes', v: [r.Qex, Ccl * (r.Tout - Ta), Qloss].map(v => (v / 1000).toFixed(2)).join(' / '), u: 'MW' },
+      { k: 'Área de grelha (carga de ' + br(load) + ' t/(d·m²))', v: area.toFixed(1) + ' m² (com 4,2 m de largura, ' + (area / 4.2).toFixed(1) + ' m de comprimento)', u: '' },
+      { k: 'Balanço de energia: calor cedido pelo clínquer = ar + perdas', v: (r.Qcl / 1000).toFixed(3) + ' = ' + ((r.Qsec + r.Qter + r.Qex + Qloss) / 1000).toFixed(3), u: 'MW' },
+      { k: 'Balanço de massa: entradas / saídas', v: mIn.toFixed(4) + ' / ' + (mCl + mSec + mTer + r.mEx).toFixed(4), u: 'kg/s' }];
+    const xs = r.Tair.map((_, k) => (k + 0.5) / N), col = ['#d1302b', '#e8a317', '#8a8f98'], nm = ['Ar secundário', 'Ar terciário', 'Ar de exaustão'];
+    const plots = [{ kind: 'curves', title: 'Resfriador: temperaturas ao longo da grelha', data: { xLabel: 'Posição na grelha (fração do comprimento)', yLabel: 'Temperatura (°C)', yRange: [0, C(Tin) * 1.05], series: [
+      { name: 'Clínquer', x: [0].concat(r.Tcl.slice(1).map((_, k) => k / N)), y: r.Tcl.map(C), color: '#5b3a29', width: 3.5 }]
+      .concat([0, 1, 2].map(z => ({ name: nm[z], x: xs.filter((_, k) => r.zone[k] === z), y: r.Tair.filter((_, k) => r.zone[k] === z).map(C), mode: 'markers', size: 11, symbol: 'square', color: col[z] })).filter(q => q.x.length)) } },
+      { kind: 'bars', title: 'Destino do calor do clínquer (MW, acima do ambiente)', data: { categories: ['Ar secundário', 'Ar terciário', 'Ar de exaustão', 'Clínquer na saída', 'Perdas'], yLabel: 'MW', series: [
+        { name: 'Calor', y: [r.Qsec, r.Qter, r.Qex, Ccl * (r.Tout - Ta), Qloss].map(v => v / 1000), color: '#e07b39' }] } }];
+    const ax = [], s1 = [], s2 = [], s3 = []; for (let k = 0; k <= 40; k++) { const ma = Math.max(mSec + mTer + 0.5, A.m * (0.6 + k / 40)), q = coolCalc(Ccl, Tin, Ta, ma, Cair * ma / A.m, mSec, mTer, N, eps, Qloss, beta); ax.push(ma); s1.push(C(q.Tsec)); s2.push(C(q.Tout)); s3.push(C(q.Tex)); }
+    plots.push({ kind: 'curves', title: 'Efeito da vazão de ar de resfriamento', data: { xLabel: 'Ar de resfriamento (kg/s)', yLabel: 'Temperatura (°C)', series: [
+      { name: 'Ar secundário', x: ax, y: s1, color: '#d1302b', width: 3 }, { name: 'Ar de exaustão', x: ax, y: s3, color: '#8a8f98', width: 2.6 }, { name: 'Clínquer na saída', x: ax, y: s2, color: '#5b3a29', width: 2.6, dash: 'dash' },
+      { name: 'Operação', x: [A.m], y: [C(r.Tsec)], mode: 'markers', size: 12, symbol: 'circle', color: '#111' }] } });
+    const need = true, P = A.conn ? Math.min(s.P, A.P) : s.P, out = {};
+    const defs = [['product', kgC, r.Tout, 'clínquer resfriado'], ['sec_air', mSec > 0 ? frac(mSec) : null, r.Tsec, 'ar secundário'], ['ter_air', mTer > 0 ? frac(mTer) : null, r.Tter, 'ar terciário'], ['exhaust', r.mEx > 1e-9 ? frac(r.mEx) : null, r.Tex, 'ar de exaustão']];
+    let ok = true;
+    defs.forEach(d => { if (!d[1]) return; const kg = d[0] === 'product' ? d[1] : { oxygen: d[1].O2, nitrogen: d[1].N2 }; const st = massStream(th, kg, d[2], P, warn, d[3], need); if (st) out[d[0]] = st; else ok = false; });
+    return { out, massUtil: ok && !A.conn ? A.m : 0, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* moinho de cimento (ou de cru): lei de Bond por material, W = 10·W_i·EF·(1/√P80 − 1/√F80); P80 do cimento pela finura Blaine
+     (P80 ≈ K/Blaine); dimensões pela potência por tonelada de bolas (como no moinho de bolas); balanço térmico com água pulverizada
+     (cimento) ou com os gases quentes da torre (secagem da farinha); conferência da composição pela NBR 16697 */
+  const CIM_LIM = { 'CP II-E': { k: [51, 94], e: [6, 34], f: [0, 15] }, 'CP II-F': { k: [75, 89], e: [0, 0], f: [11, 25] }, 'CP III': { k: [25, 65], e: [35, 75], f: [0, 10] },
+    'CP V-ARI': { k: [90, 100], e: [0, 0], f: [0, 10] }, 'CP I': { k: [95, 100], e: [0, 5], f: [0, 5], ad: 5 } };
+  const cpKg = (th, kg) => Object.keys(kg).reduce((a, id) => { const k = th.ids.indexOf(id); return a + (k >= 0 ? kg[id] * (id === 'water' ? 4.18 : (th.c[k].cpl || 100) / th.c[k].mw) : 0); }, 0);   // kW/K
+  IMPL.cement_mill = function (th, b, ins) {
+    const p = b.params, warn = [], i = ins || {}, raw = p.mode === MM_RAW;
+    const grab = (s, nm) => (connected(s) ? procIn(th, s, nm, null) : null);
+    const F = procIn(th, i.feed, raw ? 'mistura crua' : 'clínquer', null, () => { throw new Error(raw ? 'conecte a mistura crua (calcário, argila e corretivos)' : 'conecte a corrente de clínquer'); });
+    const G = grab(i.gypsum, 'gesso'), Sg = grab(i.slag, 'escória'), Fi = grab(i.filler, 'fíler');
+    const parts = [{ q: F, nm: raw ? 'Mistura crua' : 'Clínquer', Wi: num(p.WiF, 14), F80: F.psd ? PSD.dq(F.psd, 0.8) : num(p.F80, 15) * 1000 }];
+    const F80s = num(p.F80s, 3) * 1000;
+    if (G) parts.push({ q: G, nm: 'Gesso', Wi: num(p.WiA, 9), F80: F80s }); if (Sg) parts.push({ q: Sg, nm: 'Escória', Wi: num(p.WiS, 22), F80: F80s }); if (Fi) parts.push({ q: Fi, nm: 'Fíler', Wi: num(p.WiA, 9), F80: F80s });
+    if (raw && parts.length > 1) warn.push('no moinho de cru as entradas de gesso, escória e fíler entram como parte da mistura crua');
+    parts.forEach(q => { q.w = g0(q.q.kg, 'water'); q.ms = q.q.m - q.w; });
+    const P80 = raw ? num(p.P80r, 75) : num(p.Kb, 125000) / num(p.blaine, 3800), EF = num(p.EF, 1.3), fH = clamp(num(p.fH, 0.7), 0, 1);
+    if (!(P80 > 0 && EF > 0)) throw new Error('a finura e o fator de eficiência devem ser positivos');
+    parts.forEach(q => { if (!(q.F80 > P80)) throw new Error('o F80 de ' + q.nm.toLowerCase() + ' (' + fmtSize(q.F80) + ') deve ser maior que o P80 do produto (' + fmtSize(P80) + ')'); q.W = 10 * q.Wi * EF * (1 / Math.sqrt(P80) - 1 / Math.sqrt(q.F80)); q.P = q.W * q.ms * 3.6; });
+    const Ms = sum(parts.map(q => q.ms)), W0 = sum(parts.map(q => q.w)), Pw = sum(parts.map(q => q.P)), Wsp = Pw / (Ms * 3.6), eff = clamp(num(p.eff, 0.95), 0.3, 1);
+    if (!(Ms > 0)) throw new Error('a alimentação não tem sólidos');
+    // dimensões: potência de Bond por tonelada de bolas (as mesmas relações do moinho de bolas)
+    const J = num(p.J, 0.3), fc = num(p.phiC, 0.75), LD = num(p.LD, 3.2), Dmax = num(p.Dmax, 5);
+    if (!(J > 0.1 && J <= 0.5 && fc > 0.4 && fc < 1 && LD > 0 && Dmax > 0)) throw new Error('confira o enchimento de bolas (0,1 a 0,5), a fração da velocidade crítica (0,4 a 1) e a relação L/D');
+    const kB = 4.879 * (3.2 - 3 * J) * fc * (1 - 0.1 / Math.pow(2, 9 - 10 * fc)), cM = J * Math.PI / 4 * LD * 4.65, dOf = P => Math.pow(P / (kB * cM), 1 / 3.3);
+    let nM = 1; while (dOf(Pw / nM) > Dmax && nM < 40) nM++;
+    const D = dOf(Pw / nM), L = LD * D, balls = cM * D * D * D, Nc = 42.3 / Math.sqrt(D);
+    // balanço térmico: f_H·P aquece os sólidos e evapora a água (a da alimentação e, se preciso, a pulverizada)
+    const kgDry = {}; parts.forEach(q => Object.keys(q.q.kg).forEach(id => { if (id !== 'water') kgDry[id] = g0(kgDry, id) + q.q.kg[id]; }));
+    const Cs = cpKg(th, kgDry), Tin = K2C(sum(parts.map(q => cpKg(th, q.q.kg) * q.q.T)) / Math.max(1e-12, sum(parts.map(q => cpKg(th, q.q.kg))))), heat = fH * Pw;
+    let Tout, spray = 0, evap = 0, Wout = 0, Qd = 0, mGas = 0, Tgas = num(p.Tgas, 320);
+    if (raw) {
+      const Xr = clamp(num(p.Xr, 0.5), 0, 30) / 100; Tout = num(p.Tgo, 90); Wout = Math.min(W0, Xr / (1 - Xr) * Ms); evap = W0 - Wout;
+      Qd = Cs * (Tout - Tin) + Wout * 4.18 * (Tout - Tin) + evap * (2501 + 1.88 * Tout - 4.18 * Tin) - heat;
+      if (Qd > 0) { if (!(Tgas > Tout)) throw new Error('os gases de secagem devem estar mais quentes que a saída do moinho'); mGas = Qd / (1.05 * (Tgas - Tout)); }
+    } else {
+      const Tmax = num(p.Tmax, 110), hev = T => 2501 + 1.88 * Math.max(T, 100) - 4.18 * T;   // kJ/kg: água líquida a T → vapor na saída
+      const Tns = Tin + (heat - W0 * hev(Tin)) / Cs;
+      if (Tns > Tmax) { Tout = Tmax; spray = (heat - W0 * hev(Tin) - Cs * (Tmax - Tin)) / hev(25); } else Tout = Tns;
+      evap = W0 + spray;
+      if (Tns > Tmax) warn.push('sem água o cimento sairia a ' + Tns.toFixed(0) + ' °C; pulverizam-se ' + (spray * 3600).toFixed(0) + ' kg/h de água para mantê-lo a ' + br(Tmax) + ' °C (acima disso o gesso desidrata e o cimento dá pega falsa)');
+    }
+    const fP = PSD.rr(P80, num(p.nRR, 1)), pc = (a, bb) => (bb > 0 ? 100 * a / bb : 0), f1 = v => v.toFixed(1);
+    const res = [{ k: raw ? 'Mistura crua (base seca) / umidade' : 'Alimentação (base seca): ' + parts.map(q => q.nm.toLowerCase()).join(' / '), v: raw ? tph(Ms) + ' t/h / ' + pc(W0, Ms + W0).toFixed(2) + ' %' : parts.map(q => tph(q.ms)).join(' / ') + ' t/h', u: '' },
+      { k: raw ? 'Farinha crua produzida' : 'Cimento produzido', v: tph(Ms + Wout) + ' t/h (' + ((Ms + Wout) * 86.4).toFixed(0) + ' t/d) a ' + Tout.toFixed(1) + ' °C', u: '' }];
+    if (!raw) {
+      const dm = q => (q ? q.m - g0(q.kg, 'water') : 0), mk = dm(F) + dm(G), me = dm(Sg), mf = dm(Fi), tipo = String(p.tipo || CIM_TIPOS[0]).split(' (')[0], L = CIM_LIM[tipo] || CIM_LIM['CP II-E'];
+      const so3 = pc(g0(kgDry, 'gypsum') * 80.063 / 172.17, Ms), mgo = pc(g0(kgDry, 'mgo'), Ms), k = pc(mk, Ms), e = pc(me, Ms), fl = pc(mf, Ms);
+      const chk = (nm, v, lim) => (v >= lim[0] - 1e-9 && v <= lim[1] + 1e-9 ? '✔ ' : '✘ ') + nm + ' ' + f1(v) + ' % (' + lim[0] + ' a ' + lim[1] + ' %)';
+      const lst = [chk('clínquer + gesso', k, L.k), L.ad ? chk('adições', e + fl, [0, L.ad]) : chk('escória', e, L.e), L.ad ? null : chk('fíler calcário', fl, L.f), (so3 <= 4.5 ? '✔ ' : '✘ ') + 'SO₃ ' + br(so3.toFixed(2)) + ' % (até 4,5 %)'].filter(Boolean);
+      res.push({ k: 'Composição do cimento: clínquer / gesso / escória / fíler', v: [dm(F), dm(G), me, mf].map(v => f1(pc(v, Ms))).join(' / '), u: '% massa' },
+        { k: 'Conferência ' + tipo + ' (NBR 16697)', v: lst.join('; '), u: '' },
+        { k: 'SO₃ (do gesso) / MgO no cimento', v: br(so3.toFixed(2)) + ' / ' + br(mgo.toFixed(2)), u: '% massa' },
+        { k: 'Finura: Blaine / P80 estimado', v: br(num(p.blaine, 3800)) + ' cm²/g / ' + fmtSize(P80), u: '' });
+      if (lst.some(t => t[0] === '✘')) warn.push('a composição não atende ao ' + tipo + ' da NBR 16697: ' + lst.filter(t => t[0] === '✘').map(t => t.slice(2)).join('; '));
+      if (G && so3 < 1.5) warn.push('SO₃ de ' + br(so3.toFixed(2)) + ' %: pouco gesso, o C₃A reage depressa e o cimento pode dar pega instantânea (o usual é de 2 a 3,5 %)');
+    } else {
+      const k = id => g0(kgDry, id), CaO = k('caco3') * 56.077 / 100.086 + k('cao'), S = k('silica'), Al = k('alumina'), Fe = k('hematite'), tot = CaO + S + Al + Fe + k('mgo');
+      const C = pc(CaO, tot), Sp = pc(S, tot), Ap = pc(Al, tot), Fp = pc(Fe, tot);
+      res.push({ k: 'Farinha (base seca): CaCO₃ / SiO₂ / Al₂O₃ / Fe₂O₃', v: ['caco3', 'silica', 'alumina', 'hematite'].map(id => f1(pc(k(id), Ms))).join(' / '), u: '% massa' },
+        { k: 'Módulos do clínquer potencial: FSC / MS / MA', v: (100 * C / (2.8 * Sp + 1.18 * Ap + 0.65 * Fp)).toFixed(1) + ' / ' + (Sp / (Ap + Fp)).toFixed(2) + ' / ' + (Ap / Math.max(Fp, 1e-9)).toFixed(2), u: '' },
+        { k: 'Finura da farinha: P80', v: fmtSize(P80), u: '' });
+    }
+    res.push({ k: 'Energia de Bond por material (kWh/t): ' + parts.map(q => q.nm.toLowerCase()).join(' / '), v: parts.map(q => q.W.toFixed(1)).join(' / '), u: '' },
+      { k: 'Energia específica de moagem', v: Wsp.toFixed(1) + ' kWh/t' + (raw ? ' de farinha' : ' de cimento'), u: '' },
+      { k: 'Potência no pinhão / do motor', v: Pw.toFixed(0) + ' / ' + (Pw / eff).toFixed(0), u: 'kW' },
+      { k: 'Moinhos em paralelo', v: nM, u: '' },
+      { k: 'Diâmetro e comprimento internos de cada moinho (duas câmaras)', v: D.toFixed(2) + ' m × ' + L.toFixed(2) + ' m', u: '' },
+      { k: 'Carga de bolas de cada moinho / rotação (crítica ' + Nc.toFixed(1) + ' rpm)', v: balls.toFixed(0) + ' t / ' + (fc * Nc).toFixed(1) + ' rpm', u: '' },
+      { k: 'Temperatura: mistura na entrada → produto', v: Tin.toFixed(1) + ' → ' + Tout.toFixed(1), u: '°C' });
+    if (raw) res.push({ k: 'Água evaporada / calor de secagem (já descontado o calor da moagem)', v: (evap * 3600).toFixed(0) + ' kg/h / ' + (Math.max(0, Qd) / 1000).toFixed(2) + ' MW', u: '' },
+      { k: 'Gases quentes necessários (a ' + br(Tgas) + ' °C, saindo a ' + br(Tout) + ' °C)', v: Qd > 0 ? mGas.toFixed(2) + ' kg/s' : 'nenhum: o calor da moagem basta', u: '' });
+    else res.push({ k: 'Água pulverizada / evaporada', v: (spray * 3600).toFixed(0) + ' / ' + (evap * 3600).toFixed(0), u: 'kg/h' });
+    const xs = [], ys = [];
+    if (raw) { for (let k = 0; k <= 60; k++) { const x = 40 + 110 * k / 60; xs.push(x); ys.push(sum(parts.map(q => 10 * q.Wi * EF * (1 / Math.sqrt(x) - 1 / Math.sqrt(q.F80)) * q.ms)) / Ms); } }
+    else { const Kb = num(p.Kb, 125000); for (let k = 0; k <= 60; k++) { const bl = 2600 + 2900 * k / 60, x = Kb / bl; xs.push(bl); ys.push(sum(parts.map(q => 10 * q.Wi * EF * (1 / Math.sqrt(x) - 1 / Math.sqrt(q.F80)) * q.ms)) / Ms); } }
+    const plots = [psdPlot(raw ? 'Granulometria da farinha crua' : 'Granulometria do cimento (Rosin–Rammler)', [[fP, raw ? 'Farinha' : 'Cimento', '#2563c9']].concat(F.psd ? [[F.psd, 'Alimentação principal', '#8a8f98', 'dash']] : []), 1, 'µm'),
+      { kind: 'curves', title: raw ? 'Energia de moagem × P80 da farinha' : 'Energia de moagem × finura Blaine', data: { xLabel: raw ? 'P80 da farinha (µm)' : 'Finura Blaine (cm²/g)', yLabel: 'Energia específica (kWh/t)', series: [
+        { name: 'Lei de Bond', x: xs, y: ys, color: '#7a3db8', width: 3 }, { name: 'Operação', x: [raw ? P80 : num(p.blaine, 3800)], y: [Wsp], mode: 'markers', size: 12, symbol: 'circle', color: '#d1302b' }] } }];
+    const kgP = Object.assign({}, kgDry); if (Wout > 0) kgP.water = Wout;
+    const o = procOut(th, [{ port: 'product', kg: kgP, T: C2K(Tout), P: F.P, what: raw ? 'farinha crua' : 'cimento', psd: fP }, { port: 'vapor', kg: { water: evap }, T: C2K(Math.max(Tout, 105)), P: F.P, what: 'vapor de água' }], warn, true);
+    return { out: o.out, massUtil: o.ok ? spray : 0, duty: Pw / eff * 1000, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* ================================================================== versão 5.4: ácido sulfúrico
+     Forno de enxofre ou ustulador de sulfetos, conversor catalítico de V₂O₅ e torres de secagem e de absorção. Entalpias de formação
+     a 298,15 K (ChemSep e tabelas usuais) e c_p de gás ideal do banco, como no restante do programa. */
+  const SA_SO2 = 'cs-sulfur-dioxide', SA_SO3 = 'cs-sulfur-trioxide', SA_ACID = 'sulfuric-acid', SA_MWA = 98.079;
+  const SA_HF = { 'cs-sulfur-dioxide': -296840, 'cs-sulfur-trioxide': -395720, water: -241820, co2: -393510, 'sulfuric-acid': -813990,
+    sphalerite: -206000, zno: -350460, pyrite: -178200, hematite: -824200, silica: -910700, cao: -635090, caco3: -1206920 };   // J/mol
+  // entalpia molar (J/mol): formação + calor sensível (gás ideal pelo polinômio do banco; sólidos e líquidos com c_p constante)
+  function saH(th, id, T, liq) {
+    const c = th.c[th.ids.indexOf(id)];
+    if (id === 'water') return liq ? -285830 + 75.3 * (T - 298.15) : -241820 + TH.hIGcomp(c, T);
+    if (id === 'sulfur') return T < 388.36 ? 22.6 * (T - 298.15) : 22.6 * 90.21 + 1720 + 31.5 * (T - 388.36);   // sólido até 115 °C, fusão e líquido
+    return (SA_HF[id] || 0) + TH.hIGcomp(c, T);
+  }
+  const saHs = (th, f, T, liq) => f.reduce((a, v, k) => a + (v > 0 ? v * saH(th, th.ids[k], T, liq) : 0), 0);   // W (vazões em mol/s)
+  function saTad(th, f, Href, lo) { let a = lo || 250, c = 2600; for (let k = 0; k < 70; k++) { const m = 0.5 * (a + c); if (saHs(th, f, m, false) < Href) a = m; else c = m; } return 0.5 * (a + c); }
+  // calor integral de solução do H₂SO₄ (kJ/mol de ácido) em n mol de água por mol de ácido (Thomsen, 18 °C)
+  const SA_SOL = [[0, 0], [0.5, -15.73], [1, -28.07], [2, -41.92], [3, -48.99], [4, -54.06], [5, -58.03], [10, -67.03], [20, -71.5], [50, -73.35], [100, -73.97], [1e9, -73.97]];
+  const saSol = n => { for (let k = 1; k < SA_SOL.length; k++) if (n <= SA_SOL[k][0]) { const a = SA_SOL[k - 1], c = SA_SOL[k]; return a[1] + (c[1] - a[1]) * (n - a[0]) / (c[0] - a[0]); } return -73.97; };
+  const saNw = w => (1 - w) / 18.015 / (w / SA_MWA);   // mol de água por mol de H₂SO₄ num ácido de fração mássica w
+  const saCp = w => 4.184 * (1 - w) + 1.40 * w;   // kJ/(kg·K) da solução de ácido sulfúrico (aproximação linear)
+  const saKp = T => Math.pow(10, 4956 / T - 4.678);   // SO₂ + ½O₂ ⇌ SO₃, Kp em atm^−1/2
+
+  IMPL.sulfur_burner = function (th, b, ins) {
+    const p = b.params, warn = [], i = ins || {}, roast = p.mode === SB_R, f = i.feed, a = i.air;
+    if (!connected(f)) throw new Error(roast ? 'conecte o concentrado de sulfetos (esfalerita ZnS, pirita FeS₂…)' : 'conecte a corrente de enxofre fundido');
+    if (!connected(a)) throw new Error('conecte o ar de combustão (no forno de enxofre, o ar seco da torre de secagem)');
+    const ix = id => th.ids.indexOf(id), iS = ix('sulfur'), iZ = ix('sphalerite'), iP = ix('pyrite'), iO = ix('oxygen'), iW = ix('water'), i2 = ix(SA_SO2);
+    if (i2 < 0) throw new Error('inclua o dióxido de enxofre (Sulfur dioxide, do banco ChemSep) na lista de componentes');
+    if (iO < 0 || !(a.flows[iO] > 0)) throw new Error('o ar precisa de oxigênio');
+    const nf = f.flows, nS = iS >= 0 ? nf[iS] : 0, nZ = iZ >= 0 ? nf[iZ] : 0, nP = iP >= 0 ? nf[iP] : 0;
+    if (!(nS + nZ + nP > 0)) throw new Error('a alimentação não tem enxofre nem sulfetos (ZnS, FeS₂)');
+    if (!roast && nZ + nP > 0) warn.push('a alimentação tem sulfetos: para concentrados, escolha o ustulador de leito fluidizado');
+    const iZo = ix('zno'), iH = ix('hematite');
+    if (nZ > 0 && iZo < 0) throw new Error('inclua o óxido de zinco (calcinado) na lista de componentes');
+    if (nP > 0 && iH < 0) throw new Error('inclua a hematita (Fe₂O₃, do calcinado) na lista de componentes');
+    const O2req = nS + 1.5 * nZ + 2.75 * nP, nSO2 = nS + nZ + 2 * nP, ex = a.flows[iO] - O2req;
+    if (ex < 0) throw new Error('ar insuficiente: a queima pede ' + (O2req * 31.998 / 1000).toFixed(3) + ' kg/s de O₂ e o ar traz ' + (a.flows[iO] * 31.998 / 1000).toFixed(3) + ' kg/s');
+    const g = a.flows.slice(), c = new Array(th.n).fill(0);
+    g[iO] -= O2req; g[i2] += nSO2; if (iW >= 0) g[iW] += nf[iW];
+    nf.forEach((v, k) => { if (k !== iS && k !== iZ && k !== iP && k !== iW && v > 0) c[k] += v; });
+    if (nZ > 0) c[iZo] += nZ; if (nP > 0) c[iH] += nP / 2;
+    const Qloss = Math.max(0, num(p.QlossB, 800)) * 1000, Hin = saHs(th, nf.map((v, k) => (k === iW ? 0 : v)), f.T, true) + (iW >= 0 ? nf[iW] * saH(th, 'water', f.T, true) : 0) + saHs(th, a.flows, a.T, false);
+    const Hout = T => saHs(th, g, T, false) + saHs(th, c, T, false);
+    const Hr = (saHs(th, nf.map((v, k) => (k === iW ? 0 : v)), 298.15, true) + saHs(th, a.flows, 298.15, false)) - (saHs(th, g.map((v, k) => (k === iW ? v - nf[iW] : v)), 298.15, false) + saHs(th, c, 298.15, false));   // calor de reação a 25 °C (W)
+    const lo = Math.min(f.T, a.T) - 1, tad = H => { let x = lo, y = 3000; for (let k = 0; k < 70; k++) { const m = 0.5 * (x + y); if (Hout(m) < H) x = m; else y = m; } return 0.5 * (x + y); };
+    let T, Qrem = 0;
+    if (roast) { T = C2K(num(p.Tbed, 950)); Qrem = Hin - Qloss - Hout(T); if (Qrem < 0) { warn.push('o leito não se sustenta a ' + br(num(p.Tbed, 950)) + ' °C: faltam ' + (-Qrem / 1e6).toFixed(2) + ' MW (reduza a umidade, pré-aqueça o ar ou acrescente enxofre); a temperatura cai para a adiabática'); Qrem = 0; T = tad(Hin - Qloss); } }
+    else T = tad(Hin - Qloss);
+    const nG = sum(g), y = k => (k >= 0 ? 100 * g[k] / nG : 0), mf = f.mass, mS = nSO2 * 32.06 / 1000, acid = nSO2 * SA_MWA / 1000;
+    const iN = ix('nitrogen'), r2 = g[iO] / g[i2];
+    const dilA = Math.max(0, (1.1 * g[i2] - g[iO]) / 0.21) * 28.85 / 1000;   // kg/s de ar para O₂/SO₂ = 1,1 antes do conversor
+    if (!roast && r2 < 0.8) warn.push('relação O₂/SO₂ de ' + r2.toFixed(2) + ' no gás: o conversor pede de 0,9 a 1,2; aumente o ar do forno');
+    if (!roast && y(i2) > 12.5) warn.push('gás com ' + y(i2).toFixed(1) + ' % de SO₂: acima de cerca de 12 % o primeiro leito do conversor passaria de 630 °C e o catalisador se degrada; aumente o ar');
+    if (!roast && K2C(T) > 1250) warn.push('chama a ' + K2C(T).toFixed(0) + ' °C: acima de cerca de 1 200 °C o refratário e a caldeira sofrem; aumente o ar');
+    const res = [{ k: roast ? 'Concentrado alimentado' : 'Enxofre alimentado', v: mf.toFixed(3) + ' kg/s (' + (mf * 86.4).toFixed(1) + ' t/d) a ' + K2C(f.T).toFixed(0) + ' °C' + (roast ? ', com ' + (100 * mS / mf).toFixed(1) + ' % de S' : ''), u: '' },
+      { k: 'Ar de combustão', v: a.mass.toFixed(3) + ' kg/s a ' + K2C(a.T).toFixed(0) + ' °C; excesso de O₂ de ' + (100 * ex / O2req).toFixed(1) + ' %', u: '' },
+      { k: 'Gás produzido', v: (sum(g.map((v, k) => v * th.c[k].mw)) / 1000).toFixed(3) + ' kg/s a ' + K2C(T).toFixed(1) + ' °C' + (roast ? ' (leito)' : ' (chama adiabática, já descontadas as perdas)') + ', ' + (nG * 0.022414 * 3600).toFixed(0) + ' Nm³/h', u: '' },
+      { k: 'Composição molar do gás: SO₂ / O₂ / N₂ / H₂O', v: [y(i2), y(iO), y(iN), y(iW)].map(v => v.toFixed(2)).join(' / '), u: '%' },
+      { k: 'Relação O₂/SO₂ no gás' + (dilA > 0 && (roast || r2 < 0.8) ? ' (ar de diluição para chegar a 1,1 antes do conversor: ' + dilA.toFixed(2) + ' kg/s)' : ''), v: +r2.toFixed(3), u: '' },
+      { k: 'Calor de reação liberado (a 25 °C)', v: +(Hr / 1e6).toFixed(2), u: 'MW' },
+      { k: 'Capacidade equivalente de ácido (todo o SO₂ como H₂SO₄ 100 %)', v: (acid * 86.4).toFixed(0) + ' t/d', u: '' }];
+    if (roast) res.push({ k: 'Calor retirado pelas serpentinas do leito (vapor)', v: +(Qrem / 1e6).toFixed(2), u: 'MW' },
+      { k: 'Calcinado (para a lixiviação)', v: (sum(c.map((v, k) => v * th.c[k].mw)) / 1000).toFixed(3) + ' kg/s' + (nZ > 0 ? ', com ' + (100 * nZ * 65.38 / sum(c.map((v, k) => v * th.c[k].mw))).toFixed(1) + ' % de Zn' : ''), u: '' });
+    res.push({ k: 'Perdas pelas paredes', v: +(Qloss / 1e6).toFixed(2), u: 'MW' });
+    const plots = [];
+    if (!roast) {
+      const xs = [], ys = []; for (let k = 0; k <= 50; k++) { const fa = Math.max(O2req / a.flows[iO] * 1.02, 0.55 + 1.3 * k / 50), ga = a.flows.map(v => v * fa); ga[iO] -= O2req; ga[i2] += nSO2; if (iW >= 0) ga[iW] += nf[iW];
+        const Hi = Hin - saHs(th, a.flows, a.T, false) + saHs(th, a.flows.map(v => v * fa), a.T, false); let x = lo, yy = 3000; for (let q = 0; q < 60; q++) { const m = 0.5 * (x + yy); if (saHs(th, ga, m, false) < Hi - Qloss) x = m; else yy = m; }
+        xs.push(100 * ga[i2] / sum(ga)); ys.push(K2C(0.5 * (x + yy))); }
+      plots.push({ kind: 'curves', title: 'Forno de enxofre: temperatura da chama × teor de SO₂ (variando o ar)', data: { xLabel: 'SO₂ no gás (% molar)', yLabel: 'Temperatura dos gases (°C)', series: [
+        { name: 'Chama adiabática (menos as perdas)', x: xs, y: ys, color: '#d1302b', width: 3.2 }, { name: 'Operação', x: [y(i2)], y: [K2C(T)], mode: 'markers', size: 12, symbol: 'circle', color: '#111' }] } });
+    } else {
+      const xs = [], ys = []; for (let k = 0; k <= 30; k++) { const Tb = 820 + 200 * k / 30; xs.push(Tb); ys.push((Hin - Qloss - Hout(C2K(Tb))) / 1e6); }
+      plots.push({ kind: 'curves', title: 'Ustulador: calor retirado do leito × temperatura do leito', data: { xLabel: 'Temperatura do leito (°C)', yLabel: 'Calor para as serpentinas (MW)', series: [
+        { name: 'Calor que sobra no leito', x: xs, y: ys, color: '#e07b39', width: 3.2 }, { name: 'Operação', x: [K2C(T)], y: [Qrem / 1e6], mode: 'markers', size: 12, symbol: 'circle', color: '#111' }] } });
+    }
+    plots.push({ kind: 'bars', title: 'Composição do gás (% molar)', data: { categories: ['SO₂', 'O₂', 'N₂', 'H₂O'], yLabel: '% molar', series: [{ name: 'Gás', y: [y(i2), y(iO), y(iN), y(iW)], color: '#e8a317' }] } });
+    const out = { gas: mkStream(th, g, T, Math.min(f.P, a.P)) }; if (sum(c) > 0) out.calcine = mkStream(th, c, T, Math.min(f.P, a.P));
+    return { out, duty: -Qrem, res: decBR(res), warn: decW(warn), plots, sa: { nSO2 } };
+  };
+
+  /* conversor catalítico: cada leito é adiabático; a conversão sobe pela reta adiabática até uma fração f da interseção com a curva de
+     equilíbrio (SO₂ + ½O₂ ⇌ SO₃, log Kp = 4956/T − 4,678); entre os leitos o gás é resfriado até a temperatura de entrada seguinte */
+  IMPL.so2_converter = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.gas_in;
+    if (!connected(s)) throw new Error('conecte o gás com SO₂ (da caldeira de recuperação ou do reaquecedor)');
+    const ix = id => th.ids.indexOf(id), i2 = ix(SA_SO2), i3 = ix(SA_SO3), iO = ix('oxygen');
+    if (i2 < 0 || i3 < 0 || iO < 0) throw new Error('inclua o dióxido e o trióxido de enxofre (Sulfur dioxide e Sulfur trioxide, do ChemSep) e o oxigênio na lista de componentes');
+    const nB = Math.round(clamp(num(p.nB, 3), 1, 6)), bed0 = Math.round(Math.max(1, num(p.bed0, 1)));
+    const list = (v, d) => { const q = String(v == null ? '' : v).split(/[\s;]+/).map(x => +String(x).replace(',', '.')).filter(x => isFinite(x) && x > 0); return q.length ? q : d; };
+    const Tin = list(p.Tin, [420, 440, 430]), GH = list(p.GHSV, [2200, 1800, 1700, 1400]);
+    while (Tin.length < nB) Tin.push(Tin[Tin.length - 1]); while (GH.length < nB) GH.push(GH[GH.length - 1]);
+    const fEq = clamp(num(p.fEq, 0.97), 0.05, 1), Pa = s.P / 101325, f0 = s.flows.slice(), S0 = f0[i2] + f0[i3], N0 = sum(f0);
+    if (!(f0[i2] > 0)) throw new Error('o gás não tem SO₂ para converter');
+    if (!(f0[iO] > 0)) throw new Error('o gás não tem oxigênio');
+    const shift = (f, xi) => { const q = f.slice(); q[i2] -= xi; q[iO] -= xi / 2; q[i3] += xi; return q; };
+    const lnQ = q => { const nt = sum(q); return Math.log(q[i3] / nt) - Math.log(q[i2] / nt) - 0.5 * Math.log(q[iO] / nt) - 0.5 * Math.log(Pa); };
+    // curva de equilíbrio na base do gás que entra no conversor: X = SO₃/(SO₂ + SO₃)
+    const Xeq = T => { const lk = Math.log(saKp(T)); let a = 1e-9, c = 1 - 1e-9; for (let k = 0; k < 60; k++) { const X = 0.5 * (a + c), xi = X * S0 - f0[i3]; const q = shift(f0, xi); if (q[iO] <= 0 || lnQ(q) > lk) c = X; else a = X; } return 0.5 * (a + c); };
+    let f = f0.slice(); const beds = [], Q = [];
+    const Hin0 = saHs(th, f, s.T, false); Q.push(Hin0 - saHs(th, f, C2K(Tin[0]), false));   // trocador antes do 1º leito (+ = calor retirado)
+    for (let k = 0; k < nB; k++) {
+      const T1 = C2K(Tin[k]), H1 = saHs(th, f, T1, false), xmax = Math.min(f[i2], 2 * f[iO]) * (1 - 1e-9), lk = xi => Math.log(saKp(saTad(th, shift(f, xi), H1, T1 - 50)));
+      let a = 0, c = xmax; for (let q = 0; q < 60; q++) { const xi = 0.5 * (a + c), qq = shift(f, xi); if (lnQ(qq) < lk(xi)) a = xi; else c = xi; }
+      const xs = 0.5 * (a + c), xi = fEq * xs, X1 = f[i3] / S0; f = shift(f, xi);
+      const T2 = saTad(th, f, H1, T1 - 50), X2 = f[i3] / S0, Vn = sum(f) * 0.022414 * 3600;
+      beds.push({ n: bed0 + k, T1, T2, X1, X2, Xe: Xeq(T2), Xs: (f[i3] - xi + xs) / S0, Vcat: Vn / GH[k] });
+      if (k < nB - 1) Q.push(saHs(th, f, T2, false) - saHs(th, f, C2K(Tin[k + 1]), false));
+      if (K2C(T1) < 400) warn.push('leito ' + (bed0 + k) + ': entrada a ' + br(Tin[k]) + ' °C, abaixo da temperatura de ignição do catalisador de V₂O₅ (cerca de 400 °C; com césio, cerca de 370 °C)');
+      if (K2C(T2) > 630) warn.push('leito ' + (bed0 + k) + ': saída a ' + K2C(T2).toFixed(0) + ' °C; acima de cerca de 620 a 630 °C o catalisador perde atividade (sinterização)');
+    }
+    const last = beds[beds.length - 1], Tend = p.ToutC === '' || p.ToutC == null ? last.T2 : C2K(num(p.ToutC, K2C(last.T2)));
+    Q.push(saHs(th, f, last.T2, false) - saHs(th, f, Tend, false));
+    const Qtot = sum(Q), r2 = f0[iO] / f0[i2], y = (q, k) => 100 * q[k] / sum(q);
+    if (r2 < 0.8 && bed0 === 1) warn.push('relação O₂/SO₂ de ' + r2.toFixed(2) + ' na entrada: o equilíbrio fica desfavorável; acrescente ar de diluição');
+    const res = [{ k: 'Gás na entrada', v: (s.mass).toFixed(3) + ' kg/s a ' + K2C(s.T).toFixed(0) + ' °C, ' + (N0 * 0.022414 * 3600).toFixed(0) + ' Nm³/h; SO₂ ' + y(f0, i2).toFixed(2) + ' %, O₂ ' + y(f0, iO).toFixed(2) + ' % (O₂/SO₂ = ' + r2.toFixed(2) + ')', u: '' }];
+    beds.forEach(q => res.push({ k: 'Leito ' + q.n + ': temperatura de entrada → saída / conversão acumulada (equilíbrio na saída)', v: K2C(q.T1).toFixed(0) + ' → ' + K2C(q.T2).toFixed(1) + ' °C / ' + (100 * q.X2).toFixed(2) + ' % (' + (100 * q.Xe).toFixed(2) + ' %)', u: '' }));
+    res.push({ k: 'Conversão do SO₂ neste conversor', v: +(100 * (1 - f[i2] / f0[i2])).toFixed(3), u: '%' },
+      { k: 'SO₂ na entrada / na saída', v: (f0[i2] * 64.066 * 3.6).toFixed(1) + ' / ' + (f[i2] * 64.066 * 3.6).toFixed(2), u: 'kg/h' },
+      { k: 'SO₃ na saída (para a torre de absorção)', v: (f[i3] * 80.066 * 3.6).toFixed(1) + ' kg/h (' + (f[i3] * SA_MWA * 86.4 / 1000).toFixed(0) + ' t/d de H₂SO₄ 100 %)', u: '' },
+      { k: 'Calor retirado: antes do 1º leito / entre os leitos / na saída', v: [Q[0], sum(Q.slice(1, Q.length - 1)), Q[Q.length - 1]].map(v => (v / 1e6).toFixed(2)).join(' / ') + ' MW (total ' + (Qtot / 1e6).toFixed(2) + ' MW)', u: '' },
+      { k: 'Gás na saída', v: K2C(Tend).toFixed(1) + ' °C', u: '' },
+      { k: 'Catalisador (pela velocidade espacial): ' + beds.map(q => 'leito ' + q.n).join(' / '), v: beds.map(q => q.Vcat.toFixed(1)).join(' / ') + ' m³ (total ' + sum(beds.map(q => q.Vcat)).toFixed(1) + ' m³)', u: '' });
+    // diagrama conversão × temperatura
+    const tx = [], ty = []; for (let T = 360; T <= 700; T += 4) { tx.push(T); ty.push(100 * Xeq(C2K(T))); }
+    const px = [], py = []; beds.forEach((q, k) => { px.push(K2C(q.T1), K2C(q.T2)); py.push(100 * q.X1, 100 * q.X2); if (k < beds.length - 1) { px.push(K2C(C2K(Tin[k + 1]))); py.push(100 * q.X2); } });
+    const plots = [{ kind: 'curves', title: 'Conversão × temperatura: equilíbrio, retas adiabáticas e resfriamento entre os leitos', data: { xLabel: 'Temperatura do gás (°C)', yLabel: 'Conversão do SO₂ (%)', xRange: [360, 700], yRange: [Math.max(0, Math.floor(100 * beds[0].X1 / 10) * 10), 100], series: [
+      { name: 'Equilíbrio (' + br(Pa.toFixed(2)) + ' atm)', x: tx, y: ty, color: '#2563c9', width: 3 },
+      { name: 'Leitos (adiabáticos) e resfriamentos', x: px, y: py, color: '#d1302b', width: 2.8, mode: 'lines+markers', size: 7 },
+      { name: 'Saída dos leitos', x: beds.map(q => K2C(q.T2)), y: beds.map(q => 100 * q.X2), mode: 'markers', size: 12, symbol: 'diamond', color: '#111' }] } },
+      { kind: 'bars', title: 'Conversão do SO₂ em cada leito (% do SO₂ que entra no conversor)', data: { categories: beds.map(q => 'Leito ' + q.n), yLabel: '%', series: [{ name: 'Conversão no leito', y: beds.map(q => 100 * (q.X2 - q.X1)), color: '#e8a317' }] } }];
+    return { out: { gas_out: mkStream(th, f, Tend, s.P) }, duty: -Qtot, res: decBR(res), warn: decW(warn), plots, sa: { so2In: f0[i2], so2Out: f[i2], lastBed: last.n } };
+  };
+
+  /* torre de ácido: na absorção, SO₃ + H₂O → H₂SO₄ no ácido de circulação; a água da reação e da diluição vem da entrada de líquido
+     (umidade retirada na secagem) e, se faltar, de água de reposição. Na secagem, o ácido retira a umidade do gás. O calor (reação,
+     condensação e diluição, pelo calor integral de solução de Thomsen) sai nos resfriadores de ácido */
+  IMPL.acid_tower = function (th, b, ins) {
+    const p = b.params, warn = [], i = ins || {}, dry = p.mode === AT_DRY, s = i.gas_in, L = i.liq_in;
+    if (!connected(s)) throw new Error('conecte o gás que entra na torre');
+    const ix = id => th.ids.indexOf(id), i3 = ix(SA_SO3), iW = ix('water'), iA = ix(SA_ACID);
+    if (iW < 0) throw new Error('inclua a água na lista de componentes');
+    if (!dry && (i3 < 0 || iA < 0)) throw new Error('inclua o trióxido de enxofre (Sulfur trioxide, do ChemSep) e o ácido sulfúrico na lista de componentes');
+    const w = clamp(num(p.w, dry ? 96 : 98.5), 50, 99.9) / 100, TaIn = num(p.TaIn, dry ? 50 : 75), TaOut = num(p.TaOut, dry ? 65 : 110), Tgo = C2K(num(p.Tgo, TaIn + 5)), ug = num(p.ug, 1.5), HTU = num(p.HTU, 0.6);
+    if (!(TaOut > TaIn)) throw new Error('o ácido deve sair mais quente do que entra (ele recebe o calor da torre)');
+    const fg = s.flows, g = fg.slice(), lq = L && connected(L) ? L.flows.slice() : new Array(th.n).fill(0);
+    let abs = 0, make = 0, nA = 0, nWp = 0, Q, NTU, wAct = w;
+    // entalpia do líquido que entra: ácido (formação + calor de solução + sensível) ou água pura
+    const hLiq = (q, T) => { const oth = saHs(th, q.map((v, k) => (k === iW || k === iA ? 0 : v)), T, true), nw = q[iW] || 0, na = iA >= 0 ? q[iA] || 0 : 0;
+      if (!(na > 0)) return oth + nw * saH(th, 'water', T, true);
+      const m = (na * SA_MWA + nw * 18.015) / 1000; return oth + na * (-813990 + 1000 * saSol(nw / na)) + nw * (-285830) + m * saCp(na * SA_MWA / (na * SA_MWA + nw * 18.015)) * 1000 * (T - 298.15); };
+    const Hin = saHs(th, fg, s.T, false) + (L && connected(L) ? hLiq(lq, L.T) : 0);
+    const out = {};
+    if (!dry) {
+      const eta = clamp(num(p.eta, 99.9), 0, 99.9999) / 100;
+      abs = eta * fg[i3]; g[i3] -= abs; const wg = g[iW]; g[iW] = 0;
+      nA = (iA >= 0 ? lq[iA] : 0) + abs;
+      const need = nA * saNw(w), avail = lq[iW] + wg - abs;
+      if (avail < need) { make = need - avail; nWp = need; } else { nWp = avail; wAct = nA * SA_MWA / (nA * SA_MWA + nWp * 18.015); }
+      if (wAct < w - 0.002) warn.push('entra mais água do que a absorção consome: o ácido sai com ' + (100 * wAct).toFixed(2) + ' % em vez de ' + br(100 * w) + ' % (resfrie mais o gás na lavagem ou retire ácido para a torre de secagem)');
+      if (w < 0.98 || w > 0.99) warn.push('ácido de absorção a ' + br((100 * w).toFixed(1)) + ' %: a absorção do SO₃ é melhor perto de 98,3 a 98,5 % (abaixo forma névoa ácida; acima, o SO₃ escapa)');
+      const acid = lq.slice(); acid[iA] = nA; acid[iW] = nWp; if (i3 >= 0) acid[i3] = 0;
+      const Hout = saHs(th, g, Tgo, false) + hLiq(acid, C2K(TaOut));
+      Q = Hin + make * saH(th, 'water', 298.15, true) - Hout;
+      NTU = Math.log(1 / (1 - eta));
+      out.gas_out = mkStream(th, g, Tgo, s.P); out.liq_out = mkStream(th, acid, C2K(TaOut), s.P);
+    } else {
+      const nDry = sum(fg) - fg[iW], resid = Math.max(0, num(p.resid, 50)), wRes = resid * 1e-6 * nDry * 0.022414 / 0.018015;   // mol/s
+      abs = Math.max(0, fg[iW] - wRes); g[iW] = fg[iW] - abs;
+      const liq = lq.slice(); liq[iW] += abs;
+      const dil = (saSol(saNw(w) + 0.01) - saSol(saNw(w))) / 0.01;   // calor diferencial de diluição (kJ/mol de água)
+      const Hout = saHs(th, g, Tgo, false) + saHs(th, liq.map((v, k) => (k === iW ? 0 : v)), C2K(TaOut), true) + liq[iW] * saH(th, 'water', C2K(TaOut), true) + abs * dil * 1000;
+      Q = Hin - Hout;
+      NTU = wRes > 0 && fg[iW] > wRes ? Math.log(fg[iW] / wRes) : 0;
+      if (w < 0.9) warn.push('ácido de secagem a ' + br((100 * w).toFixed(1)) + ' %: abaixo de cerca de 93 % ele seca mal e corrói mais');
+      out.gas_out = mkStream(th, g, Tgo, s.P); if (sum(liq) > 0) out.liq_out = mkStream(th, liq, C2K(TaOut), s.P);
+    }
+    if (Q < 0) warn.push('o balanço da torre pede calor: o gás sai mais quente (' + K2C(Tgo).toFixed(0) + ' °C) do que o calor de ' + (dry ? 'absorção da umidade' : 'absorção do SO₃') + ' permite; baixe a temperatura de saída do gás');
+    const cp = saCp(w), mCirc = Math.max(0, Q) / 1000 / (cp * (TaOut - TaIn)), Vl = mCirc / 1830 * 3600, nOut = sum(g), Vg = nOut * R * Tgo / s.P, A = Vg / ug, D = Math.sqrt(4 * A / Math.PI);
+    const res = [{ k: 'Gás na entrada', v: s.mass.toFixed(3) + ' kg/s a ' + K2C(s.T).toFixed(0) + ' °C' + (dry ? ', com ' + (100 * fg[iW] / sum(fg)).toFixed(2) + ' % de umidade' : ', com ' + (100 * fg[i3] / sum(fg)).toFixed(2) + ' % de SO₃'), u: '' }];
+    if (!dry) res.push({ k: 'SO₃ absorvido', v: (abs * 80.066 * 3.6).toFixed(1) + ' kg/h (escapam ' + ((fg[i3] - abs) * 80.066 * 3.6).toFixed(2) + ' kg/h)', u: '' },
+      { k: 'Ácido produzido nesta torre', v: ((nA * SA_MWA + nWp * 18.015) / 1000).toFixed(3) + ' kg/s com ' + (100 * wAct).toFixed(2) + ' % de H₂SO₄ (' + (abs * SA_MWA * 86.4 / 1000).toFixed(0) + ' t/d de H₂SO₄ 100 % novo)', u: '' },
+      { k: 'Água: da entrada de líquido / do gás / de reposição', v: [lq[iW], fg[iW], make].map(v => (v * 18.015 * 3.6).toFixed(0)).join(' / '), u: 'kg/h' });
+    else res.push({ k: 'Água retirada do gás', v: (abs * 18.015 * 3.6).toFixed(1) + ' kg/h; o gás sai com ' + br(num(p.resid, 50)) + ' mg/Nm³', u: '' });
+    res.push({ k: 'Calor retirado nos resfriadores de ácido', v: +(Q / 1e6).toFixed(3), u: 'MW' },
+      { k: 'Ácido de circulação (' + br((100 * w).toFixed(1)) + ' %, ' + br(TaIn) + ' → ' + br(TaOut) + ' °C)', v: (mCirc * 3.6).toFixed(0) + ' t/h (' + Vl.toFixed(0) + ' m³/h)', u: '' },
+      { k: 'Diâmetro da torre (gás a ' + br(ug) + ' m/s) / irrigação do recheio', v: D.toFixed(2) + ' m / ' + (Vl / A).toFixed(1) + ' m³/(m²·h)', u: '' },
+      { k: 'Unidades de transferência NTU / altura do recheio (HTU = ' + br(HTU) + ' m)', v: NTU.toFixed(2) + ' / ' + (NTU * HTU).toFixed(2) + ' m', u: '' },
+      { k: 'Gás na saída', v: (sum(g.map((v, k) => v * th.c[k].mw)) / 1000).toFixed(3) + ' kg/s a ' + K2C(Tgo).toFixed(0) + ' °C', u: '' });
+    const hv = [], hq = []; for (let k = 0; k <= 30; k++) { const tO = TaIn + 5 + 45 * k / 30; hv.push(tO); hq.push(Q / 1000 / (cp * (tO - TaIn)) * 3.6); }
+    const plots = [{ kind: 'curves', title: 'Ácido de circulação × aquecimento do ácido na torre', data: { xLabel: 'Temperatura do ácido na saída (°C)', yLabel: 'Ácido de circulação (t/h)', series: [
+      { name: 'Vazão para levar o calor', x: hv, y: hq, color: '#7a3db8', width: 3 }, { name: 'Operação', x: [TaOut], y: [mCirc * 3.6], mode: 'markers', size: 12, symbol: 'circle', color: '#d1302b' }] } }];
+    return { out, massUtil: make * 18.015 / 1000, duty: -Q, res: decBR(res), warn: decW(warn), plots, sa: { acid: abs * SA_MWA / 1000, dry } };
+  };
+  // conversão global da fábrica de ácido (todos os conversores e a absorção intermediária) e SO₂ na chaminé, mostrados no último conversor
+  POST.so2_converter = function (b, r, blocks, R) {
+    const ids = Object.keys(blocks), conv = ids.filter(id => blocks[id].type === 'so2_converter' && R[id] && R[id].sa);
+    if (!conv.length) return; const lastId = conv.reduce((a, id) => (R[id].sa.lastBed > R[a].sa.lastBed ? id : a), conv[0]);
+    if (R[lastId] !== r) return;
+    const so2 = ids.filter(id => blocks[id].type === 'sulfur_burner' && R[id] && R[id].sa).reduce((a, id) => a + R[id].sa.nSO2, 0) || R[conv.reduce((a, id) => (R[id].sa.lastBed < R[a].sa.lastBed ? id : a), conv[0])].sa.so2In;
+    const acid = ids.filter(id => blocks[id].type === 'acid_tower' && R[id] && R[id].sa && !R[id].sa.dry).reduce((a, id) => a + R[id].sa.acid, 0);
+    const X = 1 - r.sa.so2Out / so2, em = r.sa.so2Out * 64.066 / 1000;
+    r.res = (r.res || []).concat(decBR([{ k: 'Conversão global do SO₂ (todos os leitos da fábrica)', v: (100 * X).toFixed(3) + ' %', u: '' }].concat(acid > 0 ? [{ k: 'SO₂ que vai para a chaminé', v: (em * 3600).toFixed(1) + ' kg/h (' + (em / acid * 1000).toFixed(2) + ' kg por tonelada de H₂SO₄)', u: '' }] : [])));
+    if (X < 0.995 && conv.length > 1) r.warn = (r.warn || []).concat(decW(['conversão global de ' + (100 * X).toFixed(2) + ' %: fábricas de dupla absorção costumam passar de 99,7 %']));
+  };
+
   SF.units = { MICROBES, TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn, ponchonSavarit, STEAM, multiEffect, IF97, H2O, tagH2O, POST };
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -12407,6 +12974,74 @@ window.SIMULAFACIL_CONFIG = {
         note: 'A água da farinha entra líquida e sai como vapor. O resíduo do balanço de energia mostra a coerência entre combustível, ar, temperaturas e perdas; o programa calcula também o combustível que zeraria o resíduo com o ar fixo. Bogue vale para MA ≥ 0,64.'
       };
     },
+    cyclone_preheater: () => {
+      const Cf = sub(i('Ċ'), 'f'), Cg = sub(i('Ċ'), 'g'), X = i('X'), Tc = sub(T, 'c');
+      return {
+        name: 'Torre de ciclones com pré-calcinador: estágios de equilíbrio e calcinação',
+        eqs: [eq(Cg + '(' + sub(T, 'i+1') + ' − ' + sub(T, 'i') + ') = ' + Cf + '(' + sub(T, 'i') + ' − ' + sub(T, 'i−1') + ')', 'estágio i: gás e farinha saem à mesma temperatura'),
+          eq(sub(T, '0') + ' = ' + sub(T, 'farinha') + ',&nbsp; ' + sub(T, 'm+1') + ' = ' + Tc, 'contorno: farinha crua no topo e pré-calcinador no fundo; no estágio 1 entra a evaporação da umidade'),
+          eq('CaCO₃ → CaO + CO₂,&nbsp; C + O₂ → CO₂,&nbsp; H₂ + ½ O₂ → H₂O', 'pré-calcinador; O₂ do ar terciário e o que sobra do forno'),
+          eq(X + ' = ' + fr(sub(i('H'), 'e') + ' − ' + sub(i('H'), 's') + '(' + X + ' = 0) − ' + sub(i('Q'), 'perdas'), sub(i('ṅ'), 'CaCO₃') + '·Δ' + sub(i('H'), 'calc') + '(' + Tc + ')'), 'grau de calcinação pelo balanço de energia, até X_máx'),
+          eq(sub(i('P'), 'exaustor') + ' = ' + fr(sub(V, 'real') + '·' + i('n') + '·Δ' + sub(i('P'), 'estágio'), 'η'), 'potência do exaustor')],
+        sym: [[Cf + ', ' + Cg, 'capacidades caloríficas da farinha seca e do gás (kW/K)'], [X, 'fração do CaCO₃ calcinada no pré-calcinador'], [i('m'), 'estágios acima do pré-calcinador (n − 1)']],
+        note: 'Ċ_f/Ċ_g fica perto de 0,7 a 0,8: por isso cada estágio a mais baixa a temperatura dos gases de saída, mas com retorno cada vez menor. X e as temperaturas dos estágios são resolvidos juntos, porque o CO₂ da calcinação aumenta o gás que sobe.'
+      };
+    },
+    clinker_cooler: () => {
+      const Ccl = sub(i('Ċ'), 'cl'), Ca = sub(i('Ċ'), 'a,k'), e = i('ε');
+      return {
+        name: 'Resfriador de clínquer de grelha: compartimentos em corrente cruzada',
+        eqs: [eq('Δ' + sub(T, 'cl,k') + ' = ' + fr(Ca + '·' + e + '·(' + sub(T, 'cl,k') + ' − ' + sub(T, 'a') + ')', Ccl + ' + ' + Ca + e + '/2'), 'clínquer em cada compartimento'),
+          eq(sub(T, 'ar,k') + ' = ' + sub(T, 'a') + ' + ' + e + '(' + sub('T̄', 'cl,k') + ' − ' + sub(T, 'a') + ')', 'ar que sai do compartimento k'),
+          eq(sub(i('ṁ'), 'a,k') + ' ∝ ' + sup('e', '−β(k − ½)/N'), 'distribuição do ar: β > 0 concentra o ar na zona quente'),
+          eq('η = ' + fr(sub(Q, 'sec') + ' + ' + sub(Q, 'ter'), Ccl + '(' + sub(T, 'cl,e') + ' − ' + sub(T, 'a') + ')'), 'eficiência de recuperação'),
+          eq(i('A') + ' = ' + fr(sub(i('ṁ'), 'cl') + ' (t/d)', 'carga (t/(d·m²))'), 'área de grelha')],
+        sym: [[Ccl, 'capacidade calorífica do clínquer (kW/K)'], [Ca, 'capacidade calorífica do ar do compartimento k'], [e, 'efetividade de cada compartimento']],
+        note: 'O ar dos primeiros compartimentos, o mais quente, vai ao forno (ar secundário); o seguinte, ao pré-calcinador (ar terciário); o resto sai pela chaminé. As perdas por radiação saem do clínquer na zona quente.'
+      };
+    },
+    cement_mill: () => {
+      const W = i('W'), Wi = sub(i('W'), 'i');
+      return {
+        name: 'Moinho de cimento ou de cru: Bond, Blaine, composição e balanço térmico',
+        eqs: [eq(W + ' = 10·' + Wi + '·EF·(' + fr('1', '√' + sub(i('P'), '80')) + ' − ' + fr('1', '√' + sub(i('F'), '80')) + ')', 'lei de Bond para cada material (kWh/t, malhas em µm)'),
+          eq(sub(i('P'), '80') + ' ≈ ' + fr(i('K'), 'Blaine'), 'finura do cimento (K ≈ 125 000 µm·cm²/g)'),
+          eq(sub(i('P'), 'motor') + ' = ' + fr(sum('j') + ' ' + sub(W, 'j') + sub(i('ṁ'), 'j'), 'η'), 'potência'),
+          eq(sub(i('f'), 'H') + sub(i('P'), 'eixo') + ' = ' + sub(i('Ċ'), 's') + '(' + sub(T, 's') + ' − ' + sub(T, 'e') + ') + ' + sub(i('ṁ'), 'água') + '·' + sub(i('h'), 'ev'), 'balanço térmico: água pulverizada (cimento) ou gases quentes (cru)'),
+          eq('SO₃ = ' + fr('80,06', '172,17') + '·' + sub(i('w'), 'gesso'), 'SO₃ do cimento vindo da gipsita')],
+        sym: [[Wi, 'índice de trabalho de Bond do material'], ['EF', 'fator de Rowland (moagem a seco ≈ 1,3)'], [sub(i('f'), 'H'), 'fração da energia que vira calor no material']],
+        note: 'A NBR 16697 define cada cimento pela soma clínquer + sulfatos de cálcio e pelas adições: no CP II-E, 51 a 94 % de clínquer + gesso, 6 a 34 % de escória e até 15 % de material carbonático. As dimensões usam as mesmas relações de Bond do moinho de bolas.'
+      };
+    },
+    sulfur_burner: () => ({
+      name: 'Forno de enxofre e ustulador de sulfetos',
+      eqs: [eq('S + O₂ → SO₂ &nbsp;(Δ' + sub(i('H'), '298') + ' = −297 kJ/mol)', 'forno de enxofre'),
+        eq('2 ZnS + 3 O₂ → 2 ZnO + 2 SO₂,&nbsp; 4 FeS₂ + 11 O₂ → 2 Fe₂O₃ + 8 SO₂', 'ustulação'),
+        eq(sum('j') + ' ' + sub(i('ṅ'), 'j,s') + sub(i('h'), 'j') + '(' + T + ') = ' + sub(i('H'), 'e') + ' − ' + sub(Q, 'perdas') + ' − ' + sub(Q, 'serpentinas'), 'balanço de energia: T adiabática (forno) ou Q das serpentinas a T do leito (ustulador)'),
+        eq(sub(i('h'), 'j') + '(' + T + ') = ' + sub(i('H'), 'f,j') + ' + ∫' + sub(i('c'), 'p,j') + 'd' + T, 'entalpia com formação; c_p de gás ideal do banco')],
+      sym: [['O₂/SO₂', 'relação molar no gás; o conversor pede de 0,9 a 1,2'], [sub(Q, 'serpentinas'), 'calor retirado do leito para gerar vapor']],
+      note: 'Quanto mais ar, mais diluído e mais frio o gás: a curva temperatura × % de SO₂ mostra a escolha do ar. Na ustulação, o gás sai pobre em O₂ e recebe ar de diluição antes da secagem.'
+    }),
+    so2_converter: () => ({
+      name: 'Conversor catalítico: equilíbrio SO₂ + ½O₂ ⇌ SO₃ e leitos adiabáticos',
+      eqs: [eq('log ' + sub(i('K'), 'p') + ' = ' + fr('4956', T) + ' − 4,678 &nbsp;(' + sub(i('K'), 'p') + ' em atm<sup>−1/2</sup>)', 'equilíbrio'),
+        eq(sub(i('K'), 'p') + ' = ' + fr(sub(i('y'), 'SO₃'), sub(i('y'), 'SO₂') + '·' + sup(sub(i('y'), 'O₂'), '1/2') + '·' + sup(P, '1/2')), 'quociente no equilíbrio'),
+        eq(sub(i('H'), 'gás') + '(' + T + ', ξ) = ' + sub(i('H'), 'entrada'), 'reta adiabática do leito: T sobe cerca de 3 °C por ponto de conversão com 11 % de SO₂'),
+        eq(sub('ξ', 'leito') + ' = ' + i('f') + '·' + sup('ξ', '*'), 'ξ*: ponto em que a reta adiabática corta a curva de equilíbrio'),
+        eq(sub(V, 'cat') + ' = ' + fr(sub(i('V̇'), 'N'), 'GHSV'), 'volume de catalisador')],
+      sym: [['ξ', 'avanço da reação (mol/s de SO₂ convertido)'], [i('f'), 'fração do equilíbrio atingida no leito'], ['GHSV', 'velocidade espacial (Nm³ de gás por hora e por m³ de catalisador)']],
+      note: 'A reação é exotérmica: o equilíbrio cai com a temperatura. Por isso o gás é resfriado entre os leitos e, na dupla absorção, o SO₃ é retirado depois do 3º leito, o que desloca o equilíbrio do 4º leito e leva a conversão global acima de 99,7 %.'
+    }),
+    acid_tower: () => ({
+      name: 'Torres de ácido: absorção do SO₃ e secagem do gás',
+      eqs: [eq('SO₃(g) + H₂O(no ácido) → H₂SO₄ &nbsp;(Δ' + sub(i('H'), '298') + ' ≈ −132 kJ/mol)', 'absorção em ácido 98,5 %'),
+        eq(sub(i('ṁ'), 'rep') + ' = ' + sub(i('ṁ'), 'H₂SO₄') + fr('1 − w', 'w') + ' + 18,0·' + sub(i('ṅ'), 'SO₃') + ' − ' + sub(i('ṁ'), 'água,e'), 'água de reposição; ṁ_água,e = água do líquido e do gás que entram'),
+        eq('Δ' + sub(i('H'), 'sol') + '(' + i('n') + ')', 'calor integral de solução de Thomsen; n = mol de água por mol de H₂SO₄'),
+        eq(sub(i('ṁ'), 'circ') + ' = ' + fr(Q, sub(i('c'), 'p') + '(' + sub(T, 'saída') + ' − ' + sub(T, 'entrada') + ')') + ',&nbsp; ' + i('D') + ' = ' + '√' + fr('4' + sub(i('V̇'), 'gás'), 'π' + sub(i('u'), 'g')), 'ácido de circulação e diâmetro'),
+        eq(i('Z') + ' = NTU·HTU,&nbsp; NTU = ln' + fr(sub(i('y'), 'entrada'), sub(i('y'), 'saída')), 'altura do recheio')],
+      sym: [[i('w'), 'fração mássica de H₂SO₄ no ácido de circulação'], [Q, 'calor levado aos resfriadores de ácido'], ['HTU', 'altura de uma unidade de transferência']],
+      note: 'O SO₃ é absorvido em ácido de 98,3 a 98,5 % e não em água: com água ele forma névoa de ácido que atravessa a torre. A umidade retirada na secagem vai para o circuito de absorção e entra na conta da água.'
+    }),
     silo: () => {
       const W = i('W'), th = i('θ'), chi = i('χ'), rb = sub(i('ρ'), 'b'), Do = sub(i('D'), 'o'), dp = sub(i('d'), 'p');
       return {
@@ -13276,6 +13911,30 @@ window.SIMULAFACIL_CONFIG = {
       'Na fabricação do cimento, a farinha crua (calcário com argila, rica em SiO₂, Al₂O₃ e Fe₂O₃) passa pela torre de ciclones, onde é aquecida pelos gases quentes, e entra no forno rotativo. O CaCO₃ se decompõe (calcinação, CaCO₃ → CaO + CO₂, fortemente endotérmica) e, perto do maçarico, a 1 450 °C, a cal reage com os demais óxidos e forma os silicatos e aluminatos do clínquer. O combustível (coque de petróleo ou carvão) queima com o ar pré-aquecido no resfriador de clínquer.',
       'O modelo supõe calcinação e combustão completas: o clínquer leva o CaO, a sílica (com as cinzas do combustível), a alumina e o óxido de ferro; os gases levam o CO₂ da calcinação e da combustão, a água e o oxigênio em excesso. A composição em óxidos dá as fases de Bogue (C₃S, C₂S, C₃A e C₄AF) e os módulos de saturação de cal, de sílica e de alumina, usados no controle de qualidade.',
       'No exemplo, 100 kg/s de farinha (78 % de CaCO₃) a 70 °C, 6,34 kg/s de coque de petróleo (PCI de 32 000 kJ/kg) e 82 kg/s de ar a 800 °C dão 64,4 kg/s de clínquer (232 t/h) com 67,9 % de CaO e 22,8 % de SiO₂. O consumo é de 753 kcal/kg (3 150 kJ/kg), típico de forno com pré-calcinador, com 17 % de excesso de ar e 2,3 % de O₂ nos gases. O clínquer tem 57 % de C₃S e 23 % de C₂S, e o forno emite 0,84 kg de CO₂ por kg de clínquer, dos quais 0,53 vêm da calcinação. O combustível foi escolhido para fechar o balanço de energia. O código de referência usava 6,5 kg/s de combustível e 75 kg/s de ar, com só 4 % de excesso, pouco para evitar CO nos gases.'] },
+    cyclone_preheater: { ex: ex('cimento-fabrica-completa', 'Fábrica de cimento completa'), p: [
+      'A torre de ciclones é um trocador de calor em contracorrente feito de estágios: o gás quente que vem do forno sobe, a farinha crua desce, e em cada estágio os dois se misturam num duto e se separam num ciclone. Como o contato é intenso, gás e farinha saem de cada ciclone praticamente à mesma temperatura (estágio de equilíbrio). Com Ċ_f/Ċ_g perto de 0,7, cada estágio a mais esfria os gases de saída, mas cada vez menos: é por isso que as fábricas usam de 4 a 6 estágios.',
+      'No fundo da torre fica o pré-calcinador: uma câmara onde se queima a maior parte do combustível com o ar terciário que vem quente do resfriador e com o O₂ que sobra do forno. Ali o CaCO₃ se decompõe (CaCO₃ → CaO + CO₂, cerca de 178 kJ/mol); o modelo tira o grau de calcinação X do balanço de energia, até um máximo, e resolve X junto com as temperaturas dos estágios, porque o CO₂ liberado aumenta o gás que aquece os estágios de cima.',
+      'Na fábrica do exemplo, 52,8 kg/s de farinha a 90 °C, os gases do forno a 1 100 °C, 2,58 kg/s de coque e o ar terciário saem com 90,7 % de calcinação a 880 °C e gases a cerca de 376 °C. O gráfico de estágios mostra que, com 6 estágios, os gases sairiam mais frios; o de combustível mostra como X responde à vazão do pré-calcinador.'] },
+    clinker_cooler: { ex: ex('cimento-fabrica-completa', 'Fábrica de cimento completa'), p: [
+      'O clínquer sai do forno a cerca de 1 400 a 1 450 °C e cai numa grelha que avança devagar, enquanto ventiladores sopram ar de baixo para cima. O resfriador tem dois papéis: esfriar o clínquer até perto de 100 °C, para o transporte e a moagem, e devolver ao processo o calor que ele leva. O ar mais quente, da zona de entrada, volta ao forno como ar secundário; o seguinte vai ao pré-calcinador pelo duto de ar terciário; o resto sai pela chaminé.',
+      'O modelo divide a grelha em compartimentos. Em cada um, o ar sai a uma temperatura que se aproxima da média do clínquer com efetividade ε, e o parâmetro β concentra o ar na zona quente, como nos resfriadores modernos. A eficiência de recuperação (calor do ar secundário e terciário dividido pelo calor do clínquer) costuma ficar entre 65 e 78 %.',
+      'No exemplo, 34,6 kg/s de clínquer a 1 450 °C e 90 kg/s de ar dão ar secundário a cerca de 1 050 °C, ar terciário a cerca de 560 °C e clínquer a 115 °C, com 71 % de recuperação. Os c_p médios são os mesmos do forno; como o modelo não conta o calor de cristalização do líquido do clínquer, o ar terciário sai mais frio que nas fábricas reais.'] },
+    cement_mill: { ex: ex('cimento-fabrica-completa', 'Fábrica de cimento completa'), p: [
+      'O cimento é o clínquer moído com um pouco de gesso, que controla a pega, e, nos cimentos compostos, com adições: escória granulada de alto-forno, pozolana ou fíler calcário. A NBR 16697 define os tipos pela composição: o CP II-E leva de 51 a 94 % de clínquer + gesso, de 6 a 34 % de escória e até 15 % de material carbonático. A escória da siderurgia substitui parte do clínquer e reduz a emissão de CO₂ por tonelada de cimento.',
+      'A energia de moagem vem da lei de Bond, W = 10·W_i·(1/√P80 − 1/√F80), aplicada a cada material com seu índice de trabalho: a escória é bem mais dura que o clínquer. A finura do cimento é medida pela superfície específica Blaine; o programa estima o P80 por P80 ≈ K/Blaine. Quase toda a energia vira calor: sem água pulverizada, o cimento passaria de 110 °C e o gesso perderia água, dando pega falsa. No moinho de cru, o mesmo calor ajuda a secar a mistura crua com os gases quentes da torre.',
+      'No exemplo, o moinho de cru seca e mói 189 t/h de mistura crua até P80 = 75 µm com 16 kWh/t; o moinho de cimento junta 124,6 t/h de clínquer, 8,6 t/h de gesso, 31 t/h de escória e 8,6 t/h de fíler e faz 173 t/h de CP II-E (72 % de clínquer, 18 % de escória) com Blaine de 3 800 cm²/g e cerca de 32 kWh/t.'] },
+    sulfur_burner: { ex: ex('acido-sulfurico-enxofre', 'Ácido sulfúrico por queima de enxofre'), p: [
+      'O ácido sulfúrico começa no SO₂. Na rota mais comum, o enxofre fundido (cerca de 140 °C) é pulverizado num forno revestido de refratário e queima com ar seco: S + O₂ → SO₂. Como a reação libera cerca de 297 kJ/mol, o gás sai a mais de 1 000 °C e passa por uma caldeira de recuperação que gera vapor. A quantidade de ar decide o teor de SO₂: com cerca de 11 %, o gás leva O₂ suficiente para o conversor e o primeiro leito não passa de 630 °C.',
+      'Na rota metalúrgica, o SO₂ é um subproduto da ustulação de concentrados de sulfetos (blenda ZnS, pirita FeS₂, calcopirita) num leito fluidizado a cerca de 950 °C, como nas refinarias de zinco: o calcinado de ZnO segue para a lixiviação e a eletrólise do zinco. A ustulação libera mais calor do que o leito precisa; o excesso sai em serpentinas de vapor. O gás sai pobre em O₂, recebe ar de diluição e precisa de limpeza (poeira, névoa e água) antes da fábrica de ácido.',
+      'No exemplo do enxofre, 3,8 kg/s de enxofre (328 t/d) e 31 kg/s de ar seco dão gás com 10,95 % de SO₂ e 10 % de O₂ a cerca de 1 010 °C, o bastante para cerca de 1 000 t/d de ácido. No exemplo metalúrgico, 6,5 kg/s de concentrado com 29 % de S dão gás com 12 % de SO₂ e retiram 5,6 MW das serpentinas.'] },
+    so2_converter: { ex: ex('acido-sulfurico-enxofre', 'Ácido sulfúrico por queima de enxofre'), p: [
+      'A oxidação SO₂ + ½O₂ ⇌ SO₃ é exotérmica e só é rápida sobre catalisador de V₂O₅, que acende a cerca de 400 °C (com césio, a cerca de 370 °C) e se degrada acima de cerca de 620 a 630 °C. Cada leito é adiabático: o gás esquenta à medida que converte, seguindo uma reta adiabática no diagrama conversão × temperatura, até perto da curva de equilíbrio, que cai com a temperatura.',
+      'Para converter mais, o gás é resfriado entre os leitos (em caldeiras, superaquecedores e trocadores gás–gás) e volta a subir por uma nova reta adiabática. Com três leitos se chega a cerca de 97 %. Na dupla absorção (DCDA), o SO₃ é retirado numa torre intermediária depois do 3º leito; sem SO₃, o equilíbrio do 4º leito fica muito favorável e a conversão global passa de 99,7 %.',
+      'No exemplo do enxofre, os leitos 1, 2 e 3 levam a conversão a 64,1, 89,6 e 97,0 %, com o 1º leito saindo a 623 °C; depois da absorção intermediária, o 4º leito converte 95,5 % do SO₂ que sobrou, e a fábrica chega a 99,86 %, com 0,9 kg de SO₂ por tonelada de ácido na chaminé. O volume de catalisador é estimado pela velocidade espacial de cada leito.'] },
+    acid_tower: { ex: ex('acido-sulfurico-enxofre', 'Ácido sulfúrico por queima de enxofre'), p: [
+      'As torres de ácido são colunas com recheio cerâmico, irrigadas por ácido sulfúrico concentrado. Na torre de secagem, ácido de 93 a 96 % retira a umidade do ar (ou do gás metalúrgico), porque a água no conversor formaria névoa de ácido e corrosão. Nas torres de absorção, ácido de 98,3 a 98,5 % absorve o SO₃: nessa concentração a pressão de vapor do conjunto é mínima, e o SO₃ não escapa nem forma névoa, o que aconteceria em água ou em ácido diluído.',
+      'O SO₃ absorvido reage com a água do ácido (SO₃ + H₂O → H₂SO₄); para a concentração ficar constante, entra água: a umidade retirada na torre de secagem e, se faltar, água de reposição. O calor de reação e de diluição (calculado pelo calor integral de solução de Thomsen) sai nos resfriadores de ácido; o ácido de circulação, o diâmetro da torre e a altura do recheio (NTU × HTU) vêm desse balanço.',
+      'No exemplo do enxofre, a torre intermediária absorve 33,1 t/h de SO₃, faz 11,4 kg/s de ácido 98,5 % (cerca de 973 t/d de H₂SO₄ 100 %) e retira 17,8 MW nos resfriadores; a final completa a produção. No exemplo metalúrgico, a umidade do gás lavado entra na conta da água: se o gás saísse da lavagem mais quente, sobraria água e o ácido ficaria abaixo de 98,5 %.'] },
     silo: { ex: ex('silo-tremonha', 'Silo com tremonha em operação contínua'), p: [
       'Um sólido granular não escoa como um líquido: o atrito com as paredes sustenta parte do peso (efeito Janssen) e a vazão pelo orifício quase não depende da altura do leito. A correlação de Beverloo dá essa vazão, W = C ρ_b √g (D_o − k d_p)^2,5, com C ≈ 0,58 e k ≈ 1,5; o termo k·d_p é o "anel vazio" junto à borda do orifício, onde os grãos não chegam com a mesma densidade.',
       'A tremonha cônica muda o padrão de escoamento. Se for íngreme o bastante, todo o material se move (escoamento em massa: o primeiro que entra é o primeiro que sai); se for rasa, só um canal central escoa e o material junto às paredes fica parado (escoamento em funil). O critério de Jenike depende do semiângulo θ (medido a partir da vertical) e do atrito com a parede; aqui se usa a aproximação θ ≤ 40° − φw/2. O fator de Rose e Tanaka, (tg θ·tg χ)^−0,35, mostra que tremonhas mais íngremes descarregam mais depressa.',
@@ -13503,7 +14162,7 @@ window.SIMULAFACIL_CONFIG = {
   const OPTIONAL_IN = { mixer: ['in2', 'in3', 'in4'], column: ['feed2', 'feed3'], crystallizer: ['feed'], tray_dryer: ['feed'], spray_dryer: ['feed'], freeze_dryer: ['feed'], microwave_dryer: ['feed'], solar_dryer: ['feed'], centrifuge: ['feed'], biodigester: ['feed', 'water'],
     bioreactor_tosetto: ['feed', 'side'], bioreactor_1: ['feed'], bioreactor_2: ['feed', 'side'], bioreactor_monod: ['feed'], bioreactor_verhulst: ['feed'],
     biodiesel_reactor: ['oil', 'alcohol'], pid_cstr: ['feed'],
-    blast_furnace: ['ore', 'coke', 'flux', 'blast'], cement_kiln: ['meal', 'fuel', 'air'], silo: ['feed'], thickener: ['feed'], kraft_digester: ['chips', 'white_liquor'],
+    blast_furnace: ['ore', 'coke', 'flux', 'blast'], cement_kiln: ['meal', 'fuel', 'air'], cyclone_preheater: ['meal', 'kiln_gas', 'fuel', 'ter_air'], clinker_cooler: ['air'], cement_mill: ['gypsum', 'slag', 'filler'], acid_tower: ['liq_in'], silo: ['feed'], thickener: ['feed'], kraft_digester: ['chips', 'white_liquor'],
     crusher: ['feed'], ball_mill: ['feed', 'recycle'], spiral_classifier: ['feed'], hydrocyclone: ['feed'], flotation: ['feed'], flot_col_bench: ['feed'], flot_col_ind: ['feed'],
     coke_oven: ['coal'], sinter_plant: ['ore', 'flux', 'fuel'], bof: ['hot_metal', 'scrap'], caster: ['steel'], rolling_mill: ['billet'], wire_drawing: ['rod'],
     wood_yard: ['logs'], pulp_washer: ['pulp'], bleach_plant: ['pulp'], paper_machine: ['stock'], recovery_boiler: ['liquor'], causticizing: ['smelt'], steam_gen: ['water'], steam_turbine: ['steam'],
@@ -13552,8 +14211,11 @@ window.SIMULAFACIL_CONFIG = {
       let pick = null;
       for (const id of remaining) { const ok = Object.values(inOf[id]).every(c => known[c.id]); if (ok) { pick = id; break; } }
       if (!pick) {
+        // só corta correntes de blocos que estão num ciclo (versão 5.4): um bloco que apenas recebe a saída de um reciclo espera o reciclo
+        const onCycle = id => { const seen = new Set(), st = [id]; while (st.length) { const u = st.pop(); for (const c of conns) { if (c.from !== u || !remaining.has(c.to)) continue; if (c.to === id) return true; if (!seen.has(c.to)) { seen.add(c.to); st.push(c.to); } } } return false; };
+        const cand = [...remaining].filter(onCycle);
         let best = null, bestScore = -1;
-        for (const id of remaining) {
+        for (const id of (cand.length ? cand : remaining)) {
           const ins = Object.values(inOf[id]); const kn = ins.filter(c => known[c.id]).length;
           const score = kn * 10 + (blocks[id].type === 'mixer' ? 5 : 0) - ins.length;
           if (score > bestScore) { bestScore = score; best = id; }
@@ -13673,6 +14335,12 @@ window.SIMULAFACIL_CONFIG = {
     eta_centrifuge: { feed: 'lodo adensado', cake: 'torta de lodo', centrate: 'centrado (para a recuperação de água)', q_in: 'motor da centrífuga' },
     blast_furnace: { ore: 'minério', coke: 'coque', flux: 'fundente', blast: 'ar de sopro', gas: 'gás de topo', slag: 'escória', pig_iron: 'gusa' },
     cement_kiln: { meal: 'farinha crua', fuel: 'combustível', air: 'ar de combustão', gas: 'gases de exaustão', clinker: 'clínquer' },
+    cyclone_preheater: { meal: 'farinha crua', kiln_gas: 'gases do forno', fuel: 'combustível do pré-calcinador', ter_air: 'ar terciário', hot_meal: 'farinha pré-calcinada (para o forno)', gas: 'gases de saída da torre' },
+    clinker_cooler: { clinker: 'clínquer quente (do forno)', air: 'ar de resfriamento', product: 'clínquer resfriado', sec_air: 'ar secundário (para o forno)', ter_air: 'ar terciário (para o pré-calcinador)', exhaust: 'ar de exaustão' },
+    cement_mill: { feed: 'clínquer ou mistura crua', gypsum: 'gesso', slag: 'escória granulada de alto-forno', filler: 'fíler calcário', product: 'cimento ou farinha crua', vapor: 'vapor de água (ventilação)', q_in: 'energia do motor' },
+    sulfur_burner: { feed: 'enxofre fundido ou concentrado de sulfetos', air: 'ar de combustão', gas: 'gás com SO₂', calcine: 'calcinado (óxidos)', q_out: 'calor retirado (vapor)' },
+    so2_converter: { gas_in: 'gás com SO₂', gas_out: 'gás com SO₃', q_out: 'calor retirado entre os leitos' },
+    acid_tower: { gas_in: 'gás (úmido ou com SO₃)', liq_in: 'água ou ácido diluído', gas_out: 'gás seco ou sem SO₃', liq_out: 'ácido produzido ou umidade retirada', q_out: 'calor dos resfriadores de ácido' },
     silo: { feed: 'alimentação', product: 'descarga' },
     thickener: { feed: 'polpa', overflow: 'overflow (clarificado)', underflow: 'underflow (lama adensada)' },
     p_precip: { feed: 'efluente (fósforo solúvel)', out: 'efluente com lodo químico' },
@@ -13786,6 +14454,12 @@ window.SIMULAFACIL_CONFIG = {
     packaging: { w: 84, h: 70, ports: { in: P(0, 35, 'l', 'in'), out: P(84, 35, 'r', 'out') } },
     blast_furnace: { w: 124, h: 172, ports: { ore: P(0, 6, 'l', 'in'), coke: P(0, 32, 'l', 'in'), flux: P(0, 58, 'l', 'in'), blast: P(0, 124, 'l', 'in'), gas: P(124, 10, 'r', 'out'), slag: P(124, 142, 'r', 'out'), pig_iron: P(124, 160, 'r', 'out') } },
     cement_kiln: { w: 176, h: 108, ports: { meal: P(0, 10, 'l', 'in'), fuel: P(0, 74, 'l', 'in'), air: P(0, 90, 'l', 'in'), gas: P(176, 6, 'r', 'out'), clinker: P(176, 102, 'r', 'out') } },
+    cyclone_preheater: { w: 150, h: 204, ports: { meal: P(0, 14, 'l', 'in'), ter_air: P(0, 152, 'l', 'in'), fuel: P(0, 172, 'l', 'in'), kiln_gas: P(0, 196, 'l', 'in'), gas: P(150, 8, 'r', 'out'), hot_meal: P(150, 192, 'r', 'out') } },
+    clinker_cooler: { w: 170, h: 100, ports: { clinker: P(0, 30, 'l', 'in'), air: P(0, 92, 'l', 'in'), sec_air: P(24, 0, 'u', 'out'), ter_air: P(64, 0, 'u', 'out'), exhaust: P(170, 20, 'r', 'out'), product: P(170, 74, 'r', 'out') } },
+    cement_mill: { w: 160, h: 116, ports: { feed: P(0, 56, 'l', 'in'), gypsum: P(0, 72, 'l', 'in'), slag: P(0, 88, 'l', 'in'), filler: P(0, 104, 'l', 'in'), vapor: P(160, 8, 'r', 'out'), product: P(160, 30, 'r', 'out'), q_in: P(141, 116, 'd', 'ein') } },
+    sulfur_burner: { w: 150, h: 84, ports: { feed: P(0, 30, 'l', 'in'), air: P(0, 56, 'l', 'in'), gas: P(150, 30, 'r', 'out'), calcine: P(150, 74, 'r', 'out'), q_out: P(80, 84, 'd', 'eout') } },
+    so2_converter: { w: 110, h: 180, ports: { gas_in: P(0, 16, 'l', 'in'), q_out: P(110, 92, 'r', 'eout'), gas_out: P(110, 176, 'r', 'out') } },
+    acid_tower: { w: 120, h: 172, ports: { liq_in: P(0, 30, 'l', 'in'), gas_in: P(0, 140, 'l', 'in'), gas_out: P(120, 8, 'r', 'out'), q_out: P(120, 120, 'r', 'eout'), liq_out: P(120, 164, 'r', 'out') } },
     silo: { w: 76, h: 152, ports: { feed: P(0, 8, 'l', 'in'), product: P(76, 142, 'r', 'out') } },
     thickener: { w: 144, h: 92, ports: { feed: P(0, 22, 'l', 'in'), overflow: P(144, 30, 'r', 'out'), underflow: P(144, 86, 'r', 'out') } },
     p_precip: { w: 150, h: 96, ports: { feed: P(0, 60, 'l', 'in'), out: P(150, 60, 'r', 'out') } },
@@ -14170,6 +14844,44 @@ window.SIMULAFACIL_CONFIG = {
       L([[106, 61], [106, 79]]), L([[66, 67], [66, 85]]), Pg([[101, 90], [111, 90], [106, 82]], 'ln'), Pg([[61, 96], [71, 96], [66, 88]], 'ln'),
       R(18, 66, 16, 30, 2), L([[34, 80], [58, 77]], 'hot'), L([[34, 85], [54, 84]], 'hot'),
       L([[0, 74], [18, 74]]), L([[0, 90], [18, 90]], 'hot'), L([[26, 96], [26, 102], [176, 102]]), T(70, 44, 'CaCO₃ → CaO')],
+    cyclone_preheater: () => { // torre de ciclones (estágios em zigue-zague), pré-calcinador com chama e ar terciário, ciclone inferior e farinha quente para o forno
+      const cy = (x, y) => [Pg([[x, y], [x + 26, y], [x + 26, y + 14], [x + 17, y + 30], [x + 9, y + 30], [x, y + 14]]), L([[x + 13, y + 30], [x + 13, y + 36]], 'lnd')];
+      return [L([[113, 18], [113, 8], [150, 8]]), L([[0, 14], [80, 14], [80, 30]], 'lnd'),
+        ...cy(100, 18), ...cy(52, 48), ...cy(100, 78), ...cy(52, 108), ...cy(100, 142),
+        L([[65, 48], [65, 36], [100, 28]]), L([[113, 78], [113, 66], [78, 58]]), L([[65, 108], [65, 96], [100, 88]]), L([[113, 142], [113, 128], [78, 118]]),
+        R(12, 128, 28, 64, 6), L([[0, 152], [12, 152]], 'hot'), L([[0, 172], [12, 172]]), L([[14, 172], [34, 164]], 'hot'), L([[14, 172], [36, 172]], 'hot'), L([[14, 172], [34, 180]], 'hot'),
+        L([[0, 196], [26, 196], [26, 192]], 'hot'), L([[26, 128], [26, 120], [44, 120], [44, 146], [100, 150]]), L([[65, 144], [65, 152], [40, 158]], 'lnd'),
+        L([[113, 172], [113, 192], [150, 192]]), T(128, 122, 'X')];
+    },
+    clinker_cooler: () => [ // resfriador de grelha: clínquer quente cai na grelha inclinada, ventiladores sob a grelha, ar secundário e terciário pelo topo, britador no fim
+      R(14, 12, 142, 52, 3), L([[0, 30], [20, 30], [20, 36]]), L([[18, 40], [150, 52]]), L([[18, 32], [70, 38], [150, 48]], 'hot'),
+      L([[44, 14], [44, 34]], 'lnd'), L([[88, 14], [88, 42]], 'lnd'),
+      L([[24, 12], [24, 0]], 'hot'), L([[64, 12], [64, 0]], 'hot'), L([[156, 20], [170, 20]]),
+      C(40, 82, 7), C(80, 82, 7), C(120, 82, 7), L([[40, 75], [40, 64]]), L([[80, 75], [80, 64]]), L([[120, 75], [120, 64]]), L([[0, 92], [120, 92], [120, 89]]), L([[40, 92], [40, 89]]), L([[80, 92], [80, 89]]),
+      C(148, 58, 5), L([[148, 63], [148, 74], [170, 74]]), T(112, 30, 'ε')],
+    cement_mill: () => [ // moinho de bolas de duas câmaras (diafragma), separador dinâmico no alto com retorno dos grossos, motor e alimentações
+      L([[0, 56], [14, 56], [14, 104], [0, 104]]), L([[0, 72], [14, 72]]), L([[0, 88], [14, 88]]), L([[14, 80], [22, 80]]),
+      R(16, 76, 6, 8, 1), R(22, 62, 100, 36, 14), R(122, 76, 6, 8, 1), L([[62, 64], [62, 96]], 'lnd'),
+      C(36, 86, 3.2, 'ln'), C(46, 90, 3.2, 'ln'), C(52, 82, 3.2, 'ln'), C(76, 90, 2, 'ln'), C(86, 86, 2, 'ln'), C(96, 91, 2, 'ln'), C(108, 87, 2, 'ln'),
+      L([[128, 80], [141, 80], [141, 96]]), R(130, 96, 22, 16, 2), L([[141, 112], [141, 116]]),
+      L([[122, 70], [134, 70], [134, 40]]), Pg([[100, 14], [134, 14], [134, 32], [124, 46], [110, 46], [100, 32]]), L([[134, 30], [160, 30]]),
+      L([[117, 14], [117, 8], [160, 8]], 'lnd'), L([[110, 46], [100, 56], [40, 56], [32, 62]], 'lnd'), T(42, 74, 'Wi')],
+    sulfur_burner: () => [ // forno de enxofre (ou ustulador): carcaça refratária, maçarico de enxofre, chama, paredes de chicana e serpentina de vapor
+      R(20, 14, 114, 48, 20), L([[0, 30], [26, 30]]), L([[0, 56], [12, 56], [12, 44], [22, 44]]), L([[28, 30], [58, 22]], 'hot'), L([[28, 30], [62, 30]], 'hot'), L([[28, 30], [58, 38]], 'hot'),
+      L([[70, 18], [70, 42]]), L([[100, 34], [100, 58]]), L([[134, 30], [150, 30]]), zig(56, 52, 48, 'cold'), L([[80, 62], [80, 84]], 'cold'),
+      L([[118, 58], [118, 74], [150, 74]], 'lnd'), T(116, 26, 'SO₂')],
+    so2_converter: () => { // conversor de leitos de catalisador (V₂O₅) com trocadores entre os leitos
+      const out = [R(24, 10, 52, 166, 10), L([[0, 16], [24, 16]]), L([[50, 176], [110, 176]])];
+      [26, 64, 102, 140].forEach((y, k) => { out.push(R(28, y, 44, 16, 1, 'bodyw'), C(36, y + 8, 1.4, 'ln'), C(50, y + 6, 1.4, 'ln'), C(64, y + 9, 1.4, 'ln'));
+        if (k < 3) out.push(L([[76, y + 24], [92, y + 24], [92, y + 30]]), C(92, y + 34, 5), L([[92, y + 39], [92, y + 44], [76, y + 44]]), L([[87, y + 34], [97, y + 34]], 'cold')); });
+      out.push(L([[97, 92], [110, 92]], 'cold'), T(50, 60, 'V₂O₅'));
+      return out;
+    },
+    acid_tower: () => [ // torre com recheio: eliminador de névoa, distribuidor de ácido, recheio, poço de ácido, bomba e resfriador de ácido
+      R(20, 16, 50, 140, 8), R(30, 20, 30, 8, 2, 'bodyw'), L([[45, 16], [45, 8], [120, 8]]), L([[0, 30], [20, 30]]), L([[0, 140], [20, 140]]),
+      L([[26, 38], [64, 38]]), R(24, 48, 42, 60, 1, 'bodyw'), L([[24, 48], [66, 108]], 'lnd'), L([[66, 48], [24, 108]], 'lnd'), L([[24, 78], [66, 78]], 'lnd'),
+      L([[24, 146], [66, 146]], 'lnd'), L([[45, 156], [45, 164], [80, 164]]), C(86, 164, 6), L([[92, 164], [120, 164]]),
+      L([[86, 158], [86, 129]]), C(86, 120, 9), L([[77, 120], [95, 120]], 'cold'), L([[95, 120], [120, 120]], 'cold'), L([[86, 111], [86, 38], [64, 38]]), T(45, 132, 'H₂SO₄')],
     silo: () => [ // silo cilíndrico com tremonha cônica, superfície do material no ângulo de repouso e válvula de descarga
       L([[0, 8], [38, 8], [38, 16]]), Pg([[10, 16], [66, 16], [66, 96], [44, 128], [32, 128], [10, 96]]),
       L([[10, 46], [38, 32], [66, 46]], 'lnd'), C(26, 70, 1.6, 'ln'), C(40, 62, 1.6, 'ln'), C(52, 76, 1.6, 'ln'), C(34, 90, 1.6, 'ln'), C(46, 104, 1.6, 'ln'),
@@ -19143,6 +19855,96 @@ def pfr_transiente(P, nome):
         S('15', 'MP', 'paper', 'P6', 'in', 'Papel'), S('16', 'MP', 'white_water', 'P7', 'in', 'Água branca'), S('17', 'MP', 'vapor', 'P8', 'in', 'Vapor'),
         S('19', 'EV', 'vapor', 'P9', 'in', 'Evaporado'), S('20', 'EV', 'condensate', 'P10', 'in', 'Condensados'), S('21', 'EV', 'product', 'CR', 'liquor', 'Licor concentrado'),
         S('22', 'CR', 'gas', 'P11', 'in', 'Gases'), S('23', 'CR', 'smelt', 'CA', 'smelt', 'Fundido'), S('24', 'CA', 'gas', 'P12', 'in', 'CO₂'), S('25', 'CA', 'white_liquor', 'P13', 'in', 'Licor branco')] } },
+    // versão 5.4: fábrica de cimento completa (CP II-E com escória de alto-forno da siderurgia da região)
+    { key: 'cimento-fabrica-completa', title: 'Cimento: fábrica completa — pedreira, britagem, moinho de cru, torre de ciclones com pré-calcinador, forno, resfriador e moinho de cimento CP II-E com escória', fs: {
+      name: 'Fábrica de cimento CP II-E (cerca de 3 000 t/d de clínquer)', components: ['caco3', 'cao', 'silica', 'alumina', 'hematite', 'mgo', 'gypsum', 'water', 'carbon', 'hydrogen', 'oxygen', 'nitrogen', 'co2'], model: 'IDEAL', fixedLayout: true,
+      blocks: [
+        { id: 'FCA', x: 60, y: 25, type: 'feed', name: 'Calcário (pedreira)', params: { T: 25, P: 1.01325, vf: '', flow: 46.1, flowUnit: 'kg/s', basis: 'mássica', composition: { caco3: 0.8924, silica: 0.0485, alumina: 0.0194, hematite: 0.0097, water: 0.03 } } },
+        { id: 'BR', x: 160, y: 15, type: 'crusher', name: 'Britador BR-1', params: { tipo: 'britador de mandíbulas (primário)', F80: 500, P80: 75, Wi: 11 } },
+        { id: 'FAR', x: 60, y: 160, type: 'feed', name: 'Argila', params: { T: 25, P: 1.01325, vf: '', flow: 4.5, flowUnit: 'kg/s', basis: 'mássica', composition: { caco3: 0.1056, silica: 0.5104, alumina: 0.1936, hematite: 0.0704, water: 0.12 } } },
+        { id: 'FAE', x: 60, y: 215, type: 'feed', name: 'Areia (corretivo de sílica)', params: { T: 25, P: 1.01325, vf: '', flow: 3.57, flowUnit: 'kg/s', basis: 'mássica', composition: { silica: 0.893, alumina: 0.038, hematite: 0.019, water: 0.05 } } },
+        { id: 'FMF', x: 60, y: 270, type: 'feed', name: 'Minério de ferro (corretivo)', params: { T: 25, P: 1.01325, vf: '', flow: 0.456, flowUnit: 'kg/s', basis: 'mássica', composition: { silica: 0.1128, alumina: 0.0282, hematite: 0.799, water: 0.06 } } },
+        { id: 'MIX', x: 290, y: 165, type: 'mixer', name: 'Pré-homogeneização (pilha de mistura)', params: { P: '' } },
+        { id: 'MCR', x: 440, y: 141, type: 'cement_mill', name: 'Moinho de cru MCR-1', params: { mode: 'moinho de cru: mistura crua → farinha (com secagem)', P80r: 75, F80: 75, WiF: 11, Xr: 0.5, Tgas: 320, Tgo: 90, LD: 2.5 } },
+        { id: 'EMR', x: 400, y: 300, type: 'energy', name: 'Motor do moinho de cru', params: { Q: '' } },
+        { id: 'FCB', x: 290, y: 420, type: 'feed', name: 'Coque de petróleo moído', params: { T: 25, P: 1.01325, vf: '', flow: 3.635, flowUnit: 'kg/s', basis: 'mássica', composition: { carbon: 0.85, hydrogen: 0.04, silica: 0.11 } } },
+        { id: 'DIV', x: 400, y: 400, type: 'splitter', name: 'Divisão do combustível (71 % ao pré-calcinador)', params: { f1: 0.71, f2: 0.29 } },
+        { id: 'TC', x: 800, y: 110, type: 'cyclone_preheater', name: 'Torre de ciclones TC-1 com pré-calcinador', params: { nSt: '5', Tc: 880, QlossP: 3000, mTa: 28.5, TTa: 650, mKg: 21, TKg: 1100 } },
+        { id: 'FK', x: 1040, y: 330, type: 'cement_kiln', name: 'Forno rotativo FR-1', params: { Tcl: 1450, Tgk: 1100, QlossK: 6000, mAir: 15.5, Tair: 1000, mMeal: 36, Tmeal: 880 } },
+        { id: 'FAF', x: 440, y: 637, type: 'feed', name: 'Ar de resfriamento (ventiladores)', params: { T: 25, P: 1.01325, vf: '', flow: 90, flowUnit: 'kg/s', basis: 'mássica', composition: { oxygen: 0.233, nitrogen: 0.767 } } },
+        { id: 'RC', x: 560, y: 560, type: 'clinker_cooler', name: 'Resfriador de clínquer RC-1', params: { mSec: 15.5, mTer: 28.5, nComp: 14, eps: 0.92, beta: 2.5, QlossC: 1500 } },
+        { id: 'SC', x: 1320, y: 600, type: 'silo', name: 'Silo de clínquer SC-1', params: { Ds: 16, Do: 0.8, Hc: 30, dp: 12, rhob: 1450, phiw: 30, theta: 20 } },
+        { id: 'FGE', x: 1370, y: 820, type: 'feed', name: 'Gesso (gipsita)', params: { T: 25, P: 1.01325, vf: '', flow: 2.4, flowUnit: 'kg/s', basis: 'mássica', composition: { gypsum: 1 } } },
+        { id: 'FES', x: 1370, y: 885, type: 'feed', name: 'Escória granulada de alto-forno (siderurgia)', params: { T: 25, P: 1.01325, vf: '', flow: 8.8, flowUnit: 'kg/s', basis: 'mássica', composition: { cao: 0.42, silica: 0.35, alumina: 0.12, mgo: 0.08, hematite: 0.01, water: 0.02 } } },
+        { id: 'FFI', x: 1370, y: 950, type: 'feed', name: 'Fíler calcário', params: { T: 25, P: 1.01325, vf: '', flow: 2.4, flowUnit: 'kg/s', basis: 'mássica', composition: { caco3: 0.95, silica: 0.05 } } },
+        { id: 'MCI', x: 1520, y: 690, type: 'cement_mill', name: 'Moinho de cimento MCI-1', params: { mode: 'moinho de cimento: clínquer + gesso + adições', tipo: 'CP II-E (com escória de alto-forno)', blaine: 3800, F80: 15, F80s: 3, fH: 0.55 } },
+        { id: 'EMC', x: 1560, y: 960, type: 'energy', name: 'Motores dos moinhos de cimento', params: { Q: '' } },
+        { id: 'PGT', x: 1010, y: 80, type: 'product', name: 'Gases da torre (filtro de mangas e chaminé)' }, { id: 'PVR', x: 640, y: 70, type: 'product', name: 'Vapor do moinho de cru' },
+        { id: 'PAE', x: 780, y: 470, type: 'product', name: 'Ar de exaustão do resfriador' }, { id: 'PVC', x: 1750, y: 630, type: 'product', name: 'Vapor do moinho de cimento' },
+        { id: 'PCI', x: 1750, y: 750, type: 'product', name: 'Cimento CP II-E (silos e expedição)' }],
+      streams: [S('1', 'FCA', 'out', 'BR', 'feed', 'Calcário ROM'), S('2', 'BR', 'product', 'MIX', 'in1', 'Calcário britado'), S('3', 'FAR', 'out', 'MIX', 'in2', 'Argila'), S('4', 'FAE', 'out', 'MIX', 'in3', 'Areia'),
+        S('5', 'FMF', 'out', 'MIX', 'in4', 'Minério de ferro'), S('6', 'MIX', 'out', 'MCR', 'feed', 'Mistura crua'), S('E1', 'EMR', 'eo', 'MCR', 'q_in', 'Motor'), S('7', 'MCR', 'vapor', 'PVR', 'in', 'Vapor'),
+        S('8', 'MCR', 'product', 'TC', 'meal', 'Farinha crua'), S('9', 'FCB', 'out', 'DIV', 'in', 'Coque'), S('10', 'DIV', 'out1', 'TC', 'fuel', 'Coque (71 %)'), S('11', 'DIV', 'out2', 'FK', 'fuel', 'Coque (29 %)'),
+        S('12', 'TC', 'hot_meal', 'FK', 'meal', 'Farinha pré-calcinada'), S('13', 'FK', 'gas', 'TC', 'kiln_gas', 'Gases do forno'), S('14', 'TC', 'gas', 'PGT', 'in', 'Gases da torre'),
+        S('15', 'FK', 'clinker', 'RC', 'clinker', 'Clínquer quente'), S('16', 'FAF', 'out', 'RC', 'air', 'Ar frio'), S('17', 'RC', 'sec_air', 'FK', 'air', 'Ar secundário'), S('18', 'RC', 'ter_air', 'TC', 'ter_air', 'Ar terciário'),
+        S('19', 'RC', 'exhaust', 'PAE', 'in', 'Ar de exaustão'), S('20', 'RC', 'product', 'SC', 'feed', 'Clínquer frio'), S('21', 'SC', 'product', 'MCI', 'feed', 'Clínquer'),
+        S('22', 'FGE', 'out', 'MCI', 'gypsum', 'Gesso'), S('23', 'FES', 'out', 'MCI', 'slag', 'Escória'), S('24', 'FFI', 'out', 'MCI', 'filler', 'Fíler'), S('E2', 'EMC', 'eo', 'MCI', 'q_in', 'Motores'),
+        S('25', 'MCI', 'vapor', 'PVC', 'in', 'Vapor'), S('26', 'MCI', 'product', 'PCI', 'in', 'Cimento')] } },
+    // versão 5.4: ácido sulfúrico por queima de enxofre, contato duplo e absorção dupla (DCDA, 3 + 1 leitos)
+    { key: 'acido-sulfurico-enxofre', title: 'Ácido sulfúrico: fábrica completa por queima de enxofre — secagem do ar, forno, caldeira, conversor 3 + 1 leitos e absorção dupla (DCDA)', fs: {
+      name: 'Fábrica de ácido sulfúrico por enxofre (cerca de 1 000 t/d)', components: ['sulfur', 'oxygen', 'nitrogen', 'water', 'cs-sulfur-dioxide', 'cs-sulfur-trioxide', 'sulfuric-acid'], model: 'IDEAL', fixedLayout: true,
+      blocks: [
+        { id: 'FAR', x: 100, y: 255, type: 'feed', name: 'Ar atmosférico (úmido)', params: { T: 25, P: 1.35, vf: '', flow: 31.6, flowUnit: 'kg/s', basis: 'mássica', composition: { oxygen: 0.2301, nitrogen: 0.758, water: 0.0119 } } },
+        { id: 'TS', x: 200, y: 130, type: 'acid_tower', name: 'Torre de secagem TS-1', params: { mode: 'torre de secagem: o ácido retira a umidade do gás', w: 96, resid: 50, TaIn: 50, TaOut: 65, Tgo: 55, ug: 2.2 } },
+        { id: 'FS', x: 260, y: 60, type: 'feed', name: 'Enxofre fundido (140 °C)', params: { T: 140, P: 1.35, vf: '', flow: 3.8, flowUnit: 'kg/s', basis: 'mássica', composition: { sulfur: 1 } } },
+        { id: 'FE', x: 390, y: 82, type: 'sulfur_burner', name: 'Forno de enxofre FE-1', params: { mode: 'forno de enxofre: S + O₂ → SO₂ (chama adiabática)', QlossB: 800 } },
+        { id: 'CR', x: 600, y: 84, type: 'cooler', name: 'Caldeira de recuperação CR-1', params: { mode: 'Temperatura de saída', T: 420, dP: 0 } },
+        { id: 'EV', x: 660, y: 215, type: 'energy', name: 'Vapor da caldeira', params: { Q: '' } },
+        { id: 'CV1', x: 720, y: 96, type: 'so2_converter', name: 'Conversor CV-1 (leitos 1 a 3)', params: { nB: '3', bed0: 1, Tin: '420; 440; 430', fEq: 0.97, ToutC: 180, GHSV: '2200; 1800; 1700' } },
+        { id: 'EC', x: 920, y: 200, type: 'energy', name: 'Calor dos trocadores do conversor', params: { Q: '' } },
+        { id: 'TAI', x: 880, y: 330, type: 'acid_tower', name: 'Torre de absorção intermediária TAI-1', params: { mode: 'torre de absorção de SO₃ (intermediária ou final)', w: 98.5, eta: 99.9, TaIn: 75, TaOut: 110, Tgo: 80 } },
+        { id: 'EA', x: 1040, y: 435, type: 'energy', name: 'Resfriadores de ácido', params: { Q: '' } },
+        { id: 'RQ', x: 1060, y: 310, type: 'heater', name: 'Reaquecimento (trocadores gás–gás)', params: { mode: 'Temperatura de saída', T: 420, dP: 0 } },
+        { id: 'CV2', x: 1180, y: 322, type: 'so2_converter', name: 'Conversor CV-1 (leito 4)', params: { nB: '1', bed0: 4, Tin: '420', fEq: 0.97, ToutC: 170, GHSV: '1400' } },
+        { id: 'TAF', x: 1350, y: 358, type: 'acid_tower', name: 'Torre de absorção final TAF-1', params: { mode: 'torre de absorção de SO₃ (intermediária ou final)', w: 98.5, eta: 99.9, TaIn: 80, TaOut: 95, Tgo: 80 } },
+        { id: 'MIX', x: 1600, y: 580, type: 'mixer', name: 'Tanque de ácido produto', params: { P: '' } },
+        { id: 'PCH', x: 1530, y: 351, type: 'product', name: 'Gases para a chaminé' }, { id: 'PAC', x: 1700, y: 597, type: 'product', name: 'Ácido sulfúrico 98,5 %' }],
+      streams: [S('1', 'FAR', 'out', 'TS', 'gas_in', 'Ar úmido'), S('2', 'TS', 'gas_out', 'FE', 'air', 'Ar seco'), S('3', 'FS', 'out', 'FE', 'feed', 'Enxofre'),
+        S('4', 'FE', 'gas', 'CR', 'in', 'Gás com SO₂'), S('E1', 'CR', 'q_out', 'EV', 'ei', 'Vapor'), S('5', 'CR', 'out', 'CV1', 'gas_in', 'Gás a 420 °C'), S('E2', 'CV1', 'q_out', 'EC', 'ei', 'Calor'),
+        S('6', 'CV1', 'gas_out', 'TAI', 'gas_in', 'Gás com SO₃'), S('7', 'TS', 'liq_out', 'TAI', 'liq_in', 'Umidade retirada'), S('E3', 'TAI', 'q_out', 'EA', 'ei', 'Calor do ácido'),
+        S('8', 'TAI', 'gas_out', 'RQ', 'in', 'Gás sem SO₃'), S('9', 'RQ', 'out', 'CV2', 'gas_in', 'Gás reaquecido'), S('10', 'CV2', 'gas_out', 'TAF', 'gas_in', 'Gás com SO₃'),
+        S('11', 'TAF', 'gas_out', 'PCH', 'in', 'Gases finais'), S('12', 'TAI', 'liq_out', 'MIX', 'in1', 'Ácido'), S('13', 'TAF', 'liq_out', 'MIX', 'in2', 'Ácido'), S('14', 'MIX', 'out', 'PAC', 'in', 'Ácido 98,5 %')] } },
+    // versão 5.4: ácido sulfúrico a partir do gás de ustulação de concentrado de zinco (gás metalúrgico, como nas refinarias de zinco)
+    { key: 'acido-sulfurico-gas-metalurgico', title: 'Ácido sulfúrico: fábrica completa com gás metalúrgico — ustulação de concentrado de zinco, caldeira, lavagem do gás, ar de diluição, secagem e conversor 3 + 1 com absorção dupla', fs: {
+      name: 'Ácido sulfúrico do gás de ustulação de blenda (ZnS)', components: ['sphalerite', 'pyrite', 'silica', 'zno', 'hematite', 'oxygen', 'nitrogen', 'water', 'cs-sulfur-dioxide', 'cs-sulfur-trioxide', 'sulfuric-acid'], model: 'IDEAL', fixedLayout: true,
+      blocks: [
+        { id: 'FCZ', x: 80, y: 240, type: 'feed', name: 'Concentrado de zinco (blenda)', params: { T: 25, P: 1.35, vf: '', flow: 6.52, flowUnit: 'kg/s', basis: 'mássica', composition: { sphalerite: 0.736, pyrite: 0.092, silica: 0.092, water: 0.08 } } },
+        { id: 'FAF', x: 80, y: 300, type: 'feed', name: 'Ar de fluidização', params: { T: 25, P: 1.35, vf: '', flow: 14, flowUnit: 'kg/s', basis: 'mássica', composition: { oxygen: 0.2301, nitrogen: 0.758, water: 0.0119 } } },
+        { id: 'US', x: 190, y: 225, type: 'sulfur_burner', name: 'Ustulador de leito fluidizado US-1', params: { mode: 'ustulador de leito fluidizado: sulfetos (ZnS, FeS₂) + O₂ → óxidos + SO₂', Tbed: 950, QlossB: 1000 } },
+        { id: 'ES', x: 300, y: 385, type: 'energy', name: 'Vapor das serpentinas do leito', params: { Q: '' } },
+        { id: 'CR', x: 420, y: 227, type: 'cooler', name: 'Caldeira de recuperação CR-1', params: { mode: 'Temperatura de saída', T: 350, dP: 0 } },
+        { id: 'EV', x: 490, y: 365, type: 'energy', name: 'Vapor da caldeira', params: { Q: '' } },
+        { id: 'LV', x: 560, y: 203, type: 'flash', name: 'Lavagem e resfriamento do gás LV-1', params: { mode: 'T e P', T: 35, P: 1.3 } },
+        { id: 'FAD', x: 660, y: 260, type: 'feed', name: 'Ar de diluição', params: { T: 25, P: 1.3, vf: '', flow: 7.2, flowUnit: 'kg/s', basis: 'mássica', composition: { oxygen: 0.2301, nitrogen: 0.758, water: 0.0119 } } },
+        { id: 'MXA', x: 790, y: 203, type: 'mixer', name: 'Entrada de ar de diluição', params: { P: '' } },
+        { id: 'TS', x: 900, y: 95, type: 'acid_tower', name: 'Torre de secagem TS-1', params: { mode: 'torre de secagem: o ácido retira a umidade do gás', w: 96, resid: 50, TaIn: 50, TaOut: 65, Tgo: 55, ug: 2.2 } },
+        { id: 'RQ1', x: 1070, y: 75, type: 'heater', name: 'Aquecimento do gás frio (trocadores gás–gás)', params: { mode: 'Temperatura de saída', T: 420, dP: 0 } },
+        { id: 'CV1', x: 1220, y: 87, type: 'so2_converter', name: 'Conversor CV-1 (leitos 1 a 3)', params: { nB: '3', bed0: 1, Tin: '420; 440; 430', fEq: 0.97, ToutC: 180, GHSV: '2200; 1800; 1700' } },
+        { id: 'TAI', x: 1390, y: 380, type: 'acid_tower', name: 'Torre de absorção intermediária TAI-1', params: { mode: 'torre de absorção de SO₃ (intermediária ou final)', w: 98.5, eta: 99.9, TaIn: 75, TaOut: 110, Tgo: 80 } },
+        { id: 'EA', x: 1550, y: 485, type: 'energy', name: 'Resfriadores de ácido', params: { Q: '' } },
+        { id: 'RQ2', x: 1570, y: 360, type: 'heater', name: 'Reaquecimento (trocadores gás–gás)', params: { mode: 'Temperatura de saída', T: 420, dP: 0 } },
+        { id: 'CV2', x: 1690, y: 372, type: 'so2_converter', name: 'Conversor CV-1 (leito 4)', params: { nB: '1', bed0: 4, Tin: '420', fEq: 0.97, ToutC: 170, GHSV: '1400' } },
+        { id: 'TAF', x: 1860, y: 408, type: 'acid_tower', name: 'Torre de absorção final TAF-1', params: { mode: 'torre de absorção de SO₃ (intermediária ou final)', w: 98.5, eta: 99.9, TaIn: 80, TaOut: 95, Tgo: 80 } },
+        { id: 'MIX', x: 2110, y: 620, type: 'mixer', name: 'Tanque de ácido produto', params: { P: '' } },
+        { id: 'PCA', x: 380, y: 450, type: 'product', name: 'Calcinado (lixiviação e eletrólise do zinco)' }, { id: 'PAF', x: 660, y: 380, type: 'product', name: 'Ácido fraco da lavagem (tratamento de efluentes)' },
+        { id: 'PCH', x: 2040, y: 401, type: 'product', name: 'Gases para a chaminé' }, { id: 'PAC', x: 2210, y: 637, type: 'product', name: 'Ácido sulfúrico 98,5 %' }],
+      streams: [S('1', 'FCZ', 'out', 'US', 'feed', 'Concentrado'), S('2', 'FAF', 'out', 'US', 'air', 'Ar'), S('3', 'US', 'calcine', 'PCA', 'in', 'Calcinado'), S('E1', 'US', 'q_out', 'ES', 'ei', 'Vapor'),
+        S('4', 'US', 'gas', 'CR', 'in', 'Gás de ustulação'), S('E2', 'CR', 'q_out', 'EV', 'ei', 'Vapor'), S('5', 'CR', 'out', 'LV', 'in', 'Gás a 350 °C'), S('6', 'LV', 'liquid', 'PAF', 'in', 'Ácido fraco'),
+        S('7', 'LV', 'vapor', 'MXA', 'in1', 'Gás limpo'), S('8', 'FAD', 'out', 'MXA', 'in2', 'Ar de diluição'), S('9', 'MXA', 'out', 'TS', 'gas_in', 'Gás úmido'),
+        S('10', 'TS', 'gas_out', 'RQ1', 'in', 'Gás seco'), S('11', 'RQ1', 'out', 'CV1', 'gas_in', 'Gás a 420 °C'), S('12', 'CV1', 'gas_out', 'TAI', 'gas_in', 'Gás com SO₃'),
+        S('13', 'TS', 'liq_out', 'TAI', 'liq_in', 'Umidade retirada'), S('E3', 'TAI', 'q_out', 'EA', 'ei', 'Calor do ácido'), S('14', 'TAI', 'gas_out', 'RQ2', 'in', 'Gás sem SO₃'),
+        S('15', 'RQ2', 'out', 'CV2', 'gas_in', 'Gás reaquecido'), S('16', 'CV2', 'gas_out', 'TAF', 'gas_in', 'Gás com SO₃'), S('17', 'TAF', 'gas_out', 'PCH', 'in', 'Gases finais'),
+        S('18', 'TAI', 'liq_out', 'MIX', 'in1', 'Ácido'), S('19', 'TAF', 'liq_out', 'MIX', 'in2', 'Ácido'), S('20', 'MIX', 'out', 'PAC', 'in', 'Ácido 98,5 %')] } },
     { key: 'energia-coluna', title: 'Pré-aquecimento com corrente de energia (100 kW) + destilação etanol/água', fs: {
       name: 'Pré-aquecedor com corrente de energia', components: ['ethanol', 'water'], model: 'NRTL',
       blocks: [
@@ -19865,7 +20667,7 @@ def pfr_transiente(P, nome):
   // blocos sem parâmetros recebem os valores pré-setados da unidade (secador, cristalizador, biorreatores...)
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && !Object.keys(b.params).length) T.params.forEach(f => { if (f.def !== undefined) b.params[f.k] = f.def; }); }));
   // equipamentos contínuos de sólidos e bioprocessos: os campos que o exemplo não informa recebem o valor pré-setado
-  const FILL = /^(evap_cond|filter_plate|filter_rotary|tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|centrifuge|biodigester|pasteurizer|butter_churn|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|silo|thickener|kraft_digester|crusher|ball_mill|spiral_classifier|hydrocyclone|flotation|flot_col_|coke_oven|sinter_plant|bof|caster|rolling_mill|wire_drawing|wood_yard|pulp_washer|bleach_plant|paper_machine|recovery_boiler|causticizing|steam_gen|steam_turbine|nuclear_reactor|pwr_steam_gen|msr|steam_condenser|deaerator|reactor_kinetics|reactor_shutdown|p_precip|daf|act_sludge|cocoa_|conche|temperer)/;
+  const FILL = /^(evap_cond|filter_plate|filter_rotary|tray_dryer|spray_dryer|freeze_dryer|microwave_dryer|solar_dryer|centrifuge|biodigester|pasteurizer|butter_churn|crystallizer|bioreactor_|biodiesel_reactor|pid_cstr|blast_furnace|cement_kiln|cyclone_preheater|clinker_cooler|cement_mill|sulfur_burner|so2_converter|acid_tower|silo|thickener|kraft_digester|crusher|ball_mill|spiral_classifier|hydrocyclone|flotation|flot_col_|coke_oven|sinter_plant|bof|caster|rolling_mill|wire_drawing|wood_yard|pulp_washer|bleach_plant|paper_machine|recovery_boiler|causticizing|steam_gen|steam_turbine|nuclear_reactor|pwr_steam_gen|msr|steam_condenser|deaerator|reactor_kinetics|reactor_shutdown|p_precip|daf|act_sludge|cocoa_|conche|temperer)/;
   if (SF.units) EX.forEach(e => e.fs.blocks.forEach(b => { const T = SF.units.TYPES[b.type]; if (T && b.params && FILL.test(b.type)) T.params.forEach(f => { if (b.params[f.k] === undefined && f.def !== undefined) b.params[f.k] = f.def; }); }));
   SF.examples = EX;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -21097,7 +21899,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', reactor_kinetics: 'CIN', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', cyclone_preheater: 'TC', clinker_cooler: 'RC', cement_mill: 'MC', sulfur_burner: 'FE', so2_converter: 'CV', acid_tower: 'TA', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', reactor_kinetics: 'CIN', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -21540,6 +22342,36 @@ def pfr_transiente(P, nome):
       ['Farinha e combustível', '100 kg/s de farinha (78 % CaCO₃, 14 % SiO₂, 4 % Al₂O₃, 2 % Fe₂O₃, 2 % de umidade) a 70 °C; 6,34 kg/s de coque de petróleo (85 % C, 4 % H, 11 % cinzas) com PCI de 32 000 kJ/kg, a vazão que fecha o balanço de energia.'],
       ['Ar e temperaturas', '82 kg/s de ar a 800 °C (pré-aquecido no resfriador), cerca de 17 % de excesso e 2,3 % de O₂ nos gases; clínquer a 1 450 °C, gases a 350 °C na saída da torre de ciclones e perdas de 5 000 kW.'],
       ['Resultados extras', 'fases de Bogue, módulos de saturação de cal, sílica e alumina, CO₂ emitido por kg de clínquer e o combustível que zeraria o resíduo térmico.']] },
+    cyclone_preheater: { ex: 'Fábrica de cimento completa', items: [
+      ['Correntes', 'entradas <b>farinha crua</b> (CaCO₃, SiO₂, Al₂O₃, Fe₂O₃ e água), <b>gases do forno</b> (CO₂, H₂O, O₂, N₂), <b>combustível</b> (Carbono, Hidrogênio e Sílica como cinzas) e <b>ar terciário</b> (O₂ + N₂); saídas <b>farinha pré-calcinada</b> (com CaO, para o forno) e <b>gases de saída</b>. Sem corrente conectada, cada entrada usa os campos.'],
+      ['Estágios e pré-calcinador', '5 estágios de ciclones (o inferior junto do pré-calcinador), pré-calcinador a 880 °C e calcinação máxima de 95 %.'],
+      ['Perdas e exaustor', '3 000 kW de perdas na fábrica do exemplo; 1,2 kPa de perda de carga por estágio e rendimento de 0,8 no exaustor.'],
+      ['Resultados extras', 'temperatura de cada estágio, consumo do pré-calcinador por kg de clínquer, potência do exaustor e combustível que daria a calcinação máxima.']] },
+    clinker_cooler: { ex: 'Fábrica de cimento completa', items: [
+      ['Correntes', 'entradas <b>clínquer quente</b> (do forno) e <b>ar de resfriamento</b> (O₂ + N₂); saídas <b>clínquer resfriado</b>, <b>ar secundário</b> (para o forno), <b>ar terciário</b> (para o pré-calcinador) e <b>ar de exaustão</b>.'],
+      ['Ar', '90 kg/s de ar a 25 °C; 15,5 kg/s de ar secundário e 28,5 kg/s de ar terciário no exemplo.'],
+      ['Grelha', '14 compartimentos, efetividade ε = 0,92, β = 2,5 (mais ar na zona quente), 1 500 kW de perdas e carga de 45 t/(d·m²) para a área.'],
+      ['Resultados extras', 'temperaturas do ar secundário, terciário e de exaustão, eficiência de recuperação e destino do calor do clínquer.']] },
+    cement_mill: { ex: 'Fábrica de cimento completa', items: [
+      ['Correntes', 'entradas <b>clínquer ou mistura crua</b>, <b>gesso</b> (Gipsita), <b>escória</b> e <b>fíler</b>, as três opcionais; saídas <b>cimento ou farinha</b> e <b>vapor de água</b>; energia do motor pela porta de baixo.'],
+      ['Cimento', 'CP II-E com Blaine de 3 800 cm²/g (P80 ≈ 33 µm); W_i de 14 kWh/t (clínquer), 22 (escória) e 9 (gesso e fíler); água pulverizada para não passar de 110 °C.'],
+      ['Moinho de cru', 'P80 de 75 µm, W_i de 11 kWh/t, umidade final de 0,5 % e secagem com os gases da torre a 320 °C.'],
+      ['Resultados extras', 'conferência da composição pela NBR 16697, SO₃ do gesso, módulos da farinha (FSC, MS, MA), dimensões e número de moinhos.']] },
+    sulfur_burner: { ex: 'Ácido sulfúrico por queima de enxofre', items: [
+      ['Correntes', 'entradas <b>enxofre fundido</b> (Enxofre) ou <b>concentrado</b> (Esfalerita, Pirita, sílica e água) e <b>ar de combustão</b>; saídas <b>gás com SO₂</b> e <b>calcinado</b> (ZnO e Fe₂O₃, na ustulação); calor das serpentinas pela porta de energia.'],
+      ['Componentes', 'inclua Sulfur dioxide (ChemSep) e, na ustulação, Óxido de zinco e Hematita.'],
+      ['Operação', 'forno de enxofre com chama adiabática (menos as perdas) ou ustulador com leito a 950 °C; 800 kW de perdas.'],
+      ['Resultados extras', 'composição do gás, relação O₂/SO₂, ar de diluição para o conversor, capacidade de ácido equivalente e curva temperatura × % de SO₂.']] },
+    so2_converter: { ex: 'Ácido sulfúrico por queima de enxofre', items: [
+      ['Correntes', 'entrada <b>gás com SO₂</b>, saída <b>gás com SO₃</b>; o calor retirado antes, entre e depois dos leitos sai pela porta de energia.'],
+      ['Componentes', 'inclua Sulfur dioxide e Sulfur trioxide (ChemSep), oxigênio e nitrogênio.'],
+      ['Leitos', '3 leitos com entradas a 420, 440 e 430 °C (antes da absorção intermediária) e 1 leito a 420 °C depois dela (primeiro leito = 4); 97 % do equilíbrio em cada leito; gás a 180 ou 170 °C na saída.'],
+      ['Resultados extras', 'diagrama conversão × temperatura com o equilíbrio, conversão de cada leito, volume de catalisador e, no último conversor, conversão global e SO₂ na chaminé.']] },
+    acid_tower: { ex: 'Ácido sulfúrico por queima de enxofre', items: [
+      ['Correntes', 'entradas <b>gás</b> e <b>água ou ácido diluído</b> (opcional); saídas <b>gás seco ou sem SO₃</b> e <b>ácido produzido</b> (absorção) ou <b>umidade retirada</b> (secagem); calor dos resfriadores de ácido pela porta de energia.'],
+      ['Absorção', 'ácido de 98,5 %, 99,9 % do SO₃ absorvido, ácido de 75 a 110 °C; a água de reposição completa a umidade que vem da secagem.'],
+      ['Secagem', 'ácido de 96 %, gás seco com 50 mg/Nm³ de umidade.'],
+      ['Resultados extras', 'ácido de circulação, diâmetro da torre, irrigação, NTU e altura do recheio.']] },
     silo: { ex: 'Silo com tremonha em operação contínua', items: [
       ['Correntes', 'alimentação de sólidos (por exemplo, Sílica como areia) e <b>descarga</b>, que acompanha a alimentação enquanto ela não passa da capacidade do orifício.'],
       ['Geometria', 'silo de 3 m de diâmetro e 8 m de cilindro (cerca de 98 t de areia), orifício de 0,20 m; partículas de 3 mm com ρ_b = 1 400 kg/m³ e atrito com a parede φw = 25°.'],

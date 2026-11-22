@@ -1,3 +1,56 @@
+SIMULA FÁCIL IA 5.4 – Fábrica de cimento completa e fábricas de ácido sulfúrico (22/11/2026)
+=============================================================================================
+
+TRÊS PROCESSOS COMPLETOS NOVOS na lista de exemplos (depois da fábrica de papel e celulose; os bioprocessos continuam no fim):
+
+1) "Cimento: fábrica completa" (CP II-E com escória de alto-forno, cerca de 3 000 t/d de clínquer): calcário da pedreira, britador,
+   argila, areia e minério de ferro na pré-homogeneização, moinho de cru com secagem, torre de ciclones de 5 estágios com
+   pré-calcinador, forno rotativo, resfriador de clínquer de grelha, silo de clínquer e moinho de cimento com gesso, escória granulada
+   de alto-forno (a siderurgia da região) e fíler calcário. Os reciclos de gases e de ar quente convergem pelo método de Wegstein:
+   gases do forno → torre de ciclones; ar secundário (resfriador → forno); ar terciário (resfriador → pré-calcinador).
+   Resultados do exemplo: farinha com FSC 94, MS 2,5 e MA 1,6; 90,7 % de calcinação no pré-calcinador; gases da torre a 376 °C;
+   34,6 kg/s de clínquer (124,6 t/h); ar secundário a 1 050 °C e clínquer frio a 115 °C (71 % de recuperação no resfriador);
+   173 t/h de CP II-E (72 % de clínquer, 5 % de gesso, 18 % de escória e 5 % de fíler; SO₃ de 2,3 %), Blaine 3 800 cm²/g,
+   31,6 kWh/t no moinho de cimento e 16 kWh/t no moinho de cru. Consumo total de cerca de 3,36 GJ/t de clínquer: um pouco acima
+   das fábricas reais porque o modelo do forno não conta o calor liberado na formação das fases do clínquer (está na teoria).
+
+2) "Ácido sulfúrico: fábrica completa por queima de enxofre" (contato duplo e absorção dupla, DCDA, 3 + 1 leitos, cerca de
+   1 000 t/d): torre de secagem do ar, forno de enxofre, caldeira de recuperação, conversor com leitos 1 a 3, torre de absorção
+   intermediária, reaquecimento, leito 4, torre de absorção final e tanque de ácido 98,5 %. Gás com 10,95 % de SO₂ a 1 010 °C;
+   conversões de 64,1, 89,6 e 97,0 % nos leitos 1 a 3 (1º leito saindo a 623 °C); conversão global de 99,86 % e 0,9 kg de SO₂
+   por tonelada de ácido na chaminé.
+
+3) "Ácido sulfúrico: fábrica completa com gás metalúrgico" (ustulação de concentrado de zinco, como nas refinarias de zinco):
+   ustulador de leito fluidizado a 950 °C com serpentinas de vapor, caldeira de recuperação, lavagem e resfriamento do gás (ácido
+   fraco para o tratamento de efluentes), ar de diluição para O₂/SO₂ = 1,1, torre de secagem, aquecimento do gás frio, conversor
+   3 + 1 e absorção dupla. Calcinado com 64 % de Zn para a lixiviação; conversão global de 99,90 %.
+
+SEIS EQUIPAMENTOS NOVOS (com ícone, equações, teoria, ajuda dos campos e gráficos), em duas categorias da paleta:
+- Cimento (o forno de cimento passou para esta categoria, e a antiga "Siderurgia e cimento" agora se chama "Siderurgia"):
+  * Torre de ciclones com pré-calcinador: estágios de equilíbrio em contracorrente (gás e farinha saem de cada ciclone à mesma
+    temperatura), evaporação da umidade no 1º estágio, pré-calcinador com combustível, ar terciário e o O₂ que sobra do forno;
+    o grau de calcinação vem do balanço de energia (até um máximo). Gráficos: temperatura por estágio, efeito do número de
+    estágios (3 a 6) e grau de calcinação × combustível. Exaustor com a perda de carga por estágio.
+  * Resfriador de clínquer de grelha: compartimentos em corrente cruzada com efetividade ε e distribuição do ar (β); ar
+    secundário, terciário e de exaustão, eficiência de recuperação e área de grelha. Gráficos: temperaturas ao longo da grelha,
+    destino do calor e efeito da vazão de ar.
+  * Moinho de cimento ou de cru: lei de Bond por material (clínquer, escória, gesso e fíler), P80 pela finura Blaine, número e
+    dimensões dos moinhos, água pulverizada para não passar de 110 °C (pega falsa) e conferência da composição pela NBR 16697
+    (CP I, CP II-E, CP II-F, CP III e CP V-ARI; SO₃ até 4,5 %). No modo moinho de cru: secagem com os gases da torre e os
+    módulos FSC, MS e MA da farinha.
+- Ácido sulfúrico (categoria nova):
+  * Forno de enxofre ou ustulador de sulfetos (ZnS, FeS₂): chama adiabática ou calor das serpentinas do leito, composição do gás,
+    relação O₂/SO₂ e ar de diluição para o conversor.
+  * Conversor catalítico de SO₂ (V₂O₅): leitos adiabáticos até uma fração do equilíbrio (log Kp = 4956/T − 4,678), resfriamento
+    entre os leitos, calor retirado, volume de catalisador pela velocidade espacial e o diagrama conversão × temperatura. O último
+    conversor mostra a conversão global da fábrica e o SO₂ na chaminé.
+  * Torre de ácido sulfúrico: secagem do gás (ácido de 96 %) ou absorção do SO₃ (98,5 %), água de reposição, calor de solução de
+    Thomsen nos resfriadores de ácido, ácido de circulação, diâmetro, irrigação e altura do recheio (NTU × HTU).
+- O forno de cimento aceita farinha pré-calcinada (com CaO) vinda da torre de ciclones.
+- Quatro compostos novos no banco próprio: gipsita (CaSO₄·2H₂O), óxido de magnésio, enxofre elementar e óxido de zinco.
+- Ordem de cálculo: o programa só corta correntes de equipamentos que estão dentro de um reciclo (um equipamento que apenas
+  recebe a saída de um reciclo espera o reciclo convergir). Os 80 exemplos anteriores dão os mesmos resultados.
+
 SIMULA FÁCIL IA 5.3 – Estação de tratamento de água (ETA) convencional (22/11/2026)
 ===================================================================================
 

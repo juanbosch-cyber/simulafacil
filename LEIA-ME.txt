@@ -1,3 +1,43 @@
+SIMULA FÁCIL IA 5.3 – Estação de tratamento de água (ETA) convencional (22/11/2026)
+===================================================================================
+
+NOVO EXEMPLO, o quarto da lista: "Estação de tratamento de água (ETA) convencional para uma cidade de 100 mil habitantes".
+1 030 m³/h de água de rio a 20 °C, com 50 uT, 20 mg/L de areia, alcalinidade de 30 mg CaCO₃/L e pH 7,0, passam pela captação
+(grade, caixa de areia e elevatória), pela calha Parshall com sulfato de alumínio, por dois floculadores de três câmaras, por dois
+decantadores convencionais e por seis filtros rápidos de antracito e areia; recebem cloro gás, ácido fluossilícico e cal no tanque de
+contato e seguem para o reservatório e a elevatória da cidade. Saem 278 L/s (100 mil habitantes × 200 L/(hab·d) × K₁ = 1,2), com
+0,23 uT, 1,0 mg/L de cloro livre, 0,7 mg/L de fluoreto e pH 7,0. O reservatório confere a água tratada com a Portaria GM/MS
+nº 888/2021: turbidez, cloro residual (na saída e na ponta da rede), pH, fluoreto, alumínio, sulfato, cloreto, dureza e sólidos
+dissolvidos (10 de 10 atendem no exemplo).
+- Abertura animada ao abrir o exemplo (canvas, sem arquivo de vídeo e sem som): o rio barrento, a captação, os tanques da estação com a
+  água cada vez mais clara, a caixa-d'água enchendo e a cidade ao amanhecer, com as janelas acendendo devagar (menos de uma vez por
+  segundo). Botão "Entrar na ETA" (ou Esc). Botão "Abertura" no fluxograma para ver de novo (no celular, só o ícone 💧).
+- Correntes do fluxograma cor de água, animadas pela regra das correntes animadas.
+- Cartão da ETA na tela inicial, com o selo NOVO.
+
+NOVA CATEGORIA "Tratamento de água (ETA)", com 7 ícones:
+- Captação: grade (perda de carga de Kirschmer, limpa e com 50 % de obstrução), caixa de areia (remoção de Hazen de cada grão, areia
+  log-normal, velocidade de sedimentação com o arrasto de uma esfera) e elevatória de água bruta (potência e kWh/m³).
+- Calha Parshall com mistura rápida: oito gargantas (de 3" a 4'), lâmina Hₐ, lâmina na garganta, ressalto, perda de carga, tempo de
+  mistura e gradiente G (método de Azevedo Netto); sulfato de alumínio e cal de pré-alcalinização; alcalinidade, CO₂ livre e pH pelo
+  sistema carbonato. Gráficos: pH e alcalinidade × dose e G de cada garganta.
+- Floculador mecânico de câmaras em série: gradientes decrescentes, modelo de agregação e ruptura de Argaman e Kaufman (1970), número
+  de Camp, volume e potência dos agitadores.
+- Decantador convencional: remoção de Hazen com velocidades log-normais dos flocos, dimensões, tempo de detenção, velocidade
+  horizontal, Reynolds e Froude, vertedores e lodo. Gráfico: turbidez da água decantada × taxa de aplicação.
+- Filtro rápido de dupla camada: remoção de Iwasaki, perda de carga de Carman–Kozeny, carreira de filtração, lavagem, água de lavagem
+  e expansão do leito (Richardson–Zaki).
+- Tanque de contato: cloro gás com demanda e decaimento, fração de HOCl, CT e inativação de Giardia (Smith et al., 1995) e de vírus
+  (USEPA), ácido fluossilícico, cal para o pH final e índice de Langelier.
+- Reservatório e elevatória de água tratada: vazões com K₁ e K₂, volume por 1/3 do dia de maior consumo (NBR 12217) e pelo diagrama
+  de massas, cloro na ponta da rede e a conferência da Portaria 888/2021.
+- Componentes novos: argila e silte, bicarbonato de cálcio (alcalinidade), CO₂ dissolvido, sílica dissolvida, sulfato de cálcio, flocos
+  (argila e hidróxido de alumínio), cloro residual livre (HOCl), cloreto de cálcio e fluoreto dissolvido.
+- Site: novidades da 5.3 no início da página, seção da ETA e pergunta frequente.
+- Manual: suplemento da versão 5.3 no fim do PDF (12 páginas: processo, como usar, componentes e reações, os sete equipamentos com
+  equações, campos, resultados e gráficos, conferência da Portaria, abertura, limites e referências), página de novidades da 5.3
+  logo depois da capa e capa e cabeçalhos com Versão 5.3. Endereço do manual: ?v=5.3-2026-11-22.
+
 SIMULA FÁCIL IA 5.2 – A Fábrica de Chocolate dos Sonhos (20/11/2026)
 =====================================================================
 

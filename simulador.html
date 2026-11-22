@@ -37,8 +37,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 5.2 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, usina nuclear e fábrica de chocolate | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 5.2, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 5.3 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, usina nuclear, fábrica de chocolate e estação de tratamento de água | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 5.3, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -47,7 +47,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 5.2 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, usina nuclear e fábrica de chocolate">
+<meta property="og:title" content="SIMULA FÁCIL IA 5.3 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, usina nuclear, fábrica de chocolate e ETA">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -941,6 +941,38 @@ body.mobile .music-btn .mu-t { display: none; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wexc.wexc-choc { background: linear-gradient(135deg, #3b1e0c, #22110a); } }
 .wex-new { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 999px; background: #e0a12f; color: #2c1505; font-size: 11px; letter-spacing: .06em; vertical-align: 2px; }
 @media (prefers-reduced-motion: reduce) { .ci-k, .ci-txt h2, .ci-s, .ci-m { animation: none; opacity: 1; transform: none; } .choc-intro { transition: none; } }
+/* versão 5.3 — exemplo da ETA: correntes cor de água, botão da abertura e abertura animada (rio, ETA, reservatório e cidade) */
+#pfd.agua { --stream: #1d8fd1; }
+:root[data-theme="dark"] #pfd.agua { --stream: #6cc8ff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #pfd.agua { --stream: #6cc8ff; } }
+#pfd.agua .str:not(.sel) { stroke-width: 3; stroke-linecap: round; }
+#pfd.agua .str.fl:not(.sel) { stroke-dasharray: 15 5; }
+.agua-ctl { position: absolute; top: 10px; right: 10px; z-index: 6; display: flex; gap: 8px; }
+.agua-ctl[hidden] { display: none; }
+.agua-ctl button { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 14px; border-radius: 999px; border: 1px solid #3d9bd1; background: linear-gradient(180deg, #eef9ff, #cdeaff); color: #0b3a5a; font: 700 14px var(--font); cursor: pointer; box-shadow: 0 2px 8px rgba(11, 58, 90, .18); white-space: nowrap; }
+.agua-ctl button:hover { background: linear-gradient(180deg, #f5fcff, #dbf0ff); }
+.agua-ctl button:focus-visible { outline: 3px solid #1d8fd1; outline-offset: 2px; }
+:root[data-theme="dark"] .agua-ctl button { background: linear-gradient(180deg, #0f3a57, #0a2639); color: #cdeeff; border-color: #2f7fb0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .agua-ctl button { background: linear-gradient(180deg, #0f3a57, #0a2639); color: #cdeeff; border-color: #2f7fb0; } }
+body.mobile .agua-ctl { top: auto; right: auto; left: 10px; bottom: 12px; }
+body.mobile .agua-ctl button { width: var(--tap); padding: 0; justify-content: center; font-size: 18px; }
+body.mobile .agua-ctl .ac-t { display: none; }
+.agua-intro { position: fixed; inset: 0; z-index: 10000; background: #061a33; overflow: hidden; opacity: 1; transition: opacity .6s ease; }
+.agua-intro.out { opacity: 0; }
+.agua-intro canvas { position: absolute; inset: 0; display: block; }
+.ai-txt { position: absolute; left: 0; right: 0; top: 13%; text-align: center; padding: 0 18px; pointer-events: none; }
+.ai-k { margin: 0 0 12px; font: 600 14px/1.3 var(--font); letter-spacing: .2em; text-transform: uppercase; color: #9fdcff; opacity: 0; animation: ciIn .9s .3s ease forwards; }
+.ai-txt h2 { margin: 0; font: 800 clamp(34px, 7vw, 80px)/1.06 var(--font); color: #fff; text-shadow: 0 4px 18px rgba(0, 0, 0, .55); opacity: 0; transform: translateY(12px); animation: ciIn 1.2s .9s ease forwards; text-wrap: balance; }
+.ai-txt h2 em { font-style: normal; font-size: .6em; color: #8fe0ff; }
+.ai-s { margin: 18px auto 0; max-width: 640px; font: 500 clamp(16px, 2.2vw, 19px)/1.45 var(--font); color: #d8f1ff; text-shadow: 0 2px 10px rgba(0, 0, 0, .6); opacity: 0; animation: ciIn 1s 2.2s ease forwards; }
+.ai-btns { position: absolute; left: 16px; right: 16px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.ai-btns button { min-height: var(--tap); padding: 0 18px; border-radius: 999px; font: 700 16px var(--font); cursor: pointer; }
+.ai-go { background: linear-gradient(180deg, #a6e8ff, #2aa3e0); color: #04243a; border: 0; box-shadow: 0 4px 16px rgba(0, 0, 0, .4); }
+.ai-btns button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.wexc.wexc-agua { --c: #1d8fd1; background: linear-gradient(135deg, #eef9ff, #cdeaff); }
+:root[data-theme="dark"] .wexc.wexc-agua { background: linear-gradient(135deg, #0f3350, #0a2134); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wexc.wexc-agua { background: linear-gradient(135deg, #0f3350, #0a2134); } }
+@media (prefers-reduced-motion: reduce) { .ai-k, .ai-txt h2, .ai-s { animation: none; opacity: 1; transform: none; } .agua-intro { transition: none; } }
 </style>
 </head>
 <body>
@@ -962,7 +994,7 @@ body.mobile .music-btn .mu-t { display: none; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.2</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.3</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -1115,7 +1147,7 @@ body.mobile .music-btn .mu-t { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.2</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.3</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1205,7 +1237,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '5.2-2026-11-21b',
+  manualVersion: '5.3-2026-11-22',
   videosAlunos: [
     { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' },
     { titulo: 'Como funciona o SIMULA FÁCIL IA - Exemplo: DESTILAÇÃO', autor: 'Bruno Gontijo de Carvalho – Engenharia Química UFSJ', url: 'https://youtu.be/H2lDGKUrdPA' }
@@ -1281,7 +1313,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
-    version: '5.2',
+    version: '5.3',
     subtitle: 'Simulador de processos químicos e bioprocessos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -2541,7 +2573,18 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'coal-fine', name: 'Carvão mineral fino (matéria carbonosa, flotação)', formula: 'C', mw: 12.011, rho: 1350, solid: true, cpl: 16, tags: 'flotação carvão mineração' },
     { id: 'coal-ash', name: 'Cinzas e argilas do carvão (ganga)', formula: 'CINZA', mw: 60, rho: 2550, solid: true, cpl: 45, tags: 'flotação carvão cinzas mineração' },
     { id: 'sylvite', name: 'Silvita (cloreto de potássio, KCl)', formula: 'KCl', mw: 74.551, rho: 1984, solid: true, cpl: 51.5, tags: 'flotação potássio fertilizante mineração' },
-    { id: 'halite', name: 'Halita (cloreto de sódio, NaCl)', formula: 'NaCl', mw: 58.443, rho: 2165, solid: true, cpl: 50.5, tags: 'flotação potássio sal mineração' }
+    { id: 'halite', name: 'Halita (cloreto de sódio, NaCl)', formula: 'NaCl', mw: 58.443, rho: 2165, solid: true, cpl: 50.5, tags: 'flotação potássio sal mineração' },
+    // versão 5.3: tratamento de água (ETA): sólidos da água bruta, sistema carbonato, produtos da coagulação, da desinfecção e da fluoretação
+    { id: 'clay', name: 'Argila e silte (sólidos suspensos da água bruta, turbidez)', formula: 'Al2Si2O5(OH)4', mw: 258.16, rho: 2600, solid: true, cpl: 246, tags: 'argila silte caulinita turbidez água bruta rio eta tratamento de água sólidos suspensos' },
+    { id: 'ca-bicarbonate', name: 'Bicarbonato de cálcio (alcalinidade da água, soluto não volátil)', formula: 'Ca(HCO3)2', mw: 162.11, rho: 2000, nv: true, cpl: 200, tags: 'alcalinidade bicarbonato dureza carbonato água eta tratamento de água' },
+    { id: 'co2-aq', name: 'Gás carbônico livre dissolvido (CO₂ aquoso, soluto não volátil)', formula: 'CO2', mw: 44.01, rho: 1100, nv: true, cpl: 37, tags: 'gás carbônico livre co2 dissolvido ph sistema carbonato água eta' },
+    { id: 'sio2-aq', name: 'Sílica dissolvida (ácido silícico, como SiO₂; soluto não volátil)', formula: 'SiO2', mw: 60.083, rho: 2200, nv: true, cpl: 44.4, tags: 'sílica dissolvida ácido silícico água eta' },
+    { id: 'calcium-sulfate', name: 'Sulfato de cálcio dissolvido (soluto não volátil)', formula: 'CaSO4', mw: 136.14, rho: 2960, nv: true, cpl: 99.7, tags: 'sulfato cálcio coagulação água eta gesso' },
+    { id: 'floc-clay', name: 'Flocos: argila, silte e areia fina aglomerados pelo coagulante', formula: 'FLOCO', mw: 258.16, rho: 2600, solid: true, cpl: 246, tags: 'flocos floculação decantação argila água eta' },
+    { id: 'floc-al', name: 'Flocos: hidróxido de alumínio aglomerado', formula: 'Al(OH)3', mw: 78.003, rho: 2420, solid: true, cpl: 91.7, tags: 'flocos floculação hidróxido de alumínio coagulante água eta' },
+    { id: 'free-chlorine', name: 'Cloro residual livre: ácido hipocloroso HOCl e OCl⁻ (soluto não volátil)', formula: 'HOCl', mw: 52.46, rho: 1500, nv: true, cpl: 60, tags: 'cloro livre residual hipocloroso desinfecção cloração água eta' },
+    { id: 'cacl2', name: 'Cloreto de cálcio dissolvido (soluto não volátil)', formula: 'CaCl2', mw: 110.98, rho: 2150, nv: true, cpl: 72.9, tags: 'cloreto cálcio cloração água eta' },
+    { id: 'caf2-aq', name: 'Fluoreto dissolvido (íons F⁻ e Ca²⁺, contados como CaF₂)', formula: 'CaF2', mw: 78.07, rho: 3180, nv: true, cpl: 67, tags: 'fluoreto flúor fluoretação ácido fluossilícico água eta' }
   ];
   /* ------------------------------------------------------------------ alimentos e lodos: a matéria seca de cada um é um componente (M = 100 g/mol, como
      os "Sólidos secos do produto"), com a composição centesimal. Propriedades pelas correlações de Choi e Okos (1986), T em °C:
@@ -3654,6 +3697,7 @@ window.SIMULAFACIL_CONFIG = {
   // versão 4.5: mineração, siderurgia integrada e papel e celulose
   const SEMG = ' (só se a corrente não trouxer a granulometria de um equipamento anterior)';
   const BR_JAW = 'britador de mandíbulas (primário)', BR_GYR = 'britador giratório (primário)', BR_CONE = 'britador cônico (secundário ou terciário)';
+  const ETA_W = ['3" (7,6 cm)', '6" (15,2 cm)', '9" (22,9 cm)', "1' (30,5 cm)", "1½' (45,7 cm)", "2' (61,0 cm)", "3' (91,5 cm)", "4' (122 cm)"];   // gargantas da calha Parshall (ETA)
   const CH_NIBS = 'moinho de nibs (pinos + bolas): nibs → liquor de cacau', CH_REF = 'refinadora de cinco cilindros: massa → chocolate fino';
   const FL_REV = 'reversa: a ganga flota e o mineral útil afunda (minério de ferro, com amina e amido)', FL_DIR = 'direta: o mineral útil flota (sulfetos com xantato, fosfato com ácido graxo)';
   /* ---- versão 4.8: colunas de flotação (bancada em batelada e industrial contínua) ----
@@ -4964,7 +5008,84 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'mb', label: 'Massa de cada barra', u: 'g', def: 100, when: q => !/^só/.test(q.tunnel || '') },
       { k: 'e', label: 'Espessura da barra', u: 'mm', def: 8, when: q => !/^só/.test(q.tunnel || '') },
       { k: 'hT', label: 'Coeficiente de convecção no túnel', u: 'W/(m²·K)', def: 20, when: q => !/^só/.test(q.tunnel || '') },
-      { k: 'vb', label: 'Velocidade da esteira de moldes', u: 'm/min', def: 1.5, when: q => !/^só/.test(q.tunnel || '') }] }
+      { k: 'vb', label: 'Velocidade da esteira de moldes', u: 'm/min', def: 1.5, when: q => !/^só/.test(q.tunnel || '') }] },
+    eta_intake: { label: 'Captação de água bruta: grade, caixa de areia (desarenador) e elevatória; perda de carga, remoção da areia e potência das bombas', cat: 'Tratamento de água (ETA)', ins: ['feed'], outs: ['product', 'grit'], eins: ['q_in'], params: [
+      { k: 'b', label: 'Espaçamento livre entre as barras da grade', u: 'mm', def: 25 },
+      { k: 'tb', label: 'Espessura das barras', u: 'mm', def: 10 },
+      { k: 'va', label: 'Velocidade de aproximação na grade', u: 'm/s', def: 0.6 },
+      { k: 'beta', label: 'Fator de forma das barras (Kirschmer: 2,42 retangulares; 1,79 circulares)', u: '', def: 2.42 },
+      { k: 'th', label: 'Inclinação da grade com a horizontal', u: '°', def: 60 },
+      { k: 'TAS', label: 'Taxa de escoamento superficial da caixa de areia', u: 'm³/(m²·d)', type: 'range', min: 400, max: 1600, step: 10, def: 1000 },
+      { k: 'dS', label: 'Grão de projeto (menor grão de areia a remover)', u: 'mm', def: 0.2 },
+      { k: 'd50', label: 'Tamanho mediano da areia trazida pelo rio', u: 'mm', def: 0.25 },
+      { k: 'sgS', label: 'Desvio padrão geométrico dos grãos de areia', u: '', def: 1.8 },
+      { k: 'vh', label: 'Velocidade horizontal na caixa de areia', u: 'm/s', def: 0.3 },
+      { k: 'nC', label: 'Número de canais da caixa de areia', u: '', def: 2 },
+      { k: 'Bc', label: 'Largura de cada canal', u: 'm', def: 1.5 },
+      { k: 'wG', label: 'Água que sai com a areia retirada', u: '% da massa', def: 40 },
+      { k: 'H', label: 'Altura manométrica da elevatória de água bruta', u: 'm', def: 40 },
+      { k: 'eta', label: 'Rendimento do conjunto motor e bomba', u: '0–1', def: 0.72 },
+      { k: 'nB', label: 'Bombas em operação (mais uma de reserva)', u: '', def: 2 }] },
+    eta_coag: { label: 'Calha Parshall com mistura rápida (coagulação): medição da vazão, ressalto hidráulico, gradiente G, sulfato de alumínio, cal e pH', cat: 'Tratamento de água (ETA)', ins: ['feed'], outs: ['product'], params: [
+      { k: 'dAl', label: 'Dose de sulfato de alumínio, como Al₂(SO₄)₃ anidro (o produto comercial Al₂(SO₄)₃·14H₂O pesa 1,74 vez mais)', u: 'mg/L', type: 'range', min: 0, max: 60, step: 0.5, def: 20 },
+      { k: 'dCa', label: 'Dose de cal hidratada Ca(OH)₂ antes do coagulante (pré-alcalinização)', u: 'mg/L', type: 'range', min: 0, max: 30, step: 0.5, def: 0 },
+      { k: 'W', label: 'Largura da garganta da calha Parshall', type: 'select', options: ETA_W, def: "2' (61,0 cm)" }] },
+    eta_floc: { label: 'Floculador mecânico de câmaras em série: gradientes decrescentes, agregação e ruptura (Argaman e Kaufman), volume e potência', cat: 'Tratamento de água (ETA)', ins: ['feed'], outs: ['product'], params: [
+      { k: 'tf', label: 'Tempo total de floculação', u: 'min', type: 'range', min: 10, max: 50, step: 1, def: 30 },
+      { k: 'nC', label: 'Número de câmaras em série', u: '', def: 3 },
+      { k: 'G1', label: 'Gradiente de velocidade na primeira câmara', u: 's⁻¹', type: 'range', min: 10, max: 100, step: 1, def: 70 },
+      { k: 'Gn', label: 'Gradiente de velocidade na última câmara', u: 's⁻¹', type: 'range', min: 5, max: 60, step: 1, def: 20 },
+      { k: 'KA', label: 'Constante de agregação K_A (Argaman e Kaufman), em unidades de 10⁻⁵', u: '', def: 10 },
+      { k: 'KB', label: 'Constante de ruptura K_B, em unidades de 10⁻⁷ s', u: '', def: 1 },
+      { k: 'Hf', label: 'Profundidade da água nas câmaras', u: 'm', def: 4 },
+      { k: 'nU', label: 'Número de floculadores em paralelo', u: '', def: 2 },
+      { k: 'etaM', label: 'Rendimento do motor e do redutor dos agitadores', u: '0–1', def: 0.7 }] },
+    eta_settler: { label: 'Decantador convencional de escoamento horizontal: taxa de aplicação, remoção de Hazen, dimensões, Reynolds e Froude, vertedores e lodo', cat: 'Tratamento de água (ETA)', ins: ['feed'], outs: ['clarified', 'sludge'], params: [
+      { k: 'TAS', label: 'Taxa de aplicação superficial', u: 'm³/(m²·d)', type: 'range', min: 15, max: 60, step: 1, def: 30 },
+      { k: 'v50', label: 'Velocidade de sedimentação mediana dos flocos', u: 'm/h', def: 4 },
+      { k: 'sg', label: 'Desvio padrão geométrico das velocidades dos flocos', u: '', def: 2 },
+      { k: 'vP', label: 'Velocidade de sedimentação das partículas que não flocularam', u: 'm/h', def: 0.2 },
+      { k: 'nD', label: 'Número de decantadores', u: '', def: 2 },
+      { k: 'Hd', label: 'Profundidade útil', u: 'm', def: 4 },
+      { k: 'LB', label: 'Relação comprimento/largura', u: '', def: 4 },
+      { k: 'qv', label: 'Vazão máxima por metro de vertedor de coleta', u: 'L/(s·m)', def: 1.8 },
+      { k: 'wL', label: 'Teor de sólidos do lodo descartado', u: '%', def: 1 }] },
+    eta_filter: { label: 'Filtro rápido descendente de dupla camada (antracito e areia): remoção, perda de carga, carreira, lavagem e expansão do leito', cat: 'Tratamento de água (ETA)', ins: ['feed'], outs: ['filtered', 'wash'], params: [
+      { k: 'tx', label: 'Taxa de filtração', u: 'm³/(m²·d)', type: 'range', min: 120, max: 480, step: 5, def: 300 },
+      { k: 'nF', label: 'Número de filtros', u: '', def: 6 },
+      { k: 'La', label: 'Espessura da camada de antracito', u: 'm', def: 0.6 },
+      { k: 'dA', label: 'Tamanho efetivo do antracito', u: 'mm', def: 1.0 },
+      { k: 'eA', label: 'Porosidade do antracito', u: '0–1', def: 0.47 },
+      { k: 'psiA', label: 'Esfericidade do antracito', u: '0–1', def: 0.7 },
+      { k: 'lA', label: 'Coeficiente de remoção λ do antracito (Iwasaki)', u: '1/m', def: 2 },
+      { k: 'Ls', label: 'Espessura da camada de areia', u: 'm', def: 0.3 },
+      { k: 'dS', label: 'Tamanho efetivo da areia', u: 'mm', def: 0.5 },
+      { k: 'eS', label: 'Porosidade da areia', u: '0–1', def: 0.42 },
+      { k: 'psiS', label: 'Esfericidade da areia', u: '0–1', def: 0.8 },
+      { k: 'lS', label: 'Coeficiente de remoção λ da areia (Iwasaki)', u: '1/m', def: 5 },
+      { k: 'Hdisp', label: 'Perda de carga disponível para a carreira', u: 'm', def: 2.2 },
+      { k: 'kH', label: 'Aumento da perda de carga por massa retida', u: 'm por kg/m²', def: 0.8 },
+      { k: 'vL', label: 'Velocidade ascensional da água de lavagem', u: 'm/min', def: 0.8 },
+      { k: 'tL', label: 'Duração de cada lavagem', u: 'min', def: 10 }] },
+    eta_disinfect: { label: 'Tanque de contato: desinfecção com cloro (CT e inativação), fluoretação com ácido fluossilícico e correção final do pH com cal', cat: 'Tratamento de água (ETA)', ins: ['feed'], outs: ['product'], params: [
+      { k: 'dCl', label: 'Dose de cloro gás (Cl₂)', u: 'mg/L', type: 'range', min: 0, max: 6, step: 0.1, def: 2 },
+      { k: 'dem', label: 'Demanda imediata de cloro da água filtrada', u: 'mg/L', def: 0.5 },
+      { k: 'kd', label: 'Constante de decaimento do cloro livre no tanque', u: '1/h', def: 0.1 },
+      { k: 'tc', label: 'Tempo de detenção do tanque de contato', u: 'min', type: 'range', min: 5, max: 120, step: 1, def: 30 },
+      { k: 'f10', label: 'Fator de chicanas T₁₀/T (0,1 sem chicanas; 0,5 boas; 0,7 excelentes)', u: '', def: 0.5 },
+      { k: 'dF', label: 'Dose de fluoreto, pelo ácido fluossilícico H₂SiF₆', u: 'mg/L de F', def: 0.7 },
+      { k: 'dCa', label: 'Dose de cal hidratada Ca(OH)₂ para corrigir o pH final', u: 'mg/L', type: 'range', min: 0, max: 40, step: 0.5, def: 16 },
+      { k: 'Hc', label: 'Profundidade do tanque de contato', u: 'm', def: 3.5 }] },
+    eta_reservoir: { label: 'Reservatório de água tratada e elevatória para a cidade: demanda, volume (NBR 12217 e Rippl), cloro na rede e conferência da Portaria 888/2021', cat: 'Tratamento de água (ETA)', ins: ['feed'], outs: ['product'], eins: ['q_in'], params: [
+      { k: 'pop', label: 'População atendida', u: 'hab', def: 100000 },
+      { k: 'qpc', label: 'Consumo per capita', u: 'L/(hab·d)', def: 200 },
+      { k: 'K1', label: 'Coeficiente do dia de maior consumo K₁', u: '', def: 1.2 },
+      { k: 'K2', label: 'Coeficiente da hora de maior consumo K₂', u: '', def: 1.5 },
+      { k: 'fr', label: 'Volume a reservar, em % do dia de maior consumo (NBR 12217: pelo menos 1/3)', u: '%', def: 33.3 },
+      { k: 'kd', label: 'Decaimento do cloro livre no reservatório e na rede', u: '1/h', def: 0.04 },
+      { k: 'tR', label: 'Tempo de percurso até a ponta da rede', u: 'h', def: 12 },
+      { k: 'H', label: 'Altura manométrica da elevatória de água tratada', u: 'm', def: 50 },
+      { k: 'eta', label: 'Rendimento do conjunto motor e bomba', u: '0–1', def: 0.75 }] }
   };
   Object.keys(TYPES).forEach(k => { TYPES[k].type = k; });
 
@@ -11123,6 +11244,417 @@ window.SIMULAFACIL_CONFIG = {
     return { out: { product: chOut(th, kg, tun ? Tf : T3, s.P) }, duty: Qt * 1000, res: decBR(res), warn: decW(warn), plots };
   };
 
+  /* ================================================================== versão 5.3: estação de tratamento de água (ETA) convencional
+     Captação (grade, caixa de areia e elevatória), calha Parshall com mistura rápida (sulfato de alumínio e cal), floculador mecânico
+     (Argaman e Kaufman, 1970), decantador convencional (Hazen), filtro rápido de dupla camada (Iwasaki, Carman–Kozeny e
+     Richardson–Zaki), tanque de contato com cloro, flúor e cal (CT de Smith et al., 1995) e reservatório de água tratada com a
+     conferência da Portaria GM/MS nº 888/2021. Química do carbonato: a alcalinidade é o Ca(HCO₃)₂ e o gás carbônico livre é o CO₂
+     dissolvido; pH = pK₁ + log([HCO₃⁻]/[CO₂]). Turbidez estimada pelos sólidos suspensos: 1 uT ≈ ETA.KT mg/L de SST. */
+  const ETA = { KT: 1.5, M: { cab: 162.11, co2: 44.01, alum: 342.15, aloh: 78.003, caso4: 136.14, caoh2: 74.093, hocl: 52.46, cl2: 70.906, cacl2: 110.98,
+    caf2: 78.07, h2sif6: 144.09, sio2: 60.083, h2o: 18.015, h2so4: 98.079, F: 18.998, Al: 26.982, Ca: 40.078, SO4: 96.06, Cl: 35.453 } };
+  const ETA_PARSHALL = {   // garganta W: Q = K·Hₐ^n (Q em m³/s, Hₐ em m) e dimensões D, C, G, K, N (m) — Azevedo Netto
+    '3" (7,6 cm)': { W: 0.076, K: 0.176, n: 1.547, D: 0.259, C: 0.178, G: 0.305, k: 0.025, N: 0.057, qmax: 0.054 },
+    '6" (15,2 cm)': { W: 0.152, K: 0.381, n: 1.580, D: 0.403, C: 0.394, G: 0.610, k: 0.076, N: 0.114, qmax: 0.110 },
+    '9" (22,9 cm)': { W: 0.229, K: 0.535, n: 1.530, D: 0.575, C: 0.380, G: 0.457, k: 0.076, N: 0.114, qmax: 0.252 },
+    "1' (30,5 cm)": { W: 0.305, K: 0.690, n: 1.522, D: 0.845, C: 0.610, G: 0.915, k: 0.076, N: 0.229, qmax: 0.456 },
+    "1½' (45,7 cm)": { W: 0.457, K: 1.056, n: 1.538, D: 1.026, C: 0.762, G: 0.915, k: 0.076, N: 0.229, qmax: 0.697 },
+    "2' (61,0 cm)": { W: 0.610, K: 1.428, n: 1.550, D: 1.207, C: 0.915, G: 0.915, k: 0.076, N: 0.229, qmax: 0.937 },
+    "3' (91,5 cm)": { W: 0.915, K: 2.184, n: 1.566, D: 1.572, C: 1.220, G: 0.915, k: 0.076, N: 0.229, qmax: 1.427 },
+    "4' (122 cm)": { W: 1.220, K: 2.953, n: 1.578, D: 1.938, C: 1.525, G: 0.915, k: 0.076, N: 0.229, qmax: 1.923 } };
+  const etaMu = Tc => 2.414e-5 * Math.pow(10, 247.8 / (Tc + 133.15));   // viscosidade da água (Pa·s), Vogel
+  const etaRho = Tc => 1000 * (1 - (Tc + 288.9414) / (508929.2 * (Tc + 68.12963)) * (Tc - 3.9863) * (Tc - 3.9863));   // kg/m³
+  const etaI = (th, id) => th.ids.indexOf(id);
+  const etaG = (th, kg, id) => { const i = etaI(th, id); return i >= 0 ? kg[i] : 0; };
+  const etaName = id => (TH.COMP[id] || {}).name || id;
+  function etaAdd(th, kg, id, dm, what) {
+    if (!(Math.abs(dm) > 1e-12)) return;
+    const i = etaI(th, id); if (i < 0) throw new Error(what + ': inclua na lista de componentes "' + etaName(id) + '"');
+    kg[i] += dm;
+    if (kg[i] < 0) { if (kg[i] > -1e-9) kg[i] = 0; else throw new Error(what + ': falta ' + etaName(id) + ' na corrente'); }
+  }
+  const etaOut = (th, kg, s) => mkStream(th, flowsOfKg(th, kg), s.T, s.P);
+  // balanço de uma corrente de água: vazão, concentrações (mg/L), turbidez, alcalinidade, pH e os parâmetros da Portaria
+  function etaBal(th, kg, Tc) {
+    const rw = etaRho(Tc), M = ETA.M; let Q = 0, tss = 0, tds = 0;
+    kg.forEach((m, i) => { const c = th.c[i]; if (!(m > 0)) return; Q += m / (c.id === 'water' ? rw : (c.rho || 1500)); if (c.solid) tss += m; else if (c.id !== 'water') tds += m; });
+    const mg = id => (Q > 0 ? 1000 * etaG(th, kg, id) / Q : 0);
+    const hco3 = 2 * mg('ca-bicarbonate') / M.cab, co2 = mg('co2-aq') / M.co2, acid = mg('sulfuric-acid') / M.h2so4, T = Tc + 273.15;   // mmol/L
+    const pK1 = 3404.71 / T + 0.032786 * T - 14.8435;   // Harned e Davis (1943)
+    let pH = acid > 1e-6 ? -Math.log10(2 * acid / 1000) : hco3 > 1e-9 && co2 > 1e-9 ? pK1 + Math.log10(hco3 / co2) : hco3 > 1e-9 ? 8.3 : 7;
+    pH = clamp(pH, 3, 10);
+    const ca = mg('ca-bicarbonate') / M.cab + mg('calcium-sulfate') / M.caso4 + mg('cacl2') / M.cacl2 + mg('caf2-aq') / M.caf2;   // mmol/L
+    const pHs = 1.85 + (ca > 0 ? -Math.log10(ca / 1000) : 9) + (hco3 > 0 ? -Math.log10(hco3 / 1000) : 9);   // Langelier, 25 °C: pK₂ − pKs = 1,85
+    const tssMg = Q > 0 ? 1000 * tss / Q : 0;
+    return { kg, Q, Ls: Q / 3.6, mass: sum(kg), mg, tss: tssMg, turb: tssMg / ETA.KT, tds: Q > 0 ? 1000 * tds / Q : 0, hco3, co2, pH, pK1,
+      alk: 50 * hco3, co2mg: mg('co2-aq'), cl: mg('free-chlorine') * M.cl2 / M.hocl, F: mg('caf2-aq') * 2 * M.F / M.caf2,
+      Al: (mg('aluminium-hydroxide') + mg('floc-al')) * M.Al / M.aloh, ca, hard: 100 * ca, so4: mg('calcium-sulfate') * M.SO4 / M.caso4,
+      chl: mg('cacl2') * 2 * M.Cl / M.cacl2, lsi: pH - pHs };
+  }
+  // reações em kg/h (os fluxos molares saem em kmol/h)
+  function etaLime(th, kg, m, what) {   // Ca(OH)₂ + 2 CO₂ → Ca(HCO₃)₂
+    const M = ETA.M, n = m / M.caoh2; if (!(n > 0)) return;
+    if (2 * n * M.co2 > etaG(th, kg, 'co2-aq') + 1e-12) throw new Error(what + ': a cal passa do gás carbônico livre da água (o excesso precipitaria carbonato de cálcio e o pH subiria acima de 9); reduza a dose de cal');
+    etaAdd(th, kg, 'co2-aq', -2 * n * M.co2, what); etaAdd(th, kg, 'ca-bicarbonate', n * M.cab, what);
+  }
+  function etaAlum(th, kg, m, what, warn) {   // Al₂(SO₄)₃ + 3 Ca(HCO₃)₂ → 2 Al(OH)₃ + 3 CaSO₄ + 6 CO₂ (sem alcalinidade: + 6 H₂O → 2 Al(OH)₃ + 3 H₂SO₄)
+    const M = ETA.M, n = m / M.alum; if (!(n > 0)) return { nA: 0, nAc: 0 };
+    const nC = Math.min(n, etaG(th, kg, 'ca-bicarbonate') / M.cab / 3), nAc = n - nC;
+    etaAdd(th, kg, 'ca-bicarbonate', -3 * nC * M.cab, what); etaAdd(th, kg, 'calcium-sulfate', 3 * nC * M.caso4, what); etaAdd(th, kg, 'co2-aq', 6 * nC * M.co2, what);
+    etaAdd(th, kg, 'aluminium-hydroxide', 2 * n * M.aloh, what);
+    if (nAc > 1e-12) {
+      if (etaI(th, 'sulfuric-acid') < 0) throw new Error(what + ': a alcalinidade da água não basta para o coagulante; aumente a cal de pré-alcalinização ou reduza a dose de sulfato de alumínio');
+      etaAdd(th, kg, 'water', -6 * nAc * M.h2o, what); etaAdd(th, kg, 'sulfuric-acid', 3 * nAc * M.h2so4, what);
+      warn.push('a alcalinidade acabou: ' + (100 * nAc / n).toFixed(0) + ' % do sulfato de alumínio formou ácido sulfúrico e o pH caiu demais; use cal antes do coagulante');
+    }
+    return { nA: n, nAc };
+  }
+  function etaChlor(th, kg, m, what) {   // 2 Cl₂ + Ca(HCO₃)₂ → 2 HOCl + CaCl₂ + 2 CO₂ (o HCl consome a alcalinidade; o HOCl é ácido fraco)
+    const M = ETA.M, n = m / M.cl2; if (!(n > 0)) return;
+    if (0.5 * n * M.cab > etaG(th, kg, 'ca-bicarbonate') + 1e-12) throw new Error(what + ': falta alcalinidade para o cloro; aumente a cal');
+    etaAdd(th, kg, 'ca-bicarbonate', -0.5 * n * M.cab, what); etaAdd(th, kg, 'free-chlorine', n * M.hocl, what); etaAdd(th, kg, 'cacl2', 0.5 * n * M.cacl2, what); etaAdd(th, kg, 'co2-aq', n * M.co2, what);
+  }
+  function etaChlorUse(th, kg, nH, what) {   // consumo do cloro livre (demanda e decaimento): 2 HOCl + Ca(HCO₃)₂ → CaCl₂ + 2 CO₂ + 2 H₂O + [O] para a matéria oxidada
+    const M = ETA.M; nH = Math.min(nH, etaG(th, kg, 'free-chlorine') / M.hocl); if (!(nH > 0)) return 0;
+    nH = Math.min(nH, 2 * etaG(th, kg, 'ca-bicarbonate') / M.cab);
+    etaAdd(th, kg, 'free-chlorine', -nH * M.hocl, what); etaAdd(th, kg, 'ca-bicarbonate', -0.5 * nH * M.cab, what); etaAdd(th, kg, 'cacl2', 0.5 * nH * M.cacl2, what);
+    etaAdd(th, kg, 'co2-aq', nH * M.co2, what); etaAdd(th, kg, 'water', nH * M.h2o, what);
+    return nH;
+  }
+  function etaFluor(th, kg, mF, what) {   // H₂SiF₆ + 3 Ca(HCO₃)₂ → 3 CaF₂ (dissolvido) + SiO₂ (dissolvida) + 6 CO₂ + 4 H₂O
+    const M = ETA.M, n = mF / (6 * M.F); if (!(n > 0)) return 0;
+    if (3 * n * M.cab > etaG(th, kg, 'ca-bicarbonate') + 1e-12) throw new Error(what + ': falta alcalinidade para o ácido fluossilícico; aumente a cal');
+    etaAdd(th, kg, 'ca-bicarbonate', -3 * n * M.cab, what); etaAdd(th, kg, 'caf2-aq', 3 * n * M.caf2, what); etaAdd(th, kg, 'sio2-aq', n * M.sio2, what);
+    etaAdd(th, kg, 'co2-aq', 6 * n * M.co2, what); etaAdd(th, kg, 'water', 4 * n * M.h2o, what);
+    return n * M.h2sif6;
+  }
+  // velocidade terminal de uma esfera (m/s): arrasto de Schiller–Naumann com o termo de Newton (Clift)
+  function etaVs(d, rhoP, Tc) {
+    const mu = etaMu(Tc), rho = etaRho(Tc), g = 9.81; let v = g * (rhoP - rho) * d * d / (18 * mu);
+    for (let k = 0; k < 60; k++) {
+      const Re = Math.max(1e-9, rho * v * d / mu), Cd = 24 / Re * (1 + 0.15 * Math.pow(Re, 0.687)) + 0.42 / (1 + 42500 * Math.pow(Re, -1.16));
+      const vn = Math.sqrt(4 * g * (rhoP - rho) * d / (3 * Cd * rho)); if (Math.abs(vn - v) < 1e-10) { v = vn; break; } v = 0.5 * (v + vn);
+    }
+    return v;
+  }
+  const etaPhi = z => 0.5 * (1 + Math.sign(z) * Math.sqrt(1 - Math.exp(-2 * z * z / Math.PI)));   // normal padrão acumulada (aprox. de Pólya)
+  // remoção ideal de Hazen para velocidades log-normais (mediana v50, desvio σg) com taxa v0: E = ∫ min(1, v/v0) f(v) dv
+  function etaHazen(v50, sg, v0) {
+    const s = Math.log(Math.max(sg, 1.0001)), n = 400; let E = 0;
+    for (let k = 0; k < n; k++) { const z = -5 + 10 * (k + 0.5) / n, v = v50 * Math.exp(s * z), w = Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI) * 10 / n; E += w * Math.min(1, v / v0); }
+    return Math.min(1, E);
+  }
+  const etaMix = (th, s, what) => {
+    if (!connected(s)) throw new Error('ligue a corrente de água na entrada ' + what);
+    if (etaI(th, 'water') < 0) throw new Error('inclua a água na lista de componentes');
+    const kg = kgOf(th, s), Tc = K2C(s.T); return { kg, Tc, I: etaBal(th, kg, Tc) };
+  };
+  const fx = (v, d) => (isFinite(v) ? v.toFixed(d) : '—');
+  const etaMil = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0');   // 100 000 (espaço como separador de milhar)
+
+  /* captação de água bruta: grade (Kirschmer), caixa de areia de fluxo horizontal (Hazen, areia log-normal) e elevatória */
+  IMPL.eta_intake = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, { kg, Tc, I } = etaMix(th, s, 'da captação');
+    const bb = num(p.b, 25) / 1000, tb = num(p.tb, 10) / 1000, va = num(p.va, 0.6), beta = num(p.beta, 2.42), th0 = num(p.th, 60) * Math.PI / 180;
+    const TAS = num(p.TAS, 1000), dS = num(p.dS, 0.2) / 1000, d50 = num(p.d50, 0.25) / 1000, sgS = num(p.sgS, 1.8), vh = num(p.vh, 0.3), nC = Math.max(1, Math.round(num(p.nC, 2))), Bc = num(p.Bc, 1.5);
+    const wG = num(p.wG, 40) / 100, H = num(p.H, 40), eta = clamp(num(p.eta, 0.72), 0.2, 1), nB = Math.max(1, Math.round(num(p.nB, 2)));
+    if (!(bb > 0 && tb > 0 && va > 0 && TAS > 0 && dS > 0 && d50 > 0 && vh > 0 && Bc > 0 && wG >= 0 && wG < 1 && H >= 0)) throw new Error('confira os campos: espaçamentos, velocidades, taxa, diâmetros e largura devem ser positivos');
+    const Qs = I.Q / 3600, g = 9.81, rho = etaRho(Tc), vb = va * (bb + tb) / bb;
+    const hf = beta * Math.pow(tb / bb, 4 / 3) * va * va / (2 * g) * Math.sin(th0), hf50 = 1.43 * ((2 * vb) * (2 * vb) - va * va) / (2 * g);
+    const Au = Qs / vb, At = Qs / va;
+    // remoção da areia: grãos log-normais (mediana d50, σg), cada um com a fração v_s/v₀ de Hazen
+    const v0 = TAS / 86400, rhoS = 2650, sS = Math.log(Math.max(sgS, 1.0001)); let Es = 0;
+    for (let k = 0; k < 200; k++) { const z = -4 + 8 * (k + 0.5) / 200, w = Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI) * 8 / 200; Es += w * Math.min(1, etaVs(d50 * Math.exp(sS * z), rhoS, Tc) / v0); }
+    Es = Math.min(1, Es);
+    const iS = etaI(th, 'silica'), mS = iS >= 0 ? kg[iS] * Es : 0, mW = mS * wG / (1 - wG), iw = etaI(th, 'water'), phi = kg[iw] > 0 ? Math.min(0.5, mW / kg[iw]) : 0;
+    const kG = kg.map((m, i) => (i === iS ? mS : th.c[i].solid ? 0 : m * phi)), kP = kg.map((m, i) => m - kG[i]);
+    const vsD = etaVs(dS, rhoS, Tc), A = Qs / v0, Sx = Qs / vh, hc = Sx / (nC * Bc), Lc = A / (nC * Bc);
+    if (vsD < v0) warn.push('o grão de projeto de ' + br(dS * 1000) + ' mm cai a ' + (vsD * 100).toFixed(2) + ' cm/s, abaixo da taxa (' + (v0 * 100).toFixed(2) + ' cm/s): parte dele passa; reduza a taxa para ' + (vsD * 86400).toFixed(0) + ' m³/(m²·d)');
+    if (TAS < 600 || TAS > 1300) warn.push('taxa de ' + br(TAS) + ' m³/(m²·d) fora da faixa usual das caixas de areia, de 600 a 1 300 m³/(m²·d)');
+    if (vh > 0.4 || vh < 0.2) warn.push('velocidade horizontal de ' + br(vh) + ' m/s: use de 0,25 a 0,40 m/s (abaixo de 0,2 a matéria orgânica também sedimenta; acima de 0,4 a areia é arrastada)');
+    if (va > 1 || va < 0.4) warn.push('velocidade de aproximação de ' + br(va) + ' m/s na grade: o usual fica entre 0,4 e 1,0 m/s');
+    if (iS < 0) warn.push('sem a sílica (areia) na lista: a caixa de areia não tem o que reter');
+    const Pw = rho * g * Qs * H / eta / 1000, outP = etaOut(th, kP, s), O = etaBal(th, kP, Tc);
+    const res = [{ k: 'Água bruta', v: I.Q.toFixed(1) + ' m³/h (' + I.Ls.toFixed(1) + ' L/s) a ' + Tc.toFixed(1) + ' °C; turbidez ≈ ' + I.turb.toFixed(0) + ' uT (SST ' + I.tss.toFixed(1) + ' mg/L); alcalinidade ' + I.alk.toFixed(1) + ' mg CaCO₃/L; pH ' + I.pH.toFixed(2), u: '' },
+      { k: 'Grade: velocidade entre as barras / área útil / área total', v: vb.toFixed(2) + ' m/s / ' + Au.toFixed(3) + ' m² / ' + At.toFixed(3) + ' m²', u: '' },
+      { k: 'Perda de carga na grade limpa (Kirschmer) / com 50 % de obstrução', v: (hf * 100).toFixed(2) + ' / ' + (hf50 * 100).toFixed(1) + ' cm', u: '' },
+      { k: 'Velocidade de sedimentação do grão de projeto (' + br(dS * 1000) + ' mm)', v: (vsD * 100).toFixed(2) + ' cm/s (taxa máxima ' + (vsD * 86400).toFixed(0) + ' m³/(m²·d))', u: '' },
+      { k: 'Caixa de areia: área / seção / lâmina e comprimento de cada canal', v: A.toFixed(1) + ' m² / ' + Sx.toFixed(2) + ' m² / ' + hc.toFixed(2) + ' m e ' + Lc.toFixed(1) + ' m (' + nC + ' canais de ' + br(Bc) + ' m)', u: '' },
+      { k: 'Areia retirada', v: (100 * Es).toFixed(1) + ' % da areia; ' + (mS * 24).toFixed(0) + ' kg/d de areia seca (' + ((mS + mW) * 24 / 1600).toFixed(2) + ' m³/d de areia úmida)', u: '' },
+      { k: 'Água para a ETA', v: O.Q.toFixed(1) + ' m³/h; turbidez ≈ ' + O.turb.toFixed(0) + ' uT', u: '' },
+      { k: 'Elevatória de água bruta (' + nB + ' + 1 bombas, H = ' + br(H) + ' m, η = ' + br(eta) + ')', v: Pw.toFixed(1) + ' kW (' + (Pw / nB).toFixed(1) + ' kW por bomba; ' + (Pw * 24).toFixed(0) + ' kWh/d; ' + (Pw / I.Q).toFixed(3) + ' kWh/m³)', u: '' }];
+    const dx = [], ex = []; for (let k = 0; k <= 80; k++) { const d = 0.05 + 0.55 * k / 80; dx.push(d); ex.push(100 * Math.min(1, etaVs(d / 1000, rhoS, Tc) / v0)); }
+    const plots = [{ kind: 'curves', title: 'Caixa de areia: remoção de cada grão (Hazen)', data: { xLabel: 'Diâmetro do grão de areia (mm)', yLabel: 'Fração removida (%)', yRange: [0, 105], series: [
+        { name: 'Taxa de ' + br(TAS) + ' m³/(m²·d)', x: dx, y: ex, color: '#2563c9', width: 3 },
+        { name: 'Grão de projeto (' + br(dS * 1000) + ' mm)', x: [dS * 1000], y: [100 * Math.min(1, vsD / v0)], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }] } },
+      { kind: 'bars', title: 'Sólidos na água bruta e na saída da captação (mg/L)', data: { categories: ['Areia (sílica)', 'Argila e silte'], yLabel: 'mg/L', series: [
+        { name: 'Água bruta', y: [I.mg('silica'), I.mg('clay')], color: '#a0703c' }, { name: 'Para a ETA', y: [O.mg('silica'), O.mg('clay')], color: '#2563c9' }] } }];
+    return { out: { product: outP, grit: etaOut(th, kG, s) }, duty: Pw * 1000, power: true, massUtil: 0, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* calha Parshall com mistura rápida: medição da vazão, ressalto hidráulico, gradiente de velocidade e coagulação com sulfato de alumínio */
+  IMPL.eta_coag = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, { kg, Tc, I } = etaMix(th, s, 'da calha Parshall'), what = 'mistura rápida';
+    const dAl = num(p.dAl, 20), dCa = num(p.dCa, 0), key = ETA_PARSHALL[p.W] ? p.W : "2' (61,0 cm)", P = ETA_PARSHALL[key];
+    if (!(dAl >= 0 && dCa >= 0)) throw new Error('as doses não podem ser negativas');
+    const Qs = I.Q / 3600, g = 9.81, mu = etaMu(Tc), rho = etaRho(Tc);
+    // hidráulica da calha (Azevedo Netto): Hₐ, energia na seção de medição, lâmina na garganta (cúbica), ressalto e mistura
+    const Ha = Math.pow(Qs / P.K, 1 / P.n), Dl = 2 / 3 * (P.D - P.W) + P.W, Va = Qs / (Dl * Ha), Ea = Va * Va / (2 * g) + Ha + P.N;
+    const fv = v => v * v * v - 2 * g * Ea * v + 2 * g * Qs / P.W; let lo = Math.sqrt(2 * g * Ea / 3), hi = Math.sqrt(2 * g * Ea);
+    for (let k = 0; k < 100; k++) { const m = (lo + hi) / 2; if (fv(m) > 0) hi = m; else lo = m; }
+    const V1 = (lo + hi) / 2, h1 = Qs / (P.W * V1), F1 = V1 / Math.sqrt(g * h1), h2 = h1 / 2 * (Math.sqrt(1 + 8 * F1 * F1) - 1);
+    const h3 = h2 - (P.N - P.k), V2 = Qs / (P.W * h2), V3 = Qs / (P.C * h3), tm = P.G / ((V2 + V3) / 2), hfP = Ha + P.N - h3, G = Math.sqrt(rho * g * hfP / (mu * tm));
+    if (Qs > P.qmax) warn.push('a vazão de ' + (Qs * 1000).toFixed(0) + ' L/s passa da capacidade da garganta de ' + key + ' (' + (P.qmax * 1000).toFixed(0) + ' L/s): escolha uma garganta maior');
+    if (!(h3 > 0)) throw new Error('a garganta escolhida não forma ressalto com essa vazão: escolha outra largura');
+    if (G < 700) warn.push('gradiente de mistura de ' + G.toFixed(0) + ' s⁻¹, abaixo de 700 s⁻¹: a mistura do coagulante fica fraca; escolha uma garganta mais estreita');
+    if (G > 2500) warn.push('gradiente de mistura de ' + G.toFixed(0) + ' s⁻¹: muito acima do usual nas calhas Parshall (1 000 a 2 000 s⁻¹); escolha uma garganta mais larga');
+    if (F1 < 2) warn.push('número de Froude ' + F1.toFixed(2) + ' na garganta: abaixo de 2 o ressalto é fraco e a mistura do coagulante é pobre');
+    if (tm > 5) warn.push('tempo de mistura de ' + tm.toFixed(1) + ' s: o coagulante deve se dispersar em poucos segundos (até 5 s)');
+    // química: primeiro a cal (pré-alcalinização), depois o sulfato de alumínio
+    const k2 = kg.slice(), mCa = dCa * I.Q / 1000, mAl = dAl * I.Q / 1000;
+    etaLime(th, k2, mCa, what); const rA = etaAlum(th, k2, mAl, what, warn);
+    const O = etaBal(th, k2, Tc), outP = etaOut(th, k2, s);
+    if (O.pH < 5.5 || O.pH > 7.8) warn.push('pH de coagulação ' + O.pH.toFixed(2) + ': com sulfato de alumínio a coagulação por varredura funciona melhor entre 6 e 7,5; corrija com cal (ou ácido)');
+    if (O.alk < 5) warn.push('alcalinidade residual de ' + O.alk.toFixed(1) + ' mg CaCO₃/L: pouca reserva para o cloro e o flúor; aumente a cal');
+    if (dAl > 0 && I.turb > 0 && dAl / I.turb < 0.1) warn.push('dose de coagulante muito baixa para a turbidez: confira no ensaio de jarros');
+    const res = [{ k: 'Água na entrada', v: I.Q.toFixed(1) + ' m³/h; turbidez ≈ ' + I.turb.toFixed(1) + ' uT; alcalinidade ' + I.alk.toFixed(1) + ' mg CaCO₃/L; CO₂ livre ' + I.co2mg.toFixed(1) + ' mg/L; pH ' + I.pH.toFixed(2), u: '' },
+      { k: 'Calha Parshall ' + key + ': lâmina na seção de medição Hₐ (Q = ' + br(P.K) + '·Hₐ^' + br(P.n) + ')', v: (Ha * 100).toFixed(1) + ' cm', u: '' },
+      { k: 'Garganta: lâmina h₁ / velocidade V₁ / Froude F₁', v: (h1 * 100).toFixed(1) + ' cm / ' + V1.toFixed(2) + ' m/s / ' + F1.toFixed(2), u: '' },
+      { k: 'Ressalto: lâmina conjugada h₂ / lâmina na saída h₃', v: (h2 * 100).toFixed(1) + ' / ' + (h3 * 100).toFixed(1) + ' cm', u: '' },
+      { k: 'Perda de carga / tempo de mistura / gradiente G = √(γh_f/(μt))', v: (hfP * 100).toFixed(1) + ' cm / ' + tm.toFixed(2) + ' s / ' + G.toFixed(0) + ' s⁻¹' + (G > 1100 ? ' (a faixa de 700 a 1 100 s⁻¹ da NBR 12216 vale quando não há ensaio de laboratório; nas calhas Parshall são comuns de 1 000 a 2 000 s⁻¹)' : ''), u: '' },
+      { k: 'Sulfato de alumínio (anidro) / produto comercial Al₂(SO₄)₃·14H₂O', v: (mAl * 24).toFixed(0) + ' / ' + (mAl * 24 * 1.737).toFixed(0) + ' kg/d (dose ' + br(dAl) + ' mg/L)', u: '' },
+      { k: 'Cal hidratada de pré-alcalinização', v: (mCa * 24).toFixed(0) + ' kg/d (dose ' + br(dCa) + ' mg/L)', u: '' },
+      { k: 'Alcalinidade consumida (0,88 mg CaCO₃ por mg de Al₂(SO₄)₃)', v: (I.alk - O.alk).toFixed(1) + ' mg CaCO₃/L', u: '' },
+      { k: 'Hidróxido de alumínio formado (flocos em potencial)', v: O.mg('aluminium-hydroxide').toFixed(1) + ' mg/L (' + (O.mg('aluminium-hydroxide') * I.Q / 1000 * 24).toFixed(0) + ' kg/d)', u: '' },
+      { k: 'Água coagulada: alcalinidade / CO₂ livre / pH de coagulação', v: O.alk.toFixed(1) + ' mg CaCO₃/L / ' + O.co2mg.toFixed(1) + ' mg/L / ' + O.pH.toFixed(2), u: '' }];
+    const dx = [], ph = [], al = []; for (let k = 0; k <= 60; k++) { const d = 60 * k / 60, kk = kg.slice(); try { etaLime(th, kk, mCa, what); etaAlum(th, kk, d * I.Q / 1000, what, []); const B = etaBal(th, kk, Tc); dx.push(d); ph.push(B.pH); al.push(B.alk); } catch (e) { break; } }
+    const qx = [], gx = []; Object.keys(ETA_PARSHALL).forEach(w => { const q = ETA_PARSHALL[w]; qx.push(w); try { const ha = Math.pow(Qs / q.K, 1 / q.n), dl = 2 / 3 * (q.D - q.W) + q.W, va = Qs / (dl * ha), ea = va * va / (2 * g) + ha + q.N;
+      let a = Math.sqrt(2 * g * ea / 3), c = Math.sqrt(2 * g * ea); for (let k = 0; k < 80; k++) { const m = (a + c) / 2; if (m * m * m - 2 * g * ea * m + 2 * g * Qs / q.W > 0) c = m; else a = m; }
+      const v1 = (a + c) / 2, y1 = Qs / (q.W * v1), f1 = v1 / Math.sqrt(g * y1), y2 = y1 / 2 * (Math.sqrt(1 + 8 * f1 * f1) - 1), y3 = y2 - (q.N - q.k), t2 = q.G / ((Qs / (q.W * y2) + Qs / (q.C * y3)) / 2);
+      gx.push(y3 > 0 ? Math.sqrt(rho * g * (ha + q.N - y3) / (mu * t2)) : 0); } catch (e) { gx.push(0); } });
+    const plots = [{ kind: 'curves', title: 'Coagulação: pH e alcalinidade × dose de sulfato de alumínio', data: { xLabel: 'Dose de Al₂(SO₄)₃ anidro (mg/L)', yLabel: 'pH', series: [
+        { name: 'pH da água coagulada', x: dx, y: ph, color: '#2563c9', width: 3 }, { name: 'Operação (' + br(dAl) + ' mg/L)', x: [dAl], y: [O.pH], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }],
+        hlines: [{ y: 6, name: 'pH 6 (início da varredura)', color: '#e8a317' }, { y: 7.5, name: 'pH 7,5', color: '#2e9e6b' }] } },
+      { kind: 'curves', title: 'Alcalinidade residual × dose de coagulante', data: { xLabel: 'Dose de Al₂(SO₄)₃ anidro (mg/L)', yLabel: 'mg CaCO₃/L', series: [{ name: 'Alcalinidade', x: dx, y: al, color: '#2e9e6b', width: 3 }] } },
+      { kind: 'bars', title: 'Gradiente de mistura de cada garganta Parshall (vazão atual)', data: { categories: qx, yLabel: 'G (s⁻¹)', series: [{ name: 'G no ressalto', y: gx, color: '#00a3b4' }] } }];
+    return { out: { product: outP }, massUtil: (sum(k2) - sum(kg)) / 3600, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* floculador mecânico de câmaras em série: modelo de agregação e ruptura de Argaman e Kaufman (1970) em cada câmara (mistura perfeita)
+     N_i = (N_{i−1} + K_B·N₀·G_i²·T_i)/(1 + K_A·G_i·T_i); a fração 1 − N/N₀ das partículas primárias vira floco */
+  IMPL.eta_floc = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, { kg, Tc, I } = etaMix(th, s, 'do floculador');
+    const tf = num(p.tf, 30), nC = Math.max(1, Math.round(num(p.nC, 3))), G1 = num(p.G1, 70), Gn = num(p.Gn, 20), KA = num(p.KA, 10) * 1e-5, KB = num(p.KB, 1) * 1e-7;
+    const Hf = num(p.Hf, 4), nU = Math.max(1, Math.round(num(p.nU, 2))), etaM = clamp(num(p.etaM, 0.7), 0.2, 1);
+    if (!(tf > 0 && G1 > 0 && Gn > 0 && KA > 0 && KB >= 0 && Hf > 0)) throw new Error('tempo, gradientes, constantes e profundidade devem ser positivos');
+    const mu = etaMu(Tc), Ti = tf * 60 / nC, Gs = [], Ns = [1]; let N = 1;
+    for (let k = 0; k < nC; k++) { const G = nC > 1 ? G1 * Math.pow(Gn / G1, k / (nC - 1)) : G1; Gs.push(G); N = (N + KB * G * G * Ti) / (1 + KA * G * Ti); Ns.push(N); }
+    const phi = clamp(1 - N, 0, 1), iC = etaI(th, 'clay'), iS = etaI(th, 'silica'), iA = etaI(th, 'aluminium-hydroxide'), k2 = kg.slice();
+    const prim = (iC >= 0 ? kg[iC] : 0) + (iS >= 0 ? kg[iS] : 0) + (iA >= 0 ? kg[iA] : 0);
+    if (!(prim > 0)) warn.push('a água não tem partículas para flocular');
+    const mMin = phi * ((iC >= 0 ? kg[iC] : 0) + (iS >= 0 ? kg[iS] : 0)), mAl = phi * (iA >= 0 ? kg[iA] : 0);
+    if (iC >= 0) k2[iC] *= 1 - phi; if (iS >= 0) k2[iS] *= 1 - phi; if (iA >= 0) k2[iA] *= 1 - phi;
+    etaAdd(th, k2, 'floc-clay', mMin, 'floculação'); etaAdd(th, k2, 'floc-al', mAl, 'floculação');
+    const V = I.Q / 3600 * tf * 60, Vc = V / nU / nC, side = Math.sqrt(Vc / Hf), Pc = Gs.map(G => mu * G * G * Vc), Pt = Pc.reduce((a, v) => a + v, 0) * nU / etaM / 1000;
+    Gs.forEach((G, k) => { if (G > 70 || G < 10) warn.push('câmara ' + (k + 1) + ' com G = ' + G.toFixed(0) + ' s⁻¹: a NBR 12216 recomenda de 10 a 70 s⁻¹'); });
+    if (tf < 20 || tf > 40) warn.push('floculação de ' + br(tf) + ' min: em floculadores mecanizados use de 30 a 40 min (20 a 30 nos hidráulicos), ou o valor do ensaio de jarros');
+    if (nC < 3) warn.push('use pelo menos 3 câmaras em série: o escoamento se aproxima do pistonado e a floculação melhora');
+    if (Gs[0] < Gs[nC - 1]) warn.push('o gradiente deve diminuir ao longo do floculador, para não quebrar os flocos já formados');
+    const O = etaBal(th, k2, Tc), Gm = Math.sqrt(Gs.reduce((a, G) => a + G * G, 0) / nC);
+    const res = [{ k: 'Água coagulada na entrada', v: I.Q.toFixed(1) + ' m³/h; partículas primárias ' + I.tss.toFixed(1) + ' mg/L (turbidez ≈ ' + I.turb.toFixed(1) + ' uT)', u: '' },
+      { k: 'Gradientes de velocidade das câmaras', v: Gs.map(G => G.toFixed(0)).join(' → ') + ' s⁻¹ (média quadrática ' + Gm.toFixed(0) + ' s⁻¹)', u: '' },
+      { k: 'Número de Camp G·t', v: (Gm * tf * 60).toFixed(0) + ' (o usual vai de 10⁴ a 10⁵)', u: '' },
+      { k: 'Partículas primárias que restam N/N₀ (Argaman e Kaufman)', v: Ns.slice(1).map(v => v.toFixed(3)).join(' → '), u: '' },
+      { k: 'Fração das partículas que virou floco', v: +(100 * phi).toFixed(1), u: '%' },
+      { k: 'Volume total / por câmara (' + nU + ' floculadores × ' + nC + ' câmaras)', v: V.toFixed(0) + ' m³ / ' + Vc.toFixed(1) + ' m³ (câmara de ' + side.toFixed(2) + ' × ' + side.toFixed(2) + ' × ' + br(Hf) + ' m)', u: '' },
+      { k: 'Potência na água por câmara (P = μG²V)', v: Pc.map(v => (v / 1000).toFixed(2)).join(' / ') + ' kW', u: '' },
+      { k: 'Potência total dos agitadores (η = ' + br(etaM) + ')', v: Pt.toFixed(2) + ' kW (' + (Pt * 24).toFixed(0) + ' kWh/d)', u: '' },
+      { k: 'Água floculada: flocos / partículas soltas', v: (O.mg('floc-clay') + O.mg('floc-al')).toFixed(1) + ' / ' + (O.mg('clay') + O.mg('silica') + O.mg('aluminium-hydroxide')).toFixed(2) + ' mg/L', u: '' }];
+    const tx = [], nx = []; for (let k = 0; k <= 60; k++) { const t2 = 60 * k / 60; let n2 = 1; for (let j = 0; j < nC; j++) { const G = Gs[j]; n2 = (n2 + KB * G * G * t2 * 60 / nC) / (1 + KA * G * t2 * 60 / nC); } tx.push(t2); nx.push(100 * n2); }
+    const cats = Gs.map((G, k) => 'Câmara ' + (k + 1));
+    const plots = [{ kind: 'curves', title: 'Floculação: partículas primárias que restam × tempo total', data: { xLabel: 'Tempo de floculação (min)', yLabel: 'N/N₀ (%)', yRange: [0, 100], series: [
+        { name: nC + ' câmaras com G de ' + G1.toFixed(0) + ' a ' + Gn.toFixed(0) + ' s⁻¹', x: tx, y: nx, color: '#2563c9', width: 3 },
+        { name: 'Operação (' + br(tf) + ' min)', x: [tf], y: [100 * N], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }] } },
+      { kind: 'bars', title: 'Gradiente de velocidade e partículas restantes por câmara', data: { categories: cats, yLabel: 'G (s⁻¹) e N/N₀ (%)', series: [
+        { name: 'G (s⁻¹)', y: Gs, color: '#00a3b4' }, { name: 'N/N₀ na saída (%)', y: Ns.slice(1).map(v => 100 * v), color: '#7a3db8' }] } }];
+    return { out: { product: etaOut(th, k2, s) }, duty: Pt * 1000, power: true, massUtil: 0, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* decantador convencional de escoamento horizontal: remoção de Hazen dos flocos (velocidades log-normais) e das partículas soltas,
+     dimensões, tempo de detenção, velocidade horizontal, Reynolds e Froude, vertedores e lodo */
+  IMPL.eta_settler = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, { kg, Tc, I } = etaMix(th, s, 'do decantador');
+    const TAS = num(p.TAS, 30), v50 = num(p.v50, 4), sg = num(p.sg, 2), vP = num(p.vP, 0.2), nD = Math.max(1, Math.round(num(p.nD, 2))), Hd = num(p.Hd, 4), LB = num(p.LB, 4), qv = num(p.qv, 1.8), wL = num(p.wL, 1) / 100;
+    if (!(TAS > 0 && v50 > 0 && sg >= 1 && vP >= 0 && Hd > 0 && LB > 0 && qv > 0 && wL > 0 && wL < 0.5)) throw new Error('confira a taxa, as velocidades, a profundidade, a relação L/B, a taxa nos vertedores e o teor de sólidos do lodo');
+    const v0 = TAS / 24, EF = etaHazen(v50, sg, v0), EP = Math.min(1, vP / v0), FL = { 'floc-clay': 1, 'floc-al': 1 };
+    const kS = kg.map((m, i) => (th.c[i].solid ? m * (FL[th.c[i].id] ? EF : EP) : 0)), mS = sum(kS), iw = etaI(th, 'water');
+    const mW = mS * (1 - wL) / wL, phi = kg[iw] > 0 ? Math.min(0.2, mW / kg[iw]) : 0;
+    if (mW > 0.2 * kg[iw]) warn.push('o lodo pedido levaria mais de 20 % da água: aumente o teor de sólidos do lodo');
+    kg.forEach((m, i) => { if (!th.c[i].solid) kS[i] = m * phi; });
+    const kC = kg.map((m, i) => m - kS[i]), O = etaBal(th, kC, Tc), Lg = etaBal(th, kS, Tc);
+    const Qs = I.Q / 3600, A = I.Q * 24 / TAS, Au = A / nD, B = Math.sqrt(Au / LB), Ld = LB * B, td = Hd / v0, vh = Qs / nD / (B * Hd);
+    const nu = etaMu(Tc) / etaRho(Tc), Rh = B * Hd / (B + 2 * Hd), Re = vh * Rh / nu, Fr = vh * vh / (9.81 * Rh), Lv = Qs * 1000 / qv;
+    if (TAS > 40) warn.push('taxa de ' + br(TAS) + ' m³/(m²·d): a NBR 12216 limita os decantadores convencionais de ETAs acima de 10 000 m³/d a 40 m³/(m²·d) (menos nas ETAs menores, sem ensaios)');
+    if (vh > 0.005) warn.push('velocidade horizontal de ' + (vh * 100).toFixed(2) + ' cm/s: acima de cerca de 0,5 cm/s o escoamento pode arrastar os flocos do fundo');
+    if (Re > 20000) warn.push('Reynolds ' + Re.toFixed(0) + ': escoamento turbulento demais; divida o decantador com cortinas longitudinais');
+    if (td < 1.5 || td > 4.5) warn.push('tempo de detenção de ' + td.toFixed(1) + ' h: o usual vai de 2 a 4 h');
+    if (O.turb > 5) warn.push('água decantada com turbidez de ' + O.turb.toFixed(1) + ' uT: acima de 5 uT a carreira dos filtros fica curta; melhore a coagulação e a floculação');
+    const res = [{ k: 'Água floculada na entrada', v: I.Q.toFixed(1) + ' m³/h; sólidos ' + I.tss.toFixed(1) + ' mg/L (flocos ' + (I.mg('floc-clay') + I.mg('floc-al')).toFixed(1) + ' mg/L)', u: '' },
+      { k: 'Velocidade crítica v₀ = Q/A (taxa de ' + br(TAS) + ' m³/(m²·d))', v: v0.toFixed(3) + ' m/h (' + (v0 / 36).toFixed(4) + ' cm/s)', u: '' },
+      { k: 'Remoção dos flocos (Hazen, log-normal) / das partículas soltas', v: (100 * EF).toFixed(1) + ' / ' + (100 * EP).toFixed(1) + ' %', u: '' },
+      { k: 'Área total / dimensões de cada decantador (' + nD + ')', v: A.toFixed(0) + ' m² / ' + Ld.toFixed(1) + ' × ' + B.toFixed(1) + ' × ' + br(Hd) + ' m', u: '' },
+      { k: 'Tempo de detenção / velocidade horizontal', v: td.toFixed(2) + ' h / ' + (vh * 100).toFixed(2) + ' cm/s', u: '' },
+      { k: 'Reynolds / Froude do escoamento horizontal', v: Re.toFixed(0) + ' / ' + Fr.toExponential(2) + (Fr < 1e-5 ? ' (Camp recomenda Fr acima de 10⁻⁵; cortinas longitudinais reduzem o raio hidráulico e aumentam o Froude)' : ''), u: '' },
+      { k: 'Comprimento de vertedores de coleta (' + br(qv) + ' L/(s·m))', v: Lv.toFixed(0) + ' m no total (' + (Lv / nD).toFixed(0) + ' m por decantador)', u: '' },
+      { k: 'Lodo: sólidos secos / volume com ' + br(wL * 100) + ' % de sólidos', v: (mS * 24).toFixed(0) + ' kg/d / ' + (Lg.Q * 24).toFixed(0) + ' m³/d', u: '' },
+      { k: 'Água decantada: turbidez / SST', v: O.turb.toFixed(2) + ' uT / ' + O.tss.toFixed(2) + ' mg/L (remoção de ' + (100 * (1 - O.tss / Math.max(I.tss, 1e-9))).toFixed(1) + ' %)', u: '' }];
+    const tx = [], ex = [], ux = []; for (let k = 0; k <= 60; k++) { const t2 = 10 + 70 * k / 60, v2 = t2 / 24, e2 = etaHazen(v50, sg, v2), ep = Math.min(1, vP / v2);
+      const left = (I.mg('floc-clay') + I.mg('floc-al')) * (1 - e2) + (I.tss - I.mg('floc-clay') - I.mg('floc-al')) * (1 - ep); tx.push(t2); ex.push(100 * e2); ux.push(left / ETA.KT); }
+    const plots = [{ kind: 'curves', title: 'Decantador: turbidez da água decantada × taxa de aplicação', data: { xLabel: 'Taxa de aplicação superficial (m³/(m²·d))', yLabel: 'Turbidez (uT)', series: [
+        { name: 'Água decantada', x: tx, y: ux, color: '#2563c9', width: 3 }, { name: 'Operação', x: [TAS], y: [O.turb], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }],
+        hlines: [{ y: 5, name: '5 uT (meta usual da água decantada)', color: '#e8a317' }] } },
+      { kind: 'curves', title: 'Remoção dos flocos (Hazen) × taxa de aplicação', data: { xLabel: 'Taxa de aplicação superficial (m³/(m²·d))', yLabel: 'Flocos removidos (%)', yRange: [0, 102], series: [
+        { name: 'v₅₀ = ' + br(v50) + ' m/h, σg = ' + br(sg), x: tx, y: ex, color: '#2e9e6b', width: 3 }] } }];
+    return { out: { clarified: etaOut(th, kC, s), sludge: etaOut(th, kS, s) }, massUtil: 0, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* filtro rápido descendente de dupla camada (antracito sobre areia): remoção de Iwasaki, perda de carga inicial de Carman–Kozeny,
+     carreira de filtração, lavagem em contracorrente e expansão do leito (Richardson–Zaki) */
+  IMPL.eta_filter = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, { kg, Tc, I } = etaMix(th, s, 'do filtro');
+    const tx = num(p.tx, 300), nF = Math.max(1, Math.round(num(p.nF, 6))), Hdisp = num(p.Hdisp, 2.2), kH = num(p.kH, 0.8), vL = num(p.vL, 0.8), tL = num(p.tL, 10);
+    const lay = [{ n: 'antracito', L: num(p.La, 0.6), d: num(p.dA, 1.0) / 1000, e: num(p.eA, 0.47), psi: num(p.psiA, 0.7), lam: num(p.lA, 2), rho: 1600 },
+      { n: 'areia', L: num(p.Ls, 0.3), d: num(p.dS, 0.5) / 1000, e: num(p.eS, 0.42), psi: num(p.psiS, 0.8), lam: num(p.lS, 5), rho: 2650 }];
+    if (!(tx > 0 && Hdisp > 0 && kH > 0 && vL > 0 && tL > 0) || lay.some(q => !(q.L > 0 && q.d > 0 && q.e > 0 && q.e < 1 && q.psi > 0 && q.psi <= 1 && q.lam >= 0))) throw new Error('confira a taxa, a perda de carga disponível, a lavagem e os dados das camadas (porosidade e esfericidade entre 0 e 1)');
+    const mu = etaMu(Tc), rho = etaRho(Tc), g = 9.81, v = tx / 86400, Pen = Math.exp(-lay.reduce((a, q) => a + q.lam * q.L, 0));
+    const h0s = lay.map(q => 180 * mu * (1 - q.e) * (1 - q.e) * v * q.L / (rho * g * q.e * q.e * q.e * q.psi * q.psi * q.d * q.d)), h0 = h0s[0] + h0s[1];
+    const Af = I.Q * 24 / tx / nF, ret = I.tss / 1000 * (1 - Pen), rate = v * 3600 * ret, dh = kH * rate, tRun = Hdisp > h0 ? (Hdisp - h0) / dh : 0;
+    if (!(tRun > 0)) throw new Error('a perda de carga do filtro limpo (' + h0.toFixed(2) + ' m) já passa da disponível: aumente a carga disponível ou use grãos maiores');
+    const vw = vL / 60, exp = lay.map(q => { const vt = etaVs(q.d * Math.sqrt(q.psi), q.rho, Tc), Re = rho * vt * q.d / mu, nRZ = (4.7 + 0.41 * Math.pow(Re, 0.75)) / (1 + 0.175 * Math.pow(Re, 0.75)), ee = Math.pow(vw / vt, 1 / nRZ);
+      return { vt, ee, E: ee > q.e ? (1 - q.e) / (1 - Math.min(0.95, ee)) - 1 : 0 }; });
+    const Vw = vw * 60 * Af * tL, nW = nF * 24 / (tRun + tL / 60), VwD = Vw * nW, fW = VwD / (I.Q * 24);
+    // saída média: a água de lavagem (tirada da água filtrada) leva os sólidos retidos
+    const iw = etaI(th, 'water'), kW2 = kg.map((m, i) => (th.c[i].solid ? m * (1 - Pen) : m * fW)), kF = kg.map((m, i) => m - kW2[i]), O = etaBal(th, kF, Tc);
+    if (tx > 360) warn.push('taxa de ' + br(tx) + ' m³/(m²·d): a NBR 12216 aceita até 360 m³/(m²·d) em filtros de dupla camada (180 nos de areia só)');
+    if (O.turb > 0.5) warn.push('água filtrada com ' + O.turb.toFixed(2) + ' uT: a Portaria GM/MS nº 888/2021 pede no máximo 0,5 uT na saída de cada filtro rápido (em 95 % das amostras)');
+    if (tRun < 20) warn.push('carreira de ' + tRun.toFixed(1) + ' h: abaixo de cerca de 20 h a água de lavagem pesa muito; melhore a decantação ou reduza a taxa');
+    if (tRun > 72) warn.push('carreira de ' + tRun.toFixed(0) + ' h: lave ao menos a cada 72 h, para evitar o crescimento de microrganismos no leito');
+    exp.forEach((q, k) => { if (q.E < 0.15 || q.E > 0.5) warn.push('expansão de ' + (100 * q.E).toFixed(0) + ' % na camada de ' + lay[k].n + ': o usual é de 20 a 40 %; ajuste a velocidade de lavagem'); });
+    if (fW > 0.05) warn.push('a lavagem gasta ' + (100 * fW).toFixed(1) + ' % da água produzida: acima de 5 % vale recircular a água de lavagem');
+    const res = [{ k: 'Água decantada na entrada', v: I.Q.toFixed(1) + ' m³/h; turbidez ≈ ' + I.turb.toFixed(2) + ' uT (' + I.tss.toFixed(2) + ' mg/L)', u: '' },
+      { k: 'Remoção de Iwasaki C/C₀ = exp(−Σλ·L)', v: (100 * (1 - Pen)).toFixed(1) + ' % (λ·L = ' + lay.map(q => br((q.lam * q.L).toFixed(2))).join(' + ') + ')', u: '' },
+      { k: 'Área de cada filtro (' + nF + ' filtros) / velocidade de filtração', v: Af.toFixed(1) + ' m² / ' + (v * 3600).toFixed(2) + ' m/h', u: '' },
+      { k: 'Perda de carga do leito limpo (Carman–Kozeny): antracito + areia', v: h0s[0].toFixed(3) + ' + ' + h0s[1].toFixed(3) + ' = ' + h0.toFixed(3) + ' m', u: '' },
+      { k: 'Sólidos retidos / aumento da perda de carga', v: (rate * 1000).toFixed(1) + ' g/(m²·h) / ' + (dh * 100).toFixed(2) + ' cm/h', u: '' },
+      { k: 'Carreira de filtração (até ' + br(Hdisp) + ' m de perda de carga)', v: +tRun.toFixed(1), u: 'h' },
+      { k: 'Lavagem: vazão de cada filtro / volume por lavagem', v: (vw * Af * 1000).toFixed(0) + ' L/s / ' + Vw.toFixed(0) + ' m³ (' + br(vL) + ' m/min por ' + br(tL) + ' min)', u: '' },
+      { k: 'Expansão do leito na lavagem (Richardson–Zaki): antracito / areia', v: (100 * exp[0].E).toFixed(0) + ' / ' + (100 * exp[1].E).toFixed(0) + ' %', u: '' },
+      { k: 'Água de lavagem', v: VwD.toFixed(0) + ' m³/d (' + (100 * fW).toFixed(2) + ' % da água; ' + nW.toFixed(1) + ' lavagens por dia)', u: '' },
+      { k: 'Água filtrada: turbidez / alumínio total', v: O.turb.toFixed(3) + ' uT / ' + O.Al.toFixed(3) + ' mg Al/L', u: '' }];
+    const ttx = [], hh = []; for (let k = 0; k <= 60; k++) { const t2 = tRun * 1.2 * k / 60; ttx.push(t2); hh.push(h0 + dh * t2); }
+    const fxs = [], fu = []; for (let k = 0; k <= 60; k++) { const t2 = 120 + 360 * k / 60; fxs.push(t2); fu.push(I.turb * Pen); }
+    const plots = [{ kind: 'curves', title: 'Filtro: perda de carga ao longo da carreira', data: { xLabel: 'Tempo de filtração (h)', yLabel: 'Perda de carga (m)', xRange: [0, tRun * 1.2], series: [
+        { name: 'Perda de carga', x: ttx, y: hh, color: '#2563c9', width: 3 }, { name: 'Fim da carreira (' + tRun.toFixed(1) + ' h)', x: [tRun], y: [Hdisp], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }],
+        hlines: [{ y: Hdisp, name: 'Carga disponível (' + br(Hdisp) + ' m)', color: '#d1302b' }, { y: h0, name: 'Leito limpo', color: '#2e9e6b' }] } },
+      { kind: 'bars', title: 'Turbidez antes e depois do filtro (uT)', data: { categories: ['Água decantada', 'Água filtrada'], yLabel: 'uT', series: [{ name: 'Turbidez', y: [I.turb, O.turb], color: '#00a3b4' }] } }];
+    return { out: { filtered: etaOut(th, kF, s), wash: etaOut(th, kW2, s) }, massUtil: 0, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* desinfecção (cloro gás), fluoretação (ácido fluossilícico) e correção final do pH (cal) num tanque de contato com chicanas.
+     Cloro livre: demanda imediata e decaimento de 1ª ordem; CT = C·T₁₀; inativação de Giardia por Smith et al. (1995) e de vírus pela tabela da USEPA */
+  IMPL.eta_disinfect = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, { kg, Tc, I } = etaMix(th, s, 'do tanque de contato'), what = 'desinfecção';
+    const dCl = num(p.dCl, 2), dem = num(p.dem, 0.5), kd = num(p.kd, 0.1), tc = num(p.tc, 30), f10 = clamp(num(p.f10, 0.5), 0.05, 1), dF = num(p.dF, 0.7), dCa = num(p.dCa, 16), Hc = num(p.Hc, 3.5);
+    if (!(dCl >= 0 && dem >= 0 && kd >= 0 && tc > 0 && dF >= 0 && dCa >= 0 && Hc > 0)) throw new Error('doses, demanda, decaimento, tempo e profundidade não podem ser negativos');
+    const M = ETA.M, Q = I.Q, k2 = kg.slice(), mCl = dCl * Q / 1000;
+    etaChlor(th, k2, mCl, what);
+    const C0 = Math.max(0, dCl - dem); etaChlorUse(th, k2, Math.min(dem, dCl) * Q / 1000 / M.cl2, what);
+    const Ce = C0 * Math.exp(-kd * tc / 60); etaChlorUse(th, k2, (C0 - Ce) * Q / 1000 / M.cl2, what);
+    const Bc = etaBal(th, k2, Tc), pHc = Bc.pH, T10 = f10 * tc, CT = Ce * T10;
+    const pKa = 3000 / (Tc + 273.15) - 10.0686 + 0.0253 * (Tc + 273.15), aHOCl = 1 / (1 + Math.pow(10, pHc - pKa));
+    const pHs = clamp(pHc, 6, 9), CT3 = Ce > 0 ? 0.2828 * Math.pow(pHs, 2.69) * Math.pow(Ce, 0.15) * Math.pow(0.933, Tc - 5) : Infinity, logG = Ce > 0 ? 3 * CT / CT3 : 0;
+    const VT = [[0.5, 12], [5, 8], [10, 6], [15, 4], [20, 3], [25, 2]], ctv = (() => { if (Tc <= VT[0][0]) return VT[0][1]; for (let k = 1; k < VT.length; k++) if (Tc <= VT[k][0]) return VT[k - 1][1] + (VT[k][1] - VT[k - 1][1]) * (Tc - VT[k - 1][0]) / (VT[k][0] - VT[k - 1][0]); return 2; })(), logV = 4 * CT / ctv;
+    const mH = etaFluor(th, k2, dF * Q / 1000, what); etaLime(th, k2, dCa * Q / 1000, what);
+    const O = etaBal(th, k2, Tc), V = Q * tc / 60, Ac = V / Hc;
+    if (logG < 0.5) warn.push('inativação de Giardia de ' + logG.toFixed(2) + ' log: com a filtração rápida (2,5 log de remoção), a desinfecção deve garantir pelo menos 0,5 log; aumente o cloro ou o tempo de contato');
+    if (O.cl > 2) warn.push('cloro residual livre de ' + O.cl.toFixed(2) + ' mg/L na saída: a Portaria 888/2021 recomenda no máximo 2 mg/L em qualquer ponto (o máximo permitido é 5 mg/L)');
+    if (O.cl < 0.5) warn.push('cloro residual de ' + O.cl.toFixed(2) + ' mg/L na saída: pouca reserva para manter 0,2 mg/L até o fim da rede');
+    if (pHc > 8) warn.push('pH ' + pHc.toFixed(2) + ' no tanque de contato: acima de 8 sobra pouco HOCl e o cloro desinfeta bem menos; corrija o pH depois do contato');
+    if (O.F > 1.5) warn.push('fluoreto de ' + O.F.toFixed(2) + ' mg/L acima do máximo de 1,5 mg/L da Portaria 888/2021');
+    else if (dF > 0 && (O.F < 0.6 || O.F > 0.9)) warn.push('fluoreto de ' + O.F.toFixed(2) + ' mg/L: em clima como o de Minas Gerais o teor ótimo fica perto de 0,7 mg/L (Portaria 635/1975)');
+    if (O.pH < 6.5 || O.pH > 9) warn.push('pH final ' + O.pH.toFixed(2) + ': a Portaria 888/2021 recomenda de 6,0 a 9,0 na distribuição; para proteger a rede, mire entre 7 e 8 (ajuste a cal)');
+    const res = [{ k: 'Água filtrada na entrada', v: Q.toFixed(1) + ' m³/h; turbidez ≈ ' + I.turb.toFixed(3) + ' uT; alcalinidade ' + I.alk.toFixed(1) + ' mg CaCO₃/L; pH ' + I.pH.toFixed(2), u: '' },
+      { k: 'Cloro gás aplicado / consumo', v: br(dCl) + ' mg/L / ' + (mCl * 24).toFixed(1) + ' kg/d (' + (mCl * 24 * 30 / 900).toFixed(1) + ' cilindros de 900 kg por mês)', u: '' },
+      { k: 'Cloro livre depois da demanda / na saída do tanque', v: C0.toFixed(2) + ' / ' + Ce.toFixed(2) + ' mg/L (decaimento k = ' + br(kd) + ' h⁻¹)', u: '' },
+      { k: 'Tanque de contato: volume / área / T₁₀ = ' + br(f10) + '·T', v: V.toFixed(0) + ' m³ / ' + Ac.toFixed(0) + ' m² / ' + T10.toFixed(1) + ' min', u: '' },
+      { k: 'pH no contato / fração de HOCl (pKa ' + br(pKa.toFixed(2)) + ')', v: pHc.toFixed(2) + ' / ' + (100 * aHOCl).toFixed(0) + ' %', u: '' },
+      { k: 'CT obtido = C·T₁₀', v: CT.toFixed(1) + ' mg·min/L (3 log de Giardia pedem ' + fx(CT3, 1) + ')', u: '' },
+      { k: 'Inativação de cistos de Giardia / de vírus', v: (logG > 6 ? '> 6' : logG.toFixed(2)) + ' log / ' + (logV > 6 ? '> 6' : logV.toFixed(1)) + ' log', u: '' },
+      { k: 'Ácido fluossilícico (H₂SiF₆ puro / solução a 20 %)', v: (mH * 24).toFixed(1) + ' / ' + (mH * 24 / 0.2).toFixed(0) + ' kg/d para ' + br(dF) + ' mg/L de fluoreto', u: '' },
+      { k: 'Cal hidratada para corrigir o pH', v: (dCa * Q / 1000 * 24).toFixed(0) + ' kg/d (dose ' + br(dCa) + ' mg/L)', u: '' },
+      { k: 'Água tratada: cloro livre / fluoreto / pH / alcalinidade', v: O.cl.toFixed(2) + ' mg/L / ' + O.F.toFixed(2) + ' mg/L / ' + O.pH.toFixed(2) + ' / ' + O.alk.toFixed(1) + ' mg CaCO₃/L', u: '' },
+      { k: 'Índice de Langelier (25 °C)', v: O.lsi.toFixed(2) + (O.lsi < -0.5 ? ' (água agressiva: tende a corroer)' : O.lsi > 0.5 ? ' (incrustante)' : ' (perto do equilíbrio)'), u: '' }];
+    const cx = [], ph = []; for (let k = 0; k <= 40; k++) { const d2 = 40 * k / 40, kk = kg.slice(); try { etaChlor(th, kk, mCl, what); etaChlorUse(th, kk, Math.min(dem, dCl) * Q / 1000 / M.cl2, what); etaChlorUse(th, kk, (C0 - Ce) * Q / 1000 / M.cl2, what); etaFluor(th, kk, dF * Q / 1000, what); etaLime(th, kk, d2 * Q / 1000, what); cx.push(d2); ph.push(etaBal(th, kk, Tc).pH); } catch (e) { break; } }
+    const tt = [], cc = []; for (let k = 0; k <= 60; k++) { const t2 = tc * k / 60; tt.push(t2); cc.push(C0 * Math.exp(-kd * t2 / 60)); }
+    const plots = [{ kind: 'curves', title: 'Correção do pH: pH final × dose de cal', data: { xLabel: 'Ca(OH)₂ (mg/L)', yLabel: 'pH', series: [
+        { name: 'pH da água tratada', x: cx, y: ph, color: '#2563c9', width: 3 }, { name: 'Operação (' + br(dCa) + ' mg/L)', x: [dCa], y: [O.pH], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }],
+        hlines: [{ y: 6, name: 'pH 6,0', color: '#e8a317' }, { y: 9, name: 'pH 9,0', color: '#e8a317' }] } },
+      { kind: 'curves', title: 'Cloro livre no tanque de contato', data: { xLabel: 'Tempo (min)', yLabel: 'Cloro residual livre (mg/L)', xRange: [0, tc], series: [{ name: 'C(t)', x: tt, y: cc, color: '#2e9e6b', width: 3 }],
+        hlines: [{ y: 2, name: '2 mg/L (máximo recomendado)', color: '#e8a317' }, { y: 0.2, name: '0,2 mg/L (mínimo na rede)', color: '#d1302b' }] } },
+      { kind: 'bars', title: 'Inativação na desinfecção (log)', data: { categories: ['Giardia', 'Vírus'], yLabel: 'log de inativação', series: [{ name: 'Obtida', y: [Math.min(logG, 8), Math.min(logV, 8)], color: '#00a3b4' }, { name: 'Mínimo usual', y: [0.5, 2], color: '#e8a317' }] } }];
+    return { out: { product: etaOut(th, k2, s) }, massUtil: (sum(k2) - sum(kg)) / 3600, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* reservatório de água tratada e elevatória para a cidade: demanda (K₁, K₂), volume pela NBR 12217 e pelo diagrama de massas (Rippl),
+     cloro residual até a ponta da rede e conferência da água com a Portaria GM/MS nº 888/2021 */
+  const ETA_DIA = [0.55, 0.5, 0.45, 0.45, 0.5, 0.65, 0.9, 1.2, 1.35, 1.4, 1.45, 1.5, 1.45, 1.3, 1.2, 1.15, 1.15, 1.2, 1.25, 1.2, 1.05, 0.9, 0.75, 0.6];   // consumo horário típico
+  IMPL.eta_reservoir = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, { kg, Tc, I } = etaMix(th, s, 'do reservatório'), what = 'reservatório';
+    const pop = num(p.pop, 100000), qpc = num(p.qpc, 200), K1 = num(p.K1, 1.2), K2 = num(p.K2, 1.5), fr = num(p.fr, 33.3) / 100, kd = num(p.kd, 0.04), tR = num(p.tR, 12), H = num(p.H, 50), eta = clamp(num(p.eta, 0.75), 0.2, 1);
+    if (!(pop > 0 && qpc > 0 && K1 >= 1 && K2 >= 1 && fr > 0 && kd >= 0 && tR >= 0 && H >= 0)) throw new Error('confira população, consumo, coeficientes (≥ 1), fração do volume, decaimento, tempo e altura');
+    const Qmed = pop * qpc / 86400, Qd = K1 * Qmed, Qh = K1 * K2 * Qmed, Qeta = I.Ls, Vreg = fr * Qd * 86.4, popMax = Qeta * 86400 / (qpc * K1);
+    // diagrama de massas do dia de maior consumo: a ETA entrega vazão constante e a cidade consome conforme a curva horária
+    const mean = ETA_DIA.reduce((a, v) => a + v, 0) / 24, mx = Math.max.apply(null, ETA_DIA) / mean, pat = ETA_DIA.map(v => 1 + (v / mean - 1) * (K2 - 1) / (mx - 1));
+    let acc = 0, lo = 0, hi = 0; const hx = [0], cum = [0]; pat.forEach((f, h) => { acc += (Qeta - Qd * f) * 3.6; lo = Math.min(lo, acc); hi = Math.max(hi, acc); hx.push(h + 1); cum.push(acc); });
+    const Vrip = hi - lo, V = Math.max(Vreg, Vrip), lvl = cum.map(c => 100 * (c - lo + (V - Vrip) / 2) / V);
+    const tRes = V / I.Q, k2 = kg.slice(), M = ETA.M, C1 = I.cl * Math.exp(-kd * tRes);
+    etaChlorUse(th, k2, (I.cl - C1) * I.Q / 1000 / M.cl2, what);
+    const O = etaBal(th, k2, Tc), Cend = O.cl * Math.exp(-kd * tR), Pw = etaRho(Tc) * 9.81 * Qeta / 1000 * H / eta / 1000;
+    if (Qeta < Qd * 0.999) warn.push('a ETA produz ' + Qeta.toFixed(1) + ' L/s, menos que a vazão do dia de maior consumo (' + Qd.toFixed(1) + ' L/s): atende só ' + popMax.toFixed(0) + ' habitantes');
+    if (Cend < 0.2) warn.push('o cloro residual chega a ' + Cend.toFixed(2) + ' mg/L na ponta da rede: a Portaria 888/2021 exige no mínimo 0,2 mg/L em todo o sistema; aumente o cloro ou faça recloração');
+    if (Vrip > Vreg) warn.push('o diagrama de massas pede ' + Vrip.toFixed(0) + ' m³, mais que a fração reservada: o volume adotado foi o do diagrama');
+    // conferência com a Portaria GM/MS nº 888/2021 (padrão de potabilidade); F ótimo pela Portaria 635/1975
+    const ok = c => (c ? '✔ atende' : '✖ fora');
+    const chk = [['Turbidez (filtração rápida: ≤ 0,5 uT na saída dos filtros; ≤ 5 uT na rede)', O.turb.toFixed(3) + ' uT', O.turb <= 0.5],
+      ['Cloro residual livre na saída (0,2 a 2 mg/L recomendados; máximo 5 mg/L)', O.cl.toFixed(2) + ' mg/L', O.cl >= 0.2 && O.cl <= 5],
+      ['Cloro residual livre na ponta da rede (≥ 0,2 mg/L)', Cend.toFixed(2) + ' mg/L', Cend >= 0.2],
+      ['pH (6,0 a 9,0 recomendados na distribuição)', O.pH.toFixed(2), O.pH >= 6 && O.pH <= 9],
+      ['Fluoreto (máximo 1,5 mg/L)', O.F.toFixed(2) + ' mg/L', O.F <= 1.5],
+      ['Alumínio (máximo 0,2 mg/L)', O.Al.toFixed(3) + ' mg/L', O.Al <= 0.2],
+      ['Sulfato (máximo 250 mg/L)', O.so4.toFixed(1) + ' mg/L', O.so4 <= 250],
+      ['Cloreto (máximo 250 mg/L)', O.chl.toFixed(1) + ' mg/L', O.chl <= 250],
+      ['Dureza total (máximo 300 mg CaCO₃/L)', O.hard.toFixed(1) + ' mg CaCO₃/L', O.hard <= 300],
+      ['Sólidos dissolvidos totais (máximo 500 mg/L)', O.tds.toFixed(1) + ' mg/L', O.tds <= 500]];
+    chk.forEach(c => { if (!c[2]) warn.push('Portaria 888/2021: ' + c[0].replace(/ \(.*$/, '') + ' = ' + c[1] + ' fora do padrão'); });
+    const res = [{ k: 'Água tratada da ETA', v: I.Q.toFixed(1) + ' m³/h (' + Qeta.toFixed(1) + ' L/s = ' + (I.Q * 24).toFixed(0) + ' m³/d)', u: '' },
+      { k: 'Vazões da cidade: média / dia de maior consumo / hora de maior consumo', v: Qmed.toFixed(1) + ' / ' + Qd.toFixed(1) + ' / ' + Qh.toFixed(1) + ' L/s (' + etaMil(pop) + ' hab × ' + br(qpc) + ' L/(hab·d))', u: '' },
+      { k: 'População que a ETA atende no dia de maior consumo', v: etaMil(Math.floor(popMax)) + ' habitantes', u: '' },
+      { k: 'Volume do reservatório: ' + br((fr * 100).toFixed(1)) + ' % do dia de maior consumo / diagrama de massas', v: Vreg.toFixed(0) + ' / ' + Vrip.toFixed(0) + ' m³ (adotado ' + V.toFixed(0) + ' m³)', u: '' },
+      { k: 'Tempo médio de permanência no reservatório', v: +tRes.toFixed(1), u: 'h' },
+      { k: 'Cloro livre: entrada / saída do reservatório / ponta da rede (' + br(tR) + ' h)', v: I.cl.toFixed(2) + ' / ' + O.cl.toFixed(2) + ' / ' + Cend.toFixed(2) + ' mg/L', u: '' },
+      { k: 'Elevatória de água tratada (H = ' + br(H) + ' m, η = ' + br(eta) + ')', v: Pw.toFixed(1) + ' kW (' + (Pw * 24).toFixed(0) + ' kWh/d)', u: '' },
+      { k: 'Conferência com a Portaria GM/MS nº 888/2021', v: chk.filter(c => c[2]).length + ' de ' + chk.length + ' parâmetros atendem', u: '' }]
+      .concat(chk.map(c => ({ k: c[0], v: c[1] + ' — ' + ok(c[2]), u: '' })));
+    const cl24 = [], tt = []; for (let k = 0; k <= 48; k++) { const t2 = 48 * k / 48; tt.push(t2); cl24.push(O.cl * Math.exp(-kd * t2)); }
+    const plots = [{ kind: 'curves', title: 'Reservatório: nível no dia de maior consumo (diagrama de massas)', data: { xLabel: 'Hora do dia', yLabel: 'Volume armazenado (% do reservatório)', xRange: [0, 24], yRange: [0, 105], series: [
+        { name: 'Nível', x: hx, y: lvl, color: '#2563c9', width: 3, markers: true }] } },
+      { kind: 'bars', title: 'Consumo horário da cidade × produção da ETA (L/s)', data: { categories: pat.map((f, h) => h + 'h'), yLabel: 'L/s', series: [
+        { name: 'Consumo', y: pat.map(f => Qd * f), color: '#e07b39' }, { name: 'Produção da ETA', y: pat.map(() => Qeta), color: '#2563c9' }] } },
+      { kind: 'curves', title: 'Cloro residual livre ao longo da rede', data: { xLabel: 'Tempo de percurso na rede (h)', yLabel: 'mg/L', xRange: [0, 48], series: [
+        { name: 'Cloro livre', x: tt, y: cl24, color: '#2e9e6b', width: 3 }, { name: 'Ponta da rede (' + br(tR) + ' h)', x: [tR], y: [Cend], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }],
+        hlines: [{ y: 0.2, name: '0,2 mg/L (mínimo da Portaria 888/2021)', color: '#d1302b' }] } }];
+    return { out: { product: etaOut(th, k2, s) }, duty: Pw * 1000, power: true, massUtil: (sum(k2) - sum(kg)) / 3600, res: decBR(res), warn: decW(warn), plots };
+  };
+
   SF.units = { MICROBES, TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn, ponchonSavarit, STEAM, multiEffect, IF97, H2O, tagH2O, POST };
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -12186,6 +12718,70 @@ window.SIMULAFACIL_CONFIG = {
         note: 'A manteiga de cacau cristaliza em seis formas (Wille e Lutton, 1966): I 17,3; II 23,3; III 25,5; IV 27,5; V 33,8; VI 36,3 °C. Só a forma V dá brilho, estalo e derrete na boca: a temperagem cria sementes dessa forma para que o resto da gordura cristalize nela no túnel.'
       };
     },
+    eta_intake: () => ({
+      name: 'Captação: grade, caixa de areia e elevatória de água bruta',
+      eqs: [eq(sub(i('h'), 'f') + ' = β' + sup('(' + fr(i('t'), i('b')) + ')', '4/3') + fr(sup(sub(i('v'), 'a'), '2'), '2' + i('g')) + 'sen θ', 'perda de carga na grade limpa (Kirschmer)'),
+        eq(sub(i('v'), '0') + ' = ' + fr(Q, i('A')) + ',&nbsp; ' + i('E') + '(' + i('d') + ') = min[1, ' + fr(sub(i('v'), 's') + '(' + i('d') + ')', sub(i('v'), '0')) + ']', 'remoção ideal de Hazen de cada grão'),
+        eq(sub(i('C'), 'D') + ' = ' + fr('24', 'Re') + '(1 + 0,15Re' + sup('', '0,687') + ') + ' + fr('0,42', '1 + 42 500Re' + sup('', '−1,16')) + ',&nbsp; ' + sub(i('v'), 's') + ' = ' + '√' + fr('4' + i('g') + '(' + sub('ρ', 's') + ' − ρ)' + i('d'), '3' + sub(i('C'), 'D') + 'ρ'), 'velocidade de sedimentação'),
+        eq(i('P') + ' = ' + fr('ρ' + i('g') + Q + i('H'), 'η'), 'potência da elevatória')],
+      sym: [['β', 'fator de forma das barras'], [i('t') + ', ' + i('b'), 'espessura das barras e espaçamento livre'], [sub(i('v'), '0'), 'taxa de escoamento superficial (velocidade crítica)'], [i('H'), 'altura manométrica']],
+      note: 'A areia (sílica) do rio desgasta as bombas e entope as tubulações; a caixa de areia a retira logo na captação. A argila e o silte, finos demais (menos de 10 µm), passam e só serão removidos depois da coagulação. A areia do rio é descrita por uma distribuição log-normal de tamanhos.'
+    }),
+    eta_coag: () => {
+      const Ha = sub(i('H'), 'a');
+      return {
+        name: 'Calha Parshall com mistura rápida: hidráulica do ressalto e química da coagulação',
+        eqs: [eq(Q + ' = ' + i('K') + sup(Ha, i('n')) + ',&nbsp; ' + sub(i('E'), 'a') + ' = ' + fr(sup(sub(i('V'), 'a'), '2'), '2' + i('g')) + ' + ' + Ha + ' + ' + i('N'), 'medição da vazão e energia na seção de medição'),
+          eq(sup(sub(i('V'), '1'), '3') + ' − 2' + i('g') + sub(i('E'), 'a') + sub(i('V'), '1') + ' + ' + fr('2' + i('g') + Q, i('W')) + ' = 0,&nbsp; ' + sub(i('h'), '2') + ' = ' + fr(sub(i('h'), '1'), '2') + '(√(1 + 8' + sup(sub(i('F'), '1'), '2') + ') − 1)', 'lâmina na garganta e ressalto'),
+          eq(i('G') + ' = ' + '√' + fr('γ' + sub(i('h'), 'f'), 'μ' + t), 'gradiente de velocidade (Camp e Stein)'),
+          eq('Al₂(SO₄)₃ + 3 Ca(HCO₃)₂ → 2 Al(OH)₃↓ + 3 CaSO₄ + 6 CO₂', 'coagulação: consome 0,88 mg CaCO₃ por mg de coagulante'),
+          eq('Ca(OH)₂ + 2 CO₂ → Ca(HCO₃)₂,&nbsp; pH = p' + sub(i('K'), '1') + ' + log' + fr('[HCO₃⁻]', '[CO₂]'), 'cal e pH pelo sistema carbonato')],
+        sym: [[i('W'), 'largura da garganta'], [i('N'), 'desnível da garganta'], [sub(i('F'), '1'), 'número de Froude na garganta'], ['p' + sub(i('K'), '1'), '6,35 a 25 °C (Harned e Davis)']],
+        note: 'O sulfato de alumínio forma hidróxido de alumínio, que precipita e "varre" as partículas de argila (coagulação por varredura, pH de 6 a 7,5). A reação libera CO₂ e consome alcalinidade: o pH cai. A mistura tem de ser intensa e rápida (G de 700 a 1 100 s⁻¹ pela NBR 12216), e o ressalto da calha Parshall faz isso sem motor, enquanto mede a vazão.'
+      };
+    },
+    eta_floc: () => ({
+      name: 'Floculador mecânico: agregação e ruptura dos flocos (Argaman e Kaufman, 1970)',
+      eqs: [eq(fr(sub(i('N'), 'i − 1') + ' − ' + sub(i('N'), 'i'), sub(i('T'), 'i')) + ' = ' + sub(i('K'), 'A') + sub(i('G'), 'i') + sub(i('N'), 'i') + ' − ' + sub(i('K'), 'B') + sub(i('N'), '0') + sup(sub(i('G'), 'i'), '2'), 'balanço de partículas primárias numa câmara de mistura perfeita'),
+        eq(sub(i('N'), 'i') + ' = ' + fr(sub(i('N'), 'i − 1') + ' + ' + sub(i('K'), 'B') + sub(i('N'), '0') + sup(sub(i('G'), 'i'), '2') + sub(i('T'), 'i'), '1 + ' + sub(i('K'), 'A') + sub(i('G'), 'i') + sub(i('T'), 'i')), 'câmaras em série'),
+        eq(sub(i('G'), 'i') + ' = ' + sub(i('G'), '1') + sup('(' + fr(sub(i('G'), 'n'), sub(i('G'), '1')) + ')', '(i − 1)/(n − 1)') + ',&nbsp; ' + i('P') + ' = μ' + sup(i('G'), '2') + V, 'gradientes decrescentes e potência')],
+      sym: [[sub(i('N'), 'i') + '/' + sub(i('N'), '0'), 'partículas primárias que restam na câmara i'], [sub(i('K'), 'A') + ', ' + sub(i('K'), 'B'), 'constantes de agregação e de ruptura'], [sub(i('T'), 'i'), 'tempo de detenção da câmara']],
+      note: 'O gradiente G faz as partículas se encontrarem e crescerem (agregação), mas também quebra os flocos maiores (ruptura). Por isso o G começa alto e cai de câmara em câmara, de 70 a 10 s⁻¹ (NBR 12216). As constantes K_A ≈ 10⁻⁴ e K_B ≈ 10⁻⁷ s são típicas; o ideal é ajustá-las com o ensaio de jarros da água do manancial.'
+    }),
+    eta_settler: () => ({
+      name: 'Decantador convencional: teoria de Hazen e escoamento horizontal',
+      eqs: [eq(sub(i('v'), '0') + ' = ' + fr(Q, i('A')) + ',&nbsp; ' + i('E') + ' = ∫ min(1, ' + fr(sub(i('v'), 's'), sub(i('v'), '0')) + ') ' + i('f') + '(' + sub(i('v'), 's') + ') d' + sub(i('v'), 's'), 'remoção de Hazen com velocidades log-normais'),
+        eq(sub(i('t'), 'd') + ' = ' + fr(i('H'), sub(i('v'), '0')) + ',&nbsp; ' + sub(i('v'), 'h') + ' = ' + fr(Q, i('B') + i('H')), 'tempo de detenção e velocidade horizontal'),
+        eq('Re = ' + fr(sub(i('v'), 'h') + sub(i('R'), 'h'), 'ν') + ',&nbsp; Fr = ' + fr(sup(sub(i('v'), 'h'), '2'), i('g') + sub(i('R'), 'h')), 'estabilidade do escoamento (Camp)')],
+      sym: [[sub(i('v'), '0'), 'taxa de aplicação superficial (velocidade crítica)'], [sub(i('R'), 'h'), 'raio hidráulico'], ['ν', 'viscosidade cinemática da água']],
+      note: 'Pela teoria de Hazen, a remoção depende só da área em planta, não da profundidade: um floco que cai mais depressa que v₀ = Q/A sempre chega ao fundo. A NBR 12216 limita a taxa dos decantadores convencionais a 40 m³/(m²·d) nas ETAs acima de 10 000 m³/d. Reynolds baixo e Froude acima de 10⁻⁵ evitam turbulência e correntes de densidade.'
+    }),
+    eta_filter: () => ({
+      name: 'Filtro rápido de dupla camada: remoção, perda de carga, carreira e lavagem',
+      eqs: [eq(fr(i('C'), sub(i('C'), '0')) + ' = exp(−' + sub('λ', 'ant') + sub(L, 'ant') + ' − ' + sub('λ', 'areia') + sub(L, 'areia') + ')', 'remoção ao longo do leito (Iwasaki)'),
+        eq(fr(sub(i('h'), '0'), L) + ' = ' + fr('180 μ' + sup('(1 − ε)', '2') + i('v'), 'ρ' + i('g') + sup('ε', '3') + sup('(ψ' + i('d') + ')', '2')), 'perda de carga do leito limpo (Carman–Kozeny)'),
+        eq(sub(t, 'c') + ' = ' + fr(sub(i('H'), 'disp') + ' − ' + sub(i('h'), '0'), sub(i('k'), 'H') + i('v') + sub(i('C'), '0') + i('E')), 'carreira de filtração'),
+        eq(fr(sub(i('v'), 'L'), sub(i('v'), 't')) + ' = ' + sup(sub('ε', 'e'), i('n')) + ',&nbsp; ' + i('E') + ' = ' + fr('1 − ε', '1 − ' + sub('ε', 'e')) + ' − 1', 'expansão na lavagem (Richardson–Zaki)')],
+      sym: [['λ', 'coeficiente de filtração de Iwasaki'], ['ε, ψ', 'porosidade e esfericidade'], [sub(i('k'), 'H'), 'aumento da perda de carga por massa retida'], [sub(i('v'), 'L'), 'velocidade da água de lavagem']],
+      note: 'O antracito, maior e mais leve, fica por cima depois da lavagem e retém a maior parte dos flocos em profundidade; a areia fina, embaixo, faz o polimento. Por isso a dupla camada aceita taxas de até 360 m³/(m²·d) (NBR 12216). A Portaria GM/MS nº 888/2021 pede no máximo 0,5 uT na saída de cada filtro rápido.'
+    }),
+    eta_disinfect: () => ({
+      name: 'Tanque de contato: desinfecção (CT), fluoretação e correção do pH',
+      eqs: [eq('Cl₂ + H₂O → HOCl + HCl,&nbsp; HOCl ⇌ H⁺ + OCl⁻ (p' + sub(i('K'), 'a') + ' ≈ 7,5)', 'cloro livre'),
+        eq(i('C') + '(' + t + ') = (' + i('D') + ' − demanda)·' + sup('e', '−' + sub(i('k'), 'd') + t) + ',&nbsp; CT = ' + sub(i('C'), 'saída') + '·' + sub(i('T'), '10'), 'decaimento e CT'),
+        eq(sub('CT', '3 log') + ' = 0,2828·' + sup('pH', '2,69') + sup(i('C'), '0,15') + sup('0,933', i('T') + ' − 5'), 'Giardia, cloro livre (Smith et al., 1995)'),
+        eq('H₂SiF₆ + 3 Ca(HCO₃)₂ → 3 CaF₂ + SiO₂ + 6 CO₂ + 4 H₂O', 'fluoretação')],
+      sym: [[sub(i('T'), '10'), 'tempo em que 10 % da água já saiu do tanque (chicanas)'], [sub(i('k'), 'd'), 'constante de decaimento do cloro'], [i('D'), 'dose de cloro']],
+      note: 'O HOCl desinfeta cerca de 80 vezes mais que o OCl⁻; por isso a desinfecção é melhor em pH abaixo de 7,5 e a cal entra depois do contato. A filtração rápida bem operada remove cerca de 2,5 log de cistos de Giardia; a desinfecção completa pelo menos 0,5 log (critério da USEPA). O flúor previne a cárie: o teor ótimo depende do clima (cerca de 0,7 mg/L em Minas Gerais).'
+    }),
+    eta_reservoir: () => ({
+      name: 'Reservatório e distribuição: demanda da cidade, volume e cloro na rede',
+      eqs: [eq(sub(Q, 'méd') + ' = ' + fr(i('P') + i('q'), '86 400') + ',&nbsp; ' + sub(Q, 'dia') + ' = ' + sub(i('K'), '1') + sub(Q, 'méd') + ',&nbsp; ' + sub(Q, 'hora') + ' = ' + sub(i('K'), '1') + sub(i('K'), '2') + sub(Q, 'méd'), 'vazões de projeto'),
+        eq(V + ' ≥ ' + fr('1', '3') + sub(Q, 'dia') + '·1 dia,&nbsp; ' + V + ' ≥ máx' + sub('', 't') + '∫(' + sub(Q, 'ETA') + ' − ' + sub(Q, 'cidade') + ')d' + t + ' − mín' + sub('', 't') + '∫(…)d' + t, 'NBR 12217 e diagrama de massas (Rippl)'),
+        eq(sub(i('C'), 'rede') + ' = ' + sub(i('C'), 'saída') + sup('e', '−' + sub(i('k'), 'd') + t), 'cloro residual na rede')],
+      sym: [[i('P'), 'população'], [i('q'), 'consumo per capita'], [sub(i('K'), '1') + ', ' + sub(i('K'), '2'), 'coeficientes do dia e da hora de maior consumo']],
+      note: 'A ETA trabalha com vazão constante (a do dia de maior consumo) e o reservatório absorve a variação ao longo do dia. A Portaria GM/MS nº 888/2021 exige pelo menos 0,2 mg/L de cloro residual livre em toda a rede e recomenda no máximo 2 mg/L. A conferência compara a água tratada com os padrões de turbidez, cloro, pH, fluoreto, alumínio, sulfato, cloreto, dureza e sólidos dissolvidos.'
+    }),
     steam_turbine: () => {
       const m = s2 => sub(i('ṁ'), s2), h = s2 => sub(i('h'), s2);
       return {
@@ -12662,6 +13258,34 @@ window.SIMULAFACIL_CONFIG = {
       'A manteiga de cacau pode cristalizar em seis formas, da I à VI. Só a forma V, que funde a 33,8 °C, dá brilho, estalo e derrete na boca; as outras deixam o chocolate mole, sem brilho e com manchas brancas (fat bloom). A temperagem funde todos os cristais, resfria a massa para formar cristais e reaquece um pouco para fundir os instáveis: sobram sementes da forma V, que guiam a cristalização no túnel.',
       'O bloco faz o balanço de energia de cada zona e do túnel com o calor sensível (c_p de Choi e Okos) e o calor latente da fração de gordura que cristaliza ou funde. O tempo no túnel vem de um balanço de parâmetros concentrados para uma barra resfriada pelas duas faces, e o gráfico mostra o caminho da temperatura junto às temperaturas de fusão das seis formas.',
       'No exemplo, 1 537 kg/h de chocolate ao leite passam por 45, 27 e 29,5 °C e são moldados em 15 374 barras de 100 g por hora. No túnel, com ar a 12 °C, as barras levam 26 min para chegar a 16 °C, o que pede 40 m de túnel a 1,5 m/min. A água gelada retira 55 kW, dos quais 14 kW são calor latente da cristalização da gordura.'] },
+    eta_intake: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
+      'A captação tira a água do rio e a leva à estação. A grade retém galhos, folhas e peixes; a caixa de areia (desarenador) deixa a areia assentar, porque ela desgastaria os rotores das bombas e entupiria as tubulações. A argila e o silte, finos demais, passam: só sairão depois da coagulação.',
+      'O bloco calcula a perda de carga na grade pela fórmula de Kirschmer (limpa e com metade obstruída), a remoção de cada grão de areia pela teoria de Hazen, com a velocidade de sedimentação dada pelo arrasto de uma esfera, as dimensões dos canais e a potência da elevatória de água bruta.',
+      'No exemplo, 1 030 m³/h de água do rio, com 50 uT e 20 mg/L de areia, passam por uma caixa de areia de 25 m² (1 000 m³/(m²·d)): 96 % da areia fica retida, cerca de 470 kg por dia. As bombas elevam a água a 40 m com 156 kW, 0,15 kWh por metro cúbico.'] },
+    eta_coag: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
+      'A coagulação desestabiliza as partículas de argila, que têm carga negativa e se repelem. O sulfato de alumínio forma hidróxido de alumínio, que precipita e arrasta as partículas (coagulação por varredura). A reação consome a alcalinidade da água e libera gás carbônico: o pH cai, e a cal corrige quando a alcalinidade não basta.',
+      'A calha Parshall mede a vazão pela lâmina de água na entrada (Q = K·Hₐⁿ) e forma um ressalto hidráulico logo depois da garganta. É ali que o coagulante é aplicado: a turbulência do ressalto o espalha em menos de um segundo, sem motor. O bloco segue o método de Azevedo Netto para a lâmina na garganta, o ressalto, a perda de carga e o gradiente de velocidade G.',
+      'No exemplo, 20 mg/L de sulfato de alumínio (cerca de 860 kg/d do produto comercial) consomem 17,5 mg CaCO₃/L de alcalinidade e levam o pH de 7,0 para 6,1, bom para a varredura. A calha de 2 pés tem lâmina de 35 cm, ressalto com Froude 2,4 e G de cerca de 1 700 s⁻¹ em 0,9 s.'] },
+    eta_floc: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
+      'Na floculação, a agitação lenta faz os microflocos se encontrarem e crescerem até ficar pesados o bastante para sedimentar. Agitação demais quebra os flocos; de menos, eles não se encontram. Por isso o floculador tem várias câmaras com o gradiente caindo de uma para a outra.',
+      'O bloco usa o modelo de Argaman e Kaufman (1970) em cada câmara de mistura perfeita: a agregação reduz as partículas primárias em proporção a K_A·G, e a ruptura devolve partículas em proporção a K_B·G². A fração que virou floco segue para o decantador como flocos; o resto continua como partículas soltas.',
+      'No exemplo, 3 câmaras com G de 70, 37 e 20 s⁻¹ em 30 minutos deixam só 5,8 % das partículas soltas (G·t ≈ 85 000). Os dois floculadores têm 515 m³ e os agitadores consomem só 1,7 kW.'] },
+    eta_settler: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
+      'No decantador, a água anda devagar por várias horas e os flocos vão ao fundo, onde formam o lodo. Pela teoria de Hazen, o que importa é a área em planta: todo floco que cai mais depressa que a taxa de aplicação v₀ = Q/A chega ao fundo antes de a água sair.',
+      'O bloco descreve as velocidades de sedimentação dos flocos por uma distribuição log-normal e integra a remoção de Hazen; as partículas que não flocularam sedimentam muito devagar. Calcula ainda as dimensões, o tempo de detenção, a velocidade horizontal, os números de Reynolds e de Froude, os vertedores de coleta e o lodo.',
+      'No exemplo, dois decantadores de 41 × 10 × 4 m (30 m³/(m²·d), 3,2 h) retêm 99 % dos flocos e a água sai com 3,3 uT. O lodo soma cerca de 2 t de sólidos secos por dia, ou 200 m³/d com 1 % de sólidos, que vão para o tratamento de lodo.'] },
+    eta_filter: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
+      'O filtro rápido é a barreira final contra a turbidez e os cistos de protozoários. A água desce por uma camada de antracito, que retém a maior parte dos flocos em profundidade, e por uma de areia fina, que faz o polimento. Quando a perda de carga chega ao limite, o filtro é lavado com água de baixo para cima, que expande o leito e solta o material retido.',
+      'O bloco usa o modelo de Iwasaki para a remoção (C/C₀ = exp(−λL) em cada camada), a equação de Carman–Kozeny para a perda de carga do leito limpo, um aumento linear da perda de carga com a massa retida para a carreira e a equação de Richardson–Zaki para a expansão na lavagem.',
+      'No exemplo, seis filtros de 13,6 m² a 300 m³/(m²·d) levam a água de 3,3 para 0,23 uT, abaixo de 0,5 uT da Portaria 888/2021. A carreira dura 31 h e a lavagem, a 0,8 m/min, expande o leito em 21 % (antracito) e 38 % (areia) e gasta 2 % da água produzida.'] },
+    eta_disinfect: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
+      'O cloro mata as bactérias, os vírus e boa parte dos protozoários que passaram pelo filtro, e o cloro que sobra (residual livre) protege a água na rede. O que conta é o produto CT: concentração de cloro vezes o tempo de contato. As chicanas do tanque evitam que parte da água saia antes da hora (T₁₀). No fim, o ácido fluossilícico dá o flúor que previne a cárie e a cal corrige o pH, para a água não corroer os canos.',
+      'O bloco aplica a demanda imediata de cloro e o decaimento de primeira ordem no tanque, calcula a fração de HOCl pelo pH, o CT e a inativação de Giardia pela correlação de Smith et al. (1995) e de vírus pela tabela da USEPA. A química do flúor e da cal entra no sistema carbonato para o pH final e o índice de Langelier.',
+      'No exemplo, 2 mg/L de cloro (48 kg/d) deixam 1,43 mg/L na saída de um tanque de 500 m³ com 30 min; com o pH de 6,0 quase todo o cloro está como HOCl, e o CT de 21 mg·min/L dá 4,9 log de Giardia. Com 0,7 mg/L de flúor e 16 mg/L de cal, a água sai com pH 7,0 e 30 mg CaCO₃/L de alcalinidade.'] },
+    eta_reservoir: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
+      'A ETA trabalha com vazão constante, mas a cidade consome pouco de madrugada e muito no fim da manhã. O reservatório guarda a água nas horas de pouco consumo e a entrega nas horas de pico; ele também é a reserva para incêndios e para as paradas da estação. A NBR 12217 pede pelo menos um terço do volume do dia de maior consumo.',
+      'O bloco calcula as vazões da cidade com os coeficientes K₁ e K₂, o volume pela regra de um terço e pelo diagrama de massas (Rippl) com uma curva típica de consumo horário, o decaimento do cloro no reservatório e na rede e a potência da elevatória. No fim, confere a água tratada com o padrão de potabilidade da Portaria GM/MS nº 888/2021.',
+      'No exemplo, 100 mil habitantes a 200 L/(hab·d) pedem 278 L/s no dia de maior consumo, exatamente o que a ETA produz. O reservatório de 8 000 m³ segura a água por 8 h; o cloro cai de 1,43 para 1,04 mg/L e chega à ponta da rede com 0,64 mg/L. Os 10 parâmetros conferidos atendem à Portaria.'] },
     steam_condenser: { ex: ex('usina-nuclear-pwr', 'Usina nuclear PWR completa (tipo Angra 2)'), p: [
       'O condensador de superfície fecha o ciclo de Rankine: o vapor que sai da turbina de baixa condensa sobre tubos com água fria, e o volume do vapor, milhares de vezes maior que o do líquido, desaparece. Isso cria o vácuo que permite à turbina expandir o vapor até cerca de 8 kPa e tirar dele muito mais trabalho.',
       'O bloco condensa o vapor de escape e os drenos ligados a ele até o condensado levemente subresfriado e entrega o calor à água de resfriamento, que sai mais quente pelo balanço de energia. A diferença terminal (saturação menos saída da água) e a média logarítmica dão a área de troca; sem corrente de água ligada, a vazão é calculada pelo aquecimento escolhido.',
@@ -12858,6 +13482,13 @@ window.SIMULAFACIL_CONFIG = {
     cocoa_press: { feed: 'liquor de cacau', butter: 'manteiga de cacau', cake: 'torta (cacau em pó)' },
     conche: { feed: 'massa refinada', fat: 'manteiga de cacau', emulsifier: 'lecitina', product: 'chocolate conchado', vapor: 'ar de exaustão', q_in: 'motores' },
     temperer: { feed: 'chocolate conchado', product: 'barras de chocolate', q_out: 'água gelada' },
+    eta_intake: { feed: 'água bruta do rio', product: 'água para a ETA', grit: 'areia retirada', q_in: 'bombas de água bruta' },
+    eta_coag: { feed: 'água bruta', product: 'água coagulada' },
+    eta_floc: { feed: 'água coagulada', product: 'água floculada' },
+    eta_settler: { feed: 'água floculada', clarified: 'água decantada', sludge: 'lodo' },
+    eta_filter: { feed: 'água decantada', filtered: 'água filtrada', wash: 'água de lavagem' },
+    eta_disinfect: { feed: 'água filtrada', product: 'água tratada (cloro, flúor e pH)' },
+    eta_reservoir: { feed: 'água tratada', product: 'para a cidade', q_in: 'bombas de água tratada' },
     blast_furnace: { ore: 'minério', coke: 'coque', flux: 'fundente', blast: 'ar de sopro', gas: 'gás de topo', slag: 'escória', pig_iron: 'gusa' },
     cement_kiln: { meal: 'farinha crua', fuel: 'combustível', air: 'ar de combustão', gas: 'gases de exaustão', clinker: 'clínquer' },
     silo: { feed: 'alimentação', product: 'descarga' },
@@ -13013,7 +13644,14 @@ window.SIMULAFACIL_CONFIG = {
     cocoa_mill: { w: 120, h: 110, ports: { feed: P(0, 86, 'l', 'in'), product: P(120, 22, 'r', 'out'), q_in: P(60, 110, 'd', 'ein') } },
     cocoa_press: { w: 130, h: 110, ports: { feed: P(0, 36, 'l', 'in'), butter: P(130, 70, 'r', 'out'), cake: P(65, 110, 'd', 'out') } },
     conche: { w: 160, h: 100, ports: { feed: P(0, 66, 'l', 'in'), fat: P(46, 0, 'u', 'in'), emulsifier: P(76, 0, 'u', 'in'), vapor: P(132, 0, 'u', 'out'), product: P(160, 84, 'r', 'out'), q_in: P(80, 100, 'd', 'ein') } },
-    temperer: { w: 190, h: 100, ports: { feed: P(0, 20, 'l', 'in'), product: P(190, 84, 'r', 'out'), q_out: P(36, 100, 'd', 'eout') } }
+    temperer: { w: 190, h: 100, ports: { feed: P(0, 20, 'l', 'in'), product: P(190, 84, 'r', 'out'), q_out: P(36, 100, 'd', 'eout') } },
+    eta_intake: { w: 170, h: 100, ports: { feed: P(0, 40, 'l', 'in'), product: P(170, 40, 'r', 'out'), grit: P(78, 100, 'd', 'out'), q_in: P(140, 0, 'u', 'ein') } },
+    eta_coag: { w: 160, h: 96, ports: { feed: P(0, 48, 'l', 'in'), product: P(160, 48, 'r', 'out') } },
+    eta_floc: { w: 170, h: 100, ports: { feed: P(0, 56, 'l', 'in'), product: P(170, 56, 'r', 'out') } },
+    eta_settler: { w: 190, h: 100, ports: { feed: P(0, 40, 'l', 'in'), clarified: P(190, 40, 'r', 'out'), sludge: P(45, 100, 'd', 'out') } },
+    eta_filter: { w: 130, h: 120, ports: { feed: P(0, 24, 'l', 'in'), wash: P(130, 22, 'r', 'out'), filtered: P(130, 92, 'r', 'out') } },
+    eta_disinfect: { w: 170, h: 100, ports: { feed: P(0, 56, 'l', 'in'), product: P(170, 56, 'r', 'out') } },
+    eta_reservoir: { w: 150, h: 110, ports: { feed: P(0, 34, 'l', 'in'), product: P(150, 48, 'r', 'out'), q_in: P(118, 110, 'd', 'ein') } }
   };
 
   /* primitivas: rect (x,y,w,h,r), circ (cx,cy,r), line (polilinha aberta), poly (polígono fechado), text.
@@ -13071,6 +13709,40 @@ window.SIMULAFACIL_CONFIG = {
   }
 
   const PRIMS = {
+    eta_intake: () => [ // captação: canal com a grade inclinada, caixa de areia com a tremonha e os grãos, e a bomba da elevatória
+      L([[0, 40], [8, 40]]), R(8, 24, 100, 42, 4), L([[10, 32], [106, 32]], 'cold'),
+      L([[20, 25], [30, 65]]), L([[26, 25], [36, 65]]), L([[32, 25], [42, 65]]),
+      Pg([[58, 66], [98, 66], [86, 84], [70, 84]]), C(72, 72, 1.8, 'ln'), C(80, 75, 1.8, 'ln'), C(88, 71, 1.8, 'ln'), C(78, 80, 1.8, 'ln'),
+      L([[78, 84], [78, 100]]), L([[108, 44], [124, 44]]), C(140, 44, 16), C(140, 44, 6, 'ln'), L([[140, 38], [146, 44], [140, 50]]),
+      L([[152, 34], [162, 34], [162, 40], [170, 40]]), R(132, 10, 16, 10, 2, 'bodyw'), L([[140, 20], [140, 28]]), L([[140, 0], [140, 10]], 'lnd'), T(58, 18, 'grade · areia')],
+    eta_coag: () => [ // calha Parshall vista de cima: entrada convergente, garganta e saída divergente; ressalto e dosagem de cal e de sulfato de alumínio
+      Pg([[0, 26], [56, 26], [80, 38], [104, 38], [160, 30], [160, 66], [104, 58], [80, 58], [56, 70], [0, 70]]),
+      L([[6, 48], [72, 48]], 'cold'), L([[84, 48], [154, 48]], 'cold'), C(96, 48, 6, 'cold'), C(110, 48, 4, 'cold'),
+      L([[44, 0], [44, 30]], 'lnd'), L([[74, 0], [74, 38]], 'hot'), T(30, 12, 'cal'), T(92, 12, 'Al'), T(80, 90, 'Parshall')],
+    eta_floc: () => [ // três câmaras com agitadores de paletas (motor, eixo e pás) e flocos que crescem de câmara em câmara
+      L([[0, 56], [6, 56]]), R(6, 22, 158, 72, 4), L([[58, 30], [58, 94]]), L([[110, 22], [110, 86]]), L([[8, 32], [162, 32]], 'cold'),
+      R(26, 6, 12, 10, 2, 'bodyw'), R(78, 6, 12, 10, 2, 'bodyw'), R(130, 6, 12, 10, 2, 'bodyw'),
+      L([[32, 16], [32, 74]]), L([[84, 16], [84, 74]]), L([[136, 16], [136, 74]]),
+      R(20, 50, 24, 5, 1, 'bodyw'), R(20, 66, 24, 5, 1, 'bodyw'), R(74, 52, 20, 5, 1, 'bodyw'), R(74, 66, 20, 5, 1, 'bodyw'), R(128, 54, 16, 5, 1, 'bodyw'), R(128, 66, 16, 5, 1, 'bodyw'),
+      C(48, 84, 1.5, 'ln'), C(16, 84, 1.5, 'ln'), C(100, 84, 2.5, 'ln'), C(66, 86, 2.5, 'ln'), C(152, 82, 4, 'ln'), C(118, 84, 4, 'ln'), L([[164, 56], [170, 56]])],
+    eta_settler: () => [ // decantador: cortina de entrada, flocos descendo, calhas de coleta no fim e poço de lodo
+      L([[0, 40], [6, 40]]), R(6, 22, 178, 56, 3), L([[8, 30], [182, 30]], 'cold'), L([[22, 26], [22, 70]], 'lnd'),
+      R(146, 24, 8, 8, 1, 'bodyw'), R(164, 24, 8, 8, 1, 'bodyw'),
+      C(50, 40, 2.5, 'ln'), C(74, 48, 2.5, 'ln'), C(98, 56, 2.5, 'ln'), C(122, 64, 2.5, 'ln'), C(64, 62, 2.5, 'ln'), C(88, 70, 2.5, 'ln'),
+      L([[30, 74], [182, 76]], 'lnd'), Pg([[30, 78], [60, 78], [50, 92], [40, 92]]), L([[45, 92], [45, 100]]), L([[184, 40], [190, 40]]), T(100, 16, 'decantador')],
+    eta_filter: () => [ // filtro: lâmina de água, calha de lavagem, antracito, areia, pedregulho e fundo com o coletor de água filtrada
+      L([[0, 24], [10, 24]]), R(10, 10, 110, 96, 3), L([[12, 30], [94, 30]], 'cold'), R(96, 18, 22, 8, 1, 'bodyw'), L([[118, 22], [130, 22]]),
+      R(12, 38, 106, 24, 0, 'bodyw'), R(12, 62, 106, 14, 0, 'bodyw'), L([[12, 80], [118, 80]], 'lnd'), L([[12, 84], [118, 84]], 'lnd'),
+      L([[20, 92], [118, 92]]), L([[40, 92], [40, 86]]), L([[65, 92], [65, 86]]), L([[90, 92], [90, 86]]), L([[118, 92], [130, 92]]),
+      T(62, 55, 'antracito'), T(62, 73, 'areia')],
+    eta_disinfect: () => [ // tanque de contato com chicanas em serpentina; dosagem de cloro na entrada e de flúor e cal na saída
+      L([[0, 56], [6, 56]]), R(6, 24, 158, 64, 3), L([[40, 24], [40, 72]]), L([[74, 40], [74, 88]]), L([[108, 24], [108, 72]]), L([[142, 40], [142, 88]]),
+      L([[10, 56], [24, 56], [24, 80], [57, 80], [57, 32], [91, 32], [91, 80], [125, 80], [125, 32], [154, 32], [154, 56], [162, 56]], 'cold'),
+      L([[16, 6], [16, 24]], 'hot'), L([[132, 6], [132, 24]], 'lnd'), L([[152, 6], [152, 24]], 'lnd'), T(32, 14, 'Cl₂'), T(124, 14, 'F'), L([[164, 56], [170, 56]])],
+    eta_reservoir: () => [ // reservatório com teto e nível da água, e a bomba da elevatória para a cidade
+      L([[0, 34], [10, 34]]), Pg([[10, 22], [50, 8], [90, 22]], 'bodyw'), R(10, 22, 80, 72, 4), L([[12, 40], [88, 40]], 'cold'), L([[12, 44], [88, 44]], 'cold'),
+      L([[90, 74], [104, 74]]), C(118, 74, 14), C(118, 74, 5, 'ln'), L([[118, 69], [123, 74], [118, 79]]),
+      L([[118, 60], [118, 48], [150, 48]]), L([[118, 88], [118, 110]], 'lnd'), T(50, 72, 'tratada')],
     cocoa_roaster: () => [ // torrador: tremonha, tambor rotativo com as amêndoas rolando, roletes, chama do queimador e chaminé da exaustão
       Pg([[10, 0], [34, 0], [28, 14], [16, 14]], 'bodyw'), L([[22, 14], [22, 26]]), L([[124, 0], [124, 26]], 'lnd'), R(116, 6, 16, 6, 2, 'bodyw'),
       R(8, 26, 134, 40, 20), C(30, 57, 3.4, 'hot'), C(40, 60, 3.4, 'hot'), C(50, 57, 3.4, 'hot'), C(36, 52, 3.4, 'hot'), C(46, 52, 3.4, 'hot'),
@@ -18113,6 +18785,9 @@ def pfr_transiente(P, nome):
   // mosto ou meio de cultura em kg/h a partir de vazão (L/h), células X e substrato S (g/L) e massa específica (kg/m³)
   const bioFeed = (Q, X, Sg, sub, rho) => { const M = Q * rho / 1000, x = X * Q / 1000 / M, sg = Sg * Q / 1000 / M, c = { water: 1 - x - sg };
     c[sub] = sg; if (x > 0) c.biomass = x; return { T: 30, P: 1.01325, vf: '', flow: M, flowUnit: 'kg/h', basis: 'mássica', composition: c }; };
+  // água bruta da ETA: vazão Q (m³/h) a 20 °C e concentrações (g/m³ = mg/L) → corrente em kg/h com a composição mássica
+  const etaRaw = (Q, mg) => { const c = { water: 998.2 }; Object.keys(mg).forEach(k => { c[k] = mg[k] / 1000; }); const tot = Object.keys(c).reduce((a, k) => a + c[k], 0);
+    Object.keys(c).forEach(k => { c[k] /= tot; }); return { T: 20, P: 1.01325, vf: '', flow: +(Q * tot).toFixed(1), flowUnit: 'kg/h', basis: 'mássica', composition: c }; };
   const EX = [
     { key: 'fabrica-chocolate', title: 'A Fábrica de Chocolate dos Sonhos: do cacau à barra de chocolate ao leite — torra, descasque, moagem, alcalinização com K₂CO₃, prensa (manteiga e cacau em pó), mistura, refino, conchagem, temperagem e túnel de resfriamento', fs: {
       name: 'A Fábrica de Chocolate dos Sonhos', theme: 'chocolate', fixedLayout: true,
@@ -18183,6 +18858,29 @@ def pfr_transiente(P, nome):
         S('10', 'HC', 'underflow', 'FL1', 'feed', 'Deslamado'), S('11', 'FL1', 'sink', 'FL2', 'feed', 'Conc. rougher'), S('12', 'FL1', 'froth', 'MXR', 'in1', 'Espuma rougher'),
         S('13', 'FL2', 'froth', 'MXR', 'in2', 'Espuma cleaner'), S('14', 'MXR', 'out', 'PR', 'in', 'Rejeito'), S('15', 'FL2', 'sink', 'SC', 'feed', 'Concentrado final'),
         S('16', 'SC', 'underflow', 'PC', 'in', 'Underflow'), S('17', 'SC', 'overflow', 'PA2', 'in', 'Água')] } },
+    { key: 'eta-convencional', title: 'Estação de tratamento de água (ETA) convencional para uma cidade de 100 mil habitantes — captação, calha Parshall, floculação, decantação, filtração, cloro, flúor e reservatório, com a Portaria 888/2021', fs: {
+      name: 'ETA convencional: água para 100 mil habitantes', theme: 'agua', fixedLayout: true,
+      components: ['water', 'silica', 'clay', 'ca-bicarbonate', 'co2-aq', 'sio2-aq', 'aluminium-hydroxide', 'calcium-sulfate', 'floc-clay', 'floc-al', 'free-chlorine', 'cacl2', 'caf2-aq'], model: 'IDEAL',
+      blocks: [
+        // água bruta do rio a 20 °C: 1 030 m³/h (100 mil hab × 200 L/(hab·d) × K₁ = 1,2 = 1 000 m³/h, mais 3 % para o lodo e a lavagem dos filtros); por m³: 20 g de areia, 75 g de argila (≈ 50 uT),
+        // alcalinidade de 30 mg CaCO₃/L (48,6 g de Ca(HCO₃)₂), 6,3 g de CO₂ livre (pH ≈ 7,0) e 10 g de sílica dissolvida
+        { id: 'FAB', x: -40, y: 165, type: 'feed', name: 'Água bruta (1 030 m³/h)', params: etaRaw(1030, { silica: 20, clay: 75, 'ca-bicarbonate': 48.6, 'co2-aq': 6.3, 'sio2-aq': 10 }) },
+        { id: 'CAP', x: 80, y: 140, type: 'eta_intake', name: 'Captação e elevatória EAB-01', params: {} },
+        { id: 'EB1', x: -10, y: 30, type: 'energy', name: 'Bombas de água bruta', params: { Q: '' } },
+        { id: 'MR', x: 340, y: 132, type: 'eta_coag', name: 'Calha Parshall e mistura rápida', params: {} },
+        { id: 'FLO', x: 590, y: 124, type: 'eta_floc', name: 'Floculadores FLO-01/02', params: {} },
+        { id: 'DEC', x: 850, y: 140, type: 'eta_settler', name: 'Decantadores DEC-01/02', params: {} },
+        { id: 'FIL', x: 1130, y: 156, type: 'eta_filter', name: 'Filtros rápidos FIL-01 a 06', params: {} },
+        { id: 'TC', x: 1350, y: 192, type: 'eta_disinfect', name: 'Tanque de contato: cloro, flúor e cal', params: {} },
+        { id: 'RES', x: 1610, y: 214, type: 'eta_reservoir', name: 'Reservatório e elevatória EAT-01', params: {} },
+        { id: 'EB2', type: 'energy', name: 'Bombas de água tratada', params: { Q: '' } },
+        { id: 'P1', x: 200, y: 280, type: 'product', name: 'Areia retirada' }, { id: 'P2', x: 920, y: 280, type: 'product', name: 'Lodo dos decantadores' },
+        { id: 'P3', x: 1330, y: 60, type: 'product', name: 'Água de lavagem dos filtros' }, { id: 'P4', x: 1900, y: 247, type: 'product', name: 'Água tratada para a cidade' }],
+      streams: [S('1', 'FAB', 'out', 'CAP', 'feed', 'Rio'), S('E1', 'EB1', 'eo', 'CAP', 'q_in', 'Bombas'), S('2', 'CAP', 'grit', 'P1', 'in', 'Areia'),
+        S('3', 'CAP', 'product', 'MR', 'feed', 'Bruta'), S('4', 'MR', 'product', 'FLO', 'feed', 'Coagulada'), S('5', 'FLO', 'product', 'DEC', 'feed', 'Floculada'),
+        S('6', 'DEC', 'sludge', 'P2', 'in', 'Lodo'), S('7', 'DEC', 'clarified', 'FIL', 'feed', 'Decantada'), S('8', 'FIL', 'wash', 'P3', 'in', 'Lavagem'),
+        S('9', 'FIL', 'filtered', 'TC', 'feed', 'Filtrada'), S('10', 'TC', 'product', 'RES', 'feed', 'Tratada'), S('E2', 'EB2', 'eo', 'RES', 'q_in', 'Bombas'),
+        S('11', 'RES', 'product', 'P4', 'in', 'Para a cidade')] } },
     { key: 'siderurgia-usina-integrada', title: 'Siderurgia: usina integrada completa — carvão e minério → coqueria, sinterização, alto-forno, aciaria LD, lingotamento contínuo, laminação e trefilação', fs: {
       name: 'Usina siderúrgica integrada: das matérias-primas ao arame', components: ['hematite', 'silica', 'carbon', 'coal-volatiles', 'coal-tar', 'caco3', 'cao', 'feo', 'iron', 'oxygen', 'nitrogen', 'co', 'co2', 'water', 'hydrogen', 'methane'], model: 'IDEAL', fixedLayout: true,
       blocks: [
@@ -20034,6 +20732,150 @@ def pfr_transiente(P, nome):
   SF.choc = { open, sync, start, stop, intro, video, closeVideo, isPlaying: () => on, hasVideo: () => !!pip };
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
+<script>/* js/agua.js */
+/* SIMULA FÁCIL IA — exemplo "ETA convencional para uma cidade de 100 mil habitantes" (versão 5.3): abertura animada em canvas
+   (rio, captação, estação de tratamento, reservatório elevado e a cidade ao amanhecer) e correntes do fluxograma cor de água.
+   Tudo é desenhado por código, sem arquivos de imagem, vídeo ou som. */
+(function (root) {
+  'use strict';
+  const SF = root.SF = root.SF || {};
+  const doc = root.document;
+  if (!doc) return;
+  const reduced = () => !!(root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const $ = s => doc.querySelector(s);
+
+  /* ---------------------------------------------------------------- botão no fluxograma */
+  let ctl = null, active = false;
+  function makeCtl() {
+    if (ctl) return ctl;
+    const wrap = $('#canvasWrap'); if (!wrap) return null;
+    ctl = doc.createElement('div'); ctl.className = 'agua-ctl'; ctl.hidden = true; ctl.setAttribute('role', 'group'); ctl.setAttribute('aria-label', 'Abertura do exemplo da estação de tratamento de água');
+    ctl.innerHTML = '<button type="button" class="ac-intro" title="Ver de novo a abertura animada da ETA" aria-label="Ver de novo a abertura animada da ETA"><span aria-hidden="true">💧</span><span class="ac-t"> Abertura</span></button>';
+    ctl.querySelector('.ac-intro').onclick = () => intro();
+    wrap.appendChild(ctl); return ctl;
+  }
+  function sync(isAgua) {
+    active = !!isAgua;
+    const svg = $('#pfd'); if (svg) svg.classList.toggle('agua', active);
+    const c = makeCtl(); if (c) c.hidden = !active;
+    if (!active) closeIntro(true);
+  }
+
+  /* ---------------------------------------------------------------- abertura animada */
+  let lay = null, raf = 0, t0 = 0, resizeFn = null, keyFn = null, closing = false;
+  function closeIntro(now) {
+    if (!lay || closing) return;
+    const l = lay; closing = true;
+    const done = () => { cancelAnimationFrame(raf); raf = 0; if (l.parentNode) l.parentNode.removeChild(l); lay = null; closing = false;
+      root.removeEventListener('resize', resizeFn); doc.removeEventListener('keydown', keyFn, true); const b = ctl && ctl.querySelector('.ac-intro'); if (b && active && !now) b.focus({ preventScroll: true }); };
+    if (now || reduced()) done(); else { l.classList.add('out'); setTimeout(done, 650); }
+  }
+  function intro() {
+    if (lay) return;
+    lay = doc.createElement('div'); lay.className = 'agua-intro'; lay.setAttribute('role', 'dialog'); lay.setAttribute('aria-modal', 'true'); lay.setAttribute('aria-labelledby', 'aiTitle');
+    lay.innerHTML = '<canvas aria-hidden="true"></canvas><div class="ai-txt"><p class="ai-k">SIMULA FÁCIL IA apresenta</p>' +
+      '<h2 id="aiTitle">Água tratada<br><em>para 100 mil pessoas</em></h2><p class="ai-s">do rio à torneira: captação, coagulação, floculação, decantação, filtração, cloro e flúor</p></div>' +
+      '<div class="ai-btns"><button type="button" class="ai-go">Entrar na ETA <span aria-hidden="true">▸</span></button></div>';
+    doc.body.appendChild(lay);
+    const cv = lay.querySelector('canvas'), cx = cv.getContext('2d');
+    lay.querySelector('.ai-go').onclick = () => closeIntro();
+    keyFn = e => { if (e.key === 'Escape' || e.key === 'Enter') { e.preventDefault(); closeIntro(); } };
+    doc.addEventListener('keydown', keyFn, true);
+    setTimeout(() => { const g = lay && lay.querySelector('.ai-go'); if (g) g.focus({ preventScroll: true }); }, 60);
+    let W = 0, H = 0, dpr = 1, drops = [], stars = [], blds = [];
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    resizeFn = () => {
+      dpr = Math.min(2, root.devicePixelRatio || 1); W = root.innerWidth; H = root.innerHeight;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.width = W + 'px'; cv.style.height = H + 'px'; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drops = []; for (let k = 0; k < Math.max(10, Math.round(W / 60)); k++) drops.push({ x: rnd(0.03, 0.97) * W, y: rnd(-1.2, -0.05) * H, v: rnd(30, 70), s: rnd(5, 10), d: rnd(0, 3) });
+      stars = []; for (let k = 0; k < Math.round(W / 18); k++) stars.push({ x: rnd(0, 1) * W, y: rnd(0.03, 0.5) * H, r: rnd(0.6, 1.8), p: rnd(0, 6.3), f: rnd(0.2, 0.6) });
+      blds = []; const x0 = W * (W < 700 ? 0.6 : 0.64);
+      for (let x = x0, k = 0; x < W + 20; k++) { const w = rnd(30, 70), h = rnd(0.1, 0.3) * H, win = [];
+        for (let wy = 10; wy < h - 8; wy += 15) for (let wx = 7; wx < w - 10; wx += 13) win.push({ x: wx, y: wy, on: Math.random() < 0.6, d: rnd(0, 6), f: rnd(0.05, 0.15), p: rnd(0, 6.3) });
+        blds.push({ x, w, h, win, ant: k % 3 === 0 }); x += w + rnd(2, 10); }
+    };
+    resizeFn(); root.addEventListener('resize', resizeFn);
+    const ground = () => H * 0.74;
+    const wave = (x, t, A, L, sp, ph) => A * Math.sin(2 * Math.PI * (x / L) - sp * t + ph);
+    function drop(x, y, s, a) {
+      cx.save(); cx.globalAlpha = a; const g = cx.createLinearGradient(x - s, y - s, x + s, y + s); g.addColorStop(0, '#e6f7ff'); g.addColorStop(1, '#4cb3e6');
+      cx.fillStyle = g; cx.beginPath(); cx.moveTo(x, y - s * 1.6); cx.bezierCurveTo(x + s * 0.2, y - s * 0.9, x + s, y - s * 0.2, x + s, y + s * 0.3);
+      cx.arc(x, y + s * 0.3, s, 0, Math.PI); cx.bezierCurveTo(x - s, y - s * 0.2, x - s * 0.2, y - s * 0.9, x, y - s * 1.6); cx.fill(); cx.restore();
+    }
+    // tubo com a água correndo (traço que anda no sentido do escoamento)
+    function pipe(pts, t, col) {
+      cx.lineCap = 'round'; cx.lineJoin = 'round'; cx.strokeStyle = '#0d2b40'; cx.lineWidth = 9; cx.beginPath(); pts.forEach((q, k) => (k ? cx.lineTo(q[0], q[1]) : cx.moveTo(q[0], q[1]))); cx.stroke();
+      cx.strokeStyle = col; cx.lineWidth = 4; cx.setLineDash([12, 9]); cx.lineDashOffset = -t * 40; cx.beginPath(); pts.forEach((q, k) => (k ? cx.lineTo(q[0], q[1]) : cx.moveTo(q[0], q[1]))); cx.stroke(); cx.setLineDash([]);
+    }
+    function frame(ms) {
+      if (!lay) return;
+      if (!t0) t0 = ms;
+      const t = reduced() ? 6 : (ms - t0) / 1000, gy = ground(), dawn = Math.min(1, t / 7);
+      // céu: da noite azul ao amanhecer
+      const bg = cx.createLinearGradient(0, 0, 0, gy);
+      bg.addColorStop(0, dawn < 0.5 ? '#061a33' : '#0b2c52'); bg.addColorStop(0.6, '#0f4a73'); bg.addColorStop(1, 'rgb(' + Math.round(40 + 190 * dawn) + ',' + Math.round(110 + 70 * dawn) + ',' + Math.round(160 - 30 * dawn) + ')');
+      cx.fillStyle = bg; cx.fillRect(0, 0, W, gy + 2);
+      // sol nascendo atrás da cidade
+      const sx = W * 0.8, sy = gy - H * 0.06 - dawn * H * 0.12, sr = Math.min(W, H) * 0.07, sg = cx.createRadialGradient(sx, sy, sr * 0.2, sx, sy, sr * 4);
+      sg.addColorStop(0, 'rgba(255,214,120,' + (0.25 + 0.5 * dawn).toFixed(3) + ')'); sg.addColorStop(1, 'rgba(255,214,120,0)'); cx.fillStyle = sg; cx.fillRect(0, 0, W, gy);
+      cx.fillStyle = 'rgba(255,224,150,' + (0.35 + 0.6 * dawn).toFixed(3) + ')'; cx.beginPath(); cx.arc(sx, sy, sr, 0, Math.PI * 2); cx.fill();
+      // estrelas que somem com o dia
+      stars.forEach(s => { cx.globalAlpha = (1 - dawn) * (0.3 + 0.5 * (0.5 + 0.5 * Math.sin(2 * Math.PI * s.f * t + s.p))); cx.fillStyle = '#dff4ff'; cx.beginPath(); cx.arc(s.x, s.y, s.r, 0, Math.PI * 2); cx.fill(); });
+      cx.globalAlpha = 1;
+      // morros ao fundo
+      cx.fillStyle = '#0d3550'; cx.beginPath(); cx.moveTo(0, gy); for (let x = 0; x <= W + 20; x += 20) cx.lineTo(x, gy - H * 0.08 - Math.sin(x / 170) * H * 0.04 - Math.sin(x / 63) * H * 0.012); cx.lineTo(W, gy); cx.closePath(); cx.fill();
+      cx.fillStyle = '#0b2a1f'; cx.fillRect(0, gy, W, H - gy);
+      // cidade: prédios com janelas que acendem devagar (menos de uma vez por segundo)
+      blds.forEach(q => {
+        const y0 = gy - q.h; cx.fillStyle = '#0a2236'; cx.fillRect(q.x, y0, q.w, q.h + 2);
+        if (q.ant) { cx.fillRect(q.x + q.w / 2 - 1, y0 - 14, 2, 14); cx.fillStyle = 'rgba(255,120,110,' + (0.4 + 0.4 * Math.sin(t * 2)).toFixed(3) + ')'; cx.beginPath(); cx.arc(q.x + q.w / 2, y0 - 15, 2.2, 0, Math.PI * 2); cx.fill(); }
+        q.win.forEach(w2 => { const on = w2.on && t > w2.d * 0.6, a = on ? 0.55 + 0.3 * Math.sin(2 * Math.PI * w2.f * t + w2.p) : 0.07; cx.fillStyle = 'rgba(255,226,150,' + a.toFixed(3) + ')'; cx.fillRect(q.x + w2.x, y0 + w2.y, 6, 8); });
+      });
+      // reservatório elevado (caixa-d'água da cidade) enchendo
+      const narrow = W < 700, rx = W * (narrow ? 0.52 : 0.57), rw = Math.max(44, W * 0.05), rh = rw * 0.9, ry = gy - H * 0.3, lvl = Math.min(1, 0.15 + t / 8);
+      cx.strokeStyle = '#0a2236'; cx.lineWidth = 4; [[rx + 6, rx - 4], [rx + rw - 6, rx + rw + 4]].forEach(([a, b]) => { cx.beginPath(); cx.moveTo(a, ry + rh); cx.lineTo(b, gy); cx.stroke(); });
+      cx.lineWidth = 2; cx.beginPath(); cx.moveTo(rx - 1, gy - H * 0.1); cx.lineTo(rx + rw + 1, gy - H * 0.16); cx.moveTo(rx + rw + 1, gy - H * 0.1); cx.lineTo(rx - 1, gy - H * 0.16); cx.stroke();
+      cx.fillStyle = '#123b58'; cx.fillRect(rx, ry, rw, rh);
+      const wg = cx.createLinearGradient(0, ry, 0, ry + rh); wg.addColorStop(0, '#7fd6ff'); wg.addColorStop(1, '#2387c7'); cx.fillStyle = wg;
+      const top = ry + rh * (1 - lvl); cx.beginPath(); cx.moveTo(rx + 3, ry + rh - 3); for (let x = rx + 3; x <= rx + rw - 3; x += 4) cx.lineTo(x, top + Math.sin(x / 6 + t * 3) * 1.5); cx.lineTo(rx + rw - 3, ry + rh - 3); cx.closePath(); cx.fill();
+      cx.fillStyle = '#0a2236'; cx.beginPath(); cx.moveTo(rx - 5, ry); cx.lineTo(rx + rw / 2, ry - rw * 0.35); cx.lineTo(rx + rw + 5, ry); cx.closePath(); cx.fill();
+      // estação de tratamento: floculador, decantador e filtros com a água cada vez mais clara
+      const ex = W * (narrow ? 0.14 : 0.2), ew = W * (narrow ? 0.34 : 0.3), eh = H * 0.07, ey = gy - eh;
+      const units = [[0, 0.22, [120, 95, 60]], [0.25, 0.42, [110, 130, 120]], [0.7, 0.3, [60, 170, 215]]];
+      units.forEach(([u0, uw, c], k) => {
+        const x = ex + ew * u0, w = ew * uw; cx.fillStyle = '#0a2236'; cx.fillRect(x - 3, ey - 3, w + 6, eh + 6);
+        cx.fillStyle = 'rgb(' + c.join(',') + ')'; cx.beginPath(); cx.moveTo(x, ey + eh); for (let xx = x; xx <= x + w; xx += 5) cx.lineTo(xx, ey + 5 + Math.sin(xx / 9 - t * 2 + k) * 1.6); cx.lineTo(x + w, ey + eh); cx.closePath(); cx.fill();
+        if (k === 0) for (let j = 0; j < 3; j++) { const ax = x + w * (j + 0.5) / 3, a = t * 3 + j; cx.strokeStyle = 'rgba(230,245,255,.7)'; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(ax - 7 * Math.cos(a), ey + eh / 2 - 7 * Math.sin(a)); cx.lineTo(ax + 7 * Math.cos(a), ey + eh / 2 + 7 * Math.sin(a)); cx.stroke(); }
+        if (k === 1) for (let j = 0; j < 6; j++) { const fx2 = x + w * ((j * 0.17 + t * 0.05) % 1), fy = ey + 8 + ((t * 9 + j * 7) % (eh - 12)); cx.fillStyle = 'rgba(90,60,30,.8)'; cx.beginPath(); cx.arc(fx2, fy, 2, 0, Math.PI * 2); cx.fill(); }
+        if (k === 2) { cx.fillStyle = '#3a3a3a'; cx.fillRect(x, ey + eh * 0.45, w, eh * 0.2); cx.fillStyle = '#d9c38d'; cx.fillRect(x, ey + eh * 0.65, w, eh * 0.35); for (let j = 1; j < 3; j++) { cx.fillStyle = '#0a2236'; cx.fillRect(x + w * j / 3 - 1.5, ey, 3, eh); } }
+      });
+      // captação no rio e tubulações: água barrenta até a ETA, água azul até o reservatório e à cidade
+      const ry0 = gy + H * 0.06, cxp = W * (narrow ? 0.05 : 0.08);
+      cx.fillStyle = '#0a2236'; cx.fillRect(cxp - 10, gy - H * 0.05, 20, H * 0.11);
+      pipe([[cxp, gy - H * 0.05], [cxp, gy - eh - 14], [ex, gy - eh - 14], [ex, ey + 6]], t, '#c8a074');
+      pipe([[ex + ew, ey + eh * 0.8], [rx + rw * 0.25, ey + eh * 0.8], [rx + rw * 0.25, ry + rh]], t, '#8fe0ff');
+      pipe([[rx + rw * 0.75, ry + rh], [rx + rw * 0.75, gy - 8], [W + 10, gy - 8]], t, '#8fe0ff');
+      // gotas de água caindo devagar
+      drops.forEach(d => { if (t < d.d) return; d.y += d.v / 60; if (d.y > gy - 10) { d.y = rnd(-0.5, -0.05) * H; d.x = rnd(0.03, 0.97) * W; } drop(d.x, d.y, d.s, 0.55); });
+      // chão e rio em camadas (barrento ao fundo, mais claro na frente)
+      [['#5b4a32', 9, 240, 0.8, 0], ['#76603f', 7, 170, 1.3, 1.1], ['#2a7fae', 5, 130, 1.9, 2.2]].forEach(([c, A, Lw, sp, ph], k) => {
+        const y0 = ry0 + k * 15; cx.fillStyle = c; cx.beginPath(); cx.moveTo(0, H);
+        for (let x = 0; x <= W + 10; x += 10) cx.lineTo(x, y0 + wave(x, t, A, Lw, sp, ph) + wave(x, t, A * 0.4, Lw * 0.37, sp * 1.7, ph));
+        cx.lineTo(W, H); cx.closePath(); cx.fill();
+        if (k === 2) { cx.strokeStyle = 'rgba(220,245,255,.35)'; cx.lineWidth = 2; cx.beginPath(); for (let x = 0; x <= W + 10; x += 10) { const y = y0 + wave(x, t, A, Lw, sp, ph) + wave(x, t, A * 0.4, Lw * 0.37, sp * 1.7, ph) + 3; x ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.stroke(); }
+      });
+      if (reduced()) { raf = 0; return; }
+      if (t > 9.5) { closeIntro(); return; }
+      raf = requestAnimationFrame(frame);
+    }
+    t0 = 0; raf = requestAnimationFrame(frame);
+    if (reduced()) setTimeout(() => closeIntro(), 4500);
+  }
+
+  function open() { sync(true); intro(); }
+  SF.agua = { open, sync, intro };
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
 <script>/* js/app.js */
 /* SIMULA FÁCIL IA — aplicação: estado, paleta, propriedades, resultados, termodinâmica, relatórios e arquivos */
 (function () {
@@ -20044,7 +20886,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', reactor_kinetics: 'CIN', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', reactor_kinetics: 'CIN', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -20163,6 +21005,7 @@ def pfr_transiente(P, nome):
     results = null; setStatus('idle', 'Alterado — simule novamente');
     $('#emptyHint').hidden = state.blocks.length > 0; $('#projName').value = state.name;
     if (SF.choc) SF.choc.sync(state.theme === 'chocolate');   // exemplo da fábrica de chocolate: correntes de chocolate e botões do improviso
+    if (SF.agua) SF.agua.sync(state.theme === 'agua');   // exemplo da ETA: correntes cor de água e botão da abertura
     pfd.render(); persist(); updateCompSummary();
     if (structural) renderProps();
     if ($('#autoSim') && $('#autoSim').checked && state.blocks.length) { clearTimeout(autoTimer); autoTimer = setTimeout(() => runSimulation(true), 700); }
@@ -20352,6 +21195,27 @@ def pfr_transiente(P, nome):
     temperer: { ex: 'A Fábrica de Chocolate dos Sonhos', items: [
       ['Correntes', 'entrada <b>chocolate conchado</b>; saída <b>barras de chocolate</b>; porta <b>q_out</b> com o calor retirado pela água gelada.'],
       ['Operação', 'zonas a 45, 27 e 29,5 °C (ao leite), 4 % de gordura cristalizada e 2 % de sementes da forma V; túnel com ar a 12 °C, barras de 100 g e 8 mm, esteira a 1,5 m/min.']] },
+    eta_intake: { ex: 'ETA convencional para 100 mil habitantes', items: [
+      ['Correntes', 'entrada <b>água bruta do rio</b> (água, areia, argila, alcalinidade e CO₂); saídas <b>água para a ETA</b> e <b>areia retirada</b>; porta de energia <b>q_in</b> com as bombas da elevatória.'],
+      ['Operação', 'grade de barras de 10 mm com 25 mm de vão a 0,6 m/s; caixa de areia com 1 000 m³/(m²·d) e grão de projeto de 0,2 mm; elevatória de 40 m com rendimento de 0,72.']] },
+    eta_coag: { ex: 'ETA convencional para 100 mil habitantes', items: [
+      ['Correntes', 'entrada <b>água bruta</b>; saída <b>água coagulada</b>. O sulfato de alumínio e a cal entram pelas doses (mg/L), como no ensaio de jarros.'],
+      ['Operação', '20 mg/L de Al₂(SO₄)₃ anidro, sem pré-alcalinização; calha Parshall de 2 pés (61 cm). Para conferir, compare o gradiente de cada garganta no gráfico de barras.']] },
+    eta_floc: { ex: 'ETA convencional para 100 mil habitantes', items: [
+      ['Correntes', 'entrada <b>água coagulada</b>; saída <b>água floculada</b> (flocos e partículas soltas).'],
+      ['Operação', '30 min em 3 câmaras, G de 70 a 20 s⁻¹; K_A = 10 × 10⁻⁵ e K_B = 1 × 10⁻⁷ s; 2 floculadores de 4 m de profundidade.']] },
+    eta_settler: { ex: 'ETA convencional para 100 mil habitantes', items: [
+      ['Correntes', 'entrada <b>água floculada</b>; saídas <b>água decantada</b> e <b>lodo</b>.'],
+      ['Operação', 'taxa de 30 m³/(m²·d); flocos com v₅₀ = 4 m/h e σg = 2; partículas soltas a 0,2 m/h; 2 decantadores de 4 m com L/B = 4; lodo com 1 % de sólidos.']] },
+    eta_filter: { ex: 'ETA convencional para 100 mil habitantes', items: [
+      ['Correntes', 'entrada <b>água decantada</b>; saídas <b>água filtrada</b> e <b>água de lavagem</b> (média do dia, com os sólidos retidos).'],
+      ['Operação', '6 filtros a 300 m³/(m²·d); 0,6 m de antracito de 1,0 mm sobre 0,3 m de areia de 0,5 mm; 2,2 m de carga disponível; lavagem a 0,8 m/min por 10 min.']] },
+    eta_disinfect: { ex: 'ETA convencional para 100 mil habitantes', items: [
+      ['Correntes', 'entrada <b>água filtrada</b>; saída <b>água tratada</b> com cloro, flúor e pH corrigido. Os produtos entram pelas doses (mg/L).'],
+      ['Operação', '2 mg/L de cloro gás com 0,5 mg/L de demanda; 30 min de contato com T₁₀/T = 0,5; 0,7 mg/L de fluoreto; 16 mg/L de cal depois do contato.']] },
+    eta_reservoir: { ex: 'ETA convencional para 100 mil habitantes', items: [
+      ['Correntes', 'entrada <b>água tratada</b>; saída <b>para a cidade</b>; porta de energia <b>q_in</b> com as bombas de água tratada.'],
+      ['Operação', '100 000 habitantes, 200 L/(hab·d), K₁ = 1,2 e K₂ = 1,5; reserva de 1/3 do dia de maior consumo; cloro decai 0,04 h⁻¹ e leva 12 h até a ponta da rede; elevatória de 50 m.']] },
     refrigerator: { ex: 'Chiller de água gelada com R-134a', items: [
       ['Temperatura de saída do produto (°C)', 'temperatura que a corrente deve atingir: 7 °C no exemplo (água gelada que volta a 12 °C).'],
       ['Fluido refrigerante', 'o gás que circula no ciclo, entre 18: HFCs (R-134a, R-32, R-125, R-143a, R-152a, R-23, R-245fa e as misturas R-404A, R-407C, R-410A e R-507A), HFOs de baixo GWP (R-1234yf e R-1234ze(E)), o R-22 e os naturais (amônia, propano, isobutano e CO₂). R-134a no exemplo; troque por R-1234yf ou R-1234ze(E) e compare pressões, vazão, COP e GWP. R-23 e CO₂ só condensam abaixo de 26 e 31 °C (cascata).'],
@@ -21278,7 +22142,7 @@ def pfr_transiente(P, nome):
 
   /* ------------------------------------------------------------------ projeto: novo, exemplos, salvar, abrir */
   // a abertura animada e o improviso ao piano só começam com o clique do usuário (o navegador só libera o som depois de um gesto)
-  const chocOpen = ex => { if (SF.choc && ex && ex.fs && ex.fs.theme === 'chocolate') SF.choc.open(); };
+  const chocOpen = ex => { if (SF.choc && ex && ex.fs && ex.fs.theme === 'chocolate') SF.choc.open(); if (SF.agua && ex && ex.fs && ex.fs.theme === 'agua') SF.agua.open(); };
   function loadFlowsheet(fs, keepPositions, then) {
     if ((fs.components || []).some(id => !TH.COMP[id]) && SF.dbx) return withComps(fs = JSON.parse(JSON.stringify(fs)), () => { loadFlowsheet(fs, keepPositions); if (then) then(); });
     loadFlowsheetNow(fs, keepPositions); if (then) then();
@@ -21358,8 +22222,8 @@ def pfr_transiente(P, nome):
     SF.examples.forEach(ex => {
       const main = (ex.fs.blocks.find(b => b.type !== 'feed' && b.type !== 'product') || ex.fs.blocks[0]).type;
       const b = document.createElement('button'); b.className = 'wexc'; b.type = 'button';
-      const choc = ex.fs.theme === 'chocolate'; if (choc) b.classList.add('wexc-choc');
-      b.innerHTML = IC.paletteIcon(main) + '<span>' + (choc ? '<b class="wex-new">NOVO</b>' : '') + esc(ex.title) + '</span>';
+      const choc = ex.fs.theme === 'chocolate', agua = ex.fs.theme === 'agua'; if (choc) b.classList.add('wexc-choc'); if (agua) b.classList.add('wexc-agua');
+      b.innerHTML = IC.paletteIcon(main) + '<span>' + (agua ? '<b class="wex-new">NOVO</b>' : '') + esc(ex.title) + '</span>';
       b.onclick = () => { closeWelcome(); loadFlowsheet(ex.fs); runSimulation(true); chocOpen(ex); toast('Exemplo carregado: ' + ex.title); };
       grid.appendChild(b);
     });
@@ -21467,6 +22331,7 @@ def pfr_transiente(P, nome):
   if (!restored) { const ex = SF.examples[0]; state = Object.assign(blank(), JSON.parse(JSON.stringify(ex.fs))); SF.pfd.autoLayout(state, !state.fixedLayout); delete state.fixedLayout; }
   $('#projName').value = state.name; $('#emptyHint').hidden = state.blocks.length > 0; updateCompSummary();
   if (SF.choc) SF.choc.sync(state.theme === 'chocolate');
+  if (SF.agua) SF.agua.sync(state.theme === 'agua');
   try { localStorage.setItem('simulafacil.boot', '1'); } catch (e) { /* */ }
   requestAnimationFrame(() => withComps(state, () => {
     SF.limiteMs = 8000;

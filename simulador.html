@@ -1237,7 +1237,7 @@ window.SIMULAFACIL_CONFIG = {
   siteUrl: 'https://juanbosch-cyber.github.io/simulafacil/',
   goatcounter: 'simulafacilufsj',
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
-  manualVersion: '5.3-2026-11-22',
+  manualVersion: '5.3-2026-11-22b',
   videosAlunos: [
     { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' },
     { titulo: 'Como funciona o SIMULA FÁCIL IA - Exemplo: DESTILAÇÃO', autor: 'Bruno Gontijo de Carvalho – Engenharia Química UFSJ', url: 'https://youtu.be/H2lDGKUrdPA' }
@@ -5085,7 +5085,34 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'kd', label: 'Decaimento do cloro livre no reservatório e na rede', u: '1/h', def: 0.04 },
       { k: 'tR', label: 'Tempo de percurso até a ponta da rede', u: 'h', def: 12 },
       { k: 'H', label: 'Altura manométrica da elevatória de água tratada', u: 'm', def: 50 },
-      { k: 'eta', label: 'Rendimento do conjunto motor e bomba', u: '0–1', def: 0.75 }] }
+      { k: 'eta', label: 'Rendimento do conjunto motor e bomba', u: '0–1', def: 0.75 }] },
+    eta_washtank: { label: 'Recuperação de água: tanque de equalização e clarificador da água de lavagem dos filtros (com o sobrenadante e o centrado), polímero e recirculação para a entrada da ETA', cat: 'Tratamento de água (ETA)', ins: ['feed', 'feed2', 'feed3'], outs: ['clarified', 'sludge'], params: [
+      { k: 'Vw', label: 'Volume de uma lavagem de filtro', u: 'm³', def: 110 },
+      { k: 'nW', label: 'Lavagens seguidas que o tanque deve receber', u: '', def: 2 },
+      { k: 'dP', label: 'Dose de polímero aniônico no clarificador', u: 'mg/L', def: 1 },
+      { k: 'TAS', label: 'Taxa de aplicação superficial do clarificador', u: 'm³/(m²·d)', type: 'range', min: 10, max: 60, step: 1, def: 30 },
+      { k: 'v50', label: 'Velocidade de sedimentação mediana dos flocos com polímero', u: 'm/h', def: 3.5 },
+      { k: 'sg', label: 'Desvio padrão geométrico das velocidades', u: '', def: 2 },
+      { k: 'Hc', label: 'Profundidade do clarificador', u: 'm', def: 3.5 },
+      { k: 'wL', label: 'Teor de sólidos do lodo para o adensador', u: '%', def: 1.5 },
+      { k: 'Qeta', label: 'Vazão da ETA (para conferir a recirculação de até 10 %)', u: 'm³/h', def: 1000 }] },
+    eta_thickener: { label: 'Adensador de lodo por gravidade: taxa de aplicação de sólidos, fluxo limite (Yoshioka), lodo adensado e sobrenadante', cat: 'Tratamento de água (ETA)', ins: ['feed', 'feed2'], outs: ['thickened', 'supernatant'], params: [
+      { k: 'SLR', label: 'Taxa de aplicação de sólidos', u: 'kg/(m²·d)', type: 'range', min: 5, max: 60, step: 1, def: 20 },
+      { k: 'Cu', label: 'Teor de sólidos do lodo adensado', u: '%', def: 3 },
+      { k: 'cap', label: 'Captura de sólidos', u: '%', def: 95 },
+      { k: 'nA', label: 'Número de adensadores', u: '', def: 2 },
+      { k: 'Ha', label: 'Profundidade lateral', u: 'm', def: 3.5 },
+      { k: 'v0', label: 'Velocidade v₀ da curva de Vesilind (sedimentação em batelada)', u: 'm/h', def: 1.5 },
+      { k: 'kV', label: 'Constante k da curva de Vesilind', u: 'm³/kg', def: 0.2 }] },
+    eta_centrifuge: { label: 'Centrífuga decanter de lodo: desaguamento com polímero, torta para o aterro, centrado, número de máquinas e energia', cat: 'Tratamento de água (ETA)', ins: ['feed'], outs: ['cake', 'centrate'], eins: ['q_in'], params: [
+      { k: 'pol', label: 'Dose de polímero catiônico', u: 'kg/t de sólidos secos', def: 4 },
+      { k: 'cap', label: 'Captura de sólidos', u: '%', def: 95 },
+      { k: 'wT', label: 'Teor de sólidos da torta', u: '%', type: 'range', min: 12, max: 40, step: 0.5, def: 22 },
+      { k: 'eE', label: 'Energia específica', u: 'kWh/m³ de lodo', def: 1.5 },
+      { k: 'hOp', label: 'Horas de operação por dia', u: 'h/d', def: 16 },
+      { k: 'qM', label: 'Capacidade de cada centrífuga', u: 'm³/h', def: 8 },
+      { k: 'rhoT', label: 'Massa específica da torta', u: 'kg/m³', def: 1150 },
+      { k: 'cac', label: 'Volume de cada caçamba', u: 'm³', def: 10 }] }
   };
   Object.keys(TYPES).forEach(k => { TYPES[k].type = k; });
 
@@ -11655,6 +11682,112 @@ window.SIMULAFACIL_CONFIG = {
     return { out: { product: etaOut(th, k2, s) }, duty: Pw * 1000, power: true, massUtil: (sum(k2) - sum(kg)) / 3600, res: decBR(res), warn: decW(warn), plots };
   };
 
+  /* ------------------------------------------------------------------ versão 5.3: lodo da ETA e água de lavagem dos filtros
+     Tanque de equalização com clarificador da água de lavagem (recirculação à entrada da ETA), adensador de lodo por gravidade
+     (taxa de sólidos e fluxo limite de Yoshioka com a curva de Vesilind) e centrífuga decanter (torta, polímero e energia).
+     O polímero é contado só como consumo (as doses são de mg/L e não mudam o balanço de massa). */
+  const etaSolidsKg = (th, kg) => kg.reduce((a, m, i) => a + (th.c[i].solid ? m : 0), 0);
+  // separa uma corrente em duas: a fração "cap" dos sólidos e a água (com os dissolvidos) para que os sólidos fiquem com o teor w
+  function etaThicken(th, kg, cap, w, what, warn) {
+    const iw = etaI(th, 'water'), mS = etaSolidsKg(th, kg) * cap, mW = mS * (1 - w) / w, phi = kg[iw] > 0 ? mW / kg[iw] : 0;
+    if (phi > 1) throw new Error(what + ': o teor de sólidos pedido é menor que o da entrada; aumente o teor de sólidos de saída');
+    const kA = kg.map((m, i) => (th.c[i].solid ? m * cap : m * phi)), kB = kg.map((m, i) => m - kA[i]);
+    return { kA, kB, mS };
+  }
+
+  /* tanque de equalização e clarificador da água de lavagem dos filtros (recuperação de água): o tanque recebe as lavagens (vazão alta
+     por pouco tempo), o sobrenadante do adensador e o centrado da centrífuga e devolve a água aos poucos; o clarificador, com polímero, separa os sólidos (Hazen) e o clarificado volta à entrada da ETA */
+  IMPL.eta_washtank = function (th, b, ins) {
+    const p = b.params, warn = [], parts = [ins && ins.feed, ins && ins.feed2, ins && ins.feed3];
+    if (!parts.some(connected)) return { out: { clarified: mkStream(th, new Array(th.n).fill(0), 293.15, 101325), sludge: mkStream(th, new Array(th.n).fill(0), 293.15, 101325) }, res: [{ k: 'Situação', v: 'sem água na entrada', u: '' }], warn: ['ligue a água de lavagem dos filtros'], plots: [] };
+    if (etaI(th, 'water') < 0) throw new Error('inclua a água na lista de componentes');
+    const s = parts.find(connected), kg = new Array(th.n).fill(0), Tc = K2C(s.T), Qp = parts.map(q => (connected(q) ? etaBal(th, kgOf(th, q), Tc).Q : 0));
+    parts.forEach(q => { if (connected(q)) kgOf(th, q).forEach((m, i) => { kg[i] += m; }); });
+    const I = etaBal(th, kg, Tc);
+    const Vw = num(p.Vw, 110), nW = num(p.nW, 2), dP = num(p.dP, 1), TAS = num(p.TAS, 30), v50 = num(p.v50, 2.5), sg = num(p.sg, 2), wL = num(p.wL, 1.5) / 100, Qeta = num(p.Qeta, 1000), Hc = num(p.Hc, 3.5);
+    if (!(Vw > 0 && nW > 0 && dP >= 0 && TAS > 0 && v50 > 0 && sg >= 1 && wL > 0 && wL < 0.5 && Qeta > 0 && Hc > 0)) throw new Error('confira o volume de lavagem, as taxas, as velocidades, o teor de sólidos do lodo e a vazão da ETA');
+    const v0 = TAS / 24, E = etaHazen(v50, sg, v0), Veq = nW * Vw, Ac = I.Q * 24 / TAS, Dc = Math.sqrt(4 * Ac / Math.PI), td = Hc / v0, fr = 100 * I.Q / Qeta;
+    const r = etaThicken(th, kg, E, wL, 'clarificador da água de lavagem', warn), O = etaBal(th, r.kB, Tc), L = etaBal(th, r.kA, Tc);
+    if (fr > 10) warn.push('a recirculação da água recuperada (' + fr.toFixed(1) + ' % da vazão da ETA) passa de 10 %: o retorno de sólidos e de microrganismos pesa na estação; aumente a carreira dos filtros ou descarte parte');
+    if (O.turb > 10) warn.push('o clarificado volta com ' + O.turb.toFixed(1) + ' uT: aumente o polímero ou reduza a taxa do clarificador');
+    if (TAS > 48) warn.push('taxa de ' + br(TAS) + ' m³/(m²·d) alta para a água de lavagem: o usual com polímero fica entre 20 e 40 m³/(m²·d)');
+    const mPol = dP * I.Q / 1000 * 24;
+    const res = [{ k: 'Água que chega ao tanque: lavagem dos filtros / sobrenadante do adensador / centrado', v: Qp.map(q => q.toFixed(2)).join(' / ') + ' m³/h', u: '' },
+      { k: 'Total no tanque (média do dia)', v: I.Q.toFixed(2) + ' m³/h (' + (I.Q * 24).toFixed(0) + ' m³/d); sólidos ' + I.tss.toFixed(0) + ' mg/L (' + (etaSolidsKg(th, kg) * 24).toFixed(0) + ' kg/d)', u: '' },
+      { k: 'Tanque de equalização (' + br(nW) + ' lavagens de ' + br(Vw) + ' m³)', v: Veq.toFixed(0) + ' m³; devolve ' + I.Q.toFixed(1) + ' m³/h de forma contínua', u: '' },
+      { k: 'Recirculação em relação à vazão da ETA (' + br(Qeta) + ' m³/h)', v: fr.toFixed(2) + ' % (limite usual: 10 %)', u: '' },
+      { k: 'Clarificador: área / diâmetro / tempo de detenção', v: Ac.toFixed(1) + ' m² / ' + Dc.toFixed(1) + ' m / ' + td.toFixed(1) + ' h (taxa de ' + br(TAS) + ' m³/(m²·d))', u: '' },
+      { k: 'Polímero (' + br(dP) + ' mg/L)', v: mPol.toFixed(2) + ' kg/d', u: '' },
+      { k: 'Remoção de sólidos (Hazen, flocos com polímero)', v: +(100 * E).toFixed(1), u: '%' },
+      { k: 'Água recuperada que volta à entrada da ETA', v: O.Q.toFixed(2) + ' m³/h com ' + O.turb.toFixed(2) + ' uT', u: '' },
+      { k: 'Lodo para o adensador (' + br(wL * 100) + ' % de sólidos)', v: (L.Q * 24).toFixed(1) + ' m³/d (' + (r.mS * 24).toFixed(0) + ' kg/d de sólidos secos)', u: '' }];
+    const tx = [], ux = []; for (let k = 0; k <= 60; k++) { const t2 = 10 + 70 * k / 60, e2 = etaHazen(v50, sg, t2 / 24); tx.push(t2); ux.push(I.turb * (1 - e2)); }
+    const plots = [{ kind: 'curves', title: 'Clarificador da água de lavagem: turbidez do clarificado × taxa', data: { xLabel: 'Taxa de aplicação superficial (m³/(m²·d))', yLabel: 'Turbidez (uT)', series: [
+        { name: 'Clarificado', x: tx, y: ux, color: '#2563c9', width: 3 }, { name: 'Operação', x: [TAS], y: [O.turb], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }] } }];
+    return { out: { clarified: etaOut(th, r.kB, s), sludge: etaOut(th, r.kA, s) }, massUtil: 0, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* adensador de lodo por gravidade: área pela taxa de aplicação de sólidos e conferência com o fluxo limite (Yoshioka) da curva de
+     sedimentação em batelada de Vesilind, v = v₀·e^(−kC); o lodo adensado segue para a centrífuga e o sobrenadante volta à ETA */
+  IMPL.eta_thickener = function (th, b, ins) {
+    const p = b.params, warn = [], parts = [ins && ins.feed, ins && ins.feed2].filter(connected);
+    if (!parts.length) throw new Error('ligue o lodo dos decantadores (e, se houver, o da água de lavagem) no adensador');
+    const s = parts[0], kg = new Array(th.n).fill(0); parts.forEach(q => kgOf(th, q).forEach((m, i) => { kg[i] += m; }));
+    if (etaI(th, 'water') < 0) throw new Error('inclua a água na lista de componentes');
+    const Tc = K2C(s.T), I = etaBal(th, kg, Tc), Ms = etaSolidsKg(th, kg) * 24;   // kg/d de sólidos
+    const SLR = num(p.SLR, 20), Cu = num(p.Cu, 3) / 100, cap = num(p.cap, 95) / 100, nA = Math.max(1, Math.round(num(p.nA, 2))), Ha = num(p.Ha, 3.5), v0 = num(p.v0, 1.5), kV = num(p.kV, 0.2);
+    if (!(SLR > 0 && Cu > 0 && Cu < 0.3 && cap > 0 && cap <= 1 && Ha > 0 && v0 > 0 && kV > 0)) throw new Error('confira a taxa de sólidos, o teor do lodo adensado, a captura, a profundidade e as constantes de Vesilind');
+    const r = etaThicken(th, kg, cap, Cu, 'adensador', warn), U2 = etaBal(th, r.kA, Tc), S2 = etaBal(th, r.kB, Tc);
+    // fluxo limite de Yoshioka: G_L = mín [G_b(C)·C_u/(C_u − C)] para C entre 1/k e C_u (kg/(m²·h)); C em kg/m³
+    const CuK = U2.tss / 1000, Gb = C => v0 * C * Math.exp(-kV * C); let GL = Infinity, Ct = 0;
+    for (let k = 1; k < 400; k++) { const C = 1 / kV + (CuK - 1 / kV) * k / 400; if (C >= CuK) break; const g = Gb(C) * CuK / (CuK - C); if (g < GL) { GL = g; Ct = C; } }
+    const GLd = GL * 24, A = Ms / SLR, Ae = A / nA, D = Math.sqrt(4 * Ae / Math.PI), HLR = I.Q * 24 / A, tS = A * Ha / (U2.Q + S2.Q);
+    if (isFinite(GLd) && SLR > GLd) warn.push('a taxa de sólidos adotada (' + br(SLR) + ' kg/(m²·d)) passa do fluxo limite de ' + GLd.toFixed(1) + ' kg/(m²·d): o leito de lodo sobe e escapa sólido pelo sobrenadante; reduza a taxa');
+    if (SLR > 30) warn.push('lodos de sulfato de alumínio adensam mal: o usual é de 10 a 25 kg/(m²·d)');
+    if (Cu > 0.05) warn.push('lodo de alumínio dificilmente passa de 3 a 4 % de sólidos no adensador por gravidade');
+    if (HLR > 8) warn.push('taxa hidráulica de ' + HLR.toFixed(1) + ' m³/(m²·d): acima de cerca de 8 o sobrenadante arrasta sólidos');
+    const res = [{ k: 'Lodo na entrada', v: (I.Q * 24).toFixed(0) + ' m³/d com ' + (100 * Ms / 24 / Math.max(I.mass, 1e-9)).toFixed(2) + ' % de sólidos (' + Ms.toFixed(0) + ' kg/d de sólidos secos)', u: '' },
+      { k: 'Área pela taxa de sólidos (' + br(SLR) + ' kg/(m²·d))', v: A.toFixed(1) + ' m² (' + nA + ' adensadores de ' + D.toFixed(1) + ' m de diâmetro)', u: '' },
+      { k: 'Fluxo limite (Yoshioka, curva de Vesilind v = ' + br(v0) + '·e^(−' + br(kV) + 'C))', v: isFinite(GLd) ? GLd.toFixed(1) + ' kg/(m²·d) (tangente em C = ' + Ct.toFixed(1) + ' kg/m³)' : '—', u: '' },
+      { k: 'Taxa hidráulica / tempo de detenção', v: HLR.toFixed(2) + ' m³/(m²·d) / ' + tS.toFixed(1) + ' h', u: '' },
+      { k: 'Lodo adensado para a centrífuga', v: (U2.Q * 24).toFixed(1) + ' m³/d com ' + br(Cu * 100) + ' % de sólidos (' + (r.mS * 24).toFixed(0) + ' kg/d)', u: '' },
+      { k: 'Sobrenadante para a recuperação de água', v: S2.Q.toFixed(2) + ' m³/h com ' + S2.tss.toFixed(0) + ' mg/L de sólidos (' + (S2.turb).toFixed(0) + ' uT)', u: '' },
+      { k: 'Redução do volume de lodo', v: (100 * (1 - U2.Q / I.Q)).toFixed(1) + ' %', u: '' }];
+    const cx = [], gy = [], tl = []; const Cmax = Math.max(CuK * 1.1, 3 / kV);
+    for (let k = 0; k <= 120; k++) { const C = Cmax * k / 120; cx.push(C); gy.push(24 * Gb(C)); tl.push(isFinite(GL) && C <= CuK ? 24 * GL * (1 - C / CuK) : null); }
+    const plots = [{ kind: 'curves', title: 'Adensador: curva de fluxo de sólidos e tangente de Yoshioka', data: { xLabel: 'Concentração de sólidos (kg/m³)', yLabel: 'Fluxo de sólidos (kg/(m²·d))', xRange: [0, Cmax], series: [
+        { name: 'Fluxo em batelada G = v₀·C·e^(−kC)', x: cx, y: gy, color: '#2563c9', width: 3 },
+        { name: 'Tangente a partir de C_u (fluxo limite ' + (isFinite(GLd) ? GLd.toFixed(1) : '—') + ')', x: cx, y: tl, color: '#d1302b', width: 2 },
+        { name: 'Taxa adotada (' + br(SLR) + ')', x: [0], y: [SLR], mode: 'markers', size: 12, symbol: 'diamond', color: '#2e9e6b' }] } }];
+    return { out: { thickened: etaOut(th, r.kA, s), supernatant: etaOut(th, r.kB, s) }, massUtil: 0, res: decBR(res), warn: decW(warn), plots };
+  };
+
+  /* centrífuga decanter: desaguamento do lodo adensado com polímero; torta para o aterro, clarificado (centrado) de volta à ETA */
+  IMPL.eta_centrifuge = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed;
+    if (!connected(s)) throw new Error('ligue o lodo adensado na entrada da centrífuga');
+    const kg = kgOf(th, s), Tc = K2C(s.T), I = etaBal(th, kg, Tc), Ms = etaSolidsKg(th, kg) * 24;
+    const pol = num(p.pol, 4), cap = num(p.cap, 95) / 100, wT = num(p.wT, 22) / 100, eE = num(p.eE, 1.5), hOp = num(p.hOp, 16), qM = num(p.qM, 8), rhoT = num(p.rhoT, 1150), cac = num(p.cac, 10);
+    if (!(pol >= 0 && cap > 0 && cap <= 1 && wT > 0 && wT < 0.6 && eE > 0 && hOp > 0 && hOp <= 24 && qM > 0 && rhoT > 0 && cac > 0)) throw new Error('confira o polímero, a captura, o teor de sólidos da torta, a energia, as horas de operação e a capacidade');
+    const r = etaThicken(th, kg, cap, wT, 'centrífuga', warn), T = etaBal(th, r.kA, Tc), Cn = etaBal(th, r.kB, Tc);
+    const Vd = I.Q * 24, qOp = Vd / hOp, nM = Math.ceil(qOp / qM - 1e-9), occ = qOp / (nM * qM), Ed = eE * Vd, Pop = Ed / hOp;
+    const mT = T.mass * 24 / 1000, VT = T.mass * 24 / rhoT, nC = VT * 7 / cac;
+    if (wT > 0.3) warn.push('torta com ' + br(wT * 100) + ' %: centrífugas com lodo de alumínio costumam dar de 18 a 25 % de sólidos');
+    if (cap < 0.9) warn.push('captura de ' + br(cap * 100) + ' %: o centrado devolve muito sólido à ETA; aumente o polímero');
+    const res = [{ k: 'Lodo adensado na entrada', v: Vd.toFixed(1) + ' m³/d com ' + (100 * Ms / 24 / Math.max(I.mass, 1e-9)).toFixed(2) + ' % de sólidos (' + Ms.toFixed(0) + ' kg/d de sólidos secos)', u: '' },
+      { k: 'Centrífugas (' + br(qM) + ' m³/h cada, ' + br(hOp) + ' h/d)', v: nM + ' em operação (+ 1 reserva), ' + (100 * occ).toFixed(0) + ' % ocupadas; vazão de ' + qOp.toFixed(1) + ' m³/h', u: '' },
+      { k: 'Polímero catiônico (' + br(pol) + ' kg/t de sólidos secos)', v: (pol * Ms / 1000).toFixed(1) + ' kg/d', u: '' },
+      { k: 'Torta de lodo (' + br(wT * 100) + ' % de sólidos) para o aterro', v: mT.toFixed(2) + ' t/d = ' + VT.toFixed(1) + ' m³/d (' + nC.toFixed(1) + ' caçambas de ' + br(cac) + ' m³ por semana)', u: '' },
+      { k: 'Centrado (clarificado) para a recuperação de água', v: Cn.Q.toFixed(2) + ' m³/h com ' + Cn.tss.toFixed(0) + ' mg/L de sólidos', u: '' },
+      { k: 'Energia / potência em operação', v: Ed.toFixed(0) + ' kWh/d / ' + Pop.toFixed(1) + ' kW (' + br(eE) + ' kWh/m³ de lodo)', u: '' },
+      { k: 'Redução do volume: lodo adensado → torta', v: (Vd / Math.max(VT, 1e-9)).toFixed(1) + ' vezes', u: '' }];
+    const wx = [], vx = []; for (let k = 0; k <= 50; k++) { const w2 = 0.12 + 0.28 * k / 50; wx.push(100 * w2); vx.push(r.mS * 24 / w2 / rhoT); }
+    const plots = [{ kind: 'curves', title: 'Centrífuga: volume de torta × teor de sólidos', data: { xLabel: 'Teor de sólidos da torta (%)', yLabel: 'Torta (m³/d)', series: [
+        { name: 'Volume de torta', x: wx, y: vx, color: '#7a3db8', width: 3 }, { name: 'Operação (' + br(wT * 100) + ' %)', x: [wT * 100], y: [VT], mode: 'markers', size: 12, symbol: 'diamond', color: '#d1302b' }] } },
+      { kind: 'bars', title: 'Sólidos secos na centrífuga (kg/d)', data: { categories: ['Entrada', 'Torta', 'Centrado'], yLabel: 'kg/d', series: [{ name: 'Sólidos secos', y: [Ms, r.mS * 24, Ms - r.mS * 24], color: '#a0703c' }] } }];
+    return { out: { cake: etaOut(th, r.kA, s), centrate: etaOut(th, r.kB, s) }, duty: Pop * 1000, power: true, massUtil: 0, res: decBR(res), warn: decW(warn), plots };
+  };
+
   SF.units = { MICROBES, TYPES, IMPL, mkStream, streamPH, compileReactions, C2K, K2C, BAR, KMOLH, solveColumn, ponchonSavarit, STEAM, multiEffect, IF97, H2O, tagH2O, POST };
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -12782,6 +12915,30 @@ window.SIMULAFACIL_CONFIG = {
       sym: [[i('P'), 'população'], [i('q'), 'consumo per capita'], [sub(i('K'), '1') + ', ' + sub(i('K'), '2'), 'coeficientes do dia e da hora de maior consumo']],
       note: 'A ETA trabalha com vazão constante (a do dia de maior consumo) e o reservatório absorve a variação ao longo do dia. A Portaria GM/MS nº 888/2021 exige pelo menos 0,2 mg/L de cloro residual livre em toda a rede e recomenda no máximo 2 mg/L. A conferência compara a água tratada com os padrões de turbidez, cloro, pH, fluoreto, alumínio, sulfato, cloreto, dureza e sólidos dissolvidos.'
     }),
+    eta_washtank: () => ({
+      name: 'Água de lavagem dos filtros: equalização, clarificação com polímero e recirculação',
+      eqs: [eq(sub(V, 'eq') + ' = ' + sub(i('n'), 'lav') + '·' + sub(V, 'lav') + ',&nbsp; ' + sub(Q, 'rec') + ' = ' + fr(sub(V, 'lav/dia'), '24 h'), 'o tanque recebe as lavagens e devolve a água aos poucos'),
+        eq(sub(i('v'), '0') + ' = ' + fr(Q, i('A')) + ',&nbsp; ' + i('E') + ' = ∫ min(1, ' + fr(sub(i('v'), 's'), sub(i('v'), '0')) + ') ' + i('f') + '(' + sub(i('v'), 's') + ') d' + sub(i('v'), 's'), 'clarificação de Hazen'),
+        eq(fr(sub(Q, 'rec'), sub(Q, 'ETA')) + ' ≤ 10 %', 'limite usual da recirculação')],
+      sym: [[sub(V, 'lav'), 'volume de uma lavagem de filtro'], [sub(Q, 'rec'), 'vazão devolvida à entrada da ETA']],
+      note: 'A água de lavagem é 2 a 5 % da água produzida e leva os sólidos retidos nos filtros. Clarificada, volta à entrada da estação: economiza água e evita o lançamento no rio. A recirculação deve ser contínua e pequena (até cerca de 10 % da vazão), para não sobrecarregar a coagulação; parte dos cistos retidos volta com ela, por isso o clarificador é importante.'
+    }),
+    eta_thickener: () => ({
+      name: 'Adensador por gravidade: taxa de sólidos e fluxo limite',
+      eqs: [eq(i('A') + ' = ' + fr(sub(i('M'), 's'), 'TAS'), 'área pela taxa de aplicação de sólidos (kg/(m²·d))'),
+        eq(sub(i('G'), 'b') + ' = ' + sub(i('v'), '0') + i('C') + sup('e', '−' + i('kC')), 'fluxo em batelada (Vesilind)'),
+        eq(sub(i('G'), 'L') + ' = mín ' + fr(sub(i('G'), 'b') + '(' + i('C') + ')·' + sub(i('C'), 'u'), sub(i('C'), 'u') + ' − ' + i('C')), 'fluxo limite: tangente a partir de C_u (Yoshioka)')],
+      sym: [[sub(i('M'), 's'), 'sólidos secos que chegam (kg/d)'], [sub(i('C'), 'u'), 'concentração do lodo adensado'], [sub(i('v'), '0') + ', ' + i('k'), 'constantes de sedimentação (ensaio em proveta)']],
+      note: 'O lodo dos decantadores tem só cerca de 1 % de sólidos; o adensador o leva a 2 a 4 %, o que reduz o volume a um terço ou menos antes da centrífuga. Lodo de sulfato de alumínio adensa mal: as taxas usuais vão de 10 a 25 kg/(m²·d). A taxa adotada deve ficar abaixo do fluxo limite da curva de sedimentação.'
+    }),
+    eta_centrifuge: () => ({
+      name: 'Centrífuga decanter: desaguamento do lodo',
+      eqs: [eq(sub(i('M'), 'torta') + ' = ' + fr('cap·' + sub(i('M'), 's'), sub(i('w'), 'T')) + ',&nbsp; ' + sub(V, 'torta') + ' = ' + fr(sub(i('M'), 'torta'), sub('ρ', 'T')), 'torta'),
+        eq(sub(i('n'), 'máq') + ' = ⌈' + fr(sub(V, 'dia'), sub(i('h'), 'op') + '·' + sub(i('q'), 'máq')) + '⌉,&nbsp; ' + sub(i('E'), 'dia') + ' = ' + sub(i('e'), 'E') + sub(V, 'dia'), 'máquinas e energia'),
+        eq(sub(i('m'), 'pol') + ' = dose·' + sub(i('M'), 's'), 'polímero (kg por tonelada de sólidos secos)')],
+      sym: [['cap', 'captura de sólidos'], [sub(i('w'), 'T'), 'teor de sólidos da torta'], [sub(i('e'), 'E'), 'energia por m³ de lodo']],
+      note: 'O tambor gira a 2 000 a 3 500 g; os sólidos vão para a parede e a rosca, um pouco mais lenta, os empurra para a parte cônica, onde saem como torta. O polímero catiônico agrega as partículas finas. Com lodo de alumínio a torta tem de 18 a 25 % de sólidos e vai para aterro sanitário ou para uso em cerâmica e cimento.'
+    }),
     steam_turbine: () => {
       const m = s2 => sub(i('ṁ'), s2), h = s2 => sub(i('h'), s2);
       return {
@@ -13261,7 +13418,7 @@ window.SIMULAFACIL_CONFIG = {
     eta_intake: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
       'A captação tira a água do rio e a leva à estação. A grade retém galhos, folhas e peixes; a caixa de areia (desarenador) deixa a areia assentar, porque ela desgastaria os rotores das bombas e entupiria as tubulações. A argila e o silte, finos demais, passam: só sairão depois da coagulação.',
       'O bloco calcula a perda de carga na grade pela fórmula de Kirschmer (limpa e com metade obstruída), a remoção de cada grão de areia pela teoria de Hazen, com a velocidade de sedimentação dada pelo arrasto de uma esfera, as dimensões dos canais e a potência da elevatória de água bruta.',
-      'No exemplo, 1 030 m³/h de água do rio, com 50 uT e 20 mg/L de areia, passam por uma caixa de areia de 25 m² (1 000 m³/(m²·d)): 96 % da areia fica retida, cerca de 470 kg por dia. As bombas elevam a água a 40 m com 156 kW, 0,15 kWh por metro cúbico.'] },
+      'No exemplo, 1 001 m³/h de água do rio, com 50 uT e 20 mg/L de areia, passam por uma caixa de areia de 24 m² (1 000 m³/(m²·d)): 96 % da areia fica retida, cerca de 460 kg por dia. As bombas elevam a água a 40 m com 151 kW, 0,15 kWh por metro cúbico. A água recuperada da lavagem dos filtros e do lodo entra logo depois, no misturador de chegada.'] },
     eta_coag: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
       'A coagulação desestabiliza as partículas de argila, que têm carga negativa e se repelem. O sulfato de alumínio forma hidróxido de alumínio, que precipita e arrasta as partículas (coagulação por varredura). A reação consome a alcalinidade da água e libera gás carbônico: o pH cai, e a cal corrige quando a alcalinidade não basta.',
       'A calha Parshall mede a vazão pela lâmina de água na entrada (Q = K·Hₐⁿ) e forma um ressalto hidráulico logo depois da garganta. É ali que o coagulante é aplicado: a turbulência do ressalto o espalha em menos de um segundo, sem motor. O bloco segue o método de Azevedo Netto para a lâmina na garganta, o ressalto, a perda de carga e o gradiente de velocidade G.',
@@ -13273,7 +13430,7 @@ window.SIMULAFACIL_CONFIG = {
     eta_settler: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
       'No decantador, a água anda devagar por várias horas e os flocos vão ao fundo, onde formam o lodo. Pela teoria de Hazen, o que importa é a área em planta: todo floco que cai mais depressa que a taxa de aplicação v₀ = Q/A chega ao fundo antes de a água sair.',
       'O bloco descreve as velocidades de sedimentação dos flocos por uma distribuição log-normal e integra a remoção de Hazen; as partículas que não flocularam sedimentam muito devagar. Calcula ainda as dimensões, o tempo de detenção, a velocidade horizontal, os números de Reynolds e de Froude, os vertedores de coleta e o lodo.',
-      'No exemplo, dois decantadores de 41 × 10 × 4 m (30 m³/(m²·d), 3,2 h) retêm 99 % dos flocos e a água sai com 3,3 uT. O lodo soma cerca de 2 t de sólidos secos por dia, ou 200 m³/d com 1 % de sólidos, que vão para o tratamento de lodo.'] },
+      'No exemplo, dois decantadores de 41 × 10 × 4 m (30 m³/(m²·d), 3,2 h) retêm 99 % dos flocos e a água sai com 3,3 uT. O lodo soma cerca de 2 t de sólidos secos por dia, ou cerca de 190 m³/d com 1 % de sólidos, que seguem para os adensadores de lodo.'] },
     eta_filter: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
       'O filtro rápido é a barreira final contra a turbidez e os cistos de protozoários. A água desce por uma camada de antracito, que retém a maior parte dos flocos em profundidade, e por uma de areia fina, que faz o polimento. Quando a perda de carga chega ao limite, o filtro é lavado com água de baixo para cima, que expande o leito e solta o material retido.',
       'O bloco usa o modelo de Iwasaki para a remoção (C/C₀ = exp(−λL) em cada camada), a equação de Carman–Kozeny para a perda de carga do leito limpo, um aumento linear da perda de carga com a massa retida para a carreira e a equação de Richardson–Zaki para a expansão na lavagem.',
@@ -13286,6 +13443,18 @@ window.SIMULAFACIL_CONFIG = {
       'A ETA trabalha com vazão constante, mas a cidade consome pouco de madrugada e muito no fim da manhã. O reservatório guarda a água nas horas de pouco consumo e a entrega nas horas de pico; ele também é a reserva para incêndios e para as paradas da estação. A NBR 12217 pede pelo menos um terço do volume do dia de maior consumo.',
       'O bloco calcula as vazões da cidade com os coeficientes K₁ e K₂, o volume pela regra de um terço e pelo diagrama de massas (Rippl) com uma curva típica de consumo horário, o decaimento do cloro no reservatório e na rede e a potência da elevatória. No fim, confere a água tratada com o padrão de potabilidade da Portaria GM/MS nº 888/2021.',
       'No exemplo, 100 mil habitantes a 200 L/(hab·d) pedem 278 L/s no dia de maior consumo, exatamente o que a ETA produz. O reservatório de 8 000 m³ segura a água por 8 h; o cloro cai de 1,43 para 1,04 mg/L e chega à ponta da rede com 0,64 mg/L. Os 10 parâmetros conferidos atendem à Portaria.'] },
+    eta_washtank: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
+      'Cada filtro é lavado uma vez por dia ou mais, com uma vazão alta por cerca de 10 minutos. O tanque de equalização recebe essas lavagens e devolve a água aos poucos, numa vazão pequena e constante. Antes de voltar à entrada da estação, a água passa por um clarificador com polímero, que separa os sólidos retidos nos filtros.',
+      'O bloco calcula o volume do tanque (algumas lavagens seguidas), a área do clarificador e a remoção de Hazen com flocos log-normais, o consumo de polímero, o lodo que segue para o adensador e a recirculação em relação à vazão da ETA, com aviso acima de 10 %.',
+      'No exemplo, chegam ao tanque de 220 m³ cerca de 490 m³/d de água de lavagem, 140 m³/d de sobrenadante e 60 m³/d de centrado. O clarificador de 23 m² devolve 28 m³/h (2,9 % da vazão) com 5 uT à entrada da ETA, e o lodo segue para o adensador.'] },
+    eta_thickener: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
+      'O lodo que sai dos decantadores tem só cerca de 1 % de sólidos: é quase tudo água. O adensador por gravidade é um tanque circular onde o lodo assenta devagar e um raspador o leva ao centro do fundo. Sai um lodo com 2 a 4 % de sólidos, e o sobrenadante, quase limpo, volta à entrada da estação.',
+      'O bloco dimensiona a área pela taxa de aplicação de sólidos e confere o fluxo limite pela teoria de Yoshioka, com a curva de sedimentação em batelada de Vesilind. Calcula também a taxa hidráulica, o tempo de detenção, o lodo adensado e o sobrenadante.',
+      'No exemplo, 2,3 t/d de sólidos chegam com 1 % de sólidos (214 m³/d). Dois adensadores de 8,5 m de diâmetro, a 20 kg/(m²·d), abaixo do fluxo limite de 33 kg/(m²·d), levam o lodo a 3 %, e o volume cai a um terço (70 m³/d).'] },
+    eta_centrifuge: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
+      'A centrífuga decanter tira a maior parte da água do lodo adensado. O tambor gira muito depressa, os sólidos vão para a parede e uma rosca os empurra para fora como uma torta úmida. O polímero catiônico agrega as partículas finas e melhora a captura. A água separada, o centrado, volta à entrada da estação.',
+      'O bloco calcula a torta pela captura e pelo teor de sólidos, o número de centrífugas pelas horas de operação, o polímero, a energia e o número de caçambas por semana.',
+      'No exemplo, 2,1 t/d de sólidos saem como 9,3 t/d de torta com 22 % de sólidos (8 m³/d), cerca de 6 caçambas de 10 m³ por semana para o aterro. Uma centrífuga de 8 m³/h, 16 h por dia, basta, com 8,6 kg/d de polímero e 106 kWh/d.'] },
     steam_condenser: { ex: ex('usina-nuclear-pwr', 'Usina nuclear PWR completa (tipo Angra 2)'), p: [
       'O condensador de superfície fecha o ciclo de Rankine: o vapor que sai da turbina de baixa condensa sobre tubos com água fria, e o volume do vapor, milhares de vezes maior que o do líquido, desaparece. Isso cria o vácuo que permite à turbina expandir o vapor até cerca de 8 kPa e tirar dele muito mais trabalho.',
       'O bloco condensa o vapor de escape e os drenos ligados a ele até o condensado levemente subresfriado e entrega o calor à água de resfriamento, que sai mais quente pelo balanço de energia. A diferença terminal (saturação menos saída da água) e a média logarítmica dão a área de troca; sem corrente de água ligada, a vazão é calculada pelo aquecimento escolhido.',
@@ -13328,7 +13497,7 @@ window.SIMULAFACIL_CONFIG = {
     crusher: ['feed'], ball_mill: ['feed', 'recycle'], spiral_classifier: ['feed'], hydrocyclone: ['feed'], flotation: ['feed'], flot_col_bench: ['feed'], flot_col_ind: ['feed'],
     coke_oven: ['coal'], sinter_plant: ['ore', 'flux', 'fuel'], bof: ['hot_metal', 'scrap'], caster: ['steel'], rolling_mill: ['billet'], wire_drawing: ['rod'],
     wood_yard: ['logs'], pulp_washer: ['pulp'], bleach_plant: ['pulp'], paper_machine: ['stock'], recovery_boiler: ['liquor'], causticizing: ['smelt'], steam_gen: ['water'], steam_turbine: ['steam'],
-    nuclear_reactor: ['cold_leg'], pwr_steam_gen: ['primary_in', 'feedwater'], msr: ['heating'], steam_condenser: ['cw_in', 'drain'], deaerator: ['drain1', 'drain2'], cocoa_alkalizer: ['alkali'], conche: ['fat', 'emulsifier'] };
+    nuclear_reactor: ['cold_leg'], pwr_steam_gen: ['primary_in', 'feedwater'], msr: ['heating'], steam_condenser: ['cw_in', 'drain'], deaerator: ['drain1', 'drain2'], cocoa_alkalizer: ['alkali'], conche: ['fat', 'emulsifier'], eta_washtank: ['feed2', 'feed3'], eta_thickener: ['feed2'] };
   // portas de energia (correntes de energia): não carregam matéria
   const ENERGY_PORTS = { ei: 1, eo: 1, q_in: 1, q_out: 1, qc: 1, qr: 1, q_pre: 1 };
   const isEnergyPort = p => !!ENERGY_PORTS[p];
@@ -13489,6 +13658,9 @@ window.SIMULAFACIL_CONFIG = {
     eta_filter: { feed: 'água decantada', filtered: 'água filtrada', wash: 'água de lavagem' },
     eta_disinfect: { feed: 'água filtrada', product: 'água tratada (cloro, flúor e pH)' },
     eta_reservoir: { feed: 'água tratada', product: 'para a cidade', q_in: 'bombas de água tratada' },
+    eta_washtank: { feed: 'água de lavagem dos filtros', feed2: 'sobrenadante do adensador', feed3: 'centrado da centrífuga', clarified: 'água recuperada (volta à ETA)', sludge: 'lodo para o adensador' },
+    eta_thickener: { feed: 'lodo dos decantadores', feed2: 'lodo da recuperação de água', thickened: 'lodo adensado', supernatant: 'sobrenadante (volta à ETA)' },
+    eta_centrifuge: { feed: 'lodo adensado', cake: 'torta de lodo', centrate: 'centrado (para a recuperação de água)', q_in: 'motor da centrífuga' },
     blast_furnace: { ore: 'minério', coke: 'coque', flux: 'fundente', blast: 'ar de sopro', gas: 'gás de topo', slag: 'escória', pig_iron: 'gusa' },
     cement_kiln: { meal: 'farinha crua', fuel: 'combustível', air: 'ar de combustão', gas: 'gases de exaustão', clinker: 'clínquer' },
     silo: { feed: 'alimentação', product: 'descarga' },
@@ -13651,7 +13823,10 @@ window.SIMULAFACIL_CONFIG = {
     eta_settler: { w: 190, h: 100, ports: { feed: P(0, 40, 'l', 'in'), clarified: P(190, 40, 'r', 'out'), sludge: P(45, 100, 'd', 'out') } },
     eta_filter: { w: 130, h: 120, ports: { feed: P(0, 24, 'l', 'in'), wash: P(130, 22, 'r', 'out'), filtered: P(130, 92, 'r', 'out') } },
     eta_disinfect: { w: 170, h: 100, ports: { feed: P(0, 56, 'l', 'in'), product: P(170, 56, 'r', 'out') } },
-    eta_reservoir: { w: 150, h: 110, ports: { feed: P(0, 34, 'l', 'in'), product: P(150, 48, 'r', 'out'), q_in: P(118, 110, 'd', 'ein') } }
+    eta_reservoir: { w: 150, h: 110, ports: { feed: P(0, 34, 'l', 'in'), product: P(150, 48, 'r', 'out'), q_in: P(118, 110, 'd', 'ein') } },
+    eta_washtank: { w: 160, h: 100, ports: { feed: P(120, 0, 'u', 'in'), feed2: P(0, 40, 'l', 'in'), feed3: P(110, 100, 'd', 'in'), clarified: P(156, 100, 'd', 'out'), sludge: P(44, 100, 'd', 'out') } },
+    eta_thickener: { w: 150, h: 100, ports: { feed: P(40, 0, 'u', 'in'), feed2: P(150, 46, 'r', 'in'), supernatant: P(150, 24, 'r', 'out'), thickened: P(75, 100, 'd', 'out') } },
+    eta_centrifuge: { w: 170, h: 90, ports: { feed: P(87, 0, 'u', 'in'), centrate: P(170, 30, 'r', 'out'), cake: P(25, 90, 'd', 'out'), q_in: P(130, 90, 'd', 'ein') } }
   };
 
   /* primitivas: rect (x,y,w,h,r), circ (cx,cy,r), line (polilinha aberta), poly (polígono fechado), text.
@@ -13709,6 +13884,21 @@ window.SIMULAFACIL_CONFIG = {
   }
 
   const PRIMS = {
+    eta_washtank: () => [ // clarificador com polímero (à esquerda) e tanque de equalização (à direita), que recebe a lavagem, o sobrenadante e o centrado
+      L([[120, 0], [120, 14]]), R(92, 14, 58, 66, 3), L([[94, 30], [148, 30]], 'cold'), L([[94, 46], [148, 46]], 'lnd'), T(121, 66, 'equal.'),
+      L([[110, 100], [110, 80]]), L([[92, 54], [80, 54]]), L([[0, 40], [8, 40]]), L([[44, 80], [44, 100]]),
+      Pg([[8, 20], [80, 20], [80, 62], [56, 80], [32, 80], [8, 62]]), L([[10, 28], [78, 28]], 'cold'),
+      L([[44, 12], [44, 70]]), L([[22, 62], [44, 70], [66, 62]]), R(38, 6, 12, 8, 2, 'bodyw'), L([[78, 24], [86, 24], [86, 8], [156, 8], [156, 100]], 'cold'), T(44, 52, 'polím.')],
+    eta_thickener: () => [ // adensador circular: poço central de alimentação, raspador de fundo inclinado, ponte e calha periférica
+      L([[40, 0], [40, 18]]), R(20, 6, 110, 8, 2, 'bodyw'), Pg([[10, 18], [140, 18], [140, 60], [84, 86], [66, 86], [10, 60]]),
+      L([[12, 28], [138, 28]], 'cold'), R(66, 18, 18, 30, 1, 'bodyw'), L([[75, 14], [75, 80]]), L([[20, 60], [75, 82], [130, 60]], 'lnd'),
+      C(36, 66, 2, 'ln'), C(52, 72, 2, 'ln'), C(100, 70, 2, 'ln'), C(116, 64, 2, 'ln'), L([[150, 46], [140, 46]]), L([[140, 24], [150, 24]], 'cold'),
+      L([[75, 86], [75, 100]]), T(108, 48, 'lodo')],
+    eta_centrifuge: () => [ // centrífuga decanter: cone à esquerda (sai a torta), cilindro com a rosca, centrado à direita e motor embaixo
+      L([[87, 0], [87, 22]]), Pg([[20, 32], [46, 22], [150, 22], [150, 54], [46, 54], [20, 44]]), L([[30, 38], [146, 38]]),
+      L([[56, 26], [64, 50]]), L([[76, 26], [84, 50]]), L([[96, 26], [104, 50]]), L([[116, 26], [124, 50]]), L([[136, 26], [144, 50]]),
+      L([[150, 30], [170, 30]], 'cold'), Pg([[14, 44], [36, 44], [31, 62], [19, 62]], 'bodyw'), L([[25, 62], [25, 90]]),
+      R(116, 60, 28, 16, 3, 'bodyw'), L([[130, 76], [130, 90]], 'lnd'), L([[130, 60], [130, 54]]), T(76, 76, 'centrífuga')],
     eta_intake: () => [ // captação: canal com a grade inclinada, caixa de areia com a tremonha e os grãos, e a bomba da elevatória
       L([[0, 40], [8, 40]]), R(8, 24, 100, 42, 4), L([[10, 32], [106, 32]], 'cold'),
       L([[20, 25], [30, 65]]), L([[26, 25], [36, 65]]), L([[32, 25], [42, 65]]),
@@ -18858,29 +19048,37 @@ def pfr_transiente(P, nome):
         S('10', 'HC', 'underflow', 'FL1', 'feed', 'Deslamado'), S('11', 'FL1', 'sink', 'FL2', 'feed', 'Conc. rougher'), S('12', 'FL1', 'froth', 'MXR', 'in1', 'Espuma rougher'),
         S('13', 'FL2', 'froth', 'MXR', 'in2', 'Espuma cleaner'), S('14', 'MXR', 'out', 'PR', 'in', 'Rejeito'), S('15', 'FL2', 'sink', 'SC', 'feed', 'Concentrado final'),
         S('16', 'SC', 'underflow', 'PC', 'in', 'Underflow'), S('17', 'SC', 'overflow', 'PA2', 'in', 'Água')] } },
-    { key: 'eta-convencional', title: 'Estação de tratamento de água (ETA) convencional para uma cidade de 100 mil habitantes — captação, calha Parshall, floculação, decantação, filtração, cloro, flúor e reservatório, com a Portaria 888/2021', fs: {
+    { key: 'eta-convencional', title: 'Estação de tratamento de água (ETA) convencional para uma cidade de 100 mil habitantes — captação, calha Parshall, floculação, decantação, filtração, cloro, flúor, reservatório, tratamento do lodo e recuperação de água, com a Portaria 888/2021', fs: {
       name: 'ETA convencional: água para 100 mil habitantes', theme: 'agua', fixedLayout: true,
       components: ['water', 'silica', 'clay', 'ca-bicarbonate', 'co2-aq', 'sio2-aq', 'aluminium-hydroxide', 'calcium-sulfate', 'floc-clay', 'floc-al', 'free-chlorine', 'cacl2', 'caf2-aq'], model: 'IDEAL',
       blocks: [
-        // água bruta do rio a 20 °C: 1 030 m³/h (100 mil hab × 200 L/(hab·d) × K₁ = 1,2 = 1 000 m³/h, mais 3 % para o lodo e a lavagem dos filtros); por m³: 20 g de areia, 75 g de argila (≈ 50 uT),
+        // água bruta do rio a 20 °C: 1 001 m³/h (100 mil hab × 200 L/(hab·d) × K₁ = 1,2 = 1 000 m³/h; a água de lavagem, o sobrenadante e o centrado
+        // voltam à entrada, e só a água da torta e da areia se perde); por m³: 20 g de areia, 75 g de argila (≈ 50 uT),
         // alcalinidade de 30 mg CaCO₃/L (48,6 g de Ca(HCO₃)₂), 6,3 g de CO₂ livre (pH ≈ 7,0) e 10 g de sílica dissolvida
-        { id: 'FAB', x: -40, y: 165, type: 'feed', name: 'Água bruta (1 030 m³/h)', params: etaRaw(1030, { silica: 20, clay: 75, 'ca-bicarbonate': 48.6, 'co2-aq': 6.3, 'sio2-aq': 10 }) },
+        { id: 'FAB', x: -40, y: 165, type: 'feed', name: 'Água bruta (1 001 m³/h)', params: etaRaw(1001, { silica: 20, clay: 75, 'ca-bicarbonate': 48.6, 'co2-aq': 6.3, 'sio2-aq': 10 }) },
         { id: 'CAP', x: 80, y: 140, type: 'eta_intake', name: 'Captação e elevatória EAB-01', params: {} },
         { id: 'EB1', x: -10, y: 30, type: 'energy', name: 'Bombas de água bruta', params: { Q: '' } },
-        { id: 'MR', x: 340, y: 132, type: 'eta_coag', name: 'Calha Parshall e mistura rápida', params: {} },
-        { id: 'FLO', x: 590, y: 124, type: 'eta_floc', name: 'Floculadores FLO-01/02', params: {} },
-        { id: 'DEC', x: 850, y: 140, type: 'eta_settler', name: 'Decantadores DEC-01/02', params: {} },
-        { id: 'FIL', x: 1130, y: 156, type: 'eta_filter', name: 'Filtros rápidos FIL-01 a 06', params: {} },
-        { id: 'TC', x: 1350, y: 192, type: 'eta_disinfect', name: 'Tanque de contato: cloro, flúor e cal', params: {} },
-        { id: 'RES', x: 1610, y: 214, type: 'eta_reservoir', name: 'Reservatório e elevatória EAT-01', params: {} },
+        { id: 'MIX', x: 310, y: 170, type: 'mixer', name: 'Chegada à ETA', params: { P: '' } },
+        { id: 'MR', x: 480, y: 154, type: 'eta_coag', name: 'Calha Parshall e mistura rápida', params: {} },
+        { id: 'FLO', x: 730, y: 146, type: 'eta_floc', name: 'Floculadores FLO-01/02', params: {} },
+        { id: 'DEC', x: 990, y: 162, type: 'eta_settler', name: 'Decantadores DEC-01/02', params: {} },
+        { id: 'FIL', x: 1270, y: 178, type: 'eta_filter', name: 'Filtros rápidos FIL-01 a 06', params: {} },
+        { id: 'TC', x: 1490, y: 214, type: 'eta_disinfect', name: 'Tanque de contato: cloro, flúor e cal', params: {} },
+        { id: 'RES', x: 1750, y: 236, type: 'eta_reservoir', name: 'Reservatório e elevatória EAT-01', params: {} },
         { id: 'EB2', type: 'energy', name: 'Bombas de água tratada', params: { Q: '' } },
-        { id: 'P1', x: 200, y: 280, type: 'product', name: 'Areia retirada' }, { id: 'P2', x: 920, y: 280, type: 'product', name: 'Lodo dos decantadores' },
-        { id: 'P3', x: 1330, y: 60, type: 'product', name: 'Água de lavagem dos filtros' }, { id: 'P4', x: 1900, y: 247, type: 'product', name: 'Água tratada para a cidade' }],
+        { id: 'REC', x: 1280, y: 440, type: 'eta_washtank', name: 'Recuperação da água de lavagem', params: {} },
+        { id: 'ADE', x: 995, y: 456, type: 'eta_thickener', name: 'Adensadores de lodo ADE-01/02', params: {} },
+        { id: 'CEN', x: 983, y: 700, type: 'eta_centrifuge', name: 'Centrífugas de lodo', params: {} },
+        { id: 'EB3', x: 929, y: 870, type: 'energy', name: 'Motores das centrífugas', params: { Q: '' } },
+        { id: 'P1', x: 200, y: 280, type: 'product', name: 'Areia retirada' }, { id: 'P2', x: 1040, y: 815, type: 'product', name: 'Torta de lodo para o aterro' },
+        { id: 'P4', x: 2040, y: 269, type: 'product', name: 'Água tratada para a cidade' }],
       streams: [S('1', 'FAB', 'out', 'CAP', 'feed', 'Rio'), S('E1', 'EB1', 'eo', 'CAP', 'q_in', 'Bombas'), S('2', 'CAP', 'grit', 'P1', 'in', 'Areia'),
-        S('3', 'CAP', 'product', 'MR', 'feed', 'Bruta'), S('4', 'MR', 'product', 'FLO', 'feed', 'Coagulada'), S('5', 'FLO', 'product', 'DEC', 'feed', 'Floculada'),
-        S('6', 'DEC', 'sludge', 'P2', 'in', 'Lodo'), S('7', 'DEC', 'clarified', 'FIL', 'feed', 'Decantada'), S('8', 'FIL', 'wash', 'P3', 'in', 'Lavagem'),
+        S('3', 'CAP', 'product', 'MIX', 'in1', 'Bruta'), S('3b', 'MIX', 'out', 'MR', 'feed', 'Mistura'), S('4', 'MR', 'product', 'FLO', 'feed', 'Coagulada'), S('5', 'FLO', 'product', 'DEC', 'feed', 'Floculada'),
+        S('6', 'DEC', 'sludge', 'ADE', 'feed', 'Lodo'), S('7', 'DEC', 'clarified', 'FIL', 'feed', 'Decantada'), S('8', 'FIL', 'wash', 'REC', 'feed', 'Lavagem'),
         S('9', 'FIL', 'filtered', 'TC', 'feed', 'Filtrada'), S('10', 'TC', 'product', 'RES', 'feed', 'Tratada'), S('E2', 'EB2', 'eo', 'RES', 'q_in', 'Bombas'),
-        S('11', 'RES', 'product', 'P4', 'in', 'Para a cidade')] } },
+        S('11', 'RES', 'product', 'P4', 'in', 'Para a cidade'), S('12', 'REC', 'clarified', 'MIX', 'in2', 'Recuperada'), S('13', 'REC', 'sludge', 'ADE', 'feed2', 'Lodo'),
+        S('14', 'ADE', 'supernatant', 'REC', 'feed2', 'Sobrenadante'), S('15', 'ADE', 'thickened', 'CEN', 'feed', 'Adensado'), S('16', 'CEN', 'centrate', 'REC', 'feed3', 'Centrado'),
+        S('17', 'CEN', 'cake', 'P2', 'in', 'Torta'), S('E3', 'EB3', 'eo', 'CEN', 'q_in', 'Motores')] } },
     { key: 'siderurgia-usina-integrada', title: 'Siderurgia: usina integrada completa — carvão e minério → coqueria, sinterização, alto-forno, aciaria LD, lingotamento contínuo, laminação e trefilação', fs: {
       name: 'Usina siderúrgica integrada: das matérias-primas ao arame', components: ['hematite', 'silica', 'carbon', 'coal-volatiles', 'coal-tar', 'caco3', 'cao', 'feo', 'iron', 'oxygen', 'nitrogen', 'co', 'co2', 'water', 'hydrogen', 'methane'], model: 'IDEAL', fixedLayout: true,
       blocks: [
@@ -20886,7 +21084,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', reactor_kinetics: 'CIN', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', reactor_kinetics: 'CIN', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -21216,6 +21414,15 @@ def pfr_transiente(P, nome):
     eta_reservoir: { ex: 'ETA convencional para 100 mil habitantes', items: [
       ['Correntes', 'entrada <b>água tratada</b>; saída <b>para a cidade</b>; porta de energia <b>q_in</b> com as bombas de água tratada.'],
       ['Operação', '100 000 habitantes, 200 L/(hab·d), K₁ = 1,2 e K₂ = 1,5; reserva de 1/3 do dia de maior consumo; cloro decai 0,04 h⁻¹ e leva 12 h até a ponta da rede; elevatória de 50 m.']] },
+    eta_washtank: { ex: 'ETA convencional para 100 mil habitantes', items: [
+      ['Correntes', 'entradas <b>água de lavagem</b> dos filtros, <b>sobrenadante</b> do adensador e <b>centrado</b> da centrífuga (as duas últimas opcionais); saídas <b>água recuperada</b> (volta à entrada da ETA, pelo misturador) e <b>lodo</b> (para o adensador).'],
+      ['Operação', 'tanque para 2 lavagens de 110 m³; clarificador a 30 m³/(m²·d) com 1 mg/L de polímero; flocos com v₅₀ = 2,5 m/h; lodo com 1,5 % de sólidos.']] },
+    eta_thickener: { ex: 'ETA convencional para 100 mil habitantes', items: [
+      ['Correntes', 'entradas <b>lodo dos decantadores</b> (por cima) e <b>lodo da recuperação de água</b> (pelo lado, opcional); saídas <b>lodo adensado</b> e <b>sobrenadante</b> (para a recuperação de água).'],
+      ['Operação', '20 kg/(m²·d) de sólidos, lodo adensado com 3 % e 95 % de captura; 2 adensadores de 3,5 m; curva de Vesilind com v₀ = 1,5 m/h e k = 0,2 m³/kg.']] },
+    eta_centrifuge: { ex: 'ETA convencional para 100 mil habitantes', items: [
+      ['Correntes', 'entrada <b>lodo adensado</b>; saídas <b>torta de lodo</b> e <b>centrado</b> (para a recuperação de água); porta de energia <b>q_in</b> com o motor.'],
+      ['Operação', '4 kg de polímero por tonelada de sólidos, 95 % de captura, torta com 22 % de sólidos; centrífugas de 8 m³/h, 16 h por dia; 1,5 kWh/m³.']] },
     refrigerator: { ex: 'Chiller de água gelada com R-134a', items: [
       ['Temperatura de saída do produto (°C)', 'temperatura que a corrente deve atingir: 7 °C no exemplo (água gelada que volta a 12 °C).'],
       ['Fluido refrigerante', 'o gás que circula no ciclo, entre 18: HFCs (R-134a, R-32, R-125, R-143a, R-152a, R-23, R-245fa e as misturas R-404A, R-407C, R-410A e R-507A), HFOs de baixo GWP (R-1234yf e R-1234ze(E)), o R-22 e os naturais (amônia, propano, isobutano e CO₂). R-134a no exemplo; troque por R-1234yf ou R-1234ze(E) e compare pressões, vazão, COP e GWP. R-23 e CO₂ só condensam abaixo de 26 e 31 °C (cascata).'],

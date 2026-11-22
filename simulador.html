@@ -37,8 +37,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 5.4 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e estação de tratamento de água | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 5.4, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também fábrica de cimento completa, fábricas de ácido sulfúrico (enxofre e gás metalúrgico), usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 5.5 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e estação de tratamento de água | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 5.5, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também cinética química com análise gráfica de reações (6 EDOs e barras deslizantes de k), fábrica de cimento completa, fábricas de ácido sulfúrico (enxofre e gás metalúrgico), usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -47,7 +47,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 5.4 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e ETA">
+<meta property="og:title" content="SIMULA FÁCIL IA 5.5 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e ETA">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -143,6 +143,12 @@ input[type=search] { -webkit-appearance: none; appearance: none; }
 .tools { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
 .top .tools button, .top .tools select { background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.28); color: #fff; border-radius: 99px; padding: 6px 13px; }
 .top .tools select option { color: #15232a; }
+/* lista aberta dos menus (Exemplos…): texto escuro sobre fundo branco nos dois temas. O Chrome do computador pinta a lista com o
+   fundo escuro do tema e o Android a pinta clara; com as duas cores fixas, o texto fica nítido em qualquer um deles */
+select option, .top .tools select option, body.mobile .top .tools select option { color: #15232a; background-color: #ffffff; }
+select option:disabled { color: #5a6a72; }
+/* textos de dica (placeholder) das caixas de busca com contraste suficiente nos dois temas */
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: 1; }
 .top .tools button:hover, .top .tools select:hover { background: rgba(255,255,255,.24); border-color: #fff; }
 .top .tools a.claude-link { background: var(--pop); color: #fff; border-color: var(--pop); border-radius: 99px; font-weight: 700; text-decoration: none; }
 .top .tools a.claude-link:hover { filter: brightness(1.06); }
@@ -536,7 +542,6 @@ body.mobile .tools::before, body.mobile .palette::before { content: ''; position
 body.mobile .tools.dragging, body.mobile .palette.dragging { transition: none; }
 .m-sec { grid-column: 1 / -1; margin: 8px 2px 0; font: 600 11px/1 var(--font-cond); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 body.mobile .top .tools button, body.mobile .top .tools select, body.mobile .top .tools a.claude-link, body.mobile .top .tools a.manual-link { background: var(--panel-2); color: var(--ink); border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 8px; font-size: 15px; font-weight: 600; justify-content: center; text-align: center; min-height: 48px; box-shadow: none; }
-body.mobile .top .tools select option { color: var(--ink); }
 body.mobile .projname { display: block; grid-column: 1 / -1; order: 1; }
 body.mobile .projname input { width: 100%; min-height: 48px; padding: 10px 12px; border-radius: var(--r-md); background: var(--panel); border: 1px solid var(--line); color: var(--ink); font-weight: 700; }
 body.mobile .top .tools #exampleSel { order: 2; grid-column: 1 / -1; max-width: none; width: 100%; text-align: left; padding: 10px 12px; background: var(--accent-weak); border-color: var(--accent); font-weight: 700; }
@@ -834,6 +839,86 @@ body:not(.mobile) .work { min-height: 700px; }
 .field-range input[type=range] { flex: 1 1 auto; width: auto; min-width: 0; accent-color: #2563c9; height: 26px; cursor: pointer; padding: 0; border: 0; background: transparent; }
 .field-range .rng-num { width: 84px; flex: 0 0 auto; }
 .field-range .rng-val { color: #2563c9; }
+/* versão 5.5: janela do bloco de cinética química (tabela de reações, barras de k, EDOs e gráficos) */
+.modal-card.ck-card { width: min(1440px, 100%); height: 100%; }
+.ck { display: grid; grid-template-columns: minmax(0, 1.28fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+.ck-left, .ck-right { min-width: 0; }
+.ck-box { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--panel); margin-top: 10px; }
+.ck-right > .ck-box:first-child { margin-top: 0; }
+.ck-box h3 { margin: 0 0 8px; font: 600 15px var(--font-cond); }
+.ck-sub { font-weight: 400; color: var(--muted); font-size: 13px; }
+.ck-red { color: var(--err); }
+.ck-hint { margin: 0 0 8px; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.ck-hint code { font-family: var(--mono); color: var(--ink); background: var(--panel-2); padding: 0 4px; border-radius: 4px; }
+.ck-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 10px; flex-wrap: wrap; }
+.ck-tabs button { border-radius: 8px 8px 0 0; margin-bottom: -1px; white-space: normal; text-align: left; }
+.ck-tabs button[aria-selected="true"] { background: var(--accent-weak); border-color: var(--accent); border-bottom-color: var(--accent-weak); font-weight: 600; }
+.ck-rxt { display: grid; gap: 4px; }
+.ck-rx, .ck-rxh { display: grid; grid-template-columns: 50px minmax(120px, 2.3fr) minmax(62px, 1fr) minmax(54px, .85fr) repeat(6, minmax(34px, .55fr)); gap: 4px; align-items: center; }
+.ck-rxh { font-size: 12px; font-weight: 700; color: var(--muted); padding-bottom: 2px; }
+.ck-rxh span:nth-child(n+3) { text-align: right; }
+.ck-no { font: 700 13px var(--font-cond); color: var(--muted); }
+.ck-c { min-width: 0; }
+.ck-c input { width: 100%; min-width: 0; font-family: var(--mono); font-size: 13px; text-align: right; padding: 5px 6px; }
+.ck-c input.ck-eq { text-align: left; }
+.ck-c input.bad { border-color: var(--err); background: var(--err-bg); }
+.ck-kref { display: block; color: var(--err); font: 700 13px var(--mono); text-align: right; }
+.ck-lb { display: none; }
+.ck-sl-row { display: grid; grid-template-columns: 50px minmax(0, 1fr) 70px 104px; gap: 8px; align-items: center; min-height: 32px; }
+.ck-sl-row label { font: 700 13px var(--mono); }
+.ck-sl-row input[type=range] { width: 100%; min-width: 0; margin: 0; height: 26px; accent-color: #2563c9; cursor: pointer; padding: 0; border: 0; background: transparent; }
+.ck-sl-row output { font: 13px var(--mono); text-align: right; color: #2563c9; }
+:root[data-theme="dark"] .ck-sl-row output { color: #6aa1ff; }
+.ck-ref { justify-content: flex-end; color: var(--err); font: 700 12px var(--mono); background: transparent; border-color: transparent; padding: 4px 6px; }
+.ck-ref:hover:not(:disabled) { border-color: var(--err); background: var(--err-bg); }
+.ck-edo { margin: 0; padding: 8px 10px; font: 13px/1.6 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; }
+.ck-st { margin: 8px 0 0; font-size: 13px; font-weight: 700; }
+.ck-st.ok { color: var(--ok); } .ck-st.warn { color: var(--warn); } .ck-st.err { color: var(--err); }
+.ck-seg { display: flex; margin-bottom: 6px; }
+.ck-seg button { flex: 1 1 0; justify-content: center; border-radius: 0; white-space: normal; }
+.ck-seg button:first-child { border-radius: 8px 0 0 8px; } .ck-seg button:last-child { border-radius: 0 8px 8px 0; margin-left: -1px; }
+.ck-seg button[aria-checked="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.ck-f { display: grid; grid-template-columns: minmax(0, 1fr) 140px; gap: 8px; align-items: center; padding: 4px 0; font-size: 13px; border-bottom: 1px solid var(--panel-2); }
+.ck-f input, .ck-f select { width: 100%; font-family: var(--mono); text-align: right; }
+.ck-f input:disabled { opacity: .55; }
+.ck-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.ck-btns button, .ck-wide { flex: 1 1 220px; justify-content: center; min-height: 40px; white-space: normal; text-align: center; }
+.ck-wide { width: 100%; margin-top: 10px; }
+.ck-redbtn { color: var(--err); font-weight: 700; }
+.ck-plot { width: 100%; min-height: 300px; }
+.ck-plot[hidden] { display: none; }
+.ck-note { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
+.ck-tw { overflow-x: auto; }
+.ck-c0 input { width: 100%; min-width: 80px; font-family: var(--mono); text-align: right; }
+.ck-res th, .ck-res td { white-space: nowrap; }
+.ck-res tr.ck-off { opacity: .5; }
+.ck-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+.ck-open { width: 100%; justify-content: center; min-height: 44px; margin: 6px 0 4px; font-weight: 700; white-space: normal; }
+.ck-sum { font: 13px/1.6 var(--mono); margin: 4px 0 0; padding-left: 18px; }
+@media (max-width: 1100px) { .ck { grid-template-columns: minmax(0, 1fr); } }
+body.mobile .ck-rxh { display: none; }
+body.mobile .ck-rxt { gap: 8px; }
+body.mobile .ck-rx { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2); }
+body.mobile .ck-no { grid-column: 1 / -1; }
+body.mobile .ck-c-eq { grid-column: 1 / -1; }
+body.mobile .ck-c-k, body.mobile .ck-c-kref { grid-column: span 3; }
+body.mobile .ck-lb { display: block; margin-bottom: 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
+body.mobile .ck-c-kref .ck-lb { color: var(--err); }
+body.mobile .ck-kref { text-align: left; line-height: var(--tap); }
+body.mobile .ck-c input { font-size: 16px; padding: 6px 4px; }
+body.mobile .ck-c-r input { text-align: center; }
+body.mobile .ck-sl-row { grid-template-columns: 30px minmax(0, 1fr) 64px; row-gap: 0; padding: 4px 0; border-bottom: 1px solid var(--line); }
+body.mobile .ck-sl-row input[type=range] { height: var(--tap); }
+body.mobile .ck-ref { grid-column: 2 / -1; justify-self: end; }
+body.mobile .ck-f { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+body.mobile .ck-f input, body.mobile .ck-f select { font-size: 16px; }
+body.mobile .ck-c0 input { font-size: 16px; min-width: 0; }
+body.mobile .ck-edo { font-size: 12px; }
+body.mobile .ck-tabs button { flex: 1 1 140px; }
+body.mobile .ck-res th, body.mobile .ck-res td { white-space: normal; font-size: 12px; padding: 4px; }
+body.mobile .ck-res th[scope=row] { white-space: nowrap; }
+body.mobile .ck-cn { display: none; }
+body.mobile .modal-card.ck-card .modal-body { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
 
 /* tutoriais em vídeo */
 /* vídeos dos alunos: botão dourado com selo NOVO e brilho pulsante */
@@ -1003,7 +1088,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.4</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.5</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -1156,7 +1241,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.4</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.5</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1323,7 +1408,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
-    version: '5.4',
+    version: '5.5',
     subtitle: 'Simulador de processos químicos e bioprocessos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -4228,6 +4313,8 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'dGmode', label: 'ΔG°f na temperatura T', type: 'select', options: ['calcular (ΔH°f e ΔG°f a 298 K + Cp)', 'informar na tabela abaixo'], def: 'calcular (ΔH°f e ΔG°f a 298 K + Cp)' },
       { k: 'dG', label: 'ΔG°f na temperatura T (modo informar; vazio = calcular)', type: 'compval', u: 'J/mol' },
       { k: 'span', label: 'Faixa do gráfico de temperatura (±)', u: 'K', def: 300 }] },
+    chem_kinetics: { label: 'Cinética química: análise gráfica de reações (6 EDOs de A a F, k em barras deslizantes; contínuo ou batelada)', cat: 'Reatores', ins: [], outs: [], params: [
+      { k: 'kin', label: 'Reações, constantes k, ordens r, C0, Cf, F/V e tempo final (na janela do bloco)', type: 'chemkin', get def() { return ckPreset(); } }] },
     bioreactor_tosetto: { label: 'Biorreatores contínuos em série — fermentação alcoólica (equação de Tosetto)', cat: 'Bioprocessos', ins: ['feed', 'side'], outs: ['product', 'gas'], params: [
       { k: 'mode', label: 'Operação', type: 'select', options: ['contínuo: biorreatores em série (como no artigo)', 'batelada: um biorreator'], def: 'contínuo: biorreatores em série (como no artigo)' },
       { k: 'Nr', label: 'Número de biorreatores em série', u: '', def: 3 },
@@ -11018,6 +11105,173 @@ window.SIMULAFACIL_CONFIG = {
     return { out: {}, res: decBR(decK(res)), warn: decW(warn), plots, massUtil: 0 };
   };
 
+  /* ================================================================== versão 5.5: cinética química — análise gráfica de reações
+     Bloco com 6 EDOs (espécies A a F) montadas a partir das equações químicas digitadas (ex.: A + 2B → C): a matriz estequiométrica ν
+     vem do interpretador, as constantes k têm barras deslizantes na janela do bloco e as ordens r de cada composto em cada reação
+     formam a lei de potência. dCi/dt = Σr νri·kr·Πj Cj^rrj + (F/V)(Cif − Ci); com F/V = 0 o reator é batelada.
+     Exemplo pré-setado: reação de Van de Vusse (A → B → C e 2A → D), Bequette (1998), Process Dynamics, módulo 5. */
+  const CK_SP = ['A', 'B', 'C', 'D', 'E', 'F'], CK_N = 6;
+  const ckZ = () => [0, 0, 0, 0, 0, 0];
+  function ckPreset() {
+    const row = (eq, k, r, kmax) => ({ eq, k, kref: k, r, kmax });
+    return { rows: [row('A → B', 5 / 6, [1, 0, 0, 0, 0, 0], 2.5), row('B → C', 5 / 3, [0, 1, 0, 0, 0, 0], 4), row('2A → D', 1 / 12, [2, 0, 0, 0, 0, 0], 0.5),
+      row('', 0, ckZ(), 2), row('', 0, ckZ(), 2), row('', 0, ckZ(), 2)],
+      C0: ckZ(), Cf: [10, 0, 0, 0, 0, 0], FV: 4 / 7, tf: 10, want: 'B' };
+  }
+  // um lado da equação: "A + 2B" → coeficientes [1, 2, 0, 0, 0, 0]
+  function ckSide(s) {
+    const c = ckZ();
+    if (!s.trim()) throw new Error('faltam reagentes ou produtos na equação');
+    s.split('+').forEach(t0 => {
+      const t = t0.trim();
+      if (!t) throw new Error('sinal "+" sobrando na equação');
+      if (t === '0' || t === 'Ø' || t === '∅') return;
+      const m = /^(\d*\.?\d+)?\s*\*?\s*([A-F])$/.exec(t);
+      if (!m) throw new Error('termo inválido "' + t + '": use as espécies A, B, C, D, E ou F, com o coeficiente na frente (ex.: 2B)');
+      c[m[2].charCodeAt(0) - 65] += m[1] ? +m[1] : 1;
+    });
+    return c;
+  }
+  // equação química → ν (produtos − reagentes) e ordens elementares (coeficientes dos reagentes)
+  function ckEq(text) {
+    const s = String(text == null ? '' : text).toUpperCase().replace(/(\d),(\d)/g, '$1.$2').replace(/\s+/g, ' ').trim()
+      .replace(/[-=–—−]+>|→|⟶|⇒|➝|➔|⟹/g, '>');
+    const parts = s.split('>');
+    if (parts.length !== 2) throw new Error('use uma seta (ex.: A + 2B → C, A ---> B ou A -> B)');
+    const R = ckSide(parts[0]), P = ckSide(parts[1]);
+    return { nu: P.map((v, j) => v - R[j]), ord: R };
+  }
+  const ck6 = (a, d) => CK_SP.map((_, j) => Math.max(0, num(a && a[j], d[j])));
+  // dados do bloco, com o que faltar preenchido pelo exemplo de Van de Vusse
+  function ckNorm(m) {
+    const d = ckPreset(); m = m && typeof m === 'object' ? m : d;
+    const rows = d.rows.map((dr, i) => {
+      const r = (m.rows || [])[i] || dr, k = Math.max(0, num(r.k, 0));
+      return { eq: String(r.eq == null ? '' : r.eq), k, kref: Math.max(0, num(r.kref, dr.kref)), r: CK_SP.map((_, j) => num(r.r && r.r[j], 0)), kmax: Math.max(num(r.kmax, dr.kmax), k) || 1 };
+    });
+    return { rows, C0: ck6(m.C0, d.C0), Cf: ck6(m.Cf, d.Cf), FV: Math.max(0, num(m.FV, d.FV)), tf: num(m.tf, d.tf) > 0 ? +m.tf : d.tf, want: CK_SP.indexOf(m.want) >= 0 ? m.want : 'B' };
+  }
+  function ckSystem(m) {
+    const Nu = [], K = [], Ord = [], err = [], on = [];
+    m.rows.forEach((r, i) => {
+      let nu = ckZ();
+      if (r.eq.trim()) { try { nu = ckEq(r.eq).nu; } catch (e) { err.push('Reação R' + (i + 1) + ': ' + e.message); } }
+      Nu.push(nu); K.push(r.k); Ord.push(r.r.slice()); on.push(r.k > 0 && nu.some(v => v !== 0));
+    });
+    return { Nu, K, Ord, err, on };
+  }
+  // taxa de cada reação pela lei de potência, com as concentrações negativas (erro numérico) tratadas como zero
+  function ckRates(sys, C) {
+    return sys.K.map((k, r) => {
+      if (!k) return 0; let v = k;
+      for (let j = 0; j < CK_N; j++) { const o = sys.Ord[r][j]; if (o) v *= Math.pow(Math.max(C[j], o < 0 ? 1e-12 : 0), o); }
+      return v;
+    });
+  }
+  function ckRhs(sys, C, FV, Cf) {
+    const w = ckRates(sys, C);
+    return CK_SP.map((_, i) => { let s = 0; for (let r = 0; r < w.length; r++) s += sys.Nu[r][i] * w[r]; return s + FV * (Cf[i] - C[i]); });
+  }
+  // estado estacionário do CSTR para uma taxa de diluição F/V (Newton a partir de uma estimativa)
+  function ckSteady(sys, m, FV, guess) {
+    if (!(FV > 0)) return null;
+    const r = N.newtonSystem(C => ckRhs(sys, C, FV, m.Cf), guess.slice(), { tol: 1e-10, maxIter: 80, lower: ckZ() });
+    return r.converged && r.x.every(isFinite) ? r.x : null;
+  }
+  // curva de Bequette: concentrações no estado estacionário em função de F/V (continuação a partir de F/V alto, onde C ≈ Cf)
+  function ckCurve(m, sys) {
+    if (!m.Cf.some(v => v > 0) || !sys.on.some(Boolean)) return null;
+    const xmax = Math.max(4, 3 * m.FV), n = 120, x = [], y = CK_SP.map(() => []);
+    let g = m.Cf.slice();
+    for (let k = n; k >= 1; k--) {
+      const fv = xmax * k / n, c = ckSteady(sys, m, fv, g);
+      if (!c) continue;
+      g = c; x.unshift(fv); c.forEach((v, j) => y[j].unshift(v));
+    }
+    if (x.length < 5) return null;
+    const iw = CK_SP.indexOf(m.want), yw = y[iw]; let im = 0; yw.forEach((v, k) => { if (v > yw[im]) im = k; });
+    const interior = im > 0 && im < x.length - 1 && yw[im] > 1e-9;
+    let best = { x: x[im], c: y.map(r => r[im]) };
+    if (interior) {   // refina o máximo pela seção áurea entre os pontos vizinhos da malha
+      const g0 = best.c.slice(), cAt = fv => ckSteady(sys, m, fv, g0), fy = fv => { const c = cAt(fv); return c ? c[iw] : -Infinity; }, gr = (Math.sqrt(5) - 1) / 2;
+      let a = x[im - 1], b = x[im + 1], c1 = b - gr * (b - a), c2 = a + gr * (b - a), f1 = fy(c1), f2 = fy(c2);
+      for (let it = 0; it < 40 && b - a > 1e-7 * b; it++) { if (f1 > f2) { b = c2; c2 = c1; f2 = f1; c1 = b - gr * (b - a); f1 = fy(c1); } else { a = c1; c1 = c2; f1 = f2; c2 = a + gr * (b - a); f2 = fy(c2); } }
+      const xb = (a + b) / 2, cb = cAt(xb); if (cb && cb[iw] >= best.c[iw]) best = { x: xb, c: cb };
+    }
+    return { x, y, xmax, im, iw, interior, best };
+  }
+  const ckFmt = v => String(+(+v).toPrecision(4)).replace('.', ',');
+  // texto das 6 EDOs montadas, como o simulador as interpretou
+  function ckEdoText(sys, FV) {
+    return CK_SP.map((s, i) => {
+      const terms = [];
+      sys.Nu.forEach((nu, r) => {
+        const c = nu[i] * sys.K[r]; if (Math.abs(c) < 1e-12) return;
+        const f = [];
+        sys.Ord[r].forEach((o, j) => { if (Math.abs(o) > 1e-12) f.push('C' + CK_SP[j] + (Math.abs(o - 1) < 1e-9 ? '' : o === 2 ? '²' : o === 3 ? '³' : '^' + ckFmt(o))); });
+        terms.push((c >= 0 ? '+ ' : '− ') + ckFmt(Math.abs(c)) + (f.length ? '·' + f.join('·') : ''));
+      });
+      if (FV > 0) terms.push('+ (F/V)·(C' + s + 'f − C' + s + ')');
+      let body = terms.length ? terms.join(' ') : '0'; if (body.indexOf('+ ') === 0) body = body.slice(2);
+      return 'dC' + s + '/dt = ' + body;
+    });
+  }
+  // espécies que aparecem nas reações ou nas concentrações (as outras ficam fora dos gráficos)
+  function ckUsed(m, sys) { return CK_SP.map((_, j) => sys.Nu.some((nu, r) => nu[j] !== 0 && sys.K[r] > 0) || m.C0[j] > 0 || (m.FV > 0 && m.Cf[j] > 0)); }
+  // resolve as 6 EDOs de 0 a tf (Dormand-Prince adaptativo; Euler implícito se o sistema for rígido)
+  function ckSolve(m0, opt) {
+    const m = ckNorm(m0), sys = ckSystem(m), nOut = (opt && opt.nOut) || 300;
+    const out = { m, sys, edo: ckEdoText(sys, m.FV), err: sys.err };
+    if (sys.err.length) return out;
+    const f = (t, y) => ckRhs(sys, y, m.FV, m.Cf);
+    const r = N.integrate(f, 0, m.C0, m.tf, { nOut, rtol: 1e-7, atol: 1e-10 });
+    if (!r || !r.y.every(v => v.every(isFinite))) { out.err = ['a integração não convergiu: confira as ordens e as constantes k']; return out; }
+    out.t = r.t; out.C = r.y; out.Cend = r.y[r.y.length - 1]; out.dEnd = f(m.tf, out.Cend);
+    out.ss = m.FV > 0 ? ckSteady(sys, m, m.FV, out.Cend) : null;
+    out.curve = opt && opt.curve === false ? null : ckCurve(m, sys);
+    out.used = ckUsed(m, sys);
+    return out;
+  }
+  const CK_COL = ['#2563c9', '#d1495b', '#2e9e6b', '#e0a100', '#00a3b4', '#5d4037'], CK_DASH = ['solid', 'solid', 'solid', 'solid', 'dash', 'dot'];
+  // gráficos no formato do simulador (C(t) e a curva de Bequette)
+  function ckPlots(s) {
+    const m = s.m, plots = [], used = s.used.some(Boolean) ? s.used : CK_SP.map(() => true);
+    const reg = m.FV > 0 ? 'contínuo, F/V = ' + ckFmt(m.FV) + ' min⁻¹' : 'batelada, F/V = 0';
+    plots.push({ kind: 'curves', title: 'Concentrações C_i(t) — ' + reg, data: { xLabel: 'Tempo (min)', yLabel: 'Concentração (mol/L)', xRange: [0, m.tf],
+      series: CK_SP.map((sp, j) => ({ sp, j })).filter(o => used[o.j]).map(o => ({ name: 'C' + o.sp + '(t)', x: s.t, y: s.C.map(c => c[o.j]), color: CK_COL[o.j], dash: CK_DASH[o.j], width: 3 })) } });
+    const cv = s.curve;
+    if (cv) {
+      const ser = CK_SP.map((sp, j) => ({ sp, j })).filter(o => used[o.j]).map(o => ({ name: 'C' + o.sp + ' estacionário', x: cv.x, y: cv.y[o.j], color: CK_COL[o.j], dash: CK_DASH[o.j], width: o.j === cv.iw ? 4 : 2.5 }));
+      if (s.ss) ser.push({ name: 'Ponto de operação (F/V = ' + ckFmt(m.FV) + ')', x: [m.FV], y: [s.ss[cv.iw]], mode: 'markers', color: '#111', size: 13, symbol: 'circle' });
+      if (cv.interior) ser.push({ name: 'Máximo de C' + m.want + ' (' + ckFmt(cv.best.c[cv.iw]) + ' mol/L em F/V = ' + ckFmt(cv.best.x) + ')', x: [cv.best.x], y: [cv.best.c[cv.iw]], mode: 'markers', color: '#d1302b', size: 14, symbol: 'star' });
+      plots.push({ kind: 'curves', title: 'Estado estacionário × F/V (curva de Bequette)', data: { xLabel: 'Taxa de diluição F/V (min⁻¹)', yLabel: 'Concentração (mol/L)', xRange: [0, cv.xmax], series: ser } });
+    }
+    return plots;
+  }
+  SF.chemKin = { SP: CK_SP, preset: ckPreset, parse: ckEq, norm: ckNorm, solve: ckSolve, plots: ckPlots, fmt: ckFmt, COL: CK_COL, DASH: CK_DASH };
+
+  IMPL.chem_kinetics = function (th, b) {
+    const s = ckSolve(b.params && b.params.kin), m = s.m, warn = [];
+    if (s.err.length) throw new Error(s.err[0]);
+    const nOn = s.sys.on.filter(Boolean).length;
+    if (!nOn) warn.push('nenhuma reação ativa: digite uma equação e um k maior que zero');
+    const res = [{ k: 'Regime', v: m.FV > 0 ? 'contínuo (CSTR): F/V = ' + ckFmt(m.FV) + ' min⁻¹, tempo de residência τ = V/F = ' + ckFmt(1 / m.FV) + ' min' : 'batelada (F/V = 0)', u: '' },
+      { k: 'Reações ativas', v: String(nOn) + ' de 6', u: '' },
+      { k: 'Tempo final da simulação', v: ckFmt(m.tf), u: 'min' }];
+    CK_SP.forEach((sp, j) => {
+      if (!s.used[j]) return;
+      res.push({ k: 'C' + sp + ': inicial → final', v: ckFmt(m.C0[j]) + ' → ' + ckFmt(s.Cend[j]) + (s.ss ? ' (estacionário ' + ckFmt(s.ss[j]) + ')' : ''), u: 'mol/L' });
+    });
+    // conversão do 1º reagente que entra no sistema
+    const jr = CK_SP.findIndex((_, j) => s.sys.Nu.some((nu, r) => nu[j] < 0 && s.sys.on[r]) && (m.FV > 0 ? m.Cf[j] : m.C0[j]) > 0);
+    if (jr >= 0) { const cin = m.FV > 0 ? m.Cf[jr] : m.C0[jr]; res.push({ k: 'Conversão de ' + CK_SP[jr] + ' no tempo final', v: ckFmt(100 * (cin - s.Cend[jr]) / cin), u: '%' }); }
+    const cv = s.curve;
+    if (cv && cv.interior) res.push({ k: 'Máximo de C' + m.want + ' no estado estacionário (curva de Bequette)', v: ckFmt(cv.best.c[cv.iw]) + ' mol/L em F/V = ' + ckFmt(cv.best.x) + ' min⁻¹ (τ = ' + ckFmt(1 / cv.best.x) + ' min)', u: '' });
+    if (m.FV > 0 && !s.ss) warn.push('não encontrei o estado estacionário para F/V = ' + ckFmt(m.FV) + ': aumente o tempo final para ver se o reator estabiliza');
+    if (m.FV > 0 && s.ss && s.Cend.some((v, j) => Math.abs(v - s.ss[j]) > 0.01 * Math.max(1, Math.abs(s.ss[j])))) warn.push('no tempo final o reator ainda não chegou ao estado estacionário: aumente o tempo final');
+    return { out: {}, res: decBR(decK(res)), warn: decW(warn), plots: ckPlots(s), massUtil: 0 };
+  };
+
   /* ================================================================== versão 5.2: fábrica de chocolate (do cacau à barra)
      Torrador de cacau, alcalinizador (processo holandês, K₂CO₃), moinho de cacau e refinadora de cinco cilindros, prensa de cacau
      (manteiga + torta), conchadeira e temperadeira com moldagem e túnel de resfriamento. Calor específico dos sólidos pelo modelo de
@@ -13365,6 +13619,20 @@ window.SIMULAFACIL_CONFIG = {
         note: 'O tempo morto é o intervalo em que a reatividade negativa extra do xenônio passa da reatividade disponível (barras e boro), e o reator não consegue partir de novo; ele é mais longo no fim do ciclo, quando sobra pouco boro. Na perda do resfriamento, o calor de decaimento esquenta a água até 100 °C e depois a evapora; o tempo até descobrir o núcleo usa a água acima do topo do combustível.'
       };
     },
+    chem_kinetics: () => {
+      const Cj = sub(i('C'), i('j')), kr = sub(i('k'), i('r')), nur = sub(i('ν'), i('r,i')), FV = fr(F, V), CA = sub(C, 'A'), CB = sub(C, 'B'), CD = sub(C, 'D');
+      return {
+        name: 'Cinética química: 6 EDOs (espécies A a F) montadas a partir das equações químicas, contínuo ou batelada',
+        eqs: [eq(od(Ci, t) + ' = ' + sum('r=1…6') + nur + sub(i('ω'), i('r')) + ' + ' + FV + '(' + sub(i('C'), i('i') + ',f') + ' − ' + Ci + '),&nbsp; ' + i('i') + ' = A, B, …, F', 'balanço de cada espécie no reator de mistura perfeita; com F/V = 0, reator batelada'),
+          eq(sub(i('ω'), i('r')) + ' = ' + kr + '∏' + sub('', i('j')) + sup(Cj, sub(i('r'), i('r,j'))), 'velocidade da reação r pela lei de potência; as ordens r vêm dos reagentes ou da tabela'),
+          eq(nur + ' = (coeficiente de ' + i('i') + ' nos produtos) − (coeficiente de ' + i('i') + ' nos reagentes)', 'matriz estequiométrica lida das equações, ex.: A + 2B → C dá ν = (−1, −2, +1, 0, 0, 0)'),
+          eq(od(CA, t) + ' = ' + FV + '(' + sub(C, 'A,f') + ' − ' + CA + ') − ' + sub(i('k'), '1') + CA + ' − ' + sub(i('k'), '3') + sup(CA, '2') + ',&nbsp; ' + od(CB, t) + ' = −' + FV + CB + ' + ' + sub(i('k'), '1') + CA + ' − ' + sub(i('k'), '2') + CB, 'exemplo de Van de Vusse (Bequette): A → B → C e 2A → D'),
+          eq(od(CD, t) + ' = −' + FV + CD + ' + ' + fr('1', '2') + sub(i('k'), '3') + sup(CA, '2') + ',&nbsp; ' + sub(i('k'), '1') + ' = 5/6 min⁻¹, ' + sub(i('k'), '2') + ' = 5/3 min⁻¹, ' + sub(i('k'), '3') + ' = 1/6 L/(mol·min)', 'na tabela, 2A → D entra com k = k₃/2 = 1/12, porque ν_A = −2'),
+          eq(sub(CB, 'ss') + ' = ' + fr(sub(i('k'), '1') + sub(CA, 'ss'), FV + ' + ' + sub(i('k'), '2')) + ',&nbsp; ' + sub(CA, 'ss') + ' = ' + fr('−(' + sub(i('k'), '1') + ' + ' + FV + ') + √[(' + sub(i('k'), '1') + ' + ' + FV + ')² + 4' + sub(i('k'), '3') + FV + sub(C, 'A,f') + ']', '2' + sub(i('k'), '3')), 'estado estacionário do Van de Vusse: a curva de Bequette (C_B × F/V) tem um máximo')],
+        sym: [[Ci, 'concentração da espécie i no reator (mol/L)'], [sub(i('C'), i('i') + ',f'), 'concentração da espécie i na alimentação'], [FV, 'taxa de diluição (1/min), o inverso do tempo de residência τ'], [kr, 'constante cinética da reação r (barra deslizante)'], [sub(i('r'), i('r,j')), 'ordem da espécie j na reação r']],
+        note: 'O simulador lê as equações químicas digitadas, monta a matriz ν e as 6 EDOs e mostra o texto delas, como o programa MATLAB do bloco. As EDOs são integradas pelo método de Dormand-Prince (RK45 adaptativo), com Euler implícito se o sistema for rígido; o estado estacionário de cada F/V vem do método de Newton, com continuação a partir de F/V alto. Concentrações negativas, por erro numérico, são tratadas como zero nas velocidades.'
+      };
+    },
     nuclear_reactor: () => {
       const m = s2 => sub(i('ṁ'), s2), h = s2 => sub(i('h'), s2), x = s2 => sub(i('x'), s2), FP = fr(i('F'), i('P'));
       return {
@@ -14048,6 +14316,11 @@ window.SIMULAFACIL_CONFIG = {
       'Depois do desligamento, o reator continua exigindo atenção. O iodo-135, produzido na fissão, continua decaindo em xenônio-135, um absorvedor de nêutrons fortíssimo que deixa de ser queimado pelo fluxo; por isso o xenônio sobe por algumas horas e pode impedir uma nova partida (o tempo morto). Ao mesmo tempo, os produtos de fissão continuam liberando calor: cerca de 6 % da potência logo após o desligamento, 1 % depois de uma hora.',
       'O bloco calcula o iodo e o xenônio antes e depois da parada, a reatividade do xenônio e o tempo morto para a reatividade disponível, o calor de decaimento comparado com a capacidade do resfriamento residual e, numa perda total do resfriamento, o tempo até a água ferver e até descobrir o núcleo.',
       'No exemplo, um PWR de 3 765 MWt com fluxo de 3·10¹³ n/cm²·s tem 2 156 pcm de xenônio no equilíbrio; o pico chega 8,4 h depois da parada, com 1 944 pcm a mais. Com só 300 pcm disponíveis, como no fim do ciclo, o reator não parte entre 0,6 h e 23,9 h. Um dia depois do desligamento, o núcleo ainda gera 16,7 MW: sem resfriamento, 250 t de água a 50 °C fervem em 53 min.'] },
+    chem_kinetics: { ex: null, p: [
+      'Este bloco resolve e desenha a cinética de até seis reações entre até seis espécies, A a F, sem depender do banco de compostos: é a ferramenta para estudar um mecanismo antes de escolher o reator. Em vez de escrever as equações diferenciais à mão, o usuário digita as reações como num livro (A + 2B → C, A ---> B ou 2A -> D). O interpretador lê os coeficientes, monta a matriz estequiométrica ν (coeficiente nos produtos menos coeficiente nos reagentes) e escreve as seis EDOs, que aparecem na janela do bloco exatamente como o simulador as entendeu.',
+      'A velocidade de cada reação segue a lei de potência, ω = k·C_A^rA·C_B^rB…, e cada linha da tabela tem as suas ordens r. Quando a equação é digitada, as ordens recebem os coeficientes dos reagentes, como numa reação elementar; para uma reação não elementar, basta trocar os valores. O balanço de cada espécie no reator de mistura perfeita é dC_i/dt = Σ ν_ri·ω_r + (F/V)(C_if − C_i). A taxa de diluição F/V é o inverso do tempo de residência: com F/V > 0 o reator é contínuo (CSTR) e parte das concentrações iniciais C0; com F/V = 0 não há entrada nem saída e o mesmo bloco vira um reator batelada. A escolha é do usuário, no botão de regime.',
+      'O exemplo pré-setado é a reação de Van de Vusse, do módulo 5 do livro de B. Wayne Bequette (Process Dynamics, 1998): A → B → C em série e 2A → D em paralelo, com k₁ = 5/6 min⁻¹, k₂ = 5/3 min⁻¹ e k₃ = 1/6 L/(mol·min), C_Af = 10 mol/L e F/V = 4/7 min⁻¹. Como a equação 2A → D consome dois mols de A, a tabela usa k = k₃/2 = 1/12 com ν_A = −2. Partindo do reator vazio, a simulação chega em cerca de 10 min ao estado estacionário de Bequette: C_A = 3 mol/L e C_B = 1,117 mol/L.',
+      'B é o produto desejado e é consumido por duas rotas: vira C se ficar tempo demais no reator e perde A para D se a concentração de A for alta. Por isso C_B no estado estacionário passa por um máximo quando F/V varia: é a curva de Bequette, que a janela desenha junto com o ponto de operação. Para o exemplo, o máximo é C_B = 1,266 mol/L em F/V = 1,292 min⁻¹ (τ = 0,77 min). Mova as barras de k e veja a curva e os perfis mudarem na hora; o k correto do exemplo fica em vermelho, e o botão Ref volta cada um ao valor de referência.'] },
     nuclear_reactor: { ex: ex('usina-nuclear-pwr', 'Usina nuclear PWR completa (tipo Angra 2)'), p: [
       'No reator de água pressurizada (PWR), a fissão do urânio-235 libera cerca de 200 MeV por núcleo partido, quase tudo como energia cinética dos fragmentos, que vira calor dentro das pastilhas de UO₂. Cada pastilha fica em varetas de zircaloy agrupadas em elementos combustíveis; a água do circuito primário passa entre as varetas, retira o calor e desacelera os nêutrons (moderação), mantendo a reação em cadeia. A pressão de cerca de 158 bar, imposta pelo pressurizador, impede que essa água ferva, mesmo a 326 °C.',
       'O bloco faz o balanço de energia do primário pela IAPWS-IF97: a água entra pela perna fria, recebe a potência térmica e sai pela perna quente; a margem até a saturação é avisada quando fica pequena. Ele também calcula a taxa linear de calor nas varetas, a duração do ciclo e o número de elementos trocados a cada recarga pela queima de descarga, o U-235 fissionado, o urânio natural e o trabalho de separação (SWU) do enriquecimento e o calor de decaimento depois do desligamento, que explica por que o núcleo precisa de resfriamento mesmo com o reator parado.',
@@ -14495,6 +14768,7 @@ window.SIMULAFACIL_CONFIG = {
     deaerator: { w: 150, h: 110, ports: { condensate: P(30, 0, 'u', 'in'), drain1: P(60, 0, 'u', 'in'), drain2: P(90, 0, 'u', 'in'), steam: P(0, 78, 'l', 'in'), out: P(150, 92, 'r', 'out') } },
     reactor_kinetics: { w: 150, h: 110, ports: {} },
     reactor_shutdown: { w: 150, h: 110, ports: {} },
+    chem_kinetics: { w: 150, h: 110, ports: {} },
     cocoa_roaster: { w: 150, h: 100, ports: { feed: P(22, 0, 'u', 'in'), vapor: P(124, 0, 'u', 'out'), product: P(150, 74, 'r', 'out'), q_in: P(75, 100, 'd', 'ein') } },
     cocoa_alkalizer: { w: 120, h: 110, ports: { feed: P(0, 46, 'l', 'in'), alkali: P(34, 0, 'u', 'in'), vapor: P(86, 0, 'u', 'out'), product: P(120, 96, 'r', 'out'), q_in: P(60, 110, 'd', 'ein') } },
     cocoa_mill: { w: 120, h: 110, ports: { feed: P(0, 86, 'l', 'in'), product: P(120, 22, 'r', 'out'), q_in: P(60, 110, 'd', 'ein') } },
@@ -15070,7 +15344,13 @@ window.SIMULAFACIL_CONFIG = {
     reactor_shutdown: () => [ // parada: vaso com as barras inseridas, curva do xenônio com pico e do calor residual
       R(10, 18, 50, 84, 20), L([[22, 10], [22, 80]], 'cold'), L([[35, 6], [35, 82]], 'cold'), L([[48, 10], [48, 80]], 'cold'), R(18, 56, 34, 36, 3, 'bodyw'),
       L([[70, 96], [146, 96]]), L([[70, 96], [70, 14]]), L([[70, 70], [84, 40], [96, 30], [110, 40], [126, 58], [146, 66]], 'hot'), L([[70, 22], [80, 54], [96, 72], [146, 86]], 'lnd'),
-      T(108, 24, 'Xe-135'), T(35, 108, 'parada')]
+      T(108, 24, 'Xe-135'), T(35, 108, 'parada')],
+    chem_kinetics: () => [ // cinética química: tela com C_A caindo, C_B passando por um máximo e C_C subindo, a reação e a barra de k
+      R(4, 4, 142, 102, 8, 'bodyw'), L([[14, 70], [136, 70]]), L([[14, 70], [14, 12]]),
+      L([[14, 16], [26, 30], [40, 42], [58, 52], [84, 59], [112, 62], [136, 63]], 'cold'),
+      L([[14, 69], [24, 46], [36, 34], [50, 32], [68, 38], [92, 48], [136, 58]], 'hot'),
+      L([[14, 70], [36, 66], [62, 54], [90, 40], [136, 26]], 'lnd'),
+      T(75, 87, 'A + 2B → C'), L([[26, 98], [132, 98]], 'cold'), C(96, 98, 4.5, 'bodyb'), T(15, 102, 'k')]
   };
   function prims(t) { return PRIMS[t] ? PRIMS[t]() : [R(0, 0, G[t] ? G[t].w : 60, G[t] ? G[t].h : 60, 6)]; }
 
@@ -15357,7 +15637,7 @@ window.SIMULAFACIL_CONFIG = {
     svg.addEventListener('pointercancel', e => { lift(e); if (!pts.size) { pinch = null; pan = null; if (self.drag) { const was = self.drag.started; self.drag = null; if (was && self.o.onChange) self.o.onChange('move'); } } });
     svg.addEventListener('pointerup', e => {
       if (lift(e) || pinch) return;
-      if (self.drag) { const was = self.drag.started; self.drag = null; if (was && self.o.onChange) self.o.onChange('move'); return; }
+      if (self.drag) { const was = self.drag.started, did = self.drag.id; self.drag = null; if (was && self.o.onChange) self.o.onChange('move'); else if (!was && self.o.onClick) self.o.onClick(did); return; }
       if (pan) { pan = null; if (!moved) self.select(null); return; }
       if (self.arm) { // soltar sobre uma porta conclui a ligação (arrastar)
         const el = document.elementFromPoint(e.clientX, e.clientY), port = el && el.closest && el.closest('[data-port]'), blk = el && el.closest && el.closest('[data-block]');
@@ -21899,7 +22179,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', cyclone_preheater: 'TC', clinker_cooler: 'RC', cement_mill: 'MC', sulfur_burner: 'FE', so2_converter: 'CV', acid_tower: 'TA', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', reactor_kinetics: 'CIN', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', cyclone_preheater: 'TC', clinker_cooler: 'RC', cement_mill: 'MC', sulfur_burner: 'FE', so2_converter: 'CV', acid_tower: 'TA', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', deaerator: 'DA', reactor_kinetics: 'CIN', chem_kinetics: 'RQ', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -21979,7 +22259,8 @@ def pfr_transiente(P, nome):
     onChange: kind => { if (kind === 'move') { persist(); return; } afterChange(false); }, onBeforeMove: pushUndo,
     onConnect: (a, ap, b, bp) => { pushUndo(); connect(a, ap, b, bp); afterChange(true); },
     onInvalid: msg => toast(msg),
-    onOpen: id => { pfd.select({ kind: 'block', id }); const inp = $('#blkName'); if (inp) inp.focus(); },
+    onOpen: id => { pfd.select({ kind: 'block', id }); if (blockType(id) === 'chem_kinetics') { if (!ckWin) ckOpen(id); return; } const inp = $('#blkName'); if (inp) inp.focus(); },
+    onClick: id => { if (blockType(id) === 'chem_kinetics' && !ckWin) ckOpen(id); },   // cinética química: clicar no ícone abre a janela do bloco
     onDropType: (t, x, y) => addBlock(t, x, y)
   });
 
@@ -22001,6 +22282,7 @@ def pfr_transiente(P, nome):
     const id = nextBlockId(type);
     state.blocks.push({ id, type, name: id, x: Math.round(x / 10) * 10, y: Math.round(y / 10) * 10, params: defaultParams(type) });
     afterChange(true); pfd.select({ kind: 'block', id });
+    if (type === 'chem_kinetics') toast((SF.mobile ? 'Toque' : 'Clique') + ' no ícone ' + id + ' para abrir a janela do bloco cinético', 4200);
     return id;
   }
   function connect(from, fromPort, to, toPort, name) {
@@ -22157,6 +22439,7 @@ def pfr_transiente(P, nome):
     const tdet = el.querySelector('.model-eq.theory'); if (tdet) tdet.addEventListener('toggle', () => { try { localStorage.setItem('simulafacil.thOpen', tdet.open ? '1' : '0'); } catch (e) { /* */ } });
     el.querySelectorAll('[data-open-example]').forEach(btn => { btn.onclick = () => { const exm = SF.examples.find(x => x.key === btn.dataset.openExample); if (!exm) return; loadFlowsheet(exm.fs); runSimulation(true); chocOpen(exm); toast('Exemplo carregado: ' + exm.title); if (SF.mobile) setMView('flow'); }; });
     bindFields(b);
+    el.querySelectorAll('[data-ckopen]').forEach(bt => { bt.onclick = () => ckOpen(b.id); });
   }
   function blockName(id) { const b = state.blocks.find(x => x.id === id); return b ? b.name : id; }
   function blockType(id) { const b = state.blocks.find(x => x.id === id); return b ? b.type : null; }
@@ -22186,6 +22469,7 @@ def pfr_transiente(P, nome):
         state.components.map(id => '<tr><td>' + esc(TH.COMP[id].name) + '</td><td><input type="number" step="any" data-ck="' + f.k + '" data-cval="1" data-comp="' + id + '" value="' + (obj[id] != null && obj[id] !== '' ? obj[id] : '') + '" placeholder="calcular" aria-label="' + esc(TH.COMP[id].name) + '"></td></tr>').join('') +
         '</tbody></table>';
     }
+    if (f.type === 'chemkin') return chemKinSummary(b);   // cinética química: resumo e botão da janela do bloco
     if (f.type === 'reactions') return reactionsHTML(b);
     return '<div class="field"><label for="f_' + f.k + '">' + esc(f.label) + (f.u ? '<span class="u">' + esc(f.u) + '</span>' : '') + '</label><input id="f_' + f.k + '" type="number" step="any" data-k="' + f.k + '" value="' + (v == null ? '' : esc(v)) + '"></div>';
   }
@@ -22486,6 +22770,11 @@ def pfr_transiente(P, nome):
       ['Combustível e caldeira', 'escolha o combustível (biomassa, carvão, óleo ou gás) e a classe: baixa (10 bar saturado), média (42 bar, 400 °C) ou alta pressão (85 bar, 480 °C). Para fábricas modernas, digite a <b>pressão</b> (5 a 140 bar) e a <b>temperatura</b> (até 560 °C) do vapor. O <b>combustível secundário</b> faz a queima conjunta (co-firing) com a parcela de energia que você escolher, por exemplo casca de eucalipto com 30 % de gás natural.'],
       ['Condensador', 'vapor direto, condensador acoplado (saída em energia) ou automático, que liga o condensador quando a porta de energia ou a do condensado está ligada.'],
       ['Resultados', 'consumo de combustível, eficiência, ar, gases, cinzas, CO₂, perdas, água de resfriamento e gráficos de calor e de excesso de ar.']] },
+    chem_kinetics: { ex: 'Reação de Van de Vusse (Bequette, módulo 5), pré-setada no bloco', items: [
+      ['Janela do bloco', 'clique no ícone no fluxograma (ou no botão abaixo) para abrir a janela com a tabela de reações, as barras deslizantes de k, as EDOs, os gráficos e o resumo. O bloco não tem correntes: as espécies são A a F.'],
+      ['Reações', 'até 6 equações como <b>A + 2B → C</b> (a seta pode ser -&gt; ou ---&gt;). As ordens r recebem os coeficientes dos reagentes e podem ser trocadas. Linha vazia ou k = 0 desliga a reação.'],
+      ['k e referência', 'k ativo na tabela ou na barra deslizante; o k correto do exemplo aparece em <b>vermelho</b>. Pré-setado: k₁ = 5/6, k₂ = 5/3 e 1/12 para 2A → D (k₃/2).'],
+      ['Regime', '<b>contínuo</b> (CSTR, F/V = 4/7 min⁻¹ e C_Af = 10 mol/L) ou <b>batelada</b> (F/V = 0); tempo final de 10 min; produto desejado B para o máximo da curva de Bequette.']] },
     reactor_kinetics: { ex: 'Cinética com moderação de Parreira e Bosch Neto (2022)', items: [
       ['Modelo', 'Duderstadt e Hamilton (clássico) ou Parreira e Bosch Neto (2022), como no programa Octave (reproduz as figuras da dissertação) ou como nas equações 12 a 14 do texto.'],
       ['Nêutrons atrasados', 'Bennet e Thomson (1989), como nos Anexos da dissertação (β = 0,007), a Tabela 8 da dissertação ou Keepin (U-235 térmico, β = 0,0065).'],
@@ -23110,6 +23399,7 @@ def pfr_transiente(P, nome):
   /* ------------------------------------------------------------------ fluxograma final (relatório) */
   let modalOpener = null;
   function openModal(title, bodyHTML, actions) {
+    if (ckWin) ckClose();
     $('#modalTitle').textContent = title; $('#modalBody').innerHTML = bodyHTML; const a = $('#modalActions'); a.innerHTML = '';
     (actions || []).forEach(x => { const b = document.createElement('button'); b.textContent = x.label; if (x.primary) b.className = 'primary'; b.onclick = x.fn; a.appendChild(b); });
     if ($('#modal').hidden) modalOpener = document.activeElement;
@@ -23118,12 +23408,199 @@ def pfr_transiente(P, nome):
   // fecha a janela e devolve o foco a quem a abriu
   function closeModal() {
     if ($('#modal').hidden) return;
+    if (ckWin) ckClose();
     $('#modal').hidden = true;
     if (modalOpener && document.contains(modalOpener) && modalOpener.focus) modalOpener.focus({ preventScroll: true });
     modalOpener = null;
   }
   $('#modalClose').onclick = closeModal;
   $('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
+
+  /* ------------------------------------------------------------------ versão 5.5: janela do bloco de cinética química
+     Abre ao clicar no ícone. À esquerda: abas com a tabela de reações (equação, k ativo, k de referência em vermelho e ordens
+     r_A…r_F) com as barras deslizantes de k, e C0 e Cf; as EDOs interpretadas; o regime (contínuo ou batelada, F/V = 0) e o tempo
+     final. À direita: C_i(t), a curva de Bequette (estado estacionário × F/V) e o resumo. Tudo é recalculado ao mover a barra. */
+  const CK = SF.chemKin;
+  let ckWin = null;   // { id, m, dirty, undo, raf, FVc }
+  const ckN = v => String(+(+v).toPrecision(5));   // valor para os campos numéricos
+  const ckCfg = () => SF.mobile ? { responsive: true, displaylogo: false, displayModeBar: false, scrollZoom: false, doubleClick: false }
+    : { responsive: true, displaylogo: false, modeBarButtonsToRemove: ['select2d', 'lasso2d', 'autoScale2d'], toImageButtonOptions: { format: 'png', width: 1400, height: 800, filename: 'cinetica_quimica' } };
+  function ckHTML(m) {
+    const SP = CK.SP, cont = m.FV > 0;
+    const rx = m.rows.map((r, i) => '<div class="ck-rx" role="row">' +
+      '<span class="ck-no" role="cell">R' + (i + 1) + '</span>' +
+      '<div class="ck-c ck-c-eq" role="cell"><label class="ck-lb" for="ckEq' + i + '">Equação química</label><input id="ckEq' + i + '" class="ck-eq" data-ckeq="' + i + '" value="' + esc(r.eq) + '" placeholder="ex.: A + 2B → C" autocomplete="off" spellcheck="false" aria-label="Equação química da reação R' + (i + 1) + '"></div>' +
+      '<div class="ck-c ck-c-k" role="cell"><label class="ck-lb" for="ckK' + i + '">k ativo</label><input id="ckK' + i + '" type="number" step="any" min="0" inputmode="decimal" data-ckk="' + i + '" value="' + ckN(r.k) + '" aria-label="k ativo da reação R' + (i + 1) + '"></div>' +
+      '<div class="ck-c ck-c-kref" role="cell"><span class="ck-lb">k ref.</span><span class="ck-kref" data-ckkref="' + i + '" title="k correto do exemplo (referência)">' + (r.kref > 0 ? CK.fmt(r.kref) : '—') + '</span></div>' +
+      SP.map((s, j) => '<div class="ck-c ck-c-r" role="cell"><label class="ck-lb" for="ckR' + i + '_' + j + '">r' + s + '</label><input id="ckR' + i + '_' + j + '" type="number" step="any" inputmode="decimal" data-ckr="' + i + '_' + j + '" value="' + ckN(r.r[j]) + '" aria-label="Ordem r' + s + ' do composto ' + s + ' na reação R' + (i + 1) + '"></div>').join('') +
+      '</div>').join('');
+    const sl = m.rows.map((r, i) => '<div class="ck-sl-row"><label for="ckS' + i + '">k' + (i + 1) + '</label>' +
+      '<input type="range" id="ckS' + i + '" data-cks="' + i + '" min="0" max="' + ckN(r.kmax) + '" step="any" value="' + ckN(r.k) + '">' +
+      '<output id="ckSv' + i + '" for="ckS' + i + '">' + CK.fmt(r.k) + '</output>' +
+      '<button type="button" class="ck-ref" data-ckref="' + i + '"' + (r.kref > 0 ? '' : ' disabled') + ' title="Volta o k' + (i + 1) + ' para o valor correto do exemplo">Ref: ' + (r.kref > 0 ? CK.fmt(r.kref) : '—') + '</button></div>').join('');
+    const c0 = SP.map((s, j) => '<tr><th scope="row">Composto ' + s + '</th>' +
+      '<td><input type="number" step="any" min="0" inputmode="decimal" data-ckc0="' + j + '" value="' + ckN(m.C0[j]) + '" aria-label="C0 inicial do composto ' + s + ' (mol/L)"></td>' +
+      '<td><input type="number" step="any" min="0" inputmode="decimal" data-ckcf="' + j + '" value="' + ckN(m.Cf[j]) + '" aria-label="Cf na alimentação do composto ' + s + ' (mol/L)"></td></tr>').join('');
+    return '<div class="ck">' +
+      '<div class="ck-left">' +
+        '<div class="ck-tabs" role="tablist" aria-label="Configuração do bloco cinético">' +
+          '<button type="button" role="tab" id="ckTabRx" data-cktab="rx" aria-controls="ckPaneRx" aria-selected="true">1. Reações, barras de k e ordens r</button>' +
+          '<button type="button" role="tab" id="ckTabC0" data-cktab="c0" aria-controls="ckPaneC0" aria-selected="false" tabindex="-1">2. Condições iniciais C0 e alimentação Cf</button></div>' +
+        '<section class="ck-pane" id="ckPaneRx" role="tabpanel" aria-labelledby="ckTabRx">' +
+          '<p class="ck-hint">Digite as reações com as espécies A a F (ex.: <code>A + 2B → C</code>; a seta também pode ser <code>-&gt;</code> ou <code>---&gt;</code>). Ao trocar a equação, as ordens r recebem os coeficientes dos reagentes (reação elementar) e você pode mudá-las depois. Deixe a linha vazia ou k = 0 para desligar a reação. O k correto do exemplo fica em <b class="ck-red">vermelho</b>.</p>' +
+          '<div class="ck-rxt" role="table" aria-label="Reações, constantes k e ordens de reação">' +
+            '<div class="ck-rxh" role="row"><span role="columnheader">Reação</span><span role="columnheader">Equação química</span><span role="columnheader">k ativo</span><span role="columnheader" class="ck-red">k ref.</span>' + SP.map(s => '<span role="columnheader">r' + s + '</span>').join('') + '</div>' + rx + '</div>' +
+          '<div class="ck-box ck-sl"><h3>Barras deslizantes de k <span class="ck-sub">(tempo real; o valor correto do exemplo em <b class="ck-red">vermelho</b>)</span></h3>' + sl + '</div>' +
+        '</section>' +
+        '<section class="ck-pane" id="ckPaneC0" role="tabpanel" aria-labelledby="ckTabC0" hidden>' +
+          '<p class="ck-hint">Concentrações em mol/L. C0 é o que há no reator no instante zero; Cf é a composição da alimentação, usada só no regime contínuo (F/V &gt; 0).</p>' +
+          '<div class="ck-tw"><table class="grid ck-c0"><thead><tr><th scope="col">Composto</th><th scope="col">C0 inicial (mol/L)</th><th scope="col">Cf alimentação (mol/L)</th></tr></thead><tbody>' + c0 + '</tbody></table></div>' +
+        '</section>' +
+        '<div class="ck-box"><h3>EDOs interpretadas pelo simulador (dC<sub>i</sub>/dt)</h3><pre id="ckEdo" class="ck-edo"></pre><p id="ckStatus" class="ck-st" role="status" aria-live="polite"></p></div>' +
+        '<div class="ck-box ck-op"><h3>Parâmetros do reator <span class="ck-sub">(F/V = 0 para reator batelada)</span></h3>' +
+          '<div class="ck-seg" role="radiogroup" aria-label="Regime de operação">' +
+            '<button type="button" role="radio" data-ckreg="cont" aria-checked="' + cont + '">Contínuo (CSTR)</button>' +
+            '<button type="button" role="radio" data-ckreg="bat" aria-checked="' + !cont + '">Batelada (F/V = 0)</button></div>' +
+          '<div class="ck-f"><label for="ckFV">Taxa de diluição F/V (1/min)</label><input id="ckFV" type="number" step="any" min="0" inputmode="decimal" value="' + ckN(m.FV) + '"' + (cont ? '' : ' disabled') + '></div>' +
+          '<div class="ck-f"><label for="ckTf">Tempo final (min)</label><input id="ckTf" type="number" step="any" min="0" inputmode="decimal" value="' + ckN(m.tf) + '"></div>' +
+          '<div class="ck-f"><label for="ckWant">Produto desejado (máximo na curva de Bequette)</label><select id="ckWant">' + SP.map(s => '<option' + (s === m.want ? ' selected' : '') + '>' + s + '</option>').join('') + '</select></div>' +
+        '</div>' +
+        '<div class="ck-btns"><button type="button" class="primary" id="ckRunBtn">▶ Interpretar e simular</button><button type="button" class="ck-redbtn" id="ckReset">↺ Restaurar k correto (Van de Vusse)</button></div>' +
+      '</div>' +
+      '<div class="ck-right">' +
+        '<div class="ck-box"><h3>Perfis dinâmicos de concentração C<sub>i</sub>(t)</h3><div id="ckPlot1" class="ck-plot"></div></div>' +
+        '<div class="ck-box"><h3>Estado estacionário × F/V <span class="ck-sub">(curva de Bequette)</span></h3><div id="ckPlot2" class="ck-plot"></div><p class="ck-note" id="ckCurveNote"></p></div>' +
+        '<div class="ck-box"><h3>Resultados</h3><div class="ck-tw"><table class="grid ck-res" id="ckRes"></table></div></div>' +
+        '<button type="button" id="ckCharts" class="ck-wide">📊 Abrir os gráficos no painel (tamanho grande e PNG)</button>' +
+      '</div></div>';
+  }
+  function ckOpen(id) {
+    const b = state.blocks.find(x => x.id === id); if (!b || b.type !== 'chem_kinetics' || !CK) return;
+    const m = CK.norm(b.params.kin);
+    openModal(b.name + ' — Cinética química: análise gráfica de reações', ckHTML(m), []);
+    $('#modal .modal-card').classList.add('ck-card');
+    ckWin = { id, m, dirty: false, undo: false, raf: 0, FVc: m.FV > 0 ? m.FV : 4 / 7 };
+    ckBind(); ckRun();
+  }
+  // grava no bloco (um passo de desfazer por abertura da janela)
+  function ckCommit() {
+    const w = ckWin, b = w && state.blocks.find(x => x.id === w.id); if (!b) return;
+    if (!w.undo) { pushUndo(); w.undo = true; }
+    b.params.kin = JSON.parse(JSON.stringify(w.m)); w.dirty = true; persist();
+  }
+  function ckClose() {
+    const w = ckWin; ckWin = null; if (!w) return;
+    cancelAnimationFrame(w.raf);
+    ['ckPlot1', 'ckPlot2'].forEach(i => { const d = document.getElementById(i); if (d && window.Plotly) Plotly.purge(d); });
+    $('#modal .modal-card').classList.remove('ck-card');
+    if (w.dirty) { afterChange(false); renderProps(); setTimeout(() => runSimulation(true), 0); }
+  }
+  const ckLater = () => { const w = ckWin; if (!w) return; cancelAnimationFrame(w.raf); w.raf = requestAnimationFrame(ckRun); };
+  function ckSetK(i, k, from) {
+    const w = ckWin, r = w.m.rows[i]; k = Math.max(0, isFinite(k) ? k : 0); r.k = k;
+    if (k > r.kmax) r.kmax = 2 * k;
+    const s = $('#ckS' + i); if (s && from !== 'slider') { s.max = ckN(r.kmax); s.value = ckN(k); }
+    const ki = $('#ckK' + i); if (ki && from !== 'input') ki.value = ckN(k);
+    $('#ckSv' + i).textContent = CK.fmt(k);
+  }
+  function ckSetReg(cont) {
+    const w = ckWin, m = w.m;
+    if (cont) m.FV = w.FVc > 0 ? w.FVc : 4 / 7;
+    else {
+      if (m.FV > 0) w.FVc = m.FV;
+      m.FV = 0;
+      if (m.C0.every(v => !(v > 0)) && m.Cf.some(v => v > 0)) {   // batelada sem nada no reator: começa com a composição da alimentação
+        m.C0 = m.Cf.slice(); document.querySelectorAll('[data-ckc0]').forEach(inp => { inp.value = ckN(m.C0[+inp.dataset.ckc0]); });
+        toast('Batelada: C0 recebeu a composição da alimentação (aba 2). Mude se quiser.', 4200);
+      }
+    }
+    const fv = $('#ckFV'); fv.value = ckN(m.FV); fv.disabled = !cont;
+    document.querySelectorAll('[data-ckreg]').forEach(bt => bt.setAttribute('aria-checked', String((bt.dataset.ckreg === 'cont') === cont)));
+  }
+  function ckBind() {
+    const body = $('#modalBody'), w = () => ckWin, num0 = v => { const x = parseFloat(String(v).replace(',', '.')); return isFinite(x) ? x : 0; };
+    body.querySelectorAll('[data-cktab]').forEach(bt => { bt.onclick = () => {
+      const t = bt.dataset.cktab;
+      body.querySelectorAll('[data-cktab]').forEach(o => { const on = o.dataset.cktab === t; o.setAttribute('aria-selected', String(on)); o.tabIndex = on ? 0 : -1; });
+      $('#ckPaneRx').hidden = t !== 'rx'; $('#ckPaneC0').hidden = t !== 'c0';
+    }; bt.onkeydown = e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); const o = body.querySelector('[data-cktab]:not([aria-selected="true"])'); o.click(); o.focus(); } }; });
+    body.querySelectorAll('[data-ckeq]').forEach(inp => { inp.onchange = () => {
+      const i = +inp.dataset.ckeq, r = w().m.rows[i], txt = inp.value.trim(); r.eq = txt;
+      if (!txt) { r.r = [0, 0, 0, 0, 0, 0]; ckSetK(i, 0); }
+      else { try { const p = CK.parse(txt); r.r = p.ord.slice(); if (!(r.k > 0)) ckSetK(i, r.kref > 0 ? r.kref : 1); } catch (e) { /* o aviso aparece na linha de status */ } }
+      r.r.forEach((v, j) => { $('#ckR' + i + '_' + j).value = ckN(v); });
+      ckCommit(); ckRun();
+    }; });
+    body.querySelectorAll('[data-ckk]').forEach(inp => { inp.onchange = () => { ckSetK(+inp.dataset.ckk, num0(inp.value)); inp.value = ckN(w().m.rows[+inp.dataset.ckk].k); ckCommit(); ckRun(); }; });
+    body.querySelectorAll('[data-ckr]').forEach(inp => { inp.onchange = () => { const [i, j] = inp.dataset.ckr.split('_').map(Number); w().m.rows[i].r[j] = num0(inp.value); inp.value = ckN(w().m.rows[i].r[j]); ckCommit(); ckRun(); }; });
+    body.querySelectorAll('[data-cks]').forEach(sl => {
+      sl.oninput = () => { const i = +sl.dataset.cks; ckSetK(i, +sl.value, 'slider'); ckLater(); };
+      sl.onchange = () => { ckCommit(); ckLater(); };
+    });
+    body.querySelectorAll('[data-ckref]').forEach(bt => { bt.onclick = () => { const i = +bt.dataset.ckref; ckSetK(i, w().m.rows[i].kref); ckCommit(); ckRun(); }; });
+    body.querySelectorAll('[data-ckc0]').forEach(inp => { inp.onchange = () => { const j = +inp.dataset.ckc0; w().m.C0[j] = Math.max(0, num0(inp.value)); inp.value = ckN(w().m.C0[j]); ckCommit(); ckRun(); }; });
+    body.querySelectorAll('[data-ckcf]').forEach(inp => { inp.onchange = () => { const j = +inp.dataset.ckcf; w().m.Cf[j] = Math.max(0, num0(inp.value)); inp.value = ckN(w().m.Cf[j]); ckCommit(); ckRun(); }; });
+    body.querySelectorAll('[data-ckreg]').forEach(bt => { bt.onclick = () => { ckSetReg(bt.dataset.ckreg === 'cont'); ckCommit(); ckRun(); }; });
+    $('#ckFV').onchange = e => { const v = Math.max(0, num0(e.target.value)); if (v > 0) { w().m.FV = v; w().FVc = v; e.target.value = ckN(v); } else ckSetReg(false); ckCommit(); ckRun(); };
+    $('#ckTf').onchange = e => { const v = num0(e.target.value); if (v > 0) w().m.tf = v; e.target.value = ckN(w().m.tf); ckCommit(); ckRun(); };
+    $('#ckWant').onchange = e => { w().m.want = e.target.value; ckCommit(); ckRun(); };
+    $('#ckRunBtn').onclick = () => { ckRun(); toast('Sistema interpretado e simulado'); };
+    $('#ckReset').onclick = () => {
+      const id = w().id, keep = { dirty: true, undo: w().undo }; if (!keep.undo) pushUndo();
+      const m = CK.preset(); $('#modalBody').innerHTML = ckHTML(m);
+      ckWin = { id, m, dirty: true, undo: true, raf: 0, FVc: m.FV }; ckCommit(); ckBind(); ckRun();
+      toast('Exemplo de Van de Vusse restaurado (k correto de Bequette)');
+    };
+    $('#ckCharts').onclick = () => { const id = w().id; ckCommit(); closeModal(); setTimeout(() => { runSimulation(true); renderCharts(id); if (SF.mobile) setMView('charts'); }, 30); };
+  }
+  function ckPlot(el, p, title, h) {
+    if (!el) return;
+    if (!window.Plotly) { el.innerHTML = '<p class="chart-empty">Biblioteca de gráficos não carregou.</p>'; return; }
+    const f = SF.charts.figure(p); if (!f) return;
+    const L = f.layout, n = f.data.filter(t => t.name).length;
+    L.title.text = title; L.title.font = { size: 17 };
+    if (SF.mobile) SF.charts.compact(f, el.clientWidth || (window.innerWidth - 40));
+    else {
+      const rows = Math.ceil(n / (el.clientWidth > 560 ? 3 : 2));
+      L.legend = Object.assign({}, L.legend, { orientation: 'h', xref: 'container', yref: 'container', x: 0.01, xanchor: 'left', y: 0.005, yanchor: 'bottom', bgcolor: 'rgba(0,0,0,0)', borderwidth: 0, font: { size: 15 } });
+      L.margin = { l: 78, r: 18, t: 46, b: 70 + rows * 22 }; L.height = h + rows * 22;
+    }
+    L.uirevision = 'ck';   // mantém o zoom do usuário enquanto a barra se move
+    el.style.height = L.height + 'px';
+    Plotly.react(el, f.data, L, ckCfg());
+  }
+  function ckRun() {
+    const w = ckWin; if (!w || !$('#ckEdo')) return;
+    const m = w.m, s = CK.solve(m), st = $('#ckStatus');
+    $('#ckEdo').textContent = s.edo.join('\n');
+    w.m.rows.forEach((r, i) => { const e = $('#ckEq' + i); if (e) e.classList.toggle('bad', s.err.some(x => x.indexOf('R' + (i + 1) + ':') >= 0)); });
+    if (s.err.length) { st.className = 'ck-st err'; st.textContent = '⚠ ' + s.err[0]; return; }
+    const nOn = s.sys.on.filter(Boolean).length;
+    st.className = 'ck-st ' + (nOn ? 'ok' : 'warn');
+    st.textContent = nOn ? '✔ Sistema válido: ' + nOn + ' reação(ões) ativa(s) · ' + (m.FV > 0 ? 'regime contínuo (CSTR), τ = V/F = ' + CK.fmt(1 / m.FV) + ' min' : 'batelada (F/V = 0)')
+      : '⚠ Nenhuma reação ativa: digite uma equação e um k maior que zero.';
+    const plots = CK.plots(s), reg = m.FV > 0 ? 'F/V = ' + CK.fmt(m.FV) + ' min⁻¹' : 'batelada';
+    ckPlot($('#ckPlot1'), plots[0], 'Cinética química (6 EDOs) | ' + reg, 380);
+    const p2 = $('#ckPlot2'), note = $('#ckCurveNote'), cv = s.curve;
+    if (plots[1]) {
+      p2.hidden = false; ckPlot(p2, plots[1], 'C no estado estacionário × F/V', 360);
+      note.textContent = (cv.interior ? 'Máximo de C' + m.want + ': ' + CK.fmt(cv.best.c[cv.iw]) + ' mol/L em F/V = ' + CK.fmt(cv.best.x) + ' min⁻¹ (τ = ' + CK.fmt(1 / cv.best.x) + ' min). ' : 'C' + m.want + ' não passa por um máximo nesta faixa de F/V. ') +
+        (m.FV > 0 ? (s.ss ? 'No ponto de operação, C' + m.want + ' = ' + CK.fmt(s.ss[cv.iw]) + ' mol/L.' : '') : 'A curva é do regime contínuo, para comparar com a batelada.');
+    } else { if (window.Plotly) Plotly.purge(p2); p2.hidden = true; note.textContent = 'A curva de Bequette precisa de alimentação (algum Cf > 0) e de pelo menos uma reação ativa.'; }
+    const f4 = v => CK.fmt(Math.abs(v) < 1e-7 ? 0 : v);   // resíduos numéricos aparecem como zero
+    $('#ckRes').innerHTML = '<thead><tr><th scope="col">Composto</th><th scope="col">C(0) (mol/L)</th><th scope="col">C(t<sub>final</sub>) (mol/L)</th><th scope="col">dC/dt final</th>' + (s.ss ? '<th scope="col">C estacionário (mol/L)</th>' : '') + '</tr></thead><tbody>' +
+      CK.SP.map((sp, j) => '<tr' + (s.used[j] ? '' : ' class="ck-off"') + '><th scope="row"><i class="ck-dot" style="background:' + CK.COL[j] + '"></i><span class="ck-cn">Composto </span>' + sp + '</th><td class="num">' + f4(m.C0[j]) + '</td><td class="num">' + f4(s.Cend[j]) + '</td><td class="num">' + f4(s.dEnd[j]) + '</td>' + (s.ss ? '<td class="num">' + f4(s.ss[j]) + '</td>' : '') + '</tr>').join('') + '</tbody>';
+  }
+
+  // painel de propriedades do bloco: resumo das reações e o botão que abre a janela
+  function chemKinSummary(b) {
+    if (!CK) return '';
+    const m = CK.norm(b.params.kin), rx = m.rows.filter(r => r.eq.trim());
+    return '<button type="button" class="primary ck-open" data-ckopen="1">🧪 Abrir a janela do bloco cinético (reações, barras de k e gráficos)</button>' +
+      '<ul class="ck-sum">' + (rx.length ? rx.map(r => '<li>' + esc(r.eq) + ' &nbsp; k = ' + CK.fmt(r.k) + '</li>').join('') : '<li>nenhuma reação digitada</li>') + '</ul>' +
+      '<p class="small muted">' + (m.FV > 0 ? 'Contínuo (CSTR): F/V = ' + CK.fmt(m.FV) + ' min⁻¹' : 'Batelada (F/V = 0)') + ' · tempo final ' + CK.fmt(m.tf) + ' min</p>';
+  }
+
 
   function reportHTML(svg) {
     const blocks = state.blocks.filter(b => results.blocks[b.id] && (results.blocks[b.id].res || []).length && b.type !== 'feed');
@@ -23259,8 +23736,8 @@ def pfr_transiente(P, nome):
   document.addEventListener('keydown', e => {
     const tag = (e.target.tagName || '').toLowerCase(); const typing = tag === 'input' || tag === 'textarea' || tag === 'select';
     if (e.key === 'F5') { e.preventDefault(); runSimulation(); }
-    else if (!typing && (e.key === 'Delete' || e.key === 'Backspace')) { e.preventDefault(); deleteSelected(); }
-    else if (!typing && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); }
+    else if (!typing && $('#modal').hidden && (e.key === 'Delete' || e.key === 'Backspace')) { e.preventDefault(); deleteSelected(); }
+    else if (!typing && $('#modal').hidden && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); }
     else if (e.key === 'Escape') { closeModal(); if (!$('#welcome').hidden) closeWelcome(); if (pfd.arm) { pfd.arm = null; pfd.render(); } }
   });
   window.addEventListener('resize', () => pfd.render());

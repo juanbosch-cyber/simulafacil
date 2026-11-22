@@ -1,3 +1,35 @@
+SIMULA FÁCIL IA 5.5 – Cinética química: análise gráfica de reações (22/11/2026)
+===============================================================================
+
+EQUIPAMENTO NOVO na categoria Reatores: "Cinética química: análise gráfica de reações (6 EDOs de A a F, k em barras deslizantes;
+contínuo ou batelada)", feito a partir do programa MATLAB bloco_reator_cinetica do autor.
+
+- Clicar (ou tocar, no celular) no ícone no fluxograma abre a janela do bloco, como no programa MATLAB:
+  * aba 1: tabela de reações com a equação química, o k ativo, o k de referência em vermelho e as ordens r_A a r_F de cada composto
+    em cada reação; logo abaixo, as barras deslizantes de k1 a k6 com o valor correto ao lado, em vermelho (o botão "Ref" volta
+    o k para ele);
+  * aba 2: concentrações iniciais C0 e da alimentação Cf de A a F (mol/L);
+  * as 6 EDOs interpretadas pelo simulador (dCi/dt), com a linha de status (sistema válido ou o erro da equação);
+  * regime contínuo (CSTR) ou batelada (F/V = 0), à escolha do usuário; taxa de diluição F/V, tempo final e produto desejado;
+  * gráficos C_i(t) e a curva de Bequette (concentrações no estado estacionário × F/V, com o ponto de operação e o máximo do
+    produto desejado), e a tabela de resultados: C(0), C(t final), dC/dt final e C estacionário.
+  Tudo é recalculado enquanto a barra deslizante se move. O botão "Restaurar k correto (Van de Vusse)" volta ao exemplo.
+- Entrada fácil: as reações são digitadas como no livro, A + 2B → C, A ---> B, 2A -> D ou 0,5A + B => C. O interpretador monta a
+  matriz estequiométrica ν (produtos − reagentes) e preenche as ordens com os coeficientes dos reagentes (reação elementar); as ordens
+  podem ser trocadas depois. Linha vazia ou k = 0 desliga a reação; espécie fora de A a F ou seta faltando aparecem no status.
+- Modelo: dCi/dt = Σr νri·kr·Πj Cj^rrj + (F/V)(Cif − Ci), integrado por Dormand-Prince (RK45 adaptativo), com Euler implícito se
+  o sistema for rígido; estado estacionário por Newton com continuação em F/V e o máximo refinado pela seção áurea.
+- Exemplo pré-setado: reação de Van de Vusse, Bequette (Process Dynamics, 1998, módulo 5): A → B (k1 = 5/6 min⁻¹), B → C
+  (k2 = 5/3 min⁻¹) e 2A → D (k3 = 1/6 L/(mol·min), na tabela k = k3/2 = 1/12 porque ν_A = −2); C_Af = 10 mol/L, F/V = 4/7 min⁻¹,
+  tempo final de 10 min. Resultado: C_A = 3 mol/L e C_B = 1,117 mol/L no estado estacionário; máximo de C_B = 1,266 mol/L em
+  F/V = 1,292 min⁻¹ (τ = 0,774 min). Na batelada, se todas as C0 forem zero, o bloco começa com a composição da alimentação.
+- No painel de propriedades: resumo das reações e o botão que abre a janela; equações do modelo, teoria e ajuda dos campos.
+- Com uma janela aberta, Delete e Ctrl+Z não apagam nem desfazem mais nada no fluxograma por trás dela.
+
+CORREÇÃO NO MODO ESCURO: a lista aberta do menu "Exemplos…" (e dos outros menus) ficava com texto escuro sobre fundo escuro no
+computador e com texto claro sobre fundo claro no celular. Agora as opções têm texto escuro sobre fundo branco nos dois temas, e o
+texto de dica das caixas de busca ("Buscar exemplo…") ganhou mais contraste.
+
 SIMULA FÁCIL IA 5.4 – Fábrica de cimento completa e fábricas de ácido sulfúrico (22/11/2026)
 =============================================================================================
 

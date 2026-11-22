@@ -37,8 +37,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 5.5 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e estação de tratamento de água | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 5.5, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também cinética química com análise gráfica de reações (6 EDOs e barras deslizantes de k), fábrica de cimento completa, fábricas de ácido sulfúrico (enxofre e gás metalúrgico), usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 5.6 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e estação de tratamento de água | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 5.6, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também cinética química com análise gráfica de reações (6 EDOs, barras deslizantes de k, Arrhenius, calor liberado e ajuste de k a dados de laboratório), fábrica de cimento completa, fábricas de ácido sulfúrico (enxofre e gás metalúrgico), usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -47,7 +47,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 5.5 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e ETA">
+<meta property="og:title" content="SIMULA FÁCIL IA 5.6 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e ETA">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -854,7 +854,7 @@ body:not(.mobile) .work { min-height: 700px; }
 .ck-tabs button { border-radius: 8px 8px 0 0; margin-bottom: -1px; white-space: normal; text-align: left; }
 .ck-tabs button[aria-selected="true"] { background: var(--accent-weak); border-color: var(--accent); border-bottom-color: var(--accent-weak); font-weight: 600; }
 .ck-rxt { display: grid; gap: 4px; }
-.ck-rx, .ck-rxh { display: grid; grid-template-columns: 50px minmax(120px, 2.3fr) minmax(62px, 1fr) minmax(54px, .85fr) repeat(6, minmax(34px, .55fr)); gap: 4px; align-items: center; }
+.ck-rx, .ck-rxh { display: grid; grid-template-columns: 50px minmax(120px, 2.3fr) minmax(62px, 1fr) minmax(54px, .85fr) repeat(6, minmax(34px, .55fr)) minmax(54px, .8fr) minmax(54px, .8fr); gap: 4px; align-items: center; }
 .ck-rxh { font-size: 12px; font-weight: 700; color: var(--muted); padding-bottom: 2px; }
 .ck-rxh span:nth-child(n+3) { text-align: right; }
 .ck-no { font: 700 13px var(--font-cond); color: var(--muted); }
@@ -895,13 +895,26 @@ body:not(.mobile) .work { min-height: 700px; }
 .ck-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
 .ck-open { width: 100%; justify-content: center; min-height: 44px; margin: 6px 0 4px; font-weight: 700; white-space: normal; }
 .ck-sum { font: 13px/1.6 var(--mono); margin: 4px 0 0; padding-left: 18px; }
-@media (max-width: 1100px) { .ck { grid-template-columns: minmax(0, 1fr); } }
+.ck-h4 { margin: 12px 0 4px; font: 600 14px var(--font-cond); }
+.ck-t-row { grid-template-columns: 50px minmax(0, 1fr) 90px; }
+.ck-t-row input[type=range] { accent-color: #e07b00; }
+.ck-t-row output, :root[data-theme="dark"] .ck-t-row output { color: var(--energy); font-weight: 700; }
+.ck-lbl { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.ck-data { width: 100%; min-height: 160px; font: 13px/1.5 var(--mono); resize: vertical; tab-size: 10; }
+.ck-fitk { border: 1px solid var(--line); border-radius: 8px; margin: 8px 0 0; padding: 6px 10px 8px; }
+.ck-fitk legend { font-size: 13px; font-weight: 600; padding: 0 4px; }
+#ckFitK { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.ck-chk { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; min-height: 32px; cursor: pointer; }
+.ck-chk input { width: 18px; height: 18px; accent-color: var(--accent); }
+.ck-fitout { margin-top: 8px; }
+.ck-res tfoot td { font-size: 13px; color: var(--muted); white-space: normal; }
+@media (max-width: 1280px) { .ck { grid-template-columns: minmax(0, 1fr); } }
 body.mobile .ck-rxh { display: none; }
 body.mobile .ck-rxt { gap: 8px; }
 body.mobile .ck-rx { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2); }
 body.mobile .ck-no { grid-column: 1 / -1; }
 body.mobile .ck-c-eq { grid-column: 1 / -1; }
-body.mobile .ck-c-k, body.mobile .ck-c-kref { grid-column: span 3; }
+body.mobile .ck-c-k, body.mobile .ck-c-kref, body.mobile .ck-c-ea, body.mobile .ck-c-dh { grid-column: span 3; }
 body.mobile .ck-lb { display: block; margin-bottom: 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
 body.mobile .ck-c-kref .ck-lb { color: var(--err); }
 body.mobile .ck-kref { text-align: left; line-height: var(--tap); }
@@ -915,6 +928,9 @@ body.mobile .ck-f input, body.mobile .ck-f select { font-size: 16px; }
 body.mobile .ck-c0 input { font-size: 16px; min-width: 0; }
 body.mobile .ck-edo { font-size: 12px; }
 body.mobile .ck-tabs button { flex: 1 1 140px; }
+body.mobile .ck-data { font-size: 16px; }
+body.mobile .ck-chk { min-height: var(--tap); }
+body.mobile .ck-t-row { grid-template-columns: 30px minmax(0, 1fr) 80px; }
 body.mobile .ck-res th, body.mobile .ck-res td { white-space: normal; font-size: 12px; padding: 4px; }
 body.mobile .ck-res th[scope=row] { white-space: nowrap; }
 body.mobile .ck-cn { display: none; }
@@ -1088,7 +1104,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.5</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.6</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <label class="projname"><span class="sr">Nome do projeto</span><input id="projName" value="Novo processo" aria-label="Nome do projeto"></label>
@@ -1241,7 +1257,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.5</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.6</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1408,7 +1424,7 @@ window.SIMULAFACIL_CONFIG = {
   const SF = root.SF = root.SF || {};
   SF.CREDITS = {
     title: 'SIMULA FÁCIL IA',
-    version: '5.5',
+    version: '5.6',
     subtitle: 'Simulador de processos químicos e bioprocessos',
     author: 'Prof. Juan Canellas Bosch Neto',
     role: 'Professor de Modelagem e Simulação de Processos',
@@ -11108,15 +11124,37 @@ window.SIMULAFACIL_CONFIG = {
   /* ================================================================== versão 5.5: cinética química — análise gráfica de reações
      Bloco com 6 EDOs (espécies A a F) montadas a partir das equações químicas digitadas (ex.: A + 2B → C): a matriz estequiométrica ν
      vem do interpretador, as constantes k têm barras deslizantes na janela do bloco e as ordens r de cada composto em cada reação
-     formam a lei de potência. dCi/dt = Σr νri·kr·Πj Cj^rrj + (F/V)(Cif − Ci); com F/V = 0 o reator é batelada.
+     formam a lei de potência. dCi/dt = Σr νri·kr(T)·Πj Cj^rrj + (F/V)(Cif − Ci); com F/V = 0 o reator é batelada.
+     Versão 5.6: k com Arrhenius (reator isotérmico na temperatura T da barra deslizante, k informado na T de referência), calor
+     liberado pelas reações (ΔH de cada uma) e ajuste de k e Ea a dados experimentais por mínimos quadrados (Levenberg-Marquardt).
      Exemplo pré-setado: reação de Van de Vusse (A → B → C e 2A → D), Bequette (1998), Process Dynamics, módulo 5. */
-  const CK_SP = ['A', 'B', 'C', 'D', 'E', 'F'], CK_N = 6;
+  const CK_SP = ['A', 'B', 'C', 'D', 'E', 'F'], CK_N = 6, CK_R = 8.314462618e-3;   // R em kJ/(mol·K)
   const ckZ = () => [0, 0, 0, 0, 0, 0];
+  const ckRow = (eq, k, r, kmax, Ea, dH, kref) => ({ eq, k, kref: kref == null ? k : kref, r, kmax, Ea: Ea || 0, dH: dH || 0, fit: false });
+  const ckEmpty = () => ckRow('', 0, ckZ(), 2);
+  const ckBase = o => Object.assign({ C0: ckZ(), Cf: ckZ(), FV: 0, tf: 10, want: 'B', T: 25, Tref: 25, V: 1, rho: 1, cp: 4.18, Tf: 25, data: '' }, o);
   function ckPreset() {
-    const row = (eq, k, r, kmax) => ({ eq, k, kref: k, r, kmax });
-    return { rows: [row('A → B', 5 / 6, [1, 0, 0, 0, 0, 0], 2.5), row('B → C', 5 / 3, [0, 1, 0, 0, 0, 0], 4), row('2A → D', 1 / 12, [2, 0, 0, 0, 0, 0], 0.5),
-      row('', 0, ckZ(), 2), row('', 0, ckZ(), 2), row('', 0, ckZ(), 2)],
-      C0: ckZ(), Cf: [10, 0, 0, 0, 0, 0], FV: 4 / 7, tf: 10, want: 'B' };
+    return ckBase({ rows: [ckRow('A → B', 5 / 6, [1, 0, 0, 0, 0, 0], 2.5), ckRow('B → C', 5 / 3, [0, 1, 0, 0, 0, 0], 4), ckRow('2A → D', 1 / 12, [2, 0, 0, 0, 0, 0], 0.5),
+      ckEmpty(), ckEmpty(), ckEmpty()], Cf: [10, 0, 0, 0, 0, 0], FV: 4 / 7, tf: 10 });
+  }
+  // dados didáticos simulados (modelo + ruído de 2 %): A → B → C em batelada a 25, 35 e 45 °C, com k1 = 0,5 e k2 = 0,2 min⁻¹ a 25 °C,
+  // Ea1 = 50 e Ea2 = 70 kJ/mol e CA0 = 2 mol/L. Não são medidas de laboratório.
+  const CK_DATA_SERIE = '# Dados didáticos SIMULADOS (modelo + ruído de 2 %), não são medidas de laboratório\nt\tT\tCA\tCB\n0\t25\t2,0827\t0,0000\n0,5\t25\t1,5987\t0,4282\n1\t25\t1,2452\t0,7201\n1,5\t25\t0,9184\t0,8895\n2\t25\t0,7487\t0,9989\n3\t25\t0,4234\t1,0715\n4\t25\t0,2649\t1,0304\n5\t25\t0,1663\t0,9488\n6\t25\t0,0975\t0,8149\n8\t25\t0,0364\t0,6096\n10\t25\t0,0134\t0,4303\n12\t25\t0,0051\t0,2840\n0\t35\t1,9674\t0,0000\n0,5\t35\t1,2532\t0,6722\n1\t35\t0,7388\t0,9342\n1,5\t35\t0,4778\t1,0149\n2\t35\t0,2877\t0,9323\n3\t35\t0,1121\t0,6910\n4\t35\t0,0433\t0,4714\n5\t35\t0,0161\t0,3110\n6\t35\t0,0060\t0,1958\n8\t35\t0,0009\t0,0762\n10\t35\t0,0001\t0,0279\n12\t35\t0,0000\t0,0105\n0\t45\t1,9612\t0,0000\n0,5\t45\t0,8321\t0,8450\n1\t45\t0,3364\t0,8365\n1,5\t45\t0,1338\t0,5992\n2\t45\t0,0594\t0,3896\n3\t45\t0,0095\t0,1437\n4\t45\t0,0017\t0,0473\n5\t45\t0,0003\t0,0151\n6\t45\t0,0000\t0,0048\n8\t45\t0,0000\t0,0005\n10\t45\t0,0000\t0,0000\n12\t45\t0,0000\t0,0000';
+  // exemplos prontos da lista de exemplos
+  function ckExample(key) {
+    if (key === 'serie') {   // k começam em palpites; o ajuste recupera os valores de referência (em vermelho)
+      const r1 = ckRow('A → B', 0.3, [1, 0, 0, 0, 0, 0], 2, 30, 0, 0.5), r2 = ckRow('B → C', 0.1, [0, 1, 0, 0, 0, 0], 1, 30, 0, 0.2);
+      r1.fit = r2.fit = true;
+      return ckBase({ rows: [r1, r2, ckEmpty(), ckEmpty(), ckEmpty(), ckEmpty()], C0: [2, 0, 0, 0, 0, 0], tf: 12, data: CK_DATA_SERIE });
+    }
+    if (key === 'paralela')   // seletividade: a rota indesejada (C) tem energia de ativação maior e cresce com a temperatura
+      return ckBase({ rows: [ckRow('A → B', 0.4, [1, 0, 0, 0, 0, 0], 1.5, 40), ckRow('A → C', 0.1, [1, 0, 0, 0, 0, 0], 1, 80), ckEmpty(), ckEmpty(), ckEmpty(), ckEmpty()],
+        C0: [1, 0, 0, 0, 0, 0], tf: 15, T: 25, Tref: 25 });
+    if (key === 'klatt')   // Van de Vusse de Klatt e Engell (1993/1998): k na T de referência (114,2 °C) em min⁻¹, ΔH por mol de reação
+      return ckBase({ rows: [ckRow('A → B', 0.245742, [1, 0, 0, 0, 0, 0], 1, 81.135, 4.2), ckRow('B → C', 0.245742, [0, 1, 0, 0, 0, 0], 1, 81.135, -11.0),
+        ckRow('2A → D', 0.0190419, [2, 0, 0, 0, 0, 0], 0.08, 71.172, -83.7), ckEmpty(), ckEmpty(), ckEmpty()],
+        Cf: [5.1, 0, 0, 0, 0, 0], FV: 14.19 / 60, tf: 30, T: 114.2, Tref: 114.2, V: 10, rho: 0.9342, cp: 3.01, Tf: 104.9 });
+    return ckPreset();
   }
   // um lado da equação: "A + 2B" → coeficientes [1, 2, 0, 0, 0, 0]
   function ckSide(s) {
@@ -11142,23 +11180,28 @@ window.SIMULAFACIL_CONFIG = {
     return { nu: P.map((v, j) => v - R[j]), ord: R };
   }
   const ck6 = (a, d) => CK_SP.map((_, j) => Math.max(0, num(a && a[j], d[j])));
-  // dados do bloco, com o que faltar preenchido pelo exemplo de Van de Vusse
+  // dados do bloco, com o que faltar preenchido pelo exemplo de Van de Vusse (blocos salvos na versão 5.5 continuam valendo)
   function ckNorm(m) {
     const d = ckPreset(); m = m && typeof m === 'object' ? m : d;
     const rows = d.rows.map((dr, i) => {
       const r = (m.rows || [])[i] || dr, k = Math.max(0, num(r.k, 0));
-      return { eq: String(r.eq == null ? '' : r.eq), k, kref: Math.max(0, num(r.kref, dr.kref)), r: CK_SP.map((_, j) => num(r.r && r.r[j], 0)), kmax: Math.max(num(r.kmax, dr.kmax), k) || 1 };
+      return { eq: String(r.eq == null ? '' : r.eq), k, kref: Math.max(0, num(r.kref, dr.kref)), r: CK_SP.map((_, j) => num(r.r && r.r[j], 0)), kmax: Math.max(num(r.kmax, dr.kmax), k) || 1,
+        Ea: num(r.Ea, 0), dH: num(r.dH, 0), fit: !!r.fit };
     });
-    return { rows, C0: ck6(m.C0, d.C0), Cf: ck6(m.Cf, d.Cf), FV: Math.max(0, num(m.FV, d.FV)), tf: num(m.tf, d.tf) > 0 ? +m.tf : d.tf, want: CK_SP.indexOf(m.want) >= 0 ? m.want : 'B' };
+    const Tref = num(m.Tref, 25);
+    return { rows, C0: ck6(m.C0, d.C0), Cf: ck6(m.Cf, d.Cf), FV: Math.max(0, num(m.FV, d.FV)), tf: num(m.tf, d.tf) > 0 ? +m.tf : d.tf, want: CK_SP.indexOf(m.want) >= 0 ? m.want : 'B',
+      T: num(m.T, Tref), Tref, V: num(m.V, 1) > 0 ? +m.V : 1, rho: num(m.rho, 1) > 0 ? +m.rho : 1, cp: num(m.cp, 4.18) > 0 ? +m.cp : 4.18, Tf: num(m.Tf, num(m.T, Tref)), data: String(m.data || '') };
   }
-  function ckSystem(m) {
-    const Nu = [], K = [], Ord = [], err = [], on = [];
+  // Arrhenius referido à temperatura de referência: k(T) = k_ref·exp[−Ea/R·(1/T − 1/T_ref)]
+  const ckArr = (k, Ea, Tc, Tref) => (Ea ? k * Math.exp(-Ea / CK_R * (1 / (Tc + 273.15) - 1 / (Tref + 273.15))) : k);
+  function ckSystem(m, Tc) {
+    const T = Tc == null ? m.T : Tc, Nu = [], K = [], Ord = [], err = [], on = [], dH = [];
     m.rows.forEach((r, i) => {
       let nu = ckZ();
       if (r.eq.trim()) { try { nu = ckEq(r.eq).nu; } catch (e) { err.push('Reação R' + (i + 1) + ': ' + e.message); } }
-      Nu.push(nu); K.push(r.k); Ord.push(r.r.slice()); on.push(r.k > 0 && nu.some(v => v !== 0));
+      Nu.push(nu); K.push(ckArr(r.k, r.Ea, T, m.Tref)); Ord.push(r.r.slice()); dH.push(r.dH); on.push(r.k > 0 && nu.some(v => v !== 0));
     });
-    return { Nu, K, Ord, err, on };
+    return { Nu, K, Ord, err, on, dH, T };
   }
   // taxa de cada reação pela lei de potência, com as concentrações negativas (erro numérico) tratadas como zero
   function ckRates(sys, C) {
@@ -11201,7 +11244,7 @@ window.SIMULAFACIL_CONFIG = {
     return { x, y, xmax, im, iw, interior, best };
   }
   const ckFmt = v => String(+(+v).toPrecision(4)).replace('.', ',');
-  // texto das 6 EDOs montadas, como o simulador as interpretou
+  // texto das 6 EDOs montadas, como o simulador as interpretou (k já na temperatura T)
   function ckEdoText(sys, FV) {
     return CK_SP.map((s, i) => {
       const terms = [];
@@ -11218,6 +11261,113 @@ window.SIMULAFACIL_CONFIG = {
   }
   // espécies que aparecem nas reações ou nas concentrações (as outras ficam fora dos gráficos)
   function ckUsed(m, sys) { return CK_SP.map((_, j) => sys.Nu.some((nu, r) => nu[j] !== 0 && sys.K[r] > 0) || m.C0[j] > 0 || (m.FV > 0 && m.Cf[j] > 0)); }
+  const ckHasEa = m => m.rows.some(r => r.eq.trim() && r.k > 0 && r.Ea);
+  const ckHasHeat = m => m.rows.some(r => r.eq.trim() && r.k > 0 && r.dH);
+  // calor liberado pelas reações: q = Σ(−ΔH_r)·ω_r·V (kW), por reação e total, e o acumulado (kJ)
+  function ckHeat(s) {
+    const m = s.m, sys = s.sys, per = sys.K.map(() => []), tot = [], acc = [0];
+    s.C.forEach((c, k) => {
+      const w = ckRates(sys, c); let q = 0;
+      w.forEach((v, r) => { const qr = -sys.dH[r] * v * m.V / 60; per[r].push(qr); q += qr; });
+      tot.push(q); if (k) acc.push(acc[k - 1] + 60 * (s.t[k] - s.t[k - 1]) * (q + tot[k - 1]) / 2);
+    });
+    const qEnd = tot[tot.length - 1], F = m.FV * m.V, out = { per, tot, acc, qEnd, Qacc: acc[acc.length - 1] };
+    if (m.FV > 0) {
+      const ref = s.ss || s.Cend, w = ckRates(sys, ref); out.qSS = w.reduce((a, v, r) => a - sys.dH[r] * v * m.V / 60, 0);
+      out.qFeed = F * m.rho * m.cp * (m.T - m.Tf) / 60;   // kW para levar a alimentação de Tf até T
+      out.qJacket = out.qSS - out.qFeed;                   // > 0: a camisa retira calor
+      out.dTad = out.qSS * 60 / (F * m.rho * m.cp);        // elevação adiabática da corrente que sai
+    } else out.dTad = out.Qacc / (m.rho * m.cp * m.V);   // batelada: o calor liberado até tf, sem resfriamento
+    return out;
+  }
+  // dados experimentais colados (do Excel ou digitados): cabeçalho opcional com t, T (°C) e as espécies (CA, C_B, A…)
+  function ckData(text) {
+    const lines = String(text || '').split(/\r?\n/).map(l => l.trim()).filter(l => l && !/^[#%]/.test(l));
+    const out = { runs: [], n: 0, err: '', cols: null };
+    if (!lines.length) return out;
+    const split = l => (/[\t;]/.test(l) ? l.split(/[\t;]+/).map(x => x.trim().replace(',', '.'))
+      : /,/.test(l) && /\./.test(l) ? l.split(/\s*,\s*/) : l.split(/\s+/).map(x => x.replace(',', '.')));
+    let cols = null, start = 0;
+    if (/[A-Za-zÀ-ú]/.test(lines[0].replace(/e[-+]?\d/gi, ''))) {
+      cols = split(lines[0]).map(h => {
+        const s = h.replace(/\(.*\)|\[.*\]/g, '').trim();
+        if (/^t$|^tempo|^time/i.test(s) && !/^T$/.test(s)) return 't';
+        if (/^T$|^temp|°C|^θ/i.test(s)) return 'T';
+        const m = /^(?:C\s*_?\s*)?([A-F])$/i.exec(s); return m ? m[1].toUpperCase() : null;
+      });
+      start = 1;
+      if (cols.indexOf('t') < 0) { out.err = 'o cabeçalho precisa de uma coluna t (tempo, min)'; return out; }
+    } else {
+      const w = split(lines[0]).length; cols = ['t'].concat(CK_SP.slice(0, Math.max(0, w - 1)));
+    }
+    out.cols = cols;
+    const byT = {};
+    for (let i = start; i < lines.length; i++) {
+      const v = split(lines[i]), get = c => { const k = cols.indexOf(c); if (k < 0 || k >= v.length) return NaN; const x = v[k]; return x === '' || x === '-' || /nan/i.test(x) ? NaN : +x; };
+      const t = get('t'); if (!isFinite(t)) { out.err = 'linha ' + (i + 1) + ': tempo inválido'; continue; }
+      const T = get('T'), key = isFinite(T) ? String(T) : '-';
+      const run = byT[key] || (byT[key] = { T: isFinite(T) ? T : null, pts: [] });
+      CK_SP.forEach((sp, j) => { const c = get(sp); if (isFinite(c)) { run.pts.push({ t, j, c }); out.n++; } });
+    }
+    out.runs = Object.keys(byT).map(k => byT[k]).filter(r => r.pts.length);
+    return out;
+  }
+  // simula cada série de dados (na sua temperatura) e devolve o valor calculado em cada ponto medido
+  function ckPredict(m, data) {
+    return data.runs.map(run => {
+      const sys = ckSystem(m, run.T == null ? m.T : run.T), tmax = Math.max.apply(null, run.pts.map(p => p.t));
+      if (!(tmax > 0)) return run.pts.map(() => m.C0.slice());
+      const r = N.integrate((t, y) => ckRhs(sys, y, m.FV, m.Cf), 0, m.C0, tmax, { nOut: 400, rtol: 1e-8, atol: 1e-11 });
+      return run.pts.map(p => { const x = p.t / tmax * 400, k = Math.min(399, Math.floor(x)), f = x - k; return r.y[k].map((v, j) => v + f * (r.y[k + 1][j] - v)); });
+    });
+  }
+  function ckStats(data, pred) {
+    let ssr = 0, n = 0; const mean = ckZ(), cnt = ckZ(), pts = [];
+    data.runs.forEach((run, a) => run.pts.forEach((p, b) => { mean[p.j] += p.c; cnt[p.j]++; const cm = pred[a][b][p.j]; ssr += (cm - p.c) * (cm - p.c); n++; pts.push({ t: p.t, T: run.T, j: p.j, c: p.c, cm }); }));
+    mean.forEach((v, j) => { mean[j] = cnt[j] ? v / cnt[j] : 0; });
+    const sst = pts.reduce((a, p) => a + (p.c - mean[p.j]) * (p.c - mean[p.j]), 0);
+    return { ssr, n, R2: sst > 0 ? 1 - ssr / sst : NaN, pts };
+  }
+  // quantil 0,975 da distribuição t de Student (expansão de Cornish-Fisher)
+  const ckT975 = d => { const z = 1.959964; return d > 0 ? z + (z * z * z + z) / (4 * d) + (5 * Math.pow(z, 5) + 16 * z * z * z + 3 * z) / (96 * d * d) + (3 * Math.pow(z, 7) + 19 * Math.pow(z, 5) + 17 * z * z * z - 15 * z) / (384 * d * d * d) : NaN; };
+  // ajuste de k (e de Ea, com dados em mais de uma temperatura) por Levenberg-Marquardt; ln k garante k > 0
+  function ckFit(m0) {
+    const m = ckNorm(m0), data = ckData(m.data), sys = ckSystem(m);
+    if (sys.err.length) return { ok: false, msg: sys.err[0] };
+    if (data.err && !data.n) return { ok: false, msg: data.err };
+    if (!data.n) return { ok: false, msg: 'cole os dados experimentais (t e as concentrações medidas) antes de ajustar' };
+    const rows = m.rows.map((r, i) => i).filter(i => m.rows[i].fit && sys.Nu[i].some(v => v !== 0));
+    if (!rows.length) return { ok: false, msg: 'marque pelo menos um k para ajustar (a reação precisa ter equação)' };
+    const nT = new Set(data.runs.map(r => (r.T == null ? m.T : r.T))).size, fitEa = nT > 1;
+    const par = []; rows.forEach(i => { par.push({ i, kind: 'k' }); if (fitEa) par.push({ i, kind: 'Ea' }); });
+    if (data.n <= par.length) return { ok: false, msg: 'há ' + data.n + ' pontos para ' + par.length + ' parâmetros: meça mais pontos' };
+    const set = (mm, p) => { par.forEach((q, a) => { if (q.kind === 'k') mm.rows[q.i].k = Math.exp(p[a]); else mm.rows[q.i].Ea = p[a]; }); return mm; };
+    const resid = p => { const mm = set(JSON.parse(JSON.stringify(m)), p), pr = ckPredict(mm, data), r = []; data.runs.forEach((run, a) => run.pts.forEach((pt, b) => r.push(pr[a][b][pt.j] - pt.c))); return r; };
+    let p = par.map(q => (q.kind === 'k' ? Math.log(Math.max(m.rows[q.i].k, 1e-6)) : m.rows[q.i].Ea)), r = resid(p), S = r.reduce((a, v) => a + v * v, 0), lam = 1e-2, J = null, it = 0;
+    const jac = (p0, r0) => { const Jm = r0.map(() => new Array(p0.length).fill(0)); p0.forEach((v, a) => { const h = par[a].kind === 'k' ? 1e-5 : 1e-4 * Math.max(1, Math.abs(v)), pp = p0.slice(); pp[a] += h; const rp = resid(pp); rp.forEach((x, b) => { Jm[b][a] = (x - r0[b]) / h; }); }); return Jm; };
+    const JtJ = Jm => p.map((_, a) => p.map((__, b) => Jm.reduce((s2, row) => s2 + row[a] * row[b], 0)));
+    for (it = 0; it < 80; it++) {
+      J = jac(p, r); const A = JtJ(J), g = p.map((_, a) => J.reduce((s2, row, b) => s2 + row[a] * r[b], 0));
+      let improved = false;
+      for (let tries = 0; tries < 12; tries++) {
+        const Ad = A.map((row, a) => row.map((v, b) => (a === b ? v * (1 + lam) + 1e-12 : v)));
+        let d; try { d = N.solveLinear(Ad, g.map(v => -v)); } catch (e) { lam *= 10; continue; }
+        const pn = p.map((v, a) => v + d[a]), rn = resid(pn), Sn = rn.reduce((a2, v) => a2 + v * v, 0);
+        if (isFinite(Sn) && Sn < S) { const rel = (S - Sn) / Math.max(S, 1e-30); p = pn; r = rn; S = Sn; lam = Math.max(lam / 5, 1e-9); improved = true; if (rel < 1e-10) it = 1e9; break; }
+        lam *= 8;
+      }
+      if (!improved) break;
+    }
+    J = jac(p, r);
+    const np = p.length, dof = data.n - np, s2 = dof > 0 ? S / dof : NaN, A = JtJ(J), tq = ckT975(dof);
+    let cov = null; try { cov = p.map((_, a) => N.solveLinear(A, p.map((__, b) => (a === b ? 1 : 0)))); } catch (e) { cov = null; }
+    const fitted = set(JSON.parse(JSON.stringify(m)), p), st = ckStats(data, ckPredict(fitted, data));
+    const params = par.map((q, a) => {
+      const sd = cov && isFinite(s2) ? Math.sqrt(Math.max(0, cov[a][a] * s2)) : NaN, v = q.kind === 'k' ? Math.exp(p[a]) : p[a];
+      return { i: q.i, kind: q.kind, v, lo: q.kind === 'k' ? v * Math.exp(-tq * sd) : v - tq * sd, hi: q.kind === 'k' ? v * Math.exp(tq * sd) : v + tq * sd, sd };
+    });
+    return { ok: true, params, fitEa, nT, R2: st.R2, ssr: st.ssr, n: data.n, np, dof, m: fitted, pts: st.pts, iters: Math.min(it, 80) };
+  }
   // resolve as 6 EDOs de 0 a tf (Dormand-Prince adaptativo; Euler implícito se o sistema for rígido)
   function ckSolve(m0, opt) {
     const m = ckNorm(m0), sys = ckSystem(m), nOut = (opt && opt.nOut) || 300;
@@ -11230,25 +11380,56 @@ window.SIMULAFACIL_CONFIG = {
     out.ss = m.FV > 0 ? ckSteady(sys, m, m.FV, out.Cend) : null;
     out.curve = opt && opt.curve === false ? null : ckCurve(m, sys);
     out.used = ckUsed(m, sys);
+    out.heat = ckHasHeat(m) ? ckHeat(out) : null;
+    out.data = ckData(m.data);
+    if (out.data.n) { out.dfit = ckStats(out.data, ckPredict(m, out.data)); out.data.used = CK_SP.map((_, j) => out.dfit.pts.some(p => p.j === j)); }
     return out;
   }
   const CK_COL = ['#2563c9', '#d1495b', '#2e9e6b', '#e0a100', '#00a3b4', '#5d4037'], CK_DASH = ['solid', 'solid', 'solid', 'solid', 'dash', 'dot'];
-  // gráficos no formato do simulador (C(t) e a curva de Bequette)
+  const ckSameT = (a, b) => Math.abs(a - b) < 0.05;
+  // gráficos no formato do simulador: C(t) com os dados medidos, curva de Bequette, calor liberado, Arrhenius e paridade
   function ckPlots(s) {
     const m = s.m, plots = [], used = s.used.some(Boolean) ? s.used : CK_SP.map(() => true);
-    const reg = m.FV > 0 ? 'contínuo, F/V = ' + ckFmt(m.FV) + ' min⁻¹' : 'batelada, F/V = 0';
-    plots.push({ kind: 'curves', title: 'Concentrações C_i(t) — ' + reg, data: { xLabel: 'Tempo (min)', yLabel: 'Concentração (mol/L)', xRange: [0, m.tf],
-      series: CK_SP.map((sp, j) => ({ sp, j })).filter(o => used[o.j]).map(o => ({ name: 'C' + o.sp + '(t)', x: s.t, y: s.C.map(c => c[o.j]), color: CK_COL[o.j], dash: CK_DASH[o.j], width: 3 })) } });
+    const reg = (m.FV > 0 ? 'contínuo, F/V = ' + ckFmt(m.FV) + ' min⁻¹' : 'batelada, F/V = 0') + (ckHasEa(m) ? ', T = ' + ckFmt(m.T) + ' °C' : '');
+    const ser = CK_SP.map((sp, j) => ({ sp, j })).filter(o => used[o.j]).map(o => ({ name: 'C' + o.sp + '(t)', x: s.t, y: s.C.map(c => c[o.j]), color: CK_COL[o.j], dash: CK_DASH[o.j], width: 3 }));
+    if (s.dfit) CK_SP.forEach((sp, j) => {   // pontos medidos na temperatura atual (ou todos, sem coluna T)
+      const pts = s.dfit.pts.filter(p => p.j === j && (p.T == null || ckSameT(p.T, m.T)));
+      if (pts.length) ser.push({ name: 'C' + sp + ' medido', x: pts.map(p => p.t), y: pts.map(p => p.c), mode: 'markers', color: CK_COL[j], size: 10, symbol: 'circle' });
+    });
+    plots.push({ kind: 'curves', title: 'Concentrações C_i(t) — ' + reg, data: { xLabel: 'Tempo (min)', yLabel: 'Concentração (mol/L)', xRange: [0, m.tf], series: ser } });
     const cv = s.curve;
     if (cv) {
-      const ser = CK_SP.map((sp, j) => ({ sp, j })).filter(o => used[o.j]).map(o => ({ name: 'C' + o.sp + ' estacionário', x: cv.x, y: cv.y[o.j], color: CK_COL[o.j], dash: CK_DASH[o.j], width: o.j === cv.iw ? 4 : 2.5 }));
-      if (s.ss) ser.push({ name: 'Ponto de operação (F/V = ' + ckFmt(m.FV) + ')', x: [m.FV], y: [s.ss[cv.iw]], mode: 'markers', color: '#111', size: 13, symbol: 'circle' });
-      if (cv.interior) ser.push({ name: 'Máximo de C' + m.want + ' (' + ckFmt(cv.best.c[cv.iw]) + ' mol/L em F/V = ' + ckFmt(cv.best.x) + ')', x: [cv.best.x], y: [cv.best.c[cv.iw]], mode: 'markers', color: '#d1302b', size: 14, symbol: 'star' });
-      plots.push({ kind: 'curves', title: 'Estado estacionário × F/V (curva de Bequette)', data: { xLabel: 'Taxa de diluição F/V (min⁻¹)', yLabel: 'Concentração (mol/L)', xRange: [0, cv.xmax], series: ser } });
+      const sr = CK_SP.map((sp, j) => ({ sp, j })).filter(o => used[o.j]).map(o => ({ name: 'C' + o.sp + ' estacionário', x: cv.x, y: cv.y[o.j], color: CK_COL[o.j], dash: CK_DASH[o.j], width: o.j === cv.iw ? 4 : 2.5 }));
+      if (s.ss) sr.push({ name: 'Ponto de operação (F/V = ' + ckFmt(m.FV) + ')', x: [m.FV], y: [s.ss[cv.iw]], mode: 'markers', color: '#111', size: 13, symbol: 'circle' });
+      if (cv.interior) sr.push({ name: 'Máximo de C' + m.want + ' (' + ckFmt(cv.best.c[cv.iw]) + ' mol/L em F/V = ' + ckFmt(cv.best.x) + ')', x: [cv.best.x], y: [cv.best.c[cv.iw]], mode: 'markers', color: '#d1302b', size: 14, symbol: 'star' });
+      plots.push({ kind: 'curves', title: 'Estado estacionário × F/V (curva de Bequette)', data: { xLabel: 'Taxa de diluição F/V (min⁻¹)', yLabel: 'Concentração (mol/L)', xRange: [0, cv.xmax], series: sr } });
     }
+    if (s.heat) {
+      const h = s.heat, hs = [];
+      m.rows.forEach((r, i) => { if (r.eq.trim() && r.k > 0 && r.dH) hs.push({ name: 'R' + (i + 1) + ' (' + r.eq + ')', x: s.t, y: h.per[i], color: CK_COL[[0, 2, 3, 4, 5, 0][i]], width: 2.5, dash: 'dash' }); });
+      hs.push({ name: 'Total liberado', x: s.t, y: h.tot, color: '#d1302b', width: 4 });
+      plots.push({ kind: 'curves', title: 'Calor liberado pelas reações q(t) (V = ' + ckFmt(m.V) + ' L)', data: { xLabel: 'Tempo (min)', yLabel: 'q (kW); < 0: absorvido', xRange: [0, m.tf], series: hs } });
+    }
+    if (ckHasEa(m)) {
+      const as = [], T0 = m.Tref - 50, T1 = m.Tref + 50;
+      m.rows.forEach((r, i) => {
+        if (!(r.eq.trim() && r.k > 0)) return; const x = [], y = [];
+        for (let k = 0; k <= 40; k++) { const Tc = T0 + (T1 - T0) * k / 40; x.push(1000 / (Tc + 273.15)); y.push(Math.log(ckArr(r.k, r.Ea, Tc, m.Tref))); }
+        as.push({ name: 'k' + (i + 1) + ' (Ea = ' + ckFmt(r.Ea) + ' kJ/mol)', x, y, color: CK_COL[i], width: 3 });
+        as.push({ name: 'k' + (i + 1) + ' em T = ' + ckFmt(m.T) + ' °C', x: [1000 / (m.T + 273.15)], y: [Math.log(ckArr(r.k, r.Ea, m.T, m.Tref))], mode: 'markers', color: CK_COL[i], size: 11 });
+      });
+      plots.push({ kind: 'curves', title: 'Arrhenius: ln k × 1000/T (' + ckFmt(T0) + ' a ' + ckFmt(T1) + ' °C)', data: { xLabel: '1000/T (1/K)', yLabel: 'ln k', series: as } });
+    }
+    if (s.dfit) plots.push(ckParity(s.dfit.pts, 'Paridade: calculado × medido (k atuais; R² = ' + ckFmt(s.dfit.R2) + ')'));
     return plots;
   }
-  SF.chemKin = { SP: CK_SP, preset: ckPreset, parse: ckEq, norm: ckNorm, solve: ckSolve, plots: ckPlots, fmt: ckFmt, COL: CK_COL, DASH: CK_DASH };
+  function ckParity(pts, title) {
+    const mx = Math.max(1e-6, ...pts.map(p => Math.max(p.c, p.cm))) * 1.05, ser = [{ name: '45° (ajuste perfeito)', x: [0, mx], y: [0, mx], color: '#888', width: 2, dash: 'dash' }];
+    CK_SP.forEach((sp, j) => { const q = pts.filter(p => p.j === j); if (q.length) ser.push({ name: 'C' + sp, x: q.map(p => p.c), y: q.map(p => p.cm), mode: 'markers', color: CK_COL[j], size: 9 }); });
+    return { kind: 'curves', title, data: { xLabel: 'Medido (mol/L)', yLabel: 'Calculado (mol/L)', xRange: [0, mx], yRange: [0, mx], series: ser } };
+  }
+  SF.chemKin = { SP: CK_SP, preset: ckPreset, example: ckExample, parse: ckEq, norm: ckNorm, solve: ckSolve, plots: ckPlots, parity: ckParity, fit: ckFit, data: ckData, arr: ckArr,
+    hasEa: ckHasEa, hasHeat: ckHasHeat, fmt: ckFmt, COL: CK_COL, DASH: CK_DASH };
 
   IMPL.chem_kinetics = function (th, b) {
     const s = ckSolve(b.params && b.params.kin), m = s.m, warn = [];
@@ -11258,6 +11439,8 @@ window.SIMULAFACIL_CONFIG = {
     const res = [{ k: 'Regime', v: m.FV > 0 ? 'contínuo (CSTR): F/V = ' + ckFmt(m.FV) + ' min⁻¹, tempo de residência τ = V/F = ' + ckFmt(1 / m.FV) + ' min' : 'batelada (F/V = 0)', u: '' },
       { k: 'Reações ativas', v: String(nOn) + ' de 6', u: '' },
       { k: 'Tempo final da simulação', v: ckFmt(m.tf), u: 'min' }];
+    if (ckHasEa(m)) res.push({ k: 'Temperatura do reator (isotérmico) / de referência dos k', v: ckFmt(m.T) + ' / ' + ckFmt(m.Tref), u: '°C' },
+      { k: 'k na temperatura T (Arrhenius)', v: m.rows.map((r, i) => (r.eq.trim() && r.k > 0 ? 'k' + (i + 1) + ' = ' + ckFmt(s.sys.K[i]) : '')).filter(Boolean).join('; '), u: '' });
     CK_SP.forEach((sp, j) => {
       if (!s.used[j]) return;
       res.push({ k: 'C' + sp + ': inicial → final', v: ckFmt(m.C0[j]) + ' → ' + ckFmt(s.Cend[j]) + (s.ss ? ' (estacionário ' + ckFmt(s.ss[j]) + ')' : ''), u: 'mol/L' });
@@ -11267,6 +11450,16 @@ window.SIMULAFACIL_CONFIG = {
     if (jr >= 0) { const cin = m.FV > 0 ? m.Cf[jr] : m.C0[jr]; res.push({ k: 'Conversão de ' + CK_SP[jr] + ' no tempo final', v: ckFmt(100 * (cin - s.Cend[jr]) / cin), u: '%' }); }
     const cv = s.curve;
     if (cv && cv.interior) res.push({ k: 'Máximo de C' + m.want + ' no estado estacionário (curva de Bequette)', v: ckFmt(cv.best.c[cv.iw]) + ' mol/L em F/V = ' + ckFmt(cv.best.x) + ' min⁻¹ (τ = ' + ckFmt(1 / cv.best.x) + ' min)', u: '' });
+    const h = s.heat;
+    if (h) {
+      res.push({ k: 'Calor liberado pelas reações no tempo final (V = ' + ckFmt(m.V) + ' L)', v: ckFmt(h.qEnd) + ' kW (' + ckFmt(h.qEnd * 3600) + ' kJ/h)', u: '' },
+        { k: 'Calor acumulado de 0 a tf', v: ckFmt(h.Qacc), u: 'kJ' });
+      if (m.FV > 0) res.push({ k: 'Camisa no estado estacionário (alimentação a ' + ckFmt(m.Tf) + ' °C)', v: (h.qJacket >= 0 ? 'retirar ' : 'fornecer ') + ckFmt(Math.abs(h.qJacket)) + ' kW (' + ckFmt(Math.abs(h.qJacket) * 3600) + ' kJ/h); a alimentação absorve ' + ckFmt(h.qFeed) + ' kW', u: '' },
+        { k: 'Elevação adiabática da corrente (se a camisa falhar)', v: ckFmt(h.dTad), u: 'K' });
+      else res.push({ k: 'Elevação adiabática de temperatura (batelada sem resfriamento)', v: ckFmt(h.dTad), u: 'K' });
+      if (h.dTad > 50) warn.push('elevação adiabática de ' + ckFmt(h.dTad) + ' K: sem resfriamento, a reação pode disparar');
+    }
+    if (s.dfit) res.push({ k: 'Aderência aos dados experimentais (k atuais)', v: 'R² = ' + ckFmt(s.dfit.R2) + ' com ' + s.dfit.n + ' pontos (soma dos quadrados ' + ckFmt(s.dfit.ssr) + ')', u: '' });
     if (m.FV > 0 && !s.ss) warn.push('não encontrei o estado estacionário para F/V = ' + ckFmt(m.FV) + ': aumente o tempo final para ver se o reator estabiliza');
     if (m.FV > 0 && s.ss && s.Cend.some((v, j) => Math.abs(v - s.ss[j]) > 0.01 * Math.max(1, Math.abs(s.ss[j])))) warn.push('no tempo final o reator ainda não chegou ao estado estacionário: aumente o tempo final');
     return { out: {}, res: decBR(decK(res)), warn: decW(warn), plots: ckPlots(s), massUtil: 0 };
@@ -13628,8 +13821,12 @@ window.SIMULAFACIL_CONFIG = {
           eq(nur + ' = (coeficiente de ' + i('i') + ' nos produtos) − (coeficiente de ' + i('i') + ' nos reagentes)', 'matriz estequiométrica lida das equações, ex.: A + 2B → C dá ν = (−1, −2, +1, 0, 0, 0)'),
           eq(od(CA, t) + ' = ' + FV + '(' + sub(C, 'A,f') + ' − ' + CA + ') − ' + sub(i('k'), '1') + CA + ' − ' + sub(i('k'), '3') + sup(CA, '2') + ',&nbsp; ' + od(CB, t) + ' = −' + FV + CB + ' + ' + sub(i('k'), '1') + CA + ' − ' + sub(i('k'), '2') + CB, 'exemplo de Van de Vusse (Bequette): A → B → C e 2A → D'),
           eq(od(CD, t) + ' = −' + FV + CD + ' + ' + fr('1', '2') + sub(i('k'), '3') + sup(CA, '2') + ',&nbsp; ' + sub(i('k'), '1') + ' = 5/6 min⁻¹, ' + sub(i('k'), '2') + ' = 5/3 min⁻¹, ' + sub(i('k'), '3') + ' = 1/6 L/(mol·min)', 'na tabela, 2A → D entra com k = k₃/2 = 1/12, porque ν_A = −2'),
-          eq(sub(CB, 'ss') + ' = ' + fr(sub(i('k'), '1') + sub(CA, 'ss'), FV + ' + ' + sub(i('k'), '2')) + ',&nbsp; ' + sub(CA, 'ss') + ' = ' + fr('−(' + sub(i('k'), '1') + ' + ' + FV + ') + √[(' + sub(i('k'), '1') + ' + ' + FV + ')² + 4' + sub(i('k'), '3') + FV + sub(C, 'A,f') + ']', '2' + sub(i('k'), '3')), 'estado estacionário do Van de Vusse: a curva de Bequette (C_B × F/V) tem um máximo')],
-        sym: [[Ci, 'concentração da espécie i no reator (mol/L)'], [sub(i('C'), i('i') + ',f'), 'concentração da espécie i na alimentação'], [FV, 'taxa de diluição (1/min), o inverso do tempo de residência τ'], [kr, 'constante cinética da reação r (barra deslizante)'], [sub(i('r'), i('r,j')), 'ordem da espécie j na reação r']],
+          eq(sub(CB, 'ss') + ' = ' + fr(sub(i('k'), '1') + sub(CA, 'ss'), FV + ' + ' + sub(i('k'), '2')) + ',&nbsp; ' + sub(CA, 'ss') + ' = ' + fr('−(' + sub(i('k'), '1') + ' + ' + FV + ') + √[(' + sub(i('k'), '1') + ' + ' + FV + ')² + 4' + sub(i('k'), '3') + FV + sub(C, 'A,f') + ']', '2' + sub(i('k'), '3')), 'estado estacionário do Van de Vusse: a curva de Bequette (C_B × F/V) tem um máximo'),
+          eq(kr + '(' + T + ') = ' + sub(i('k'), i('r') + ',ref') + '·exp[−' + fr(sub(i('E'), i('a,r')), i('R')) + '(' + fr('1', T) + ' − ' + fr('1', sub(T, 'ref')) + ')]', 'Arrhenius: reator isotérmico na temperatura T da barra deslizante; k informado na temperatura de referência'),
+          eq(i('q') + ' = ' + V + sum('r') + '(−Δ' + sub(i('H'), i('r')) + ')' + sub(i('ω'), i('r')) + ',&nbsp; ' + sub(i('q'), 'camisa') + ' = ' + i('q') + ' − ' + F + 'ρ' + sub(i('c'), 'p') + '(' + T + ' − ' + sub(T, 'f') + ')', 'calor liberado pelas reações e calor que a camisa retira para manter T no regime contínuo'),
+          eq('Δ' + sub(T, 'ad') + ' = ' + fr(i('q'), F + 'ρ' + sub(i('c'), 'p')) + ' (contínuo),&nbsp; Δ' + sub(T, 'ad') + ' = ' + fr(i('Q') + '(' + sub(t, 'f') + ')', 'ρ' + sub(i('c'), 'p') + V) + ' (batelada)', 'elevação adiabática de temperatura, se o resfriamento falhar'),
+          eq('mín ' + sum('pontos') + '(' + sub(i('C'), 'calc') + ' − ' + sub(i('C'), 'med') + ')²,&nbsp; parâmetros ln ' + kr + ' (e ' + sub(i('E'), i('a,r')) + ' com dados em várias T)', 'ajuste aos dados experimentais por Levenberg-Marquardt, com intervalo de confiança de 95 % pela covariância e t de Student')],
+        sym: [[Ci, 'concentração da espécie i no reator (mol/L)'], [sub(i('C'), i('i') + ',f'), 'concentração da espécie i na alimentação'], [FV, 'taxa de diluição (1/min), o inverso do tempo de residência τ'], [kr, 'constante cinética da reação r (barra deslizante)'], [sub(i('r'), i('r,j')), 'ordem da espécie j na reação r'], [sub(i('E'), i('a,r')), 'energia de ativação da reação r (kJ/mol)'], ['Δ' + sub(i('H'), i('r')), 'calor da reação r por mol de reação, como escrita (negativo libera calor)'], [V, 'volume do reator (L)']],
         note: 'O simulador lê as equações químicas digitadas, monta a matriz ν e as 6 EDOs e mostra o texto delas, como o programa MATLAB do bloco. As EDOs são integradas pelo método de Dormand-Prince (RK45 adaptativo), com Euler implícito se o sistema for rígido; o estado estacionário de cada F/V vem do método de Newton, com continuação a partir de F/V alto. Concentrações negativas, por erro numérico, são tratadas como zero nas velocidades.'
       };
     },
@@ -14316,11 +14513,14 @@ window.SIMULAFACIL_CONFIG = {
       'Depois do desligamento, o reator continua exigindo atenção. O iodo-135, produzido na fissão, continua decaindo em xenônio-135, um absorvedor de nêutrons fortíssimo que deixa de ser queimado pelo fluxo; por isso o xenônio sobe por algumas horas e pode impedir uma nova partida (o tempo morto). Ao mesmo tempo, os produtos de fissão continuam liberando calor: cerca de 6 % da potência logo após o desligamento, 1 % depois de uma hora.',
       'O bloco calcula o iodo e o xenônio antes e depois da parada, a reatividade do xenônio e o tempo morto para a reatividade disponível, o calor de decaimento comparado com a capacidade do resfriamento residual e, numa perda total do resfriamento, o tempo até a água ferver e até descobrir o núcleo.',
       'No exemplo, um PWR de 3 765 MWt com fluxo de 3·10¹³ n/cm²·s tem 2 156 pcm de xenônio no equilíbrio; o pico chega 8,4 h depois da parada, com 1 944 pcm a mais. Com só 300 pcm disponíveis, como no fim do ciclo, o reator não parte entre 0,6 h e 23,9 h. Um dia depois do desligamento, o núcleo ainda gera 16,7 MW: sem resfriamento, 250 t de água a 50 °C fervem em 53 min.'] },
-    chem_kinetics: { ex: null, p: [
+    chem_kinetics: { ex: ex('cinetica-van-de-vusse-bequette', 'Cinética química: reação de Van de Vusse (Bequette)'), p: [
       'Este bloco resolve e desenha a cinética de até seis reações entre até seis espécies, A a F, sem depender do banco de compostos: é a ferramenta para estudar um mecanismo antes de escolher o reator. Em vez de escrever as equações diferenciais à mão, o usuário digita as reações como num livro (A + 2B → C, A ---> B ou 2A -> D). O interpretador lê os coeficientes, monta a matriz estequiométrica ν (coeficiente nos produtos menos coeficiente nos reagentes) e escreve as seis EDOs, que aparecem na janela do bloco exatamente como o simulador as entendeu.',
       'A velocidade de cada reação segue a lei de potência, ω = k·C_A^rA·C_B^rB…, e cada linha da tabela tem as suas ordens r. Quando a equação é digitada, as ordens recebem os coeficientes dos reagentes, como numa reação elementar; para uma reação não elementar, basta trocar os valores. O balanço de cada espécie no reator de mistura perfeita é dC_i/dt = Σ ν_ri·ω_r + (F/V)(C_if − C_i). A taxa de diluição F/V é o inverso do tempo de residência: com F/V > 0 o reator é contínuo (CSTR) e parte das concentrações iniciais C0; com F/V = 0 não há entrada nem saída e o mesmo bloco vira um reator batelada. A escolha é do usuário, no botão de regime.',
       'O exemplo pré-setado é a reação de Van de Vusse, do módulo 5 do livro de B. Wayne Bequette (Process Dynamics, 1998): A → B → C em série e 2A → D em paralelo, com k₁ = 5/6 min⁻¹, k₂ = 5/3 min⁻¹ e k₃ = 1/6 L/(mol·min), C_Af = 10 mol/L e F/V = 4/7 min⁻¹. Como a equação 2A → D consome dois mols de A, a tabela usa k = k₃/2 = 1/12 com ν_A = −2. Partindo do reator vazio, a simulação chega em cerca de 10 min ao estado estacionário de Bequette: C_A = 3 mol/L e C_B = 1,117 mol/L.',
-      'B é o produto desejado e é consumido por duas rotas: vira C se ficar tempo demais no reator e perde A para D se a concentração de A for alta. Por isso C_B no estado estacionário passa por um máximo quando F/V varia: é a curva de Bequette, que a janela desenha junto com o ponto de operação. Para o exemplo, o máximo é C_B = 1,266 mol/L em F/V = 1,292 min⁻¹ (τ = 0,77 min). Mova as barras de k e veja a curva e os perfis mudarem na hora; o k correto do exemplo fica em vermelho, e o botão Ref volta cada um ao valor de referência.'] },
+      'B é o produto desejado e é consumido por duas rotas: vira C se ficar tempo demais no reator e perde A para D se a concentração de A for alta. Por isso C_B no estado estacionário passa por um máximo quando F/V varia: é a curva de Bequette, que a janela desenha junto com o ponto de operação. Para o exemplo, o máximo é C_B = 1,266 mol/L em F/V = 1,292 min⁻¹ (τ = 0,77 min). Mova as barras de k e veja a curva e os perfis mudarem na hora; o k correto do exemplo fica em vermelho, e o botão Ref volta cada um ao valor de referência.',
+      'A temperatura entra pela lei de Arrhenius: cada reação tem o seu k na temperatura de referência e a sua energia de ativação Ea, e a barra deslizante de T recalcula todos os k (o reator continua isotérmico). No exemplo de reações paralelas, a rota indesejada A → C tem Ea = 80 kJ/mol, o dobro da rota A → B: a 25 °C saem 80 % de B, mas a 60 °C só 42 %. É a regra prática de que a temperatura alta favorece a reação de maior energia de ativação, que o gráfico ln k × 1000/T mostra como a reta mais inclinada.',
+      'Com o ΔH de cada reação, o bloco calcula o calor liberado q(t), por reação e no total, o calor acumulado e a carga da camisa. O exemplo de Klatt e Engell é o Van de Vusse a 114,2 °C, com k₁ = k₂ = 1,287·10¹² h⁻¹·exp(−9 758,3/T), k₃ = 9,043·10⁹ L/(mol·h)·exp(−8 560/T), ΔH = +4,2, −11,0 e −41,85 kJ/mol (na tabela, −83,7 kJ por mol de 2A → D), C_Af = 5,1 mol/L, F/V = 14,19 h⁻¹ e V = 10 L. O simulador reproduz o ponto de operação do artigo: C_A = 2,14 e C_B = 1,09 mol/L. As reações liberam 1,34 kW; a alimentação, entrando a 104,9 °C, absorve 1,03 kW para chegar a 114,2 °C, e a camisa retira os 0,31 kW restantes (1 110 kJ/h, contra 1 113,5 kJ/h de Klatt e Engell). Sem a camisa, a corrente esquentaria 12 K.',
+      'Na aula de laboratório, o aluno cola na aba 3 a tabela medida (t, as concentrações e, se houver, a temperatura de cada ensaio), marca os k que quer estimar e clica em Ajustar. O programa minimiza a soma dos quadrados entre o calculado e o medido pelo método de Levenberg-Marquardt, mostra cada k com o intervalo de confiança de 95 %, o R² e o gráfico de paridade, e sobrepõe os pontos às curvas. Com ensaios em mais de uma temperatura, ajusta também as energias de ativação. O exemplo em série A → B → C traz dados didáticos simulados (modelo com ruído de 2 %) a 25, 35 e 45 °C: partindo de k₁ = 0,3 e k₂ = 0,1 min⁻¹, o ajuste encontra 0,500 e 0,203 min⁻¹, com Ea de 50 e 69 kJ/mol (os valores usados para gerar os dados são 0,5, 0,2, 50 e 70).'] },
     nuclear_reactor: { ex: ex('usina-nuclear-pwr', 'Usina nuclear PWR completa (tipo Angra 2)'), p: [
       'No reator de água pressurizada (PWR), a fissão do urânio-235 libera cerca de 200 MeV por núcleo partido, quase tudo como energia cinética dos fragmentos, que vira calor dentro das pastilhas de UO₂. Cada pastilha fica em varetas de zircaloy agrupadas em elementos combustíveis; a água do circuito primário passa entre as varetas, retira o calor e desacelera os nêutrons (moderação), mantendo a reação em cadeia. A pressão de cerca de 158 bar, imposta pelo pressurizador, impede que essa água ferva, mesmo a 326 °C.',
       'O bloco faz o balanço de energia do primário pela IAPWS-IF97: a água entra pela perna fria, recebe a potência térmica e sai pela perna quente; a margem até a saturação é avisada quando fica pequena. Ele também calcula a taxa linear de calor nas varetas, a duração do ciclo e o número de elementos trocados a cada recarga pela queima de descarga, o U-235 fissionado, o urânio natural e o trabalho de separação (SWU) do enriquecimento e o calor de decaimento depois do desligamento, que explica por que o núcleo precisa de resfriamento mesmo com o reator parado.',
@@ -20701,6 +20901,23 @@ def pfr_transiente(P, nome):
         { id: 'R', type: 'pfr', name: 'R-101', params: { V: 0.1, D: 0.2, mode: 'transiente', start: 'partida (transiente)', phase: 'líquida', thermal: 'isotérmico', T: 25, tEnd: 80, cells: 60,
           reactions: [{ stoich: { 'comp-A': -1, 'comp-B': 1 }, orders: { 'comp-A': 1 }, k: 0.035, Tref: 25, Ea: 0, dH: 0 }] } }],
       streams: [S('1', 'F', 'out', 'R', 'in')] } },
+    // cinética química (versão 5.6): o bloco de 6 EDOs com os exemplos de Van de Vusse, série com dados, paralela e calor liberado
+    { key: 'cinetica-van-de-vusse-bequette', title: 'Cinética química: reação de Van de Vusse (Bequette) — A → B → C e 2A → D no CSTR, barras de k e a curva de Bequette', fs: {
+      name: 'Cinética química: Van de Vusse (Bequette)', components: ['water'], model: 'IDEAL', fixedLayout: true,
+      blocks: [{ id: 'RQ-101', x: 80, y: 80, type: 'chem_kinetics', name: 'RQ-101 Van de Vusse (Bequette)', params: { kin: SF.chemKin.example('bequette') } }],
+      streams: [] } },
+    { key: 'cinetica-serie-ajuste-k', title: 'Cinética química: reações em série A → B → C (batelada) com dados a 25, 35 e 45 °C — ajuste de k e Ea (aula de laboratório)', fs: {
+      name: 'Cinética química: série A → B → C e ajuste de k', components: ['water'], model: 'IDEAL', fixedLayout: true,
+      blocks: [{ id: 'RQ-101', x: 80, y: 80, type: 'chem_kinetics', name: 'RQ-101 Série A → B → C (ajuste de k)', params: { kin: SF.chemKin.example('serie') } }],
+      streams: [] } },
+    { key: 'cinetica-paralela-seletividade', title: 'Cinética química: reações paralelas A → B e A → C — seletividade e temperatura (Arrhenius)', fs: {
+      name: 'Cinética química: reações paralelas', components: ['water'], model: 'IDEAL', fixedLayout: true,
+      blocks: [{ id: 'RQ-101', x: 80, y: 80, type: 'chem_kinetics', name: 'RQ-101 Paralelas A → B e A → C', params: { kin: SF.chemKin.example('paralela') } }],
+      streams: [] } },
+    { key: 'cinetica-van-de-vusse-calor', title: 'Cinética química: Van de Vusse com temperatura e calor liberado (Klatt e Engell) — Arrhenius, camisa e elevação adiabática', fs: {
+      name: 'Cinética química: Van de Vusse com calor (Klatt e Engell)', components: ['water'], model: 'IDEAL', fixedLayout: true,
+      blocks: [{ id: 'RQ-101', x: 80, y: 80, type: 'chem_kinetics', name: 'RQ-101 Van de Vusse a 114,2 °C (Klatt e Engell)', params: { kin: SF.chemKin.example('klatt') } }],
+      streams: [] } },
     { key: 'flash', title: 'Flash com reciclo (benzeno/tolueno)', fs: {
       name: 'Flash com reciclo', components: ['benzene', 'toluene'], model: 'IDEAL',
       blocks: [
@@ -22773,7 +22990,9 @@ def pfr_transiente(P, nome):
     chem_kinetics: { ex: 'Reação de Van de Vusse (Bequette, módulo 5), pré-setada no bloco', items: [
       ['Janela do bloco', 'clique no ícone no fluxograma (ou no botão abaixo) para abrir a janela com a tabela de reações, as barras deslizantes de k, as EDOs, os gráficos e o resumo. O bloco não tem correntes: as espécies são A a F.'],
       ['Reações', 'até 6 equações como <b>A + 2B → C</b> (a seta pode ser -&gt; ou ---&gt;). As ordens r recebem os coeficientes dos reagentes e podem ser trocadas. Linha vazia ou k = 0 desliga a reação.'],
-      ['k e referência', 'k ativo na tabela ou na barra deslizante; o k correto do exemplo aparece em <b>vermelho</b>. Pré-setado: k₁ = 5/6, k₂ = 5/3 e 1/12 para 2A → D (k₃/2).'],
+      ['k e referência', 'k ativo na tabela ou na barra deslizante, na temperatura de referência; o k correto do exemplo aparece em <b>vermelho</b>. Pré-setado: k₁ = 5/6, k₂ = 5/3 e 1/12 para 2A → D (k₃/2).'],
+      ['Temperatura e calor', 'Ea (kJ/mol) e ΔH (kJ/mol de reação) em cada linha; barra deslizante de T (reator isotérmico) e T de referência; V, ρ, cp e Tf para o calor liberado, a carga da camisa e a elevação adiabática.'],
+      ['Dados e ajuste', 'aba 3: cole t, CA, CB… (e T, se houver vários ensaios); marque os k e clique em Ajustar. Sai o k com IC de 95 %, R², paridade e Ea quando há várias temperaturas.'],
       ['Regime', '<b>contínuo</b> (CSTR, F/V = 4/7 min⁻¹ e C_Af = 10 mol/L) ou <b>batelada</b> (F/V = 0); tempo final de 10 min; produto desejado B para o máximo da curva de Bequette.']] },
     reactor_kinetics: { ex: 'Cinética com moderação de Parreira e Bosch Neto (2022)', items: [
       ['Modelo', 'Duderstadt e Hamilton (clássico) ou Parreira e Bosch Neto (2022), como no programa Octave (reproduz as figuras da dissertação) ou como nas equações 12 a 14 do texto.'],
@@ -23417,22 +23636,27 @@ def pfr_transiente(P, nome):
   $('#modal').onclick = e => { if (e.target.id === 'modal') closeModal(); };
 
   /* ------------------------------------------------------------------ versão 5.5: janela do bloco de cinética química
-     Abre ao clicar no ícone. À esquerda: abas com a tabela de reações (equação, k ativo, k de referência em vermelho e ordens
-     r_A…r_F) com as barras deslizantes de k, e C0 e Cf; as EDOs interpretadas; o regime (contínuo ou batelada, F/V = 0) e o tempo
-     final. À direita: C_i(t), a curva de Bequette (estado estacionário × F/V) e o resumo. Tudo é recalculado ao mover a barra. */
+     Abre ao clicar no ícone. À esquerda: abas com a tabela de reações (equação, k ativo, k de referência em vermelho, ordens
+     r_A…r_F, Ea e ΔH) com as barras deslizantes de k, C0 e Cf, e os dados experimentais com o ajuste de k; as EDOs interpretadas;
+     o regime (contínuo ou batelada, F/V = 0), a temperatura (barra deslizante, Arrhenius) e os dados para o calor. À direita: C_i(t)
+     com os pontos medidos, a curva de Bequette, o calor liberado, o gráfico de Arrhenius e o resumo. Tudo é recalculado ao mover
+     uma barra. Versão 5.6: Arrhenius, calor liberado e ajuste de k. */
   const CK = SF.chemKin;
-  let ckWin = null;   // { id, m, dirty, undo, raf, FVc }
+  let ckWin = null;   // { id, m, dirty, undo, raf, FVc, fit }
   const ckN = v => String(+(+v).toPrecision(5));   // valor para os campos numéricos
   const ckCfg = () => SF.mobile ? { responsive: true, displaylogo: false, displayModeBar: false, scrollZoom: false, doubleClick: false }
     : { responsive: true, displaylogo: false, modeBarButtonsToRemove: ['select2d', 'lasso2d', 'autoScale2d'], toImageButtonOptions: { format: 'png', width: 1400, height: 800, filename: 'cinetica_quimica' } };
+  const ckField = (id, label, v, extra) => '<div class="ck-f"><label for="' + id + '">' + label + '</label><input id="' + id + '" type="number" step="any" inputmode="decimal" value="' + ckN(v) + '"' + (extra || '') + '></div>';
   function ckHTML(m) {
-    const SP = CK.SP, cont = m.FV > 0;
+    const SP = CK.SP, cont = m.FV > 0, num1 = (id, data, v, lab, cls, extra) => '<div class="ck-c ' + cls + '" role="cell"><label class="ck-lb" for="' + id + '">' + lab + '</label><input id="' + id + '" type="number" step="any" inputmode="decimal" ' + data + ' value="' + ckN(v) + '"' + (extra || '') + '></div>';
     const rx = m.rows.map((r, i) => '<div class="ck-rx" role="row">' +
       '<span class="ck-no" role="cell">R' + (i + 1) + '</span>' +
       '<div class="ck-c ck-c-eq" role="cell"><label class="ck-lb" for="ckEq' + i + '">Equação química</label><input id="ckEq' + i + '" class="ck-eq" data-ckeq="' + i + '" value="' + esc(r.eq) + '" placeholder="ex.: A + 2B → C" autocomplete="off" spellcheck="false" aria-label="Equação química da reação R' + (i + 1) + '"></div>' +
-      '<div class="ck-c ck-c-k" role="cell"><label class="ck-lb" for="ckK' + i + '">k ativo</label><input id="ckK' + i + '" type="number" step="any" min="0" inputmode="decimal" data-ckk="' + i + '" value="' + ckN(r.k) + '" aria-label="k ativo da reação R' + (i + 1) + '"></div>' +
+      num1('ckK' + i, 'data-ckk="' + i + '" min="0"', r.k, 'k ativo (na T ref.)', 'ck-c-k', ' aria-label="k ativo da reação R' + (i + 1) + ' na temperatura de referência"') +
       '<div class="ck-c ck-c-kref" role="cell"><span class="ck-lb">k ref.</span><span class="ck-kref" data-ckkref="' + i + '" title="k correto do exemplo (referência)">' + (r.kref > 0 ? CK.fmt(r.kref) : '—') + '</span></div>' +
-      SP.map((s, j) => '<div class="ck-c ck-c-r" role="cell"><label class="ck-lb" for="ckR' + i + '_' + j + '">r' + s + '</label><input id="ckR' + i + '_' + j + '" type="number" step="any" inputmode="decimal" data-ckr="' + i + '_' + j + '" value="' + ckN(r.r[j]) + '" aria-label="Ordem r' + s + ' do composto ' + s + ' na reação R' + (i + 1) + '"></div>').join('') +
+      SP.map((s, j) => num1('ckR' + i + '_' + j, 'data-ckr="' + i + '_' + j + '"', r.r[j], 'r' + s, 'ck-c-r', ' aria-label="Ordem r' + s + ' do composto ' + s + ' na reação R' + (i + 1) + '"')).join('') +
+      num1('ckEa' + i, 'data-ckea="' + i + '"', r.Ea, 'Ea (kJ/mol)', 'ck-c-ea', ' aria-label="Energia de ativação Ea da reação R' + (i + 1) + ' (kJ/mol)"') +
+      num1('ckDH' + i, 'data-ckdh="' + i + '"', r.dH, 'ΔH (kJ/mol)', 'ck-c-dh', ' aria-label="Calor de reação ΔH da reação R' + (i + 1) + ' (kJ/mol; negativo libera calor)"') +
       '</div>').join('');
     const sl = m.rows.map((r, i) => '<div class="ck-sl-row"><label for="ckS' + i + '">k' + (i + 1) + '</label>' +
       '<input type="range" id="ckS' + i + '" data-cks="' + i + '" min="0" max="' + ckN(r.kmax) + '" step="any" value="' + ckN(r.k) + '">' +
@@ -23441,35 +23665,50 @@ def pfr_transiente(P, nome):
     const c0 = SP.map((s, j) => '<tr><th scope="row">Composto ' + s + '</th>' +
       '<td><input type="number" step="any" min="0" inputmode="decimal" data-ckc0="' + j + '" value="' + ckN(m.C0[j]) + '" aria-label="C0 inicial do composto ' + s + ' (mol/L)"></td>' +
       '<td><input type="number" step="any" min="0" inputmode="decimal" data-ckcf="' + j + '" value="' + ckN(m.Cf[j]) + '" aria-label="Cf na alimentação do composto ' + s + ' (mol/L)"></td></tr>').join('');
+    const tab = (id, key, txt, on) => '<button type="button" role="tab" id="' + id + '" data-cktab="' + key + '" aria-controls="ckPane' + key + '" aria-selected="' + on + '"' + (on ? '' : ' tabindex="-1"') + '>' + txt + '</button>';
     return '<div class="ck">' +
       '<div class="ck-left">' +
-        '<div class="ck-tabs" role="tablist" aria-label="Configuração do bloco cinético">' +
-          '<button type="button" role="tab" id="ckTabRx" data-cktab="rx" aria-controls="ckPaneRx" aria-selected="true">1. Reações, barras de k e ordens r</button>' +
-          '<button type="button" role="tab" id="ckTabC0" data-cktab="c0" aria-controls="ckPaneC0" aria-selected="false" tabindex="-1">2. Condições iniciais C0 e alimentação Cf</button></div>' +
-        '<section class="ck-pane" id="ckPaneRx" role="tabpanel" aria-labelledby="ckTabRx">' +
-          '<p class="ck-hint">Digite as reações com as espécies A a F (ex.: <code>A + 2B → C</code>; a seta também pode ser <code>-&gt;</code> ou <code>---&gt;</code>). Ao trocar a equação, as ordens r recebem os coeficientes dos reagentes (reação elementar) e você pode mudá-las depois. Deixe a linha vazia ou k = 0 para desligar a reação. O k correto do exemplo fica em <b class="ck-red">vermelho</b>.</p>' +
-          '<div class="ck-rxt" role="table" aria-label="Reações, constantes k e ordens de reação">' +
-            '<div class="ck-rxh" role="row"><span role="columnheader">Reação</span><span role="columnheader">Equação química</span><span role="columnheader">k ativo</span><span role="columnheader" class="ck-red">k ref.</span>' + SP.map(s => '<span role="columnheader">r' + s + '</span>').join('') + '</div>' + rx + '</div>' +
-          '<div class="ck-box ck-sl"><h3>Barras deslizantes de k <span class="ck-sub">(tempo real; o valor correto do exemplo em <b class="ck-red">vermelho</b>)</span></h3>' + sl + '</div>' +
+        '<div class="ck-tabs" role="tablist" aria-label="Configuração do bloco cinético">' + tab('ckTabRx', 'rx', '1. Reações, barras de k, ordens, Ea e ΔH', true) + tab('ckTabC0', 'c0', '2. C0 e alimentação Cf', false) + tab('ckTabDat', 'dat', '3. Dados experimentais e ajuste de k', false) + '</div>' +
+        '<section class="ck-pane" id="ckPanerx" role="tabpanel" aria-labelledby="ckTabRx">' +
+          '<p class="ck-hint">Digite as reações com as espécies A a F (ex.: <code>A + 2B → C</code>; a seta também pode ser <code>-&gt;</code> ou <code>---&gt;</code>). Ao trocar a equação, as ordens r recebem os coeficientes dos reagentes (reação elementar) e você pode mudá-las depois. Deixe a linha vazia ou k = 0 para desligar a reação. O k vale na temperatura de referência; com <b>Ea</b> &gt; 0 ele muda com T pela lei de Arrhenius. <b>ΔH</b> é por mol de reação, como escrita (negativo libera calor). O k correto do exemplo fica em <b class="ck-red">vermelho</b>.</p>' +
+          '<div class="ck-rxt" role="table" aria-label="Reações, constantes k, ordens de reação, energias de ativação e calores de reação">' +
+            '<div class="ck-rxh" role="row"><span role="columnheader">Reação</span><span role="columnheader">Equação química</span><span role="columnheader">k ativo</span><span role="columnheader" class="ck-red">k ref.</span>' + SP.map(s => '<span role="columnheader">r' + s + '</span>').join('') + '<span role="columnheader">Ea kJ/mol</span><span role="columnheader">ΔH kJ/mol</span></div>' + rx + '</div>' +
+          '<div class="ck-box ck-sl"><h3>Barras deslizantes de k <span class="ck-sub">(tempo real, na T de referência; o valor correto do exemplo em <b class="ck-red">vermelho</b>)</span></h3>' + sl + '</div>' +
         '</section>' +
-        '<section class="ck-pane" id="ckPaneC0" role="tabpanel" aria-labelledby="ckTabC0" hidden>' +
+        '<section class="ck-pane" id="ckPanec0" role="tabpanel" aria-labelledby="ckTabC0" hidden>' +
           '<p class="ck-hint">Concentrações em mol/L. C0 é o que há no reator no instante zero; Cf é a composição da alimentação, usada só no regime contínuo (F/V &gt; 0).</p>' +
           '<div class="ck-tw"><table class="grid ck-c0"><thead><tr><th scope="col">Composto</th><th scope="col">C0 inicial (mol/L)</th><th scope="col">Cf alimentação (mol/L)</th></tr></thead><tbody>' + c0 + '</tbody></table></div>' +
+        '</section>' +
+        '<section class="ck-pane" id="ckPanedat" role="tabpanel" aria-labelledby="ckTabDat" hidden>' +
+          '<p class="ck-hint">Cole a tabela do Excel ou digite uma linha por medida: <code>t</code> (min), as concentrações medidas (<code>CA</code>, <code>CB</code>…, em mol/L) e, se houver ensaios em várias temperaturas, uma coluna <code>T</code> (°C). Faltando valores, deixe a célula vazia ou use <code>-</code>. Linhas com <code>#</code> são comentários. Cada temperatura é simulada desde C0 (aba 2), no regime escolhido.</p>' +
+          '<label class="ck-lbl" for="ckData">Dados experimentais</label><textarea id="ckData" class="ck-data" rows="9" spellcheck="false" placeholder="t\tCA\tCB&#10;0\t2,0\t0&#10;1\t1,25\t0,70">' + esc(m.data) + '</textarea>' +
+          '<p class="ck-note" id="ckDataInfo"></p>' +
+          '<fieldset class="ck-fitk"><legend>Ajustar</legend><div id="ckFitK"></div></fieldset>' +
+          '<div class="ck-btns"><button type="button" class="primary" id="ckFitBtn">📈 Ajustar k aos dados</button><button type="button" id="ckFitApply" disabled>Aplicar os valores ajustados</button></div>' +
+          '<div id="ckFitOut" class="ck-fitout" aria-live="polite"></div><div id="ckPlotFit" class="ck-plot" hidden></div>' +
         '</section>' +
         '<div class="ck-box"><h3>EDOs interpretadas pelo simulador (dC<sub>i</sub>/dt)</h3><pre id="ckEdo" class="ck-edo"></pre><p id="ckStatus" class="ck-st" role="status" aria-live="polite"></p></div>' +
         '<div class="ck-box ck-op"><h3>Parâmetros do reator <span class="ck-sub">(F/V = 0 para reator batelada)</span></h3>' +
           '<div class="ck-seg" role="radiogroup" aria-label="Regime de operação">' +
             '<button type="button" role="radio" data-ckreg="cont" aria-checked="' + cont + '">Contínuo (CSTR)</button>' +
             '<button type="button" role="radio" data-ckreg="bat" aria-checked="' + !cont + '">Batelada (F/V = 0)</button></div>' +
-          '<div class="ck-f"><label for="ckFV">Taxa de diluição F/V (1/min)</label><input id="ckFV" type="number" step="any" min="0" inputmode="decimal" value="' + ckN(m.FV) + '"' + (cont ? '' : ' disabled') + '></div>' +
-          '<div class="ck-f"><label for="ckTf">Tempo final (min)</label><input id="ckTf" type="number" step="any" min="0" inputmode="decimal" value="' + ckN(m.tf) + '"></div>' +
+          ckField('ckFV', 'Taxa de diluição F/V (1/min)', m.FV, ' min="0"' + (cont ? '' : ' disabled')) +
+          ckField('ckTf', 'Tempo final (min)', m.tf, ' min="0"') +
           '<div class="ck-f"><label for="ckWant">Produto desejado (máximo na curva de Bequette)</label><select id="ckWant">' + SP.map(s => '<option' + (s === m.want ? ' selected' : '') + '>' + s + '</option>').join('') + '</select></div>' +
+          '<h4 class="ck-h4">Temperatura (reator isotérmico; Arrhenius)</h4>' +
+          '<div class="ck-sl-row ck-t-row"><label for="ckTs">T</label><input type="range" id="ckTs" min="' + ckN(m.Tref - 60) + '" max="' + ckN(m.Tref + 60) + '" step="0.5" value="' + ckN(m.T) + '"><output id="ckTv" for="ckTs">' + CK.fmt(m.T) + ' °C</output></div>' +
+          ckField('ckT', 'Temperatura do reator T (°C)', m.T) + ckField('ckTref', 'Temperatura de referência dos k (°C)', m.Tref) +
+          '<h4 class="ck-h4">Calor liberado <span class="ck-sub">(usa o ΔH de cada reação)</span></h4>' +
+          ckField('ckV', 'Volume do reator V (L)', m.V, ' min="0"') + ckField('ckRho', 'Densidade ρ (kg/L)', m.rho, ' min="0"') + ckField('ckCp', 'Calor específico cp (kJ/(kg·K))', m.cp, ' min="0"') +
+          ckField('ckTfeed', 'Temperatura da alimentação Tf (°C), no contínuo', m.Tf) +
         '</div>' +
         '<div class="ck-btns"><button type="button" class="primary" id="ckRunBtn">▶ Interpretar e simular</button><button type="button" class="ck-redbtn" id="ckReset">↺ Restaurar k correto (Van de Vusse)</button></div>' +
       '</div>' +
       '<div class="ck-right">' +
         '<div class="ck-box"><h3>Perfis dinâmicos de concentração C<sub>i</sub>(t)</h3><div id="ckPlot1" class="ck-plot"></div></div>' +
-        '<div class="ck-box"><h3>Estado estacionário × F/V <span class="ck-sub">(curva de Bequette)</span></h3><div id="ckPlot2" class="ck-plot"></div><p class="ck-note" id="ckCurveNote"></p></div>' +
+        '<div class="ck-box" id="ckBox2"><h3>Estado estacionário × F/V <span class="ck-sub">(curva de Bequette)</span></h3><div id="ckPlot2" class="ck-plot"></div><p class="ck-note" id="ckCurveNote"></p></div>' +
+        '<div class="ck-box" id="ckBox3" hidden><h3>Calor liberado pelas reações q(t)</h3><div id="ckPlot3" class="ck-plot"></div><p class="ck-note" id="ckHeatNote"></p></div>' +
+        '<div class="ck-box" id="ckBox4" hidden><h3>Arrhenius: ln k × 1000/T</h3><div id="ckPlot4" class="ck-plot"></div></div>' +
         '<div class="ck-box"><h3>Resultados</h3><div class="ck-tw"><table class="grid ck-res" id="ckRes"></table></div></div>' +
         '<button type="button" id="ckCharts" class="ck-wide">📊 Abrir os gráficos no painel (tamanho grande e PNG)</button>' +
       '</div></div>';
@@ -23479,8 +23718,8 @@ def pfr_transiente(P, nome):
     const m = CK.norm(b.params.kin);
     openModal(b.name + ' — Cinética química: análise gráfica de reações', ckHTML(m), []);
     $('#modal .modal-card').classList.add('ck-card');
-    ckWin = { id, m, dirty: false, undo: false, raf: 0, FVc: m.FV > 0 ? m.FV : 4 / 7 };
-    ckBind(); ckRun();
+    ckWin = { id, m, dirty: false, undo: false, raf: 0, FVc: m.FV > 0 ? m.FV : 4 / 7, fit: null };
+    ckBind(); ckFitBoxes(); ckRun();
   }
   // grava no bloco (um passo de desfazer por abertura da janela)
   function ckCommit() {
@@ -23491,7 +23730,7 @@ def pfr_transiente(P, nome):
   function ckClose() {
     const w = ckWin; ckWin = null; if (!w) return;
     cancelAnimationFrame(w.raf);
-    ['ckPlot1', 'ckPlot2'].forEach(i => { const d = document.getElementById(i); if (d && window.Plotly) Plotly.purge(d); });
+    ['ckPlot1', 'ckPlot2', 'ckPlot3', 'ckPlot4', 'ckPlotFit'].forEach(i => { const d = document.getElementById(i); if (d && window.Plotly) Plotly.purge(d); });
     $('#modal .modal-card').classList.remove('ck-card');
     if (w.dirty) { afterChange(false); renderProps(); setTimeout(() => runSimulation(true), 0); }
   }
@@ -23502,6 +23741,11 @@ def pfr_transiente(P, nome):
     const s = $('#ckS' + i); if (s && from !== 'slider') { s.max = ckN(r.kmax); s.value = ckN(k); }
     const ki = $('#ckK' + i); if (ki && from !== 'input') ki.value = ckN(k);
     $('#ckSv' + i).textContent = CK.fmt(k);
+  }
+  function ckSetT(T, from) {
+    const m = ckWin.m; m.T = T; $('#ckTv').textContent = CK.fmt(T) + ' °C';
+    const s = $('#ckTs'); if (from !== 'slider') { if (T < +s.min) s.min = ckN(T - 10); if (T > +s.max) s.max = ckN(T + 10); s.value = ckN(T); }
+    if (from !== 'input') $('#ckT').value = ckN(T);
   }
   function ckSetReg(cont) {
     const w = ckWin, m = w.m;
@@ -23517,13 +23761,26 @@ def pfr_transiente(P, nome):
     const fv = $('#ckFV'); fv.value = ckN(m.FV); fv.disabled = !cont;
     document.querySelectorAll('[data-ckreg]').forEach(bt => bt.setAttribute('aria-checked', String((bt.dataset.ckreg === 'cont') === cont)));
   }
+  // caixas "ajustar k1…k6" (só as reações com equação) e o resumo dos dados colados
+  function ckFitBoxes() {
+    const w = ckWin, el = $('#ckFitK'); if (!w || !el) return;
+    const rows = w.m.rows.map((r, i) => ({ r, i })).filter(o => o.r.eq.trim());
+    el.innerHTML = rows.length ? rows.map(o => '<label class="ck-chk"><input type="checkbox" data-ckfit="' + o.i + '"' + (o.r.fit ? ' checked' : '') + '> k' + (o.i + 1) + ' <span class="ck-sub">(' + esc(o.r.eq) + ')</span></label>').join('') : '<p class="ck-note">Digite as reações na aba 1.</p>';
+    el.querySelectorAll('[data-ckfit]').forEach(cb => { cb.onchange = () => { w.m.rows[+cb.dataset.ckfit].fit = cb.checked; ckCommit(); }; });
+    const d = CK.data(w.m.data), nT = new Set(d.runs.map(r => (r.T == null ? 'x' : r.T))).size;
+    $('#ckDataInfo').textContent = d.n ? d.n + ' valores medidos em ' + d.runs.length + ' ensaio(s)' + (nT > 1 ? ' a ' + d.runs.map(r => CK.fmt(r.T) + ' °C').join(', ') + ': o ajuste estima também Ea, com o k na temperatura de referência (' + CK.fmt(w.m.Tref) + ' °C).' : '.') + (d.err ? ' Aviso: ' + d.err + '.' : '')
+      : (d.err ? 'Aviso: ' + d.err + '.' : 'Sem dados: cole a tabela acima.');
+  }
   function ckBind() {
     const body = $('#modalBody'), w = () => ckWin, num0 = v => { const x = parseFloat(String(v).replace(',', '.')); return isFinite(x) ? x : 0; };
+    const onNum = (sel, fn) => { const el = $(sel); el.onchange = () => { fn(num0(el.value), el); ckCommit(); ckRun(); }; };
     body.querySelectorAll('[data-cktab]').forEach(bt => { bt.onclick = () => {
       const t = bt.dataset.cktab;
       body.querySelectorAll('[data-cktab]').forEach(o => { const on = o.dataset.cktab === t; o.setAttribute('aria-selected', String(on)); o.tabIndex = on ? 0 : -1; });
-      $('#ckPaneRx').hidden = t !== 'rx'; $('#ckPaneC0').hidden = t !== 'c0';
-    }; bt.onkeydown = e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); const o = body.querySelector('[data-cktab]:not([aria-selected="true"])'); o.click(); o.focus(); } }; });
+      ['rx', 'c0', 'dat'].forEach(k => { $('#ckPane' + k).hidden = k !== t; });
+      if (t === 'dat') ckFitBoxes();
+    }; bt.onkeydown = e => { if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return; e.preventDefault();
+      const all = [...body.querySelectorAll('[data-cktab]')], k = all.indexOf(bt), o = all[(k + (e.key === 'ArrowRight' ? 1 : all.length - 1)) % all.length]; o.click(); o.focus(); }; });
     body.querySelectorAll('[data-ckeq]').forEach(inp => { inp.onchange = () => {
       const i = +inp.dataset.ckeq, r = w().m.rows[i], txt = inp.value.trim(); r.eq = txt;
       if (!txt) { r.r = [0, 0, 0, 0, 0, 0]; ckSetK(i, 0); }
@@ -23533,6 +23790,8 @@ def pfr_transiente(P, nome):
     }; });
     body.querySelectorAll('[data-ckk]').forEach(inp => { inp.onchange = () => { ckSetK(+inp.dataset.ckk, num0(inp.value)); inp.value = ckN(w().m.rows[+inp.dataset.ckk].k); ckCommit(); ckRun(); }; });
     body.querySelectorAll('[data-ckr]').forEach(inp => { inp.onchange = () => { const [i, j] = inp.dataset.ckr.split('_').map(Number); w().m.rows[i].r[j] = num0(inp.value); inp.value = ckN(w().m.rows[i].r[j]); ckCommit(); ckRun(); }; });
+    body.querySelectorAll('[data-ckea]').forEach(inp => { inp.onchange = () => { const i = +inp.dataset.ckea; w().m.rows[i].Ea = num0(inp.value); inp.value = ckN(w().m.rows[i].Ea); ckCommit(); ckRun(); }; });
+    body.querySelectorAll('[data-ckdh]').forEach(inp => { inp.onchange = () => { const i = +inp.dataset.ckdh; w().m.rows[i].dH = num0(inp.value); inp.value = ckN(w().m.rows[i].dH); ckCommit(); ckRun(); }; });
     body.querySelectorAll('[data-cks]').forEach(sl => {
       sl.oninput = () => { const i = +sl.dataset.cks; ckSetK(i, +sl.value, 'slider'); ckLater(); };
       sl.onchange = () => { ckCommit(); ckLater(); };
@@ -23542,16 +23801,48 @@ def pfr_transiente(P, nome):
     body.querySelectorAll('[data-ckcf]').forEach(inp => { inp.onchange = () => { const j = +inp.dataset.ckcf; w().m.Cf[j] = Math.max(0, num0(inp.value)); inp.value = ckN(w().m.Cf[j]); ckCommit(); ckRun(); }; });
     body.querySelectorAll('[data-ckreg]').forEach(bt => { bt.onclick = () => { ckSetReg(bt.dataset.ckreg === 'cont'); ckCommit(); ckRun(); }; });
     $('#ckFV').onchange = e => { const v = Math.max(0, num0(e.target.value)); if (v > 0) { w().m.FV = v; w().FVc = v; e.target.value = ckN(v); } else ckSetReg(false); ckCommit(); ckRun(); };
-    $('#ckTf').onchange = e => { const v = num0(e.target.value); if (v > 0) w().m.tf = v; e.target.value = ckN(w().m.tf); ckCommit(); ckRun(); };
+    onNum('#ckTf', (v, el) => { if (v > 0) w().m.tf = v; el.value = ckN(w().m.tf); });
     $('#ckWant').onchange = e => { w().m.want = e.target.value; ckCommit(); ckRun(); };
+    $('#ckTs').oninput = e => { ckSetT(+e.target.value, 'slider'); ckLater(); };
+    $('#ckTs').onchange = () => { ckCommit(); ckLater(); };
+    onNum('#ckT', v => ckSetT(Math.max(-273, v), 'input'));
+    onNum('#ckTref', (v, el) => { w().m.Tref = Math.max(-273, v); el.value = ckN(w().m.Tref); const s = $('#ckTs'); s.min = ckN(Math.min(w().m.Tref - 60, w().m.T)); s.max = ckN(Math.max(w().m.Tref + 60, w().m.T)); });
+    onNum('#ckV', (v, el) => { if (v > 0) w().m.V = v; el.value = ckN(w().m.V); });
+    onNum('#ckRho', (v, el) => { if (v > 0) w().m.rho = v; el.value = ckN(w().m.rho); });
+    onNum('#ckCp', (v, el) => { if (v > 0) w().m.cp = v; el.value = ckN(w().m.cp); });
+    onNum('#ckTfeed', v => { w().m.Tf = v; });
+    $('#ckData').onchange = e => { w().m.data = e.target.value; w().fit = null; $('#ckFitApply').disabled = true; ckCommit(); ckFitBoxes(); ckRun(); };
+    $('#ckFitBtn').onclick = () => {
+      const ww = w(); ww.m.data = $('#ckData').value; ckFitBoxes();
+      $('#ckFitOut').innerHTML = '<p class="ck-note">Ajustando…</p>';
+      setTimeout(() => { if (ckWin !== ww) return; const f = CK.fit(ww.m); ww.fit = f.ok ? f : null; $('#ckFitApply').disabled = !f.ok; ckFitShow(f); }, 20);
+    };
+    $('#ckFitApply').onclick = () => {
+      const ww = w(), f = ww.fit; if (!f) return;
+      f.params.forEach(p => { if (p.kind === 'k') ckSetK(p.i, p.v); else { ww.m.rows[p.i].Ea = p.v; $('#ckEa' + p.i).value = ckN(p.v); } });
+      ckCommit(); ckRun(); toast('Valores ajustados aplicados ao modelo (k' + (f.fitEa ? ' e Ea' : '') + ')');
+    };
     $('#ckRunBtn').onclick = () => { ckRun(); toast('Sistema interpretado e simulado'); };
     $('#ckReset').onclick = () => {
-      const id = w().id, keep = { dirty: true, undo: w().undo }; if (!keep.undo) pushUndo();
+      const id = w().id; if (!w().undo) pushUndo();
       const m = CK.preset(); $('#modalBody').innerHTML = ckHTML(m);
-      ckWin = { id, m, dirty: true, undo: true, raf: 0, FVc: m.FV }; ckCommit(); ckBind(); ckRun();
+      ckWin = { id, m, dirty: true, undo: true, raf: 0, FVc: m.FV, fit: null }; ckCommit(); ckBind(); ckFitBoxes(); ckRun();
       toast('Exemplo de Van de Vusse restaurado (k correto de Bequette)');
     };
     $('#ckCharts').onclick = () => { const id = w().id; ckCommit(); closeModal(); setTimeout(() => { runSimulation(true); renderCharts(id); if (SF.mobile) setMView('charts'); }, 30); };
+  }
+  // resultado do ajuste: tabela com o valor e o intervalo de confiança de 95 % de cada parâmetro, R² e o gráfico de paridade
+  function ckFitShow(f) {
+    const out = $('#ckFitOut'), pl = $('#ckPlotFit');
+    if (!f.ok) { out.innerHTML = '<p class="ck-st err">⚠ ' + esc(f.msg) + '</p>'; if (window.Plotly) Plotly.purge(pl); pl.hidden = true; return; }
+    const m = ckWin.m, u = i => { const o = m.rows[i].r.reduce((a, v) => a + v, 0); return o === 1 ? 'min⁻¹' : '(L/mol)' + (o === 2 ? '' : '^' + CK.fmt(o - 1)) + '·min⁻¹'; };
+    out.innerHTML = '<p class="ck-st ok">✔ Ajuste concluído: R² = ' + CK.fmt(f.R2) + ', ' + f.n + ' pontos, ' + f.np + ' parâmetro(s), ' + f.dof + ' graus de liberdade.</p>' +
+      '<div class="ck-tw"><table class="grid ck-res"><thead><tr><th scope="col">Parâmetro</th><th scope="col">Ajustado</th><th scope="col">IC 95 %</th><th scope="col">Atual</th><th scope="col">Ref.</th></tr></thead><tbody>' +
+      f.params.map(p => { const r = m.rows[p.i]; return p.kind === 'k'
+        ? '<tr><th scope="row">k' + (p.i + 1) + ' <span class="ck-sub">' + u(p.i) + (f.fitEa ? ', a ' + CK.fmt(m.Tref) + ' °C' : '') + '</span></th><td class="num"><b>' + CK.fmt(p.v) + '</b></td><td class="num">' + (isFinite(p.sd) ? CK.fmt(p.lo) + ' a ' + CK.fmt(p.hi) : '—') + '</td><td class="num">' + CK.fmt(r.k) + '</td><td class="num ck-red">' + (r.kref > 0 ? CK.fmt(r.kref) : '—') + '</td></tr>'
+        : '<tr><th scope="row">Ea' + (p.i + 1) + ' <span class="ck-sub">kJ/mol</span></th><td class="num"><b>' + CK.fmt(p.v) + '</b></td><td class="num">' + (isFinite(p.sd) ? CK.fmt(p.lo) + ' a ' + CK.fmt(p.hi) : '—') + '</td><td class="num">' + CK.fmt(r.Ea) + '</td><td class="num">—</td></tr>'; }).join('') +
+      '</tbody></table></div><p class="ck-note">Mínimos quadrados não lineares (Levenberg-Marquardt) sobre as concentrações medidas; o intervalo de confiança vem da matriz de covariância com t de Student. Clique em <b>Aplicar</b> para usar os valores no modelo.</p>';
+    pl.hidden = false; ckPlot(pl, CK.parity(f.pts, 'Paridade após o ajuste'), 'Calculado × medido (R² = ' + CK.fmt(f.R2) + ')', 340);
   }
   function ckPlot(el, p, title, h) {
     if (!el) return;
@@ -23569,38 +23860,46 @@ def pfr_transiente(P, nome):
     el.style.height = L.height + 'px';
     Plotly.react(el, f.data, L, ckCfg());
   }
+  const ckFind = (plots, re) => plots.find(p => re.test(p.title));
+  function ckBoxPlot(box, el, p, title, h) { $(box).hidden = !p; if (p) ckPlot($(el), p, title, h); else if (window.Plotly) Plotly.purge($(el)); }
   function ckRun() {
     const w = ckWin; if (!w || !$('#ckEdo')) return;
     const m = w.m, s = CK.solve(m), st = $('#ckStatus');
-    $('#ckEdo').textContent = s.edo.join('\n');
+    $('#ckEdo').textContent = s.edo.join('\n') + (CK.hasEa(m) ? '\n(k na temperatura T = ' + CK.fmt(m.T) + ' °C)' : '');
     w.m.rows.forEach((r, i) => { const e = $('#ckEq' + i); if (e) e.classList.toggle('bad', s.err.some(x => x.indexOf('R' + (i + 1) + ':') >= 0)); });
     if (s.err.length) { st.className = 'ck-st err'; st.textContent = '⚠ ' + s.err[0]; return; }
     const nOn = s.sys.on.filter(Boolean).length;
     st.className = 'ck-st ' + (nOn ? 'ok' : 'warn');
-    st.textContent = nOn ? '✔ Sistema válido: ' + nOn + ' reação(ões) ativa(s) · ' + (m.FV > 0 ? 'regime contínuo (CSTR), τ = V/F = ' + CK.fmt(1 / m.FV) + ' min' : 'batelada (F/V = 0)')
+    st.textContent = nOn ? '✔ Sistema válido: ' + nOn + ' reação(ões) ativa(s) · ' + (m.FV > 0 ? 'regime contínuo (CSTR), τ = V/F = ' + CK.fmt(1 / m.FV) + ' min' : 'batelada (F/V = 0)') + (CK.hasEa(m) ? ' · T = ' + CK.fmt(m.T) + ' °C' : '')
       : '⚠ Nenhuma reação ativa: digite uma equação e um k maior que zero.';
-    const plots = CK.plots(s), reg = m.FV > 0 ? 'F/V = ' + CK.fmt(m.FV) + ' min⁻¹' : 'batelada';
-    ckPlot($('#ckPlot1'), plots[0], 'Cinética química (6 EDOs) | ' + reg, 380);
-    const p2 = $('#ckPlot2'), note = $('#ckCurveNote'), cv = s.curve;
-    if (plots[1]) {
-      p2.hidden = false; ckPlot(p2, plots[1], 'C no estado estacionário × F/V', 360);
+    const plots = CK.plots(s), reg = (m.FV > 0 ? 'F/V = ' + CK.fmt(m.FV) + ' min⁻¹' : 'batelada') + (CK.hasEa(m) ? ' | T = ' + CK.fmt(m.T) + ' °C' : '');
+    ckPlot($('#ckPlot1'), plots[0], (SF.mobile ? '' : 'Cinética química (6 EDOs) | ') + reg, 380);   // no celular, título curto
+    const cv = s.curve, pc = ckFind(plots, /Bequette/), note = $('#ckCurveNote');
+    $('#ckBox2').hidden = !pc && !(m.FV > 0); const p2 = $('#ckPlot2');   // na batelada sem alimentação, a curva não existe
+    if (pc) {
+      p2.hidden = false; ckPlot(p2, pc, 'C no estado estacionário × F/V', 360);
       note.textContent = (cv.interior ? 'Máximo de C' + m.want + ': ' + CK.fmt(cv.best.c[cv.iw]) + ' mol/L em F/V = ' + CK.fmt(cv.best.x) + ' min⁻¹ (τ = ' + CK.fmt(1 / cv.best.x) + ' min). ' : 'C' + m.want + ' não passa por um máximo nesta faixa de F/V. ') +
         (m.FV > 0 ? (s.ss ? 'No ponto de operação, C' + m.want + ' = ' + CK.fmt(s.ss[cv.iw]) + ' mol/L.' : '') : 'A curva é do regime contínuo, para comparar com a batelada.');
     } else { if (window.Plotly) Plotly.purge(p2); p2.hidden = true; note.textContent = 'A curva de Bequette precisa de alimentação (algum Cf > 0) e de pelo menos uma reação ativa.'; }
-    const f4 = v => CK.fmt(Math.abs(v) < 1e-7 ? 0 : v);   // resíduos numéricos aparecem como zero
+    ckBoxPlot('#ckBox3', '#ckPlot3', ckFind(plots, /^Calor/), 'Calor liberado q(t) (kW)', 340);
+    const h = s.heat;
+    if (h) $('#ckHeatNote').textContent = 'No tempo final: ' + CK.fmt(h.qEnd) + ' kW; acumulado de 0 a tf: ' + CK.fmt(h.Qacc) + ' kJ. ' +
+      (m.FV > 0 ? 'No estado estacionário, a camisa precisa ' + (h.qJacket >= 0 ? 'retirar ' : 'fornecer ') + CK.fmt(Math.abs(h.qJacket)) + ' kW (' + CK.fmt(Math.abs(h.qJacket) * 3600) + ' kJ/h), porque a alimentação a ' + CK.fmt(m.Tf) + ' °C absorve ' + CK.fmt(h.qFeed) + ' kW; sem camisa, a corrente esquentaria ' + CK.fmt(h.dTad) + ' K.'
+        : 'Sem resfriamento (adiabático), a batelada esquentaria ' + CK.fmt(h.dTad) + ' K.');
+    ckBoxPlot('#ckBox4', '#ckPlot4', ckFind(plots, /^Arrhenius/), 'ln k × 1000/T', 340);
+    const f4 = v => CK.fmt(Math.abs(v) < 1e-7 ? 0 : v);
     $('#ckRes').innerHTML = '<thead><tr><th scope="col">Composto</th><th scope="col">C(0) (mol/L)</th><th scope="col">C(t<sub>final</sub>) (mol/L)</th><th scope="col">dC/dt final</th>' + (s.ss ? '<th scope="col">C estacionário (mol/L)</th>' : '') + '</tr></thead><tbody>' +
-      CK.SP.map((sp, j) => '<tr' + (s.used[j] ? '' : ' class="ck-off"') + '><th scope="row"><i class="ck-dot" style="background:' + CK.COL[j] + '"></i><span class="ck-cn">Composto </span>' + sp + '</th><td class="num">' + f4(m.C0[j]) + '</td><td class="num">' + f4(s.Cend[j]) + '</td><td class="num">' + f4(s.dEnd[j]) + '</td>' + (s.ss ? '<td class="num">' + f4(s.ss[j]) + '</td>' : '') + '</tr>').join('') + '</tbody>';
+      CK.SP.map((sp, j) => '<tr' + (s.used[j] ? '' : ' class="ck-off"') + '><th scope="row"><i class="ck-dot" style="background:' + CK.COL[j] + '"></i><span class="ck-cn">Composto </span>' + sp + '</th><td class="num">' + f4(m.C0[j]) + '</td><td class="num">' + f4(s.Cend[j]) + '</td><td class="num">' + f4(s.dEnd[j]) + '</td>' + (s.ss ? '<td class="num">' + f4(s.ss[j]) + '</td>' : '') + '</tr>').join('') + '</tbody>' +
+      (s.dfit ? '<tfoot><tr><td colspan="' + (s.ss ? 5 : 4) + '">Aderência aos dados com os k atuais: R² = ' + CK.fmt(s.dfit.R2) + ' (' + s.dfit.n + ' pontos)</td></tr></tfoot>' : '');
   }
-
   // painel de propriedades do bloco: resumo das reações e o botão que abre a janela
   function chemKinSummary(b) {
     if (!CK) return '';
     const m = CK.norm(b.params.kin), rx = m.rows.filter(r => r.eq.trim());
     return '<button type="button" class="primary ck-open" data-ckopen="1">🧪 Abrir a janela do bloco cinético (reações, barras de k e gráficos)</button>' +
-      '<ul class="ck-sum">' + (rx.length ? rx.map(r => '<li>' + esc(r.eq) + ' &nbsp; k = ' + CK.fmt(r.k) + '</li>').join('') : '<li>nenhuma reação digitada</li>') + '</ul>' +
-      '<p class="small muted">' + (m.FV > 0 ? 'Contínuo (CSTR): F/V = ' + CK.fmt(m.FV) + ' min⁻¹' : 'Batelada (F/V = 0)') + ' · tempo final ' + CK.fmt(m.tf) + ' min</p>';
+      '<ul class="ck-sum">' + (rx.length ? rx.map(r => '<li>' + esc(r.eq) + ' &nbsp; k = ' + CK.fmt(r.k) + (r.Ea ? ', Ea = ' + CK.fmt(r.Ea) : '') + (r.dH ? ', ΔH = ' + CK.fmt(r.dH) : '') + '</li>').join('') : '<li>nenhuma reação digitada</li>') + '</ul>' +
+      '<p class="small muted">' + (m.FV > 0 ? 'Contínuo (CSTR): F/V = ' + CK.fmt(m.FV) + ' min⁻¹' : 'Batelada (F/V = 0)') + ' · tempo final ' + CK.fmt(m.tf) + ' min' + (CK.hasEa(m) ? ' · T = ' + CK.fmt(m.T) + ' °C' : '') + (m.data.trim() ? ' · com dados experimentais' : '') + '</p>';
   }
-
 
   function reportHTML(svg) {
     const blocks = state.blocks.filter(b => results.blocks[b.id] && (results.blocks[b.id].res || []).length && b.type !== 'feed');

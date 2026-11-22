@@ -411,6 +411,13 @@ header.top { background: linear-gradient(105deg, #073b4c 0%, #0a6f86 50%, #10a8a
 .eyebrow { font: 800 13px var(--fun); letter-spacing: .14em; text-transform: uppercase; color: var(--sun); margin: 0 0 6px; }
 .hero h1 { font: 900 clamp(34px, 5vw, 54px)/1.02 var(--fun); margin: 0 0 6px; text-wrap: balance; }
 .hero h1 .ver { display: inline-block; vertical-align: middle; font: 900 .3em var(--fun); font-style: normal; letter-spacing: .08em; padding: 5px 12px; border-radius: var(--r-pill); background: var(--sun); color: var(--sun-ink); position: relative; top: -.35em; margin-left: 6px; white-space: nowrap; }
+/* selo "em testes": leva ao aviso de uso no rodapé */
+.hero h1 .test-pill { display: inline-flex; align-items: center; vertical-align: middle; position: relative; top: -.35em; margin-left: 6px; text-decoration: none; }
+.hero h1 .test-pill b { font: 900 .3em var(--fun); font-size: max(.3em, 11px); letter-spacing: .08em; padding: 5px 12px; border-radius: var(--r-pill); border: 2px solid #ffb4a6; background: rgba(180, 53, 42, .6); color: #fff; white-space: nowrap; }
+.hero h1 .test-pill:hover b, .hero h1 .test-pill:focus-visible b { background: rgba(180, 53, 42, .9); }
+footer .aviso { margin: 14px 0 12px; padding: 12px 14px; border: 1px solid #ff8a7d; border-radius: 12px; background: rgba(180, 53, 42, .22); color: #fff; }
+footer .aviso b { color: #ffd9d3; }
+@media (max-width: 640px) { .hero h1 .test-pill { min-height: 44px; } }
 .hero h1 span { display: block; font-size: .5em; font-weight: 800; color: #e3fffb; margin-top: 8px; }
 .hero p.lead { font-size: 17px; color: #e9f7f6; margin: 14px 0 0; max-width: 34em; }
 .author-pill { margin: 18px 0 0; background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .3); border-radius: 12px; padding: 8px 12px; font-size: 14.5px; line-height: 1.5; }
@@ -694,7 +701,7 @@ nav.bar .links { order: 1; }
     <div class="hero">
       <div class="hero-txt">
         <p class="eyebrow">Engenharia Química · UFSJ</p>
-        <h1>SIMULA FÁCIL IA <em class="ver">VERSÃO 5.6</em><span>Simulador de processos químicos e bioprocessos</span></h1>
+        <h1>SIMULA FÁCIL IA <em class="ver">VERSÃO 5.6</em><a class="test-pill" href="#aviso" title="Uso acadêmico e de ensino · versão em fase de testes (ler o aviso)"><b>EM TESTES</b></a><span>Simulador de processos químicos e bioprocessos</span></h1>
         <a class="new-pill" href="#novo-5-6"><span aria-hidden="true">🧪</span> <b>Novo na 5.6:</b> cinética química com temperatura (Arrhenius), calor liberado e ajuste de k a dados de laboratório, com quatro exemplos prontos <span aria-hidden="true">→</span></a>
         <a class="new-pill" href="#cimento"><span aria-hidden="true">🏭</span> <b>Novo na 5.4:</b> fábrica de cimento completa (CP II-E com escória de alto-forno) e fábricas de ácido sulfúrico por queima de enxofre e por gás metalúrgico, com seis equipamentos novos <span aria-hidden="true">→</span></a>
         <a class="new-pill" href="#eta"><span aria-hidden="true">💧</span> <b>Novo na 5.3:</b> estação de tratamento de água (ETA) convencional para 100 mil habitantes, com abertura animada, dez equipamentos novos (com o tratamento do lodo e a recuperação de água) e a conferência da Portaria 888/2021 <span aria-hidden="true">→</span></a>
@@ -1103,6 +1110,7 @@ nav.bar .links { order: 1; }
   <div class="wrap">
     <p><b>SIMULA FÁCIL IA – Simulador de processos químicos e bioprocessos</b></p>
     <p>Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE · <a href="simulador.html">Abrir o simulador</a> · <a href="Manual_SIMULA_FACIL_IA.pdf?v=5.3-2026-11-22b" target="_blank" rel="noopener">Manual (PDF)</a></p>
+    <div class="aviso" id="aviso"><p><b>Uso acadêmico e de ensino · versão em fase de testes.</b> O SIMULA FÁCIL IA é um programa para uso acadêmico e de ensino de Engenharia Química. Por ser recente, está em fase de testes e pode conter erros. Os resultados são didáticos: não os use para projetar, operar ou avaliar a segurança de instalações reais sem verificação independente. O programa é fornecido sem garantia.</p><p>Encontrou um erro? <a href="https://github.com/juanbosch-cyber/simulafacil/issues" target="_blank" rel="noopener">Relate na página de problemas do projeto no GitHub</a> (precisa de uma conta no GitHub).</p></div>
     <p class="visitas" hidden>Contador de visitas: <b class="vis-n"></b></p>
   </div>
 </footer>

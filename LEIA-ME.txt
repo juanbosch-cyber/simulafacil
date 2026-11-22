@@ -24,6 +24,16 @@ O bloco "Cinética química: análise gráfica de reações" ganhou temperatura,
     C_B = 1,09 mol/L, reações liberando 1,34 kW e a camisa retirando 1 110 kJ/h (1 113,5 kJ/h no artigo); ΔT adiabático de 12 K.
 - Blocos salvos na versão 5.5 abrem normalmente (Ea = 0, ΔH = 0 e T = T_ref = 25 °C).
 
+AVISO DE USO (pedido do autor): o SIMULA FÁCIL IA é para uso acadêmico e de ensino e está em fase de testes.
+- Selo "EM TESTES" ao lado da versão no cabeçalho do simulador (clique abre o aviso completo) e na tela de boas-vindas; no celular,
+  o aviso fica no menu ☰ ("Aviso de uso (em testes)"), para não apertar o nome do programa no cabeçalho.
+- Texto completo na janela Sobre e no rodapé da página de apresentação, com o link para relatar erros na página de problemas do
+  projeto no GitHub (github.com/juanbosch-cyber/simulafacil/issues).
+- Uma linha do aviso no fluxograma final (PNG/SVG e relatório), no cabeçalho do código MATLAB/Octave e Python e no LEIA-ME do pacote.
+- Texto: "O SIMULA FÁCIL IA é um programa para uso acadêmico e de ensino de Engenharia Química. Por ser recente, está em fase de
+  testes e pode conter erros. Os resultados são didáticos: não os use para projetar, operar ou avaliar a segurança de instalações
+  reais sem verificação independente. O programa é fornecido sem garantia."
+
 SIMULA FÁCIL IA 5.5 – Cinética química: análise gráfica de reações (22/11/2026)
 ===============================================================================
 

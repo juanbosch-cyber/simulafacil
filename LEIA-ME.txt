@@ -1,3 +1,36 @@
+SIMULA FÁCIL IA 5.7 – soft-SAFT original com líquidos iônicos: separação do R-410A (23/11/2026)
+===============================================================================================
+
+Primeira etapa da simulação do artigo de S. Asensio-Delgado, D. Jovell, G. Zarca, A. Urtiaga e F. Llovell, "Thermodynamic and process
+modeling of the recovery of R410A compounds with ionic liquids" (Int. J. Refrig. 118, 365–375, 2020).
+
+- soft-SAFT ORIGINAL (Blas e Vega, 1997), ao lado da versão simplificada que já existia. Ele vale quando algum componente tem parâmetros
+  publicados para o soft-SAFT original:
+  * g(σ) do fluido de Lennard-Jones de Johnson, Müller e Gubbins (1994), no lugar de Carnahan-Starling × 0,45;
+  * associação com Δ = 4π·κHB·[exp(εHB/kT) − 1]·I(T*, ρ*), com a integral de Müller e Gubbins (1995) e κHB em Å³;
+  * sítios de tipos A a E e associação cruzada entre moléculas diferentes: A–B nos HFCs (R-32 com R-32, R-125 e entre os dois),
+    C–C no [PF6], D–E no [Tf2N], A–C e B–C (HFC + [PF6]) e A–D e B–E (HFC + [Tf2N]); εHB cruzado pela média geométrica e κHB pela
+    média dos raios;
+  * Lorentz-Berthelot com os dois parâmetros binários do artigo: εij = ξ·√(εi·εj) (no simulador, kij = 1 − ξ) e σij = η·(σi + σj)/2.
+    A tabela de binários da aba Termodinâmica mostra kij, ξ e η, e o η também pode ser editado.
+- Parâmetros da tabela 2 do artigo: R-32 (m = 1,321; σ = 3,529 Å; ε/k = 144,4 K; εHB/k = 1 708 K; κHB = 24 050 Å³), R-125, [C2mim][Tf2N],
+  [C6mim][Tf2N] e [C4mim][PF6]. Binários da tabela 3 (ξ e η de cada HFC com cada líquido iônico) e ξ = 0,955 para R-32 + R-125.
+- Componente novo: líquido iônico [C4mim][PF6] ([bmim][PF6]), M = 284,18 g/mol, ρ = 1 368 kg/m³ e cp = 408 J/(mol·K) a 25 °C.
+- Conferência com o artigo:
+  * pressão de vapor e densidade do líquido do R-32 a 1–2 % do NIST e do R-125 a 1–5 % (−20 a 40 °C), como os desvios do artigo;
+  * constantes de Henry a 25 °C: R-32 e R-125 em [C2mim][Tf2N] = 1,01 e 1,87 MPa; em [C4mim][PF6] = 1,27 e 4,02 MPa (Fig. 6);
+    seletividade ideal 1,86 ([C2mim][Tf2N]) e 3,17 ([C4mim][PF6]);
+  * R-32 em [C2mim][Tf2N] a 25 °C: x = 0,4 a 0,52 MPa (Fig. 4a); R-410A a 30 °C: bolha a 1,89 MPa (Fig. 3b);
+  * seletividade S = (y125/x125)/(y32/x32) do R-410A com [C2mim][Tf2N] a 300 K e z_LI = 0,4: 1,77, 1,70, 1,62, 1,55 e 1,48 a 0,2, 0,4,
+    0,6, 0,8 e 1,0 MPa (Fig. 8: 1,77, 1,70, 1,63, 1,56 e 1,49).
+- Exemplo novo: "Separação do R-410A (R-32 + R-125) com o líquido iônico [C2mim][Tf2N] — soft-SAFT original": absorvedor de um estágio a
+  300 K e 4 bar (45 % vaporizado, S = 1,70) e regenerador a 80 °C e 1 bar (o flash 1 do artigo), que libera R-32 com 77 % molar.
+- Desempenho: a energia de Helmholtz da formulação original guarda os pares e o Δ por temperatura e resolve os sítios sem alocar memória;
+  o exemplo converge em cerca de 2 s.
+- Os 22 componentes do soft-SAFT simplificado e o exemplo "Flash de metanol + água com soft-SAFT" dão exatamente os mesmos resultados.
+- Próximas etapas (dependem do material suplementar do artigo): gráficos P–x, Henry, diagrama ternário e seletividade × z_LI na aba
+  Termodinâmica, e a destilação extrativa da Fig. 9 com o NRTL estendido, comparada com a tabela 5.
+
 SIMULA FÁCIL IA 5.6 – Cinética química: Arrhenius, calor liberado, ajuste de k e quatro exemplos (22/11/2026)
 =============================================================================================================
 

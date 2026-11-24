@@ -1,3 +1,51 @@
+SIMULA FÁCIL IA 5.8 – R-410A com líquido iônico: destilação extrativa e gráficos do artigo (24/11/2026)
+=======================================================================================================
+
+Segunda e terceira etapas do artigo de Asensio-Delgado, Jovell, Zarca, Urtiaga e Llovell (Int. J. Refrig. 118, 365, 2020), com o
+material suplementar (tabelas S1 a S4).
+
+PROCESSO DA FIG. 9 (exemplo novo, NRTL da tabela S4)
+- "Destilação extrativa do R-410A com o líquido iônico [C2mim][Tf2N]": 0,3 kg/s de R-410A (50/50 % em massa, 30 °C) no prato 22 e
+  4,2464 kg/s de [C2mim][Tf2N] (40 °C) no prato 2 de uma coluna de 28 estágios a 10 bar, com refluxo 1,5 e condensador parcial; o fundo
+  passa por dois flashes a 80,58 °C (1 e 0,1 bar), e o líquido iônico volta a 10 bar (bomba) e a 40 °C (resfriador).
+- Parâmetros NRTL da tabela S4 no banco (R-32/R-125, R-32/[C2mim][Tf2N] e R-125/[C2mim][Tf2N]), conferidos com as figs. 4a e 4b
+  (P = 0,544 e 0,840 MPa a 25 °C e x = 0,4; o artigo mostra ≈ 0,55 e ≈ 0,8).
+- Resultado × tabela 5 do artigo (D = 3,04 kmol/h): R-125 com 99,0 % molar no topo (artigo: 99 %), 0,101 kg/s (0,122); condensador a
+  13,13 °C e −24,9 kW (13,15 °C e −29,1 kW); refervedor a 78 °C (80,55 °C); R-32 no flash 1: 0,183 kg/s com 86,9 % (0,135 kg/s, 92,0 %);
+  flash 2: 0,0143 kg/s com 92,4 % (0,0139 kg/s, 95,7 %).
+- O refervedor (238 kW) e o resfriador (−227 kW) ficam muito abaixo dos 1 955 e 1 957 kW do artigo. O simulador usa o cp medido do
+  [C2mim][Tf2N] (506 J/(mol·K), cerca de 1,3 kJ/(kg·K)); os valores do artigo exigiriam cp ≈ 11 kJ/(kg·K) para resfriar 4,25 kg/s de 81 a
+  40 °C, e devem vir da entalpia montada no Aspen (cp de gás ideal + ΔHvap de Watson, tabela S3).
+- O artigo usa equilíbrio líquido-líquido-vapor na coluna (RadFrac com três fases); o simulador usa duas fases.
+
+MUDANÇAS NO MOTOR
+- NRTL: líquidos iônicos com parâmetros no banco agora entram no coeficiente de atividade (continuam sem evaporar). Antes, componentes não
+  voláteis eram tirados do γ, e o líquido iônico não alterava a volatilidade dos gases. As exportações para MATLAB e Python seguem a mesma
+  regra (D.ga / GA: componentes do γ).
+- Coluna rigorosa com solvente não volátil: se o ponto de bolha diverge nos pratos ricos em solvente, o Newton (Naphtali–Sandholm) parte de
+  um perfil com o líquido já rico em solvente abaixo do prato de entrada dele, com até 200 iterações; um prato quase só de solvente sem
+  ponto de bolha mantém a temperatura da iteração anterior em vez de parar a simulação.
+- Pressão de vapor acima da temperatura crítica (componentes com Antoine ou DIPPR): ln P segue reto em 1/T com o valor e a inclinação da
+  correlação em Tc. Antes havia um salto em Tc (Antoine → Wilson) que travava o Newton com o R-32 a 78 °C no fundo da coluna.
+- soft-SAFT original: Z e dP/dη por diferenças de quatro pontos (passo 1e-3) e potencial químico com passo 1e-4. O arredondamento da
+  equação MBWR dava ±10 Pa de ruído na pressão do líquido iônico e ~3e-5 no ln φ; o exemplo do R-410A com soft-SAFT muda na 5ª casa.
+
+GRÁFICOS DO ARTIGO (aba Termodinâmica, modelo soft-SAFT: "R-410A + líquidos iônicos")
+- Curvas P–x do R-32 e do R-125 em [C2mim][Tf2N], [C6mim][Tf2N] ou [C4mim][PF6] a 283, 298, 323 e 348 K (figs. 4, 5 e S1), com o NRTL da
+  tabela S4 tracejado no [C2mim][Tf2N]. R-32 a 298 K e x = 0,4: 0,524 MPa; R-125: 0,772 MPa.
+- Henry e seletividade ideal (fig. 6): k_H × T pelo soft-SAFT e pela correlação da tabela S1; barras de k_H e de α nos três líquidos
+  iônicos; tabela com A, B, ΔH e ΔS (van't Hoff) ao lado das tabelas S1 e 4. [C2mim][Tf2N]: ΔH = −21,4 (R-32) e −19,9 kJ/mol (R-125),
+  artigo −21,5 e −20,1; α = 1,86 na diluição infinita e 1,24 a 1,0 MPa ([C4mim][PF6]: 3,17 e 1,71).
+- Diagrama ternário R-32 + R-125 + líquido iônico (fig. 7): isóbaras de 0,2 a 1,6 MPa a T escolhida, rótulos de pressão na base e a linha
+  onde o ramo de bolha termina (começo da região de duas fases líquidas; a linha de três fases do artigo não é calculada).
+- Seletividade S × z_LI do R-410A (fig. 8): 1,771, 1,697, 1,626, 1,558 e 1,491 a 300 K de 0,2 a 1,0 MPa (artigo 1,77 a 1,49).
+- Novo tipo de gráfico "ternIso" (isóbaras num triângulo) no módulo de gráficos.
+
+TESTES
+- Os 87 exemplos anteriores à 5.7 dão exatamente os mesmos resultados; o da 5.7 muda na 5ª casa (derivadas mais precisas).
+- Sem erros de JavaScript e sem rolagem horizontal em 1440, 390 (claro) e 320 px (escuro); botões e campos com 44 px e fonte de 16 px no
+  celular.
+
 SIMULA FÁCIL IA 5.7 – soft-SAFT original com líquidos iônicos: separação do R-410A (23/11/2026)
 ===============================================================================================
 

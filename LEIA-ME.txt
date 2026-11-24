@@ -1,3 +1,31 @@
+SIMULA FÁCIL IA 5.9 – Torre de resfriamento e central de água gelada de shopping (24/11/2026)
+==============================================================================================
+
+EQUIPAMENTO NOVO (paleta "Utilidades (água de resfriamento)")
+- "Torre de resfriamento": contracorrente, tiragem induzida, corpo redondo de fibra; ícone com ventilador axial no topo, pluma,
+  eliminador de gotas, distribuição da água quente, enchimento, entradas de ar, bacia, válvula de purga e três bombas dosadoras.
+- Balanço de energia: Q_rejeitado = carga do prédio + trabalho dos compressores = Q_carga(1 + 1/COP) (1 TR = 3,517 kW). Pela carga
+  (TR e COP) a torre fixa a circulação e fecha o laço com os condensadores; pela corrente, usa a vazão e a temperatura da água quente.
+- Lado do ar (Merkel): reta de operação, número de Merkel (KaV/L), L/G máximo, ar de saída saturado, vazão e potência dos ventiladores.
+  Evaporação pelo ganho de umidade do ar; mostra também a regra prática 0,00153·L·ΔT.
+- Balanço de água: arraste (% da circulação), purga informada ou pelos ciclos, reposição M = E + D + B, ciclos = M/(B + D), setpoint
+  de condutividade da purga automática e tempo de residência (HTI).
+- Bombas dosadoras na bacia: dosagem = (B + D)·C = M·C/ciclos (corrige a dosagem M·C do código MATLAB de partida, que superdosava pelo
+  fator dos ciclos). Fosfonato de zinco (anticorrosivo), polímero antiincrustante e dispersante aniônico, e biocida: hipoclorito
+  contínuo (0,5 a 1 ppm de cloro livre, com meia-vida) e choque de 10 ppm; clorito de sódio (ClO₂); ou quaternário de amônio, com
+  aviso de incompatibilidade com o polímero aniônico. Mostra L/h, L/dia, g por m³ de reposição e a carga inicial de cada produto.
+- Avisos: approach abaixo de 2,8 °C, ciclos acima de 8 ou abaixo de 2, cloro contínuo acima de 2 ppm, bombas abaixo de 0,1 L/h.
+
+EXEMPLO NOVO (utilidades, antes dos bioprocessos)
+- "Central de água gelada de um shopping grande": chillers de 1 500 TR com COP 5,2 (5 275 kW + 1 014 kW = 6 290 kW na torre),
+  604 m³/h de 34 para 25 °C, bulbo úmido de 21,5 °C (approach de 3,5 °C; o 24,5 °C do código de partida daria 0,5 °C, inalcançável).
+  Evaporação de 8,0 m³/h, purga de 5 m³/h (no código de partida, 5 L/h daria mais de 200 ciclos), reposição de 13,1 m³/h e 2,6 ciclos.
+  Bombas: 40 mL/h de fosfonato de zinco (10 ppm), 69 mL/h de polímero (15 ppm), 2,1 L/h de hipoclorito 10 % e choque de 40 L/h por 30 min.
+
+MUDANÇA NO MOTOR
+- Aquecedor e resfriador: água pura com o estado exato (stm) usa a IAPWS-IF97 (c_p ≈ 4,18 kJ/(kg·K)). O modelo termodinâmico geral dá
+  c_p ≈ 4,6 kJ/(kg·K) para a água líquida e erraria a circulação em 9 %. Os 89 exemplos anteriores não mudam.
+
 SIMULA FÁCIL IA 5.8 – R-410A com líquido iônico: destilação extrativa e gráficos do artigo (24/11/2026)
 =======================================================================================================
 

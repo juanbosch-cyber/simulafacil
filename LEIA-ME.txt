@@ -1,3 +1,14 @@
+SIMULA FÁCIL IA 5.9.2 – Torre de resfriamento: bombonas de 50 L e bombas peristálticas de baixa vazão (25/11/2026)
+================================================================================================================
+
+- Campos novos: volume da bombona de cada produto (50 L) e diluição 1:N do anticorrosivo, do polímero e do biocida (1 L de produto
+  em N litros de solução; 1 = puro). Padrão: fosfonato de zinco e polímero 1:10; hipoclorito puro (diluído perde força).
+- Para cada produto, o resultado mostra a vazão da bomba dosadora peristáltica de baixa vazão (solução da bombona), os litros de produto
+  e de água por bombona, a autonomia em dias (ou bombonas por semana) e a vazão de produto puro. Gráfico novo de autonomia das bombonas.
+- Exemplo do shopping: bombas de 71 mL/h (fosfonato, bombona dura 29 dias) e 122 mL/h (polímero, 17 dias); hipoclorito puro a 2,1 L/h,
+  com a bombona de 50 L durando menos de um dia (7,4 por semana, contando o choque semanal).
+- Observação de bomba pequena agora abaixo de 30 mL/h de solução, sugerindo aumentar a diluição.
+
 SIMULA FÁCIL IA 5.9.1 – Torre de resfriamento: purga em L/min e limite de ciclos de concentração (25/11/2026)
 =============================================================================================================
 

@@ -1,3 +1,16 @@
+SIMULA FÁCIL IA 5.9.1 – Torre de resfriamento: purga em L/min e limite de ciclos de concentração (25/11/2026)
+=============================================================================================================
+
+- Purga da torre ajustada em L/min na barra deslizante (0 a 200 L/min, passo de 0,5), com padrão de 5 L/min. O campo antigo em m³/h
+  saiu (projetos salvos na 5.9 voltam ao padrão de 5 L/min).
+- Campo novo "ciclos de concentração máximos permitidos", com padrão 10. A purga automática nunca deixa passar desse limite:
+  purga mínima = E/(C_máx − 1) − D. Com purga informada menor, a válvula abre o necessário e um aviso mostra quantos ciclos a purga
+  informada daria. Com "ciclos como meta" acima do limite, a torre opera no limite. Saiu o aviso de "acima de 8 ciclos".
+- No exemplo da central de água gelada do shopping, 5 L/min dariam 25 ciclos; a válvula abre para 14,4 L/min (0,86 m³/h) e a torre opera
+  com 10 ciclos. A reposição cai de 13,1 para 8,9 m³/h, e as bombas de fosfonato de zinco e de polímero caem para 7 e 12 mL/h
+  (a dosagem é (purga + arraste) × C). O hipoclorito quase não muda (2,1 L/h): ele é consumido pela demanda, não sai só pela purga.
+- Resultados: purga em L/min e m³/h, ciclos com o máximo permitido; o gráfico de reposição × ciclos vai até o limite.
+
 SIMULA FÁCIL IA 5.9 – Torre de resfriamento e central de água gelada de shopping (24/11/2026)
 ==============================================================================================
 

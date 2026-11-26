@@ -1,3 +1,15 @@
+SIMULA FÁCIL IA 5.12.1 – Vídeo da aluna Darciele: laticínios e leite em pó (26/11/2026)
+=======================================================================================
+
+- Novo vídeo em "Vídeos dos alunos" (agora são 3), depois dos vídeos da Ana Clara e do Bruno: "Laticínios – Leite em pó",
+  de Darciele Permanhani Dalcin (Engenharia Química UFSJ), https://youtu.be/hBh3ZsHiZ30. Aparece no simulador (botão
+  dos vídeos, tela inicial e janela dos tutoriais) e na página de apresentação.
+- O exemplo "Laticínio completo" ganhou o botão "🎓 Vídeo: Laticínios – Leite em pó" no fluxograma (o vídeo não abre
+  sozinho: só com o clique). Na busca de exemplos, ele leva a marca "🎓 vídeo" e é achado também por "Darciele" ou "vídeo".
+- Para ligar outro exemplo a um vídeo de aluno: ponha alunoVideo: '<link do YouTube>' no fs do exemplo (o link precisa
+  estar em videosAlunos).
+- Dados estruturados (Google) da página de apresentação: o vídeo da Darciele entrou como VideoObject.
+
 SIMULA FÁCIL IA 5.12 – Busca nos exemplos, separados por área (26/11/2026)
 ===========================================================================
 

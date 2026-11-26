@@ -80,7 +80,7 @@
         "price": "0",
         "priceCurrency": "BRL"
       },
-      "softwareVersion": "5.12.1",
+      "softwareVersion": "5.12.2",
       "description": "Simulador de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos e termodinâmica NRTL, UNIQUAC, UNIFAC, Peng-Robinson, PC-SAFT e soft-SAFT (líquidos iônicos), refrigerador com fluidos refrigerantes, colunas de destilação rigorosas e McCabe-Thiele, reatores CSTR e PFR transientes, biorreatores de Tosetto, Monod e Verhulst, reator de biodiesel, alto-forno, forno de cimento, silo, sedimentador e digestor kraft contínuos, secadores, cristalizador, trocadores de calor, extração, agente de inteligência artificial e geração de código MATLAB, Octave e Python.",
       "featureList": [
         "Ciclo do combustível nuclear, da uraninita às pastilhas de UO₂ (rota brasileira da INB, uma recarga de Angra 2 por ano): lixiviação ácida em pilha, extração por solvente com amina, precipitação do DUA e calcinação (yellowcake), conversão a UF₆, enriquecimento em cascata de ultracentrífugas, reconversão AUC, pastilhas e elementos combustíveis ligados ao reator PWR",
@@ -345,21 +345,6 @@
     },
     {
       "@type": "VideoObject",
-      "name": "Simulação de um refrigerador no SIMULA FÁCIL IA – vídeo da aluna Ana Clara Alves de Macedo (Engenharia Química UFSJ)",
-      "description": "Vídeo feito por aluna da turma de Modelagem e Simulação de Processos da UFSJ: simulação de um refrigerador (ciclo de compressão de vapor) no SIMULA FÁCIL IA.",
-      "thumbnailUrl": "https://i.ytimg.com/vi/MqbwtjsU0-4/hqdefault.jpg",
-      "embedUrl": "https://www.youtube.com/embed/MqbwtjsU0-4",
-      "url": "https://youtu.be/MqbwtjsU0-4",
-      "uploadDate": "2026-11-13",
-      "inLanguage": "pt-BR",
-      "isFamilyFriendly": true,
-      "creator": {
-        "@type": "Person",
-        "name": "Ana Clara Alves de Macedo"
-      }
-    },
-    {
-      "@type": "VideoObject",
       "name": "Laticínios – Leite em pó no SIMULA FÁCIL IA – vídeo da aluna Darciele Permanhani Dalcin (Engenharia Química UFSJ)",
       "description": "Vídeo feito por aluna de Engenharia Química da UFSJ: produção de leite em pó num laticínio completo (refrigeração, pasteurização HTST, centrífuga, evaporador de triplo efeito e spray dryer) no SIMULA FÁCIL IA.",
       "thumbnailUrl": "https://i.ytimg.com/vi/hBh3ZsHiZ30/hqdefault.jpg",
@@ -371,6 +356,21 @@
       "creator": {
         "@type": "Person",
         "name": "Darciele Permanhani Dalcin"
+      }
+    },
+    {
+      "@type": "VideoObject",
+      "name": "Simulação de um refrigerador no SIMULA FÁCIL IA – vídeo da aluna Ana Clara Alves de Macedo (Engenharia Química UFSJ)",
+      "description": "Vídeo feito por aluna da turma de Modelagem e Simulação de Processos da UFSJ: simulação de um refrigerador (ciclo de compressão de vapor) no SIMULA FÁCIL IA.",
+      "thumbnailUrl": "https://i.ytimg.com/vi/MqbwtjsU0-4/hqdefault.jpg",
+      "embedUrl": "https://www.youtube.com/embed/MqbwtjsU0-4",
+      "url": "https://youtu.be/MqbwtjsU0-4",
+      "uploadDate": "2026-11-13",
+      "inLanguage": "pt-BR",
+      "isFamilyFriendly": true,
+      "creator": {
+        "@type": "Person",
+        "name": "Ana Clara Alves de Macedo"
       }
     }
   ]
@@ -522,7 +522,8 @@ section p.sub { color: var(--muted); margin: 0 0 26px; max-width: 46em; }
 .alunos-list .al-v { position: relative; display: block; width: 100%; aspect-ratio: 16/9; border: 0; padding: 0; border-radius: 10px; background: #0b2f3a center/cover no-repeat; cursor: pointer; overflow: hidden; }
 .alunos-list .al-v::after { content: '▶'; position: absolute; inset: 0; margin: auto; width: 56px; height: 38px; border-radius: 10px; background: var(--red); color: #fff; font-size: 20px; display: grid; place-items: center; }
 .alunos-list .al-v.on::after { display: none; } .alunos-list iframe { display: block; width: 100%; height: 100%; border: 0; }
-.alunos-list .al b { font-size: 15px; line-height: 1.25; } .alunos-list .al small { color: var(--muted); }
+.alunos-list .al b { font-size: 15px; line-height: 1.25; }
+.al-novo { display: inline-block; margin-right: 6px; padding: 0 6px; font: 900 10px/16px sans-serif; letter-spacing: .6px; vertical-align: 1px; border-radius: 99px; background: #e10600; color: #fff; } .alunos-list .al small { color: var(--muted); }
 .alunos-list .al a { display: inline-flex; align-items: center; min-height: 32px; font-size: 13px; font-weight: 600; }
 
 /* 8. banco de compostos, autor, turma e perguntas */
@@ -720,7 +721,7 @@ nav.bar .links { order: 1; }
     <div class="hero">
       <div class="hero-txt">
         <p class="eyebrow">Engenharia Química · UFSJ</p>
-        <h1>SIMULA FÁCIL IA <em class="ver">VERSÃO 5.12.1</em><a class="test-pill" href="#aviso" title="Uso acadêmico e de ensino · versão em fase de testes (ler o aviso)"><b>EM TESTES</b></a><span>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</span></h1>
+        <h1>SIMULA FÁCIL IA <em class="ver">VERSÃO 5.12.2</em><a class="test-pill" href="#aviso" title="Uso acadêmico e de ensino · versão em fase de testes (ler o aviso)"><b>EM TESTES</b></a><span>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</span></h1>
         <a class="new-pill" href="#novo-5-11"><span aria-hidden="true">☢️</span> <b>Novo na 5.11:</b> ciclo do combustível nuclear, da uraninita às pastilhas de UO₂ para Angra 2: lixiviação, extração por solvente, yellowcake, UF₆, ultracentrífugas, reconversão e pastilhas, sete equipamentos novos <span aria-hidden="true">→</span></a>
         <a class="new-pill" href="#novo-5-9"><span aria-hidden="true">🧪</span> <b>Novo na 5.9.2:</b> torre de resfriamento e central de água gelada de shopping, com purga automática e bombas dosadoras <span aria-hidden="true">→</span></a>
         <a class="new-pill" href="#cimento"><span aria-hidden="true">🏭</span> <b>Novo na 5.4:</b> fábrica de cimento completa (CP II-E com escória de alto-forno) e fábricas de ácido sulfúrico por queima de enxofre e por gás metalúrgico, com seis equipamentos novos <span aria-hidden="true">→</span></a>
@@ -1162,6 +1163,7 @@ nav.bar .links { order: 1; }
    goatcounter: código da conta em goatcounter.com que conta as visitas (veja js/visitas.js); '' desliga.
    manual:      nome do arquivo PDF do manual, enviado para a mesma pasta do site no GitHub.
    videosAlunos: vídeos enviados pelos alunos, por exemplo { titulo: 'Coluna de destilação', autor: 'Nome do aluno', url: 'https://youtu.be/...' }.
+     A ordem da lista é a ordem na tela; novo: true põe a etiqueta NOVO no vídeo.
    manualVersion: troque a cada manual novo (por exemplo, a data); o link muda e o navegador não abre o PDF antigo do cache. */
 window.SIMULAFACIL_CONFIG = {
   claudeUrl: 'https://claude.ai/artifact/A8LR4WDCvpfBY9XhF5T3TF',
@@ -1170,9 +1172,9 @@ window.SIMULAFACIL_CONFIG = {
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
   manualVersion: '5.3-2026-11-22b',
   videosAlunos: [
-    { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' },
+    { titulo: 'Laticínios – Leite em pó', autor: 'Darciele Permanhani Dalcin – Engenharia Química UFSJ', url: 'https://youtu.be/hBh3ZsHiZ30', novo: true },
     { titulo: 'Como funciona o SIMULA FÁCIL IA - Exemplo: DESTILAÇÃO', autor: 'Bruno Gontijo de Carvalho – Engenharia Química UFSJ', url: 'https://youtu.be/H2lDGKUrdPA' },
-    { titulo: 'Laticínios – Leite em pó', autor: 'Darciele Permanhani Dalcin – Engenharia Química UFSJ', url: 'https://youtu.be/hBh3ZsHiZ30' }
+    { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' }
   ]
 };
 
@@ -1341,7 +1343,7 @@ window.SIMULAFACIL_CONFIG = {
       '<div class="tut-bar"><button type="button" class="tut-pp-btn"></button><a class="tut-dl" hidden>⬇ Baixar a imagem</a><span class="tut-narrw" style="display:contents"><label><input type="checkbox" class="tut-narr"' + (narr ? ' checked' : '') + '> 🔊 Narração por voz</label><small class="tut-voice"></small></span><small style="margin-left:auto">Legendas no vídeo · setas vermelhas na imagem</small></div>' +
       '<div class="tut-list">' + LIST.map((T, i) => '<div class="tut-item" data-k="' + i + '"><button type="button" class="tut-play" data-k="' + i + '" title="Assistir ao vídeo"><img alt="" src="' + esc(src(T.poster)) + '"><b>' + (i + 1) + '. ' + esc(T.title) + '</b><small>🎬 ' + esc(T.narr) + ' · ' + esc(T.dur) + '</small></button>' + (T.img ? '<button type="button" class="tut-pp" data-k="' + i + '" title="Imagem com o passo a passo">🧭 Passo a passo</button>' : '') + '</div>').join('') + '</div>' +
       (al.length ? '<div class="tut-alunos"><div class="tut-alh"><h4>🎓 Vídeos dos alunos (' + al.length + ')</h4>' + (al.length > 6 ? '<input type="search" class="tut-alq" placeholder="Buscar por tema ou aluno…" aria-label="Buscar vídeos dos alunos">' : '') + '</div><div class="tut-algrid">' + al.map((v, i) => { const id = ytId(v.url);
-        return '<div class="tut-al" data-i="' + i + '" data-s="' + esc(((v.titulo || '') + ' ' + (v.autor || '')).toLowerCase()) + '"><button type="button" class="tut-yt" data-i="' + i + '" title="Assistir aqui"><span class="th"' + (id ? ' style="background-image:url(https://i.ytimg.com/vi/' + id + '/mqdefault.jpg)"' : '') + '></span><b>' + esc(v.titulo || 'Vídeo do aluno') + '</b><small>' + esc(v.autor || '') + '</small></button>' +
+        return '<div class="tut-al" data-i="' + i + '" data-s="' + esc(((v.titulo || '') + ' ' + (v.autor || '')).toLowerCase()) + '"><button type="button" class="tut-yt" data-i="' + i + '" title="Assistir aqui"><span class="th"' + (id ? ' style="background-image:url(https://i.ytimg.com/vi/' + id + '/mqdefault.jpg)"' : '') + '></span><b>' + (v.novo ? '<span class="al-novo">NOVO</span>' : '') + esc(v.titulo || 'Vídeo do aluno') + '</b><small>' + esc(v.autor || '') + '</small></button>' +
           '<a href="' + esc(v.url) + '" target="_blank" rel="noopener">Abrir no YouTube ↗</a></div>'; }).join('') + '</div></div>' : '') +
       '</div>';
     document.body.appendChild(ov);
@@ -1412,6 +1414,7 @@ window.SIMULAFACIL_CONFIG = {
         btn.onclick = function () { if (btn.classList.contains("on")) return; btn.classList.add("on"); btn.innerHTML = '<iframe title="' + (v.titulo || "Vídeo do aluno").replace(/"/g, "&quot;") + '" src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&hl=pt-BR" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>'; }; }
       else { btn.href = v.url; btn.target = "_blank"; btn.rel = "noopener"; }
       var t = document.createElement("b"); t.textContent = v.titulo || "Vídeo do aluno";
+      if (v.novo) { var nv = document.createElement("span"); nv.className = "al-novo"; nv.textContent = "NOVO"; t.insertBefore(nv, t.firstChild); }
       var a = document.createElement("small"); a.textContent = v.autor || "";
       var l = document.createElement("a"); l.href = v.url; l.target = "_blank"; l.rel = "noopener"; l.textContent = "Abrir no YouTube ↗";
       card.appendChild(btn); card.appendChild(t); if (v.autor) card.appendChild(a); card.appendChild(l); list.appendChild(card); });

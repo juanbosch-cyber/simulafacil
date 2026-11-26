@@ -1,3 +1,11 @@
+SIMULA FÁCIL IA 5.12.2 – Vídeo da Darciele em primeiro lugar (26/11/2026)
+==========================================================================
+
+- Nova ordem dos "Vídeos dos alunos" (simulador e página de apresentação): 1º Darciele Permanhani Dalcin (Laticínios –
+  Leite em pó), 2º Bruno Gontijo de Carvalho (destilação), 3º Ana Clara Alves de Macedo (refrigerador).
+- O vídeo da Darciele leva a etiqueta vermelha "NOVO" nas listas (campo novo: true em videosAlunos).
+- Dados estruturados (Google): o vídeo da Darciele vem antes do da Ana Clara.
+
 SIMULA FÁCIL IA 5.12.1 – Vídeo da aluna Darciele: laticínios e leite em pó (26/11/2026)
 =======================================================================================
 

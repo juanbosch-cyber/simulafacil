@@ -1,3 +1,37 @@
+SIMULA FÁCIL IA 5.11 – Ciclo do combustível nuclear: da uraninita às pastilhas de UO₂ (26/11/2026)
+=====================================================================================================
+
+CATEGORIA NOVA NA PALETA: "Ciclo do combustível nuclear (urânio)", com sete equipamentos e ícones novos (rota brasileira da INB)
+- "Britagem e lixiviação ácida em pilha": UO₂ + MnO₂ + 2 H₂SO₄ → UO₂SO₄ + MnSO₄ + 2 H₂O e ataque da calcita (vira gesso e libera CO₂);
+  extração limitada pelo oxidante e pelo ácido, cinética X(t) = X_máx(1 − e^(−t/τ)) com τ ∝ P80², solução retida na pilha, licor rico,
+  ácido e MnO₂ por tonelada, área das pilhas e taxa de irrigação.
+- "Extração por solvente com amina terciária": extração e reextração com sulfato de amônio e amônia, equilíbrio linear e Kremser, orgânico
+  reextraído que volta à extração (iteração), carga do orgânico, dois diagramas de McCabe–Thiele, misturadores e decantadores.
+- "Precipitação do DUA e calcinação": 2 UO₂SO₄ + 6 NH₃ + 3 H₂O → (NH₄)₂U₂O₇ + 2 (NH₄)₂SO₄ e 9 DUA → 6 U₃O₈ + 14 NH₃ + 15 H₂O + 2 N₂;
+  torta, gases, yellowcake, tambores, calor e curva termogravimétrica ilustrativa.
+- "Conversão a UF₆": TBP, desnitração, redução com H₂, hidrofluoração e fluoração (U₃O₈ + ½ O₂ + 3 H₂ + 12 HF + 3 F₂ → 3 UF₆ + 9 H₂O);
+  reagentes, fluorita, eletrólise do flúor e cilindros 48Y. Os reagentes entram pelos campos.
+- "Enriquecimento em cascata de ultracentrífugas": fator de alimentação, SWU, limite de Dirac do poder de separação, centrífugas, cascata
+  ideal (estágios, vazões e máquinas por estágio), escolha do teor do rejeito, pressão de vapor do UF₆, energia e cilindros.
+- "Reconversão AUC": UF₆ + 5 H₂O + 10 NH₃ + 3 CO₂ → AUC + 6 NH₄F e AUC + H₂ → UO₂ + 4 NH₃ + 3 CO₂ + 3 H₂O; efluente com NH₄F.
+- "Fábrica de pastilhas e elementos combustíveis": densidade a verde e sinterizada, contração, retífica, rejeitos, pastilhas por vareta,
+  varetas de zircaloy, folga pastilha–revestimento e elementos 16 × 16 por ano.
+- Componentes novos: uraninita, albita, pirolusita, sulfato de manganês, sulfato de uranila, sulfato de amônio, amônia dissolvida, DUA,
+  U₃O₈, ²³⁵UF₆ e ²³⁸UF₆, fluoreto de amônio, ²³⁵UO₂ e ²³⁸UO₂, PuO₂ e produtos de fissão. Depois do enriquecimento cada composto tem um
+  componente para cada isótopo, e o teor de U-235 aparece na composição da corrente.
+
+REATOR PWR
+- Entrada nova de combustível novo (opcional): o reator usa o enriquecimento da corrente e compara o urânio entregue com o queimado.
+- Saída nova de combustível usado, com U-235 e plutônio informados nos campos e os produtos de fissão pela queima.
+- O exemplo da usina de Angra 2 continua com os mesmos resultados.
+
+EXEMPLO NOVO (o segundo da lista, com cartão "NOVO" e correntes cor de yellowcake)
+- "Ciclo do combustível nuclear: da uraninita de Caetité às pastilhas de UO₂ para Angra 2", em vazões médias do ano (8 766 h).
+- Resultados: 12,75 t/h de minério com 0,3 % de U₃O₈; 80 % do urânio no licor (0,89 g U/L); extração por solvente de 99,2 % e
+  concentração de 29 vezes; 266 t de yellowcake por ano; 333 t de UF₆ natural; 5,83 SWU/kg e 161 mil SWU por ano (cerca de 6 mil
+  centrífugas em 22 estágios); 31 t de pó de UO₂ a 4 %; 4 milhões de pastilhas e 48 elementos combustíveis por ano (uma recarga).
+- Os 91 exemplos anteriores dão os mesmos resultados.
+
 SIMULA FÁCIL IA 5.10 – Cosméticos: fábrica de shampoo capilar perolado (26/11/2026)
 ====================================================================================
 

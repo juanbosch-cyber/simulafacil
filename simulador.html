@@ -1164,6 +1164,7 @@ body.kb .m-fab-ex { display: none; }
 .exp-t .exp-hit { font-size: 12px; font-weight: 600; color: var(--accent); -webkit-line-clamp: 1; }
 :root:not([data-theme="dark"]) .exp-t .exp-hit { color: #087471; }
 .exp-cur { display: inline-block; margin-left: 6px; padding: 0 7px; font: 700 10.5px/17px var(--font); letter-spacing: .03em; vertical-align: 1px; border-radius: 99px; background: var(--accent); color: var(--accent-ink); }
+.exp-vid { display: inline-block; margin-left: 6px; padding: 0 7px; font: 700 10.5px/17px var(--font); vertical-align: 1px; border-radius: 99px; background: #ffc93c; color: #2a1b00; white-space: nowrap; }
 .exp mark { padding: 0 1px; border-radius: 3px; background: rgba(255, 201, 60, .5); color: inherit; }
 :root[data-theme="dark"] .exp mark { background: rgba(255, 212, 94, .32); }
 .exp-none { margin: 0; padding: 28px 22px 34px; text-align: center; color: var(--muted); line-height: 1.5; }
@@ -1199,7 +1200,7 @@ body.kb .m-fab-ex { display: none; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.12</span><em>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.12.1</span><em>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <button type="button" class="test-badge" id="btnAviso" title="Uso acadêmico e de ensino · versão em fase de testes (clique para ler o aviso)"><span>EM TESTES</span></button>
@@ -1354,7 +1355,7 @@ body.kb .m-fab-ex { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.12</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.12.1</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
         <p class="wsub">Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1467,7 +1468,8 @@ window.SIMULAFACIL_CONFIG = {
   manualVersion: '5.3-2026-11-22b',
   videosAlunos: [
     { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' },
-    { titulo: 'Como funciona o SIMULA FÁCIL IA - Exemplo: DESTILAÇÃO', autor: 'Bruno Gontijo de Carvalho – Engenharia Química UFSJ', url: 'https://youtu.be/H2lDGKUrdPA' }
+    { titulo: 'Como funciona o SIMULA FÁCIL IA - Exemplo: DESTILAÇÃO', autor: 'Bruno Gontijo de Carvalho – Engenharia Química UFSJ', url: 'https://youtu.be/H2lDGKUrdPA' },
+    { titulo: 'Laticínios – Leite em pó', autor: 'Darciele Permanhani Dalcin – Engenharia Química UFSJ', url: 'https://youtu.be/hBh3ZsHiZ30' }
   ]
 };
 
@@ -22676,7 +22678,7 @@ def pfr_transiente(P, nome):
         { id: 'P', type: 'product', name: 'Extrato de tomate (28 %)' }, { id: 'VC', type: 'product', name: 'Vapor ao condensador' }, { id: 'C', type: 'product', name: 'Condensado' }],
       streams: [S('1', 'F', 'out', 'EV', 'feed', '1'), S('E1', 'ES', 'eo', 'EV', 'q_in', 'E1'), S('2', 'EV', 'product', 'P', 'in', '2'), S('3', 'EV', 'vapor', 'VC', 'in', '3'), S('4', 'EV', 'condensate', 'C', 'in', '4')] } },
     { key: 'laticinio-completo', title: 'Laticínio completo: leite cru → refrigerador → pasteurizador HTST → centrífuga → creme → batedeira (manteiga) e leite desnatado → evaporador de triplo efeito → spray dryer (leite em pó)', fs: {
-      name: 'Laticínio: manteiga e leite em pó desnatado', components: ['water', 'milk-fat', 'milk-snf', 'cs-air'], model: 'IDEAL',
+      name: 'Laticínio: manteiga e leite em pó desnatado', alunoVideo: 'https://youtu.be/hBh3ZsHiZ30', components: ['water', 'milk-fat', 'milk-snf', 'cs-air'], model: 'IDEAL',
       blocks: [
         { id: 'F', type: 'feed', name: 'Leite cru (recepção, 10 °C)', params: { T: 10, P: 3, vf: '', flow: 10000, flowUnit: 'kg/h', basis: 'mássica', material: 'Leite cru integral (água + gordura + sólidos não gordurosos)', composition: { water: 0.8773, 'milk-fat': 0.035, 'milk-snf': 0.0877, 'cs-air': 0 } } },
         { id: 'RF', type: 'refrigerator', name: 'Resfriador do leite RF-101 (R-134a)', params: { T: 4, fluid: 'R-134a', Tcd: 40, dTev: 5, eta: 0.75, sh: 5, sc: 3 } },
@@ -26100,17 +26102,28 @@ def pfr_transiente(P, nome):
   /* ------------------------------------------------------------------ projeto: novo, exemplos, salvar, abrir */
   // a abertura animada e o improviso ao piano só começam com o clique do usuário (o navegador só libera o som depois de um gesto)
   const chocOpen = ex => { if (SF.choc && ex && ex.fs && ex.fs.theme === 'chocolate') SF.choc.open(); if (SF.agua && ex && ex.fs && ex.fs.theme === 'agua') SF.agua.open(); vidOpen(ex && ex.fs && ex.fs.video); };
-  // exemplo com vídeo de abertura (McCabe e Thiele): o vídeo abre no player dos tutoriais, com o botão Pular; o botão "Vídeo" no fluxograma mostra de novo
+  // exemplo com vídeo de abertura (McCabe e Thiele): o vídeo abre no player dos tutoriais, com o botão Pular; o botão "Vídeo" no fluxograma mostra de novo.
+  // exemplo com vídeo de aluno (fs.alunoVideo = link do YouTube que está em videosAlunos): o botão "🎓 Vídeo" no fluxograma abre o vídeo, sem abrir sozinho
   function vidOpen(file) { if (!file || !SF.tutoriais) return; const k = SF.tutoriais.list.findIndex(T => T.file === file); if (k >= 0) SF.tutoriais.open(k, 'intro'); }
   var vidCtl = null;   // var: afterChange pode chamar vidSync antes desta linha
+  function alunosCfg() { return ((window.SIMULAFACIL_CONFIG || {}).videosAlunos || []).filter(v => v && v.url); } // função: vidSync pode rodar antes desta linha
+  function alunoVid(url) { // posição do vídeo na lista videosAlunos (a mesma que o player dos tutoriais usa), ou -1
+    const yt = SF.tutoriais && SF.tutoriais.ytId, id = url && yt ? yt(url) : null;
+    return url ? alunosCfg().findIndex(v => v.url === url || (id && yt(v.url) === id)) : -1;
+  }
   function vidSync() {
     const wrap = $('#canvasWrap'); if (!wrap) return;
     if (!vidCtl) {
       vidCtl = document.createElement('div'); vidCtl.className = 'vid-ctl'; vidCtl.hidden = true;
-      vidCtl.innerHTML = '<button type="button" title="Ver o vídeo: McCabe e Thiele, a história do diagrama (1925)" aria-label="Ver o vídeo: McCabe e Thiele, a história do diagrama (1925)"><span aria-hidden="true">🎬</span><span class="vc-t"> Vídeo: McCabe e Thiele</span></button>';
-      vidCtl.querySelector('button').onclick = () => vidOpen(state.video); wrap.appendChild(vidCtl);
+      vidCtl.innerHTML = '<button type="button"><span aria-hidden="true"></span><span class="vc-t"></span></button>';
+      vidCtl.querySelector('button').onclick = () => { const k = alunoVid(state.alunoVideo); if (state.video) vidOpen(state.video); else if (k >= 0 && SF.tutoriais) SF.tutoriais.openAluno(k); };
+      wrap.appendChild(vidCtl);
     }
-    vidCtl.hidden = !state.video;
+    const k = state.video ? -1 : alunoVid(state.alunoVideo), v = k >= 0 ? alunosCfg()[k] : null;
+    vidCtl.hidden = !state.video && !v; if (vidCtl.hidden) return;
+    const b = vidCtl.querySelector('button'), t = v ? 'Ver o vídeo dos alunos: ' + v.titulo + (v.autor ? ' — ' + v.autor : '') : 'Ver o vídeo: McCabe e Thiele, a história do diagrama (1925)';
+    b.title = t; b.setAttribute('aria-label', t);
+    b.firstChild.textContent = v ? '🎓' : '🎬'; b.lastChild.textContent = v ? ' Vídeo: ' + v.titulo : ' Vídeo: McCabe e Thiele';
   }
   function loadFlowsheet(fs, keepPositions, then) {
     if ((fs.components || []).some(id => !TH.COMP[id]) && SF.dbx) return withComps(fs = JSON.parse(JSON.stringify(fs)), () => { loadFlowsheet(fs, keepPositions); if (then) then(); });
@@ -26163,10 +26176,11 @@ def pfr_transiente(P, nome):
       const cut = ex.title.indexOf(' — ');
       return { ex, area, icon: types[0] || 'feed', main: cut > 0 ? ex.title.slice(0, cut) : ex.title, sub: cut > 0 ? ex.title.slice(cut + 3) : '',
         equip, comps, names, fTitle: xfold(ex.title), fEquip: equip.map(xfold), fComp: comps.map(xfold), fForm: forms.map(xfold), fNames: names.map(xfold),
-        fArea: xfold(area.name + ' ' + area.chip + ' ' + ex.key + ' ' + (fs.model || '')) };
+        fArea: xfold(area.name + ' ' + area.chip + ' ' + ex.key + ' ' + (fs.model || '') + (fs.video || fs.alunoVideo ? ' video ' + exAlunoTxt(fs.alunoVideo) : '')) };
     });
     return exIdx;
   }
+  const exAlunoTxt = url => { const v = alunosCfg()[alunoVid(url)]; return v ? 'aluno aluna ' + (v.titulo || '') + ' ' + (v.autor || '') : ''; };
   const exWords = () => xfold($('#exPSearch').value).split(/[\s,;]+/).filter(Boolean);
   // a palavra está em algum lugar do exemplo? devolve onde (para a linha "Componente: …"), ou null
   function exFind(it, w) {
@@ -26210,6 +26224,7 @@ def pfr_transiente(P, nome):
       html += '<h3 class="exp-grp">' + esc(a.name) + ' <i>· ' + g.length + '</i></h3>' + g.map(h => {
         const it = h.it, cur = state.name === it.ex.fs.name;
         return '<button type="button" class="exp-item" data-k="' + esc(it.ex.key) + '"><span class="exp-ic">' + IC.paletteIcon(it.icon) + '</span><span class="exp-t"><b>' + exMark(it.main, words) +
+          (it.ex.fs.video || it.ex.fs.alunoVideo ? '<span class="exp-vid" title="Exemplo com vídeo">' + (it.ex.fs.alunoVideo ? '🎓' : '🎬') + ' vídeo</span>' : '') +
           (cur ? '<span class="exp-cur">aberto</span>' : '') + '</b>' + (it.sub ? '<small>' + exMark(it.sub, words) + '</small>' : '') +
           (h.extra.length ? '<small class="exp-hit">' + exMark(h.extra.slice(0, 2).join(' · '), words) + '</small>' : '') + '</span></button>';
       }).join('');

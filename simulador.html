@@ -1108,6 +1108,76 @@ body.mobile .agua-ctl .ac-t { display: none; }
 body.mobile .vid-ctl { top: auto; right: auto; left: 10px; bottom: 12px; }
 body.mobile .vid-ctl button { width: var(--tap); padding: 0; justify-content: center; font-size: 18px; }
 body.mobile .vid-ctl .vc-t { display: none; }
+/* versão 5.12 — painel de exemplos da barra de cima: busca por nome, equipamento e componente, lista agrupada por área */
+/* o botão dos exemplos fica em destaque: branco cheio na barra (os outros são transparentes) e com um anel que pulsa na abertura */
+.top .tools #exampleSel.ex-open { gap: 7px; background: #fff; color: #07505a; border-color: #fff; font-weight: 800; box-shadow: 0 2px 10px rgba(0,0,0,.25); animation: ex-ring 1.6s ease-out .8s 3; }
+.top .tools #exampleSel.ex-open:hover { background: #e3f8f6; border-color: #fff; transform: translateY(-1px); }
+.top .tools #exampleSel.ex-open:active { transform: translateY(0) scale(.97); }
+@keyframes ex-ring { 0% { box-shadow: 0 2px 10px rgba(0,0,0,.25), 0 0 0 0 rgba(255,255,255,.75); } 100% { box-shadow: 0 2px 10px rgba(0,0,0,.25), 0 0 0 12px rgba(255,255,255,0); } }
+#exampleSel .ex-open-n, .m-fab-ex .ex-open-n { font-size: 11.5px; font-weight: 800; line-height: 18px; padding: 0 7px; border-radius: 99px; background: #0a8f8c; color: #fff; font-variant-numeric: tabular-nums; }
+#exampleSel .ex-open-n:empty, .m-fab-ex .ex-open-n:empty { display: none; }
+body.mobile .top .tools #exampleSel.ex-open { justify-content: flex-start; background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 800; box-shadow: none; animation: none; }
+body.mobile .top .tools #exampleSel .ex-open-n { margin-left: auto; background: var(--panel); color: var(--ink); }
+/* celular: botão próprio dos exemplos na tela do fluxograma, acima do "+ Equipamento" (some enquanto a barra de seleção aparece) */
+.m-fab.m-fab-ex { bottom: 78px; min-height: 48px; gap: 8px; padding: 0 16px 0 14px; background: var(--panel); color: var(--accent); border: 2px solid var(--accent); }
+:root:not([data-theme="dark"]) .m-fab.m-fab-ex { color: #07656a; }
+.m-selbar:not([hidden]) ~ .m-fab-ex { display: none; }
+body.kb .m-fab-ex { display: none; }
+@media (prefers-reduced-motion: reduce) { .top .tools #exampleSel.ex-open { animation: none; } }
+.exp { position: fixed; inset: 0; z-index: 88; }
+.exp-bg { position: absolute; inset: 0; background: rgba(7, 33, 41, .32); }
+.exp-card { position: absolute; top: 64px; left: 16px; width: min(600px, calc(100vw - 32px)); max-height: calc(100dvh - 80px); display: flex; flex-direction: column;
+  background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: 0 22px 60px rgba(0,0,0,.3); overflow: hidden; animation: exp-in .16s ease-out; }
+@keyframes exp-in { from { opacity: 0; transform: translateY(-6px); } }
+.exp-head, .exp-search, .exp-chips, .exp-none, .exp-foot { flex: none; }
+.exp-head { display: flex; align-items: center; gap: 10px; padding: 12px 10px 10px 18px; }
+.exp-head h2 { margin: 0; flex: 1; font: 700 17px var(--font-cond); }
+.exp-head h2 small { margin-left: 6px; font: 500 13px var(--font); color: var(--muted); font-variant-numeric: tabular-nums; }
+.exp-x { width: var(--tap); height: var(--tap); padding: 0; justify-content: center; border-radius: 99px; background: transparent; border-color: transparent; font-size: 17px; color: var(--muted); }
+.exp-x:hover { background: var(--panel-2); color: var(--ink); }
+.exp-search { position: relative; margin: 0 14px; }
+.exp-search svg { position: absolute; left: 13px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.exp-search input { width: 100%; min-height: var(--tap); padding: 10px 12px 10px 41px; font-size: 16px; color: var(--ink); background: var(--panel-2); border: 1.5px solid var(--line); border-radius: var(--r-md); }
+.exp-search input:focus { outline: none; border-color: var(--accent); background: var(--panel); box-shadow: 0 0 0 3px var(--accent-weak); }
+.exp-chips { display: flex; gap: 6px; padding: 10px 14px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; border-bottom: 1px solid var(--line); }
+.exp-chip { flex: none; padding: 5px 12px; font-size: 13px; border-radius: 99px; background: var(--panel-2); border-color: var(--line); }
+@media (hover: hover) { .exp-chip:hover { border-color: var(--accent); } }
+.exp-chip:active { transform: scale(.97); }
+.exp-chip i { font-style: normal; margin-left: 2px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.exp-chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.exp-chip[aria-pressed="true"] i { color: inherit; opacity: .8; }
+.exp-chip.zero { opacity: .5; }
+.exp-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 8px 10px; }
+.exp-grp { position: sticky; top: 0; z-index: 1; display: flex; gap: 6px; align-items: baseline; margin: 0; padding: 12px 10px 6px; background: var(--panel);
+  font: 600 11.5px/1.2 var(--font-cond); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.exp-grp i { font-style: normal; letter-spacing: 0; }
+.exp-item { display: flex; align-items: flex-start; gap: 12px; width: 100%; min-height: var(--tap); padding: 8px 10px; text-align: left; white-space: normal; border: 0; border-radius: var(--r-md); background: transparent; }
+.exp-item:focus-visible { background: var(--accent-weak); }
+@media (hover: hover) { .exp-item:hover { background: var(--accent-weak); } }
+.exp-item:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.exp-item:active { transform: scale(.995); }
+.exp-ic { flex: none; display: grid; place-items: center; width: 40px; height: 36px; border-radius: var(--r-sm); background: var(--panel-2); }
+.exp-ic svg { width: 34px; height: 30px; }
+.exp-t { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.exp-t b { font-size: 14.5px; font-weight: 600; line-height: 1.3; }
+.exp-t small { font-size: 12.5px; line-height: 1.35; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.exp-t .exp-hit { font-size: 12px; font-weight: 600; color: var(--accent); -webkit-line-clamp: 1; }
+:root:not([data-theme="dark"]) .exp-t .exp-hit { color: #087471; }
+.exp-cur { display: inline-block; margin-left: 6px; padding: 0 7px; font: 700 10.5px/17px var(--font); letter-spacing: .03em; vertical-align: 1px; border-radius: 99px; background: var(--accent); color: var(--accent-ink); }
+.exp mark { padding: 0 1px; border-radius: 3px; background: rgba(255, 201, 60, .5); color: inherit; }
+:root[data-theme="dark"] .exp mark { background: rgba(255, 212, 94, .32); }
+.exp-none { margin: 0; padding: 28px 22px 34px; text-align: center; color: var(--muted); line-height: 1.5; }
+.exp-none button { margin-top: 10px; min-height: var(--tap); }
+.exp-foot { margin: 0; padding: 8px 16px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); background: var(--panel-2); }
+.exp-foot kbd { display: inline-block; min-width: 20px; margin-right: 2px; padding: 0 5px; font: 600 11px/18px var(--mono); text-align: center; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; background: var(--panel); }
+/* celular e janelas estreitas: o painel ocupa a tela inteira */
+.exp.full .exp-card { inset: 0; width: auto; max-height: none; border: 0; border-radius: 0; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); animation-name: exp-up; }
+@keyframes exp-up { from { opacity: 0; transform: translateY(14px); } }
+.exp.full .exp-foot { display: none; }
+.exp.full .exp-chip { min-height: var(--tap); padding: 8px 14px; font-size: 14px; }
+.exp.full .exp-item { padding: 10px; }
+.exp.full .exp-t b { font-size: 15px; }
+@media (prefers-reduced-motion: reduce) { .exp-card { animation: none; } }
 </style>
 </head>
 <body>
@@ -1129,7 +1199,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.11.2</span><em>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.12</span><em>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <button type="button" class="test-badge" id="btnAviso" title="Uso acadêmico e de ensino · versão em fase de testes (clique para ler o aviso)"><span>EM TESTES</span></button>
@@ -1138,8 +1208,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
   <button id="btnAlunos" class="alunos-btn" type="button" hidden title="Vídeos feitos pelos alunos de Engenharia Química da UFSJ (YouTube)"><span class="al-new">NOVO</span>🎓 <span class="al-t">Vídeos dos alunos</span><span class="al-tm">Alunos</span> <span class="al-n"></span></button>
   <div class="tools" id="tools">
     <button id="btnNew" title="Novo fluxograma">Novo</button>
-    <label class="sr" for="exampleSel">Exemplos</label>
-    <select id="exampleSel" title="Carregar exemplo"><option value="">Exemplos…</option></select>
+    <button type="button" id="exampleSel" class="ex-open" title="Buscar e abrir um exemplo pronto (atalho: /)" aria-haspopup="dialog" aria-expanded="false" aria-controls="exPanel"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="ex-open-t">Exemplos</span><span class="ex-open-n" id="exampleN"></span></button>
     <button id="btnUndo" title="Desfazer (Ctrl+Z)">Desfazer</button>
     <button id="btnRun" class="primary" title="Simular (F5)"><svg viewBox="0 0 12 12" width="11" height="11"><path d="M2 1l9 5-9 5z" fill="currentColor"/></svg> Simular</button>
     <button id="btnReport" title="Fluxograma final com resultados">Fluxograma final</button>
@@ -1191,6 +1260,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
       </div>
       <div class="hint-m hint-m-float m-only">Toque numa saída <b class="dot out"></b> e depois numa entrada <b class="dot in"></b> para ligar · dois dedos: zoom</div>
       <div class="m-selbar m-only" id="mSel" hidden><span id="mSelName"></span><button type="button" id="mSelEdit" class="primary">Editar</button><button type="button" id="mSelDel">Apagar</button></div>
+      <button type="button" class="m-fab m-fab-ex m-only" id="mEx" aria-haspopup="dialog" aria-controls="exPanel"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>Exemplos <span class="ex-open-n" id="mExN"></span></button>
       <button type="button" class="m-fab m-only" id="mAdd"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>Equipamento</button>
     </div>
     <div class="drawer" id="drawer">
@@ -1284,7 +1354,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.11.2</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.12</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
         <p class="wsub">Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1341,6 +1411,25 @@ body.mobile .vid-ctl .vc-t { display: none; }
   </div>
 </div>
 
+<!-- painel de exemplos da barra de cima: busca por nome, equipamento e componente, lista agrupada por área -->
+<div class="exp" id="exPanel" hidden>
+  <div class="exp-bg" id="exPBg"></div>
+  <div class="exp-card" role="dialog" aria-modal="true" aria-labelledby="exPTitle">
+    <div class="exp-head">
+      <h2 id="exPTitle">Exemplos prontos <small id="exPCount" aria-live="polite"></small></h2>
+      <button type="button" class="exp-x" id="exPClose" aria-label="Fechar a lista de exemplos" title="Fechar (Esc)">✕</button>
+    </div>
+    <div class="exp-search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <label class="sr" for="exPSearch">Buscar exemplo pelo nome, equipamento ou componente</label>
+      <input type="search" id="exPSearch" placeholder="Buscar: etanol, secador, cerveja, CSTR…" autocomplete="off" spellcheck="false" enterkeyhint="search">
+    </div>
+    <div class="exp-chips" id="exPChips" role="group" aria-label="Filtrar por área"></div>
+    <div class="exp-list" id="exPList"></div>
+    <p class="exp-none" id="exPNone" hidden></p>
+    <p class="exp-foot"><kbd>↑</kbd><kbd>↓</kbd> escolher · <kbd>Enter</kbd> abrir · <kbd>Esc</kbd> fechar</p>
+  </div>
+</div>
 <div class="modal" id="modal" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-head"><h2 id="modalTitle">—</h2><span class="spacer"></span><div id="modalActions"></div><button class="icon" id="modalClose" type="button" title="Fechar" aria-label="Fechar">✕</button></div>
@@ -26040,8 +26129,156 @@ def pfr_transiente(P, nome):
     results = null; pfd.sel = null; afterChange(true); setTimeout(() => pfd.fit(), 30);
   }
   function defaultParamsSafe(type, st) { const saved = state; state = st; try { return U.TYPES[type] ? defaultParams(type) : {}; } finally { state = saved; } }
-  SF.examples.forEach(e => { const o = document.createElement('option'); o.value = e.key; o.textContent = e.title; $('#exampleSel').appendChild(o); });
-  $('#exampleSel').onchange = e => { const ex = SF.examples.find(x => x.key === e.target.value); e.target.value = ''; if (!ex) return; chocOpen(ex); loadFlowsheet(ex.fs, false, () => { runSimulation(true); toast('Exemplo carregado: ' + ex.title); }); };
+  /* ------------------------------------------------------------------ painel de exemplos (botão Exemplos da barra de cima)
+     A busca acha o exemplo pelo nome, pelos equipamentos do fluxograma e pelos componentes (sem acento, várias palavras).
+     A lista é agrupada por área. Exemplo novo: acrescente a chave dele numa área abaixo (ou ponha area: '<id>' no exemplo);
+     sem área, ele aparece em "Outros exemplos". */
+  const EX_AREAS = [
+    { id: 'dest', chip: 'Destilação', name: 'Destilação e colunas', keys: 'etoh-mccabe energia-coluna mccabe-refluxo coluna-mccabe-preaquecida extractive fug ponchon-savarit acido-nitrico-azeotropo r410a-destilacao-extrativa-li' },
+    { id: 'sep', chip: 'Separação', name: 'Flash, extração, absorção e adsorção', keys: 'flash lle ell-ternario leach gas adsorcao-mn co2-liquido-ionico metanol-agua-pcsaft metanol-agua-softsaft r410a-liquido-ionico-softsaft' },
+    { id: 'reat', chip: 'Reatores', name: 'Reatores, cinética e controle', keys: 'cstr pfr pid-cstr cinetica-van-de-vusse-bequette cinetica-serie-ajuste-k cinetica-paralela-seletividade cinetica-van-de-vusse-calor gibbs-reforma nox-oxidacao embalagem-o2' },
+    { id: 'bio', chip: 'Bioprocessos', name: 'Bioprocessos', keys: 'biorreatores-tosetto biorreator-tosetto-um biorreatores-dois-serie biorreator-monod biorreator-verhulst biodiesel-transesterificacao biodigestor-rural biodigestor-granja-suinos' },
+    { id: 'alim', chip: 'Alimentos e bebidas', name: 'Alimentos e bebidas', keys: 'fabrica-chocolate laticinio-completo centrifuga-leite degomagem-oleo-soja refrigerante-processo cerveja-processo cachaca-processo cafe-soluvel evaporador-tomate' },
+    { id: 'seca', chip: 'Secagem e evaporação', name: 'Secagem, evaporação e cristalização', keys: 'secador-bandejas spray-dryer-leite liofilizador-esteira secador-micro-ondas secador-solar-abacaxi secador-solar-lodo evaporador-simples evaporador-duplo evaporador-triplo evaporador-energia cristalizador-msmpr cristalizador-kno3' },
+    { id: 'ener', chip: 'Energia e frio', name: 'Calor, bombeamento, vapor e refrigeração', keys: 'hx bomba-afogada gerador-vapor-cavaco cogeracao-biomassa refrig cag-shopping-torre r407c-evaporador' },
+    { id: 'agua', chip: 'Água e efluentes', name: 'Água e efluentes', keys: 'eta-convencional ete-refrigerantes-daf-fosforo' },
+    { id: 'min', chip: 'Mineração e metalurgia', name: 'Mineração, metalurgia e sólidos', keys: 'mineracao-ferro-completo siderurgia-usina-integrada alto-forno silo-tremonha sedimentador-continuo filtracao-continua flotacao-coluna-bancada flotacao-coluna-industrial flotacao-coluna-cobre' },
+    { id: 'ind', chip: 'Indústria química', name: 'Ácidos, cimento, papel, petróleo e cosméticos', keys: 'acido-sulfurico-enxofre acido-sulfurico-gas-metalurgico acido-nitrico-diluicao cimento-fabrica-completa forno-cimento papel-celulose-fabrica-integrada digestor-kraft-eucalipto refinaria-petroleo shampoo-capilar' },
+    { id: 'nuc', chip: 'Nuclear', name: 'Nuclear', keys: 'ciclo-combustivel-nuclear usina-nuclear-pwr cinetica-sem-moderador cinetica-parreira-bosch-neto cinetica-triga-ufmg cinetica-scram-pwr parada-xenonio-angra2' },
+    { id: 'outros', chip: 'Outros', name: 'Outros exemplos', keys: '' }
+  ];
+  EX_AREAS.forEach(a => { a.set = new Set(a.keys.split(/\s+/).filter(Boolean)); });
+  const exAreaOf = ex => EX_AREAS.find(a => a.id === ex.area) || EX_AREAS.find(a => a.set.has(ex.key)) || EX_AREAS[EX_AREAS.length - 1];
+  let exIdx = null, exChip = 'all', exBack = null;
+  const xfold = t => fold(String(t == null ? '' : t).normalize('NFKD')); // como fold, e CO₂ vira co2 (a busca acha "CO2")
+  function exIndex() { // montado na primeira abertura (os nomes dos componentes já estão carregados)
+    if (exIdx) return exIdx;
+    exIdx = SF.examples.map(ex => {
+      const fs = ex.fs, area = exAreaOf(ex);
+      const types = [...new Set(fs.blocks.map(b => b.type))].filter(t => t !== 'feed' && t !== 'product');
+      const equip = types.map(t => (U.TYPES[t] && U.TYPES[t].label) || t);
+      const comps = (fs.components || []).map(id => (TH.COMP[id] || {}).name).filter(Boolean);
+      const forms = (fs.components || []).map(id => (TH.COMP[id] || {}).formula).filter(Boolean);
+      const names = fs.blocks.map(b => b.name || '').concat((fs.streams || []).map(x => x.name || '')).filter(n => n.length > 2);
+      const cut = ex.title.indexOf(' — ');
+      return { ex, area, icon: types[0] || 'feed', main: cut > 0 ? ex.title.slice(0, cut) : ex.title, sub: cut > 0 ? ex.title.slice(cut + 3) : '',
+        equip, comps, names, fTitle: xfold(ex.title), fEquip: equip.map(xfold), fComp: comps.map(xfold), fForm: forms.map(xfold), fNames: names.map(xfold),
+        fArea: xfold(area.name + ' ' + area.chip + ' ' + ex.key + ' ' + (fs.model || '')) };
+    });
+    return exIdx;
+  }
+  const exWords = () => xfold($('#exPSearch').value).split(/[\s,;]+/).filter(Boolean);
+  // a palavra está em algum lugar do exemplo? devolve onde (para a linha "Componente: …"), ou null
+  function exFind(it, w) {
+    if (it.fTitle.indexOf(w) >= 0) return { where: 'title' };
+    let k = it.fComp.findIndex(c => c.indexOf(w) >= 0); if (k >= 0) return { where: 'Componente', what: it.comps[k] };
+    k = it.fForm.findIndex(c => c === w); if (k >= 0) return { where: 'Componente', what: it.comps[k] || w };
+    k = it.fEquip.findIndex(c => c.indexOf(w) >= 0); if (k >= 0) return { where: 'Equipamento', what: it.equip[k] };
+    k = it.fNames.findIndex(c => c.indexOf(w) >= 0); if (k >= 0) return { where: 'No fluxograma', what: it.names[k] };
+    if (it.fArea.indexOf(w) >= 0) return { where: 'area' };
+    return null;
+  }
+  // realça as palavras buscadas no texto (sem acento); se o texto mudar de tamanho ao tirar os acentos, fica sem realce
+  function exMark(text, words) {
+    const f = xfold(text); if (!words.length || f.length !== text.length) return esc(text);
+    const on = new Uint8Array(text.length);
+    words.forEach(w => { for (let i = f.indexOf(w); i >= 0; i = f.indexOf(w, i + 1)) on.fill(1, i, i + w.length); });
+    let out = '', i = 0;
+    while (i < text.length) { let j = i; while (j < text.length && on[j] === on[i]) j++; const part = esc(text.slice(i, j)); out += on[i] ? '<mark>' + part + '</mark>' : part; i = j; }
+    return out;
+  }
+  function renderExPanel() {
+    const all = exIndex(), words = exWords(), hits = [];
+    all.forEach(it => {
+      const found = words.map(w => exFind(it, w));
+      if (found.some(x => !x)) return;
+      const extra = []; found.forEach(x => { if (x.what && extra.indexOf(x.where + ': ' + x.what) < 0) extra.push(x.where + ': ' + x.what); });
+      hits.push({ it, extra, inTitle: found.every(x => x.where === 'title') });
+    });
+    const per = {}; hits.forEach(h => { per[h.it.area.id] = (per[h.it.area.id] || 0) + 1; });
+    if (exChip !== 'all' && !per[exChip] && words.length) exChip = 'all'; // a área escolhida não tem o que foi buscado: mostra todas
+    const used = EX_AREAS.filter(a => all.some(it => it.area === a));
+    $('#exPChips').innerHTML = ['all'].concat(used.map(a => a.id)).map(id => {
+      const a = EX_AREAS.find(x => x.id === id), n = id === 'all' ? hits.length : (per[id] || 0);
+      return '<button type="button" class="exp-chip' + (n ? '' : ' zero') + '" data-area="' + id + '" aria-pressed="' + (exChip === id) + '">' + esc(a ? a.chip : 'Todas') + ' <i>' + n + '</i></button>';
+    }).join('');
+    const shown = hits.filter(h => exChip === 'all' || h.it.area.id === exChip);
+    let html = '';
+    used.forEach(a => {
+      const g = shown.filter(h => h.it.area === a); if (!g.length) return;
+      g.sort((x, y) => y.inTitle - x.inTitle); // com busca, quem tem a palavra no nome vem antes (a ordem estável mantém o resto)
+      html += '<h3 class="exp-grp">' + esc(a.name) + ' <i>· ' + g.length + '</i></h3>' + g.map(h => {
+        const it = h.it, cur = state.name === it.ex.fs.name;
+        return '<button type="button" class="exp-item" data-k="' + esc(it.ex.key) + '"><span class="exp-ic">' + IC.paletteIcon(it.icon) + '</span><span class="exp-t"><b>' + exMark(it.main, words) +
+          (cur ? '<span class="exp-cur">aberto</span>' : '') + '</b>' + (it.sub ? '<small>' + exMark(it.sub, words) + '</small>' : '') +
+          (h.extra.length ? '<small class="exp-hit">' + exMark(h.extra.slice(0, 2).join(' · '), words) + '</small>' : '') + '</span></button>';
+      }).join('');
+    });
+    $('#exPList').innerHTML = html;
+    $('#exPCount').textContent = words.length || exChip !== 'all' ? shown.length + ' de ' + all.length : all.length;
+    const none = $('#exPNone'); none.hidden = shown.length > 0;
+    if (!shown.length) none.innerHTML = 'Nenhum exemplo com <b>' + esc($('#exPSearch').value.trim()) + '</b>.<br>Tente outra palavra, como destilação, reator, leite ou etanol.<br><button type="button" id="exPClear">Limpar a busca</button>';
+  }
+  function placeExPanel() {
+    const p = $('#exPanel'), card = p.querySelector('.exp-card'), full = SF.mobile || innerWidth < 640 || innerHeight < 420;
+    p.classList.toggle('full', full);
+    if (full) { card.style.top = card.style.left = card.style.width = card.style.maxHeight = ''; return; }
+    const r = $('#exampleSel').getBoundingClientRect(), w = Math.min(600, innerWidth - 32);
+    const top = r.height ? Math.round(r.bottom + 8) : 64, left = r.width ? Math.max(16, Math.min(Math.round(r.left), innerWidth - w - 16)) : Math.round((innerWidth - w) / 2);
+    card.style.top = top + 'px'; card.style.left = left + 'px'; card.style.width = w + 'px'; card.style.maxHeight = (innerHeight - top - 16) + 'px';
+  }
+  function openExPanel() {
+    exBack = document.activeElement;
+    $('#exPanel').hidden = false; $('#exampleSel').setAttribute('aria-expanded', 'true');
+    placeExPanel(); renderExPanel(); $('#exPList').scrollTop = 0;
+    const inp = $('#exPSearch');
+    if (!SF.mobile) setTimeout(() => { inp.focus({ preventScroll: true }); inp.select(); }, 20); // no celular o teclado só abre quando o aluno toca na busca
+    else setTimeout(() => $('#exPClose').focus({ preventScroll: true }), 20);
+  }
+  function closeExPanel(restore) {
+    if ($('#exPanel').hidden) return;
+    $('#exPanel').hidden = true; $('#exampleSel').setAttribute('aria-expanded', 'false');
+    if (restore !== false && !SF.mobile && exBack && exBack.focus) exBack.focus({ preventScroll: true });
+  }
+  function loadExample(ex) {
+    closeExPanel(false);
+    chocOpen(ex); loadFlowsheet(ex.fs, false, () => { runSimulation(true); toast('Exemplo carregado: ' + ex.title); });
+    if (SF.mobile) { closeSheets(); setMView('flow'); mFitted = true; setTimeout(() => pfd.fit(), 60); }
+  }
+  $('#exampleN').textContent = $('#mExN').textContent = SF.examples.length;
+  $('#mEx').onclick = () => openExPanel();
+  $('#exampleSel').onclick = () => ($('#exPanel').hidden ? openExPanel() : closeExPanel());
+  $('#exPClose').onclick = () => closeExPanel();
+  $('#exPBg').onclick = () => closeExPanel();
+  $('#exPSearch').oninput = () => { renderExPanel(); $('#exPList').scrollTop = 0; };
+  $('#exPChips').onclick = e => {
+    const b = e.target.closest('.exp-chip'); if (!b) return;
+    exChip = b.dataset.area; renderExPanel(); $('#exPList').scrollTop = 0;
+    const nb = $('#exPChips [data-area="' + exChip + '"]'); if (nb) { nb.focus({ preventScroll: true }); nb.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+  };
+  $('#exPList').onclick = e => { const b = e.target.closest('.exp-item'); const ex = b && SF.examples.find(x => x.key === b.dataset.k); if (ex) loadExample(ex); };
+  $('#exPNone').onclick = e => { if (e.target.id === 'exPClear') { $('#exPSearch').value = ''; exChip = 'all'; renderExPanel(); $('#exPSearch').focus(); } };
+  $('#exPanel').addEventListener('keydown', e => {
+    const items = Array.from($('#exPList').querySelectorAll('.exp-item')), k = items.indexOf(document.activeElement), inp = $('#exPSearch');
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); if (inp.value && document.activeElement === inp) { inp.value = ''; renderExPanel(); } else closeExPanel(); }
+    else if (e.key === 'ArrowDown' && items.length && (document.activeElement === inp || k >= 0)) { e.preventDefault(); items[Math.min(k + 1, items.length - 1)].focus(); }
+    else if (e.key === 'ArrowUp' && k >= 0) { e.preventDefault(); if (k === 0) inp.focus(); else items[k - 1].focus(); }
+    else if (e.key === 'Enter' && document.activeElement === inp && items.length) { e.preventDefault(); items[0].click(); }
+    else if (e.key === 'Tab') { // o Tab circula só dentro do painel
+      const f = Array.from($('#exPanel .exp-card').querySelectorAll('button, input')).filter(el => el.offsetParent !== null);
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  document.addEventListener('keydown', e => { // atalho "/": abre a busca de exemplos (fora das caixas de texto e com a tela livre)
+    if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) return;
+    if (!$('#exPanel').hidden || !$('#modal').hidden || !$('#welcome').hidden || document.querySelector('.tut-ov')) return;
+    e.preventDefault(); openExPanel();
+  });
+  window.addEventListener('resize', () => { if (!$('#exPanel').hidden) placeExPanel(); });
   $('#btnNew').onclick = () => { pushUndo(); state = blank(); results = null; pfd.sel = null; afterChange(true); pfd.fit(); renderCharts(null, []); };
   $('#btnUndo').onclick = undo;
   $('#btnRun').onclick = () => runSimulation();
@@ -26313,7 +26550,6 @@ def pfr_transiente(P, nome):
   $('#palette').addEventListener('click', e => { if (SF.mobile && e.target.closest('.pal-item')) { closeSheets(); updateSelBar(); } });
   // o menu fecha depois de cada item, menos na troca de versão e na troca de tema (dá para ver o tema mudar e voltar)
   $('.tools').addEventListener('click', e => { const b = SF.mobile && e.target.closest('button, a'); if (b && b.id !== 'btnViewMode' && !b.hasAttribute('data-theme-toggle')) setTimeout(closeSheets, 0); });
-  $('#exampleSel').addEventListener('change', () => { if (SF.mobile) { closeSheets(); setMView('flow'); mFitted = true; setTimeout(() => pfd.fit(), 60); } });
   $('#btnViewMode').onclick = () => { const m = SF.mobile ? 'desktop' : 'mobile'; try { localStorage.setItem(VM_KEY, m); } catch (e) { /* */ } closeSheets(); applyView(m, true); toast(m === 'mobile' ? 'Versão para celular' : 'Versão completa para notebook'); };
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && SF.mobile) closeSheets(); });
   (function () {

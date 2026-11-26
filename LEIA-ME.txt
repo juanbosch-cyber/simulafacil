@@ -1,3 +1,24 @@
+SIMULA FÁCIL IA 5.12 – Busca nos exemplos, separados por área (26/11/2026)
+===========================================================================
+
+BOTÃO "EXEMPLOS" EM DESTAQUE
+- No computador, o antigo menu "Exemplos…" da barra de cima virou um botão branco com lupa e o número de exemplos (92),
+  diferente dos outros botões da barra, com um anel que pulsa três vezes quando o simulador abre. Atalho: tecla "/".
+- No celular, um botão "Exemplos 92" fica na própria tela do fluxograma, acima do "+ Equipamento" (não é preciso abrir o
+  menu ☰); no menu ☰ o botão também ficou em destaque.
+
+PAINEL DE EXEMPLOS COM BUSCA
+- Caixa de busca que acha o exemplo pelo nome, pelos equipamentos do fluxograma (coluna, CSTR, secador…) e pelos
+  componentes (etanol, água, CO2…), sem precisar de acento; várias palavras restringem a busca ("cstr camisa").
+- Os exemplos aparecem separados em 11 áreas: destilação; flash, extração, absorção e adsorção; reatores, cinética e
+  controle; bioprocessos; alimentos e bebidas; secagem, evaporação e cristalização; calor, bombeamento, vapor e
+  refrigeração; água e efluentes; mineração, metalurgia e sólidos; ácidos, cimento, papel, petróleo e cosméticos; nuclear.
+  Os botões de área no topo filtram a lista e mostram quantos exemplos de cada área atendem à busca.
+- As palavras buscadas ficam realçadas; quando a palavra está nos componentes ou nos equipamentos, uma linha diz onde
+  ("Componente: Etanol"). O exemplo que está na tela leva a marca "aberto".
+- Teclado: ↑ ↓ escolhem, Enter abre, Esc limpa a busca e fecha. No celular o painel ocupa a tela inteira.
+- Exemplo novo: acrescente a chave dele numa das áreas de EX_AREAS (simulador.html); sem área, ele aparece em "Outros".
+
 SIMULA FÁCIL IA 5.11.2 – "Alimentos" no nome da busca do Google (26/11/2026)
 ============================================================================
 

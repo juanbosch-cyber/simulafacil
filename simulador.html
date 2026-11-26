@@ -952,6 +952,7 @@ body.mobile .modal-card.ck-card .modal-body { padding-bottom: calc(84px + env(sa
 .top button.alunos-btn, .wtut-alunos-btn { position: relative; background: linear-gradient(135deg, #fff176, #ffc107 55%, #ff9800); border: 2px solid #fff; color: #3a2500; font-weight: 900; letter-spacing: .2px; border-radius: 99px; cursor: pointer; box-shadow: 0 2px 8px rgba(0, 0, 0, .25); animation: alunosGlow 1.8s ease-in-out 4; text-shadow: 0 1px 0 rgba(255, 255, 255, .5); }
 .top button.alunos-btn { padding: 7px 16px 7px 14px; font-size: 14.5px; font-family: var(--font-fun); align-self: center; white-space: nowrap; flex: none; }
 .top button.alunos-btn:hover, .wtut-alunos-btn:hover { filter: brightness(1.06) saturate(1.1); transform: translateY(-1px); }
+.al-novo { display: inline-block; margin-right: 6px; padding: 0 6px; font: 900 10px/16px sans-serif; letter-spacing: .6px; vertical-align: 1px; border-radius: 99px; background: #e10600; color: #fff; }
 .alunos-btn .al-new, .wtut-alunos-btn .al-new { position: absolute; top: -9px; right: -6px; background: #e10600; color: #fff; font: 900 10px/1 sans-serif; letter-spacing: .8px; padding: 3px 6px; border-radius: 99px; border: 1.5px solid #fff; transform: rotate(-6deg); animation: alunosNew 1.4s ease-in-out 5; text-shadow: none; }
 .top button.alunos-btn:hover, .wtut-alunos-btn:hover, .alunos-btn:hover .al-new, .wtut-alunos-btn:hover .al-new { animation-iteration-count: infinite; }
 .alunos-btn .al-n, .wtut-alunos-btn .al-n { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; margin-left: 2px; border-radius: 99px; background: #3a2500; color: #ffd54f; font-size: 12.5px; text-shadow: none; }
@@ -1200,7 +1201,7 @@ body.kb .m-fab-ex { display: none; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.12.1</span><em>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.12.2</span><em>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <button type="button" class="test-badge" id="btnAviso" title="Uso acadêmico e de ensino · versão em fase de testes (clique para ler o aviso)"><span>EM TESTES</span></button>
@@ -1355,7 +1356,7 @@ body.kb .m-fab-ex { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.12.1</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.12.2</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
         <p class="wsub">Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -1459,6 +1460,7 @@ body.kb .m-fab-ex { display: none; }
    goatcounter: código da conta em goatcounter.com que conta as visitas (veja js/visitas.js); '' desliga.
    manual:      nome do arquivo PDF do manual, enviado para a mesma pasta do site no GitHub.
    videosAlunos: vídeos enviados pelos alunos, por exemplo { titulo: 'Coluna de destilação', autor: 'Nome do aluno', url: 'https://youtu.be/...' }.
+     A ordem da lista é a ordem na tela; novo: true põe a etiqueta NOVO no vídeo.
    manualVersion: troque a cada manual novo (por exemplo, a data); o link muda e o navegador não abre o PDF antigo do cache. */
 window.SIMULAFACIL_CONFIG = {
   claudeUrl: 'https://claude.ai/artifact/A8LR4WDCvpfBY9XhF5T3TF',
@@ -1467,9 +1469,9 @@ window.SIMULAFACIL_CONFIG = {
   manual: 'Manual_SIMULA_FACIL_IA.pdf',
   manualVersion: '5.3-2026-11-22b',
   videosAlunos: [
-    { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' },
+    { titulo: 'Laticínios – Leite em pó', autor: 'Darciele Permanhani Dalcin – Engenharia Química UFSJ', url: 'https://youtu.be/hBh3ZsHiZ30', novo: true },
     { titulo: 'Como funciona o SIMULA FÁCIL IA - Exemplo: DESTILAÇÃO', autor: 'Bruno Gontijo de Carvalho – Engenharia Química UFSJ', url: 'https://youtu.be/H2lDGKUrdPA' },
-    { titulo: 'Laticínios – Leite em pó', autor: 'Darciele Permanhani Dalcin – Engenharia Química UFSJ', url: 'https://youtu.be/hBh3ZsHiZ30' }
+    { titulo: 'Simulação de um refrigerador', autor: 'Ana Clara Alves de Macedo – Engenharia Química UFSJ', url: 'https://youtu.be/MqbwtjsU0-4' }
   ]
 };
 
@@ -23955,7 +23957,7 @@ def pfr_transiente(P, nome):
       '<div class="tut-bar"><button type="button" class="tut-pp-btn"></button><a class="tut-dl" hidden>⬇ Baixar a imagem</a><span class="tut-narrw" style="display:contents"><label><input type="checkbox" class="tut-narr"' + (narr ? ' checked' : '') + '> 🔊 Narração por voz</label><small class="tut-voice"></small></span><small style="margin-left:auto">Legendas no vídeo · setas vermelhas na imagem</small></div>' +
       '<div class="tut-list">' + LIST.map((T, i) => '<div class="tut-item" data-k="' + i + '"><button type="button" class="tut-play" data-k="' + i + '" title="Assistir ao vídeo"><img alt="" src="' + esc(src(T.poster)) + '"><b>' + (i + 1) + '. ' + esc(T.title) + '</b><small>🎬 ' + esc(T.narr) + ' · ' + esc(T.dur) + '</small></button>' + (T.img ? '<button type="button" class="tut-pp" data-k="' + i + '" title="Imagem com o passo a passo">🧭 Passo a passo</button>' : '') + '</div>').join('') + '</div>' +
       (al.length ? '<div class="tut-alunos"><div class="tut-alh"><h4>🎓 Vídeos dos alunos (' + al.length + ')</h4>' + (al.length > 6 ? '<input type="search" class="tut-alq" placeholder="Buscar por tema ou aluno…" aria-label="Buscar vídeos dos alunos">' : '') + '</div><div class="tut-algrid">' + al.map((v, i) => { const id = ytId(v.url);
-        return '<div class="tut-al" data-i="' + i + '" data-s="' + esc(((v.titulo || '') + ' ' + (v.autor || '')).toLowerCase()) + '"><button type="button" class="tut-yt" data-i="' + i + '" title="Assistir aqui"><span class="th"' + (id ? ' style="background-image:url(https://i.ytimg.com/vi/' + id + '/mqdefault.jpg)"' : '') + '></span><b>' + esc(v.titulo || 'Vídeo do aluno') + '</b><small>' + esc(v.autor || '') + '</small></button>' +
+        return '<div class="tut-al" data-i="' + i + '" data-s="' + esc(((v.titulo || '') + ' ' + (v.autor || '')).toLowerCase()) + '"><button type="button" class="tut-yt" data-i="' + i + '" title="Assistir aqui"><span class="th"' + (id ? ' style="background-image:url(https://i.ytimg.com/vi/' + id + '/mqdefault.jpg)"' : '') + '></span><b>' + (v.novo ? '<span class="al-novo">NOVO</span>' : '') + esc(v.titulo || 'Vídeo do aluno') + '</b><small>' + esc(v.autor || '') + '</small></button>' +
           '<a href="' + esc(v.url) + '" target="_blank" rel="noopener">Abrir no YouTube ↗</a></div>'; }).join('') + '</div></div>' : '') +
       '</div>';
     document.body.appendChild(ov);
@@ -26312,7 +26314,7 @@ def pfr_transiente(P, nome):
     const yid = u => (SF.tutoriais && SF.tutoriais.ytId ? SF.tutoriais.ytId(u) : null);
     const MAX = 4;   // na tela inicial: os 4 primeiros + "ver todos"; a lista completa (com busca) fica na janela dos tutoriais
     box.querySelector('b').textContent = '🎓 Vídeos dos alunos' + (al.length > 1 ? ' (' + al.length + ')' : '');
-    box.querySelector('.wtut-al-l').innerHTML = al.slice(0, MAX).map((v, i) => { const id = yid(v.url); return '<button type="button" data-al="' + i + '" title="' + esc((v.titulo || 'Vídeo') + (v.autor ? ' — ' + v.autor : '')) + '">' + (id ? '<img alt="" loading="lazy" src="https://i.ytimg.com/vi/' + id + '/default.jpg">' : '') + '<span>' + esc(v.titulo || 'Vídeo do aluno') + (v.autor ? ' · ' + esc(v.autor.split(/\s[–-]\s/)[0]) : '') + '</span></button>'; }).join('') +
+    box.querySelector('.wtut-al-l').innerHTML = al.slice(0, MAX).map((v, i) => { const id = yid(v.url); return '<button type="button" data-al="' + i + '" title="' + esc((v.titulo || 'Vídeo') + (v.autor ? ' — ' + v.autor : '')) + '">' + (id ? '<img alt="" loading="lazy" src="https://i.ytimg.com/vi/' + id + '/default.jpg">' : '') + '<span>' + (v.novo ? '<span class="al-novo">NOVO</span>' : '') + esc(v.titulo || 'Vídeo do aluno') + (v.autor ? ' · ' + esc(v.autor.split(/\s[–-]\s/)[0]) : '') + '</span></button>'; }).join('') +
       (al.length > MAX ? '<button type="button" class="wtut-al-all">Ver todos os ' + al.length + ' vídeos →</button>' : '');
     box.querySelectorAll('[data-al]').forEach(b => { b.onclick = () => { closeWelcome(); if (SF.tutoriais) SF.tutoriais.openAluno(+b.dataset.al); }; });
     const all = box.querySelector('.wtut-al-all'); if (all) all.onclick = () => { closeWelcome(); if (SF.tutoriais) SF.tutoriais.openAlunos(); };

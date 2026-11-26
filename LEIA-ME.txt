@@ -1,3 +1,18 @@
+SIMULA FÁCIL IA 5.11.1 – Novo nome na busca do Google e nova ordem dos exemplos (26/11/2026)
+============================================================================================
+
+NOME NA BUSCA DO GOOGLE
+- Título da página (aba, Google, prévia do WhatsApp e dados estruturados): "SIMULA FÁCIL IA – Simulador de Processos Químicos,
+  Bioprocessos, Nuclear, de Minas e Metalurgia", sem o número da versão, para o Google não cortar o nome.
+- O mesmo subtítulo aparece no topo da página de apresentação, na tela inicial e no cabeçalho do simulador, e no nome do
+  aplicativo instalado no celular (site.webmanifest).
+
+NOVA ORDEM DOS EXEMPLOS
+- 2º: "Destilação etanol/água — McCabe-Thiele", com o vídeo da história do diagrama (1925).
+- 3º: ciclo do combustível nuclear (era o 2º).
+- 76º de 92: fábrica de shampoo capilar perolado (era o 3º), depois de Ponchon–Savarit e antes do chiller com R-134a.
+- Os textos da página de apresentação que citam a posição dos exemplos foram corrigidos.
+
 SIMULA FÁCIL IA 5.11 – Ciclo do combustível nuclear: da uraninita às pastilhas de UO₂ (26/11/2026)
 =====================================================================================================
 

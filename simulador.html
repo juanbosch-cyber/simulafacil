@@ -37,8 +37,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 5.10 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e estação de tratamento de água | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 5.10, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também cinética química com análise gráfica de reações (6 EDOs, barras deslizantes de k, Arrhenius, calor liberado e ajuste de k a dados de laboratório), fábrica de cimento completa, fábricas de ácido sulfúrico (enxofre e gás metalúrgico), usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 5.11 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, ciclo do combustível nuclear, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e estação de tratamento de água | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 5.11, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também cinética química com análise gráfica de reações (6 EDOs, barras deslizantes de k, Arrhenius, calor liberado e ajuste de k a dados de laboratório), fábrica de cimento completa, fábricas de ácido sulfúrico (enxofre e gás metalúrgico), usina nuclear PWR completa, ciclo do combustível nuclear da uraninita às pastilhas de UO₂ (lixiviação, extração por solvente, yellowcake, UF₆, ultracentrífugas e reconversão), cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -47,7 +47,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 5.10 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e ETA">
+<meta property="og:title" content="SIMULA FÁCIL IA 5.11 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e ETA">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -1090,6 +1090,14 @@ body.mobile .agua-ctl .ac-t { display: none; }
 .wexc.wexc-shampoo { --c: #9b5cc4; background: linear-gradient(135deg, #fbf3ff, #ead6f7); }
 :root[data-theme="dark"] .wexc.wexc-shampoo { background: linear-gradient(135deg, #36184a, #200f2c); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wexc.wexc-shampoo { background: linear-gradient(135deg, #36184a, #200f2c); } }
+/* versão 5.11 — exemplo do ciclo do combustível nuclear: correntes cor de yellowcake e cartão do exemplo */
+#pfd.uranio { --stream: #a08400; }
+:root[data-theme="dark"] #pfd.uranio { --stream: #e8cf3a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #pfd.uranio { --stream: #e8cf3a; } }
+#pfd.uranio .str:not(.sel) { stroke-width: 3; stroke-linecap: round; }
+.wexc.wexc-uranio { --c: #a08400; background: linear-gradient(135deg, #fffbe3, #f2e38c); }
+:root[data-theme="dark"] .wexc.wexc-uranio { background: linear-gradient(135deg, #3a3200, #1e1a00); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wexc.wexc-uranio { background: linear-gradient(135deg, #3a3200, #1e1a00); } }
 @media (prefers-reduced-motion: reduce) { .ai-k, .ai-txt h2, .ai-s { animation: none; opacity: 1; transform: none; } .agua-intro { transition: none; } }
 /* exemplo com vídeo de abertura (McCabe e Thiele): botão no fluxograma */
 .vid-ctl { position: absolute; top: 10px; right: 10px; z-index: 6; }
@@ -1121,7 +1129,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.10</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.11</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <button type="button" class="test-badge" id="btnAviso" title="Uso acadêmico e de ensino · versão em fase de testes (clique para ler o aviso)"><span>EM TESTES</span></button>
@@ -1276,7 +1284,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.10</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.11</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -2865,7 +2873,24 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'capb', name: 'Cocoamidopropil betaína: tensoativo anfótero, base ativa', formula: 'C19H38N2O3', mw: 342.5, rho: 1050, nv: true, cpl: 650, tags: 'tensoativo anfótero betaína capb cocoamidopropil shampoo xampu espuma suavidade cosmético' },
     { id: 'egds', name: 'Diestearato de etilenoglicol (EGDS): perolizante, funde a 60–65 °C', formula: 'C38H74O4', mw: 595.0, rho: 960, nv: true, cpl: 1250, tags: 'perolizante perolado pérola cera diestearato glicol egds shampoo xampu cosmético' },
     { id: 'phenoxyethanol', name: 'Fenoxietanol: conservante (até 1 % nos cosméticos)', formula: 'C8H10O2', mw: 138.16, rho: 1102, nv: true, cpl: 245, tags: 'conservante preservante fenoxietanol shampoo xampu cosmético' },
-    { id: 'fragrance', name: 'Fragrância (essência: mistura de terpenos e ésteres, soluto não volátil)', formula: 'C10H16', mw: 136.24, rho: 860, nv: true, cpl: 250, tags: 'fragrância essência perfume shampoo xampu cosmético' }
+    { id: 'fragrance', name: 'Fragrância (essência: mistura de terpenos e ésteres, soluto não volátil)', formula: 'C10H16', mw: 136.24, rho: 860, nv: true, cpl: 250, tags: 'fragrância essência perfume shampoo xampu cosmético' },
+    // versão 5.11: ciclo do combustível nuclear. Antes do enriquecimento o urânio é natural; depois, cada composto tem um componente para o U-235 e outro para o U-238
+    { id: 'uraninite', name: 'Uraninita: dióxido de urânio natural (minério de urânio, pechblenda)', formula: 'UO2', mw: 270.027, rho: 9500, solid: true, cpl: 63.6, tags: 'urânio uraninita pechblenda minério nuclear caetité ciclo do combustível' },
+    { id: 'albite', name: 'Albita: feldspato sódico (ganga do albitito de Lagoa Real, Caetité)', formula: 'NaAlSi3O8', mw: 262.22, rho: 2620, solid: true, cpl: 205, tags: 'albita feldspato ganga albitito urânio mineração' },
+    { id: 'pyrolusite', name: 'Pirolusita: dióxido de manganês (oxidante da lixiviação do urânio)', formula: 'MnO2', mw: 86.937, rho: 5030, solid: true, cpl: 54.1, tags: 'pirolusita manganês oxidante lixiviação urânio' },
+    { id: 'mnso4', name: 'Sulfato de manganês dissolvido (soluto não volátil)', formula: 'MnSO4', mw: 151.0, rho: 3250, nv: true, cpl: 100, tags: 'manganês sulfato lixiviação urânio' },
+    { id: 'uranyl-sulfate', name: 'Sulfato de uranila dissolvido (complexo [UO₂(SO₄)₃]⁴⁻ contado como UO₂SO₄)', formula: 'UO2SO4', mw: 366.09, rho: 3280, nv: true, cpl: 150, tags: 'uranila sulfato urânio lixiviação licor extração por solvente' },
+    { id: 'ammonium-sulfate', name: 'Sulfato de amônio dissolvido (soluto não volátil)', formula: '(NH4)2SO4', mw: 132.14, rho: 1770, nv: true, cpl: 187.5, tags: 'sulfato de amônio reextração urânio fertilizante' },
+    { id: 'nh3-aq', name: 'Amônia dissolvida (NH₃ aquosa, soluto não volátil)', formula: 'NH3', mw: 17.031, rho: 700, nv: true, cpl: 80, tags: 'amônia aquosa hidróxido de amônio precipitação urânio dua' },
+    { id: 'adu', name: 'Diuranato de amônio (DUA, precipitado amarelo)', formula: '(NH4)2U2O7', mw: 624.13, rho: 4500, solid: true, cpl: 300, tags: 'diuranato amônio dua adu yellowcake urânio precipitação' },
+    { id: 'u3o8', name: 'Octóxido de triurânio (U₃O₈, yellowcake calcinado)', formula: 'U3O8', mw: 842.08, rho: 8380, solid: true, cpl: 238, tags: 'u3o8 yellowcake concentrado de urânio torta amarela' },
+    { id: 'uf6-235', name: 'Hexafluoreto de urânio com U-235 (²³⁵UF₆)', formula: '235UF6', mw: 349.034, rho: 5090, nv: true, cpl: 167, tags: 'uf6 hexafluoreto urânio 235 enriquecimento centrífuga' },
+    { id: 'uf6-238', name: 'Hexafluoreto de urânio com U-238 (²³⁸UF₆)', formula: '238UF6', mw: 352.041, rho: 5090, nv: true, cpl: 167, tags: 'uf6 hexafluoreto urânio 238 enriquecimento centrífuga empobrecido' },
+    { id: 'nh4f', name: 'Fluoreto de amônio dissolvido (soluto não volátil)', formula: 'NH4F', mw: 37.037, rho: 1010, nv: true, cpl: 65.3, tags: 'fluoreto de amônio efluente reconversão auc' },
+    { id: 'uo2-235', name: 'Dióxido de urânio com U-235 (²³⁵UO₂, pó e pastilhas)', formula: '235UO2', mw: 267.042, rho: 10960, solid: true, cpl: 63.6, tags: 'uo2 dióxido de urânio 235 pastilha combustível nuclear' },
+    { id: 'uo2-238', name: 'Dióxido de urânio com U-238 (²³⁸UO₂, pó e pastilhas)', formula: '238UO2', mw: 270.049, rho: 10960, solid: true, cpl: 63.6, tags: 'uo2 dióxido de urânio 238 pastilha combustível nuclear' },
+    { id: 'puo2', name: 'Dióxido de plutônio (formado no combustível usado)', formula: 'PuO2', mw: 271.05, rho: 11460, solid: true, cpl: 66, tags: 'plutônio combustível usado queima reator' },
+    { id: 'fp-oxide', name: 'Produtos de fissão (óxidos e gases retidos no combustível usado)', formula: 'PF', mw: 135, rho: 7000, solid: true, cpl: 60, tags: 'produtos de fissão combustível usado rejeito radioativo' }
   ];
   /* ------------------------------------------------------------------ alimentos e lodos: a matéria seca de cada um é um componente (M = 100 g/mol, como
      os "Sólidos secos do produto"), com a composição centesimal. Propriedades pelas correlações de Choi e Okos (1986), T em °C:
@@ -5403,7 +5428,7 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'dCor', label: 'Anticorrosivo: diluição na bombona 1:N (1 L de produto em N litros de solução; 1 = puro)', u: 'N', def: 10 },
       { k: 'dPol', label: 'Polímero: diluição na bombona 1:N (1 = puro)', u: 'N', def: 10 },
       { k: 'dBio', label: 'Biocida: diluição na bombona 1:N (1 = puro; o hipoclorito diluído perde força mais depressa)', u: 'N', def: 1 }] },
-    nuclear_reactor: { label: 'Reator nuclear PWR (água pressurizada): potência térmica, circuito primário, combustível, recarga, enriquecimento e calor de decaimento', cat: 'Usina nuclear (PWR)', ins: ['cold_leg'], outs: ['hot_leg'], params: [
+    nuclear_reactor: { label: 'Reator nuclear PWR (água pressurizada): potência térmica, circuito primário, combustível, recarga, enriquecimento e calor de decaimento', cat: 'Usina nuclear (PWR)', ins: ['cold_leg', 'fuel'], outs: ['hot_leg', 'spent'], params: [
       { k: 'Qt', label: 'Potência térmica do núcleo', u: 'MWt', def: 3765 },
       { k: 'Pp', label: 'Pressão do primário (fixada pelo pressurizador)', u: 'bar', def: 158 },
       { k: 'Tin', label: 'Temperatura de entrada no núcleo (perna fria)' + SEMC, u: '°C', def: 291.3 },
@@ -5418,7 +5443,9 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Bd', label: 'Queima média de descarga', u: 'MWd/kgU', def: 50 },
       { k: 'nb', label: 'Lotes do núcleo (a cada recarga troca-se 1/n dos elementos)', u: '', def: 4 },
       { k: 'cf', label: 'Fator de capacidade (fração do ano a plena potência)', u: '%', def: 90 },
-      { k: 'xw', label: 'U-235 no rejeito do enriquecimento (urânio empobrecido)', u: '%', def: 0.25 }] },
+      { k: 'xw', label: 'U-235 no rejeito do enriquecimento (urânio empobrecido)', u: '%', def: 0.25 },
+      { k: 'x5d', label: 'U-235 no combustível usado (com a corrente de combustível novo ligada)', u: '%', def: 0.8 },
+      { k: 'xPu', label: 'Plutônio no combustível usado (com a corrente de combustível novo ligada)', u: '%', def: 1.2 }] },
     pwr_steam_gen: { label: 'Gerador de vapor do PWR (tubos em U): o primário cede calor e o secundário produz vapor saturado; área de troca e diagrama T–Q', cat: 'Usina nuclear (PWR)', ins: ['primary_in', 'feedwater'], outs: ['primary_out', 'steam'], params: [
       { k: 'nSG', label: 'Número de geradores de vapor (circuitos do primário)', u: '', def: 4 },
       { k: 'Ps', label: 'Pressão do vapor produzido', u: 'bar', def: 64.5 },
@@ -5748,7 +5775,80 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Lh', label: 'Comprimento da linha até a envasadora', u: 'm', def: 6 },
       { k: 'd', label: 'Diâmetro interno da linha', u: 'mm', def: 22.1 },
       { k: 'dz', label: 'Desnível até o bico de envase', u: 'm', def: 1.5 },
-      { k: 'dPn', label: 'Perda no bico e na válvula de envase', u: 'bar', def: 0.3 }] }
+      { k: 'dPn', label: 'Perda no bico e na válvula de envase', u: 'bar', def: 0.3 }] },
+    // versão 5.11: ciclo do combustível nuclear, da uraninita às pastilhas (rota brasileira da INB: Caetité e Resende). Vazões médias do ano
+    u_heap_leach: { label: 'Britagem e lixiviação ácida em pilha do minério de urânio (uraninita, H₂SO₄ e MnO₂, como em Caetité): extração, ácido, oxidante e área das pilhas', cat: 'Ciclo do combustível nuclear (urânio)', ins: ['ore', 'acid', 'oxidant'], outs: ['pls', 'residue', 'gas'], params: [
+      { k: 'd80', label: 'Tamanho do minério britado (P80)', u: 'mm', type: 'range', min: 3, max: 50, step: 1, def: 12 },
+      { k: 'tL', label: 'Tempo de lixiviação de cada pilha', u: 'dias', type: 'range', min: 5, max: 150, step: 5, def: 60 },
+      { k: 'tau', label: 'Constante de tempo da lixiviação com P80 de 12 mm (τ cresce com d²)', u: 'dias', def: 20 },
+      { k: 'Xmax', label: 'Extração máxima do urânio (parte da uraninita fica presa em grãos fechados)', u: '%', def: 88 },
+      { k: 'xCal', label: 'Calcita da ganga atacada pelo ácido', u: '%', def: 100 },
+      { k: 'wRet', label: 'Solução retida na pilha lixiviada (sobre o sólido seco)', u: '%', def: 10 },
+      { k: 'H', label: 'Altura das pilhas', u: 'm', def: 6 },
+      { k: 'rhoB', label: 'Massa específica aparente do minério empilhado', u: 't/m³', def: 1.75 }] },
+    u_sx: { label: 'Extração por solvente com amina terciária (misturadores-decantadores): extração, reextração com sulfato de amônio, McCabe–Thiele e Kremser', cat: 'Ciclo do combustível nuclear (urânio)', ins: ['pls', 'strip'], outs: ['raffinate', 'eluate'], params: [
+      { k: 'D', label: 'Coeficiente de distribuição do urânio na extração (orgânico/aquoso)', u: '', type: 'range', min: 2, max: 100, step: 1, def: 20 },
+      { k: 'Ne', label: 'Estágios de extração', u: '', def: 4 },
+      { k: 'OA', label: 'Razão orgânico/aquoso na extração (O/A)', u: '', def: 0.25 },
+      { k: 'Ds', label: 'Coeficiente de distribuição na reextração (orgânico/aquoso)', u: '', def: 0.05 },
+      { k: 'Ns', label: 'Estágios de reextração', u: '', def: 3 },
+      { k: 'yMax', label: 'Carga máxima do orgânico (amina 0,1 M em querosene)', u: 'g U₃O₈/L', def: 8 },
+      { k: 'tMix', label: 'Tempo de residência nos misturadores', u: 'min', def: 3 },
+      { k: 'qS', label: 'Taxa específica dos decantadores (aquoso + orgânico)', u: 'm³/(h·m²)', def: 4 },
+      { k: 'loss', label: 'Perda de orgânico por arraste no rafinado', u: 'L/m³', def: 0.2 }] },
+    u_yellowcake: { label: 'Precipitação do diuranato de amônio (DUA), filtração, secagem e calcinação: yellowcake (U₃O₈)', cat: 'Ciclo do combustível nuclear (urânio)', ins: ['feed', 'ammonia'], outs: ['product', 'filtrate', 'gas'], params: [
+      { k: 'yP', label: 'Urânio precipitado como DUA (pH 7 a 8)', u: '%', def: 99.8 },
+      { k: 'sol', label: 'Sólidos na torta filtrada e lavada', u: '%', def: 40 },
+      { k: 'Tc', label: 'Temperatura de calcinação', u: '°C', type: 'range', min: 300, max: 1000, step: 10, def: 800 },
+      { k: 'dHd', label: 'Calor de decomposição do DUA (estimativa)', u: 'kJ/kg', def: 400 },
+      { k: 'Tg', label: 'Temperatura dos gases da secagem e da calcinação', u: '°C', def: 200 },
+      { k: 'drum', label: 'Yellowcake por tambor de 200 L', u: 'kg', def: 350 }] },
+    u_conversion: { label: 'Conversão do yellowcake a UF₆: purificação com TBP, desnitração, redução (H₂), hidrofluoração (HF) e fluoração (F₂)', cat: 'Ciclo do combustível nuclear (urânio)', ins: ['feed'], outs: ['uf6', 'offgas', 'waste'], params: [
+      { k: 'eta', label: 'Urânio recuperado na purificação com TBP', u: '%', def: 99.5 },
+      { k: 'w5', label: 'U-235 no urânio natural (em massa)', u: '%', def: 0.711 },
+      { k: 'eH2', label: 'Excesso de H₂ na redução', u: '%', def: 20 },
+      { k: 'eHF', label: 'Excesso de HF na hidrofluoração', u: '%', def: 10 },
+      { k: 'eF2', label: 'Excesso de F₂ na fluoração', u: '%', def: 10 },
+      { k: 'kWhF2', label: 'Energia da eletrólise do flúor', u: 'kWh/kg F₂', def: 12 },
+      { k: 'cyl', label: 'UF₆ por cilindro 48Y', u: 'kg', def: 12500 },
+      { k: 'Tg', label: 'Temperatura dos gases (vapor d’água)', u: '°C', def: 150 }] },
+    u_enrichment: { label: 'Enriquecimento do urânio em cascata ideal de ultracentrífugas: SWU, fator de alimentação, limite de Dirac, estágios e máquinas', cat: 'Ciclo do combustível nuclear (urânio)', ins: ['feed'], outs: ['product', 'tails'], params: [
+      { k: 'xp', label: 'Enriquecimento do produto (U-235 em massa)', u: '%', type: 'range', min: 0.8, max: 20, step: 0.05, def: 4 },
+      { k: 'xw', label: 'U-235 no rejeito (urânio empobrecido)', u: '%', type: 'range', min: 0.1, max: 0.5, step: 0.01, def: 0.25 },
+      { k: 'alpha', label: 'Fator de separação de cada centrífuga (com o contrafluxo axial)', u: '', def: 1.3 },
+      { k: 'v', label: 'Velocidade periférica do rotor', u: 'm/s', type: 'range', min: 300, max: 1000, step: 10, def: 600 },
+      { k: 'Z', label: 'Comprimento do rotor', u: 'm', def: 1 },
+      { k: 'Tg', label: 'Temperatura do UF₆ no rotor', u: '°C', def: 27 },
+      { k: 'rD', label: 'ρD do UF₆ (massa específica × difusividade do par isotópico)', u: 'kg/(m·s)', def: 2.3e-5 },
+      { k: 'eff', label: 'Eficiência em relação ao limite de Dirac', u: '%', def: 50 },
+      { k: 'eSWU', label: 'Energia por unidade de trabalho de separação', u: 'kWh/SWU', def: 50 },
+      { k: 'cyP', label: 'UF₆ por cilindro 30B (produto)', u: 'kg', def: 2277 },
+      { k: 'cyW', label: 'UF₆ por cilindro 48Y (rejeito)', u: 'kg', def: 12500 }] },
+    u_auc: { label: 'Reconversão do UF₆ a pó de UO₂ pelo processo AUC (precipitação com NH₃ e CO₂ e calcinação em leito fluidizado com H₂)', cat: 'Ciclo do combustível nuclear (urânio)', ins: ['feed'], outs: ['product', 'effluent'], params: [
+      { k: 'eta', label: 'Urânio recuperado no pó', u: '%', def: 99.9 },
+      { k: 'Tc', label: 'Temperatura do leito fluidizado (calcinação e redução)', u: '°C', type: 'range', min: 400, max: 800, step: 10, def: 550 },
+      { k: 'eH2', label: 'Excesso de H₂ no leito fluidizado', u: '%', def: 100 },
+      { k: 'Vef', label: 'Efluente com fluoreto de amônio', u: 'm³ por t de U', def: 10 },
+      { k: 'BET', label: 'Área específica do pó (informativa)', u: 'm²/g', def: 5.5 }] },
+    u_pellets: { label: 'Fábrica de pastilhas de UO₂ e elementos combustíveis: compactação, sinterização em H₂, retífica, varetas de zircaloy e elementos 16 × 16', cat: 'Ciclo do combustível nuclear (urânio)', ins: ['feed'], outs: ['fuel', 'scrap'], params: [
+      { k: 'dG', label: 'Densidade a verde (compactada)', u: '% da teórica', type: 'range', min: 40, max: 65, step: 1, def: 50 },
+      { k: 'dS', label: 'Densidade sinterizada', u: '% da teórica', type: 'range', min: 90, max: 98, step: 0.1, def: 95.5 },
+      { k: 'rTD', label: 'Densidade teórica do UO₂', u: 'g/cm³', def: 10.96 },
+      { k: 'D', label: 'Diâmetro final da pastilha', u: 'mm', def: 9.11 },
+      { k: 'Hp', label: 'Altura da pastilha', u: 'mm', def: 11 },
+      { k: 'gr', label: 'Sobremetal da retífica no diâmetro', u: 'mm', def: 0.12 },
+      { k: 'dish', label: 'Volume dos rebaixos e chanfros', u: '%', def: 1.2 },
+      { k: 'rej', label: 'Pastilhas rejeitadas na inspeção', u: '%', def: 2 },
+      { k: 'Pp', label: 'Pressão de compactação', u: 'MPa', def: 400 },
+      { k: 'Ts', label: 'Temperatura de sinterização (em H₂)', u: '°C', def: 1750 },
+      { k: 'tS', label: 'Tempo no patamar de sinterização', u: 'h', def: 4 },
+      { k: 'La', label: 'Comprimento ativo da vareta (coluna de pastilhas)', u: 'm', def: 3.9 },
+      { k: 'Dc', label: 'Diâmetro externo do revestimento de zircaloy', u: 'mm', def: 10.75 },
+      { k: 'tc', label: 'Espessura do revestimento', u: 'mm', def: 0.725 },
+      { k: 'Lc', label: 'Comprimento do tubo de revestimento', u: 'm', def: 4.07 },
+      { k: 'rZr', label: 'Massa específica do zircaloy-4', u: 'g/cm³', def: 6.55 },
+      { k: 'nR', label: 'Varetas por elemento (16 × 16 menos os tubos-guia)', u: '', def: 236 },
+      { k: 'nRel', label: 'Elementos trocados por recarga do reator', u: '', def: 48 }] }
   };
   Object.keys(TYPES).forEach(k => { TYPES[k].type = k; });
 
@@ -11374,8 +11474,16 @@ window.SIMULAFACIL_CONFIG = {
     const qAvg = Q * 1000 / (nFA * nR * La), qMax = qAvg * Fq;   // kW/m
     if (qMax > 45) warn.push('taxa linear de calor máxima de ' + qMax.toFixed(1) + ' kW/m, acima do limite usual de 42 a 45 kW/m: risco de fundir o centro da pastilha de UO₂');
     const mFA = Math.max(0.01, num(p.mFA, 0.55)), mU = nFA * mFA;   // t de urânio
-    const enr = num(p.enr, 4) / 100, Bd = Math.max(1, num(p.Bd, 50)), nb = Math.max(1, Math.round(num(p.nb, 4))), cf = Math.min(1, Math.max(0.05, num(p.cf, 90) / 100));
+    let enr = num(p.enr, 4) / 100; const Bd = Math.max(1, num(p.Bd, 50)), nb = Math.max(1, Math.round(num(p.nb, 4))), cf = Math.min(1, Math.max(0.05, num(p.cf, 90) / 100));
     const xf = 0.00711, xw = num(p.xw, 0.25) / 100;
+    // combustível novo vindo da fábrica de pastilhas (versão 5.11): o enriquecimento sai da composição da corrente
+    const sF = ins && ins.fuel, fConn = connected(sF); let fuel = null;
+    if (fConn) {
+      urNeed(th, UR.pairs.uo2, 'combustível novo'); fuel = urIso(th, kgOf(th, sF), UR.pairs.uo2);
+      if (!(fuel.U > 0)) throw new Error('a corrente de combustível não traz UO₂ (pastilhas)');
+      if (Math.abs(fuel.x - enr) > 5e-4) warn.push('o combustível que chega tem ' + (100 * fuel.x).toFixed(2) + ' % de U-235 e o campo pede ' + (100 * enr).toFixed(2) + ' %: o reator usa o teor da corrente');
+      enr = fuel.x; if (enr < 0.02) warn.push('combustível com só ' + (100 * enr).toFixed(2) + ' % de U-235: um PWR com água leve precisa de cerca de 3 a 5 % para ficar crítico com a queima pedida');
+    }
     if (!(enr > xf && enr <= 0.2)) throw new Error('o enriquecimento fica entre 0,72 % (urânio natural) e 20 % (limite do urânio de baixo enriquecimento); no PWR, de 3 a 5 %');
     if (!(xw > 0.0005 && xw < xf)) throw new Error('o teor de U-235 no rejeito do enriquecimento fica entre 0,05 % e 0,71 % (usual: 0,2 a 0,3 %)');
     if (enr > 0.05) warn.push('enriquecimento acima de 5 %: as fábricas de combustível de PWR são licenciadas, em geral, até 5 % de U-235');
@@ -11413,8 +11521,25 @@ window.SIMULAFACIL_CONFIG = {
     const plots = [{ kind: 'curves', title: 'Perfil axial da taxa linear de calor (vareta média)', data: { xLabel: 'Altura no núcleo (m)', yLabel: 'Taxa linear de calor (kW/m)', series: [{ name: 'q′(z)', x: zs, y: qz, color: '#d1302b', width: 3 }], hlines: [{ y: qAvg, name: 'Média' }] } },
       { kind: 'curves', title: 'Temperatura da água ao longo do canal médio', data: { xLabel: 'Altura no núcleo (m)', yLabel: 'Temperatura (°C)', series: [{ name: 'Água do primário', x: zs, y: Tz, color: '#2563c9', width: 3 }], hlines: [{ y: Tsat, name: 'Saturação a ' + br(fmt(Pp, 0)) + ' bar' }] } },
       { kind: 'curves', title: 'Calor de decaimento depois do desligamento (Way–Wigner)', data: { xLabel: 'Tempo depois do desligamento (s)', yLabel: 'Potência residual (% da nominal)', xLog: true, yLog: true, series: [{ name: 'P/P₀', x: ts, y: ps, color: '#7a3db8', width: 3 }] } }];
+    let spent = null;
+    if (fConn) { // combustível usado: U-235 e plutônio informados; produtos de fissão pela queima (massa fissionada ≈ massa dos produtos)
+      const wh = 'combustível usado'; urNeed(th, ['puo2', 'fp-oxide'], wh);
+      const x5d = Math.max(0, num(p.x5d, 0.8)) / 100, xPu = Math.max(0, num(p.xPu, 1.2)) / 100, fpF = Bd * gU5 / 1000, u8f = 1 - fpF - x5d - xPu;
+      if (!(x5d < enr)) throw new Error('o combustível novo chega com ' + br(fmt(100 * enr, 2)) + ' % de U-235 e o campo "U-235 no combustível usado" pede ' + br(fmt(100 * x5d, 2)) + ' %: o usado tem de ficar abaixo do novo. O PWR usa de 3 a 5 % (abaixo de cerca de 2 % o núcleo nem fica crítico): suba o enriquecimento na cascata');
+      if (!(u8f > 0)) throw new Error('confira a queima, o U-235 e o plutônio do combustível usado: a soma passa de 100 %');
+      const kF = kgOf(th, sF), kS = urZ(th), HM = fuel.U;
+      urIsoPut(th, kS, UR.pairs.uo2, x5d * HM, u8f * HM, wh); etaAdd(th, kS, 'puo2', xPu * HM * 271.05 / 239.052, wh);
+      const rest = sum(kF) - sum(kS); if (rest > 0) etaAdd(th, kS, 'fp-oxide', rest, wh);
+      spent = chOut(th, kS, 40, sF.P);
+      const supY = HM * UR.h, cov = supY / mUy;
+      if (cov < 0.95) warn.push('a fábrica entrega ' + fmt(100 * cov, 0) + ' % do urânio que o reator queima por ano: aumente a produção no início da rota');
+      res.push({ k: 'COMBUSTÍVEL DA FÁBRICA (corrente de entrada)', v: '', u: '' },
+        { k: 'Urânio recebido / queimado pelo reator por ano', v: fmt(supY / 1000, 2) + ' t / ' + fmt(mUy / 1000, 2) + ' t (' + fmt(100 * cov, 0) + ' %), com ' + fmt(100 * enr, 3) + ' % de U-235', u: '' },
+        { k: 'Elementos combustíveis por ano (de ' + fmt(mFA, 2) + ' t U): entregues / trocados', v: fmt(supY / (mFA * 1000), 1) + ' / ' + fmt(FAy, 1), u: '' },
+        { k: 'Combustível usado (queima de ' + fmt(Bd, 0) + ' MWd/kgU)', v: fmt(100 * x5d, 2) + ' % de U-235, ' + fmt(100 * xPu, 2) + ' % de plutônio, ' + fmt(100 * fpF, 2) + ' % de produtos de fissão e ' + fmt(100 * u8f, 2) + ' % de U-238 (sobre o metal pesado inicial)', u: '' });
+    }
     const out = h2oStream(th, m, Pp, stOut);
-    return { out: { hot_leg: out }, massUtil: conn ? 0 : m, res: decBR(decK(res)), warn: decW(warn), plots, duty: Q * 1e6, nuc: { Q, cf } };
+    return { out: spent ? { hot_leg: out, spent } : { hot_leg: out }, massUtil: conn ? 0 : m, res: decBR(decK(res)), warn: decW(warn), plots, duty: Q * 1e6, nuc: { Q, cf } };
   };
 
   /* gerador de vapor do PWR (tubos em U): a água do primário cede calor e sai na temperatura especificada; o secundário recebe a água de
@@ -13297,6 +13422,405 @@ window.SIMULAFACIL_CONFIG = {
     out.visc = s.visc; out.rhoL = s.rhoL;
     return { out: { product: out, loss: chOut(th, kL, T, s.P) }, res: decBR(decK(res)), warn: decW(warn), plots };
   };
+  /* ================================================================== versão 5.11: ciclo do combustível nuclear (rota brasileira da INB)
+     Da uraninita de Caetité (BA) às pastilhas de UO₂ de Resende (RJ): lixiviação ácida em pilha com MnO₂, extração por solvente com
+     amina terciária e reextração com sulfato de amônio, precipitação do diuranato de amônio (DUA) e calcinação (yellowcake, U₃O₈),
+     conversão a UF₆, enriquecimento em cascata de ultracentrífugas, reconversão pelo processo AUC e fabricação das pastilhas e dos
+     elementos combustíveis. Base de cálculo: vazões médias ao longo do ano (kg/h = produção do ano ÷ 8 766 h).
+     Antes do enriquecimento o urânio é natural (um componente por composto); depois, cada composto tem dois componentes,
+     um com o U-235 e outro com o U-238, e o teor de U-235 aparece na própria composição da corrente. */
+  const UR = { h: 8766, MU: 238.029, M5: 235.0439, M8: 238.0508, MO: 15.999, MF: 18.998, R: 8.314462618,
+    U3O8perU: 842.08 / (3 * 238.029),
+    pairs: { uf6: ['uf6-235', 'uf6-238'], uo2: ['uo2-235', 'uo2-238'] } };
+  const urF = (v, d) => (isFinite(v) ? (+v).toFixed(d) : '—');
+  const urMW = (th, id) => { const i = th.ids.indexOf(id); return i >= 0 ? th.c[i].mw : (TH.COMP[id] || {}).mw; };
+  const urN = (th, kg, id) => { const m = etaG(th, kg, id); return m > 0 ? m / urMW(th, id) : 0; };   // kmol/h
+  const urAddN = (th, kg, id, dn, what) => etaAdd(th, kg, id, dn * urMW(th, id), what);
+  const urZ = th => new Array(th.n).fill(0);
+  const urSum = (th, list) => { const kg = urZ(th); list.forEach(s => { if (connected(s)) kgOf(th, s).forEach((v, i) => { kg[i] += v; }); }); return kg; };
+  const urT = list => { let m = 0, q = 0; list.forEach(s => { if (connected(s)) { m += s.mass; q += s.mass * K2C(s.T); } }); return m > 0 ? q / m : 25; };
+  // volume da fase aquosa (m³/h): água a 997 kg/m³ e os solutos pela massa específica de cada um (os sólidos ficam de fora)
+  const urVol = (th, kg) => { let v = 0; kg.forEach((m, i) => { const c = th.c[i]; if (m > 0 && !c.solid) v += m / (c.id === 'water' ? 997 : c.rho || 1500); }); return v; };
+  // urânio por isótopo (kg de U por hora) de um par de componentes isotópicos
+  function urIso(th, kg, pair) {
+    const m5 = etaG(th, kg, pair[0]) * UR.M5 / urMW(th, pair[0]), m8 = etaG(th, kg, pair[1]) * UR.M8 / urMW(th, pair[1]), U = m5 + m8;
+    return { m5, m8, U, x: U > 0 ? m5 / U : 0 };
+  }
+  function urIsoPut(th, kg, pair, m5, m8, what) { etaAdd(th, kg, pair[0], m5 * urMW(th, pair[0]) / UR.M5, what); etaAdd(th, kg, pair[1], m8 * urMW(th, pair[1]) / UR.M8, what); }
+  const urNeed = (th, ids, what) => ids.forEach(id => { if (th.ids.indexOf(id) < 0) throw new Error(what + ': inclua na lista de componentes "' + etaName(id) + '"'); });
+  const swuVal = x => (2 * x - 1) * Math.log(x / (1 - x));   // função valor do enriquecimento
+  // pressão de vapor do UF₆ (bar): sólido de 0 a 64 °C e líquido acima do ponto triplo (Oliver, Milton e Grisard, 1953; P em mmHg)
+  const uf6Psat = t => Math.pow(10, t < 64.05 ? 6.38363 + 0.0075377 * t - 942.76 / (t + 183.416) : 6.99464 - 1126.288 / (t + 221.963)) / 750.062;
+
+  /* 1) britagem e lixiviação ácida em pilha (Caetité). O U(IV) da uraninita só se dissolve depois de oxidado a U(VI):
+     UO₂ + MnO₂ + 2 H₂SO₄ → UO₂SO₄ + MnSO₄ + 2 H₂O (o par Fe³⁺/Fe²⁺ da solução leva os elétrons). A calcita da ganga gasta ácido:
+     CaCO₃ + H₂SO₄ + H₂O → CaSO₄·2H₂O + CO₂. A extração segue X(t) = X_máx(1 − e^(−t/τ)), com τ ∝ d² (difusão no grão britado). */
+  IMPL.u_heap_leach = function (th, b, ins) {
+    const p = b.params, warn = [], f = urF, what = 'lixiviação em pilha', so = ins && ins.ore, sa = ins && ins.acid, sx = ins && ins.oxidant;
+    if (!connected(so)) throw new Error('conecte a corrente de minério britado');
+    if (!connected(sa)) throw new Error('conecte a solução de irrigação (água com ácido sulfúrico)');
+    urNeed(th, ['uraninite', 'water', 'sulfuric-acid', 'uranyl-sulfate'], what);
+    const kg = urSum(th, [so, sa, sx]), Tc = urT([so, sa, sx]), mOre = sum(kgOf(th, so)), oreDry = mOre - etaG(th, kgOf(th, so), 'water');
+    const Xmax = clamp(num(p.Xmax, 88), 1, 100) / 100, tauR = Math.max(0.1, num(p.tau, 20)), d80 = Math.max(0.5, num(p.d80, 12)), tL = Math.max(0, num(p.tL, 60));
+    const xCal = clamp(num(p.xCal, 100), 0, 100) / 100, wRet = clamp(num(p.wRet, 10), 0, 60) / 100, H = Math.max(0.5, num(p.H, 6)), rhoB = Math.max(0.5, num(p.rhoB, 1.75));
+    const tau = tauR * Math.pow(d80 / 12, 2), Xt = Xmax * (1 - Math.exp(-tL / tau));
+    const nU0 = urN(th, kg, 'uraninite'), nMn0 = urN(th, kg, 'pyrolusite'), nA0 = urN(th, kg, 'sulfuric-acid'), nCa0 = urN(th, kg, 'caco3');
+    if (!(nU0 > 0)) throw new Error('o minério não tem uraninita (UO₂)');
+    // calcita primeiro (reação rápida), depois o urânio, limitado pelo oxidante e pelo ácido que sobra
+    let nCa = nCa0 * xCal; if (nCa > 0) urNeed(th, ['gypsum', 'co2'], what);
+    if (nCa > nA0) { warn.push('o ácido não dá nem para a calcita da ganga: a pilha fica neutra e o urânio não se dissolve; aumente o H₂SO₄'); nCa = nA0; }
+    let nU = Xt * nU0; const lim = [];
+    if (nU > nMn0) { lim.push('o oxidante (MnO₂) só oxida ' + f(100 * nMn0 / nU0, 1) + ' % do urânio'); nU = nMn0; }
+    if (nU > (nA0 - nCa) / 2) { lim.push('o ácido que sobra da calcita só dissolve ' + f(100 * (nA0 - nCa) / 2 / nU0, 1) + ' % do urânio'); nU = Math.max(0, (nA0 - nCa) / 2); }
+    if (lim.length) warn.push('extração limitada: ' + lim.join('; ') + ' (a cinética permitiria ' + f(100 * Xt, 1) + ' %)');
+    if (nU > 0) urNeed(th, ['pyrolusite', 'mnso4'], what);
+    urAddN(th, kg, 'caco3', -nCa, what); urAddN(th, kg, 'sulfuric-acid', -nCa, what); urAddN(th, kg, 'water', -nCa, what); urAddN(th, kg, 'gypsum', nCa, what);
+    urAddN(th, kg, 'uraninite', -nU, what); urAddN(th, kg, 'pyrolusite', -nU, what); urAddN(th, kg, 'sulfuric-acid', -2 * nU, what);
+    urAddN(th, kg, 'uranyl-sulfate', nU, what); urAddN(th, kg, 'mnso4', nU, what); urAddN(th, kg, 'water', 2 * nU, what);
+    // o CO₂ sai para a atmosfera; os sólidos ficam na pilha com a solução retida (umidade); o resto da solução é o licor rico (PLS)
+    const kGas = urZ(th), iC = th.ids.indexOf('co2'); if (iC >= 0) { kGas[iC] = kg[iC]; kg[iC] = 0; }
+    const kSol = kg.map((m, i) => (th.c[i].solid ? m : 0)), kLiq = kg.map((m, i) => (th.c[i].solid ? 0 : m)), mSol = sum(kSol), mLiq = sum(kLiq);
+    const fRet = Math.min(0.95, wRet * mSol / Math.max(mLiq, 1e-9)), kRes = kSol.map((m, i) => m + kLiq[i] * fRet), kPLS = kLiq.map(m => m * (1 - fRet));
+    const Vp = urVol(th, kPLS), nUp = urN(th, kPLS, 'uranyl-sulfate'), gU = nUp * UR.MU / Vp, acid = etaG(th, kPLS, 'sulfuric-acid') / Vp;
+    const Ufeed = nU0 * UR.MU, Ulix = nU * UR.MU, Upls = nUp * UR.MU, Uret = Ulix - Upls, Uun = Ufeed - Ulix, ton = oreDry / 1000;
+    const grade = Ufeed * UR.U3O8perU / oreDry * 100;   // % de U₃O₈ equivalente no minério seco
+    const inv = mOre / 1000 * 24 * tL, area = inv / rhoB / H, irr = urVol(th, kgOf(th, sa)) * 1000 / Math.max(area, 1e-9);
+    if (gU < 0.1) warn.push('licor com ' + f(gU, 3) + ' g U/L: muito diluído para a extração por solvente (o usual é de 0,3 a 2 g/L)');
+    if (acid < 2) warn.push('ácido livre de ' + f(acid, 1) + ' g/L no licor: abaixo de 2 a 3 g/L o ferro e o urânio voltam a precipitar na pilha');
+    if (acid > 25) warn.push('ácido livre de ' + f(acid, 1) + ' g/L no licor: acidez sobrando encarece o processo e prejudica a extração com amina');
+    if (nU > 0 && nMn0 < 1.3 * nU) warn.push('oxidante com pouca folga (' + f(nMn0 / nU, 2) + ' vez o estequiométrico): use de 1,5 a 3 vezes, porque a pirita e o Fe²⁺ da ganga também gastam MnO₂');
+    if (tL > 0 && (irr < 4 || irr > 25)) warn.push('taxa de irrigação de ' + f(irr, 1) + ' L/(h·m²): o usual nas pilhas é de 5 a 20 L/(h·m²); mude o tempo de lixiviação, a altura da pilha ou a solução');
+    if (d80 > 25) warn.push('minério britado grosso (P80 = ' + f(d80, 0) + ' mm): o ácido demora a chegar ao centro dos grãos (τ cresce com d²)');
+    const res = [{ k: 'Base de cálculo', v: 'vazões médias ao longo do ano (produção do ano ÷ 8 766 h); a pilha recebe minério e solução continuamente', u: '' },
+      { k: 'Minério britado (seco) / teor', v: f(ton, 2) + ' t/h (' + f(ton * UR.h / 1000, 1) + ' mil t por ano) com ' + f(grade, 3) + ' % de U₃O₈ equivalente (' + f(10 * grade, 2) + ' kg/t)', u: '' },
+      { k: 'Cinética: τ = ' + f(tauR, 0) + ' d × (P80/12 mm)²', v: 'τ = ' + f(tau, 1) + ' d; em ' + f(tL, 0) + ' dias a cinética extrai ' + f(100 * Xt, 1) + ' % (máximo ' + f(100 * Xmax, 0) + ' %)', u: '' },
+      { k: 'Urânio extraído / no licor rico (PLS)', v: f(100 * Ulix / Ufeed, 2) + ' % / ' + f(100 * Upls / Ufeed, 2) + ' % (' + f(Upls, 2) + ' kg U/h, ' + f(Upls * UR.h / 1000, 1) + ' t U por ano)', u: '' },
+      { k: 'Perdas de urânio: não lixiviado / na solução retida na pilha', v: f(100 * Uun / Ufeed, 2) + ' % / ' + f(100 * Uret / Ufeed, 2) + ' %', u: '' },
+      { k: 'Licor rico (PLS)', v: f(Vp, 2) + ' m³/h com ' + f(gU, 3) + ' g U/L (' + f(gU * UR.U3O8perU, 3) + ' g U₃O₈/L), ' + f(acid, 2) + ' g/L de H₂SO₄ livre e ' + f(etaG(th, kPLS, 'mnso4') / Vp, 2) + ' g/L de MnSO₄', u: '' },
+      { k: 'Ácido consumido', v: f((nA0 - urN(th, kg, 'sulfuric-acid')) * 98.079 / ton, 1) + ' kg H₂SO₄/t de minério (' + f(2 * nU * 98.079 / ton, 2) + ' pelo urânio, ' + f(nCa * 98.079 / ton, 1) + ' pela calcita); o licor ainda leva ' + f(acid * Vp / ton, 1) + ' kg/t livres', u: '' },
+      { k: 'Oxidante (MnO₂)', v: f(nMn0 * 86.937 / ton, 2) + ' kg/t de minério (' + (nU > 0 ? f(nMn0 / nU, 2) + ' vez o estequiométrico' : '—') + ')', u: '' },
+      { k: 'Gesso formado na pilha / CO₂ liberado', v: f(nCa * 172.17, 1) + ' / ' + f(nCa * 44.01, 1) + ' kg/h', u: '' },
+      { k: 'Pilhas em lixiviação', v: f(inv / 1000, 1) + ' mil t de minério (' + f(tL, 0) + ' dias), ' + f(H, 1) + ' m de altura e ' + f(area, 0) + ' m² irrigados a ' + f(irr, 1) + ' L/(h·m²)', u: '' },
+      { k: 'Pilha lixiviada (rejeito)', v: f(sum(kRes) / 1000, 2) + ' t/h com ' + f(100 * wRet, 0) + ' % de solução retida (sobre o sólido seco); vai para a área de rejeitos, com o Ra-226 e o tório do minério', u: '' }];
+    const tt = [], s1 = [], s2 = [], s3 = [], X = (tq, d) => 100 * Xmax * (1 - Math.exp(-tq / (tauR * Math.pow(d / 12, 2)))), tMax = Math.max(150, 1.5 * tL);
+    for (let k = 0; k <= 60; k++) { const tq = tMax * k / 60; tt.push(tq); s1.push(X(tq, d80 / 2)); s2.push(X(tq, d80)); s3.push(X(tq, 2 * d80)); }
+    const plots = [{ kind: 'curves', title: 'Extração do urânio na pilha ao longo do tempo (efeito da britagem)', data: { xLabel: 'Tempo de lixiviação (dias)', yLabel: 'Urânio extraído (%)', xRange: [0, tMax], yRange: [0, 100], series: [
+        { name: 'P80 = ' + br(f(d80 / 2, 1)) + ' mm', x: tt, y: s1, color: '#2e9e6b', width: 2.5 }, { name: 'P80 = ' + br(f(d80, 1)) + ' mm (operação)', x: tt, y: s2, color: '#b08a00', width: 3.5 },
+        { name: 'P80 = ' + br(f(2 * d80, 1)) + ' mm', x: tt, y: s3, color: '#d1302b', width: 2.5 },
+        { name: 'Operação: ' + br(f(100 * Ulix / Ufeed, 1)) + ' %', x: [tL], y: [100 * Ulix / Ufeed], mode: 'markers', size: 13, symbol: 'diamond', color: '#111' }],
+        hlines: [{ y: 100 * Xmax, name: 'Extração máxima (' + f(100 * Xmax, 0) + ' %)', color: '#8a8f98' }] } },
+      { kind: 'bars', title: 'Destino do urânio do minério (% do que entra)', data: { categories: ['Licor rico (PLS)', 'Solução retida na pilha', 'Não lixiviado (rejeito)'], yLabel: '%',
+        series: [{ name: '% do urânio', y: [100 * Upls / Ufeed, 100 * Uret / Ufeed, 100 * Uun / Ufeed], color: '#b08a00' }] } },
+      { kind: 'bars', title: 'Ácido sulfúrico por tonelada de minério (kg/t)', data: { categories: ['Dissolve o urânio', 'Gasto pela calcita', 'Sai livre no licor'], yLabel: 'kg de H₂SO₄ por t',
+        series: [{ name: 'kg/t', y: [2 * nU * 98.079 / ton, nCa * 98.079 / ton, acid * Vp / ton], color: '#2563c9' }] } }];
+    const P = so.P;
+    return { out: { pls: chOut(th, kPLS, Tc, P), residue: chOut(th, kRes, Tc, P), gas: chOut(th, kGas, Tc, P) }, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
+  /* 2) extração por solvente: amina terciária (Alamine 336, 0,1 M em querosene com isodecanol), misturadores-decantadores em
+     contracorrente. Extração: 2 (R₃NH)₂SO₄ + UO₂(SO₄)₃⁴⁻ → (R₃NH)₄UO₂(SO₄)₃ + 2 SO₄²⁻ (por U, o orgânico leva UO₂SO₄ + 2 H₂SO₄).
+     Reextração com sulfato de amônio e amônia (pH ≈ 4): 2 H₂SO₄ + 4 NH₃ → 2 (NH₄)₂SO₄. Equilíbrio linear y = D·x e Kremser,
+     com o orgânico reextraído voltando à extração (a carga que sobra nele é calculada por iteração). */
+  IMPL.u_sx = function (th, b, ins) {
+    const p = b.params, warn = [], f = urF, what = 'extração por solvente', sp = ins && ins.pls, ss = ins && ins.strip;
+    if (!connected(sp)) throw new Error('conecte o licor rico (PLS) da lixiviação');
+    if (!connected(ss)) throw new Error('conecte a solução de reextração (sulfato de amônio com amônia)');
+    urNeed(th, ['uranyl-sulfate', 'sulfuric-acid', 'ammonium-sulfate', 'nh3-aq'], what);
+    const D = Math.max(0.01, num(p.D, 20)), Ne = Math.max(1, Math.round(num(p.Ne, 4))), OA = Math.max(0.01, num(p.OA, 0.25)), Ds = Math.max(1e-4, num(p.Ds, 0.05)), Ns = Math.max(1, Math.round(num(p.Ns, 3)));
+    const yMax = Math.max(0.1, num(p.yMax, 8)), loss = Math.max(0, num(p.loss, 0.2)), tMix = Math.max(0.1, num(p.tMix, 3)), qS = Math.max(0.1, num(p.qS, 4));
+    const kA = kgOf(th, sp), kS = kgOf(th, ss), Va = urVol(th, kA), Vs = urVol(th, kS), Vo = OA * Va;
+    const x0 = urN(th, kA, 'uranyl-sulfate') * UR.MU / Va;   // g U/L
+    if (!(x0 > 0)) throw new Error('o licor não traz urânio dissolvido (sulfato de uranila)');
+    const phi = (E, N) => (Math.abs(E - 1) < 1e-9 ? 1 / (N + 1) : (E - 1) / (Math.pow(E, N + 1) - 1));
+    const E = D * Vo / Va, S = (Vs / Vo) / Ds, pe = phi(E, Ne), ps = phi(S, Ns);
+    let y0 = 0, xN = x0, yL = 0;
+    for (let k = 0; k < 500; k++) { xN = y0 / D + pe * (x0 - y0 / D); yL = y0 + (Va / Vo) * (x0 - xN); const y1 = ps * yL; if (Math.abs(y1 - y0) < 1e-12) { y0 = y1; break; } y0 = y1; }
+    const nU = Va * (x0 - xN) / UR.MU, xs = Vo * (yL - y0) / Vs, eta = 1 - xN / x0;
+    const kR = kA.slice(), kE = kS.slice();
+    const nAc = urN(th, kR, 'sulfuric-acid'); let nAt = 2 * nU;
+    if (nAt > nAc) { warn.push('o licor tem pouco ácido livre: a amina não forma o sulfato de amina que extrai o urânio; acidifique o licor'); nAt = nAc; }
+    urAddN(th, kR, 'uranyl-sulfate', -nU, what); urAddN(th, kR, 'sulfuric-acid', -nAt, what);
+    urAddN(th, kE, 'uranyl-sulfate', nU, what);
+    const nN = urN(th, kE, 'nh3-aq'), nNeu = Math.min(nAt / 2, nN / 4);
+    urAddN(th, kE, 'nh3-aq', -4 * nNeu, what); urAddN(th, kE, 'ammonium-sulfate', 2 * nNeu, what); urAddN(th, kE, 'sulfuric-acid', nAt - 2 * nNeu, what);
+    if (nN < 2 * nAt * 0.98) warn.push('falta amônia na solução de reextração: ' + f(100 * nN / (2 * nAt), 0) + ' % da necessária para neutralizar o ácido que vem com o orgânico; o pH cai e a reextração piora');
+    if (nN > 2 * nAt * 1.15) warn.push('amônia ' + f(100 * (nN / (2 * nAt) - 1), 0) + ' % acima da necessária: com pH acima de 4,5 a 5 o DUA precipita dentro dos misturadores-decantadores');
+    const y3 = yL * UR.U3O8perU;
+    if (y3 > yMax) warn.push('orgânico carregado com ' + f(y3, 2) + ' g U₃O₈/L, acima da carga máxima da amina (' + f(yMax, 1) + ' g/L): o equilíbrio deixa de ser linear e o urânio escapa no rafinado; aumente a razão O/A');
+    else if (y3 > 0.85 * yMax) warn.push('orgânico com ' + f(100 * y3 / yMax, 0) + ' % da carga máxima: perto da saturação, a extração real fica abaixo da calculada pelo equilíbrio linear');
+    if (eta < 0.99) warn.push('extração de ' + f(100 * eta, 2) + ' %: o rafinado leva urânio demais; aumente os estágios, a razão O/A ou o coeficiente de distribuição');
+    if (E < 1.2) warn.push('fator de extração E = D·O/A = ' + f(E, 2) + ': com E perto de 1 nenhum número de estágios esgota o licor');
+    if (S < 1.2) warn.push('fator de reextração S = (A/O)/D = ' + f(S, 2) + ': aumente a solução de reextração ou use mais estágios');
+    const Qe = Va + Vo, Qs = Vo + Vs, Ae = Qe / qS, As = Qs / qS, Vme = Qe * tMix / 60, Vms = Qs * tMix / 60;
+    const res = [{ k: 'Licor rico (PLS) / orgânico / solução de reextração', v: f(Va, 2) + ' / ' + f(Vo, 2) + ' / ' + f(Vs, 3) + ' m³/h', u: '' },
+      { k: 'EXTRAÇÃO: ' + Ne + ' estágios, O/A = ' + f(OA, 3) + ', D = ' + f(D, 1), v: 'E = D·O/A = ' + f(E, 2) + '; o rafinado sai com ' + f(xN * 1000, 2) + ' mg U/L (extração de ' + f(100 * eta, 3) + ' %)', u: '' },
+      { k: 'Orgânico carregado / reextraído (volta à extração)', v: f(yL, 3) + ' / ' + f(y0, 4) + ' g U/L (' + f(y3, 2) + ' g U₃O₈/L carregado, ' + f(100 * y3 / yMax, 0) + ' % da carga máxima)', u: '' },
+      { k: 'REEXTRAÇÃO: ' + Ns + ' estágios, A/O = ' + f(Vs / Vo, 3) + ', D = ' + f(Ds, 3), v: 'S = (A/O)/D = ' + f(S, 2) + '; ' + f(100 * ps, 2) + ' % do urânio fica no orgânico', u: '' },
+      { k: 'Licor de reextração (eluato)', v: f(xs, 2) + ' g U/L (' + f(xs * UR.U3O8perU, 2) + ' g U₃O₈/L): o urânio ficou ' + f(xs / x0, 1) + ' vezes mais concentrado que no PLS', u: '' },
+      { k: 'Urânio transferido', v: f(nU * UR.MU, 3) + ' kg U/h (' + f(nU * UR.MU * UR.h / 1000, 2) + ' t U por ano); com ele vão ' + f(nAt * 98.079, 2) + ' kg/h de H₂SO₄, neutralizados por ' + f(4 * nNeu * 17.031, 2) + ' kg/h de NH₃', u: '' },
+      { k: 'Seletividade', v: 'o Mn²⁺, o Ca²⁺ e o ferro ficam no rafinado: a amina só extrai complexos aniônicos, como o [UO₂(SO₄)₃]⁴⁻', u: '' },
+      { k: 'Misturadores-decantadores (extração / reextração)', v: f(Vme, 2) + ' / ' + f(Vms, 3) + ' m³ por misturador (' + f(tMix, 1) + ' min); decantadores de ' + f(Ae, 1) + ' / ' + f(As, 2) + ' m² a ' + f(qS, 1) + ' m³/(h·m²)', u: '' },
+      { k: 'Perda de orgânico por arraste', v: f(loss * Va * UR.h / 1000, 1) + ' m³ por ano de querosene com amina (' + f(loss, 2) + ' L por m³ de licor)', u: '' }];
+    // diagramas de McCabe–Thiele da extração e da reextração (degraus a partir da ponta concentrada)
+    const stair = (n, x1, y1, eqX, opY) => { const X = [x1], Y = [y1]; let xq = x1, yq = y1; for (let k = 0; k < n; k++) { xq = eqX(yq); X.push(xq); Y.push(yq); yq = opY(xq); X.push(xq); Y.push(yq); } return { X, Y }; };
+    const opE = xq => y0 + (Va / Vo) * (xq - xN), stE = stair(Ne, x0, yL, yq => yq / D, opE), xe = [0, 1.1 * x0];
+    // reextração: degraus entre o equilíbrio y = D·x e a reta de operação y = y₀ + (A/O)·x, partindo de (x_s, y_L)
+    const sx_ = [xs], sy_ = [yL]; { let xq = xs, yq = yL; for (let k = 0; k < Ns; k++) { yq = Ds * xq; sx_.push(xq); sy_.push(yq); xq = (yq - y0) * Vo / Vs; sx_.push(Math.max(0, xq)); sy_.push(yq); } }
+    const plots = [{ kind: 'curves', title: 'Extração por solvente: McCabe–Thiele (urânio no aquoso × no orgânico)', data: { xLabel: 'Urânio no aquoso (g/L)', yLabel: 'Urânio no orgânico (g/L)', xRange: xe, series: [
+        { name: 'Equilíbrio y = D·x (D = ' + br(f(D, 1)) + ')', x: xe, y: xe.map(xq => D * xq), color: '#2e9e6b', width: 3 },
+        { name: 'Reta de operação (O/A = ' + br(f(OA, 3)) + ')', x: [xN, x0], y: [y0, yL], color: '#2563c9', width: 3 },
+        { name: Ne + ' estágios', x: stE.X, y: stE.Y, color: '#b08a00', width: 2.5, mode: 'lines+markers', size: 6 }], yRange: [0, 1.15 * yL] } },
+      { kind: 'curves', title: 'Reextração: McCabe–Thiele (urânio na solução de reextração × no orgânico)', data: { xLabel: 'Urânio na solução de reextração (g/L)', yLabel: 'Urânio no orgânico (g/L)', xRange: [0, 1.1 * xs], series: [
+        { name: 'Equilíbrio y = D·x (D = ' + br(f(Ds, 3)) + ')', x: [0, 1.1 * xs], y: [0, 1.1 * xs * Ds], color: '#2e9e6b', width: 3 },
+        { name: 'Reta de operação (A/O = ' + br(f(Vs / Vo, 3)) + ')', x: [0, xs], y: [y0, yL], color: '#2563c9', width: 3 },
+        { name: Ns + ' estágios', x: sx_, y: sy_, color: '#b08a00', width: 2.5, mode: 'lines+markers', size: 6 }], yRange: [0, 1.15 * yL] } },
+      { kind: 'bars', title: 'Concentração do urânio em cada corrente (g U/L)', data: { categories: ['Licor rico (PLS)', 'Rafinado', 'Orgânico carregado', 'Orgânico reextraído', 'Licor de reextração'], yLabel: 'g U/L',
+        series: [{ name: 'g U/L', y: [x0, xN, yL, y0, xs], color: '#b08a00' }] } }];
+    return { out: { raffinate: chOut(th, kR, K2C(sp.T), sp.P), eluate: chOut(th, kE, K2C(ss.T), ss.P) }, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
+  /* 3) precipitação do diuranato de amônio (DUA) e calcinação do yellowcake:
+     2 UO₂SO₄ + 6 NH₃ + 3 H₂O → (NH₄)₂U₂O₇ + 2 (NH₄)₂SO₄ (pH 7 a 8); 9 (NH₄)₂U₂O₇ → 6 U₃O₈ + 14 NH₃ + 15 H₂O + 2 N₂ (acima de 650 °C).
+     A torta é lavada (os sais solúveis ficam no filtrado) e leva só água; a água evapora na secagem. */
+  IMPL.u_yellowcake = function (th, b, ins) {
+    const p = b.params, warn = [], f = urF, what = 'precipitação e calcinação', se = ins && ins.feed, sn = ins && ins.ammonia;
+    if (!connected(se)) throw new Error('conecte o licor de reextração (eluato) com o urânio');
+    urNeed(th, ['uranyl-sulfate', 'nh3-aq', 'ammonium-sulfate', 'adu', 'u3o8', 'water'], what);
+    const yP = clamp(num(p.yP, 99.8), 0, 100) / 100, sol = clamp(num(p.sol, 40), 5, 95) / 100, Tc = num(p.Tc, 800), Tg = num(p.Tg, 200), dHd = Math.max(0, num(p.dHd, 400)), drum = Math.max(1, num(p.drum, 350));
+    const kg = urSum(th, [se, sn]), T0 = urT([se, sn]), nU0 = urN(th, kg, 'uranyl-sulfate');
+    if (!(nU0 > 0)) throw new Error('o licor não traz urânio dissolvido');
+    let nU = yP * nU0; const nN = urN(th, kg, 'nh3-aq');
+    if (3 * nU > nN) { warn.push('falta amônia: ela só precipita ' + f(100 * nN / 3 / nU0, 1) + ' % do urânio (são 3 mol de NH₃ por mol de U); aumente a amônia até pH 7 a 8'); nU = nN / 3; }
+    else if (nN > 6 * nU) warn.push('amônia ' + f(nN / (3 * nU), 1) + ' vezes a estequiométrica: o excesso vai para o filtrado e precisa ser recuperado');
+    urAddN(th, kg, 'uranyl-sulfate', -nU, what); urAddN(th, kg, 'nh3-aq', -3 * nU, what); urAddN(th, kg, 'water', -1.5 * nU, what);
+    urAddN(th, kg, 'adu', nU / 2, what); urAddN(th, kg, 'ammonium-sulfate', nU, what);
+    // torta: DUA com água retida (fração de sólidos); o filtrado leva o resto
+    const mADU = etaG(th, kg, 'adu'), wCake = mADU * (1 - sol) / sol, iw = th.ids.indexOf('water');
+    if (wCake > kg[iw]) throw new Error('a torta pede mais água do que o licor tem: aumente a fração de sólidos da torta');
+    const kF = kg.slice(); kF[th.ids.indexOf('adu')] = 0; kF[iw] -= wCake;
+    // calcinação: 9 DUA → 6 U₃O₈ + 14 NH₃ + 15 H₂O + 2 N₂; os gases levam a água da torta
+    const nA = mADU / urMW(th, 'adu'), kY = urZ(th), kG = urZ(th);
+    urAddN(th, kY, 'u3o8', 6 * nA / 9, what);
+    if (nA > 0) urNeed(th, ['ammonia', 'nitrogen'], what);
+    urAddN(th, kG, 'ammonia', 14 * nA / 9, what); urAddN(th, kG, 'water', 15 * nA / 9, what); urAddN(th, kG, 'nitrogen', 2 * nA / 9, what); kG[iw] += wCake;
+    if (Tc < 650) warn.push('calcinação a ' + f(Tc, 0) + ' °C: abaixo de cerca de 650 °C o DUA vira UO₃ (laranja), não U₃O₈ (verde-oliva); o balanço considera U₃O₈');
+    if (Tc > 900) warn.push('calcinação a ' + f(Tc, 0) + ' °C: acima de 900 °C o U₃O₈ sinteriza e fica menos reativo na dissolução da conversão');
+    if (sol < 0.25) warn.push('torta com só ' + f(100 * sol, 0) + ' % de sólidos: muita água para evaporar no secador');
+    const Qdry = wCake * (4.18 * (100 - T0) + 2257 + 2.0 * (Tg - 100)) / 3600, Qcal = mADU * (0.45 * (Tc - T0) + dHd) / 3600;   // kW
+    const mY = sum(kY), Uin = nU0 * UR.MU, UY = 6 * nA / 9 * 3 * UR.MU, Ufil = urN(th, kF, 'uranyl-sulfate') * UR.MU;
+    const res = [{ k: 'Urânio no licor / precipitado como DUA', v: f(Uin, 3) + ' kg U/h / ' + f(100 * nU / nU0, 2) + ' % (' + f(mADU, 2) + ' kg/h de (NH₄)₂U₂O₇, o "DUA" amarelo)', u: '' },
+      { k: 'Amônia gasta na precipitação', v: f(3 * nU * 17.031, 2) + ' kg/h de NH₃ (' + f(nN > 0 ? nN / (3 * nU) : 0, 2) + ' vez o estequiométrico); forma ' + f(nU * 132.14, 2) + ' kg/h de (NH₄)₂SO₄ no filtrado', u: '' },
+      { k: 'Torta filtrada e lavada', v: f(mADU + wCake, 2) + ' kg/h com ' + f(100 * sol, 0) + ' % de sólidos (' + f(wCake, 2) + ' kg/h de água a evaporar)', u: '' },
+      { k: 'Calcinação a ' + f(Tc, 0) + ' °C', v: '9 (NH₄)₂U₂O₇ → 6 U₃O₈ + 14 NH₃ + 15 H₂O + 2 N₂; os gases levam ' + f(14 * nA / 9 * 17.031, 2) + ' kg/h de NH₃, recuperados no lavador de gases', u: '' },
+      { k: 'YELLOWCAKE (U₃O₈)', v: f(mY, 3) + ' kg/h = ' + f(mY * UR.h / 1000, 1) + ' t por ano, com ' + f(100 / UR.U3O8perU, 1) + ' % de urânio (' + f(UY * UR.h / 1000, 1) + ' t U por ano)', u: '' },
+      { k: 'Tambores de 200 L (' + f(drum, 0) + ' kg cada)', v: f(mY * UR.h / drum, 0) + ' por ano', u: '' },
+      { k: 'Urânio perdido no filtrado', v: f(Ufil * 1000, 1) + ' g U/h (' + f(100 * Ufil / Uin, 2) + ' %): o filtrado volta ao circuito ou vai para o tratamento de efluentes', u: '' },
+      { k: 'Calor: secagem / calcinação (estimativa)', v: f(Qdry, 1) + ' / ' + f(Qcal, 1) + ' kW (calcinação com ' + f(dHd, 0) + ' kJ/kg de decomposição do DUA)', u: '' }];
+    // curva termogravimétrica ilustrativa do DUA: secagem, perda de NH₃ e H₂O (→ UO₃) e redução parcial a U₃O₈ (→ libera O₂)
+    const r3 = 2 * 286.03 / 624.13, r38 = 2 / 3 * 842.08 / 624.13, sg = (T, Tm, w) => 1 / (1 + Math.exp(-(T - Tm) / w)), TT = [], mm = [];
+    for (let k = 0; k <= 90; k++) { const T = 25 + 875 * k / 90; TT.push(T); mm.push(100 * (1 - (1 - r3) * sg(T, 380, 35) - (r3 - r38) * sg(T, 630, 25))); }
+    const plots = [{ kind: 'curves', title: 'Calcinação do DUA: massa do sólido ao aquecer (curva termogravimétrica ilustrativa)', data: { xLabel: 'Temperatura (°C)', yLabel: 'Massa (% do DUA seco)', xRange: [25, 900], yRange: [85, 101], series: [
+        { name: 'DUA → UO₃ → U₃O₈', x: TT, y: mm, color: '#b08a00', width: 3.5 },
+        { name: 'Calcinador: ' + f(Tc, 0) + ' °C', x: [Tc], y: [100 * (1 - (1 - r3) * sg(Tc, 380, 35) - (r3 - r38) * sg(Tc, 630, 25))], mode: 'markers', size: 13, symbol: 'diamond', color: '#d1302b' }],
+        hlines: [{ y: 100 * r3, name: 'UO₃ (' + br(f(100 * r3, 1)) + ' %)', color: '#e07b00' }, { y: 100 * r38, name: 'U₃O₈ (' + br(f(100 * r38, 1)) + ' %)', color: '#2e9e6b' }] } },
+      { kind: 'bars', title: 'Destino do urânio do licor (kg U/h)', data: { categories: ['Yellowcake (U₃O₈)', 'Filtrado'], yLabel: 'kg U/h', series: [{ name: 'kg U/h', y: [UY, Ufil], color: '#b08a00' }] } },
+      { kind: 'bars', title: 'Calor da secagem e da calcinação (kW)', data: { categories: ['Secagem da torta', 'Calcinação'], yLabel: 'kW', series: [{ name: 'kW', y: [Qdry, Qcal], color: '#d1302b' }] } }];
+    return { out: { product: chOut(th, kY, 40, se.P), filtrate: chOut(th, kF, T0, se.P), gas: chOut(th, kG, Tg, se.P) }, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
+  /* 4) conversão do U₃O₈ a UF₆ (via úmida): dissolução em HNO₃ e purificação com TBP (nitrato de uranila de grau nuclear), desnitração a UO₃,
+     redução com H₂ a UO₂, hidrofluoração com HF a UF₄ e fluoração com F₂ a UF₆. Com o NOₓ reabsorvido como HNO₃, a soma é
+     U₃O₈ + ½ O₂ + 3 H₂ + 12 HF + 3 F₂ → 3 UF₆ + 9 H₂O. Os reagentes entram pelos campos; o UF₆ sai com o U-235 natural separado. */
+  IMPL.u_conversion = function (th, b, ins) {
+    const p = b.params, warn = [], f = urF, what = 'conversão a UF₆', s = ins && ins.feed;
+    if (!connected(s)) throw new Error('conecte o yellowcake (U₃O₈)');
+    urNeed(th, ['u3o8', 'water', 'uf6-235', 'uf6-238'], what);
+    const eta = clamp(num(p.eta, 99.5), 50, 100) / 100, w5 = clamp(num(p.w5, 0.711), 0.01, 5) / 100, eH = Math.max(0, num(p.eH2, 20)) / 100, eHF = Math.max(0, num(p.eHF, 10)) / 100, eF = Math.max(0, num(p.eF2, 10)) / 100;
+    const kWF = Math.max(0, num(p.kWhF2, 12)), cyl = Math.max(100, num(p.cyl, 12500)), Tg = num(p.Tg, 150);
+    const kIn = kgOf(th, s), Min = sum(kIn), nY = urN(th, kIn, 'u3o8');
+    if (!(nY > 0)) throw new Error('a corrente não traz U₃O₈');
+    const others = Min - etaG(th, kIn, 'u3o8') - etaG(th, kIn, 'water');
+    if (others > 1e-6 * Min) warn.push('o yellowcake traz outros componentes (' + f(others, 3) + ' kg/h): o modelo os manda para os efluentes da purificação');
+    const n = nY * eta, Um = n * 3 * UR.MU, m5 = w5 * Um, m8 = (1 - w5) * Um;
+    const kU = urZ(th), kG = urZ(th), kW = kIn.slice(); kW[th.ids.indexOf('water')] = 0;
+    urAddN(th, kW, 'u3o8', -n, what); urIsoPut(th, kU, UR.pairs.uf6, m5, m8, what);
+    urAddN(th, kG, 'water', 9 * n + urN(th, kIn, 'water'), what);
+    const mOut = sum(kU) + sum(kG) + sum(kW), util = (mOut - Min) / 3600;   // reagentes (O₂, H₂, HF e F₂) que entram pelos campos, kg/s
+    const kgr = (nn, M) => nn * M, O2 = kgr(0.5 * n, 31.999), H2 = kgr(3 * n, 2.016), HF = kgr(12 * n, 20.006), F2 = kgr(3 * n, 37.997);
+    const HFtot = kgr(12 * n * (1 + eHF) + 6 * n * (1 + eF), 20.006), CaF2 = HFtot / 2 / 20.006 * 78.07, eEl = F2 * (1 + eF) * kWF;
+    const UNH = n * 3 * 502.13, UO3 = n * 3 * 286.03, UO2 = n * 3 * 270.03, UF4 = n * 3 * 314.02, UF6 = sum(kU), yr = UR.h / 1000;
+    if (eta < 0.99) warn.push('rendimento de ' + f(100 * eta, 1) + ' % na purificação: as conversoras recuperam mais de 99,5 % do urânio dos rafinados');
+    const res = [{ k: 'Yellowcake recebido', v: f(etaG(th, kIn, 'u3o8'), 3) + ' kg/h de U₃O₈ (' + f(etaG(th, kIn, 'u3o8') * yr, 1) + ' t por ano)', u: '' },
+      { k: '1) Dissolução e purificação com TBP', v: 'U₃O₈ + 8 HNO₃ → 3 UO₂(NO₃)₂ + 2 NO₂ + 4 H₂O; TBP a 30 % em dodecano separa o urânio das impurezas: ' + f(UNH * yr, 1) + ' t/ano de nitrato de uranila hexa-hidratado (' + f(100 * eta, 2) + ' % recuperado)', u: '' },
+      { k: '2) Desnitração (≈ 300 °C)', v: 'UO₂(NO₃)₂ → UO₃ + 2 NO₂ + ½ O₂; o NOₓ é reabsorvido como HNO₃: ' + f(UO3 * yr, 1) + ' t/ano de UO₃', u: '' },
+      { k: '3) Redução com H₂ (≈ 600 °C)', v: 'UO₃ + H₂ → UO₂ + H₂O: ' + f(UO2 * yr, 1) + ' t/ano de UO₂', u: '' },
+      { k: '4) Hidrofluoração (≈ 450 °C)', v: 'UO₂ + 4 HF → UF₄ + 2 H₂O: ' + f(UF4 * yr, 1) + ' t/ano de UF₄ (o "sal verde")', u: '' },
+      { k: '5) Fluoração com F₂ (reator de chama)', v: 'UF₄ + F₂ → UF₆: ' + f(UF6, 3) + ' kg/h = ' + f(UF6 * yr, 1) + ' t de UF₆ por ano, recolhidos em armadilhas frias', u: '' },
+      { k: 'Reação global (com o NOₓ reciclado)', v: 'U₃O₈ + ½ O₂ + 3 H₂ + 12 HF + 3 F₂ → 3 UF₆ + 9 H₂O', u: '' },
+      { k: 'Reagentes por ano (estequiométricos)', v: 'O₂ ' + f(O2 * yr, 1) + ' t, H₂ ' + f(H2 * yr, 2) + ' t, HF ' + f(HF * yr, 1) + ' t, F₂ ' + f(F2 * yr, 1) + ' t', u: '' },
+      { k: 'Com os excessos (H₂ +' + f(100 * eH, 0) + ' %, HF +' + f(100 * eHF, 0) + ' %, F₂ +' + f(100 * eF, 0) + ' %)', v: 'H₂ ' + f(H2 * (1 + eH) * yr, 2) + ' t, HF ' + f(HF * (1 + eHF) * yr, 1) + ' t e F₂ ' + f(F2 * (1 + eF) * yr, 1) + ' t por ano; o excesso é recuperado ou neutralizado', u: '' },
+      { k: 'Flúor da eletrólise (2 HF → H₂ + F₂, em KF·2HF)', v: f(eEl * yr, 0) + ' MWh por ano (' + f(kWF, 0) + ' kWh/kg de F₂); o H₂ que ela libera (3 mol por mol de U₃O₈) é o que a redução precisa', u: '' },
+      { k: 'Fluorita (CaF₂ + H₂SO₄ → CaSO₄ + 2 HF)', v: f(CaF2 * yr, 0) + ' t por ano para todo o HF (hidrofluoração e eletrólise)', u: '' },
+      { k: 'UF₆ natural', v: f(100 * w5, 3) + ' % de U-235 em massa; ' + f(UF6 * UR.h / cyl, 1) + ' cilindros 48Y (' + f(cyl / 1000, 1) + ' t de UF₆ cada) por ano', u: '' },
+      { k: 'Urânio perdido nos rafinados da purificação', v: f(100 * (1 - eta), 2) + ' % (' + f(3 * (nY - n) * UR.MU * UR.h, 0) + ' kg U por ano)', u: '' }];
+    const plots = [{ kind: 'bars', title: 'Massa de cada composto por kg de urânio ao longo da conversão', data: { categories: ['U₃O₈', 'UO₂(NO₃)₂·6H₂O', 'UO₃', 'UO₂', 'UF₄', 'UF₆'], yLabel: 'kg do composto por kg de U',
+        series: [{ name: 'kg/kg U', y: [842.08 / 714.087, 502.13 / UR.MU, 286.03 / UR.MU, 270.03 / UR.MU, 314.02 / UR.MU, 352.02 / UR.MU], color: '#b08a00' }] } },
+      { kind: 'bars', title: 'Reagentes da conversão por ano (t, estequiométrico)', data: { categories: ['O₂', 'H₂', 'HF', 'F₂', 'Fluorita (CaF₂)'], yLabel: 't por ano',
+        series: [{ name: 't/ano', y: [O2 * yr, H2 * yr, HF * yr, F2 * yr, CaF2 * yr], color: '#2563c9' }] } }];
+    return { out: { uf6: chOut(th, kU, 25, s.P), offgas: chOut(th, kG, Tg, s.P), waste: chOut(th, kW, 25, s.P) }, massUtil: util, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
+  /* 5) enriquecimento em cascata ideal de ultracentrífugas (INB Resende, tecnologia da Marinha). Balanço do U-235 (fator de
+     alimentação), trabalho de separação (SWU), poder de separação de cada máquina pelo limite de Dirac
+     δU_máx = (πZ/2)·ρD·(ΔM·v²/(2RT))², estágios da cascata ideal (fator β = √α por estágio) e máquinas em cada estágio. */
+  IMPL.u_enrichment = function (th, b, ins) {
+    const p = b.params, warn = [], f = urF, what = 'enriquecimento', s = ins && ins.feed;
+    if (!connected(s)) throw new Error('conecte o UF₆ natural da conversão');
+    urNeed(th, UR.pairs.uf6, what);
+    const xp = num(p.xp, 4) / 100, xw = num(p.xw, 0.25) / 100, alpha = Math.max(1.001, num(p.alpha, 1.3)), v = Math.max(50, num(p.v, 600)), Z = Math.max(0.05, num(p.Z, 1));
+    const TK = num(p.Tg, 27) + 273.15, rD = Math.max(1e-7, num(p.rD, 2.3e-5)), eff = clamp(num(p.eff, 50), 1, 100) / 100, eS = Math.max(0, num(p.eSWU, 50));
+    const cyP = Math.max(10, num(p.cyP, 2277)), cyW = Math.max(100, num(p.cyW, 12500));
+    const kIn = kgOf(th, s), I = urIso(th, kIn, UR.pairs.uf6), F = I.U, xf = I.x;
+    if (!(F > 0)) throw new Error('a corrente não traz UF₆');
+    const extra = sum(kIn) - etaG(th, kIn, 'uf6-235') - etaG(th, kIn, 'uf6-238');
+    if (extra > 1e-6 * sum(kIn)) throw new Error('a alimentação da cascata deve ser só UF₆ (há ' + br(f(extra, 3)) + ' kg/h de outros componentes)');
+    if (!(xw > 0 && xw < xf)) throw new Error('o teor do rejeito (' + br(f(100 * xw, 3)) + ' %) deve ficar entre 0 e o teor da alimentação (' + br(f(100 * xf, 3)) + ' %)');
+    if (!(xp > xf && xp < 0.999)) throw new Error('o enriquecimento do produto deve ficar acima do teor da alimentação (' + br(f(100 * xf, 3)) + ' %)');
+    if (xp > 0.05 && xp <= 0.2) warn.push('produto com ' + f(100 * xp, 2) + ' % de U-235: acima de 5 % o combustível de PWR não é licenciado (é o urânio de baixo enriquecimento de alto teor, HALEU, dos reatores avançados)');
+    if (xp > 0.2) warn.push('acima de 20 % de U-235 o urânio deixa de ser de baixo enriquecimento: as salvaguardas da AIEA e da ABACC não permitem para usinas');
+    const P = F * (xf - xw) / (xp - xw), W = F - P, swuH = P * swuVal(xp) + W * swuVal(xw) - F * swuVal(xf), swuY = swuH * UR.h;   // kg SWU/h e por ano
+    const dM = 0.003, eps = dM * v * v / (2 * UR.R * TK), dUmax = Math.PI * Z / 2 * rD * eps * eps, dU = eff * dUmax * 3.15576e7;   // kg SWU por máquina por ano
+    const nM = swuY / dU, a0 = Math.exp(eps), beta = Math.sqrt(alpha), Rr = x => x / (1 - x), Rf = Rr(xf), Rp = Rr(xp), Rw = Rr(xw);
+    const Ne = Math.max(1, Math.ceil(Math.log(Rp / Rf) / Math.log(beta) - 1e-9)), Ns = Math.max(1, Math.ceil(Math.log(Rf / Rw) / Math.log(beta) - 1e-9));
+    const be = Math.pow(Rp / Rf, 1 / Ne), bs = Math.pow(Rf / Rw, 1 / Ns), xk = k => { const R = k >= 0 ? Rf * Math.pow(be, k) : Rf * Math.pow(bs, k); return R / (1 + R); };
+    const Hc = j => (j >= 0 ? P * (xp - xk(j)) / (xk(j + 1) - xk(j)) : W * (xk(j) - xw) / (xk(j + 1) - xk(j)));   // vazão que sobe pelo corte entre os estágios j e j + 1
+    // alimentação de uma máquina (kg U/h) com corte ½: L = 8·δU/(ln α_estágio)², com o fator de cada seção (β² ≤ α, pelo arredondamento dos estágios)
+    const Lm = 8 * (dU / UR.h) / Math.pow(Math.log(alpha), 2), LmE = 8 * (dU / UR.h) / Math.pow(2 * Math.log(be), 2), LmS = 8 * (dU / UR.h) / Math.pow(2 * Math.log(bs), 2);
+    const stg = [], mach = [], xs = []; let nSum = 0;
+    for (let k = -Ns + 1; k <= Ne - 1; k++) { const Tk = (k - 1 >= 0 ? Hc(k - 1) - P : Hc(k - 1) + W), L = Hc(k) + Tk, nk = L / (k >= 0 ? LmE : LmS); nSum += nk;
+      stg.push((k >= 0 ? 'E' : 'S') + (k >= 0 ? k + 1 : -k)); mach.push(nk); xs.push(100 * xk(k)); }
+    const MW = s2 => s2 * eS / UR.h / 1000, kP = urZ(th), kT = urZ(th);
+    urIsoPut(th, kP, UR.pairs.uf6, P * xp, P * (1 - xp), what); urIsoPut(th, kT, UR.pairs.uf6, W * xw, W * (1 - xw), what);
+    const yr = UR.h / 1000, U235 = [F * xf, P * xp, W * xw];
+    if (eff > 0.85) warn.push('eficiência de ' + f(100 * eff, 0) + ' % do limite de Dirac: as melhores centrífugas ficam perto de 50 a 70 %');
+    if (v > 750) warn.push('velocidade periférica de ' + f(v, 0) + ' m/s: rotores de alumínio rompem perto de 450 m/s, de aço maraging perto de 600 a 700 m/s; acima disso só fibra de carbono');
+    const res = [{ k: 'Alimentação / produto / rejeito (urânio)', v: f(F, 3) + ' / ' + f(P, 3) + ' / ' + f(W, 3) + ' kg U/h (' + f(F * yr, 1) + ' / ' + f(P * yr, 2) + ' / ' + f(W * yr, 1) + ' t U por ano)', u: '' },
+      { k: 'Teor de U-235 (em massa): alimentação / produto / rejeito', v: f(100 * xf, 3) + ' / ' + f(100 * xp, 2) + ' / ' + f(100 * xw, 3) + ' %', u: '' },
+      { k: 'Fator de alimentação F/P', v: f(F / P, 3) + ' kg de urânio natural por kg de urânio enriquecido; ' + f(100 * (P * xp) / (F * xf), 1) + ' % do U-235 vai para o produto', u: '' },
+      { k: 'Trabalho de separação', v: f(swuH / P, 3) + ' SWU por kg de produto; ' + f(swuY / 1000, 1) + ' mil SWU por ano', u: '' },
+      { k: 'Centrífuga: ΔM·v²/(2RT) / fator radial e^(...)', v: f(eps, 4) + ' / ' + f(a0, 3) + ' (v = ' + f(v, 0) + ' m/s, ' + f(TK - 273.15, 0) + ' °C); com o contrafluxo axial cada máquina chega a α = ' + f(alpha, 2), u: '' },
+      { k: 'Poder de separação por máquina', v: f(dUmax * 3.15576e7, 1) + ' SWU/ano no limite de Dirac (Z = ' + f(Z, 2) + ' m); ' + f(dU, 1) + ' SWU/ano com ' + f(100 * eff, 0) + ' % de eficiência', u: '' },
+      { k: 'Centrífugas necessárias', v: f(nM, 0) + ' máquinas (soma dos estágios da cascata ideal: ' + f(nSum, 0) + ')', u: '' },
+      { k: 'Cascata ideal (β = √α = ' + f(beta, 4) + ' por estágio)', v: Ne + ' estágios de enriquecimento + ' + (Ns - 1) + ' de esgotamento + o de alimentação = ' + (Ne + Ns - 1) + ' estágios; cada máquina recebe ' + f(Lm * 1000, 1) + ' g U/h', u: '' },
+      { k: 'Energia elétrica', v: f(MW(swuY), 2) + ' MW médios (' + f(eS, 0) + ' kWh/SWU; a difusão gasosa gastava cerca de 2 500 kWh/SWU)', u: '' },
+      { k: 'Cilindros por ano', v: f(P * yr * 1000 * 352.02 / UR.MU / cyP, 1) + ' cilindros 30B de produto (' + f(cyP, 0) + ' kg de UF₆) e ' + f(W * yr * 1000 * 352.02 / UR.MU / cyW, 1) + ' cilindros 48Y de rejeito empobrecido', u: '' },
+      { k: 'UF₆ na alimentação e na retirada', v: 'o cilindro de alimentação é aquecido a cerca de 95 °C (UF₆ líquido, ' + f(uf6Psat(95), 2) + ' bar); o produto e o rejeito voltam a sólido em armadilhas frias a −15 °C (' + f(uf6Psat(-15) * 1000, 1) + ' mbar)', u: '' }];
+    const xwG = [], swG = [], fpG = []; for (let k = 0; k <= 40; k++) { const w = (0.08 + (Math.min(0.5, 100 * xf - 0.05) - 0.08) * k / 40) / 100; xwG.push(100 * w); swG.push(swuVal(xp) + ((xp - w) / (xf - w) - 1) * swuVal(w) - (xp - w) / (xf - w) * swuVal(xf)); fpG.push((xp - w) / (xf - w)); }
+    const tS = [], pS = []; for (let k = 0; k <= 70; k++) { const tq = -20 + 140 * k / 70; tS.push(tq); pS.push(uf6Psat(tq)); }
+    const plots = [{ kind: 'curves', title: 'Escolha do teor do rejeito: SWU e urânio natural por kg de produto', data: { xLabel: 'Teor de U-235 no rejeito (%)', yLabel: 'SWU/kg  ·  kg de U natural/kg', series: [
+        { name: 'SWU por kg de produto', x: xwG, y: swG, color: '#7a3db8', width: 3 }, { name: 'Fator de alimentação F/P', x: xwG, y: fpG, color: '#b08a00', width: 3 },
+        { name: 'Operação: ' + br(f(100 * xw, 2)) + ' %', x: [100 * xw, 100 * xw], y: [swuH / P, F / P], mode: 'markers', size: 13, symbol: 'diamond', color: '#111' }] } },
+      { kind: 'bars', title: 'Cascata ideal: centrífugas em cada estágio (S = esgotamento, E = enriquecimento)', data: { categories: stg, yLabel: 'Centrífugas', series: [{ name: 'Máquinas', y: mach, color: '#b08a00' }] } },
+      { kind: 'curves', title: 'Teor de U-235 ao longo da cascata', data: { xLabel: 'Estágio (da ponta do rejeito à do produto)', yLabel: 'U-235 na alimentação do estágio (%)', yLog: true, series: [
+        { name: 'x do estágio', x: stg.map((_, k) => k + 1), y: xs, mode: 'lines+markers', color: '#7a3db8', width: 3, size: 8 }],
+        hlines: [{ y: 100 * xf, name: 'Alimentação (' + br(f(100 * xf, 3)) + ' %)', color: '#2e9e6b' }] } },
+      { kind: 'curves', title: 'UF₆: pressão de vapor (sublima a 56,5 °C em 1 atm; ponto triplo a 64 °C e 1,52 bar)', data: { xLabel: 'Temperatura (°C)', yLabel: 'Pressão (bar)', yLog: true, xRange: [-20, 120], series: [
+        { name: 'Sólido–vapor e líquido–vapor', x: tS, y: pS, color: '#2563c9', width: 3.5 },
+        { name: 'Ponto triplo', x: [64.05], y: [uf6Psat(64.05)], mode: 'markers', size: 12, symbol: 'circle', color: '#111' },
+        { name: 'Cilindro de alimentação (95 °C)', x: [95], y: [uf6Psat(95)], mode: 'markers', size: 13, symbol: 'diamond', color: '#d1302b' },
+        { name: 'Armadilha fria (−15 °C)', x: [-15], y: [uf6Psat(-15)], mode: 'markers', size: 13, symbol: 'square', color: '#00a3b4' }],
+        hlines: [{ y: 1.01325, name: '1 atm', color: '#8a8f98' }] } },
+      { kind: 'bars', title: 'U-235 nas correntes (kg/h)', data: { categories: ['Alimentação', 'Produto', 'Rejeito'], yLabel: 'kg de U-235 por hora', series: [{ name: 'kg/h', y: U235, color: '#7a3db8' }] } }];
+    return { out: { product: chOut(th, kP, 25, s.P), tails: chOut(th, kT, 25, s.P) }, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
+  /* 6) reconversão do UF₆ a pó de UO₂ pelo processo AUC (tricarbonato de uranila e amônio), como na fábrica de Resende:
+     UF₆ + 5 H₂O + 10 NH₃ + 3 CO₂ → (NH₄)₄UO₂(CO₃)₃ + 6 NH₄F; no leito fluidizado com H₂ e vapor,
+     (NH₄)₄UO₂(CO₃)₃ + H₂ → UO₂ + 4 NH₃ + 3 CO₂ + 3 H₂O. O NH₃ e o CO₂ do calcinador voltam à precipitação, e a soma fica
+     UF₆ + 2 H₂O + 6 NH₃ + H₂ → UO₂ + 6 NH₄F. */
+  IMPL.u_auc = function (th, b, ins) {
+    const p = b.params, warn = [], f = urF, what = 'reconversão (AUC)', s = ins && ins.feed;
+    if (!connected(s)) throw new Error('conecte o UF₆ enriquecido');
+    urNeed(th, UR.pairs.uf6.concat(UR.pairs.uo2, ['water', 'nh4f']), what);
+    const eta = clamp(num(p.eta, 99.9), 50, 100) / 100, Vef = Math.max(0, num(p.Vef, 10)), Tc = num(p.Tc, 550), eH = Math.max(0, num(p.eH2, 100)) / 100, BET = num(p.BET, 5.5);
+    const kIn = kgOf(th, s), I = urIso(th, kIn, UR.pairs.uf6);
+    if (!(I.U > 0)) throw new Error('a corrente não traz UF₆');
+    const nU = urN(th, kIn, 'uf6-235') + urN(th, kIn, 'uf6-238');
+    const kP = urZ(th), kE = urZ(th);
+    urIsoPut(th, kP, UR.pairs.uo2, I.m5 * eta, I.m8 * eta, what); urIsoPut(th, kE, UR.pairs.uo2, I.m5 * (1 - eta), I.m8 * (1 - eta), what);
+    urAddN(th, kE, 'nh4f', 6 * nU, what); etaAdd(th, kE, 'water', Vef * I.U, what);   // Vef m³/t U = kg de água por kg de U
+    const util = (sum(kP) + sum(kE) - sum(kIn)) / 3600, yr = UR.h / 1000;
+    const AUC = nU * 522.2, nh4f = 6 * nU * 37.037;
+    if (Tc < 500) warn.push('calcinação a ' + f(Tc, 0) + ' °C: abaixo de 500 °C sobra carbono e flúor no pó, que atrapalham a sinterização');
+    if (Tc > 700) warn.push('calcinação a ' + f(Tc, 0) + ' °C: acima de 650 a 700 °C o pó perde área específica e sinteriza mal');
+    if (I.x > 0.05) warn.push('UO₂ com ' + f(100 * I.x, 2) + ' % de U-235: acima de 5 % a fábrica de Resende não é licenciada (criticidade)');
+    const res = [{ k: 'UF₆ recebido', v: f(sum(kIn), 3) + ' kg/h (' + f(sum(kIn) * yr, 2) + ' t por ano) com ' + f(100 * I.x, 3) + ' % de U-235', u: '' },
+      { k: '1) Vaporização e hidrólise', v: 'o cilindro é aquecido em autoclave (UF₆ gasoso) e o gás entra no vaso de precipitação com água, NH₃ e CO₂ a cerca de 60 °C', u: '' },
+      { k: '2) Precipitação do AUC', v: 'UF₆ + 5 H₂O + 10 NH₃ + 3 CO₂ → (NH₄)₄UO₂(CO₃)₃ + 6 NH₄F: ' + f(AUC * yr, 1) + ' t de AUC por ano, com ' + f(10 * nU * 17.031 * yr, 1) + ' t de NH₃ e ' + f(3 * nU * 44.01 * yr, 1) + ' t de CO₂', u: '' },
+      { k: '3) Calcinação em leito fluidizado (' + f(Tc, 0) + ' °C, H₂ e vapor)', v: '(NH₄)₄UO₂(CO₃)₃ + H₂ → UO₂ + 4 NH₃ + 3 CO₂ + 3 H₂O; ' + f(nU * (1 + eH) * 22.414, 2) + ' Nm³/h de H₂ (' + f(100 * eH, 0) + ' % de excesso); NH₃ e CO₂ voltam à precipitação', u: '' },
+      { k: 'Reação global', v: 'UF₆ + 2 H₂O + 6 NH₃ + H₂ → UO₂ + 6 NH₄F: consome ' + f(6 * nU * 17.031 * yr, 1) + ' t de NH₃ e ' + f(nU * 2.016 * yr * 1000, 0) + ' kg de H₂ por ano', u: '' },
+      { k: 'PÓ DE UO₂', v: f(sum(kP), 3) + ' kg/h = ' + f(sum(kP) * yr, 2) + ' t por ano (' + f(I.U * eta * yr, 2) + ' t U), com ' + f(100 * I.x, 3) + ' % de U-235; área específica de cerca de ' + f(BET, 1) + ' m²/g, que escoa bem e dispensa a granulação', u: '' },
+      { k: 'Efluente com fluoreto de amônio', v: f(Vef * I.U * yr, 0) + ' m³ por ano com ' + f(1000 * nh4f / Math.max(Vef * I.U, 1e-9), 0) + ' g/L de NH₄F; com cal, 2 NH₄F + Ca(OH)₂ → CaF₂ + 2 NH₃ + 2 H₂O devolve ' + f(3 * nU * 78.07 * yr, 1) + ' t de CaF₂ e recupera a amônia', u: '' },
+      { k: 'Urânio no efluente', v: f(100 * (1 - eta), 2) + ' % (' + f(I.U * (1 - eta) * UR.h, 1) + ' kg U por ano), recuperado na unidade de rejeitos', u: '' }];
+    const plots = [{ kind: 'bars', title: 'Massa de cada composto por kg de urânio na reconversão', data: { categories: ['UF₆', 'AUC (NH₄)₄UO₂(CO₃)₃', 'UO₂', 'NH₄F no efluente'], yLabel: 'kg por kg de U',
+        series: [{ name: 'kg/kg U', y: [352.02 / UR.MU, 522.2 / UR.MU, 270.03 / UR.MU, 6 * 37.037 / UR.MU], color: '#b08a00' }] } },
+      { kind: 'bars', title: 'Amônia e gás carbônico do processo AUC (t por ano)', data: { categories: ['NH₃ na precipitação', 'NH₃ que volta do calcinador', 'NH₃ consumido (vira NH₄F)', 'CO₂ na precipitação (volta todo)'], yLabel: 't por ano',
+        series: [{ name: 't/ano', y: [10 * nU * 17.031 * yr, 4 * nU * 17.031 * yr, 6 * nU * 17.031 * yr, 3 * nU * 44.01 * yr], color: '#2563c9' }] } }];
+    return { out: { product: chOut(th, kP, 40, s.P), effluent: chOut(th, kE, 30, s.P) }, massUtil: util, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
+  /* 7) fábrica de pastilhas e elementos combustíveis (FCN Resende): compactação do pó (densidade a verde), sinterização em H₂ a
+     1 750 °C (contração linear 1 − (ρ_v/ρ_s)^⅓), retífica sem centro até o diâmetro final, inspeção, varetas de zircaloy com hélio e
+     elementos 16 × 16 (tipo Angra 2). O pó da retífica e as pastilhas rejeitadas voltam ao processo depois de oxidados a U₃O₈. */
+  IMPL.u_pellets = function (th, b, ins) {
+    const p = b.params, warn = [], f = urF, what = 'fábrica de pastilhas', s = ins && ins.feed;
+    if (!connected(s)) throw new Error('conecte o pó de UO₂ da reconversão');
+    urNeed(th, UR.pairs.uo2, what);
+    const rTD = num(p.rTD, 10.96), dG = clamp(num(p.dG, 50), 20, 80) / 100, dS = clamp(num(p.dS, 95.5), 50, 100) / 100, D = num(p.D, 9.11), Hp = num(p.Hp, 11), gr = Math.max(0, num(p.gr, 0.12));
+    const dish = clamp(num(p.dish, 1.2), 0, 20) / 100, rej = clamp(num(p.rej, 2), 0, 50) / 100, Pp = Math.max(1, num(p.Pp, 400)), Ts = num(p.Ts, 1750), tS = Math.max(0.1, num(p.tS, 4));
+    const nR = Math.max(1, Math.round(num(p.nR, 236))), La = num(p.La, 3.9), Dc = num(p.Dc, 10.75), tc = num(p.tc, 0.725), Lc = num(p.Lc, 4.07), rZr = num(p.rZr, 6.55), nRel = Math.max(1, Math.round(num(p.nRel, 48)));
+    if (!(rTD > 0 && D > 0 && Hp > 0 && La > 0 && Dc > 0 && tc > 0)) throw new Error('confira as dimensões da pastilha e da vareta (devem ser positivas)');
+    if (!(dS > dG)) throw new Error('a densidade sinterizada deve ser maior que a densidade a verde');
+    const kIn = kgOf(th, s), I = urIso(th, kIn, UR.pairs.uo2), M = sum(kIn);
+    const extra = M - etaG(th, kIn, 'uo2-235') - etaG(th, kIn, 'uo2-238');
+    if (!(I.U > 0)) throw new Error('a corrente não traz pó de UO₂');
+    if (extra > 1e-6 * M) warn.push('o pó traz ' + f(extra, 3) + ' kg/h de outros componentes, que o modelo manda para o refugo');
+    // dimensões: final (retificada), sinterizada (com sobremetal no diâmetro) e a verde (antes da contração)
+    const sh = 1 - Math.cbrt(dG / dS), Dsn = D + gr, Dg = Dsn / (1 - sh), Hg = Hp / (1 - sh);
+    const Vp = Math.PI / 4 * Math.pow(D / 10, 2) * (Hp / 10) * (1 - dish), mP = Vp * rTD * dS;   // cm³ e g de UO₂ por pastilha pronta
+    const fg = (Dsn * Dsn - D * D) / (Dsn * Dsn), Mgood = (M - extra) * (1 - fg) * (1 - rej), Mscr = M - Mgood;
+    const npR = Math.floor(La * 1000 / Hp + 1e-9), pel = Mgood * 1000 / mP, rods = pel / npR, FA = rods / nR, FAy = FA * UR.h;
+    const Ufr = I.U / (M - extra), mUFA = npR * mP * nR * Ufr / 1000, gap = (Dc - 2 * tc) - D, Fpress = Pp * Math.PI / 4 * Dg * Dg / 1000;   // kg U por elemento, mm, kN
+    const zr = Math.PI / 4 * (Math.pow(Dc / 10, 2) - Math.pow((Dc - 2 * tc) / 10, 2)) * Lc * 100 * rZr / 1000;   // kg de zircaloy por vareta
+    if (gap <= 0) throw new Error('a pastilha (' + br(f(D, 2)) + ' mm) não cabe no revestimento (' + br(f(Dc - 2 * tc, 2)) + ' mm por dentro)');
+    if (gap < 0.12 || gap > 0.3) warn.push('folga diametral pastilha–revestimento de ' + f(gap, 3) + ' mm: o usual é de 0,15 a 0,20 mm (folga pequena trinca o revestimento; grande esquenta a pastilha)');
+    if (dS < 0.93) warn.push('densidade sinterizada de ' + f(100 * dS, 1) + ' %: abaixo de 94 a 95 % a pastilha densifica no reator e a vareta perde a pressão de contato');
+    if (dS > 0.97) warn.push('densidade de ' + f(100 * dS, 1) + ' %: sem porosidade para acomodar os gases de fissão, a pastilha incha mais com a queima');
+    if (Ts < 1650) warn.push('sinterização a ' + f(Ts, 0) + ' °C: abaixo de 1 650 a 1 700 °C (em H₂) o UO₂ não chega a 95 % de densidade em poucas horas');
+    if (Pp > 600) warn.push('compactação a ' + f(Pp, 0) + ' MPa: acima de 500 a 600 MPa as pastilhas a verde laminam e trincam');
+    const cov = FAy / nRel, yr = UR.h / 1000;
+    if (cov < 0.98) warn.push('a fábrica faz ' + f(FAy, 1) + ' elementos por ano: menos que a recarga de ' + nRel + ' (' + f(100 * cov, 0) + ' %); aumente o minério no início da rota');
+    const res = [{ k: 'Pó de UO₂ recebido', v: f(M, 3) + ' kg/h (' + f(M * yr, 2) + ' t por ano) com ' + f(100 * I.x, 3) + ' % de U-235', u: '' },
+      { k: '1) Compactação', v: 'pastilha a verde com ' + f(100 * dG, 0) + ' % da densidade teórica, ' + f(Dg, 2) + ' mm × ' + f(Hg, 2) + ' mm; ' + f(Fpress, 1) + ' kN por pastilha (' + f(Pp, 0) + ' MPa)', u: '' },
+      { k: '2) Sinterização em H₂ (' + f(Ts, 0) + ' °C, ' + f(tS, 1) + ' h)', v: 'densidade de ' + f(100 * dS, 1) + ' % (' + f(rTD * dS, 2) + ' g/cm³); contração linear de ' + f(100 * sh, 1) + ' %: ' + f(Dsn, 2) + ' mm × ' + f(Hp, 2) + ' mm', u: '' },
+      { k: '3) Retífica sem centro e inspeção', v: 'diâmetro final de ' + f(D, 2) + ' mm (sai ' + f(100 * fg, 2) + ' % como pó); ' + f(100 * rej, 1) + ' % das pastilhas rejeitadas', u: '' },
+      { k: 'PASTILHAS PRONTAS', v: f(mP, 3) + ' g de UO₂ cada (' + f(Vp, 4) + ' cm³); ' + f(pel, 0) + ' por hora = ' + f(pel * UR.h / 1e6, 2) + ' milhões por ano', u: '' },
+      { k: '4) Varetas (zircaloy-4 de ' + f(Dc, 2) + ' × ' + f(tc, 3) + ' mm, com hélio)', v: npR + ' pastilhas por vareta (' + f(La, 2) + ' m ativos); ' + f(rods * UR.h, 0) + ' varetas por ano; folga diametral de ' + f(gap, 3) + ' mm', u: '' },
+      { k: '5) ELEMENTOS COMBUSTÍVEIS (16 × 16, ' + nR + ' varetas)', v: f(FAy, 1) + ' por ano, com ' + f(mUFA, 1) + ' kg de urânio cada; a recarga de Angra 2 troca ' + nRel + ' elementos (' + f(100 * cov, 0) + ' % atendida)', u: '' },
+      { k: 'Zircaloy das varetas', v: f(zr * rods * UR.h / 1000, 1) + ' t por ano (' + f(zr, 3) + ' kg por vareta)', u: '' },
+      { k: 'Refugo (pó da retífica e pastilhas rejeitadas)', v: f(Mscr, 3) + ' kg/h de UO₂ (' + f(100 * Mscr / M, 2) + ' %): oxidado a U₃O₈ a 400 °C e misturado de novo ao pó', u: '' }];
+    const mo = [], fa = [], pz = []; for (let k = 0; k <= 12; k++) { mo.push(k); fa.push(FAy * k / 12); pz.push(pel * UR.h / 1e6 * k / 12); }
+    const plots = [{ kind: 'bars', title: 'Pastilha em cada etapa: diâmetro e altura (mm)', data: { categories: ['A verde (compactada)', 'Sinterizada', 'Retificada (final)'], yLabel: 'mm', series: [
+        { name: 'Diâmetro', y: [Dg, Dsn, D], color: '#b08a00' }, { name: 'Altura', y: [Hg, Hp, Hp], color: '#2563c9' }] } },
+      { kind: 'curves', title: 'Elementos combustíveis prontos ao longo do ano', data: { xLabel: 'Mês', yLabel: 'Elementos combustíveis', xRange: [0, 12], series: [
+        { name: 'Elementos prontos', x: mo, y: fa, mode: 'lines+markers', color: '#b08a00', width: 3, size: 7 }],
+        hlines: [{ y: nRel, name: 'Recarga de Angra 2 (' + nRel + ' elementos)', color: '#d1302b' }] } },
+      { kind: 'bars', title: 'Destino do pó de UO₂ (kg/h)', data: { categories: ['Pastilhas boas', 'Pó da retífica', 'Pastilhas rejeitadas'], yLabel: 'kg/h',
+        series: [{ name: 'kg/h', y: [Mgood, (M - extra) * fg, (M - extra) * (1 - fg) * rej], color: '#b08a00' }] } }];
+    const g = Mgood / (M - extra), kF = urZ(th), kS = kIn.slice();
+    urIsoPut(th, kF, UR.pairs.uo2, I.m5 * g, I.m8 * g, what); etaAdd(th, kS, 'uo2-235', -etaG(th, kF, 'uo2-235'), what); etaAdd(th, kS, 'uo2-238', -etaG(th, kF, 'uo2-238'), what);
+    return { out: { fuel: chOut(th, kF, 25, s.P), scrap: chOut(th, kS, 25, s.P) }, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
 
   /* ================================================================== versão 5.4: fábrica de cimento completa
      Torre de ciclones com pré-calcinador, resfriador de clínquer de grelha e moinho de cimento (ou de cru). A torre e o resfriador
@@ -15017,6 +15541,72 @@ window.SIMULAFACIL_CONFIG = {
       sym: [[i('p'), 'fração retida no tanque e na linha (perdas)'], [sub(V, 'frasco'), 'volume de cada frasco'], ['μ', 'viscosidade do shampoo (vem do tanque de mistura)']],
       note: 'A bomba de lóbulos é de deslocamento positivo: a vazão quase não muda com a viscosidade e ela trata o produto com cuidado, sem quebrar a pérola nem incorporar ar. O shampoo é pseudoplástico: na linha, com cisalhamento de dezenas de s⁻¹, fica mais fino que na medida do viscosímetro, por isso a perda de carga calculada é conservadora.'
     }),
+    u_heap_leach: () => ({
+      name: 'Lixiviação ácida em pilha da uraninita com MnO₂',
+      eqs: [eq('UO₂ + MnO₂ + 2 H₂SO₄ → UO₂SO₄ + MnSO₄ + 2 H₂O', 'oxidação do U(IV) a U(VI) e dissolução; o Fe³⁺/Fe²⁺ da solução leva os elétrons'),
+        eq('UO₂²⁺ + 3 SO₄²⁻ ⇌ [UO₂(SO₄)₃]⁴⁻', 'complexo aniônico do licor, o que a amina extrai'),
+        eq('CaCO₃ + H₂SO₄ + H₂O → CaSO₄·2H₂O + CO₂', 'consumo de ácido pela calcita da ganga'),
+        eq(i('X') + '(' + t + ') = ' + sub(i('X'), 'máx') + '(1 − ' + sup('e', '−' + t + '/τ') + '),&nbsp; τ = ' + sub('τ', 'ref') + sup('(' + fr(sub(i('d'), '80'), '12 mm') + ')', '2'), 'cinética da extração (difusão no grão)'),
+        eq(i('A') + ' = ' + fr(sub(i('ṁ'), 'minério') + sub(t, 'L'), sub('ρ', 'ap') + i('H')) + ',&nbsp; ' + i('q') + ' = ' + fr(sub(Q, 'solução'), i('A')), 'área das pilhas e taxa de irrigação')],
+      sym: [[sub(i('X'), 'máx'), 'extração máxima'], ['τ', 'constante de tempo da lixiviação'], [sub(i('d'), '80'), 'tamanho do minério britado (P80)'], [sub(t, 'L'), 'tempo de lixiviação de cada pilha'], [sub('ρ', 'ap') + ', ' + i('H'), 'massa específica aparente e altura da pilha']],
+      note: 'Na uraninita o urânio é U(IV), quase insolúvel. Só o U(VI), como íon uranila UO₂²⁺, forma complexos solúveis com o sulfato. Por isso a lixiviação precisa de um oxidante (MnO₂ ou clorato) e do ferro como mediador: o Fe³⁺ oxida o UO₂ e o MnO₂ reoxida o Fe²⁺. A pilha é mais barata que os tanques agitados, mas extrai menos e mais devagar; o minério britado mais fino acelera a extração, mas a pilha fica menos permeável.'
+    }),
+    u_sx: () => ({
+      name: 'Extração por solvente com amina terciária: Kremser e McCabe–Thiele',
+      eqs: [eq('2 R₃N + H₂SO₄ → (R₃NH)₂SO₄,&nbsp; 2 (R₃NH)₂SO₄ + [UO₂(SO₄)₃]⁴⁻ → (R₃NH)₄UO₂(SO₄)₃ + 2 SO₄²⁻', 'extração (troca aniônica)'),
+        eq('(R₃NH)₄UO₂(SO₄)₃ + 4 NH₃ → 4 R₃N + UO₂SO₄ + 2 (NH₄)₂SO₄', 'reextração com amônia e sulfato de amônio (pH ≈ 4)'),
+        eq(i('y') + ' = ' + i('D') + i('x') + ',&nbsp; ' + i('E') + ' = ' + i('D') + fr(i('O'), i('A')) + ',&nbsp; ' + fr(sub(x, i('N')) + ' − ' + sub(i('y'), '0') + '/' + i('D'), sub(x, '0') + ' − ' + sub(i('y'), '0') + '/' + i('D')) + ' = ' + fr(i('E') + ' − 1', sup(i('E'), i('N') + ' + 1') + ' − 1'), 'equilíbrio linear e equação de Kremser'),
+        eq(i('O') + '(' + sub(i('y'), 'L') + ' − ' + sub(i('y'), '0') + ') = ' + i('A') + '(' + sub(x, '0') + ' − ' + sub(x, i('N')) + ')', 'reta de operação (balanço do urânio)'),
+        eq(i('S') + ' = ' + fr(sub(i('A'), 's') + '/' + i('O'), sub(i('D'), 's')) + ',&nbsp; ' + fr(sub(i('y'), '0'), sub(i('y'), 'L')) + ' = ' + fr(i('S') + ' − 1', sup(i('S'), sub(i('N'), 's') + ' + 1') + ' − 1'), 'reextração; o orgânico reextraído volta à extração')],
+      sym: [[x + ', ' + i('y'), 'urânio no aquoso e no orgânico (g/L)'], [i('D'), 'coeficiente de distribuição'], [i('O') + ', ' + i('A'), 'vazões de orgânico e de aquoso'], [i('N'), 'número de estágios'], [sub(i('y'), 'L') + ', ' + sub(i('y'), '0'), 'orgânico carregado e reextraído']],
+      note: 'A amina terciária (Alamine 336, a 0,1 M em querosene) só extrai complexos aniônicos, como o sulfato de uranila: o manganês, o cálcio e quase todo o ferro ficam no rafinado. Com a razão O/A pequena na extração e a A/O pequena na reextração, o urânio sai dezenas de vezes mais concentrado do que entrou. O equilíbrio linear vale com o orgânico bem abaixo da carga máxima; perto da saturação a curva de equilíbrio entorta e são precisos mais estágios.'
+    }),
+    u_yellowcake: () => ({
+      name: 'Precipitação do DUA e calcinação a U₃O₈ (yellowcake)',
+      eqs: [eq('2 UO₂SO₄ + 6 NH₃ + 3 H₂O → (NH₄)₂U₂O₇ + 2 (NH₄)₂SO₄', 'precipitação do diuranato de amônio, pH 7 a 8'),
+        eq('9 (NH₄)₂U₂O₇ → 6 U₃O₈ + 14 NH₃ + 15 H₂O + 2 N₂', 'calcinação acima de 650 °C'),
+        eq(sub(Q, 'sec') + ' = ' + sub(i('m'), 'água') + '[' + sub(i('c'), 'p') + '(100 − ' + sub(T, '0') + ') + Δ' + sub(i('H'), 'v') + '],&nbsp; ' + sub(Q, 'calc') + ' = ' + sub(i('m'), 'DUA') + '[' + sub(i('c'), 'p') + '(' + sub(T, 'c') + ' − ' + sub(T, '0') + ') + Δ' + sub(i('H'), 'd') + ']', 'calor da secagem e da calcinação')],
+      sym: [[sub(T, 'c'), 'temperatura de calcinação'], ['Δ' + sub(i('H'), 'd'), 'calor de decomposição do DUA (estimativa)']],
+      note: 'O "yellowcake" é o concentrado de urânio vendido pelas minas. Precipitado com amônia, o diuranato de amônio é amarelo; calcinado acima de 650 °C, vira U₃O₈ verde-oliva, estável e com cerca de 85 % de urânio, que viaja em tambores de 200 L. A essa altura o urânio ainda é natural: 0,711 % de U-235.'
+    }),
+    u_conversion: () => ({
+      name: 'Conversão do U₃O₈ a UF₆',
+      eqs: [eq('U₃O₈ + 8 HNO₃ → 3 UO₂(NO₃)₂ + 2 NO₂ + 4 H₂O', 'dissolução; o TBP purifica o nitrato de uranila'),
+        eq('UO₂(NO₃)₂ → UO₃ + 2 NO₂ + ½ O₂,&nbsp; UO₃ + H₂ → UO₂ + H₂O', 'desnitração e redução'),
+        eq('UO₂ + 4 HF → UF₄ + 2 H₂O,&nbsp; UF₄ + F₂ → UF₆', 'hidrofluoração e fluoração'),
+        eq('U₃O₈ + ½ O₂ + 3 H₂ + 12 HF + 3 F₂ → 3 UF₆ + 9 H₂O', 'reação global, com o NOₓ reabsorvido como HNO₃'),
+        eq('2 HF → H₂ + F₂ (eletrólise em KF·2HF),&nbsp; CaF₂ + H₂SO₄ → CaSO₄ + 2 HF', 'origem do flúor')],
+      sym: [['TBP', 'fosfato de tributila, extrator do nitrato de uranila'], ['UF₄', '"sal verde"']],
+      note: 'O enriquecimento separa os isótopos num gás, e o UF₆ é o único composto de urânio que vira gás perto da temperatura ambiente (sublima a 56,5 °C em 1 atm). O flúor ajuda: tem um só isótopo estável, o F-19, e a diferença de massa entre ²³⁵UF₆ e ²³⁸UF₆ vem só do urânio. O Brasil ainda converte o urânio no exterior; a Marinha opera uma unidade de demonstração em Iperó (SP).'
+    }),
+    u_enrichment: () => ({
+      name: 'Enriquecimento em cascata de ultracentrífugas',
+      eqs: [eq(i('F') + sub(x, 'f') + ' = ' + i('P') + sub(x, 'p') + ' + ' + i('W') + sub(x, 'w') + ',&nbsp; ' + fr(i('F'), i('P')) + ' = ' + fr(sub(x, 'p') + ' − ' + sub(x, 'w'), sub(x, 'f') + ' − ' + sub(x, 'w')), 'balanço do U-235 e fator de alimentação'),
+        eq('SWU = ' + i('P') + i('V') + '(' + sub(x, 'p') + ') + ' + i('W') + i('V') + '(' + sub(x, 'w') + ') − ' + i('F') + i('V') + '(' + sub(x, 'f') + '),&nbsp; ' + i('V') + '(' + x + ') = (2' + x + ' − 1) ln' + fr(x, '1 − ' + x), 'trabalho de separação'),
+        eq('δ' + sub(i('U'), 'máx') + ' = ' + fr('π' + i('Z'), '2') + 'ρ' + i('D') + sup('(' + fr('Δ' + i('M') + sup(i('v'), '2'), '2' + i('RT')) + ')', '2'), 'limite de Dirac do poder de separação de uma centrífuga'),
+        eq(sub(i('n'), 'E') + ' = ' + fr('ln(' + sub(i('R'), 'p') + '/' + sub(i('R'), 'f') + ')', 'ln β') + ',&nbsp; ' + sub(i('n'), 'S') + ' = ' + fr('ln(' + sub(i('R'), 'f') + '/' + sub(i('R'), 'w') + ')', 'ln β') + ',&nbsp; β = √α,&nbsp; ' + i('R') + ' = ' + fr(x, '1 − ' + x), 'estágios da cascata ideal'),
+        eq(sub(i('H'), 'j') + '(' + sub(x, 'j + 1') + ' − ' + sub(x, 'j') + ') = ' + i('P') + '(' + sub(x, 'p') + ' − ' + sub(x, 'j') + '),&nbsp; ' + sub(i('n'), 'máq') + ' = ' + fr(sub(i('L'), 'j') + sup('(ln α)', '2'), '8 δ' + i('U')), 'vazão entre estágios e máquinas por estágio')],
+      sym: [[i('F') + ', ' + i('P') + ', ' + i('W'), 'urânio na alimentação, no produto e no rejeito'], [x, 'fração mássica de U-235'], [i('v') + ', ' + i('Z'), 'velocidade periférica e comprimento do rotor'], ['Δ' + i('M'), 'diferença de massa molar entre os dois UF₆ (3 g/mol)'], ['α', 'fator de separação de uma máquina']],
+      note: 'Na centrífuga, o ²³⁸UF₆, mais pesado, se concentra junto à parede e o ²³⁵UF₆ perto do eixo. Um contrafluxo axial multiplica esse efeito radial ao longo do rotor. Como cada máquina enriquece pouco, elas são ligadas em série (estágios) e em paralelo (dentro de cada estágio): a cascata ideal fica larga no estágio de alimentação e estreita nas pontas. O trabalho de separação (SWU) mede o esforço e não depende da tecnologia; a centrífuga gasta cerca de 50 kWh/SWU, cinquenta vezes menos que a antiga difusão gasosa.'
+    }),
+    u_auc: () => ({
+      name: 'Reconversão do UF₆ a UO₂ pelo processo AUC',
+      eqs: [eq('UF₆ + 5 H₂O + 10 NH₃ + 3 CO₂ → (NH₄)₄UO₂(CO₃)₃ + 6 NH₄F', 'precipitação do tricarbonato de uranila e amônio (AUC)'),
+        eq('(NH₄)₄UO₂(CO₃)₃ + H₂ → UO₂ + 4 NH₃ + 3 CO₂ + 3 H₂O', 'calcinação e redução em leito fluidizado'),
+        eq('UF₆ + 2 H₂O + 6 NH₃ + H₂ → UO₂ + 6 NH₄F', 'reação global, com o NH₃ e o CO₂ do calcinador reciclados'),
+        eq('2 NH₄F + Ca(OH)₂ → CaF₂ + 2 NH₃ + 2 H₂O', 'tratamento do efluente')],
+      sym: [['AUC', 'tricarbonato de uranila e amônio (ammonium uranyl carbonate)']],
+      note: 'O processo AUC, que a fábrica de Resende recebeu da Siemens/KWU, dá um pó de UO₂ que escoa bem e se compacta sem granulação prévia. A partir daqui o urânio está enriquecido: a massa de cada lote é limitada pela criticidade e os equipamentos têm geometria segura.'
+    }),
+    u_pellets: () => ({
+      name: 'Pastilhas de UO₂ e elementos combustíveis',
+      eqs: [eq(sub(i('L'), 'v') + ' = ' + fr(sub(i('L'), 's'), sup('(' + sub('ρ', 'v') + '/' + sub('ρ', 's') + ')', '1/3')) + ',&nbsp; contração = 1 − ' + sup('(' + fr(sub('ρ', 'v'), sub('ρ', 's')) + ')', '1/3'), 'dimensões a verde e contração na sinterização'),
+        eq(sub(i('m'), 'p') + ' = ' + fr('π', '4') + sup(i('D'), '2') + i('H') + '(1 − ' + sub(i('f'), 'reb') + ')' + sub('ρ', 'TD') + sub('δ', 's'), 'massa de cada pastilha'),
+        eq(sub(i('n'), 'elementos') + ' = ' + fr(sub(i('ṁ'), 'UO₂') + '(1 − ' + sub(i('f'), 'ret') + ')(1 − ' + sub(i('f'), 'rej') + ')', sub(i('m'), 'p') + sub(i('n'), 'pastilhas/vareta') + sub(i('n'), 'varetas')), 'elementos combustíveis por ano'),
+        eq('folga = (' + sub(i('D'), 'ext') + ' − 2' + i('e') + ') − ' + i('D'), 'folga diametral entre a pastilha e o revestimento')],
+      sym: [[sub('ρ', 'v') + ', ' + sub('ρ', 's'), 'densidade a verde e sinterizada'], [sub(i('f'), 'ret') + ', ' + sub(i('f'), 'rej'), 'fração retificada e rejeitada'], [sub(i('f'), 'reb'), 'volume dos rebaixos e chanfros']],
+      note: 'A pastilha é a primeira barreira contra a liberação dos produtos de fissão. A sinterização em hidrogênio a cerca de 1 750 °C leva o UO₂ a 95 % da densidade teórica: a porosidade que sobra acomoda parte dos gases de fissão. A retífica deixa o diâmetro com tolerância de centésimos de milímetro, porque a folga para o revestimento de zircaloy controla a temperatura no centro da pastilha.'
+    }),
     eta_disinfect: () => ({
       name: 'Tanque de contato: desinfecção (CT), fluoretação e correção do pH',
       eqs: [eq('Cl₂ + H₂O → HOCl + HCl,&nbsp; HOCl ⇌ H⁺ + OCl⁻ (p' + sub(i('K'), 'a') + ' ≈ 7,5)', 'cloro livre'),
@@ -15613,6 +16203,34 @@ window.SIMULAFACIL_CONFIG = {
       'A bomba sanitária de lóbulos tira o shampoo do tanque de mistura e o leva à envasadora, que enche os frascos pelo bico dosador. Parte do produto fica retida no tanque, na mangueira e na bomba e sai na água de limpeza.',
       'O bloco calcula os frascos por batelada, o tempo de envase e a cadência, a perda de carga do shampoo viscoso na linha (regime laminar), o desnível e o bico, a potência hidráulica e a energia. A viscosidade vem do tanque de mistura pela corrente.',
       'No exemplo, 51 kg de shampoo a 100 L/h enchem 164 frascos de 300 mL em cerca de 30 min. A bomba trabalha a 2,4 bar e usa menos de 1 % da potência do motor de 1 kW: nas bombas de lóbulos o motor é escolhido pelo torque de partida com o produto viscoso e pela limpeza.'] },
+    u_heap_leach: { ex: ex('ciclo-combustivel-nuclear', 'Ciclo do combustível nuclear: da uraninita às pastilhas'), p: [
+      'Em Caetité (BA), na província uranífera de Lagoa Real, o urânio está em albititos, como uraninita (UO₂) fina. O minério da lavra é britado e empilhado sobre uma manta impermeável; gotejadores espalham ácido sulfúrico diluído sobre a pilha, e a solução que escorre pelo fundo, o licor rico (PLS), vai para a extração por solvente. O oxidante (MnO₂) é misturado ao minério, porque só o urânio hexavalente se dissolve.',
+      'O bloco faz a estequiometria da dissolução da uraninita e do ataque à calcita (que vira gesso e libera CO₂), limita a extração pelo oxidante e pelo ácido, usa uma cinética de primeira ordem com τ proporcional ao quadrado do tamanho do minério britado e calcula a solução retida na pilha, o licor rico, o consumo de ácido e de oxidante por tonelada e a área das pilhas e a taxa de irrigação.',
+      'No exemplo, 12,75 t/h de minério com 0,3 % de U₃O₈ ficam 60 dias nas pilhas: a cinética extrai 83,6 % do urânio e 80,2 % chegam ao licor, com 0,89 g U/L e 5 g/L de ácido livre. Cada tonelada recebe cerca de 34 kg de ácido: 22 kg são consumidos, quase todos pela calcita, e 12 kg saem livres no licor.'] },
+    u_sx: { ex: ex('ciclo-combustivel-nuclear', 'Ciclo do combustível nuclear: da uraninita às pastilhas'), p: [
+      'A extração por solvente purifica e concentra o urânio do licor. Num banco de misturadores-decantadores em contracorrente, o licor encontra uma amina terciária dissolvida em querosene, que extrai o complexo aniônico do sulfato de uranila e deixa no rafinado o manganês, o cálcio e o ferro. Num segundo banco, uma solução de sulfato de amônio com amônia tira o urânio do orgânico, que volta à extração.',
+      'O bloco usa equilíbrio linear (y = D·x) e a equação de Kremser em cada banco, com o orgânico reextraído voltando à extração (a carga residual é obtida por iteração). Mostra os dois diagramas de McCabe–Thiele, confere a carga do orgânico com a carga máxima da amina, neutraliza o ácido que vem com o orgânico e dimensiona os misturadores e os decantadores.',
+      'No exemplo, 4 estágios de extração com O/A = 0,25 e D = 20 (E = 5) e 3 de reextração deixam cerca de 7 mg U/L no rafinado (99,2 % extraído) e concentram o urânio 29 vezes, de 0,89 para 25,9 g U/L.'] },
+    u_yellowcake: { ex: ex('ciclo-combustivel-nuclear', 'Ciclo do combustível nuclear: da uraninita às pastilhas'), p: [
+      'Com amônia, o urânio do licor de reextração precipita como diuranato de amônio, um sólido amarelo. A polpa é espessada e filtrada, a torta é lavada e seca, e a calcinação a cerca de 800 °C transforma o DUA em U₃O₈, o yellowcake, embalado em tambores de 200 L.',
+      'O bloco calcula a amônia da precipitação, o sulfato de amônio do filtrado, a água da torta, a calcinação (com os gases NH₃, H₂O e N₂), o yellowcake, os tambores por ano e o calor da secagem e da calcinação. A curva termogravimétrica mostra as duas perdas de massa: DUA → UO₃ e UO₃ → U₃O₈.',
+      'No exemplo saem cerca de 30 kg/h de U₃O₈, ou 266 t por ano: é o yellowcake de que uma recarga de Angra 2 precisa a cada ano.'] },
+    u_conversion: { ex: ex('ciclo-combustivel-nuclear', 'Ciclo do combustível nuclear: da uraninita às pastilhas'), p: [
+      'Na conversão o yellowcake é dissolvido em ácido nítrico e purificado com TBP até o grau nuclear. O nitrato de uranila é desnitrado a UO₃, reduzido com hidrogênio a UO₂, hidrofluorado com HF a UF₄ e fluorado com flúor a UF₆, que é recolhido em armadilhas frias e enchido em cilindros 48Y.',
+      'O bloco faz a estequiometria de cada etapa e a global, calcula os reagentes por ano (O₂, H₂, HF e F₂), a fluorita de que vem todo o flúor, a energia da eletrólise do flúor e os cilindros de UF₆. O UF₆ sai dividido em ²³⁵UF₆ e ²³⁸UF₆, com o teor natural de U-235.',
+      'No exemplo, cerca de 266 t de U₃O₈ por ano viram cerca de 333 t de UF₆, o enchimento de 27 cilindros 48Y.'] },
+    u_enrichment: { ex: ex('ciclo-combustivel-nuclear', 'Ciclo do combustível nuclear: da uraninita às pastilhas'), p: [
+      'O enriquecimento aumenta o teor de U-235 de 0,711 % para cerca de 4 %. Na fábrica de Resende ele é feito em ultracentrífugas de tecnologia nacional, desenvolvidas pela Marinha: o UF₆ gasoso gira a centenas de metros por segundo, e a força centrífuga separa um pouco os dois isótopos. Muitas máquinas, em série e em paralelo, formam a cascata.',
+      'O bloco faz os balanços do urânio e do U-235, o fator de alimentação e o trabalho de separação (SWU), estima o poder de separação de cada máquina pelo limite de Dirac, conta as máquinas e monta a cascata ideal: número de estágios, vazão entre eles e máquinas em cada estágio. Mostra também como o teor do rejeito troca urânio natural por SWU e o diagrama de fases do UF₆.',
+      'No exemplo, 25,6 kg U/h de urânio natural dão 3,15 kg U/h a 4 % e 22,5 kg U/h de rejeito a 0,25 %: são 5,83 SWU por kg de produto e 161 mil SWU por ano, cerca de 6 mil centrífugas numa cascata ideal de 22 estágios.'] },
+    u_auc: { ex: ex('ciclo-combustivel-nuclear', 'Ciclo do combustível nuclear: da uraninita às pastilhas'), p: [
+      'Na reconversão o UF₆ enriquecido volta a ser óxido. No processo AUC, o UF₆ vaporizado reage com água, amônia e gás carbônico e precipita o tricarbonato de uranila e amônio; o AUC é filtrado e calcinado em leito fluidizado com hidrogênio e vapor, e sai o pó de UO₂.',
+      'O bloco faz a estequiometria da precipitação, da calcinação e da reação global, calcula a amônia, o gás carbônico e o hidrogênio, o efluente com fluoreto de amônio e o CaF₂ que o tratamento com cal recupera. Os isótopos passam do UF₆ para o UO₂ sem mudar o teor.',
+      'No exemplo saem cerca de 31 t de pó de UO₂ por ano, com 4 % de U-235.'] },
+    u_pellets: { ex: ex('ciclo-combustivel-nuclear', 'Ciclo do combustível nuclear: da uraninita às pastilhas'), p: [
+      'Na fábrica de combustível o pó de UO₂ é compactado em pastilhas a verde, sinterizado em hidrogênio a cerca de 1 750 °C e retificado até o diâmetro final. As pastilhas aprovadas na inspeção enchem tubos de zircaloy, que recebem hélio e são soldados; 236 varetas formam um elemento combustível 16 × 16 de Angra 2.',
+      'O bloco calcula as dimensões a verde, sinterizada e retificada, a contração, a força de compactação, a massa de cada pastilha, as pastilhas por vareta, as varetas e os elementos por ano, o zircaloy, a folga entre a pastilha e o revestimento e o refugo, que volta ao processo.',
+      'No exemplo, pastilhas de 9,11 mm × 11 mm com 7,4 g de UO₂ enchem 354 por vareta; a fábrica entrega cerca de 48 elementos por ano, com 546 kg de urânio cada: uma recarga de Angra 2.'] },
     eta_filter: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
       'O filtro rápido é a barreira final contra a turbidez e os cistos de protozoários. A água desce por uma camada de antracito, que retém a maior parte dos flocos em profundidade, e por uma de areia fina, que faz o polimento. Quando a perda de carga chega ao limite, o filtro é lavado com água de baixo para cima, que expande o leito e solta o material retido.',
       'O bloco usa o modelo de Iwasaki para a remoção (C/C₀ = exp(−λL) em cada camada), a equação de Carman–Kozeny para a perda de carga do leito limpo, um aumento linear da perda de carga com a massa retida para a carreira e a equação de Richardson–Zaki para a expansão na lavagem.',
@@ -15685,7 +16303,7 @@ window.SIMULAFACIL_CONFIG = {
     crusher: ['feed'], ball_mill: ['feed', 'recycle'], spiral_classifier: ['feed'], hydrocyclone: ['feed'], flotation: ['feed'], flot_col_bench: ['feed'], flot_col_ind: ['feed'],
     coke_oven: ['coal'], sinter_plant: ['ore', 'flux', 'fuel'], bof: ['hot_metal', 'scrap'], caster: ['steel'], rolling_mill: ['billet'], wire_drawing: ['rod'],
     wood_yard: ['logs'], pulp_washer: ['pulp'], bleach_plant: ['pulp'], paper_machine: ['stock'], recovery_boiler: ['liquor'], causticizing: ['smelt'], steam_gen: ['water'], steam_turbine: ['steam'], cooling_tower: ['hot_in'],
-    nuclear_reactor: ['cold_leg'], pwr_steam_gen: ['primary_in', 'feedwater'], msr: ['heating'], steam_condenser: ['cw_in', 'drain'], deaerator: ['drain1', 'drain2'], shampoo_tank: ['water_hot', 'water_cold', 'anionic', 'amphoteric', 'glycerin', 'pearl', 'additives'], cocoa_alkalizer: ['alkali'], conche: ['fat', 'emulsifier'], eta_washtank: ['feed2', 'feed3'], eta_thickener: ['feed2'] };
+    nuclear_reactor: ['cold_leg', 'fuel'], pwr_steam_gen: ['primary_in', 'feedwater'], msr: ['heating'], steam_condenser: ['cw_in', 'drain'], deaerator: ['drain1', 'drain2'], shampoo_tank: ['water_hot', 'water_cold', 'anionic', 'amphoteric', 'glycerin', 'pearl', 'additives'], cocoa_alkalizer: ['alkali'], conche: ['fat', 'emulsifier'], eta_washtank: ['feed2', 'feed3'], eta_thickener: ['feed2'] };
   // portas de energia (correntes de energia): não carregam matéria
   const ENERGY_PORTS = { ei: 1, eo: 1, q_in: 1, q_out: 1, qc: 1, qr: 1, q_pre: 1 };
   const isEnergyPort = p => !!ENERGY_PORTS[p];
@@ -15847,6 +16465,13 @@ window.SIMULAFACIL_CONFIG = {
     shampoo_tank: { water_hot: 'água da fase quente', water_cold: 'água da fase fria', anionic: 'tensoativo aniônico (LESS)', amphoteric: 'tensoativo anfótero (betaína)', glycerin: 'glicerina',
       pearl: 'perolizante (EGDS)', additives: 'aditivos e corretores', out: 'shampoo a granel' },
     filling: { feed: 'shampoo a granel', product: 'shampoo envasado (frascos)', loss: 'perdas (retido na linha)' },
+    u_heap_leach: { ore: 'minério britado', acid: 'solução de irrigação (H₂SO₄)', oxidant: 'oxidante (MnO₂)', pls: 'licor rico (PLS)', residue: 'pilha lixiviada (rejeito)', gas: 'CO₂ (atmosfera)' },
+    u_sx: { pls: 'licor rico (PLS)', strip: 'solução de reextração', raffinate: 'rafinado (volta às pilhas)', eluate: 'licor de reextração (eluato)' },
+    u_yellowcake: { feed: 'licor de reextração (eluato)', ammonia: 'amônia', product: 'yellowcake (U₃O₈)', filtrate: 'filtrado', gas: 'gases da secagem e da calcinação' },
+    u_conversion: { feed: 'yellowcake (U₃O₈)', uf6: 'UF₆ natural', offgas: 'vapor d’água', waste: 'perdas da purificação' },
+    u_enrichment: { feed: 'UF₆ natural', product: 'UF₆ enriquecido', tails: 'UF₆ empobrecido (rejeito)' },
+    u_auc: { feed: 'UF₆ enriquecido', product: 'pó de UO₂', effluent: 'efluente com NH₄F' },
+    u_pellets: { feed: 'pó de UO₂', fuel: 'elementos combustíveis (pastilhas)', scrap: 'refugo (pó da retífica e rejeitos)' },
     eta_intake: { feed: 'água bruta do rio', product: 'água para a ETA', grit: 'areia retirada', q_in: 'bombas de água bruta' },
     eta_coag: { feed: 'água bruta', product: 'água coagulada' },
     eta_floc: { feed: 'água coagulada', product: 'água floculada' },
@@ -15893,7 +16518,7 @@ window.SIMULAFACIL_CONFIG = {
     steam_turbine: { steam: 'vapor vivo (alta pressão)', extraction: 'vapor de extração (média pressão)', exhaust: 'vapor de escape (baixa pressão)', q_out: 'potência elétrica gerada' },
     cooling_tower: { hot_in: 'água quente (dos condensadores)', cold_out: 'água fria da bacia (aos condensadores)', blowdown: 'purga automática', vapor: 'ar úmido: evaporação + arraste' },
     causticizing: { smelt: 'fundido (smelt)', white_liquor: 'licor branco', gas: 'CO₂ do forno de cal' },
-    nuclear_reactor: { cold_leg: 'perna fria (água do primário que volta das bombas)', hot_leg: 'perna quente (água do primário para os geradores de vapor)' },
+    nuclear_reactor: { cold_leg: 'perna fria (água do primário que volta das bombas)', hot_leg: 'perna quente (água do primário para os geradores de vapor)', fuel: 'combustível novo (elementos com pastilhas de UO₂)', spent: 'combustível usado (para a piscina)' },
     pwr_steam_gen: { primary_in: 'primário: entrada (perna quente)', primary_out: 'primário: saída (para a bomba do primário)', feedwater: 'água de alimentação', steam: 'vapor saturado (para as turbinas)' },
     msr: { wet: 'vapor úmido (escape da turbina de alta)', heating: 'vapor vivo de aquecimento', reheated: 'vapor reaquecido (para a turbina de baixa)', drain: 'água separada (dreno)', heat_drain: 'condensado do reaquecedor' },
     steam_condenser: { steam: 'vapor de escape', drain: 'drenos', cw_in: 'água de resfriamento (entrada)', cw_out: 'água de resfriamento (saída)', condensate: 'condensado' },
@@ -16014,7 +16639,7 @@ window.SIMULAFACIL_CONFIG = {
     steam_turbine: { w: 150, h: 96, ports: { steam: P(0, 40, 'l', 'in'), extraction: P(70, 0, 'u', 'out'), exhaust: P(100, 96, 'd', 'out'), q_out: P(150, 40, 'r', 'eout') } },
     cooling_tower: { w: 150, h: 150, ports: { hot_in: P(0, 54, 'l', 'in'), vapor: P(66, 0, 'u', 'out'), cold_out: P(150, 116, 'r', 'out'), blowdown: P(66, 150, 'd', 'out') } },
     causticizing: { w: 180, h: 110, ports: { smelt: P(0, 20, 'l', 'in'), white_liquor: P(180, 28, 'r', 'out'), gas: P(180, 100, 'r', 'out') } },
-    nuclear_reactor: { w: 120, h: 160, ports: { cold_leg: P(0, 50, 'l', 'in'), hot_leg: P(120, 50, 'r', 'out') } },
+    nuclear_reactor: { w: 120, h: 160, ports: { cold_leg: P(0, 50, 'l', 'in'), hot_leg: P(120, 50, 'r', 'out'), fuel: P(0, 120, 'l', 'in'), spent: P(120, 120, 'r', 'out') } },
     pwr_steam_gen: { w: 90, h: 180, ports: { steam: P(45, 0, 'u', 'out'), feedwater: P(0, 72, 'l', 'in'), primary_in: P(0, 160, 'l', 'in'), primary_out: P(90, 160, 'r', 'out') } },
     msr: { w: 170, h: 80, ports: { wet: P(0, 40, 'l', 'in'), heating: P(120, 0, 'u', 'in'), reheated: P(170, 40, 'r', 'out'), drain: P(45, 80, 'd', 'out'), heat_drain: P(125, 80, 'd', 'out') } },
     steam_condenser: { w: 160, h: 100, ports: { steam: P(80, 0, 'u', 'in'), drain: P(0, 26, 'l', 'in'), cw_in: P(0, 62, 'l', 'in'), cw_out: P(160, 62, 'r', 'out'), condensate: P(80, 100, 'd', 'out') } },
@@ -16042,7 +16667,14 @@ window.SIMULAFACIL_CONFIG = {
     pw_tank: { w: 150, h: 120, ports: { feed: P(0, 30, 'l', 'in'), hot: P(150, 70, 'r', 'out'), cold: P(150, 96, 'r', 'out'), stock: P(68, 120, 'd', 'out') } },
     shampoo_tank: { w: 170, h: 150, ports: { water_hot: P(0, 34, 'l', 'in'), water_cold: P(0, 60, 'l', 'in'), anionic: P(0, 86, 'l', 'in'), amphoteric: P(48, 0, 'u', 'in'), glycerin: P(64, 0, 'u', 'in'),
       pearl: P(106, 0, 'u', 'in'), additives: P(122, 0, 'u', 'in'), out: P(170, 142, 'r', 'out') } },
-    filling: { w: 170, h: 100, ports: { feed: P(0, 60, 'l', 'in'), product: P(170, 86, 'r', 'out'), loss: P(33, 100, 'd', 'out') } }
+    filling: { w: 170, h: 100, ports: { feed: P(0, 60, 'l', 'in'), product: P(170, 86, 'r', 'out'), loss: P(33, 100, 'd', 'out') } },
+    u_heap_leach: { w: 220, h: 110, ports: { ore: P(0, 78, 'l', 'in'), oxidant: P(24, 0, 'u', 'in'), acid: P(80, 0, 'u', 'in'), gas: P(190, 0, 'u', 'out'), pls: P(220, 96, 'r', 'out'), residue: P(120, 110, 'd', 'out') } },
+    u_sx: { w: 220, h: 110, ports: { pls: P(0, 40, 'l', 'in'), strip: P(180, 0, 'u', 'in'), raffinate: P(60, 110, 'd', 'out'), eluate: P(220, 70, 'r', 'out') } },
+    u_yellowcake: { w: 210, h: 130, ports: { feed: P(0, 40, 'l', 'in'), ammonia: P(48, 0, 'u', 'in'), gas: P(180, 0, 'u', 'out'), product: P(210, 112, 'r', 'out'), filtrate: P(80, 130, 'd', 'out') } },
+    u_conversion: { w: 210, h: 120, ports: { feed: P(0, 62, 'l', 'in'), uf6: P(210, 62, 'r', 'out'), offgas: P(150, 0, 'u', 'out'), waste: P(30, 120, 'd', 'out') } },
+    u_enrichment: { w: 230, h: 130, ports: { feed: P(0, 65, 'l', 'in'), product: P(230, 28, 'r', 'out'), tails: P(230, 104, 'r', 'out') } },
+    u_auc: { w: 190, h: 120, ports: { feed: P(0, 40, 'l', 'in'), product: P(190, 96, 'r', 'out'), effluent: P(50, 120, 'd', 'out') } },
+    u_pellets: { w: 230, h: 120, ports: { feed: P(0, 40, 'l', 'in'), fuel: P(230, 61, 'r', 'out'), scrap: P(110, 120, 'd', 'out') } }
   };
 
   /* primitivas: rect (x,y,w,h,r), circ (cx,cy,r), line (polilinha aberta), poly (polígono fechado), text.
@@ -16212,6 +16844,44 @@ window.SIMULAFACIL_CONFIG = {
         L([[33, 44], [33, 16], [112, 16], [112, 24]]), R(102, 24, 20, 12, 2, 'bodyw'), L([[112, 36], [112, 46]]),
         L([[82, 86], [168, 86]]), C(86, 90, 4), C(164, 90, 4), L([[168, 86], [170, 86]]), L([[33, 76], [33, 100]], 'lnd'), T(140, 12, 'envase')];
       [[86, 'bodyw'], [105, 'bodyb'], [124, 'bodyb'], [143, 'bodyb']].forEach(([x, c]) => o.push(R(x + 4, 52, 6, 6, 1, 'bodyw'), R(x, 58, 14, 26, 4, c)));
+      return o; },
+    u_heap_leach: () => { // pilha de minério sobre a manta, irrigação por gotejamento com H₂SO₄, oxidante no minério, CO₂ e licor rico na canaleta
+      const o = [L([[0, 78], [22, 78]]), L([[24, 0], [24, 78]]), Pg([[22, 94], [62, 44], [160, 44], [196, 94]]), L([[14, 96], [206, 96]], 'lnd'),
+        L([[80, 0], [80, 34], [158, 34]], 'cold'), L([[176, 44], [190, 26], [190, 0]], 'lnd'), L([[200, 96], [220, 96]], 'hot'), L([[120, 96], [120, 110]], 'lnd'), T(110, 80, 'pilha'), T(124, 26, 'H₂SO₄')];
+      [92, 108, 124, 140, 154].forEach(x => o.push(L([[x, 34], [x, 41]], 'cold')));
+      [[58, 70], [76, 58], [96, 66], [118, 54], [138, 64], [160, 72], [84, 84], [146, 86]].forEach(([x, y]) => o.push(C(x, y, 2.4, 'bodyw')));
+      return o; },
+    u_sx: () => { // misturadores-decantadores: banco de extração (4) e de reextração (3), orgânico carregado e orgânico reextraído
+      const o = [L([[0, 40], [10, 40]]), L([[60, 76], [60, 110]]), L([[180, 0], [180, 30]]), L([[202, 70], [220, 70]]),
+        L([[106, 36], [130, 36]], 'hot'), L([[130, 70], [118, 70], [118, 94], [14, 94], [14, 76]], 'lnd'), T(58, 22, 'extração'), T(166, 22, 'reextração')];
+      for (let k = 0; k < 4; k++) o.push(R(10 + 24 * k, 30, 22, 46, 3), C(21 + 24 * k, 44, 5, 'bodyw'));
+      for (let k = 0; k < 3; k++) o.push(R(130 + 24 * k, 30, 22, 46, 3), C(141 + 24 * k, 44, 5, 'bodyw'));
+      o.push(L([[10, 60], [106, 60]], 'lnd'), L([[130, 60], [202, 60]], 'lnd'));
+      return o; },
+    u_yellowcake: () => [ // tanque de precipitação com agitador, filtro de tambor, forno rotativo de calcinação e o yellowcake
+      L([[0, 40], [10, 40]]), R(10, 22, 50, 60, 6), R(24, 8, 12, 8, 2, 'bodyw'), L([[30, 16], [30, 64]]), L([[20, 64], [40, 64]]), L([[48, 0], [48, 22]]), T(35, 48, 'DUA'),
+      L([[60, 70], [74, 70]]), C(90, 70, 16), C(90, 70, 4, 'ln'), L([[80, 84], [80, 130]], 'lnd'),
+      L([[106, 70], [114, 78]]), Pg([[112, 74], [198, 96], [194, 110], [108, 88]]), L([[118, 76], [118, 40], [180, 40], [180, 0]], 'lnd'),
+      L([[170, 102], [184, 106]], 'hot'), L([[196, 104], [196, 112], [210, 112]]), T(150, 126, 'U₃O₈')],
+    u_conversion: () => { // dissolução e TBP, desnitração e redução (H₂), hidrofluoração (HF), fluoração (F₂) e cilindro 48Y de UF₆
+      const o = [L([[0, 62], [10, 62]]), R(170, 48, 34, 28, 13, 'bodyw'), L([[204, 62], [210, 62]]), L([[63, 30], [63, 14], [150, 14], [150, 0]], 'lnd'),
+        L([[103, 30], [103, 14]], 'lnd'), L([[143, 30], [143, 14]], 'lnd'), L([[23, 94], [23, 108], [30, 108], [30, 120]], 'lnd'), T(187, 66, 'UF₆')];
+      ['TBP', 'H₂', 'HF', 'F₂'].forEach((s, k) => { const x = 10 + 40 * k; o.push(R(x, 30, 26, 64, 4), T(x + 13, 66, s)); o.push(L([[x + 26, 62], [x + 40, 62]])); });
+      return o; },
+    u_enrichment: () => { // cascata de ultracentrífugas: duas fileiras de rotores, coletor de alimentação, de produto e de rejeito
+      const o = [L([[0, 65], [214, 65]]), L([[22, 14], [214, 14], [214, 28], [230, 28]], 'hot'), L([[22, 116], [214, 116], [214, 104], [230, 104]], 'cold')];
+      for (let k = 0; k < 10; k++) { const x = 22 + 19 * k; o.push(R(x, 22, 11, 38, 5), R(x, 70, 11, 38, 5), L([[x + 5.5, 22], [x + 5.5, 14]], 'hot'), L([[x + 5.5, 108], [x + 5.5, 116]], 'cold')); }
+      return o; },
+    u_auc: () => [ // vaso de precipitação do AUC com agitador, filtro e leito fluidizado (H₂ e vapor) que dá o pó de UO₂
+      L([[0, 40], [20, 40]]), R(20, 20, 50, 64, 8), R(39, 4, 12, 8, 2, 'bodyw'), L([[45, 12], [45, 70]]), L([[34, 70], [56, 70]]), T(45, 52, 'AUC'),
+      L([[70, 40], [90, 40], [90, 60], [110, 60]]), R(110, 10, 34, 92, 6), C(120, 82, 3, 'bodyw'), C(133, 72, 3, 'bodyw'), C(122, 58, 3, 'bodyw'), C(135, 46, 3, 'bodyw'), C(121, 36, 3, 'bodyw'),
+      L([[127, 102], [127, 112], [160, 112]], 'hot'), L([[144, 96], [190, 96]]), L([[50, 84], [50, 120]], 'lnd'), T(127, 24, 'UO₂')],
+    u_pellets: () => { // prensa, forno de sinterização com as navículas, retífica sem centro e vareta de zircaloy com as pastilhas
+      const o = [L([[0, 40], [10, 40]]), R(10, 20, 30, 44, 3), R(19, 4, 12, 6, 1, 'bodyw'), L([[25, 10], [25, 30]]), L([[40, 42], [52, 42]]),
+        R(52, 24, 60, 34, 6), L([[56, 30], [108, 30]], 'hot'), L([[112, 42], [120, 42]]), C(132, 44, 11), C(154, 44, 7), L([[161, 44], [164, 44], [164, 61], [170, 61]]),
+        R(170, 56, 56, 10, 5, 'bodyw'), L([[226, 61], [230, 61]]), L([[140, 55], [140, 92], [110, 92], [110, 120]], 'lnd'), T(82, 74, 'sinterização'), T(198, 82, 'vareta')];
+      [60, 72, 84, 96].forEach(x => o.push(R(x, 42, 8, 10, 1, 'bodyw')));
+      [182, 194, 206].forEach(x => o.push(L([[x, 56], [x, 66]])));
       return o; },
     feed: () => [Pg([[2, 6], [36, 6], [50, 15], [36, 24], [2, 24]], 'bodyb'), T(22, 19, 'F', 'lblb')],
     product: () => [Pg([[4, 6], [38, 6], [52, 15], [38, 24], [4, 24]], 'bodyw'), T(24, 19, 'P', 'lblb')],
@@ -16620,7 +17290,7 @@ window.SIMULAFACIL_CONFIG = {
       L([[0, 50], [30, 50]], 'cold'), L([[35, 56], [35, 140]], 'cold'), L([[85, 56], [85, 140]], 'cold'),
       R(41, 80, 38, 56, 3, 'bodyw'), L([[47, 84], [47, 132]], 'hot'), L([[54, 84], [54, 132]], 'hot'), L([[60, 84], [60, 132]], 'hot'), L([[66, 84], [66, 132]], 'hot'), L([[73, 84], [73, 132]], 'hot'),
       L([[50, 40], [50, 98]], 'lnd'), L([[70, 40], [70, 98]], 'lnd'), L([[60, 78], [60, 56], [90, 50]], 'hot'), L([[90, 50], [120, 50]], 'hot'),
-      T(60, 70, '☢'), T(60, 151, 'PWR')],
+      L([[0, 120], [30, 120]]), L([[90, 120], [120, 120]], 'lnd'), T(60, 70, '☢'), T(60, 151, 'PWR')],
     pwr_steam_gen: () => [ // gerador de vapor de tubos em U: casco com tambor superior, secadores, feixe em U e câmara do primário dividida
       Pg([[22, 150], [22, 84], [12, 66], [12, 18], [24, 6], [66, 6], [78, 18], [78, 66], [68, 84], [68, 150]]),
       L([[24, 22], [66, 22]], 'lnd'), L([[20, 32], [70, 32]], 'lnd'), L([[45, 6], [45, 0]], 'hot'),
@@ -21364,6 +22034,46 @@ def pfr_transiente(P, nome):
         S('18', 'MIS', 'out', 'REF', 'feed', 'Massa'), S('19', 'REF', 'product', 'CON', 'feed', 'Refinada'), S('20', 'DM', 'out2', 'CON', 'fat', 'Manteiga'),
         S('21', 'FLE', 'out', 'CON', 'emulsifier', 'Lecitina'), S('E3', 'EC', 'eo', 'CON', 'q_in', 'Motores'), S('22', 'CON', 'vapor', 'P5', 'in', 'Exaustão'),
         S('23', 'CON', 'product', 'TEM', 'feed', 'Conchado'), S('E4', 'TEM', 'q_out', 'EF', 'ei', 'Água gelada'), S('24', 'TEM', 'product', 'P6', 'in', 'Barras')] } },
+    { key: 'ciclo-combustivel-nuclear', title: 'Ciclo do combustível nuclear: da uraninita de Caetité às pastilhas de UO₂ para Angra 2 — lixiviação em pilha, extração por solvente, yellowcake, conversão a UF₆, enriquecimento em ultracentrífugas, reconversão AUC, pastilhas e o reator PWR (uma recarga por ano)', fs: {
+      name: 'Ciclo do combustível nuclear: da uraninita às pastilhas (uma recarga de Angra 2 por ano)', theme: 'uranio', fixedLayout: true,
+      components: ['water', 'uraninite', 'albite', 'caco3', 'sulfuric-acid', 'pyrolusite', 'uranyl-sulfate', 'mnso4', 'gypsum', 'co2', 'ammonium-sulfate', 'nh3-aq', 'adu', 'u3o8', 'ammonia', 'nitrogen',
+        'uf6-235', 'uf6-238', 'nh4f', 'uo2-235', 'uo2-238', 'puo2', 'fp-oxide'], model: 'IDEAL',
+      blocks: [
+        { id: 'F1', x: -40, y: 214, type: 'feed', name: 'Minério britado de Caetité (0,3 % de U₃O₈)', params: { T: 28, P: 1.01325, vf: '', flow: 12750, flowUnit: 'kg/h', basis: 'mássica',
+          composition: { uraninite: 0.002886, caco3: 0.02, water: 0.03, albite: 0.947114 } } },
+        { id: 'F3', x: -40, y: 90, type: 'feed', name: 'Oxidante: pirolusita (MnO₂)', params: { T: 28, P: 1.01325, vf: '', flow: 30, flowUnit: 'kg/h', basis: 'mássica', composition: { pyrolusite: 1 } } },
+        { id: 'F2', x: 100, y: 20, type: 'feed', name: 'Solução de irrigação (H₂SO₄ diluído)', params: { T: 28, P: 1.01325, vf: '', flow: 30300, flowUnit: 'kg/h', basis: 'mássica', composition: { 'sulfuric-acid': 0.014, water: 0.986 } } },
+        { id: 'LX', x: 110, y: 150, type: 'u_heap_leach', name: 'LX-01 Pilhas de lixiviação', params: {} },
+        { id: 'P1', x: 370, y: 40, type: 'product', name: 'CO₂ para a atmosfera' },
+        { id: 'P2', x: 260, y: 300, type: 'product', name: 'Pilha lixiviada (rejeitos)' },
+        { id: 'F4', x: 490, y: 40, type: 'feed', name: 'Reextração: (NH₄)₂SO₄ + NH₃', params: { T: 30, P: 1.01325, vf: '', flow: 1060, flowUnit: 'kg/h', basis: 'mássica',
+          composition: { water: 0.8418, 'ammonium-sulfate': 0.1510, 'nh3-aq': 0.0072 } } },
+        { id: 'SX', x: 430, y: 150, type: 'u_sx', name: 'SX-01 Extração por solvente (amina)', params: {} },
+        { id: 'P3', x: 520, y: 300, type: 'product', name: 'Rafinado (volta às pilhas)' },
+        { id: 'F5', x: 690, y: 40, type: 'feed', name: 'Amônia aquosa 25 %', params: { T: 25, P: 1.01325, vf: '', flow: 32, flowUnit: 'kg/h', basis: 'mássica', composition: { 'nh3-aq': 0.25, water: 0.75 } } },
+        { id: 'YC', x: 750, y: 140, type: 'u_yellowcake', name: 'YC-01 Precipitação do DUA e calcinação', params: {} },
+        { id: 'P4', x: 960, y: 40, type: 'product', name: 'Gases (lavador de NH₃)' },
+        { id: 'P5', x: 860, y: 300, type: 'product', name: 'Filtrado (sulfato de amônio)' },
+        { id: 'CV', x: 1060, y: 150, type: 'u_conversion', name: 'CV-01 Conversão a UF₆', params: {} },
+        { id: 'P6', x: 1240, y: 50, type: 'product', name: 'Vapor d’água' },
+        { id: 'P7', x: 1120, y: 300, type: 'product', name: 'Perdas da purificação' },
+        { id: 'EN', x: 110, y: 470, type: 'u_enrichment', name: 'EN-01 Cascata de ultracentrífugas', params: {} },
+        { id: 'P8', x: 380, y: 620, type: 'product', name: 'UF₆ empobrecido (48Y)' },
+        { id: 'RC', x: 450, y: 470, type: 'u_auc', name: 'RC-01 Reconversão AUC', params: {} },
+        { id: 'P9', x: 560, y: 680, type: 'product', name: 'Efluente com NH₄F' },
+        { id: 'PF', x: 730, y: 480, type: 'u_pellets', name: 'FCN-01 Pastilhas e elementos combustíveis', params: {} },
+        { id: 'P10', x: 870, y: 650, type: 'product', name: 'Refugo (volta ao processo)' },
+        { id: 'RN', x: 1090, y: 460, type: 'nuclear_reactor', name: 'RN-101 Reator PWR (tipo Angra 2)', params: {} },
+        { id: 'P11', x: 1340, y: 490, type: 'product', name: 'Perna quente (geradores de vapor)' },
+        { id: 'P12', x: 1340, y: 660, type: 'product', name: 'Combustível usado (piscina)' }],
+      streams: [S('1', 'F1', 'out', 'LX', 'ore', 'Minério'), S('2', 'F3', 'out', 'LX', 'oxidant', 'MnO₂'), S('3', 'F2', 'out', 'LX', 'acid', 'H₂SO₄'),
+        S('4', 'LX', 'gas', 'P1', 'in', 'CO₂'), S('5', 'LX', 'residue', 'P2', 'in', 'Rejeito'), S('6', 'LX', 'pls', 'SX', 'pls', 'PLS'),
+        S('7', 'F4', 'out', 'SX', 'strip', 'Reextração'), S('8', 'SX', 'raffinate', 'P3', 'in', 'Rafinado'), S('9', 'SX', 'eluate', 'YC', 'feed', 'Eluato'),
+        S('10', 'F5', 'out', 'YC', 'ammonia', 'NH₃'), S('11', 'YC', 'gas', 'P4', 'in', 'Gases'), S('12', 'YC', 'filtrate', 'P5', 'in', 'Filtrado'), S('13', 'YC', 'product', 'CV', 'feed', 'U₃O₈'),
+        S('14', 'CV', 'offgas', 'P6', 'in', 'H₂O'), S('15', 'CV', 'waste', 'P7', 'in', 'Perdas'), S('16', 'CV', 'uf6', 'EN', 'feed', 'UF₆ natural'),
+        S('17', 'EN', 'tails', 'P8', 'in', 'UF₆ 0,25 %'), S('18', 'EN', 'product', 'RC', 'feed', 'UF₆ 4 %'), S('19', 'RC', 'effluent', 'P9', 'in', 'Efluente'),
+        S('20', 'RC', 'product', 'PF', 'feed', 'Pó de UO₂'), S('21', 'PF', 'scrap', 'P10', 'in', 'Refugo'), S('22', 'PF', 'fuel', 'RN', 'fuel', 'Elementos'),
+        S('23', 'RN', 'hot_leg', 'P11', 'in', 'Perna quente'), S('24', 'RN', 'spent', 'P12', 'in', 'Combustível usado')] } },
     { key: 'shampoo-capilar', title: 'Cosméticos: fábrica de shampoo capilar perolado — pré-tratamento da água (filtro de areia, carvão ativado, abrandador e UV), tanque de água purificada, tanque de mistura encamisado com agitador âncora e envase (batelada de 51 kg)', fs: {
       name: 'Fábrica de shampoo capilar perolado (batelada de 51 kg)', theme: 'shampoo', fixedLayout: true,
       components: ['water', 'ca-bicarbonate', 'co2-aq', 'free-chlorine', 'cacl2', 'clay', 'nahco3', 'nacl', 'sles', 'capb', 'cs-glycerol', 'egds', 'phenoxyethanol', 'fragrance', 'citric-acid'], model: 'IDEAL',
@@ -23602,7 +24312,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', cyclone_preheater: 'TC', clinker_cooler: 'RC', cement_mill: 'MC', sulfur_burner: 'FE', so2_converter: 'CV', acid_tower: 'TA', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', cooling_tower: 'TRF', deaerator: 'DA', reactor_kinetics: 'CIN', chem_kinetics: 'RQ', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN', pw_pretreat: 'PT', pw_tank: 'TQ', shampoo_tank: 'TM', filling: 'ENV' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', cyclone_preheater: 'TC', clinker_cooler: 'RC', cement_mill: 'MC', sulfur_burner: 'FE', so2_converter: 'CV', acid_tower: 'TA', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', cooling_tower: 'TRF', deaerator: 'DA', reactor_kinetics: 'CIN', chem_kinetics: 'RQ', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN', pw_pretreat: 'PT', pw_tank: 'TQ', shampoo_tank: 'TM', filling: 'ENV', u_heap_leach: 'LX', u_sx: 'SX', u_yellowcake: 'YC', u_conversion: 'CV', u_enrichment: 'EN', u_auc: 'RC', u_pellets: 'FCN' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -23719,7 +24429,7 @@ def pfr_transiente(P, nome):
     else state.streams = state.streams.filter(s => s.id !== sel.id);
     pfd.sel = null; afterChange(true); renderProps();
   }
-  function shampooSync() { const sv = $('#pfd'); if (sv) sv.classList.toggle('shampoo', state.theme === 'shampoo'); }
+  function shampooSync() { const sv = $('#pfd'); if (sv) { sv.classList.toggle('shampoo', state.theme === 'shampoo'); sv.classList.toggle('uranio', state.theme === 'uranio'); } }   // correntes cor de pérola (shampoo) ou de yellowcake (urânio)
   function afterChange(structural) {
     results = null; setStatus('idle', 'Alterado — simule novamente');
     $('#emptyHint').hidden = state.blocks.length > 0; $('#projName').value = state.name;
@@ -23946,6 +24656,27 @@ def pfr_transiente(P, nome):
     filling: { ex: 'Cosméticos: fábrica de shampoo capilar perolado', items: [
       ['Correntes', 'entrada <b>shampoo a granel</b>; saídas <b>shampoo envasado</b> e <b>perdas</b> (retido na linha).'],
       ['Operação', 'bomba de lóbulos de 100 L/h e 1 kW; frascos de 300 mL; 1,5 % de perdas; 6 m de linha de 22,1 mm e 1,5 m de desnível.']] },
+    u_heap_leach: { ex: 'Ciclo do combustível nuclear: da uraninita às pastilhas', items: [
+      ['Correntes', 'entradas <b>minério britado</b> (uraninita, albita, calcita e umidade), <b>solução de irrigação</b> (água com H₂SO₄) e <b>oxidante</b> (MnO₂); saídas <b>licor rico</b>, <b>pilha lixiviada</b> e <b>CO₂</b>.'],
+      ['Operação', 'P80 de 12 mm, 60 dias de lixiviação, τ = 20 dias, extração máxima de 88 %, 10 % de solução retida e pilhas de 6 m.']] },
+    u_sx: { ex: 'Ciclo do combustível nuclear: da uraninita às pastilhas', items: [
+      ['Correntes', 'entradas <b>licor rico</b> (pela esquerda) e <b>solução de reextração</b> (por cima: sulfato de amônio com amônia); saídas <b>rafinado</b> e <b>licor de reextração</b>. O orgânico circula por dentro do bloco.'],
+      ['Operação', '4 estágios de extração com O/A = 0,25 e D = 20; 3 de reextração com D = 0,05; carga máxima de 8 g U₃O₈/L.']] },
+    u_yellowcake: { ex: 'Ciclo do combustível nuclear: da uraninita às pastilhas', items: [
+      ['Correntes', 'entradas <b>licor de reextração</b> e <b>amônia</b> (NH₃ aquosa); saídas <b>yellowcake</b> (U₃O₈), <b>filtrado</b> e <b>gases</b> (NH₃, H₂O e N₂).'],
+      ['Operação', '99,8 % precipitado, torta com 40 % de sólidos, calcinação a 800 °C, tambores de 350 kg.']] },
+    u_conversion: { ex: 'Ciclo do combustível nuclear: da uraninita às pastilhas', items: [
+      ['Correntes', 'entrada <b>yellowcake</b>; saídas <b>UF₆ natural</b> (²³⁵UF₆ e ²³⁸UF₆), <b>vapor d’água</b> e <b>perdas</b>. O₂, H₂, HF e F₂ entram pelos campos.'],
+      ['Operação', '99,5 % recuperado no TBP, 0,711 % de U-235, excessos de 20 % de H₂ e 10 % de HF e de F₂, cilindros 48Y de 12,5 t.']] },
+    u_enrichment: { ex: 'Ciclo do combustível nuclear: da uraninita às pastilhas', items: [
+      ['Correntes', 'entrada <b>UF₆ natural</b>; saídas <b>UF₆ enriquecido</b> (produto) e <b>UF₆ empobrecido</b> (rejeito). O teor de U-235 aparece na composição.'],
+      ['Operação', 'produto a 4 % e rejeito a 0,25 %; α = 1,3 por máquina; rotor de 1 m a 600 m/s; 50 % do limite de Dirac; 50 kWh/SWU.']] },
+    u_auc: { ex: 'Ciclo do combustível nuclear: da uraninita às pastilhas', items: [
+      ['Correntes', 'entrada <b>UF₆ enriquecido</b>; saídas <b>pó de UO₂</b> e <b>efluente</b> com NH₄F. NH₃, H₂ e água entram pelos campos (o CO₂ e parte do NH₃ circulam).'],
+      ['Operação', 'leito fluidizado a 550 °C com 100 % de excesso de H₂; 10 m³ de efluente por tonelada de urânio; 99,9 % do urânio no pó.']] },
+    u_pellets: { ex: 'Ciclo do combustível nuclear: da uraninita às pastilhas', items: [
+      ['Correntes', 'entrada <b>pó de UO₂</b>; saídas <b>elementos combustíveis</b> (as pastilhas boas, que podem ir para o reator) e <b>refugo</b>.'],
+      ['Operação', 'densidade a verde de 50 % e sinterizada de 95,5 %; pastilha de 9,11 × 11 mm; 0,12 mm de retífica; 2 % rejeitadas; varetas de 10,75 × 0,725 mm; 236 varetas por elemento; recarga de 48.']] },
     eta_disinfect: { ex: 'ETA convencional para 100 mil habitantes', items: [
       ['Correntes', 'entrada <b>água filtrada</b>; saída <b>água tratada</b> com cloro, flúor e pH corrigido. Os produtos entram pelas doses (mg/L).'],
       ['Operação', '2 mg/L de cloro gás com 0,5 mg/L de demanda; 30 min de contato com T₁₀/T = 0,5; 0,7 mg/L de fluoreto; 16 mg/L de cal depois do contato.']] },
@@ -25371,8 +26102,8 @@ def pfr_transiente(P, nome):
     SF.examples.forEach(ex => {
       const main = (ex.fs.blocks.find(b => b.type !== 'feed' && b.type !== 'product') || ex.fs.blocks[0]).type;
       const b = document.createElement('button'); b.className = 'wexc'; b.type = 'button';
-      const choc = ex.fs.theme === 'chocolate', agua = ex.fs.theme === 'agua', sham = ex.fs.theme === 'shampoo'; if (choc) b.classList.add('wexc-choc'); if (agua) b.classList.add('wexc-agua'); if (sham) b.classList.add('wexc-shampoo');
-      b.innerHTML = IC.paletteIcon(main) + '<span>' + (agua || sham ? '<b class="wex-new">NOVO</b>' : '') + esc(ex.title) + '</span>';
+      const choc = ex.fs.theme === 'chocolate', agua = ex.fs.theme === 'agua', sham = ex.fs.theme === 'shampoo', ura = ex.fs.theme === 'uranio'; if (choc) b.classList.add('wexc-choc'); if (agua) b.classList.add('wexc-agua'); if (sham) b.classList.add('wexc-shampoo'); if (ura) b.classList.add('wexc-uranio');
+      b.innerHTML = IC.paletteIcon(main) + '<span>' + (ura || sham ? '<b class="wex-new">NOVO</b>' : '') + esc(ex.title) + '</span>';
       b.onclick = () => { closeWelcome(); loadFlowsheet(ex.fs); runSimulation(true); chocOpen(ex); toast('Exemplo carregado: ' + ex.title); };
       grid.appendChild(b);
     });

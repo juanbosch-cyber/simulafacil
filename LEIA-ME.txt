@@ -1,3 +1,30 @@
+SIMULA FÁCIL IA 5.10 – Cosméticos: fábrica de shampoo capilar perolado (26/11/2026)
+====================================================================================
+
+CATEGORIA NOVA NA PALETA: "Cosméticos (shampoo)", com quatro equipamentos e ícones novos
+- "Pré-tratamento da água para cosméticos": filtro de areia, carvão ativado, abrandador (resina catiônica na forma Na⁺) e lâmpada UV.
+  Garrafas de PRFV pela vazão de projeto, ciclo e regeneração do abrandador (sal e eficiência), retrolavagens, rejeito, dose e potência
+  da lâmpada, bactérias (o carvão vira berçário sem o cloro; a UV reduz até 5 log) e conferência para cosméticos (cloro, dureza,
+  turbidez, bactérias). Química pelo sistema carbonato da ETA: HOCl → cloreto no carvão; Ca(HCO₃)₂ + 2 NaCl → 2 NaHCO₃ + CaCl₂.
+- "Tanque de água purificada": inox 316L com anel de recirculação sanitário e UV na volta; dosa a água de cada batelada (fase quente e
+  fase fria), deixa o excedente, calcula a autonomia, a velocidade e a perda de carga do anel e simula o nível ao longo do dia.
+- "Tanque de mistura encamisado com agitador âncora": fase quente (água + LESS) aquecida pela camisa, fusão do perolizante (diestearato
+  de glicol), resfriamento lento com taxa controlada (cristais perolados), fase fria (água, betaína, glicerina), aditivos abaixo de 40 °C,
+  ciclo da batelada, fórmula em base ativa, curva de sal (correlação ilustrativa), potência do agitador (N_p = K_p/Re + N_t) e energia.
+  A viscosidade segue pela corrente até a bomba de envase.
+- "Bomba sanitária de lóbulos e envasadora": frascos por batelada, tempo de envase, cadência, perda de carga laminar do shampoo viscoso,
+  desnível e bico, potência hidráulica e energia.
+- Componentes novos: lauril éter sulfato de sódio (LESS), cocoamidopropil betaína, diestearato de glicol (EGDS), fenoxietanol, fragrância
+  e bicarbonato de sódio dissolvido.
+
+EXEMPLO NOVO (o segundo da lista, com cartão "NOVO" e correntes cor de pérola)
+- "Fábrica de shampoo capilar perolado", batelada de 51 kg no tanque de 100 L (f = 0,5), como na figura do DWSIM do autor:
+  C-01 água purificada 34,935 kg (68,5 %), C-02 LESS 27 % 10,20 kg, C-03 betaína 30 % 2,55 kg, C-04 glicerina 1,02 kg,
+  C-05 perolizante 0,765 kg (1,5 %, tirado da água) e C-06 aditivos e corretores 1,53 kg (NaCl, fenoxietanol, fragrância e ácido cítrico).
+- Base de cálculo: as vazões das correntes (kg/h) são lidas como kg por batelada.
+- Resultados: água bruta de 149 para 2 mg CaCO₃/L e de 1 para 0,01 mg/L de cloro; 6,9 % de tensoativos ativos, 1,95 % de NaCl e cerca
+  de 6 500 mPa·s; ciclo de cerca de 3 h; 164 frascos de 300 mL em 30 min com a bomba de 100 L/h.
+
 SIMULA FÁCIL IA 5.9.2 – Torre de resfriamento: bombonas de 50 L e bombas peristálticas de baixa vazão (25/11/2026)
 ================================================================================================================
 

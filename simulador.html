@@ -37,8 +37,8 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="manifest" href="site.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SIMULA FÁCIL IA 5.9.2 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e estação de tratamento de água | Prof. Juan Canellas Bosch Neto – UFSJ</title>
-<meta name="description" content="SIMULA FÁCIL IA 5.9.2, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também cinética química com análise gráfica de reações (6 EDOs, barras deslizantes de k, Arrhenius, calor liberado e ajuste de k a dados de laboratório), fábrica de cimento completa, fábricas de ácido sulfúrico (enxofre e gás metalúrgico), usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
+<title>SIMULA FÁCIL IA 5.10 – Simulador de processos químicos e bioprocessos (aplicativo), com mais de 40 mil compostos químicos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e estação de tratamento de água | Prof. Juan Canellas Bosch Neto – UFSJ</title>
+<meta name="description" content="SIMULA FÁCIL IA 5.10, o aplicativo: simulador gratuito de processos químicos e bioprocessos no navegador, com mais de 40 mil compostos químicos, agente de IA e código MATLAB e Python, e também cinética química com análise gráfica de reações (6 EDOs, barras deslizantes de k, Arrhenius, calor liberado e ajuste de k a dados de laboratório), fábrica de cimento completa, fábricas de ácido sulfúrico (enxofre e gás metalúrgico), usina nuclear PWR completa, cinética de reatores (modelo de Parreira e Bosch Neto), colunas de flotação de bancada e industrial com bancos de misturas minerais, coletores e depressores. Destilação, McCabe-Thiele, reatores CSTR e PFR, biorreatores, secadores, cristalizadores e trocadores de calor. Autor: Prof. Juan Canellas Bosch Neto – UFSJ.">
 <meta name="author" content="Juan Canellas Bosch Neto">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://juanbosch-cyber.github.io/simulafacil/simulador.html">
@@ -47,7 +47,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SIMULA FÁCIL IA">
-<meta property="og:title" content="SIMULA FÁCIL IA 5.9.2 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e ETA">
+<meta property="og:title" content="SIMULA FÁCIL IA 5.10 – Simulador de processos químicos e bioprocessos, com mais de 40 mil compostos, fábrica de cimento, ácido sulfúrico, usina nuclear, fábrica de chocolate e ETA">
 <meta property="og:description" content="Novo na versão 4.0: mais de 40 mil compostos químicos. Simulador de processos químicos e bioprocessos gratuito, no navegador. Autor: Prof. Juan Canellas Bosch Neto – Engenharia Química – UFSJ.">
 <meta property="og:image" content="https://juanbosch-cyber.github.io/simulafacil/og-image.jpg">
 <meta property="og:image:alt" content="SIMULA FÁCIL IA versão 4.0: simulador de processos químicos com mais de 40 mil compostos químicos">
@@ -1082,6 +1082,14 @@ body.mobile .agua-ctl .ac-t { display: none; }
 .wexc.wexc-agua { --c: #1d8fd1; background: linear-gradient(135deg, #eef9ff, #cdeaff); }
 :root[data-theme="dark"] .wexc.wexc-agua { background: linear-gradient(135deg, #0f3350, #0a2134); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wexc.wexc-agua { background: linear-gradient(135deg, #0f3350, #0a2134); } }
+/* versão 5.10 — exemplo da fábrica de shampoo: correntes cor de pérola e cartão do exemplo */
+#pfd.shampoo { --stream: #9b5cc4; }
+:root[data-theme="dark"] #pfd.shampoo { --stream: #d4a8f0; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #pfd.shampoo { --stream: #d4a8f0; } }
+#pfd.shampoo .str:not(.sel) { stroke-width: 3; stroke-linecap: round; }
+.wexc.wexc-shampoo { --c: #9b5cc4; background: linear-gradient(135deg, #fbf3ff, #ead6f7); }
+:root[data-theme="dark"] .wexc.wexc-shampoo { background: linear-gradient(135deg, #36184a, #200f2c); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wexc.wexc-shampoo { background: linear-gradient(135deg, #36184a, #200f2c); } }
 @media (prefers-reduced-motion: reduce) { .ai-k, .ai-txt h2, .ai-s { animation: none; opacity: 1; transform: none; } .agua-intro { transition: none; } }
 /* exemplo com vídeo de abertura (McCabe e Thiele): botão no fluxograma */
 .vid-ctl { position: absolute; top: 10px; right: 10px; z-index: 6; }
@@ -1113,7 +1121,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.9.2</span><em>Simulador de processos químicos e bioprocessos</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.10</span><em>Simulador de processos químicos e bioprocessos</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <button type="button" class="test-badge" id="btnAviso" title="Uso acadêmico e de ensino · versão em fase de testes (clique para ler o aviso)"><span>EM TESTES</span></button>
@@ -1268,7 +1276,7 @@ body.mobile .vid-ctl .vc-t { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.9.2</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.10</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
         <p class="wsub">Simulador de processos químicos e bioprocessos</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -2850,7 +2858,14 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'floc-al', name: 'Flocos: hidróxido de alumínio aglomerado', formula: 'Al(OH)3', mw: 78.003, rho: 2420, solid: true, cpl: 91.7, tags: 'flocos floculação hidróxido de alumínio coagulante água eta' },
     { id: 'free-chlorine', name: 'Cloro residual livre: ácido hipocloroso HOCl e OCl⁻ (soluto não volátil)', formula: 'HOCl', mw: 52.46, rho: 1500, nv: true, cpl: 60, tags: 'cloro livre residual hipocloroso desinfecção cloração água eta' },
     { id: 'cacl2', name: 'Cloreto de cálcio dissolvido (soluto não volátil)', formula: 'CaCl2', mw: 110.98, rho: 2150, nv: true, cpl: 72.9, tags: 'cloreto cálcio cloração água eta' },
-    { id: 'caf2-aq', name: 'Fluoreto dissolvido (íons F⁻ e Ca²⁺, contados como CaF₂)', formula: 'CaF2', mw: 78.07, rho: 3180, nv: true, cpl: 67, tags: 'fluoreto flúor fluoretação ácido fluossilícico água eta' }
+    { id: 'caf2-aq', name: 'Fluoreto dissolvido (íons F⁻ e Ca²⁺, contados como CaF₂)', formula: 'CaF2', mw: 78.07, rho: 3180, nv: true, cpl: 67, tags: 'fluoreto flúor fluoretação ácido fluossilícico água eta' },
+    // versão 5.10: fábrica de shampoo — abrandador (o Na⁺ da resina troca o Ca²⁺) e os ingredientes cosméticos (base ativa, sem a água das soluções)
+    { id: 'nahco3', name: 'Bicarbonato de sódio dissolvido (soluto não volátil)', formula: 'NaHCO3', mw: 84.007, rho: 2200, nv: true, cpl: 87.6, tags: 'bicarbonato sódio abrandador abrandamento troca iônica resina água cosmético' },
+    { id: 'sles', name: 'Lauril éter sulfato de sódio (LESS, 2 EO): tensoativo aniônico, base ativa', formula: 'C16H33NaO6S', mw: 376.5, rho: 1100, nv: true, cpl: 680, tags: 'tensoativo aniônico surfactante sles less lauril éter sulfato shampoo xampu detergente espuma cosmético' },
+    { id: 'capb', name: 'Cocoamidopropil betaína: tensoativo anfótero, base ativa', formula: 'C19H38N2O3', mw: 342.5, rho: 1050, nv: true, cpl: 650, tags: 'tensoativo anfótero betaína capb cocoamidopropil shampoo xampu espuma suavidade cosmético' },
+    { id: 'egds', name: 'Diestearato de etilenoglicol (EGDS): perolizante, funde a 60–65 °C', formula: 'C38H74O4', mw: 595.0, rho: 960, nv: true, cpl: 1250, tags: 'perolizante perolado pérola cera diestearato glicol egds shampoo xampu cosmético' },
+    { id: 'phenoxyethanol', name: 'Fenoxietanol: conservante (até 1 % nos cosméticos)', formula: 'C8H10O2', mw: 138.16, rho: 1102, nv: true, cpl: 245, tags: 'conservante preservante fenoxietanol shampoo xampu cosmético' },
+    { id: 'fragrance', name: 'Fragrância (essência: mistura de terpenos e ésteres, soluto não volátil)', formula: 'C10H16', mw: 136.24, rho: 860, nv: true, cpl: 250, tags: 'fragrância essência perfume shampoo xampu cosmético' }
   ];
   /* ------------------------------------------------------------------ alimentos e lodos: a matéria seca de cada um é um componente (M = 100 g/mol, como
      os "Sólidos secos do produto"), com a composição centesimal. Propriedades pelas correlações de Choi e Okos (1986), T em °C:
@@ -5665,7 +5680,75 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'hOp', label: 'Horas de operação por dia', u: 'h/d', def: 16 },
       { k: 'qM', label: 'Capacidade de cada centrífuga', u: 'm³/h', def: 8 },
       { k: 'rhoT', label: 'Massa específica da torta', u: 'kg/m³', def: 1150 },
-      { k: 'cac', label: 'Volume de cada caçamba', u: 'm³', def: 10 }] }
+      { k: 'cac', label: 'Volume de cada caçamba', u: 'm³', def: 10 }] },
+    // versão 5.10: fábrica de shampoo (cosméticos). As correntes das bateladas trazem kg por batelada (lidos como kg/h)
+    pw_pretreat: { label: 'Pré-tratamento da água para cosméticos: filtro de areia, carvão ativado, abrandador e lâmpada UV (água purificada)', cat: 'Cosméticos (shampoo)', ins: ['feed'], outs: ['product', 'waste'], params: [
+      { k: 'Qp', label: 'Vazão de projeto do sistema (bomba de pressurização)', u: 'L/h', def: 200 },
+      { k: 'hOp', label: 'Horas de operação por semana', u: 'h', def: 5 },
+      { k: 'tx', label: 'Filtro de areia: taxa de filtração (filtros de pressão: 8 a 15 m/h)', u: 'm/h', def: 12 },
+      { k: 'remF', label: 'Filtro de areia: retenção dos sólidos suspensos (turbidez)', u: '%', def: 90 },
+      { k: 'ebct', label: 'Carvão ativado: tempo de contato em leito vazio (EBCT)', u: 'min', def: 5 },
+      { k: 'Hc', label: 'Carvão ativado: altura do leito', u: 'm', def: 0.6 },
+      { k: 'remCl', label: 'Carvão ativado: remoção do cloro livre', u: '%', def: 99 },
+      { k: 'nBW', label: 'Retrolavagens por semana (filtro e carvão)', u: '', def: 1 },
+      { k: 'vBW', label: 'Velocidade da retrolavagem', u: 'm/h', def: 25 },
+      { k: 'tBW', label: 'Duração de cada retrolavagem, com o enxágue', u: 'min', def: 10 },
+      { k: 'Vr', label: 'Abrandador: volume de resina catiônica (forma Na⁺)', u: 'L', def: 10 },
+      { k: 'capR', label: 'Abrandador: capacidade útil da resina', u: 'g CaCO₃/L', def: 50 },
+      { k: 'salt', label: 'Abrandador: sal por regeneração', u: 'g NaCl/L de resina', def: 150 },
+      { k: 'bvR', label: 'Abrandador: água da regeneração (salmoura e enxágues)', u: 'volumes de leito', def: 8 },
+      { k: 'leak', label: 'Abrandador: dureza que escapa (vazamento)', u: 'mg CaCO₃/L', def: 2 },
+      { k: 'uvD', label: 'Lâmpada UV: dose de projeto (NSF/ANSI 55, classe A: 40 mJ/cm²)', u: 'mJ/cm²', type: 'range', min: 0, max: 100, step: 1, def: 40 },
+      { k: 'uvE', label: 'Lâmpada UV: consumo específico a 40 mJ/cm²', u: 'kWh/m³', def: 0.06 },
+      { k: 'cfuIn', label: 'Bactérias heterotróficas na água bruta clorada', u: 'UFC/mL', def: 10 },
+      { k: 'cfuC', label: 'Bactérias depois do carvão (sem cloro, o leito vira berçário)', u: 'UFC/mL', def: 1000 },
+      { k: 'D1', label: 'Lâmpada UV: dose para reduzir 1 log das bactérias (valor típico; varia de 2 a 6)', u: 'mJ/cm²', def: 3 },
+      { k: 'logMax', label: 'Lâmpada UV: redução máxima (sombras e agregados limitam a curva)', u: 'log', def: 5 }] },
+    pw_tank: { label: 'Tanque de água purificada (inox 316L) com anel de recirculação sanitário: dosagem da água por batelada, estoque e nível ao longo do dia', cat: 'Cosméticos (shampoo)', ins: ['feed'], outs: ['hot', 'cold', 'stock'], params: [
+      { k: 'V', label: 'Volume do tanque', u: 'L', def: 300 },
+      { k: 'fill', label: 'Nível máximo de operação', u: '%', def: 90 },
+      { k: 'mB', label: 'Água purificada pedida por batelada (as duas fases)', u: 'kg', def: 34.935 },
+      { k: 'fH', label: 'Parte da água que vai para a fase quente (fusão do perolizante)', u: '%', type: 'range', min: 0, max: 100, step: 1, def: 40 },
+      { k: 'Qf', label: 'Vazão de enchimento (vem do pré-tratamento)', u: 'L/h', def: 200 },
+      { k: 'Lon', label: 'Nível que liga o pré-tratamento', u: '%', def: 50 },
+      { k: 'nB', label: 'Bateladas por dia (num turno de 8 h, a partir das 7 h)', u: '', def: 4 },
+      { k: 'Qr', label: 'Vazão da bomba do anel de recirculação', u: 'L/h', def: 2000 },
+      { k: 'dN', label: 'Diâmetro interno do tubo do anel (1" sanitário: 22,1 mm)', u: 'mm', def: 22.1 },
+      { k: 'Lr', label: 'Comprimento do anel', u: 'm', def: 20 }] },
+    shampoo_tank: { label: 'Tanque de mistura encamisado com agitador âncora: batelada de shampoo perolado (fase quente, resfriamento lento, fase fria, aditivos e curva de sal)', cat: 'Cosméticos (shampoo)', ins: ['water_hot', 'water_cold', 'anionic', 'amphoteric', 'glycerin', 'pearl', 'additives'], outs: ['out'], params: [
+      { k: 'V', label: 'Volume do tanque', u: 'L', def: 100 },
+      { k: 'Tm', label: 'Temperatura da fase quente (água quente + aniônico + perolizante)', u: '°C', type: 'range', min: 40, max: 90, step: 1, def: 75 },
+      { k: 'Tj', label: 'Fluido de aquecimento na camisa (água quente ou vapor)', u: '°C', def: 95 },
+      { k: 'Uh', label: 'Coeficiente global da camisa no aquecimento', u: 'W/(m²·K)', def: 400 },
+      { k: 'dHf', label: 'Calor de fusão do perolizante', u: 'kJ/kg', def: 200 },
+      { k: 'tFus', label: 'Tempo de fusão e dispersão do perolizante', u: 'min', def: 20 },
+      { k: 'rC', label: 'Taxa do resfriamento lento (forma os cristais perolados)', u: '°C/min', type: 'range', min: 0.1, max: 5, step: 0.1, def: 0.8 },
+      { k: 'Tc1', label: 'Fim do resfriamento lento (entra a fase fria)', u: '°C', def: 45 },
+      { k: 'Tcw', label: 'Água de resfriamento na camisa', u: '°C', def: 20 },
+      { k: 'Uc', label: 'Coeficiente global da camisa no resfriamento', u: 'W/(m²·K)', def: 250 },
+      { k: 'Tadd', label: 'Temperatura máxima para os aditivos (fragrância e conservante)', u: '°C', def: 40 },
+      { k: 'imp', label: 'Agitador', type: 'select', options: ['Âncora com raspadores (alta viscosidade)', 'Turbina de pás inclinadas 45° (PBT)', 'Hélice naval'], def: 'Âncora com raspadores (alta viscosidade)' },
+      { k: 'N', label: 'Rotação do agitador', u: 'rpm', type: 'range', min: 10, max: 300, step: 5, def: 40 },
+      { k: 'etaM', label: 'Rendimento do motor e do redutor', u: '%', def: 60 },
+      { k: 'aRef', label: 'Curva de sal: tensoativos ativos de referência', u: '%', def: 7 },
+      { k: 'cStar', label: 'Curva de sal: NaCl no pico da viscosidade (com os ativos de referência)', u: '%', def: 2.2 },
+      { k: 'wS', label: 'Curva de sal: largura do pico', u: '% de NaCl', def: 1 },
+      { k: 'etaMax', label: 'Curva de sal: viscosidade no pico, a 25 °C (com os ativos de referência)', u: 'mPa·s', def: 7000 },
+      { k: 'eta0', label: 'Curva de sal: viscosidade sem sal', u: 'mPa·s', def: 300 },
+      { k: 'tLoad', label: 'Pesagem e carga dos ingredientes', u: 'min', def: 15 },
+      { k: 'tAdj', label: 'Mistura final, ajuste do pH e da viscosidade e análises', u: 'min', def: 30 },
+      { k: 'Qd', label: 'Vazão de descarga (bomba sanitária do envase)', u: 'L/h', def: 100 },
+      { k: 'tCIP', label: 'Limpeza e sanitização do tanque (CIP)', u: 'min', def: 30 }] },
+    filling: { label: 'Bomba sanitária de lóbulos e envasadora de frascos: tempo de envase, frascos por batelada, perda de carga do shampoo viscoso e energia', cat: 'Cosméticos (shampoo)', ins: ['feed'], outs: ['product', 'loss'], params: [
+      { k: 'Q', label: 'Vazão da bomba sanitária', u: 'L/h', def: 100 },
+      { k: 'Pm', label: 'Potência do motor da bomba', u: 'kW', def: 1 },
+      { k: 'vol', label: 'Volume de cada frasco', u: 'mL', def: 300 },
+      { k: 'hold', label: 'Perda: produto retido no tanque, na mangueira e na bomba', u: '%', def: 1.5 },
+      { k: 'mu', label: 'Viscosidade do shampoo (só se a corrente não trouxer; o tanque de mistura informa)', u: 'mPa·s', def: 6000 },
+      { k: 'Lh', label: 'Comprimento da linha até a envasadora', u: 'm', def: 6 },
+      { k: 'd', label: 'Diâmetro interno da linha', u: 'mm', def: 22.1 },
+      { k: 'dz', label: 'Desnível até o bico de envase', u: 'm', def: 1.5 },
+      { k: 'dPn', label: 'Perda no bico e na válvula de envase', u: 'bar', def: 0.3 }] }
   };
   Object.keys(TYPES).forEach(k => { TYPES[k].type = k; });
 
@@ -12876,6 +12959,345 @@ window.SIMULAFACIL_CONFIG = {
     return { out: { cake: etaOut(th, r.kA, s), centrate: etaOut(th, r.kB, s) }, duty: Pop * 1000, power: true, massUtil: 0, res: decBR(res), warn: decW(warn), plots };
   };
 
+  /* ================================================================== versão 5.10: fábrica de shampoo (cosméticos)
+     Pré-tratamento da água (filtro de areia, carvão ativado, abrandador e lâmpada UV), tanque de água purificada com anel de
+     recirculação, tanque de mistura encamisado com agitador âncora (fase quente com o perolizante, resfriamento lento, fase fria,
+     aditivos e curva de sal) e bomba sanitária de lóbulos com a envasadora. Base das bateladas: as vazões das correntes (kg/h) são
+     lidas como kg por batelada; os equipamentos são dimensionados pelos próprios campos (vazão de projeto, volume, rotação). */
+  const SH = {
+    inch: [6, 7, 8, 9, 10, 12, 13, 14, 16, 18, 21, 24, 30, 36],   // garrafas de PRFV dos filtros e abrandadores (diâmetro em polegadas)
+    M: { nahco3: 84.007, nacl: 58.443, na2so4: 142.04, caco3: 100.087 },
+    // agitadores: curva de potência aproximada N_p = K_p/Re + N_t (laminar + turbulento) e D/T usual
+    imp: [{ n: 'Âncora com raspadores (alta viscosidade)', Kp: 300, Nt: 0.35, DT: 0.9 }, { n: 'Turbina de pás inclinadas 45° (PBT)', Kp: 50, Nt: 1.27, DT: 0.4 },
+      { n: 'Hélice naval', Kp: 40, Nt: 0.35, DT: 0.33 }],
+    motors: [0.09, 0.12, 0.18, 0.25, 0.37, 0.55, 0.75, 1.1, 1.5, 2.2, 3, 4, 5.5, 7.5]   // kW (motores padronizados)
+  };
+  const shFmt = (v, d) => (isFinite(v) ? (+v).toFixed(d) : '—');
+  // menor garrafa padronizada com área de pelo menos A (m²)
+  const shVessel = A => { const d = SH.inch.find(v => Math.PI * Math.pow(v * 0.0254, 2) / 4 >= A) || SH.inch[SH.inch.length - 1]; return { inch: d, A: Math.PI * Math.pow(d * 0.0254, 2) / 4 }; };
+  // calor específico da mistura cosmética, média mássica (kJ/(kg·K)); a glicerina do ChemSep usa 2,43 kJ/(kg·K)
+  function shCp(th, kg) {
+    let m = 0, q = 0;
+    for (let i = 0; i < th.n; i++) { const w = kg[i]; if (!(w > 0)) continue; const c = th.c[i];
+      const cp = c.id === 'water' ? 4.18 : c.id === 'cs-glycerol' ? 2.43 : (c.nv || c.solid) ? (c.cpl || 150) / c.mw : 2.0; m += w; q += w * cp; }
+    return m > 0 ? q / m : 4.18;
+  }
+  // massa específica pela soma dos volumes (kg/L)
+  function shRho(th, kg) {
+    let m = 0, v = 0;
+    for (let i = 0; i < th.n; i++) { const w = kg[i]; if (!(w > 0)) continue; const c = th.c[i]; m += w; v += w / (c.id === 'water' ? 997 : c.rho || 1000); }
+    return v > 0 ? m / v / 1000 : 1;
+  }
+  // pH da água pelo sistema carbonato, contando o bicarbonato de sódio do abrandador
+  const shPH = B => { const h = B.hco3 + B.mg('nahco3') / SH.M.nahco3; return h > 1e-9 && B.co2 > 1e-9 ? clamp(B.pK1 + Math.log10(h / B.co2), 3, 10) : B.pH; };
+
+  IMPL.pw_pretreat = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, what = 'pré-tratamento da água', f = shFmt;
+    if (!connected(s)) throw new Error('conecte a corrente de água bruta');
+    if (etaI(th, 'water') < 0) throw new Error('inclua Água na lista de componentes');
+    const Tc = K2C(s.T), kg0 = kgOf(th, s), I = etaBal(th, kg0, Tc);
+    const Qp = num(p.Qp, 200) / 1000, hOp = num(p.hOp, 5), tx = num(p.tx, 12), remF = clamp(num(p.remF, 90), 0, 100) / 100;
+    const ebct = num(p.ebct, 5), Hc = num(p.Hc, 0.6), remCl = clamp(num(p.remCl, 99), 0, 100) / 100;
+    const nBW = Math.max(0, num(p.nBW, 1)), vBW = num(p.vBW, 25), tBW = Math.max(0, num(p.tBW, 10));
+    const Vr = num(p.Vr, 10), capR = num(p.capR, 50), salt = num(p.salt, 150), bvR = Math.max(0, num(p.bvR, 8)), leak = Math.max(0, num(p.leak, 2));
+    const uvD = Math.max(0, num(p.uvD, 40)), uvE = Math.max(0, num(p.uvE, 0.06)), D1 = num(p.D1, 3), logMax = Math.max(0, num(p.logMax, 5));
+    const cfuIn = Math.max(0, num(p.cfuIn, 10)), cfuC = Math.max(0, num(p.cfuC, 1000));
+    if (!(Qp > 0 && hOp > 0 && tx > 0 && ebct > 0 && Hc > 0 && vBW > 0 && Vr > 0 && capR > 0 && salt > 0 && D1 > 0))
+      throw new Error('confira a vazão de projeto, as horas de operação e os dados do filtro, do carvão, do abrandador e da lâmpada UV (devem ser positivos)');
+    const eff = capR * 2 * SH.M.nacl / SH.M.caco3 / salt;   // sal estequiométrico ÷ sal gasto
+    if (eff > 1) throw new Error('com ' + f(salt, 0) + ' g de sal por litro a resina não recupera ' + f(capR, 0) + ' g de CaCO₃ por litro: o mínimo estequiométrico é ' + f(capR * 1.1678, 0) + ' g/L');
+    // dimensionamento pela vazão de projeto
+    const Vw = Qp * hOp, fA = Qp / tx, fV = shVessel(fA), Vc = Qp * ebct / 60, cA = Vc / Hc, cV = shVessel(cA);
+    const Vbw = nBW * (fV.A + cV.A) * vBW * tBW / 60;   // m³ por semana
+    const H = I.hard, Hr = Math.max(0, H - leak), Vcyc = Hr > 0 ? Vr * capR / Hr : Infinity, tCyc = Vcyc / Qp, nReg = Hr > 0 ? Vw / Vcyc : 0;
+    const saltReg = Vr * salt / 1000, saltW = nReg * saltReg, Vreg = nReg * bvR * Vr / 1000, fR = (Vbw + Vreg) / (Vw + Vbw + Vreg);
+    // a fração fR da água bruta vai para as retrolavagens e a regeneração; o restante passa pelas quatro etapas
+    const kgW = kg0.map(m => m * fR), kgP = kg0.map(m => m * (1 - fR)), A0 = etaBal(th, kgP, Tc);
+    kgP.forEach((m, i) => { if (th.c[i].solid && m > 0) { kgP[i] -= m * remF; kgW[i] += m * remF; } });   // 1) filtro de areia
+    const S1 = etaBal(th, kgP, Tc);
+    const nCl = remCl * etaG(th, kgP, 'free-chlorine') / ETA.M.hocl; if (nCl > 0) etaChlorUse(th, kgP, nCl, what);   // 2) carvão: HOCl → Cl⁻ (o H⁺ consome bicarbonato)
+    const S2 = etaBal(th, kgP, Tc);
+    // 3) abrandador: na média do ciclo, Ca(HCO₃)₂ + 2 NaCl (sal da regeneração) → 2 NaHCO₃ (na água) + CaCl₂ (na salmoura)
+    const rr = S2.hard > leak ? 1 - leak / S2.hard : 0; let nCa = 0, saltKg = 0;
+    if (rr > 0) {
+      const swap = (id, Mw, prod) => { const m = etaG(th, kgP, id) * rr; if (!(m > 0)) return; const n = m / Mw; nCa += n; etaAdd(th, kgP, id, -m, what); prod(n); };
+      swap('ca-bicarbonate', ETA.M.cab, n => etaAdd(th, kgP, 'nahco3', 2 * n * SH.M.nahco3, what));
+      swap('cacl2', ETA.M.cacl2, n => etaAdd(th, kgP, 'nacl', 2 * n * SH.M.nacl, what));
+      swap('calcium-sulfate', ETA.M.caso4, n => etaAdd(th, kgP, 'na2so4', n * SH.M.na2so4, what));
+      const st = 2 * nCa * SH.M.nacl; saltKg = st / eff;
+      etaAdd(th, kgW, 'cacl2', nCa * ETA.M.cacl2, what); etaAdd(th, kgW, 'nacl', saltKg - st, what);
+    }
+    const S3 = etaBal(th, kgP, Tc), pH3 = shPH(S3);
+    // 4) lâmpada UV
+    const uvLog = Math.min(logMax, uvD / D1), cfuOut = cfuC * Math.pow(10, -uvLog), Puv = Qp * uvE * uvD / 40 * 1000, cond = S3.tds / 0.65;
+    const chk = [], ck = (ok, t) => chk.push((ok ? '✔ ' : '✘ ') + t);
+    ck(S3.cl <= 0.1, 'cloro livre ' + f(S3.cl, 3) + ' mg/L (máximo 0,1: o cloro oxida a fragrância e os corantes e ataca a resina)');
+    ck(S3.hard <= 5, 'dureza ' + f(S3.hard, 1) + ' mg CaCO₃/L (máximo 5: o cálcio forma sabões insolúveis, turva o shampoo e desloca a curva de sal)');
+    ck(S3.turb <= 1, 'turbidez ' + f(S3.turb, 2) + ' uT (máximo 1)');
+    ck(cfuOut <= 100, 'bactérias ' + (cfuOut < 0.1 ? cfuOut.toExponential(1) : f(cfuOut, 1)) + ' UFC/mL (limite de ação usual da água purificada: 100 UFC/mL)');
+    if (chk.some(t => t[0] === '✘')) warn.push('a água tratada não atende: ' + chk.filter(t => t[0] === '✘').map(t => t.slice(2)).join('; '));
+    if (tx > 15) warn.push('taxa de ' + f(tx, 1) + ' m/h: filtros de areia sob pressão trabalham de 8 a 15 m/h');
+    if (ebct < 2) warn.push('EBCT de ' + f(ebct, 1) + ' min: abaixo de 2 a 3 min o carvão não retira todo o cloro');
+    if (Qp * 1000 / Vr > 40) warn.push('vazão de ' + f(Qp * 1000 / Vr, 0) + ' volumes de leito por hora no abrandador: o usual é de 8 a 40; aumente a resina');
+    if (isFinite(tCyc) && tCyc < 4) warn.push('o abrandador regenera a cada ' + f(tCyc, 1) + ' h de serviço: resina pequena para essa dureza');
+    if (uvD < 30) warn.push('dose UV de ' + f(uvD, 0) + ' mJ/cm²: a NSF/ANSI 55 (classe A) pede 40 mJ/cm² para água sem tratamento posterior');
+    if (fR > 0.25) warn.push(f(100 * fR, 0) + ' % da água bruta vai para o rejeito: reduza as retrolavagens, aproveite a última água do enxágue ou aumente as horas de operação');
+    const res = [{ k: 'Base de cálculo', v: 'a corrente traz a água de uma batelada (kg/h lidos como kg por batelada); os vasos e a lâmpada são dimensionados pela vazão de projeto', u: '' },
+      { k: 'Água bruta na entrada', v: f(I.mass, 2) + ' kg (' + f(I.Q * 1000, 1) + ' L): dureza ' + f(I.hard, 0) + ' mg CaCO₃/L, cloro livre ' + f(I.cl, 2) + ' mg/L, turbidez ' + f(I.turb, 1) + ' uT, pH ' + f(I.pH, 2), u: '' },
+      { k: 'Vazão de projeto e operação', v: f(Qp * 1000, 0) + ' L/h por ' + f(hOp, 0) + ' h por semana: ' + f(Vw * 1000, 0) + ' L de água tratada por semana', u: '' },
+      { k: '1) FILTRO DE AREIA (sólidos suspensos e turbidez)', v: '', u: '' },
+      { k: 'Garrafa de PRFV', v: fV.inch + '" (área mínima de ' + f(fA * 1e4, 0) + ' cm² a ' + f(tx, 1) + ' m/h; velocidade real ' + f(Qp / fV.A, 1) + ' m/h)', u: '' },
+      { k: 'Turbidez', v: f(A0.turb, 2) + ' → ' + f(S1.turb, 2) + ' uT (' + f(100 * remF, 0) + ' % retida)', u: '' },
+      { k: '2) CARVÃO ATIVADO (cloro livre)', v: '', u: '' },
+      { k: 'Leito de carvão (EBCT de ' + f(ebct, 1) + ' min)', v: f(Vc * 1000, 1) + ' L em garrafa de ' + cV.inch + '" com ' + f(Hc, 2) + ' m de altura (velocidade ' + f(Qp / cV.A, 1) + ' m/h)', u: '' },
+      { k: 'Cloro livre', v: f(S1.cl, 2) + ' → ' + f(S2.cl, 3) + ' mg/L', u: '' },
+      { k: 'Retrolavagens do filtro e do carvão', v: f(nBW, 0) + ' por semana a ' + f(vBW, 0) + ' m/h por ' + f(tBW, 0) + ' min: ' + f(Vbw * 1000, 0) + ' L por semana', u: '' },
+      { k: '3) ABRANDADOR (troca iônica Ca²⁺ → Na⁺)', v: '', u: '' },
+      { k: 'Resina catiônica (forma Na⁺)', v: f(Vr, 1) + ' L, ' + f(Qp * 1000 / Vr, 1) + ' volumes de leito por hora; retém ' + f(Vr * capR / 1000, 2) + ' kg de CaCO₃ por ciclo', u: '' },
+      { k: 'Dureza', v: f(S2.hard, 0) + ' → ' + f(S3.hard, 1) + ' mg CaCO₃/L (o sódio entra no lugar do cálcio)', u: '' },
+      { k: 'Ciclo do abrandador', v: isFinite(Vcyc) ? f(Vcyc * 1000, 0) + ' L entre regenerações (' + f(tCyc, 1) + ' h de serviço); ' + f(nReg, 2) + ' regenerações por semana' : 'sem dureza na água: não precisa regenerar', u: '' },
+      { k: 'Sal (NaCl) por regeneração / por semana', v: f(saltReg, 2) + ' / ' + f(saltW, 2) + ' kg (só ' + f(100 * eff, 0) + ' % do sal troca íons; o resto sai na salmoura)', u: '' },
+      { k: 'Água da regeneração (salmoura e enxágues)', v: f(Vreg * 1000, 0) + ' L por semana', u: '' },
+      { k: '4) LÂMPADA UV (desinfecção)', v: '', u: '' },
+      { k: 'Dose e potência da lâmpada', v: f(uvD, 0) + ' mJ/cm² com cerca de ' + f(Puv, 0) + ' W (' + f(uvE, 2) + ' kWh/m³ a 40 mJ/cm²)', u: '' },
+      { k: 'Bactérias heterotróficas', v: f(cfuIn, 0) + ' UFC/mL na água bruta → ' + f(cfuC, 0) + ' depois do carvão → ' + (cfuOut < 0.1 ? cfuOut.toExponential(1) : f(cfuOut, 1)) + ' depois da UV (' + f(uvLog, 1) + ' log)', u: '' },
+      { k: 'BALANÇO DE ÁGUA', v: '', u: '' },
+      { k: 'Rejeito (retrolavagens e regeneração)', v: f((Vbw + Vreg) * 1000, 0) + ' L por semana: ' + f(100 * fR, 1) + ' % da água bruta (aproveitamento de ' + f(100 * (1 - fR), 1) + ' %)', u: '' },
+      { k: 'Água purificada na saída', v: f(sum(kgP), 2) + ' kg: dureza ' + f(S3.hard, 1) + ' mg CaCO₃/L, cloro ' + f(S3.cl, 3) + ' mg/L, turbidez ' + f(S3.turb, 2) + ' uT, pH ' + f(pH3, 2), u: '' },
+      { k: 'Conferência para cosméticos', v: chk.join('; '), u: '' },
+      { k: 'Condutividade estimada (TDS ≈ 0,65 × condutividade)', v: f(cond, 0) + ' µS/cm. A água purificada da Farmacopeia pede no máximo 1,3 µS/cm a 25 °C: exigiria osmose reversa ou deionização depois do abrandador', u: '' }];
+    const stg = ['Água bruta', 'Filtro de areia', 'Carvão ativado', 'Abrandador', 'Lâmpada UV'], pc = (v, v0) => (v0 > 0 ? 100 * v / v0 : 0);
+    const plots = [{ kind: 'bars', title: 'O que sobra de cada contaminante em cada etapa (% do valor da água bruta)', data: { categories: stg, yLabel: '% da água bruta', series: [
+        { name: 'Turbidez', y: [100, pc(S1.turb, A0.turb), pc(S2.turb, A0.turb), pc(S3.turb, A0.turb), pc(S3.turb, A0.turb)], color: '#a0703a' },
+        { name: 'Cloro livre', y: [100, pc(S1.cl, A0.cl), pc(S2.cl, A0.cl), pc(S3.cl, A0.cl), pc(S3.cl, A0.cl)], color: '#2e9e6b' },
+        { name: 'Dureza', y: [100, pc(S1.hard, A0.hard), pc(S2.hard, A0.hard), pc(S3.hard, A0.hard), pc(S3.hard, A0.hard)], color: '#2563c9' }] } },
+      { kind: 'curves', title: 'Bactérias heterotróficas ao longo do pré-tratamento (escala log)', data: { xLabel: 'Etapa', yLabel: 'UFC/mL', yLog: true, series: [
+        { name: 'Bactérias', x: stg, y: [cfuIn, cfuIn, cfuC, cfuC, Math.max(cfuOut, 1e-4)], mode: 'lines+markers', color: '#d1302b', width: 3, size: 11 },
+        { name: 'Limite de ação usual (100 UFC/mL)', x: stg, y: stg.map(() => 100), color: '#8a8f98', width: 2, dash: 'dash' }] } },
+      { kind: 'bars', title: 'Água por semana: tratada e rejeito (L)', data: { categories: ['Água tratada', 'Retrolavagens', 'Regeneração do abrandador'], yLabel: 'L por semana',
+        series: [{ name: 'L por semana', y: [Vw * 1000, Vbw * 1000, Vreg * 1000], color: '#1d8fd1' }] } }];
+    return { out: { product: etaOut(th, kgP, s), waste: etaOut(th, kgW, s) }, massUtil: saltKg / 3600, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
+  IMPL.pw_tank = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, f = shFmt;
+    if (!connected(s)) throw new Error('conecte a corrente de água purificada');
+    const kg = kgOf(th, s), M = sum(kg), Tc = K2C(s.T), rho = etaRho(Tc) / 1000;   // kg/L
+    const V = num(p.V, 300), fill = clamp(num(p.fill, 90), 10, 100) / 100, mB = num(p.mB, 34.935), fH = clamp(num(p.fH, 40), 0, 100) / 100;
+    const Qf = num(p.Qf, 200), Lon = clamp(num(p.Lon, 50), 5, 95) / 100, nB = Math.max(1, Math.round(num(p.nB, 4))), Qr = Math.max(0, num(p.Qr, 2000)), dN = num(p.dN, 22.1) / 1000, Lr = Math.max(0, num(p.Lr, 20));
+    if (!(V > 0 && mB > 0 && Qf > 0 && dN > 0)) throw new Error('volume, água por batelada, vazão de enchimento e diâmetro do anel devem ser positivos');
+    let mU = mB;
+    if (M < mB) { mU = M; warn.push('chegam ' + f(M, 2) + ' kg de água, menos que os ' + f(mB, 2) + ' kg pedidos por batelada: o tanque entrega o que recebe; aumente a água bruta'); }
+    const part = m => kg.map(x => x * m / M), kH = part(mU * fH), kC = part(mU * (1 - fH)), kS = part(M - mU);
+    const Vb = mB / rho, Vu = V * fill, nT = Math.floor(Vu / Vb + 1e-9), day = Vb * nB, aut = Vu / day;
+    const Dt = Math.cbrt(4 * V / 1000 / (1.5 * Math.PI)), Ht = 1.5 * Dt;   // cilindro vertical com H/D = 1,5
+    // anel de recirculação: Darcy–Weisbach (Blasius no turbulento) e K = 12 para curvas, válvulas e o reator UV da volta
+    const A = Math.PI * dN * dN / 4, v = Qr / 3.6e6 / A, mu = etaMu(Tc), Re = rho * 1000 * v * dN / mu, fD = Re > 2300 ? 0.316 * Math.pow(Re, -0.25) : Re > 0 ? 64 / Re : 0;
+    const dP = (fD * Lr / dN + 12) * rho * 1000 * v * v / 2, Ph = dP * Qr / 3.6e6, Pmt = Ph / 0.45, turn = Qr / V;
+    if (nT < 1) warn.push('o tanque não comporta uma batelada inteira (' + f(Vb, 1) + ' L)');
+    if (Qr > 0 && v < 0.9) warn.push('velocidade de ' + f(v, 2) + ' m/s no anel: use pelo menos 0,9 a 1,5 m/s, em regime turbulento, para não formar biofilme');
+    if (Qr === 0) warn.push('sem recirculação a água fica parada no tanque e nas linhas: é onde as bactérias crescem');
+    if (aut > 2) warn.push('a água fica ' + f(aut, 1) + ' dias no tanque: acima de 1 a 2 dias, sanitize com mais frequência ou use um tanque menor');
+    // nível ao longo do dia: as bateladas tiram a água a partir das 7 h, a cada 8/nB h; o pré-tratamento liga abaixo de Lon e enche até o nível máximo
+    const ts = [], lv = [], dt = 0.02, tk = []; for (let k = 0; k < nB; k++) tk.push(7 + k * 8 / nB);
+    let L = Vu, on = false, nx = 0, Lmin = L, hOn = 0;
+    for (let k = 0; k <= 1200; k++) {
+      const t = k * dt;
+      while (nx < tk.length && t >= tk[nx] - 1e-9) { L -= Vb; nx++; }
+      if (L < Lon * V) on = true;
+      if (on) { L = Math.min(Vu, L + Qf * dt); hOn += dt; if (L >= Vu - 1e-9) on = false; }
+      Lmin = Math.min(Lmin, L); ts.push(+t.toFixed(2)); lv.push(+(100 * Math.max(0, L) / V).toFixed(2));
+    }
+    if (Lmin < 0) warn.push('o tanque esvazia antes da última batelada: aumente o volume, a vazão de enchimento ou o nível que liga o pré-tratamento');
+    const res = [{ k: 'Base de cálculo', v: 'a corrente de entrada é a água de uma batelada (kg/h lidos como kg por batelada)', u: '' },
+      { k: 'Tanque de inox 316L', v: f(V, 0) + ' L (' + f(Dt * 1000, 0) + ' mm de diâmetro × ' + f(Ht * 1000, 0) + ' mm de altura); nível máximo de ' + f(100 * fill, 0) + ' % = ' + f(Vu, 0) + ' L úteis', u: '' },
+      { k: 'Água purificada recebida', v: f(M, 3) + ' kg a ' + f(Tc, 1) + ' °C', u: '' },
+      { k: 'Para a batelada', v: f(mU, 3) + ' kg: ' + f(mU * fH, 3) + ' kg para a fase quente e ' + f(mU * (1 - fH), 3) + ' kg para a fase fria', u: '' },
+      { k: 'Excedente (fica no tanque para a próxima batelada)', v: f(M - mU, 3) + ' kg', u: '' },
+      { k: 'Bateladas com o tanque cheio', v: nT + ' (' + f(Vb, 1) + ' L por batelada)', u: '' },
+      { k: 'Consumo do dia / autonomia', v: f(day, 0) + ' L em ' + nB + ' bateladas / ' + f(aut, 2) + ' dia(s) de água no tanque cheio', u: '' },
+      { k: 'Encher o tanque / pré-tratamento ligado no dia', v: f(Vu / Qf, 2) + ' h a ' + f(Qf, 0) + ' L/h / ' + f(hOn, 2) + ' h', u: '' },
+      { k: 'ANEL DE RECIRCULAÇÃO (o tanque e as linhas nunca ficam parados)', v: '', u: '' },
+      { k: 'Velocidade e regime', v: f(v, 2) + ' m/s; Re = ' + f(Re, 0) + (Re > 4000 ? ' (turbulento)' : Re > 2300 ? ' (transição)' : ' (laminar)'), u: '' },
+      { k: 'Renovações do tanque por hora', v: f(turn, 1), u: '' },
+      { k: 'Perda de carga do anel / potência da bomba', v: f(dP / 1e5, 2) + ' bar / ' + f(Ph, 0) + ' W hidráulicos (motor de cerca de ' + f(Pmt, 0) + ' W)', u: '' },
+      { k: 'Nível mais baixo no dia', v: f(100 * Math.max(0, Lmin) / V, 0) + ' %', u: '' }];
+    const plots = [{ kind: 'curves', title: 'Nível do tanque de água purificada ao longo do dia', data: { xLabel: 'Hora do dia', yLabel: 'Nível (% do volume)', xRange: [0, 24], yRange: [0, 100], series: [
+        { name: 'Nível', x: ts, y: lv, color: '#1d8fd1', width: 3 }],
+        hlines: [{ y: 100 * fill, name: 'Nível máximo (' + f(100 * fill, 0) + ' %)', color: '#2e9e6b' }, { y: 100 * Lon, name: 'Liga o pré-tratamento (' + f(100 * Lon, 0) + ' %)', color: '#d1302b' }] } },
+      { kind: 'bars', title: 'Destino da água purificada que chega (kg)', data: { categories: ['Fase quente', 'Fase fria', 'Fica no tanque'], yLabel: 'kg', series: [{ name: 'kg', y: [mU * fH, mU * (1 - fH), M - mU], color: '#1d8fd1' }] } }];
+    return { out: { hot: chOut(th, kH, Tc, s.P), cold: chOut(th, kC, Tc, s.P), stock: chOut(th, kS, Tc, s.P) }, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
+  IMPL.shampoo_tank = function (th, b, ins) {
+    const p = b.params, warn = [], f = shFmt, nn = th.n;
+    const got = {}; ['water_hot', 'water_cold', 'anionic', 'amphoteric', 'glycerin', 'pearl', 'additives'].forEach(k => { got[k] = ins && connected(ins[k]) ? ins[k] : null; });
+    if (!Object.keys(got).some(k => got[k])) throw new Error('conecte a água e os ingredientes do shampoo');
+    const z = () => new Array(nn).fill(0), add = (a, list) => { list.forEach(k => { if (got[k]) kgOf(th, got[k]).forEach((v, i) => { a[i] += v; }); }); return a; };
+    const Tof = list => { let m = 0, q = 0; list.forEach(k => { if (got[k]) { const w = sum(kgOf(th, got[k])); m += w; q += w * K2C(got[k].T); } }); return m > 0 ? q / m : 25; };
+    const kHot = add(z(), ['water_hot', 'anionic']), kPe = add(z(), ['pearl']), kCold = add(z(), ['water_cold', 'amphoteric', 'glycerin']), kAd = add(z(), ['additives']);
+    const kAll = kHot.map((v, i) => v + kPe[i] + kCold[i] + kAd[i]), M = sum(kAll), mH = sum(kHot), mPe = sum(kPe), mC = sum(kCold), mA = sum(kAd);
+    if (mPe > 0 && !(mH > 0)) throw new Error('o perolizante só se dispersa na fase quente: ligue a água quente e o tensoativo aniônico');
+    const V = num(p.V, 100), Tm = num(p.Tm, 75), Tj = num(p.Tj, 95), Uh = num(p.Uh, 400), dHf = Math.max(0, num(p.dHf, 200)), tFus = Math.max(0, num(p.tFus, 20));
+    const rC = num(p.rC, 0.8), Tc1 = num(p.Tc1, 45), Tcw = num(p.Tcw, 20), Uc = num(p.Uc, 250), Tadd = num(p.Tadd, 40), N = num(p.N, 40) / 60, etaM = clamp(num(p.etaM, 60), 5, 100) / 100;
+    const aRef = num(p.aRef, 7), cS0 = num(p.cStar, 2.2), wS = num(p.wS, 1), eMax0 = num(p.etaMax, 7000), e0 = Math.max(1, num(p.eta0, 300));
+    const tLoad = Math.max(0, num(p.tLoad, 15)), tAdj = Math.max(0, num(p.tAdj, 30)), Qd = num(p.Qd, 100), tCIP = Math.max(0, num(p.tCIP, 30));
+    if (!(V > 0 && Uh > 0 && Uc > 0 && rC > 0 && N > 0 && aRef > 0 && wS > 0 && Qd > 0)) throw new Error('volume, coeficientes da camisa, taxa de resfriamento, rotação, curva de sal e vazão de descarga devem ser positivos');
+    const rho = shRho(th, kAll), Vb = M / rho, fill = Vb / V;
+    if (fill > 1) throw new Error('a batelada (' + f(Vb, 1) + ' L) não cabe no tanque de ' + f(V, 0) + ' L');
+    if (fill > 0.8) warn.push('tanque com ' + f(100 * fill, 0) + ' % de enchimento: deixe pelo menos 20 % livres, porque o shampoo incorpora ar e faz espuma na agitação');
+    if (fill < 0.3) warn.push('só ' + f(100 * fill, 0) + ' % de enchimento: o agitador e a camisa ficam mal cobertos; use um tanque menor');
+    // geometria: cilindro vertical H/T = 1,2; a camisa cobre o fundo e a parede molhada
+    const Tt = Math.cbrt(4 * V / 1000 / (1.2 * Math.PI)), Ab = Math.PI * Tt * Tt / 4, wet = vL => Ab + Math.PI * Tt * Math.min(1.2 * Tt, vL / 1000 / Ab);
+    const cpH = shCp(th, kHot), cpPe = shCp(th, kPe), kHP = kHot.map((v, i) => v + kPe[i]), cpHP = shCp(th, kHP), cpC = shCp(th, kCold), cpA = shCp(th, kAd);
+    const T0 = Tof(['water_hot', 'anionic']), Tpe = Tof(['pearl']), TC = Tof(['water_cold', 'amphoteric', 'glycerin']), TA = Tof(['additives']);
+    if (mH > 0 && !(Tj > Tm)) throw new Error('o fluido da camisa (' + f(Tj, 0) + ' °C) deve estar mais quente que a fase quente (' + f(Tm, 0) + ' °C)');
+    if (!(Tcw < Math.min(Tc1, Tadd))) throw new Error('a água de resfriamento deve estar mais fria que o fim do resfriamento lento e que a temperatura dos aditivos');
+    if (mPe > 0 && Tm < 68) warn.push('fase quente a ' + f(Tm, 0) + ' °C: o diestearato funde a 60–65 °C; abaixo de 68–70 °C ficam grumos e o perolado sai fraco');
+    if (Tm > 85) warn.push('fase quente a ' + f(Tm, 0) + ' °C: acima de 80–85 °C o LESS hidrolisa, o pH cai e o produto escurece');
+    if (mPe > 0 && Tc1 > 55) warn.push('o resfriamento lento termina a ' + f(Tc1, 0) + ' °C, antes de o perolizante cristalizar (cerca de 55 a 45 °C): a fase fria vai resfriar de repente e os cristais ficam finos');
+    // etapa por etapa; o perfil de temperatura vai para o gráfico (tempo em min)
+    const tx = [0], Ty = [T0]; let t = 0, T = T0;
+    const step = (dtm, Tn) => { t += dtm; T = Tn; tx.push(+t.toFixed(3)); Ty.push(+Tn.toFixed(3)); };
+    step(tLoad, T0);
+    // aquecimento da fase quente pela camisa (temperatura do fluido constante): t = m·c_p/(U·A)·ln((T_j − T₀)/(T_j − T_m))
+    const VH = mH / Math.max(0.5, shRho(th, kHot)), UAh = Uh * wet(VH), tauH = mH * cpH * 1000 / UAh / 60;   // min
+    let tHeat = 0, Qh = 0;
+    if (mH > 0 && Tm > T0) { tHeat = tauH * Math.log((Tj - T0) / (Tj - Tm)); Qh = mH * cpH * (Tm - T0);
+      for (let k = 1; k <= 30; k++) step(tHeat / 30, Tj - (Tj - T0) * Math.exp(-tHeat * k / 30 / tauH)); }
+    // perolizante: aquece da temperatura da corrente até T_m e funde; a camisa repõe o calor em pelo menos tFus
+    let tMelt = 0, Qm = 0;
+    if (mPe > 0) {
+      Qm = mPe * (cpPe * (Tm - Tpe) + dHf); const Td = (mH * cpH * Tm + mPe * cpPe * Tpe - mPe * dHf) / (mH * cpH + mPe * cpPe);
+      const tNeed = Qm * 1000 / (Uh * wet(VH + mPe / 0.96) * (Tj - Tm)) / 60; tMelt = Math.max(tFus, tNeed);
+      step(0, Td); step(Math.min(tNeed, tMelt), Tm); step(tMelt - Math.min(tNeed, tMelt), Tm);
+    }
+    // resfriamento lento até Tc1: a válvula da água limita a taxa a rC; no fim, a camisa pode não dar conta (dT/dt = U·A·(T − T_cw)/(m·c_p))
+    const mHP = mH + mPe, UAc = Uc * wet(VH + mPe / 0.96); let tCool = 0, Qc1 = 0, rMax = 0;
+    if (mHP > 0 && T > Tc1) {
+      Qc1 = mHP * cpHP * (T - Tc1); let Tq = T, n = 0; const h = 1 / 60, t1 = t;   // passo de 1 s
+      rMax = UAc * (Tc1 - Tcw) / (mHP * cpHP * 1000) * 60;   // °C/min no fim, com a água toda
+      while (Tq > Tc1 + 1e-6 && n < 2e6) { const r = Math.min(rC, UAc * (Tq - Tcw) / (mHP * cpHP * 1000) * 60); Tq = Math.max(Tc1, Tq - r * h); tCool += h; n++; if (n % 60 === 0) step(1, Tq); }
+      step(t1 + tCool - t, Tc1);
+      if (rMax < rC) warn.push('no fim do resfriamento lento a camisa só tira ' + f(rMax, 2) + ' °C/min (menos que os ' + f(rC, 1) + ' °C/min pedidos): use água mais fria ou aceite um ciclo mais longo');
+    }
+    if (mPe > 0 && rC > 2) warn.push('resfriamento a ' + f(rC, 1) + ' °C/min: rápido demais, o diestearato forma cristais finos e o shampoo fica acetinado em vez de perolado (use de 0,5 a 1 °C/min)');
+    if (mPe > 0 && rC < 0.3) warn.push('resfriamento a ' + f(rC, 1) + ' °C/min: cristais grandes e brilhantes, mas o ciclo fica muito longo');
+    // fase fria (água, anfótero e glicerina): temperatura da mistura pelo balanço de energia
+    let Tmix = T;
+    if (mC > 0) { Tmix = (mHP * cpHP * T + mC * cpC * TC) / (mHP * cpHP + mC * cpC); step(3, Tmix); }
+    // se ainda estiver quente, a camisa resfria (com a água toda) até a temperatura dos aditivos
+    const mB = mHP + mC, cpB = shCp(th, kHP.map((v, i) => v + kCold[i])), VB = mB / rho;
+    let tCool2 = 0, Qc2 = 0;
+    if (mA > 0 && T > Tadd) { const tau2 = mB * cpB * 1000 / (Uc * wet(VB)) / 60; tCool2 = tau2 * Math.log((T - Tcw) / (Tadd - Tcw)); Qc2 = mB * cpB * (T - Tadd);
+      const Ts = T; for (let k = 1; k <= 20; k++) step(tCool2 / 20, Tcw + (Ts - Tcw) * Math.exp(-tCool2 * k / 20 / tau2)); }
+    const Tad = T;
+    // aditivos (sal, ácido cítrico, conservante e fragrância), ajuste e análises
+    let Tf = T; if (mA > 0) Tf = (mB * cpB * T + mA * cpA * TA) / (mB * cpB + mA * cpA);
+    step(0, Tf); step(tAdj, Tf);
+    const tDis = Vb / Qd * 60; step(tDis, Tf); step(tCIP, Tf);
+    const tCyc = t, nTurn = Math.floor(480 / tCyc + 1e-9);
+    // fórmula, curva de sal e viscosidade
+    const pc = id => 100 * chG(th, kAll, id) / M, aS = pc('sles'), aC = pc('capb'), act = aS + aC, salt = pc('nacl'), saltAdd = 100 * chG(th, kAd, 'nacl') / M;
+    const sc = act / aRef, cS = cS0 * sc, eMax = Math.max(e0, eMax0 * sc * sc);
+    const visc = c => e0 + (eMax - e0) * Math.exp(-Math.pow((c - cS) / wS, 2)), eta = act > 0 ? visc(salt) : 1;
+    const egds = pc('egds'), phe = pc('phenoxyethanol'), gly = pc('cs-glycerol'), cit = pc('citric-acid'), fra = pc('fragrance');
+    const chk = [], ck = (ok, txt) => chk.push((ok ? '✔ ' : '✘ ') + txt);
+    ck(act >= 6 && act <= 20, 'tensoativos ativos ' + f(act, 2) + ' % (usual de 8 a 15 %; abaixo de 6 % a espuma fica fraca)');
+    if (aC > 0) ck(aS / aC >= 2 && aS / aC <= 8, 'aniônico : anfótero = ' + f(aS / aC, 1) + ' : 1 (de 3 a 5 : 1 dá espuma cremosa e menos irritação)');
+    ck(eta >= 2000 && eta <= 12000, 'viscosidade ' + f(eta, 0) + ' mPa·s (de 3 000 a 10 000 escorre bem do frasco)');
+    if (egds > 0) ck(egds >= 0.5 && egds <= 3, 'perolizante ' + f(egds, 2) + ' % (de 0,5 a 2 %)');
+    if (phe > 0) ck(phe <= 1, 'fenoxietanol ' + f(phe, 2) + ' % (máximo 1 %, Regulamento (CE) 1223/2009 e lista de conservantes do Mercosul)');
+    if (gly > 0) ck(gly <= 5, 'glicerina ' + f(gly, 2) + ' % (umectante, de 1 a 5 %)');
+    ck(cit > 0, 'ácido cítrico ' + f(cit, 2) + ' % (abaixa o pH para 5,5 a 6,5, compatível com o couro cabeludo e os olhos)');
+    if (fra > 0) ck(Tad <= Tadd + 0.05, 'fragrância e conservante entram a ' + f(Tad, 1) + ' °C (máximo ' + f(Tadd, 0) + ' °C: acima disso a essência evapora e muda o cheiro)');
+    chk.filter(x => x[0] === '✘').forEach(x => warn.push(x.slice(2)));
+    if (salt > cS + 0.05 && act > 0) warn.push('o sal (' + f(salt, 2) + ' %) passou do pico da curva (' + f(cS, 2) + ' %): agora mais sal afina o shampoo; reduza o NaCl');
+    // agitador: P = N_p·ρ·N³·D⁵, com N_p = K_p/Re + N_t
+    const im = SH.imp[Math.max(0, SH.imp.findIndex(q => q.n === p.imp))], D = im.DT * Tt, tip = Math.PI * N * D;
+    const pw = (mu, r) => { const Re = r * N * D * D / mu, Np = im.Kp / Re + im.Nt; return { Re, Np, P: Np * r * Math.pow(N, 3) * Math.pow(D, 5) }; };
+    const PE = pw(eta / 1000, rho * 1000), PH = pw(0.002, 990), Pmax = Math.max(PE.P, PH.P), Pmot = Pmax / etaM, mot = SH.motors.find(m => m * 1000 >= 1.3 * Pmot) || SH.motors[SH.motors.length - 1];
+    if (tip > 2) warn.push('ponta do agitador a ' + f(tip, 1) + ' m/s: acima de cerca de 2 m/s o shampoo incorpora ar e faz espuma; reduza a rotação');
+    if (/Âncora/.test(im.n) === false && eta > 3000) warn.push('com ' + f(eta, 0) + ' mPa·s a ' + im.n.toLowerCase() + ' só mexe perto das pás; para massa viscosa use a âncora com raspadores');
+    const Qcool = Qc1 + Qc2, kWh = x => x / 3600, Eag = Pmax / 1000 * (tCyc - tCIP) / 60;
+    const tLst = [['Carga', tLoad], ['Aquecimento', tHeat], ['Fusão do perolizante', tMelt], ['Resfriamento lento', tCool], ['Fase fria e resfriamento', (mC > 0 ? 3 : 0) + tCool2], ['Aditivos e ajuste', tAdj], ['Descarga', tDis], ['Limpeza (CIP)', tCIP]];
+    const PN = { water_hot: 'água purificada (fase quente)', water_cold: 'água purificada (fase fria)', anionic: 'tensoativo aniônico', amphoteric: 'tensoativo anfótero', glycerin: 'glicerina', pearl: 'perolizante', additives: 'aditivos e corretores' };
+    const charged = Object.keys(PN).filter(k => got[k]).map(k => [PN[k], sum(kgOf(th, got[k]))]);
+    const form = [['Água (total, com a das soluções)', pc('water')], ['LESS (ativo)', aS], ['Betaína (ativo)', aC], ['Glicerina', gly], ['Perolizante (EGDS)', egds], ['NaCl', salt], ['Fenoxietanol', phe], ['Fragrância', fra], ['Ácido cítrico', cit]].filter(x => x[1] > 0);
+    const res = [{ k: 'Base de cálculo', v: 'as correntes de entrada trazem os ingredientes de uma batelada (kg/h lidos como kg por batelada)', u: '' },
+      { k: 'Batelada', v: f(M, 3) + ' kg = ' + f(Vb, 1) + ' L (ρ ≈ ' + f(rho, 3) + ' kg/L); enchimento de ' + f(100 * fill, 0) + ' % do tanque de ' + f(V, 0) + ' L', u: '' },
+      { k: 'Tanque (cilindro com H/T = 1,2)', v: f(Tt * 1000, 0) + ' mm de diâmetro; ' + im.n.toLowerCase() + ' com ' + f(D * 1000, 0) + ' mm a ' + f(N * 60, 0) + ' rpm', u: '' },
+      { k: '1) FASE QUENTE: água quente + tensoativo aniônico', v: f(mH, 3) + ' kg aquecidos de ' + f(T0, 1) + ' a ' + f(Tm, 0) + ' °C em ' + f(tHeat, 1) + ' min (camisa a ' + f(Tj, 0) + ' °C, U·A = ' + f(UAh, 0) + ' W/K)', u: '' },
+      { k: '2) PEROLIZANTE: fusão e dispersão', v: mPe > 0 ? f(mPe, 3) + ' kg de diestearato fundidos a ' + f(Tm, 0) + ' °C em ' + f(tMelt, 0) + ' min (' + f(Qm, 0) + ' kJ, com ' + f(dHf, 0) + ' kJ/kg de fusão)' : 'sem perolizante', u: '' },
+      { k: '3) RESFRIAMENTO LENTO (cristais perolados)', v: mHP > 0 && tCool > 0 ? f(Tm, 0) + ' → ' + f(Tc1, 0) + ' °C em ' + f(tCool, 1) + ' min, a ' + f(Math.min(rC, (Tm - Tc1) / tCool), 2) + ' °C/min em média (no fim, a camisa tira até ' + f(rMax, 2) + ' °C/min)' : '—', u: '' },
+      { k: '4) FASE FRIA: água, anfótero e glicerina', v: mC > 0 ? f(mC, 3) + ' kg a ' + f(TC, 1) + ' °C: a mistura vai a ' + f(Tmix, 1) + ' °C' + (tCool2 > 0 ? ' e a camisa resfria até ' + f(Tadd, 0) + ' °C em ' + f(tCool2, 1) + ' min' : '') : 'sem fase fria', u: '' },
+      { k: '5) ADITIVOS E CORRETORES', v: mA > 0 ? f(mA, 3) + ' kg a ' + f(Tad, 1) + ' °C (NaCl, conservante, fragrância e ácido cítrico); o shampoo sai a ' + f(Tf, 1) + ' °C' : 'sem aditivos', u: '' },
+      { k: 'Ciclo da batelada', v: f(tCyc, 0) + ' min (' + f(tCyc / 60, 2) + ' h, com descarga de ' + f(tDis, 0) + ' min e CIP); ' + nTurn + ' bateladas por turno de 8 h = ' + f(nTurn * M, 0) + ' kg por turno', u: '' },
+      { k: 'Ingredientes da batelada (como carregados)', v: charged.map(x => x[0] + ' ' + f(x[1], 3) + ' kg (' + f(100 * x[1] / M, 2) + ' %)').join('; '), u: '' },
+      { k: 'Composição final (% m/m, tensoativos em base ativa)', v: form.map(x => x[0] + ' ' + f(x[1], 2) + ' %').join('; '), u: '' },
+      { k: 'Tensoativos ativos', v: f(act, 2) + ' % (LESS ' + f(aS, 2) + ' % + betaína ' + f(aC, 2) + ' %)' + (aC > 0 ? '; aniônico : anfótero = ' + f(aS / aC, 1) + ' : 1' : ''), u: '' },
+      { k: 'NaCl (espessante)', v: f(salt, 2) + ' % (' + f(saltAdd, 2) + ' % adicionado + ' + f(salt - saltAdd, 2) + ' % que vem com a betaína e a água)', u: '' },
+      { k: 'Viscosidade pela curva de sal (correlação ilustrativa, a 25 °C)', v: f(eta, 0) + ' mPa·s; pico de ' + f(eMax, 0) + ' mPa·s com ' + f(cS, 2) + ' % de NaCl', u: '' },
+      { k: 'Conferência da fórmula', v: chk.join('; '), u: '' },
+      { k: 'AGITAÇÃO E ENERGIA', v: '', u: '' },
+      { k: 'Agitador no shampoo pronto', v: 'Re = ' + f(PE.Re, 1) + ', N_p = ' + f(PE.Np, 2) + ', ' + f(PE.P, 1) + ' W; ponta a ' + f(tip, 2) + ' m/s', u: '' },
+      { k: 'Agitador na fase quente (fluida)', v: 'Re = ' + f(PH.Re, 0) + ', N_p = ' + f(PH.Np, 2) + ', ' + f(PH.P, 1) + ' W', u: '' },
+      { k: 'Motor do agitador', v: f(mot, 2) + ' kW (padronizado; ' + f(Pmot, 0) + ' W no eixo ÷ rendimento, com 30 % de folga)', u: '' },
+      { k: 'Calor da camisa no aquecimento e na fusão', v: f(Qh + Qm, 0) + ' kJ = ' + f(kWh(Qh + Qm), 2) + ' kWh (' + f((Qh + Qm) / 2200, 2) + ' kg de vapor de 2 bar)', u: '' },
+      { k: 'Calor retirado pela água de resfriamento', v: f(Qcool, 0) + ' kJ = ' + f(kWh(Qcool), 2) + ' kWh (' + f(Qcool / (4.18 * 5), 0) + ' L de água aquecida 5 °C)', u: '' },
+      { k: 'Energia do agitador', v: f(Eag, 3) + ' kWh por batelada', u: '' }];
+    const plots = [{ kind: 'curves', title: 'Batelada de shampoo: temperatura ao longo do ciclo', data: { xLabel: 'Tempo (min)', yLabel: 'Temperatura (°C)', xRange: [0, tCyc], series: [
+        { name: 'Temperatura da massa', x: tx, y: Ty, color: '#d1302b', width: 3 }],
+        hlines: [mPe > 0 ? { y: 62, name: 'Fusão do diestearato (≈ 60–65 °C)', color: '#7a3db8' } : null, mA > 0 ? { y: Tadd, name: 'Máximo para os aditivos (' + f(Tadd, 0) + ' °C)', color: '#2e9e6b' } : null].filter(Boolean) } },
+      { kind: 'curves', title: 'Curva de sal: viscosidade do shampoo × NaCl', data: { xLabel: 'NaCl no shampoo (% m/m)', yLabel: 'Viscosidade a 25 °C (mPa·s)', xRange: [0, Math.max(4, cS + 2 * wS)], series: [
+        { name: 'Curva de sal (' + f(act, 1).replace('.', ',') + ' % de ativos)', x: Array.from({ length: 81 }, (_, k) => k * Math.max(4, cS + 2 * wS) / 80), y: Array.from({ length: 81 }, (_, k) => visc(k * Math.max(4, cS + 2 * wS) / 80)), color: '#7a3db8', width: 3 },
+        { name: 'Operação: ' + f(eta, 0) + ' mPa·s', x: [salt], y: [eta], mode: 'markers', size: 13, symbol: 'diamond', color: '#d1302b' },
+        { name: 'Pico', x: [cS], y: [eMax], mode: 'markers', size: 10, symbol: 'circle', color: '#111' }],
+        hlines: [{ y: 3000, name: 'Faixa usual: mínimo (3 000 mPa·s)', color: '#2e9e6b' }, { y: 10000, name: 'Faixa usual: máximo (10 000 mPa·s)', color: '#e0a100' }] } },
+      { kind: 'bars', title: 'Ingredientes do shampoo, sem a água (% m/m; tensoativos em base ativa)', data: { categories: form.slice(1).map(x => x[0]), yLabel: '% m/m', series: [{ name: '% m/m', y: form.slice(1).map(x => x[1]), color: '#7a3db8' }] } },
+      { kind: 'bars', title: 'Tempo de cada etapa da batelada (min)', data: { categories: tLst.map(x => x[0]), yLabel: 'min', series: [{ name: 'min', y: tLst.map(x => x[1]), color: '#2563c9' }] } }];
+    const out = chOut(th, kAll, Tf, (got.water_hot || got.anionic || got.water_cold || got.amphoteric || got.glycerin || got.pearl || got.additives).P);
+    out.visc = eta; out.rhoL = rho;   // seguem para a bomba de envase
+    return { out: { out }, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
+  IMPL.filling = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, f = shFmt;
+    if (!connected(s)) throw new Error('conecte a corrente de shampoo a granel');
+    const kg = kgOf(th, s), M = sum(kg), rho = s.rhoL > 0 ? s.rhoL : shRho(th, kg);
+    const Q = num(p.Q, 100), Pm = num(p.Pm, 1), vol = num(p.vol, 300), hold = clamp(num(p.hold, 1.5), 0, 50) / 100;
+    const Lh = Math.max(0, num(p.Lh, 6)), d = num(p.d, 22.1) / 1000, dz = num(p.dz, 1.5), dPn = Math.max(0, num(p.dPn, 0.3));
+    const fromTank = s.visc > 0, mu = (fromTank ? s.visc : Math.max(1, num(p.mu, 6000))) / 1000;   // Pa·s
+    if (!(Q > 0 && Pm > 0 && vol > 0 && d > 0)) throw new Error('vazão, potência, volume do frasco e diâmetro da linha devem ser positivos');
+    const V = M / rho, Vn = V * (1 - hold), nF = Math.floor(Vn * 1000 / vol + 1e-9), rest = Vn * 1000 - nF * vol, tEnv = Vn / Q * 60, cad = Q * 1000 / vol / 60, E = Pm * tEnv / 60;
+    const line = (q, m) => { const v = q / 3.6e6 / (Math.PI * d * d / 4), Re = rho * 1000 * v * d / m, fD = Re < 2300 ? 64 / Re : 0.316 * Math.pow(Re, -0.25); return { v, Re, dP: fD * Lh / d * rho * 1000 * v * v / 2 }; };
+    const L0 = line(Q, mu), dPt = L0.dP + rho * 1000 * 9.81 * dz + dPn * 1e5, Ph = dPt * Q / 3.6e6, eff = Ph / (Pm * 1000), gam = 8 * L0.v / d;
+    if (Ph > Pm * 1000) warn.push('a bomba precisa de ' + f(Ph, 0) + ' W hidráulicos, mais que o motor de ' + f(Pm, 2) + ' kW');
+    if (dPt > 10e5) warn.push('perda de carga de ' + f(dPt / 1e5, 1) + ' bar: alta para uma bomba de lóbulos sanitária; use linha mais larga ou mais curta');
+    if (tEnv > 120) warn.push('envase de ' + f(tEnv, 0) + ' min: a bomba é pequena para a batelada');
+    const res = [{ k: 'Base de cálculo', v: 'a corrente de entrada é o shampoo de uma batelada (kg/h lidos como kg por batelada)', u: '' },
+      { k: 'Shampoo a granel', v: f(M, 3) + ' kg = ' + f(V, 2) + ' L (ρ = ' + f(rho, 3) + ' kg/L) a ' + f(K2C(s.T), 1) + ' °C', u: '' },
+      { k: 'Viscosidade', v: f(mu * 1000, 0) + ' mPa·s (' + (fromTank ? 'informada pelo tanque de mistura' : 'campo do equipamento') + ')', u: '' },
+      { k: 'Perdas (retido no tanque, na mangueira e na bomba)', v: f(M * hold, 3) + ' kg (' + f(100 * hold, 1) + ' %): vão para a água de limpeza', u: '' },
+      { k: 'Frascos de ' + f(vol, 0) + ' mL por batelada', v: nF + ' frascos (sobram ' + f(rest, 0) + ' mL)', u: '' },
+      { k: 'Tempo de envase / cadência', v: f(tEnv, 1) + ' min a ' + f(Q, 0) + ' L/h / ' + f(cad, 1) + ' frascos por minuto', u: '' },
+      { k: 'Linha até a envasadora', v: f(Lh, 1) + ' m de ' + f(d * 1000, 1) + ' mm: velocidade ' + f(L0.v, 3) + ' m/s, Re = ' + f(L0.Re, 2) + (L0.Re < 2300 ? ' (laminar: Hagen–Poiseuille)' : ' (turbulento)') + ', cisalhamento na parede ≈ ' + f(gam, 0) + ' s⁻¹', u: '' },
+      { k: 'Perda de carga: atrito + desnível + bico', v: f(L0.dP / 1e5, 3) + ' + ' + f(rho * 9.81 * dz / 100, 3) + ' + ' + f(dPn, 2) + ' = ' + f(dPt / 1e5, 3) + ' bar', u: '' },
+      { k: 'Potência hidráulica / motor', v: f(Ph, 1) + ' W / ' + f(Pm, 2) + ' kW (rendimento global de ' + f(100 * eff, 1) + ' %)', u: '' },
+      { k: 'Energia do envase (motor a plena carga)', v: f(E, 3) + ' kWh por batelada', u: '' }];
+    if (eff < 0.05) res.push({ k: 'Observação sobre o motor', v: 'o atrito pede só ' + f(100 * eff, 1) + ' % da potência do motor: a bomba de lóbulos é escolhida pelo torque na partida com o produto viscoso e pela vazão da limpeza (CIP), não pela perda de carga', u: '' });
+    const qx = [], series = []; for (let k = 0; k <= 40; k++) qx.push(Q * 2 * k / 40 || 0.001);
+    [[0.5, '#2e9e6b'], [1, '#d1302b'], [2, '#7a3db8']].forEach(([fa, c]) => series.push({ name: f(mu * 1000 * fa, 0) + ' mPa·s', x: qx, y: qx.map(q => (line(q, mu * fa).dP + rho * 1000 * 9.81 * dz + dPn * 1e5) / 1e5), color: c, width: fa === 1 ? 3.5 : 2.5 }));
+    series.push({ name: 'Operação: ' + f(dPt / 1e5, 2) + ' bar', x: [Q], y: [dPt / 1e5], mode: 'markers', size: 13, symbol: 'diamond', color: '#111' });
+    const tf = [], nf = []; for (let k = 0; k <= 40; k++) { const tt = tEnv * k / 40; tf.push(tt); nf.push(Math.floor(Q * 1000 / vol * tt / 60 + 1e-9)); }
+    const plots = [{ kind: 'curves', title: 'Frascos envasados ao longo do tempo', data: { xLabel: 'Tempo de envase (min)', yLabel: 'Frascos de ' + f(vol, 0) + ' mL', series: [{ name: 'Frascos cheios', x: tf, y: nf, color: '#7a3db8', width: 3 }] } },
+      { kind: 'curves', title: 'Pressão na bomba × vazão (linha, desnível e bico)', data: { xLabel: 'Vazão (L/h)', yLabel: 'Pressão (bar)', series } },
+      { kind: 'bars', title: 'Destino do shampoo da batelada (kg)', data: { categories: ['Envasado', 'Perdas'], yLabel: 'kg', series: [{ name: 'kg', y: [M * (1 - hold), M * hold], color: '#7a3db8' }] } }];
+    const T = K2C(s.T), kP = kg.map(x => x * (1 - hold)), kL = kg.map(x => x * hold), out = chOut(th, kP, T, s.P);
+    out.visc = s.visc; out.rhoL = s.rhoL;
+    return { out: { product: out, loss: chOut(th, kL, T, s.P) }, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
   /* ================================================================== versão 5.4: fábrica de cimento completa
      Torre de ciclones com pré-calcinador, resfriador de clínquer de grelha e moinho de cimento (ou de cru). A torre e o resfriador
      usam as mesmas entalpias de formação e os mesmos c_p médios do forno (MET), para que os balanços dos três fechem entre si. */
@@ -14557,6 +14979,44 @@ window.SIMULAFACIL_CONFIG = {
       sym: [['λ', 'coeficiente de filtração de Iwasaki'], ['ε, ψ', 'porosidade e esfericidade'], [sub(i('k'), 'H'), 'aumento da perda de carga por massa retida'], [sub(i('v'), 'L'), 'velocidade da água de lavagem']],
       note: 'O antracito, maior e mais leve, fica por cima depois da lavagem e retém a maior parte dos flocos em profundidade; a areia fina, embaixo, faz o polimento. Por isso a dupla camada aceita taxas de até 360 m³/(m²·d) (NBR 12216). A Portaria GM/MS nº 888/2021 pede no máximo 0,5 uT na saída de cada filtro rápido.'
     }),
+    pw_pretreat: () => ({
+      name: 'Pré-tratamento da água para cosméticos: filtro de areia, carvão ativado, abrandador e lâmpada UV',
+      eqs: [eq(sub(i('A'), 'filtro') + ' = ' + fr(sub(Q, 'p'), i('taxa')) + ',&nbsp; ' + sub(V, 'carvão') + ' = ' + sub(Q, 'p') + '·EBCT', 'área do filtro de areia e volume do leito de carvão'),
+        eq('HOCl + C* → CO* + H⁺ + Cl⁻,&nbsp; H⁺ + HCO₃⁻ → CO₂ + H₂O', 'o carvão ativado retira o cloro livre'),
+        eq('Ca²⁺ + 2 Na–R → Ca–R₂ + 2 Na⁺,&nbsp; Ca–R₂ + 2 NaCl → 2 Na–R + CaCl₂', 'abrandamento e regeneração da resina'),
+        eq(sub(V, 'ciclo') + ' = ' + fr(sub(V, 'r') + '·' + sub(i('q'), 'r'), sub(i('H'), 'entrada') + ' − ' + sub(i('H'), 'saída')) + ',&nbsp; ' + sub('η', 'sal') + ' = ' + fr('1,168·' + sub(i('q'), 'r'), sub(i('m'), 'sal')), 'água entre regenerações e eficiência do sal'),
+        eq(sub('log', '10') + fr(sub(i('N'), '0'), i('N')) + ' = ' + fr(i('D'), sub(i('D'), '1 log')) + ',&nbsp; ' + i('D') + ' = ' + i('I') + '·' + t, 'inativação pela lâmpada UV (dose em mJ/cm²)')],
+      sym: [[sub(Q, 'p'), 'vazão de projeto'], ['EBCT', 'tempo de contato em leito vazio'], [sub(V, 'r') + ', ' + sub(i('q'), 'r'), 'volume e capacidade útil da resina (g CaCO₃/L)'], [i('H'), 'dureza (mg CaCO₃/L)'], [sub(i('m'), 'sal'), 'sal por litro de resina na regeneração']],
+      note: 'A água é o ingrediente principal do shampoo (cerca de 70 % da fórmula). O filtro de areia segura a turbidez; o carvão ativado tira o cloro, que oxidaria a fragrância e atacaria a resina; o abrandador troca o cálcio por sódio, porque o cálcio forma sabões insolúveis e muda a curva de sal; a lâmpada UV mata as bactérias que crescem no carvão depois que o cloro sai. A água abrandada ainda tem sais: para água purificada da Farmacopeia seria preciso osmose reversa ou deionização.'
+    }),
+    pw_tank: () => ({
+      name: 'Tanque de água purificada com anel de recirculação',
+      eqs: [eq(sub(i('n'), 'bat') + ' = ' + fr(i('f') + V, sub(V, 'bat')) + ',&nbsp; autonomia = ' + fr(i('f') + V, sub(i('n'), 'dia') + sub(V, 'bat')), 'bateladas com o tanque cheio e dias de estoque'),
+        eq(i('v') + ' = ' + fr('4' + sub(Q, 'r'), 'π' + sup(i('d'), '2')) + ',&nbsp; Δ' + P + ' = (' + i('f') + fr(L, i('d')) + ' + Σ' + i('K') + ')' + fr('ρ' + sup(i('v'), '2'), '2'), 'velocidade e perda de carga no anel (Darcy–Weisbach com Blasius)'),
+        eq(V + '(' + t + ') = ' + sub(V, '0') + ' + ∫' + sub(Q, 'enchimento') + 'd' + t + ' − Σ' + sub(V, 'bat'), 'nível ao longo do dia')],
+      sym: [[i('f'), 'nível máximo de operação'], [sub(Q, 'r'), 'vazão do anel'], [i('K'), 'perdas localizadas (curvas, válvulas e reator UV)']],
+      note: 'Água purificada parada vira criadouro de bactérias. Por isso o tanque é de inox 316L polido, tem filtro de respiro e uma bomba que recircula a água por um anel sanitário com velocidade de 1 a 2 m/s (regime turbulento) e uma lâmpada UV na volta. O tanque também dosa a água de cada batelada: uma parte vai para a fase quente e o restante para a fase fria.'
+    }),
+    shampoo_tank: () => ({
+      name: 'Batelada de shampoo perolado: aquecimento, fusão, resfriamento lento, curva de sal e potência do agitador',
+      eqs: [eq(t + ' = ' + fr(i('m') + sub(i('c'), 'p'), i('UA')) + ' ln' + fr(sub(T, 'j') + ' − ' + sub(T, '0'), sub(T, 'j') + ' − ' + sub(T, 'm')), 'aquecimento pela camisa (fluido a T_j constante)'),
+        eq(sub(Q, 'fusão') + ' = ' + sub(i('m'), 'EGDS') + '[' + sub(i('c'), 'p') + '(' + sub(T, 'm') + ' − ' + sub(T, 'EGDS') + ') + Δ' + sub(i('H'), 'f') + ']', 'calor para aquecer e fundir o perolizante'),
+        eq(fr('d' + T, 'd' + t) + ' = −mín(' + sub(i('r'), 'C') + ', ' + fr(i('UA') + '(' + T + ' − ' + sub(T, 'água') + ')', i('m') + sub(i('c'), 'p')) + ')', 'resfriamento lento controlado'),
+        eq(sub(T, 'mistura') + ' = ' + fr(sum('') + i('m') + sub(i('c'), 'p') + T, sum('') + i('m') + sub(i('c'), 'p')), 'entrada da fase fria e dos aditivos'),
+        eq('η(' + C + ') = ' + sub('η', '0') + ' + (' + sub('η', 'máx') + ' − ' + sub('η', '0') + ')' + sup('e', '−[(' + C + ' − ' + sup(C, '*') + ')/' + i('w') + ']²'), 'curva de sal (correlação ilustrativa)'),
+        eq(i('P') + ' = ' + sub(i('N'), 'p') + 'ρ' + sup(i('N'), '3') + sup(i('D'), '5') + ',&nbsp; ' + sub(i('N'), 'p') + ' = ' + fr(sub(i('K'), 'p'), 'Re') + ' + ' + sub(i('N'), 't') + ',&nbsp; Re = ' + fr('ρ' + i('N') + sup(i('D'), '2'), 'μ'), 'potência do agitador')],
+      sym: [[sub(T, 'm') + ', ' + sub(T, 'j'), 'temperatura da fase quente e do fluido da camisa'], [i('UA'), 'coeficiente global × área molhada da camisa'], [sub(i('r'), 'C'), 'taxa de resfriamento pedida'],
+        [C + ', ' + sup(C, '*'), 'NaCl no shampoo e no pico da curva (o pico e η_máx crescem com os tensoativos ativos)'], [sub(i('K'), 'p') + ', ' + sub(i('N'), 't'), 'constantes da curva de potência do agitador']],
+      note: 'O diestearato de glicol só forma o brilho perolado se for fundido na fase quente (70 a 75 °C, com o tensoativo aniônico que o emulsiona) e resfriado devagar, de 0,5 a 1 °C/min, com agitação lenta: crescem cristais em plaquetas que refletem a luz. A fragrância e o conservante entram abaixo de 40 °C. O sal engrossa o shampoo porque transforma as micelas esféricas em micelas longas; passado o pico da curva de sal, mais sal afina o produto. A âncora com raspadores mistura a massa viscosa e renova a película na parede da camisa.'
+    }),
+    filling: () => ({
+      name: 'Bomba sanitária de lóbulos e envasadora',
+      eqs: [eq(sub(i('n'), 'frascos') + ' = ' + fr(V + '(1 − ' + i('p') + ')', sub(V, 'frasco')) + ',&nbsp; ' + sub(t, 'envase') + ' = ' + fr(V + '(1 − ' + i('p') + ')', Q), 'frascos e tempo de envase'),
+        eq('Δ' + sub(P, 'atrito') + ' = ' + fr('128 μ' + L + Q, 'π' + sup(i('d'), '4')) + '&nbsp; (Re < 2 300)', 'Hagen–Poiseuille: o shampoo viscoso escoa em regime laminar'),
+        eq(sub(i('P'), 'hidr') + ' = (Δ' + sub(P, 'atrito') + ' + ρ' + i('g') + 'Δ' + i('z') + ' + Δ' + sub(P, 'bico') + ')·' + Q, 'potência hidráulica da bomba')],
+      sym: [[i('p'), 'fração retida no tanque e na linha (perdas)'], [sub(V, 'frasco'), 'volume de cada frasco'], ['μ', 'viscosidade do shampoo (vem do tanque de mistura)']],
+      note: 'A bomba de lóbulos é de deslocamento positivo: a vazão quase não muda com a viscosidade e ela trata o produto com cuidado, sem quebrar a pérola nem incorporar ar. O shampoo é pseudoplástico: na linha, com cisalhamento de dezenas de s⁻¹, fica mais fino que na medida do viscosímetro, por isso a perda de carga calculada é conservadora.'
+    }),
     eta_disinfect: () => ({
       name: 'Tanque de contato: desinfecção (CT), fluoretação e correção do pH',
       eqs: [eq('Cl₂ + H₂O → HOCl + HCl,&nbsp; HOCl ⇌ H⁺ + OCl⁻ (p' + sub(i('K'), 'a') + ' ≈ 7,5)', 'cloro livre'),
@@ -15137,6 +15597,22 @@ window.SIMULAFACIL_CONFIG = {
       'No decantador, a água anda devagar por várias horas e os flocos vão ao fundo, onde formam o lodo. Pela teoria de Hazen, o que importa é a área em planta: todo floco que cai mais depressa que a taxa de aplicação v₀ = Q/A chega ao fundo antes de a água sair.',
       'O bloco descreve as velocidades de sedimentação dos flocos por uma distribuição log-normal e integra a remoção de Hazen; as partículas que não flocularam sedimentam muito devagar. Calcula ainda as dimensões, o tempo de detenção, a velocidade horizontal, os números de Reynolds e de Froude, os vertedores de coleta e o lodo.',
       'No exemplo, dois decantadores de 41 × 10 × 4 m (30 m³/(m²·d), 3,2 h) retêm 99 % dos flocos e a água sai com 3,3 uT. O lodo soma cerca de 2 t de sólidos secos por dia, ou cerca de 190 m³/d com 1 % de sólidos, que seguem para os adensadores de lodo.'] },
+    pw_pretreat: { ex: ex('shampoo-capilar', 'Cosméticos: fábrica de shampoo capilar perolado'), p: [
+      'Numa fábrica de cosméticos a água é o ingrediente principal e precisa chegar sem cloro, sem dureza, sem turbidez e com poucas bactérias. O pré-tratamento simples tem quatro barreiras em série: filtro de areia (turbidez), carvão ativado (cloro livre), abrandador de resina catiônica (troca o cálcio pelo sódio) e lâmpada UV (bactérias).',
+      'O bloco dimensiona as garrafas de PRFV pela vazão de projeto, calcula o ciclo e a regeneração do abrandador, o sal e a água de retrolavagem e de regeneração, e a dose e a potência da lâmpada UV. A química usa o sistema carbonato da ETA: o carvão converte o HOCl em cloreto e o abrandador troca o Ca(HCO₃)₂ por NaHCO₃.',
+      'No exemplo, 45 kg de água bruta com 149 mg CaCO₃/L, 1 mg/L de cloro e 5 uT saem com 2 mg CaCO₃/L, 0,01 mg/L de cloro e 0,5 uT. A resina de 10 L regenera a cada 17 h de serviço com 1,5 kg de sal, a lâmpada UV de cerca de 12 W reduz 5 log das bactérias e o rejeito leva 19 % da água bruta.'] },
+    pw_tank: { ex: ex('shampoo-capilar', 'Cosméticos: fábrica de shampoo capilar perolado'), p: [
+      'O tanque de inox guarda a água purificada entre o pré-tratamento, que trabalha por algumas horas, e as bateladas, que tiram a água de uma vez. Uma bomba recircula a água por um anel sanitário com uma lâmpada UV na volta, para que ela nunca fique parada.',
+      'O bloco separa a água de cada batelada em fase quente e fase fria, deixa o excedente no tanque, calcula a autonomia, a velocidade e a perda de carga do anel e simula o nível ao longo do dia, com o pré-tratamento ligando abaixo de um nível mínimo.',
+      'No exemplo, o tanque de 300 L dá água para 7 bateladas (quase 2 dias); cada batelada leva 34,9 kg: 14,0 kg para a fase quente e 21,0 kg para a fase fria. O anel de 1" circula a 1,45 m/s, em regime turbulento.'] },
+    shampoo_tank: { ex: ex('shampoo-capilar', 'Cosméticos: fábrica de shampoo capilar perolado'), p: [
+      'O shampoo perolado é feito em batelada num tanque encamisado com agitador âncora. Primeiro a fase quente (parte da água e o tensoativo aniônico) é aquecida a 75 °C e recebe o perolizante (diestearato de glicol), que funde e se dispersa. Depois a massa esfria devagar, para formar os cristais perolados; entram a fase fria (resto da água, o tensoativo anfótero e a glicerina) e, abaixo de 40 °C, os aditivos: sal (espessante), conservante, fragrância e ácido cítrico (pH).',
+      'O bloco calcula cada etapa pela camisa (aquecimento, fusão, resfriamento lento com taxa controlada e resfriamento final), a temperatura da mistura pelo balanço de energia, o tempo do ciclo, a fórmula final em base ativa, a viscosidade pela curva de sal (correlação ilustrativa, que deve ser ajustada aos ensaios de laboratório), a potência do agitador e a energia. Ele confere a fórmula: tensoativos, relação aniônico : anfótero, conservante, perolizante e temperatura dos aditivos.',
+      'No exemplo, a batelada de 51 kg (50 L, metade do tanque de 100 L) aquece em 13 min, funde o perolizante em 20 min, esfria de 75 para 45 °C em 38 min a 0,8 °C/min e vai a 35 °C com a fase fria. O shampoo tem 6,9 % de tensoativos ativos e 1,95 % de NaCl: cerca de 6 500 mPa·s, logo antes do pico da curva de sal. O ciclo, com descarga e limpeza, leva cerca de 3 h.'] },
+    filling: { ex: ex('shampoo-capilar', 'Cosméticos: fábrica de shampoo capilar perolado'), p: [
+      'A bomba sanitária de lóbulos tira o shampoo do tanque de mistura e o leva à envasadora, que enche os frascos pelo bico dosador. Parte do produto fica retida no tanque, na mangueira e na bomba e sai na água de limpeza.',
+      'O bloco calcula os frascos por batelada, o tempo de envase e a cadência, a perda de carga do shampoo viscoso na linha (regime laminar), o desnível e o bico, a potência hidráulica e a energia. A viscosidade vem do tanque de mistura pela corrente.',
+      'No exemplo, 51 kg de shampoo a 100 L/h enchem 164 frascos de 300 mL em cerca de 30 min. A bomba trabalha a 2,4 bar e usa menos de 1 % da potência do motor de 1 kW: nas bombas de lóbulos o motor é escolhido pelo torque de partida com o produto viscoso e pela limpeza.'] },
     eta_filter: { ex: ex('eta-convencional', 'ETA convencional para 100 mil habitantes'), p: [
       'O filtro rápido é a barreira final contra a turbidez e os cistos de protozoários. A água desce por uma camada de antracito, que retém a maior parte dos flocos em profundidade, e por uma de areia fina, que faz o polimento. Quando a perda de carga chega ao limite, o filtro é lavado com água de baixo para cima, que expande o leito e solta o material retido.',
       'O bloco usa o modelo de Iwasaki para a remoção (C/C₀ = exp(−λL) em cada camada), a equação de Carman–Kozeny para a perda de carga do leito limpo, um aumento linear da perda de carga com a massa retida para a carreira e a equação de Richardson–Zaki para a expansão na lavagem.',
@@ -15209,7 +15685,7 @@ window.SIMULAFACIL_CONFIG = {
     crusher: ['feed'], ball_mill: ['feed', 'recycle'], spiral_classifier: ['feed'], hydrocyclone: ['feed'], flotation: ['feed'], flot_col_bench: ['feed'], flot_col_ind: ['feed'],
     coke_oven: ['coal'], sinter_plant: ['ore', 'flux', 'fuel'], bof: ['hot_metal', 'scrap'], caster: ['steel'], rolling_mill: ['billet'], wire_drawing: ['rod'],
     wood_yard: ['logs'], pulp_washer: ['pulp'], bleach_plant: ['pulp'], paper_machine: ['stock'], recovery_boiler: ['liquor'], causticizing: ['smelt'], steam_gen: ['water'], steam_turbine: ['steam'], cooling_tower: ['hot_in'],
-    nuclear_reactor: ['cold_leg'], pwr_steam_gen: ['primary_in', 'feedwater'], msr: ['heating'], steam_condenser: ['cw_in', 'drain'], deaerator: ['drain1', 'drain2'], cocoa_alkalizer: ['alkali'], conche: ['fat', 'emulsifier'], eta_washtank: ['feed2', 'feed3'], eta_thickener: ['feed2'] };
+    nuclear_reactor: ['cold_leg'], pwr_steam_gen: ['primary_in', 'feedwater'], msr: ['heating'], steam_condenser: ['cw_in', 'drain'], deaerator: ['drain1', 'drain2'], shampoo_tank: ['water_hot', 'water_cold', 'anionic', 'amphoteric', 'glycerin', 'pearl', 'additives'], cocoa_alkalizer: ['alkali'], conche: ['fat', 'emulsifier'], eta_washtank: ['feed2', 'feed3'], eta_thickener: ['feed2'] };
   // portas de energia (correntes de energia): não carregam matéria
   const ENERGY_PORTS = { ei: 1, eo: 1, q_in: 1, q_out: 1, qc: 1, qr: 1, q_pre: 1 };
   const isEnergyPort = p => !!ENERGY_PORTS[p];
@@ -15366,6 +15842,11 @@ window.SIMULAFACIL_CONFIG = {
     cocoa_press: { feed: 'liquor de cacau', butter: 'manteiga de cacau', cake: 'torta (cacau em pó)' },
     conche: { feed: 'massa refinada', fat: 'manteiga de cacau', emulsifier: 'lecitina', product: 'chocolate conchado', vapor: 'ar de exaustão', q_in: 'motores' },
     temperer: { feed: 'chocolate conchado', product: 'barras de chocolate', q_out: 'água gelada' },
+    pw_pretreat: { feed: 'água bruta', product: 'água purificada', waste: 'rejeito (retrolavagens e salmoura)' },
+    pw_tank: { feed: 'água purificada', hot: 'água para a fase quente', cold: 'água para a fase fria', stock: 'excedente (fica no tanque)' },
+    shampoo_tank: { water_hot: 'água da fase quente', water_cold: 'água da fase fria', anionic: 'tensoativo aniônico (LESS)', amphoteric: 'tensoativo anfótero (betaína)', glycerin: 'glicerina',
+      pearl: 'perolizante (EGDS)', additives: 'aditivos e corretores', out: 'shampoo a granel' },
+    filling: { feed: 'shampoo a granel', product: 'shampoo envasado (frascos)', loss: 'perdas (retido na linha)' },
     eta_intake: { feed: 'água bruta do rio', product: 'água para a ETA', grit: 'areia retirada', q_in: 'bombas de água bruta' },
     eta_coag: { feed: 'água bruta', product: 'água coagulada' },
     eta_floc: { feed: 'água coagulada', product: 'água floculada' },
@@ -15556,7 +16037,12 @@ window.SIMULAFACIL_CONFIG = {
     eta_reservoir: { w: 150, h: 110, ports: { feed: P(0, 34, 'l', 'in'), product: P(150, 48, 'r', 'out'), q_in: P(118, 110, 'd', 'ein') } },
     eta_washtank: { w: 160, h: 100, ports: { feed: P(120, 0, 'u', 'in'), feed2: P(0, 40, 'l', 'in'), feed3: P(110, 100, 'd', 'in'), clarified: P(156, 100, 'd', 'out'), sludge: P(44, 100, 'd', 'out') } },
     eta_thickener: { w: 150, h: 100, ports: { feed: P(40, 0, 'u', 'in'), feed2: P(150, 46, 'r', 'in'), supernatant: P(150, 24, 'r', 'out'), thickened: P(75, 100, 'd', 'out') } },
-    eta_centrifuge: { w: 170, h: 90, ports: { feed: P(87, 0, 'u', 'in'), centrate: P(170, 30, 'r', 'out'), cake: P(25, 90, 'd', 'out'), q_in: P(130, 90, 'd', 'ein') } }
+    eta_centrifuge: { w: 170, h: 90, ports: { feed: P(87, 0, 'u', 'in'), centrate: P(170, 30, 'r', 'out'), cake: P(25, 90, 'd', 'out'), q_in: P(130, 90, 'd', 'ein') } },
+    pw_pretreat: { w: 220, h: 110, ports: { feed: P(0, 30, 'l', 'in'), product: P(220, 71, 'r', 'out'), waste: P(110, 110, 'd', 'out') } },
+    pw_tank: { w: 150, h: 120, ports: { feed: P(0, 30, 'l', 'in'), hot: P(150, 70, 'r', 'out'), cold: P(150, 96, 'r', 'out'), stock: P(68, 120, 'd', 'out') } },
+    shampoo_tank: { w: 170, h: 150, ports: { water_hot: P(0, 34, 'l', 'in'), water_cold: P(0, 60, 'l', 'in'), anionic: P(0, 86, 'l', 'in'), amphoteric: P(48, 0, 'u', 'in'), glycerin: P(64, 0, 'u', 'in'),
+      pearl: P(106, 0, 'u', 'in'), additives: P(122, 0, 'u', 'in'), out: P(170, 142, 'r', 'out') } },
+    filling: { w: 170, h: 100, ports: { feed: P(0, 60, 'l', 'in'), product: P(170, 86, 'r', 'out'), loss: P(33, 100, 'd', 'out') } }
   };
 
   /* primitivas: rect (x,y,w,h,r), circ (cx,cy,r), line (polilinha aberta), poly (polígono fechado), text.
@@ -15694,6 +16180,39 @@ window.SIMULAFACIL_CONFIG = {
       R(80, 82, 12, 7, 1, 'bodyw'), R(98, 82, 12, 7, 1, 'bodyw'), R(130, 80, 12, 7, 1, 'bodyw'), R(152, 80, 12, 7, 1, 'bodyw'),
       R(118, 52, 64, 36, 6), L([[124, 62], [176, 62]], 'cold'), L([[124, 70], [176, 70]], 'cold'), T(150, 48, 'túnel'),
       L([[182, 84], [190, 84]]), L([[36, 90], [36, 100]], 'cold')],
+    pw_pretreat: () => { // pré-tratamento da água: filtro de areia, carvão ativado e abrandador em garrafas de PRFV, tanque de salmoura e reator UV
+      const o = [L([[0, 30], [8, 30]])];
+      [[8, 'areia'], [50, 'carvão'], [92, 'resina']].forEach(([x, lb], k) => { o.push(R(x, 16, 32, 76, 12), T(x + 16, 11, lb)); if (k < 2) o.push(L([[x + 32, 30], [x + 42, 30]])); });
+      [[16, 60], [26, 68], [33, 58], [18, 80], [30, 80], [24, 50]].forEach(([x, y]) => o.push(C(x, y, 1.8, 'ln')));   // grãos de areia
+      o.push(R(55, 44, 22, 42, 3, 'bodyb'));   // carvão granulado
+      [[100, 50], [110, 48], [120, 52], [104, 60], [115, 62], [99, 72], [109, 71], [119, 74], [104, 83], [116, 84]].forEach(([x, y]) => o.push(C(x, y, 3, 'bodyw')));   // esferas de resina
+      o.push(L([[124, 72], [132, 72]], 'lnd'), R(132, 58, 18, 34, 3, 'bodyw'), T(141, 52, 'sal'));   // tanque de salmoura
+      o.push(L([[124, 30], [160, 30], [160, 63]]), R(156, 63, 58, 16, 8), L([[164, 71], [206, 71]], 'hot'), L([[172, 58], [174, 52]], 'hot'), L([[185, 58], [185, 51]], 'hot'), L([[198, 58], [196, 52]], 'hot'),
+        T(185, 96, 'UV'), L([[214, 71], [220, 71]]));   // reator UV com a lâmpada
+      o.push(L([[24, 92], [24, 100], [141, 100], [141, 92]], 'lnd'), L([[66, 92], [66, 100]], 'lnd'), L([[110, 100], [110, 110]], 'lnd'));   // rejeito
+      return o; },
+    pw_tank: () => [ // tanque de inox com filtro de respiro, nível de água, bomba sanitária e anel de recirculação com lâmpada UV na volta
+      L([[0, 30], [36, 30]]), R(36, 14, 64, 90, 14), R(60, 2, 16, 10, 2, 'bodyw'), L([[68, 12], [68, 14]]),
+      L([[38, 42], [98, 42]], 'cold'), L([[38, 46], [98, 46]], 'cold'), T(68, 74, 'H₂O'), T(68, 90, 'purif.'),
+      L([[68, 104], [68, 112], [84, 112]]), C(92, 112, 8), C(92, 112, 3, 'ln'),
+      L([[100, 112], [124, 112], [124, 24], [100, 24]], 'cold'), R(118, 28, 12, 24, 3, 'bodyw'), L([[124, 31], [124, 49]], 'hot'),
+      L([[124, 70], [150, 70]]), L([[124, 96], [150, 96]]), L([[68, 112], [68, 120]], 'lnd')],
+    shampoo_tank: () => { // tanque encamisado: motor e redutor, âncora com raspadores, camisa com água quente e fria, nível com a pérola e entradas dos ingredientes
+      const o = [R(76, 0, 18, 12, 2, 'bodyw'), L([[85, 12], [85, 18]]), R(30, 18, 110, 116, 22),
+        R(24, 94, 6, 34, 2, 'bodyw'), R(140, 94, 6, 34, 2, 'bodyw'), L([[146, 100], [158, 100]], 'hot'), L([[146, 122], [158, 122]], 'cold'),
+        L([[32, 50], [138, 50]], 'cold'), L([[85, 18], [85, 118]]), L([[42, 66], [42, 124], [128, 124], [128, 66]]), L([[42, 92], [128, 92]]),
+        L([[38, 70], [38, 118]], 'lnd'), L([[132, 70], [132, 118]], 'lnd'),
+        L([[0, 34], [30, 34]], 'hot'), L([[0, 60], [30, 60]]), L([[0, 86], [30, 86]]),
+        L([[48, 0], [48, 19]]), L([[64, 0], [64, 18]]), L([[106, 0], [106, 18]]), L([[122, 0], [122, 19]]),
+        L([[85, 134], [85, 142], [170, 142]])];
+      [[56, 76], [70, 106], [102, 72], [114, 108], [62, 116], [106, 100], [74, 82], [98, 116], [114, 82], [56, 100]].forEach(([x, y]) => o.push(C(x, y, 2.4, 'bodyw')));   // cristais perolados
+      return o; },
+    filling: () => { // bomba sanitária de lóbulos (dois rotores na carcaça), linha até a envasadora, bico dosador e frascos na esteira
+      const o = [L([[0, 60], [10, 60]]), R(10, 44, 46, 32, 12), C(25, 60, 9, 'bodyw'), C(41, 60, 9, 'bodyw'), C(25, 60, 2, 'ln'), C(41, 60, 2, 'ln'),
+        L([[33, 44], [33, 16], [112, 16], [112, 24]]), R(102, 24, 20, 12, 2, 'bodyw'), L([[112, 36], [112, 46]]),
+        L([[82, 86], [168, 86]]), C(86, 90, 4), C(164, 90, 4), L([[168, 86], [170, 86]]), L([[33, 76], [33, 100]], 'lnd'), T(140, 12, 'envase')];
+      [[86, 'bodyw'], [105, 'bodyb'], [124, 'bodyb'], [143, 'bodyb']].forEach(([x, c]) => o.push(R(x + 4, 52, 6, 6, 1, 'bodyw'), R(x, 58, 14, 26, 4, c)));
+      return o; },
     feed: () => [Pg([[2, 6], [36, 6], [50, 15], [36, 24], [2, 24]], 'bodyb'), T(22, 19, 'F', 'lblb')],
     product: () => [Pg([[4, 6], [38, 6], [52, 15], [38, 24], [4, 24]], 'bodyw'), T(24, 19, 'P', 'lblb')],
     mixer: () => [Pg([[4, 4], [52, 26], [52, 38], [4, 60]])],
@@ -20845,6 +21364,31 @@ def pfr_transiente(P, nome):
         S('18', 'MIS', 'out', 'REF', 'feed', 'Massa'), S('19', 'REF', 'product', 'CON', 'feed', 'Refinada'), S('20', 'DM', 'out2', 'CON', 'fat', 'Manteiga'),
         S('21', 'FLE', 'out', 'CON', 'emulsifier', 'Lecitina'), S('E3', 'EC', 'eo', 'CON', 'q_in', 'Motores'), S('22', 'CON', 'vapor', 'P5', 'in', 'Exaustão'),
         S('23', 'CON', 'product', 'TEM', 'feed', 'Conchado'), S('E4', 'TEM', 'q_out', 'EF', 'ei', 'Água gelada'), S('24', 'TEM', 'product', 'P6', 'in', 'Barras')] } },
+    { key: 'shampoo-capilar', title: 'Cosméticos: fábrica de shampoo capilar perolado — pré-tratamento da água (filtro de areia, carvão ativado, abrandador e UV), tanque de água purificada, tanque de mistura encamisado com agitador âncora e envase (batelada de 51 kg)', fs: {
+      name: 'Fábrica de shampoo capilar perolado (batelada de 51 kg)', theme: 'shampoo', fixedLayout: true,
+      components: ['water', 'ca-bicarbonate', 'co2-aq', 'free-chlorine', 'cacl2', 'clay', 'nahco3', 'nacl', 'sles', 'capb', 'cs-glycerol', 'egds', 'phenoxyethanol', 'fragrance', 'citric-acid'], model: 'IDEAL',
+      blocks: [
+        { id: 'F0', x: 60, y: 175, type: 'feed', name: 'C-00 Água bruta clorada', params: { T: 25, P: 1.01325, vf: '', flow: 45, flowUnit: 'kg/h', basis: 'mássica',
+          composition: { water: 0.9997388, 'ca-bicarbonate': 0.000243, 'co2-aq': 0.00001, 'free-chlorine': 0.00000074, clay: 0.0000075 } } },
+        { id: 'PT', x: 190, y: 160, type: 'pw_pretreat', name: 'PT-01 Pré-tratamento da água', params: {} },
+        { id: 'PR', x: 400, y: 330, type: 'product', name: 'Rejeito (esgoto)' },
+        { id: 'TA', x: 510, y: 201, type: 'pw_tank', name: 'TQ-01 Água purificada (300 L)', params: {} },
+        { id: 'PE', x: 700, y: 400, type: 'product', name: 'Excedente (fica no tanque)' },
+        { id: 'F2', x: 690, y: 308, type: 'feed', name: 'C-02 LESS 27 % (10,20 kg)', params: { T: 25, P: 1.01325, vf: '', flow: 10.2, flowUnit: 'kg/h', basis: 'mássica', composition: { sles: 0.27, water: 0.73 } } },
+        { id: 'F3', x: 680, y: 160, type: 'feed', name: 'C-03 Betaína 30 % (2,55 kg)', params: { T: 25, P: 1.01325, vf: '', flow: 2.55, flowUnit: 'kg/h', basis: 'mássica', composition: { capb: 0.30, nacl: 0.05, water: 0.65 } } },
+        { id: 'F4', x: 680, y: 110, type: 'feed', name: 'C-04 Glicerina (1,02 kg)', params: { T: 25, P: 1.01325, vf: '', flow: 1.02, flowUnit: 'kg/h', basis: 'mássica', composition: { 'cs-glycerol': 0.995, water: 0.005 } } },
+        { id: 'F5', x: 680, y: 60, type: 'feed', name: 'C-05 Perolizante EGDS (0,765 kg)', params: { T: 25, P: 1.01325, vf: '', flow: 0.765, flowUnit: 'kg/h', basis: 'mássica', composition: { egds: 1 } } },
+        { id: 'F6', x: 680, y: 10, type: 'feed', name: 'C-06 Aditivos e corretores (1,53 kg)', params: { T: 25, P: 1.01325, vf: '', flow: 1.53, flowUnit: 'kg/h', basis: 'mássica',
+          composition: { nacl: 0.5666667, phenoxyethanol: 0.1666667, fragrance: 0.1666667, 'citric-acid': 0.0999999 } } },
+        { id: 'TM', x: 800, y: 237, type: 'shampoo_tank', name: 'TM-01 Tanque de mistura (100 L)', params: {} },
+        { id: 'EN', x: 1040, y: 319, type: 'filling', name: 'ENV-01 Bomba e envasadora', params: {} },
+        { id: 'P1', x: 1290, y: 390, type: 'product', name: 'C-08 Shampoo em frascos de 300 mL' },
+        { id: 'P2', x: 1160, y: 480, type: 'product', name: 'Perdas (limpeza)' }],
+      streams: [S('1', 'F0', 'out', 'PT', 'feed', 'C-00'), S('2', 'PT', 'product', 'TA', 'feed', 'Purificada'), S('3', 'PT', 'waste', 'PR', 'in', 'Rejeito'),
+        S('4', 'TA', 'hot', 'TM', 'water_hot', 'C-01a'), S('5', 'TA', 'cold', 'TM', 'water_cold', 'C-01b'), S('6', 'TA', 'stock', 'PE', 'in', 'Excedente'),
+        S('7', 'F2', 'out', 'TM', 'anionic', 'C-02'), S('8', 'F3', 'out', 'TM', 'amphoteric', 'C-03'), S('9', 'F4', 'out', 'TM', 'glycerin', 'C-04'),
+        S('10', 'F5', 'out', 'TM', 'pearl', 'C-05'), S('11', 'F6', 'out', 'TM', 'additives', 'C-06'),
+        S('12', 'TM', 'out', 'EN', 'feed', 'C-07'), S('13', 'EN', 'product', 'P1', 'in', 'C-08'), S('14', 'EN', 'loss', 'P2', 'in', 'Perdas')] } },
     { key: 'etoh-mccabe', title: 'Destilação etanol/água — McCabe-Thiele (com o vídeo da história do diagrama, 1925)', fs: {
       name: 'Destilação etanol-água', components: ['ethanol', 'water'], model: 'NRTL', video: 'midia/mccabe-thiele.mp4',
       blocks: [
@@ -23058,7 +23602,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', cyclone_preheater: 'TC', clinker_cooler: 'RC', cement_mill: 'MC', sulfur_burner: 'FE', so2_converter: 'CV', acid_tower: 'TA', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', cooling_tower: 'TRF', deaerator: 'DA', reactor_kinetics: 'CIN', chem_kinetics: 'RQ', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', cyclone_preheater: 'TC', clinker_cooler: 'RC', cement_mill: 'MC', sulfur_burner: 'FE', so2_converter: 'CV', acid_tower: 'TA', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', cooling_tower: 'TRF', deaerator: 'DA', reactor_kinetics: 'CIN', chem_kinetics: 'RQ', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN', pw_pretreat: 'PT', pw_tank: 'TQ', shampoo_tank: 'TM', filling: 'ENV' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -23175,11 +23719,13 @@ def pfr_transiente(P, nome):
     else state.streams = state.streams.filter(s => s.id !== sel.id);
     pfd.sel = null; afterChange(true); renderProps();
   }
+  function shampooSync() { const sv = $('#pfd'); if (sv) sv.classList.toggle('shampoo', state.theme === 'shampoo'); }
   function afterChange(structural) {
     results = null; setStatus('idle', 'Alterado — simule novamente');
     $('#emptyHint').hidden = state.blocks.length > 0; $('#projName').value = state.name;
     if (SF.choc) SF.choc.sync(state.theme === 'chocolate');   // exemplo da fábrica de chocolate: correntes de chocolate e botões do improviso
     if (SF.agua) SF.agua.sync(state.theme === 'agua');   // exemplo da ETA: correntes cor de água e botão da abertura
+    shampooSync();   // exemplo da fábrica de shampoo: correntes cor de pérola
     vidSync();   // exemplo com vídeo de abertura: botão no fluxograma
     pfd.render(); persist(); updateCompSummary();
     if (structural) renderProps();
@@ -23387,6 +23933,19 @@ def pfr_transiente(P, nome):
     eta_filter: { ex: 'ETA convencional para 100 mil habitantes', items: [
       ['Correntes', 'entrada <b>água decantada</b>; saídas <b>água filtrada</b> e <b>água de lavagem</b> (média do dia, com os sólidos retidos).'],
       ['Operação', '6 filtros a 300 m³/(m²·d); 0,6 m de antracito de 1,0 mm sobre 0,3 m de areia de 0,5 mm; 2,2 m de carga disponível; lavagem a 0,8 m/min por 10 min.']] },
+    pw_pretreat: { ex: 'Cosméticos: fábrica de shampoo capilar perolado', items: [
+      ['Correntes', 'entrada <b>água bruta</b> (Água com dureza, cloro e turbidez); saídas <b>água purificada</b> e <b>rejeito</b> (retrolavagens e salmoura da regeneração). O sal da regeneração entra pelo campo.'],
+      ['Operação', '200 L/h por 5 h por semana; areia a 12 m/h; carvão com EBCT de 5 min; 10 L de resina com 50 g CaCO₃/L e 150 g de sal por litro; UV de 40 mJ/cm².']] },
+    pw_tank: { ex: 'Cosméticos: fábrica de shampoo capilar perolado', items: [
+      ['Correntes', 'entrada <b>água purificada</b>; saídas <b>fase quente</b>, <b>fase fria</b> e <b>excedente</b> (o que fica no tanque).'],
+      ['Operação', 'tanque de 300 L com 90 % de nível; 34,935 kg de água por batelada, 40 % para a fase quente; 4 bateladas por dia; anel de 1" a 2 000 L/h.']] },
+    shampoo_tank: { ex: 'Cosméticos: fábrica de shampoo capilar perolado', items: [
+      ['Correntes', 'entradas <b>água da fase quente</b>, <b>água da fase fria</b> e <b>tensoativo aniônico</b> (pela esquerda) e <b>anfótero</b>, <b>glicerina</b>, <b>perolizante</b> e <b>aditivos</b> (por cima), todas opcionais; saída <b>shampoo a granel</b>, com a viscosidade.'],
+      ['Batelada', 'as vazões das correntes (kg/h) são lidas como kg por batelada: no exemplo, 51 kg no tanque de 100 L.'],
+      ['Operação', 'fase quente a 75 °C (camisa a 95 °C), fusão em 20 min, resfriamento lento a 0,8 °C/min até 45 °C, aditivos abaixo de 40 °C; âncora a 40 rpm.']] },
+    filling: { ex: 'Cosméticos: fábrica de shampoo capilar perolado', items: [
+      ['Correntes', 'entrada <b>shampoo a granel</b>; saídas <b>shampoo envasado</b> e <b>perdas</b> (retido na linha).'],
+      ['Operação', 'bomba de lóbulos de 100 L/h e 1 kW; frascos de 300 mL; 1,5 % de perdas; 6 m de linha de 22,1 mm e 1,5 m de desnível.']] },
     eta_disinfect: { ex: 'ETA convencional para 100 mil habitantes', items: [
       ['Correntes', 'entrada <b>água filtrada</b>; saída <b>água tratada</b> com cloro, flúor e pH corrigido. Os produtos entram pelas doses (mg/L).'],
       ['Operação', '2 mg/L de cloro gás com 0,5 mg/L de demanda; 30 min de contato com T₁₀/T = 0,5; 0,7 mg/L de fluoreto; 16 mg/L de cal depois do contato.']] },
@@ -24812,8 +25371,8 @@ def pfr_transiente(P, nome):
     SF.examples.forEach(ex => {
       const main = (ex.fs.blocks.find(b => b.type !== 'feed' && b.type !== 'product') || ex.fs.blocks[0]).type;
       const b = document.createElement('button'); b.className = 'wexc'; b.type = 'button';
-      const choc = ex.fs.theme === 'chocolate', agua = ex.fs.theme === 'agua'; if (choc) b.classList.add('wexc-choc'); if (agua) b.classList.add('wexc-agua');
-      b.innerHTML = IC.paletteIcon(main) + '<span>' + (agua ? '<b class="wex-new">NOVO</b>' : '') + esc(ex.title) + '</span>';
+      const choc = ex.fs.theme === 'chocolate', agua = ex.fs.theme === 'agua', sham = ex.fs.theme === 'shampoo'; if (choc) b.classList.add('wexc-choc'); if (agua) b.classList.add('wexc-agua'); if (sham) b.classList.add('wexc-shampoo');
+      b.innerHTML = IC.paletteIcon(main) + '<span>' + (agua || sham ? '<b class="wex-new">NOVO</b>' : '') + esc(ex.title) + '</span>';
       b.onclick = () => { closeWelcome(); loadFlowsheet(ex.fs); runSimulation(true); chocOpen(ex); toast('Exemplo carregado: ' + ex.title); };
       grid.appendChild(b);
     });
@@ -24922,6 +25481,7 @@ def pfr_transiente(P, nome):
   $('#projName').value = state.name; $('#emptyHint').hidden = state.blocks.length > 0; updateCompSummary();
   if (SF.choc) SF.choc.sync(state.theme === 'chocolate');
   if (SF.agua) SF.agua.sync(state.theme === 'agua');
+  shampooSync();
   vidSync();
   try { localStorage.setItem('simulafacil.boot', '1'); } catch (e) { /* */ }
   requestAnimationFrame(() => withComps(state, () => {

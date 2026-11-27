@@ -1,3 +1,16 @@
+SIMULA FÁCIL IA 5.13.1 – Vídeo do aluno Silas: evaporador com saída de energia e cristalizador (27/11/2026)
+===========================================================================================================
+
+- Novo vídeo em "Vídeos dos alunos" (agora são 5), em primeiro lugar: "Evaporador com saída de energia e
+  cristalizador", de Silas Stevan Tavares (Engenharia Química UFSJ), https://youtu.be/PV1KFt4otjM. Aparece no
+  simulador (botão dos vídeos, tela inicial e janela dos tutoriais) e na página de apresentação.
+- Nova ordem dos "Vídeos dos alunos": 1º Silas Stevan Tavares, 2º Bruno Gontijo de Carvalho, 3º Darciele
+  Permanhani Dalcin, 4º Ana Clara Alves de Macedo, 5º Arthur Luiz Barcelos Rocha.
+- A etiqueta vermelha "NOVO" passou do vídeo do Arthur para o do Silas.
+- O exemplo "Evaporador de triplo efeito com saída de energia" ganhou o botão "🎓 Vídeo" no fluxograma, que abre o
+  vídeo do Silas (só com o clique).
+- Dados estruturados (Google): o vídeo do Silas entrou como VideoObject.
+
 SIMULA FÁCIL IA 5.13.0 – Refino do açúcar: osmose reversa, carvão ativado e resina de troca iônica (27/11/2026)
 ===============================================================================================================
 

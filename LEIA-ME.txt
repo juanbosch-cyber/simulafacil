@@ -1,3 +1,14 @@
+SIMULA FÁCIL IA 5.12.3 – Vídeo do aluno Arthur: destilação (27/11/2026)
+========================================================================
+
+- Novo vídeo em "Vídeos dos alunos" (agora são 4): "Destilação", de Arthur Luiz Barcelos Rocha (Engenharia Química
+  UFSJ), https://youtu.be/12yBgNpM9P0. Aparece no simulador (botão dos vídeos, tela inicial e janela dos tutoriais) e
+  na página de apresentação.
+- Nova ordem dos "Vídeos dos alunos": 1º Bruno Gontijo de Carvalho (destilação), 2º Darciele Permanhani Dalcin
+  (Laticínios – Leite em pó), 3º Ana Clara Alves de Macedo (refrigerador), 4º Arthur Luiz Barcelos Rocha (destilação).
+- A etiqueta vermelha "NOVO" passou do vídeo da Darciele para o do Arthur.
+- Dados estruturados (Google): o vídeo do Arthur entrou como VideoObject.
+
 SIMULA FÁCIL IA 5.12.2 – Vídeo da Darciele em primeiro lugar (26/11/2026)
 ==========================================================================
 

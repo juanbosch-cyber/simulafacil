@@ -1,3 +1,19 @@
+SIMULA FÁCIL IA 5.14.0 – Evaporadores de duplo e triplo efeito com condensador acoplado (27/11/2026)
+====================================================================================================
+
+- Dois equipamentos novos em "Evaporadores", com ícone, equações e teoria (sem exemplo novo):
+  * Evaporador de duplo efeito com condensador acoplado (evap_cond2);
+  * Evaporador de triplo efeito com condensador acoplado (evap_cond3).
+  O vapor de cada efeito aquece o seguinte e o vapor do último condensa no próprio equipamento; o calor latente sai
+  pela corrente de energia de cima (q_out), pronta para aquecer outro equipamento (por exemplo, a entrada de energia
+  q_in de outro evaporador com condensador acoplado, de efeito único, duplo ou triplo).
+- Sem energia na entrada: vapor vivo e o mesmo cálculo do evaporador de múltiplo efeito (áreas iguais; com os mesmos
+  dados, o duplo dá exatamente os números do evaporador de duplo efeito). Com a energia de outro equipamento: a
+  energia recebida fixa quanto evapora; as saturações dos efeitos ficam igualmente espaçadas entre a condensação da
+  energia recebida e a do último efeito, e o bloco calcula a área de cada efeito e avisa de cruzamento de temperatura.
+- Resultados: energia que sai, temperatura dela, pressão máxima do evaporador seguinte, cascata acumulada (água
+  evaporada, vapor vivo e economia) e gráficos das temperaturas e do aproveitamento da energia.
+
 SIMULA FÁCIL IA 5.13.1 – Vídeo do aluno Silas: evaporador com saída de energia e cristalizador (27/11/2026)
 ===========================================================================================================
 

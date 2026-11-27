@@ -1201,7 +1201,7 @@ body.kb .m-fab-ex { display: none; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.13.1</span><em>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.14.0</span><em>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <button type="button" class="test-badge" id="btnAviso" title="Uso acadêmico e de ensino · versão em fase de testes (clique para ler o aviso)"><span>EM TESTES</span></button>
@@ -1356,7 +1356,7 @@ body.kb .m-fab-ex { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.13.1</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.14.0</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
         <p class="wsub">Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -4451,6 +4451,24 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Ps', label: 'Pressão do vapor de aquecimento (saturado), só sem corrente de energia na entrada', u: 'kPa abs', def: 205.5 },
       { k: 'PN', label: 'Pressão no espaço de vapor do efeito (menor que a do efeito anterior)', u: 'kPa abs', def: 101.325 },
       { k: 'U', label: 'Coeficiente global de troca térmica U', u: 'W/m²·K', type: 'matrix', def: '3000' },
+      { k: 'b1', label: 'Elevação do ponto de ebulição: BPR = b1·x + b2·x² — coeficiente b1', u: '°C', def: 1.78 },
+      { k: 'b2', label: 'Elevação do ponto de ebulição — coeficiente b2 (b1 = b2 = 0 despreza a BPR)', u: '°C', def: 6.22 },
+      { k: 'cp0', label: 'Calor específico da solução: cp = cp0 − cp1·x — cp0', u: 'kJ/kg·K', def: 4.19 },
+      { k: 'cp1', label: 'Calor específico da solução — cp1', u: 'kJ/kg·K', def: 2.35 }] },
+    evap_cond2: { label: 'Evaporador de duplo efeito com condensador acoplado: o vapor de cada efeito aquece o seguinte e a energia da condensação do vapor do 2º efeito sai por uma corrente de energia, pronta para aquecer outro equipamento', cat: 'Evaporadores', ins: ['feed'], outs: ['product', 'condensate'], eins: ['q_in'], eouts: ['q_out'], params: [
+      { k: 'xP', label: 'Fração mássica de soluto no concentrado do 2º efeito (só sem corrente de energia na entrada)', u: '0–1', def: 0.5 },
+      { k: 'Ps', label: 'Pressão do vapor de aquecimento (saturado) do 1º efeito, só sem corrente de energia na entrada', u: 'kPa abs', def: 205.5 },
+      { k: 'PN', label: 'Pressão no 2º efeito: fixa a temperatura da energia que sai (mais alta = energia mais quente para o próximo equipamento)', u: 'kPa abs', def: 40 },
+      { k: 'U', label: 'Coeficiente global U de cada efeito (um valor por linha, do 1º ao 2º)', u: 'W/m²·K', type: 'matrix', def: '3123; 1987' },
+      { k: 'b1', label: 'Elevação do ponto de ebulição: BPR = b1·x + b2·x² — coeficiente b1', u: '°C', def: 1.78 },
+      { k: 'b2', label: 'Elevação do ponto de ebulição — coeficiente b2 (b1 = b2 = 0 despreza a BPR)', u: '°C', def: 6.22 },
+      { k: 'cp0', label: 'Calor específico da solução: cp = cp0 − cp1·x — cp0', u: 'kJ/kg·K', def: 4.19 },
+      { k: 'cp1', label: 'Calor específico da solução — cp1', u: 'kJ/kg·K', def: 2.35 }] },
+    evap_cond3: { label: 'Evaporador de triplo efeito com condensador acoplado: o vapor de cada efeito aquece o seguinte e a energia da condensação do vapor do 3º efeito sai por uma corrente de energia, pronta para aquecer outro equipamento', cat: 'Evaporadores', ins: ['feed'], outs: ['product', 'condensate'], eins: ['q_in'], eouts: ['q_out'], params: [
+      { k: 'xP', label: 'Fração mássica de soluto no concentrado do 3º efeito (só sem corrente de energia na entrada)', u: '0–1', def: 0.5 },
+      { k: 'Ps', label: 'Pressão do vapor de aquecimento (saturado) do 1º efeito, só sem corrente de energia na entrada', u: 'kPa abs', def: 205.5 },
+      { k: 'PN', label: 'Pressão no 3º efeito: fixa a temperatura da energia que sai (mais alta = energia mais quente para o próximo equipamento)', u: 'kPa abs', def: 31.2 },
+      { k: 'U', label: 'Coeficiente global U de cada efeito (um valor por linha, do 1º ao 3º)', u: 'W/m²·K', type: 'matrix', def: '3123; 1987; 1136' },
       { k: 'b1', label: 'Elevação do ponto de ebulição: BPR = b1·x + b2·x² — coeficiente b1', u: '°C', def: 1.78 },
       { k: 'b2', label: 'Elevação do ponto de ebulição — coeficiente b2 (b1 = b2 = 0 despreza a BPR)', u: '°C', def: 6.22 },
       { k: 'cp0', label: 'Calor específico da solução: cp = cp0 − cp1·x — cp0', u: 'kJ/kg·K', def: 4.19 },
@@ -8052,6 +8070,81 @@ window.SIMULAFACIL_CONFIG = {
     }
     return { out, res: decBR(res), warn: decW(warn), plots, duty: steam ? Qin / 3.6 : null, eports: { q_in: Qin / 3.6, q_out: Qout / 3.6 }, eT: { q_out: Tv }, eAcc: { q_out: { V: Vtot, S: S0 } } };
   };
+
+  /* evaporadores de duplo e triplo efeito com condensador acoplado: o vapor de cada efeito aquece o seguinte e o vapor do último
+     condensa no próprio equipamento; o calor latente sai pela corrente de energia (porta de cima), pronto para aquecer outro equipamento.
+     Sem energia na entrada: vapor vivo e o mesmo modelo de áreas iguais do múltiplo efeito. Com energia de outro equipamento: a energia
+     recebida fixa quanto evapora, e as temperaturas de saturação dos efeitos ficam igualmente espaçadas entre a condensação da energia
+     recebida e a do último efeito. */
+  function evapCondN(N) {
+    return function (th, b, ins) {
+      const s = ins.feed, p = b.params, warn = [];
+      if (!s || !(s.F > 0)) throw new Error('conecte a alimentação');
+      const iw = th.ids.indexOf('water'); if (iw < 0) throw new Error('inclua a água entre os componentes (o solvente evaporado)');
+      const mw = th.c.map(c => c.mw), mass = s.flows.map((f, i) => f * mw[i] * 3.6), F = mass.reduce((a, v) => a + v, 0), xF = 1 - mass[iw] / F;
+      if (!(xF > 0)) throw new Error('a alimentação não tem soluto (só água)');
+      let Us = String(p.U == null ? '' : p.U).split(/[;\n\s]+/).map(t => parseFloat(t.replace(',', '.'))).filter(v => isFinite(v) && v > 0);
+      if (!Us.length) throw new Error('informe o coeficiente U de cada efeito');
+      if (Us.length < N) { warn.push('foram informados ' + Us.length + ' valores de U para ' + N + ' efeitos: o último valor foi repetido'); while (Us.length < N) Us.push(Us[Us.length - 1]); }
+      Us = Us.slice(0, N);
+      const PNk = num(p.PN, 30), PN = PNk * 1000, b1 = num(p.b1, 1.78), b2 = num(p.b2, 6.22), cp0 = num(p.cp0, 4.19), cp1 = num(p.cp1, 2.35);
+      if (!(PN > 0)) throw new Error('informe a pressão no último efeito');
+      const eIn = ins.q_in && ins.q_in.energy && ins.q_in.Q > 0 ? ins.q_in : null, steam = !eIn, kmol = kgph => kgph / 3.6 / mw[iw];
+      let V, T, Tv, bpr, x, A, Pe, Th, Q, S = null, xo, prod;
+      if (steam) {   // vapor vivo: o mesmo cálculo do evaporador de múltiplo efeito (áreas iguais)
+        const base = IMPL.evap_multi(th, { params: Object.assign({}, p, { N, U: Us.join('; '), PN: PNk }) }, { feed: s }), r = base.evap.r;
+        (base.warn || []).forEach(w => warn.push(w));
+        V = r.V; T = r.T; Tv = r.Tv; bpr = r.bpr; x = r.x; A = r.A; S = r.S; prod = base.out.product; xo = x[N - 1];
+        Th = [K2C(STEAM.Tsat(num(p.Ps, 205.5) * 1000))].concat(Tv.slice(0, -1)); Pe = Tv.map(t => STEAM.psat(C2K(t)));
+        const lamS = STEAM.hV(C2K(Th[0])) - STEAM.hL(C2K(Th[0])); Q = [S * lamS];
+        for (let i = 1; i < N; i++) Q.push(V[i - 1] * (STEAM.hV(C2K(Tv[i - 1])) + 1.884 * bpr[i - 1] - STEAM.hL(C2K(Tv[i - 1]))));
+      } else {       // energia recebida de outro equipamento
+        const T0 = eIn.T != null ? eIn.T : K2C(STEAM.Tsat(num(p.Ps, 205.5) * 1000)), TN = K2C(STEAM.Tsat(PN));
+        if (eIn.T == null) warn.push('a corrente de energia não informa a temperatura de condensação (valor digitado): foi usada a do vapor de aquecimento (' + T0.toFixed(1) + ' °C)');
+        if (!(T0 - TN > 2 * N)) throw new Error(decW(['a energia recebida condensa a ' + T0.toFixed(1) + ' °C e o último efeito satura a ' + TN.toFixed(1) + ' °C: falta diferença de temperatura para ' + N + ' efeitos. Reduza a pressão do último efeito (abaixo de ' + (STEAM.psat(C2K(T0 - 8 * N)) / 1000).toFixed(1) + ' kPa)'])[0]);
+        V = []; T = []; Tv = []; bpr = []; x = []; A = []; Pe = []; Th = []; Q = [];
+        let Fi = F, xi = xF, TFi = K2C(s.T), Qi = eIn.Q * 3.6, Thi = T0;
+        for (let i = 0; i < N; i++) {
+          const Tvi = T0 - (T0 - TN) * (i + 1) / N, Pi = i === N - 1 ? PN : STEAM.psat(C2K(Tvi));
+          let e; try { e = evapEnergy({ F: Fi, xF: xi, TF: TFi, Q: Qi, PN: Pi, b1, b2, cp0, cp1 }); } catch (err) { throw new Error(decW(['efeito ' + (i + 1) + ': ' + err.message])[0]); }
+          const dT = Thi - e.T;
+          if (!(dT > 0)) throw new Error(decW(['cruzamento de temperatura no efeito ' + (i + 1) + ': o vapor que o aquece condensa a ' + Thi.toFixed(1) + ' °C e a solução ferve a ' + e.T.toFixed(1) + ' °C (BPR de ' + e.bpr.toFixed(1) + ' °C). Reduza a pressão do último efeito para abrir as diferenças de temperatura'])[0]);
+          V.push(e.V); T.push(e.T); Tv.push(e.Tv); bpr.push(e.bpr); x.push(e.x); Pe.push(Pi); Th.push(Thi); Q.push(Qi); A.push(Qi / 3.6 / (Us[i] * dT));
+          Qi = e.V * (e.H - STEAM.hL(C2K(e.Tv))); Fi -= e.V; xi = e.x; TFi = e.T; Thi = e.Tv;
+        }
+        xo = x[N - 1];
+        const fP = s.flows.map((f, i) => (i === iw ? kmol(Fi * (1 - xo)) : f));
+        prod = mkStream(th, fP, C2K(T[N - 1]), Math.max(PN, 101325));
+      }
+      const Vt = V.reduce((a, v) => a + v, 0), Hv = STEAM.hV(C2K(Tv[N - 1])) + 1.884 * bpr[N - 1], Qout = V[N - 1] * (Hv - STEAM.hL(C2K(Tv[N - 1])));   // kJ/h
+      const Tc = V.reduce((a, v, i) => a + v * Tv[i], 0) / Vt, fC = new Array(th.n).fill(0); fC[iw] = kmol(Vt);
+      const out = { product: prod, condensate: mkStream(th, fC, C2K(Tc), Math.max(101325, 1.02 * STEAM.psat(C2K(Math.max(...Tv))))) };
+      const kw = v => +(v / 3600).toFixed(1), acc = eIn && eIn.acc ? eIn.acc : null, S0 = steam ? S : acc ? acc.S : null, Vcum = Vt + (acc ? acc.V : 0);
+      for (let i = 0; i < N; i++) if (Th[i] - T[i] < 5) warn.push('efeito ' + (i + 1) + ': diferença de temperatura de só ' + (Th[i] - T[i]).toFixed(1) + ' °C; a área fica muito grande');
+      const res = [{ k: 'Modo de aquecimento do 1º efeito', v: steam ? 'vapor saturado a ' + num(p.Ps, 205.5) + ' kPa (' + Th[0].toFixed(1) + ' °C)' : 'corrente de energia recebida (condensação a ' + Th[0].toFixed(1) + ' °C)', u: '' },
+        { k: 'Calor recebido pelo 1º efeito', v: kw(Q[0]), u: 'kW' }];
+      if (S != null) res.push({ k: 'Vapor de aquecimento consumido', v: +S.toFixed(1), u: 'kg/h' }, { k: 'Economia de vapor (água evaporada / vapor)', v: +(Vt / S).toFixed(3), u: 'kg/kg' });
+      res.push({ k: 'Água evaporada total', v: +Vt.toFixed(1), u: 'kg/h' }, { k: 'Concentrado (fração mássica de soluto)', v: (F - Vt).toFixed(1) + ' kg/h (' + (100 * xo).toFixed(2) + ' %)', u: '' },
+        { k: 'Área total', v: +A.reduce((a, v) => a + v, 0).toFixed(2), u: 'm²' });
+      for (let i = 0; i < N; i++) res.push({ k: 'Efeito ' + (i + 1) + ': P / T ebulição / BPR / ΔT / x / V / A', v: (Pe[i] / 1000).toFixed(2) + ' kPa / ' + T[i].toFixed(2) + ' °C / ' + bpr[i].toFixed(2) + ' / ' + (Th[i] - T[i]).toFixed(2) + ' / ' + x[i].toFixed(4) + ' / ' + V[i].toFixed(0) + ' kg/h / ' + A[i].toFixed(2) + ' m²', u: '' });
+      if (acc && S0 > 0) res.push({ k: 'Cascata de equipamentos: água evaporada acumulada / vapor vivo / economia', v: Vcum.toFixed(0) + ' kg/h / ' + S0.toFixed(0) + ' kg/h / ' + (Vcum / S0).toFixed(2) + ' kg/kg', u: '' });
+      res.push({ k: 'Energia liberada no condensador acoplado (saída de energia)', v: kw(Qout), u: 'kW' },
+        { k: 'Temperatura de condensação do vapor do último efeito (potencial térmico da energia que sai)', v: +Tv[N - 1].toFixed(2), u: '°C' },
+        { k: 'Fração da energia recebida que sai pela corrente de energia', v: +(Qout / Q[0]).toFixed(3), u: '' },
+        { k: 'Pressão máxima do equipamento seguinte, se for um evaporador (ΔT mínimo de 5 °C, sem BPR)', v: +(STEAM.psat(C2K(Tv[N - 1] - 5)) / 1000).toFixed(2), u: 'kPa' },
+        { k: 'Condensado total (vapor dos ' + N + ' efeitos condensado; o condensado do vapor vivo volta à caldeira)', v: +Vt.toFixed(1), u: 'kg/h' });
+      const eff = T.map((t, i) => i + 1);
+      const plots = [{ kind: 'curves', title: 'Temperaturas ao longo dos efeitos (a última condensação vira a energia que sai)', data: { xLabel: 'Efeito (0 = energia de aquecimento)', yLabel: 'Temperatura (°C)', series: [
+          { name: 'Vapor que aquece o efeito (condensação)', x: eff.map(k => k - 1), y: Th, markers: true, color: '#d1302b' },
+          { name: 'Solução em ebulição', x: eff, y: T, markers: true, color: '#2563c9' },
+          { name: 'Condensação do vapor produzido (T − BPR)', x: eff, y: Tv, markers: true, dash: 'dot', color: '#8a8f98' }] } },
+        { kind: 'bars', title: 'Aproveitamento da energia (kW)', data: { categories: ['Calor recebido no 1º efeito'].concat(eff.slice(1).map(i => 'Calor no ' + i + 'º efeito'), ['Saída de energia (condensador acoplado)']), xLabel: '', yLabel: 'kW',
+          series: [{ name: 'kW', y: Q.map(q => q / 3600).concat([Qout / 3600]), color: '#e07b39' }] } }];
+      return { out, res: decBR(res), warn: decW(warn), plots, duty: steam ? Q[0] / 3.6 : null, eports: { q_in: Q[0] / 3.6, q_out: Qout / 3.6 }, eT: { q_out: Tv[N - 1] }, eAcc: { q_out: { V: Vcum, S: S0 } } };
+    };
+  }
+  IMPL.evap_cond2 = evapCondN(2);
+  IMPL.evap_cond3 = evapCondN(3);
 
   /* um biorreator (batelada ou quimiostato) e dois biorreatores em série: o mesmo modelo de Tosetto com N = 1 ou N = 2 e vazão única */
   IMPL.bioreactor_1 = function (th, b, ins) {
@@ -16053,6 +16146,10 @@ window.SIMULAFACIL_CONFIG = {
     eqs: m.eqs.concat([eq(sub(Q, 'saída') + ' = ' + i('V') + '·(' + sub(i('H'), 'V') + ' − ' + sub(i('h'), 'L,sat') + ')', 'calor latente liberado ao condensar o vapor produzido: é a corrente de energia que aquece o próximo efeito'),
       eq(sub(Q, 'entrada') + ' = ' + F + '(' + sub(i('h'), 'L') + ' − ' + sub(i('h'), 'F') + ') + ' + i('V') + '(' + sub(i('H'), 'V') + ' − ' + sub(i('h'), 'L') + ')', 'com a energia dada (efeito 2 em diante) esta equação fixa quanto evapora'),
       eq(sub(i('T'), 'cond') + ' &gt; ' + sub(i('T'), 'ebulição') + ',&nbsp; ' + i('A') + ' = ' + fr(sub(Q, 'entrada'), i('U') + '(' + sub(i('T'), 'cond') + ' − ' + sub(i('T'), 'ebulição') + ')'), 'o calor só flui se a condensação do efeito anterior estiver mais quente: por isso os efeitos seguintes operam sob vácuo')]) }); };
+  [2, 3].forEach(n => { M['evap_cond' + n] = p => { const m = M.evap_multi(Object.assign({}, p, { N: n })); return Object.assign({}, m, { name: 'Evaporador de ' + (n === 2 ? 'duplo' : 'triplo') + ' efeito com condensador acoplado: cascata de efeitos e energia liberada na condensação do vapor do último',
+    eqs: m.eqs.concat([eq(sub(Q, 'saída') + ' = ' + sub(i('V'), n) + '·(' + sub(i('H'), 'V,' + n) + ' − ' + sub(i('h'), 'L,sat')+ ')', 'o vapor do último efeito condensa no condensador acoplado; o calor latente sai pela corrente de energia'),
+      eq(sub(Q, 'i+1') + ' = ' + sub(i('V'), 'i') + '·(' + sub(i('H'), 'V,i') + ' − ' + sub(i('h'), 'L,i') + '),&nbsp; ' + sub(i('A'), 'i') + ' = ' + fr(sub(Q, 'i'), sub(i('U'), 'i') + '(' + sub(i('T'), 'cond,i') + ' − ' + sub(i('T'), 'i') + ')'), 'com energia de outro equipamento: cada efeito recebe o calor do vapor do anterior'),
+      eq(sub(i('T'), 'sat,i') + ' = ' + sub(i('T'), '0') + ' − (' + sub(i('T'), '0') + ' − ' + sub(i('T'), 'sat,' + n) + ')·' + fr(i('i'), n), 'com energia de outro equipamento: saturações igualmente espaçadas entre a energia recebida e o último efeito')]) }); }; });
   const filtEq = rot => ({ name: rot ? 'Filtro rotativo a vácuo: filtração a pressão constante' : 'Filtro-prensa de placas: filtração a pressão constante',
     eqs: [eq(t + ' = ' + fr(i('μ') + i('α') + i('c'), '2Δ' + P) + sup(i('v'), '2') + ' + ' + fr(i('μ') + sub(i('R'), 'm'), 'Δ' + P) + i('v'), 'tempo para filtrar o volume v por área'),
       eq(i('c') + ' = ' + fr(sub(i('ṁ'), 's,torta'), sub(i('Q'), 'filtrado')), 'sólido depositado por volume de filtrado'),
@@ -16177,6 +16274,14 @@ window.SIMULAFACIL_CONFIG = {
     filter_rotary: { ex: ex('filtracao-continua', 'Filtração contínua: filtro-prensa e filtro rotativo'), p: [
       'No filtro rotativo a vácuo, o tambor gira parcialmente mergulhado na polpa; o vácuo forma a torta sobre a superfície e uma faca a raspa. O tempo de formação da torta é t_f = φ/n, com φ a fração mergulhada e n a rotação. Com a mesma equação de filtração do filtro-prensa, o simulador calcula a área, o comprimento do tambor e a espessura da torta.',
       'A rotação é o parâmetro de projeto: girar mais rápido reduz a área, mas a torta fica fina e difícil de raspar (abaixo de cerca de 3 mm). O vácuo não passa de cerca de 85 kPa. Saem o filtrado e a torta.'] },
+    evap_cond2: { p: [
+      'Este ícone junta 2 efeitos em série e o condensador acoplado. O vapor de cada efeito aquece o seguinte, que opera a uma pressão menor; o vapor do último efeito condensa dentro do próprio equipamento, e o seu calor latente sai pela corrente de energia (porta de cima). Essa energia pode aquecer outro equipamento: ligue-a à entrada de energia de um evaporador com condensador acoplado (de efeito único, duplo ou triplo) para continuar a cascata.',
+      'Sem corrente de energia na entrada, o 1º efeito usa vapor saturado e o bloco faz o mesmo cálculo do evaporador de múltiplo efeito: concentrado pedido, áreas iguais e economia de vapor. Com a energia de outro equipamento ligada na entrada, a energia recebida fixa quanto evapora; as temperaturas de saturação dos efeitos ficam igualmente espaçadas entre a condensação da energia recebida e a do último efeito, e o bloco calcula a área de cada efeito.',
+      'A pressão do último efeito decide a qualidade da energia que sai: mais alta, a energia sai mais quente e serve para aquecer outro equipamento, mas sobra menos diferença de temperatura para os efeitos (áreas maiores); mais baixa, os efeitos ficam menores, mas a energia sai fria demais para ser reaproveitada. Os resultados mostram a temperatura da energia que sai e a pressão máxima do evaporador seguinte.'] },
+    evap_cond3: { p: [
+      'Este ícone junta 3 efeitos em série e o condensador acoplado. O vapor de cada efeito aquece o seguinte, que opera a uma pressão menor; o vapor do último efeito condensa dentro do próprio equipamento, e o seu calor latente sai pela corrente de energia (porta de cima). Essa energia pode aquecer outro equipamento: ligue-a à entrada de energia de um evaporador com condensador acoplado (de efeito único, duplo ou triplo) para continuar a cascata.',
+      'Sem corrente de energia na entrada, o 1º efeito usa vapor saturado e o bloco faz o mesmo cálculo do evaporador de múltiplo efeito: concentrado pedido, áreas iguais e economia de vapor. Com a energia de outro equipamento ligada na entrada, a energia recebida fixa quanto evapora; as temperaturas de saturação dos efeitos ficam igualmente espaçadas entre a condensação da energia recebida e a do último efeito, e o bloco calcula a área de cada efeito.',
+      'A pressão do último efeito decide a qualidade da energia que sai: mais alta, a energia sai mais quente e serve para aquecer outro equipamento, mas sobra menos diferença de temperatura para os efeitos (áreas maiores); mais baixa, os efeitos ficam menores, mas a energia sai fria demais para ser reaproveitada. Os resultados mostram a temperatura da energia que sai e a pressão máxima do evaporador seguinte.'] },
     evap_double: { ex: ex('evaporador-duplo', 'Evaporador de duplo efeito'), p: [
       'No duplo efeito, o vapor gerado no 1º efeito aquece o 2º, que opera a uma pressão menor (vácuo) para que a solução ferva numa temperatura mais baixa. O mesmo vapor de aquecimento evapora quase o dobro de água: a economia sobe para perto de 2, ao custo de mais área de troca.',
       'O exemplo concentra a mesma solução de açúcar do triplo efeito (22 680 kg/h, de 10 % a 50 %). Com dois efeitos, a economia é 1,54 kg/kg e o vapor consumido é 11 780 kg/h; com três, a economia é 2,03 e o vapor cai para 8 954 kg/h. A área total, porém, passa de 154 m² para 315 m²: o número ótimo de efeitos vem do balanço entre o custo do vapor e o custo dos equipamentos.',
@@ -16892,6 +16997,8 @@ window.SIMULAFACIL_CONFIG = {
     centrifuge: { feed: 'alimentação', light: 'fase leve (creme ou óleo degomado)', heavy: 'fase pesada (leite desnatado ou gomas)', sludge: 'lodo', q_in: 'motor' },
     pasteurizer: { feed: 'produto cru', out: 'produto pasteurizado', q_in: 'água quente (aquecimento)', q_out: 'água gelada (resfriamento)' },
     butter_churn: { feed: 'creme de leite', butter: 'manteiga', buttermilk: 'leitelho', q_out: 'resfriamento do creme' },
+    evap_cond2: { feed: 'alimentação (solução diluída)', product: 'concentrado', condensate: 'condensado (vapor de todos os efeitos)', q_in: 'energia de aquecimento (vapor ou outro equipamento)', q_out: 'energia do condensador acoplado (para outro equipamento)' },
+    evap_cond3: { feed: 'alimentação (solução diluída)', product: 'concentrado', condensate: 'condensado (vapor de todos os efeitos)', q_in: 'energia de aquecimento (vapor ou outro equipamento)', q_out: 'energia do condensador acoplado (para outro equipamento)' },
     evap_cond: { feed: 'alimentação (solução diluída)', product: 'concentrado', condensate: 'condensado (líquido saturado)', q_in: 'energia de aquecimento (vapor ou efeito anterior)', q_out: 'energia da condensação do vapor (para o próximo efeito)' },
     filter_plate: { feed: 'polpa (suspensão)', filtrate: 'filtrado', cake: 'torta' }, filter_rotary: { feed: 'polpa (suspensão)', filtrate: 'filtrado', cake: 'torta' } };
   function portLabel(p, type) { return (type && TYPE_PORT_LABELS[type] && TYPE_PORT_LABELS[type][p]) || PORT_LABELS[p] || p; }
@@ -16926,6 +17033,8 @@ window.SIMULAFACIL_CONFIG = {
     evap_single: { w: 64, h: 96, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 62, 'l', 'in'), vapor: P(64, 10, 'r', 'out'), product: P(64, 88, 'r', 'out') } },
     evap_double: { w: 112, h: 96, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 62, 'l', 'in'), vapor: P(112, 10, 'r', 'out'), product: P(112, 88, 'r', 'out'), condensate: P(76, 96, 'd', 'out') } },
     evap_multi: { w: 160, h: 96, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 62, 'l', 'in'), vapor: P(160, 10, 'r', 'out'), product: P(160, 88, 'r', 'out'), condensate: P(124, 96, 'd', 'out') } },
+    evap_cond2: { w: 143, h: 100, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 70, 'l', 'in'), q_out: P(111, 0, 'u', 'eout'), condensate: P(143, 16, 'r', 'out'), product: P(143, 96, 'r', 'out') } },
+    evap_cond3: { w: 191, h: 100, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 70, 'l', 'in'), q_out: P(159, 0, 'u', 'eout'), condensate: P(191, 16, 'r', 'out'), product: P(191, 96, 'r', 'out') } },
     evap_cond: { w: 110, h: 100, ports: { q_in: P(6, 0, 'u', 'ein'), feed: P(0, 70, 'l', 'in'), q_out: P(78, 0, 'u', 'eout'), condensate: P(110, 16, 'r', 'out'), product: P(110, 96, 'r', 'out') } },
     filter_plate: { w: 130, h: 100, ports: { feed: P(0, 40, 'l', 'in'), filtrate: P(130, 6, 'r', 'out'), cake: P(65, 100, 'd', 'out') } },
     filter_rotary: { w: 140, h: 100, ports: { feed: P(0, 78, 'l', 'in'), filtrate: P(140, 6, 'r', 'out'), cake: P(140, 40, 'r', 'out') } },
@@ -17082,6 +17191,17 @@ window.SIMULAFACIL_CONFIG = {
       else o.push(L([[x0 + 15, 18], [x0 + 15, 10], [W, 10]], 'lnd'), L([[x0 + 15, 76], [x0 + 15, 88], [W, 88]]));
     }
     if (n > 1) o.push(L([[60, 92], [12 + (n - 1) * 48 + 16, 92], [12 + (n - 1) * 48 + 16, 96]], 'cold'));
+    return o;
+  }
+  function evapCondBodies(n) { // n corpos em série (o vapor de um aquece o seguinte) e o condensador acoplado no vapor do último: a energia sai pelo alto
+    const xl = 12 + 48 * (n - 1), xc = xl + 33, W = xc + 50, o = [L([[6, 0], [6, 64], [12, 64]], 'hot'), L([[0, 70], [12, 70]])];
+    for (let k = 0; k < n; k++) {
+      const x0 = 12 + k * 48;
+      o.push(R(x0, 26, 30, 58, 7), L([[x0 + 3, 60], [x0 + 27, 60]], 'hot'), L([[x0 + 3, 68], [x0 + 27, 68]], 'hot'), T(x0 + 15, 48, String(k + 1)));
+      if (k < n - 1) o.push(L([[x0 + 15, 26], [x0 + 15, 17], [x0 + 42, 17], [x0 + 42, 64], [x0 + 48, 64]], 'lnd'), L([[x0 + 15, 84], [x0 + 15, 90], [x0 + 45, 90], [x0 + 45, 74], [x0 + 48, 74]]));
+    }
+    o.push(L([[xl + 15, 26], [xl + 15, 16], [xc, 16]], 'lnd'), R(xc, 8, 36, 16, 8, 'bodyw'), L([[xc + 5, 16], [xc + 11, 11], [xc + 17, 21], [xc + 23, 11], [xc + 29, 16]], 'cold'),
+      L([[xc + 18, 8], [xc + 18, 0]], 'hot'), L([[xc + 36, 16], [W, 16]]), L([[xl + 15, 84], [xl + 15, 96], [W, 96]]));
     return o;
   }
   function fermenters(n, label, dx, Wb, side) { // n fermentadores em série com agitador e células (pontos): mosto pela esquerda, vinho pela direita, CO₂ no alto
@@ -17274,6 +17394,8 @@ window.SIMULAFACIL_CONFIG = {
     evap_multi: () => evapBodies(3),
     evap_single: () => evapBodies(1),
     evap_double: () => evapBodies(2),
+    evap_cond2: () => evapCondBodies(2),
+    evap_cond3: () => evapCondBodies(3),
     evap_cond: () => [ // um corpo de evaporação (feixe aquecido) e, no vapor de topo, o condensador acoplado: a energia da condensação sai pelo alto
       L([[6, 0], [6, 64], [12, 64]], 'hot'), L([[0, 70], [12, 70]]), R(12, 26, 30, 58, 7), L([[15, 60], [39, 60]], 'hot'), L([[15, 68], [39, 68]], 'hot'), T(27, 48, 'EV'),
       L([[27, 26], [27, 16], [60, 16]], 'lnd'), R(60, 8, 36, 16, 8, 'bodyw'), L([[65, 16], [71, 11], [77, 21], [83, 11], [89, 16]], 'cold'),
@@ -24716,7 +24838,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', cyclone_preheater: 'TC', clinker_cooler: 'RC', cement_mill: 'MC', sulfur_burner: 'FE', so2_converter: 'CV', acid_tower: 'TA', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', cooling_tower: 'TRF', deaerator: 'DA', reactor_kinetics: 'CIN', chem_kinetics: 'RQ', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN', pw_pretreat: 'PT', ro_membrane: 'OR', gac_column: 'CA', ix_resin: 'RT', pw_tank: 'TQ', shampoo_tank: 'TM', filling: 'ENV', u_heap_leach: 'LX', u_sx: 'SX', u_yellowcake: 'YC', u_conversion: 'CV', u_enrichment: 'EN', u_auc: 'RC', u_pellets: 'FCN' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', cyclone_preheater: 'TC', clinker_cooler: 'RC', cement_mill: 'MC', sulfur_burner: 'FE', so2_converter: 'CV', acid_tower: 'TA', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', cooling_tower: 'TRF', deaerator: 'DA', reactor_kinetics: 'CIN', chem_kinetics: 'RQ', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', evap_cond2: 'EV', evap_cond3: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN', pw_pretreat: 'PT', ro_membrane: 'OR', gac_column: 'CA', ix_resin: 'RT', pw_tank: 'TQ', shampoo_tank: 'TM', filling: 'ENV', u_heap_leach: 'LX', u_sx: 'SX', u_yellowcake: 'YC', u_conversion: 'CV', u_enrichment: 'EN', u_auc: 'RC', u_pellets: 'FCN' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };

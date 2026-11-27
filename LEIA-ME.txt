@@ -1,3 +1,27 @@
+SIMULA FÁCIL IA 5.13.0 – Refino do açúcar: osmose reversa, carvão ativado e resina de troca iônica (27/11/2026)
+===============================================================================================================
+
+- Três equipamentos novos na paleta, com ícone, equações, teoria e ajuda dos campos:
+  * Osmose reversa (ro_membrane), na nova categoria "Membranas e troca iônica": pressão osmótica de van 't Hoff
+    em molalidade (φ = 1 + 0,08·m para a sacarose; sais contam os íons), polarização de concentração, fluxo
+    J = A·TCF·(ΔP − Δπ) integrado ao longo dos vasos, área, elementos e vasos, rejeição, energia da bomba (com
+    recuperador opcional) e comparação com o vapor de um evaporador. Especifica o °Brix do concentrado ou a
+    recuperação; se a pressão não basta, diz até que °Brix dá para ir.
+  * Coluna de carvão ativado granular (gac_column), em "Adsorção e difusão": isoterma de Freundlich, consumo de
+    carvão no carrossel, EBCT, colunas, vida do leito, regeneração no forno e comparação com o carvão em pó.
+  * Resina de troca iônica para descoloração (ix_resin), em "Membranas e troca iônica": ciclo de serviço,
+    volumes de leito, salmoura alcalina (NaCl + NaOH), águas doces do adoçamento e efluente da regeneração.
+- Componente novo "Corantes do açúcar" (sugar-color): leva a cor ICUMSA nas correntes, na convenção
+  1 UI = 1 mg de corante por kg de sólidos. O separador de componentes mostra a cor e o °Brix das saídas
+  quando ele está na lista.
+- Exemplo novo "Açúcar: refino do açúcar cristal" (logo depois de Bebidas): 5 t/h de açúcar cristal com 400 UI,
+  dissolvedor a 65 °Bx, aquecedor, carvão ativado (400 → 198 UI), resina (→ 79 UI), águas doces resfriadas e
+  concentradas na osmose reversa de volta ao dissolvedor (reciclo), cozedor a vácuo e centrífuga como blocos
+  equivalentes; o açúcar refinado sai com cerca de 8 UI.
+- Agente de IA (chave da API e Gemini da UFSJ): regra nova para equipamento que não existe na paleta. O agente
+  monta um equivalente com os blocos genéricos, dá o nome do equipamento real com "(equivalente)", diz as
+  hipóteses e sugere pedir ao professor que avalie incluí-lo na paleta.
+
 SIMULA FÁCIL IA 5.12.3 – Vídeo do aluno Arthur: destilação (27/11/2026)
 ========================================================================
 

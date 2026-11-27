@@ -1201,7 +1201,7 @@ body.kb .m-fab-ex { display: none; }
 <header class="top">
   <button class="brand" id="btnHome" title="Tela inicial">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
-    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.12.3</span><em>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</em></span>
+    <span class="brand-txt"><span class="brand-title"><strong>SIMULA FÁCIL IA</strong><span class="ver-badge" title="Versão do programa"><span class="ver-w">VERSÃO </span>5.13.0</span><em>Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</em></span>
     <span class="brand-auth">Autor: Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ · PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</span></span>
   </button>
   <button type="button" class="test-badge" id="btnAviso" title="Uso acadêmico e de ensino · versão em fase de testes (clique para ler o aviso)"><span>EM TESTES</span></button>
@@ -1356,7 +1356,7 @@ body.kb .m-fab-ex { display: none; }
       <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><use href="#logo"/></svg>
       <div class="whero-txt">
         <p class="weyebrow">Engenharia Química · UFSJ</p>
-        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.12.3</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
+        <h1 id="wTitle">SIMULA FÁCIL IA <span class="ver-badge big">VERSÃO 5.13.0</span><span class="test-badge-txt big" title="Uso acadêmico e de ensino · versão em fase de testes">EM TESTES</span></h1>
         <p class="wsub">Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear, de Minas e Metalurgia</p>
         <button type="button" class="wopen" id="wOpen" title="Abrir o simulador com o exemplo A Fábrica de Chocolate dos Sonhos">ABRIR SIMULADOR <span aria-hidden="true">▸</span></button>
         <p class="wauth"><b>Autor:</b> Prof. Juan Canellas Bosch Neto – Curso de Engenharia Química – UFSJ<br>PPGEQ-DEQUI-CAP-UFSJ &amp; CLAUDE</p>
@@ -2862,6 +2862,7 @@ window.SIMULAFACIL_CONFIG = {
     { id: 'co', name: 'Monóxido de carbono', formula: 'CO', mw: 28.01, tc: 132.9, pc: 34.99e5, w: 0.045, tb: 81.7, rho: 789, cp: [30.87, -1.285e-2, 2.789e-5, -1.272e-8], dhv: 6040 },
     { id: 'ammonia', name: 'Amônia', formula: 'NH3', mw: 17.031, tc: 405.4, pc: 113.53e5, w: 0.257, tb: 239.8, rho: 603, cp: [27.31, 2.383e-2, 1.707e-5, -1.185e-8], dhv: 23350, ant: [7.36050, 926.132, 240.17], alias: 'R-717' },
     { id: 'sucrose', name: 'Sacarose (soluto não volátil)', formula: 'C12H22O11', mw: 342.3, rho: 1587, nv: true, cpl: 425 },
+    { id: 'sugar-color', name: 'Corantes do açúcar (pseudocomponente da cor ICUMSA: 1 UI = 1 mg por kg de sólidos)', formula: 'COR', mw: 1000, rho: 1500, nv: true, cpl: 1250 },
     { id: 'nacl', name: 'Cloreto de sódio (soluto não volátil)', formula: 'NaCl', mw: 58.443, rho: 2165, nv: true, cpl: 50.5 },
     { id: 'kno3', name: 'Nitrato de potássio (soluto não volátil)', formula: 'KNO3', mw: 101.103, rho: 2109, nv: true, cpl: 96.4 },
     { id: 'soy-oil', name: 'Óleo de soja (trioleína)', formula: 'C57H104O6', mw: 885.4, rho: 915, nv: true, cpl: 1680 },
@@ -4986,6 +4987,44 @@ window.SIMULAFACIL_CONFIG = {
       { k: 'Cext', label: 'Concentração externa Cext (se informar)', u: 'mol/m³', def: 8.6 },
       { k: 'tEnd', label: 'Tempo de simulação', u: 'h', def: 24 },
       { k: 'nodes', label: 'Pontos da malha espacial', u: '', def: 60 }] },
+    gac_column: { label: 'Coluna de carvão ativado granular (descoloração de caldas e xaropes): isoterma de Freundlich, consumo de carvão, EBCT, vida do leito e regeneração no forno', cat: 'Adsorção e difusão', ins: ['feed'], outs: ['product'], params: [
+      { k: 'rem', label: 'Remoção de cor pedida (média do ciclo, colunas em série)', u: '%', type: 'range', min: 5, max: 90, step: 1, def: 50 },
+      { k: 'KF', label: 'Isoterma de Freundlich q = K·C^(1/n): constante K (q em mg de corante por g de carvão, C em UI)', u: '(mg/g)/UI^(1/n)', def: 0.14 },
+      { k: 'inv', label: 'Isoterma de Freundlich: expoente 1/n (os corantes do açúcar costumam ter 1/n perto de 1 ou acima)', u: '', def: 1.2 },
+      { k: 'eta', label: 'Aproveitamento do leito (zona de transferência de massa; colunas em série: 60 a 85 %)', u: '%', def: 70 },
+      { k: 'ebct', label: 'Tempo de contato em leito vazio (EBCT; xaropes: 30 a 90 min)', u: 'min', def: 60 },
+      { k: 'nCol', label: 'Colunas em série (carrossel: a primeira sai para regenerar quando satura)', u: '', def: 2 },
+      { k: 'HD', label: 'Relação altura/diâmetro de cada coluna', u: '', def: 3 },
+      { k: 'rhoB', label: 'Massa específica aparente do leito de carvão', u: 'kg/m³', def: 480 },
+      { k: 'loss', label: 'Perda de carvão em cada regeneração no forno (atrito e queima)', u: '%', def: 5 },
+      { k: 'Tmax', label: 'Temperatura máxima recomendada da calda', u: '°C', def: 85 }] },
+    ro_membrane: { label: 'Osmose reversa (membranas em espiral): pressão osmótica, fluxo de permeado, área, número de elementos, recuperação e energia da bomba', cat: 'Membranas e troca iônica', ins: ['feed'], outs: ['permeate', 'concentrate'], params: [
+      { k: 'spec', label: 'Especificar', type: 'select', options: ['°Brix do concentrado', 'recuperação de água (permeado ÷ água da alimentação)'], def: '°Brix do concentrado' },
+      { k: 'BxC', label: '°Brix do concentrado (sólidos dissolvidos, % em massa)', u: '°Bx', def: 25, when: q => !/^recupera/.test(q.spec || '') },
+      { k: 'rec', label: 'Recuperação de água', u: '%', type: 'range', min: 5, max: 95, step: 1, def: 50, when: q => /^recupera/.test(q.spec || '') },
+      { k: 'P', label: 'Pressão de alimentação na saída da bomba de alta pressão (absoluta)', u: 'bar', type: 'range', min: 5, max: 80, step: 1, def: 40 },
+      { k: 'Aw', label: 'Permeabilidade da membrana à água a 25 °C (água do mar: 0,8 a 1,5; salobra: 2 a 5)', u: 'L/(m²·h·bar)', def: 1 },
+      { k: 'Rs', label: 'Rejeição dos solutos (sacarose e sais) pela membrana', u: '%', def: 99.5 },
+      { k: 'CP', label: 'Fator de polarização de concentração (concentração na parede ÷ no seio)', u: '', def: 1.15 },
+      { k: 'dP', label: 'Perda de carga ao longo dos vasos de pressão', u: 'bar', def: 2 },
+      { k: 'Pp', label: 'Pressão do permeado (absoluta)', u: 'bar', def: 1.5 },
+      { k: 'Ael', label: 'Área de um elemento (8": 37 m²; 4": 7,4 m²)', u: 'm²', def: 37 },
+      { k: 'nEl', label: 'Elementos por vaso de pressão', u: '', def: 6 },
+      { k: 'effP', label: 'Rendimento da bomba de alta pressão com o motor', u: '%', def: 80 },
+      { k: 'erd', label: 'Recuperador de energia do concentrado (0 = sem recuperador; turbinas e trocadores de pressão: 50 a 95 %)', u: '%', def: 0 },
+      { k: 'econ', label: 'Comparação: economia do evaporador que faria o mesmo serviço (kg de água por kg de vapor)', u: 'kg/kg', def: 3 },
+      { k: 'Tmax', label: 'Temperatura máxima da membrana de poliamida', u: '°C', def: 45 }] },
+    ix_resin: { label: 'Coluna de resina de troca iônica para descoloração (resina aniônica forte na forma cloreto): ciclo, regeneração com salmoura alcalina, águas doces e efluente', cat: 'Membranas e troca iônica', ins: ['feed'], outs: ['product', 'sweet', 'waste'], params: [
+      { k: 'rem', label: 'Remoção de cor média do ciclo (resinas estirênicas: 50 a 80 %)', u: '%', type: 'range', min: 5, max: 95, step: 1, def: 60 },
+      { k: 'Vr', label: 'Volume de resina em serviço', u: 'm³', def: 2 },
+      { k: 'capC', label: 'Capacidade de cor da resina por ciclo (corante retido, na convenção 1 UI = 1 mg por kg de sólidos)', u: 'g/L de resina', def: 8 },
+      { k: 'cB', label: 'Salmoura de regeneração: NaCl', u: '% massa', def: 10 },
+      { k: 'cOH', label: 'Salmoura de regeneração: NaOH (salmoura alcalina; 0 = só NaCl)', u: '% massa', def: 0.2 },
+      { k: 'bvB', label: 'Salmoura por regeneração', u: 'volumes de leito', def: 2 },
+      { k: 'bvR', label: 'Água de enxágue depois da salmoura (vai para o efluente)', u: 'volumes de leito', def: 2 },
+      { k: 'hold', label: 'Calda retida no leito e nas linhas no fim do ciclo', u: 'volumes de leito', def: 1 },
+      { k: 'bvS', label: 'Água de adoçamento (empurra a calda retida; vira água doce)', u: 'volumes de leito', def: 4 },
+      { k: 'Tmax', label: 'Temperatura máxima da resina (estirênica: 80 °C; acrílica: 75 °C)', u: '°C', def: 80 }] },
     blast_furnace: { label: 'Alto-forno contínuo (siderurgia): minério + coque + fundente + ar de sopro → gusa, escória e gás de topo; balanços de massa e energia', cat: 'Siderurgia', ins: ['ore', 'coke', 'flux', 'blast'], outs: ['gas', 'slag', 'pig_iron'], params: [
       { k: 'mOre', label: 'Vazão de minério' + SEMC, u: 'kg/s', def: 100 },
       { k: 'wFe2O3', label: 'Fração mássica de Fe₂O₃ no minério (o restante é ganga, SiO₂)' + SEMC, u: '0–1', def: 0.94 },
@@ -6267,8 +6306,14 @@ window.SIMULAFACIL_CONFIG = {
     const s = ins.in, sp = b.params.splits || {};
     const f1 = s.flows.map((v, i) => v * clamp(num(sp[th.ids[i]], 0.5), 0, 1));
     const f2 = s.flows.map((v, i) => v - f1[i]);
-    const o1 = mkStream(th, f1, s.T, s.P), o2 = mkStream(th, f2, s.T, s.P);
-    return { out: { out1: o1, out2: o2 }, res: [{ k: 'Carga térmica', v: kW(o1.H + o2.H - s.H), u: 'kW' }] };
+    const o1 = mkStream(th, f1, s.T, s.P), o2 = mkStream(th, f2, s.T, s.P), res = [{ k: 'Carga térmica', v: kW(o1.H + o2.H - s.H), u: 'kW' }];
+    if (th.ids.indexOf('sugar-color') >= 0) { // açúcar: mostra a cor ICUMSA da entrada e das duas saídas (1 UI = 1 mg de corante por kg de sólidos)
+      const iu = fl => { const kg = kgOf(th, { flows: fl }), w = th.ids.indexOf('water'), S = sum(kg) - (w >= 0 ? kg[w] : 0); return S > 0 ? 1e6 * kg[th.ids.indexOf('sugar-color')] / S : 0; };
+      const bx = fl => { const kg = kgOf(th, { flows: fl }), w = th.ids.indexOf('water'), M = sum(kg); return M > 0 ? 100 * (M - (w >= 0 ? kg[w] : 0)) / M : 0; };
+      res.push({ k: 'Cor ICUMSA da entrada', v: iu(s.flows), u: 'UI' }, { k: 'Cor ICUMSA da saída 1', v: iu(f1), u: 'UI' }, { k: 'Cor ICUMSA da saída 2', v: iu(f2), u: 'UI' },
+        { k: '°Brix (sólidos, % em massa) da saída 1 / saída 2', v: bx(f1).toFixed(2).replace('.', ',') + ' / ' + bx(f2).toFixed(2).replace('.', ','), u: '°Bx' });
+    }
+    return { out: { out1: o1, out2: o2 }, res };
   };
 
   function heaterLike(th, b, ins, sign) {
@@ -13298,6 +13343,188 @@ window.SIMULAFACIL_CONFIG = {
     return { out: { product: etaOut(th, kgP, s), waste: etaOut(th, kgW, s) }, massUtil: saltKg / 3600, res: decBR(decK(res)), warn: decW(warn), plots };
   };
 
+  /* ------------------------------------------------------------------ refino do açúcar e águas açucaradas: carvão ativado, osmose reversa e resina
+     A cor ICUMSA anda nas correntes pelo pseudocomponente "Corantes do açúcar" (sugar-color), na convenção do simulador:
+     1 UI = 1 mg de corante por kg de sólidos dissolvidos. Assim a cor se conserva na evaporação (a razão corante/sólidos não muda)
+     e cai só onde o corante sai da calda: no carvão, na resina e na cristalização. */
+  const sgI = (th, id) => th.ids.indexOf(id);
+  // massa, água, sólidos, °Brix, cor (UI), massa específica (kg/m³, ajuste das tabelas de °Brix a 20 °C) e vazão volumétrica (m³/h)
+  function sgBal(th, kg) {
+    const iw = sgI(th, 'water'), ic = sgI(th, 'sugar-color'), M = sum(kg), W = iw >= 0 ? kg[iw] : 0, S = M - W, col = ic >= 0 ? kg[ic] : 0;
+    const Bx = M > 0 ? 100 * S / M : 0, rho = 997 + 3.86 * Bx + 0.0157 * Bx * Bx;
+    return { M, W, S, col, Bx, IU: S > 0 ? 1e6 * col / S : 0, rho, Q: M / rho };
+  }
+  const SG_NU = { nacl: 2, naoh: 2, kcl: 2, cacl2: 3, na2so4: 3, 'calcium-sulfate': 2, nahco3: 2, 'ca-bicarbonate': 3 };   // íons por fórmula
+  // pressão osmótica (bar): van 't Hoff em molalidade; sacarose e açúcares com φ = 1 + 0,08·m; sais contam os íons com φ ≈ 0,93
+  function sgPi(th, kg, TK) {
+    const iw = sgI(th, 'water'), W = iw >= 0 ? kg[iw] : 0; if (!(W > 0)) return Infinity;
+    let mS = 0, mI = 0;
+    for (let i = 0; i < th.n; i++) { if (i === iw || !(kg[i] > 0) || th.c[i].solid) continue; const m = kg[i] / th.c[i].mw / W * 1000, nu = SG_NU[th.ids[i]]; if (nu) mI += nu * m; else mS += m; }
+    return 0.08314 * TK * ((1 + 0.08 * mS) * mS + 0.93 * mI);
+  }
+  const sgErr = m => new Error(decW([m])[0]);   // mensagens de erro com vírgula decimal
+  const sgFmtIU = v => (v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v.toFixed(2));
+
+  IMPL.ro_membrane = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, f = shFmt;
+    if (!connected(s)) throw sgErr('conecte a corrente de alimentação (água doce ou outra solução aquosa)');
+    const iw = sgI(th, 'water'); if (iw < 0) throw sgErr('inclua Água na lista de componentes');
+    const kg0 = kgOf(th, s), B0 = sgBal(th, kg0), TK = s.T, Tc = K2C(TK), W0 = kg0[iw];
+    if (!(W0 > 0)) throw sgErr('a alimentação da osmose reversa não tem água');
+    const byBx = !/^recupera/.test(p.spec || ''), BxC = num(p.BxC, 25), recT = clamp(num(p.rec, 50), 1, 99) / 100;
+    const P = num(p.P, 40), Aw = num(p.Aw, 1), R = clamp(num(p.Rs, 99.5), 0, 100) / 100, CP = Math.max(1, num(p.CP, 1.15)), dP = Math.max(0, num(p.dP, 2)), Pp = num(p.Pp, 1.5);
+    const Ael = num(p.Ael, 37), nEl = Math.max(1, Math.round(num(p.nEl, 6))), effP = clamp(num(p.effP, 80), 5, 100) / 100, erd = clamp(num(p.erd, 0), 0, 100) / 100, econ = num(p.econ, 3), Tmax = num(p.Tmax, 45);
+    if (!(P > Pp && Aw > 0 && Ael > 0 && econ > 0)) throw sgErr('a pressão de alimentação deve ser maior que a do permeado; a permeabilidade, a área do elemento e a economia devem ser positivas');
+    if (byBx && !(BxC > B0.Bx + 1e-9)) throw sgErr('o °Brix pedido para o concentrado (' + f(BxC, 1) + ') deve ser maior que o da alimentação (' + f(B0.Bx, 1) + ' °Bx)');
+    if (byBx && !(BxC < 100)) throw sgErr('o °Brix do concentrado deve ficar abaixo de 100');
+    const pi0 = sgPi(th, kg0, TK);
+    if (P - Pp <= CP * pi0 + 0.5) throw sgErr('com ' + f(P, 0) + ' bar não sai permeado: a pressão osmótica da alimentação já é ' + f(pi0, 1) + ' bar (' + f(CP * pi0, 1) + ' bar na parede da membrana). Aumente a pressão ou dilua a alimentação');
+    const TCF = Math.exp(2640 * (1 / 298.15 - 1 / TK));   // correção da permeabilidade pela temperatura (≈ 3 % por °C)
+    // recuperação estimada (rejeição total) só para distribuir a perda de carga ao longo dos vasos
+    const rEst = byBx ? clamp(1 - (B0.S / (BxC / 100) - B0.S) / W0, 0.01, 0.99) : recT;
+    // integração ao longo dos vasos: em cada passo sai dW de água no permeado e os solutos passam na fração (1 − R) da concentração na parede
+    const N = 2000, dW = W0 / N, kb = kg0.slice(), kp = new Array(th.n).fill(0), prof = { r: [], P: [], piW: [], piB: [], J: [], Bx: [] };
+    let A = 0, Wp = 0, stop = null, ndp0 = null, ndpN = 0, k = 0;
+    for (k = 0; k < N; k++) {
+      const r = Wp / W0, Bb = sgBal(th, kb);
+      if (byBx ? Bb.Bx >= BxC : r >= recT - 1e-9) break;
+      const Wb = kb[iw], kw = kb.map((m, i) => (i === iw ? m : m * CP)), kpl = kb.map((m, i) => (i === iw ? 1 : (1 - R) * CP * m / Wb));
+      const piB = sgPi(th, kb, TK), piW = sgPi(th, kw, TK), piP = sgPi(th, kpl, TK), Pl = P - dP * Math.min(1, r / rEst), ndp = Pl - Pp - (piW - piP);
+      if (ndp < 0.5) { stop = { r, Bx: Bb.Bx, Pl, piW }; break; }
+      if (ndp0 == null) ndp0 = ndp; ndpN = ndp;
+      const J = Aw * TCF * ndp;   // L/(m²·h), praticamente kg/(m²·h)
+      if (k % 20 === 0) { prof.r.push(+(100 * r).toFixed(2)); prof.P.push(+Pl.toFixed(3)); prof.piW.push(+piW.toFixed(3)); prof.piB.push(+piB.toFixed(3)); prof.J.push(+J.toFixed(3)); prof.Bx.push(+Bb.Bx.toFixed(3)); }
+      A += dW / J;
+      for (let i = 0; i < th.n; i++) { const d = i === iw ? dW : Math.min(kb[i], kpl[i] * dW); kb[i] -= d; kp[i] += d; }
+      Wp += dW;
+    }
+    if (stop) throw sgErr('com ' + f(P, 0) + ' bar a osmose reversa só chega a ' + f(stop.Bx, 1) + ' °Bx (' + f(100 * stop.r, 0) + ' % de recuperação): ali a pressão osmótica na parede da membrana, ' + f(stop.piW, 1) + ' bar, quase iguala a pressão disponível (' + f(stop.Pl - Pp, 1) + ' bar). Aumente a pressão (as membranas de alta pressão vão até cerca de 80 bar), peça um °Brix menor ou termine a concentração no evaporador');
+    if (!(Wp > 0)) throw sgErr('a osmose reversa não produziu permeado: confira o °Brix ou a recuperação pedidos');
+    const Bc = sgBal(th, kb), Bp = sgBal(th, kp), rec = Wp / W0, piC = sgPi(th, kb, TK);
+    const nE = Math.ceil(A / Ael - 1e-9), nV = Math.ceil(nE / nEl), Jm = Wp / A;
+    const iS = sgI(th, 'sucrose'), lossS = iS >= 0 && kg0[iS] > 0 ? 100 * kp[iS] / kg0[iS] : 100 * Bp.S / Math.max(B0.S, 1e-12);
+    const Pin = s.P / BAR, Qf = B0.Q / 3600, Qc = Bc.Q / 3600;   // m³/s
+    const Wpump = Qf * Math.max(0, P - Pin) * BAR / effP, Wrec = erd * Qc * Math.max(0, P - dP - 1.01325) * BAR, Wnet = Wpump - Wrec;
+    const SEC = Wnet / 1000 / (Bp.Q || 1e-12), steam = Wp / econ, Qev = steam * 2200 / 3600;   // kWh/m³ de permeado; vapor (kg/h) e calor (kW) do evaporador
+    if (Tc > Tmax) warn.push('alimentação a ' + f(Tc, 0) + ' °C: a membrana de poliamida aguenta até cerca de ' + f(Tmax, 0) + ' °C. Resfrie a corrente antes (aproveite o calor num trocador)');
+    if (Tc < 5) warn.push('alimentação a ' + f(Tc, 0) + ' °C: muito fria, a água atravessa a membrana devagar (o fluxo cai cerca de 3 % por °C)');
+    if (Jm > 25) warn.push('fluxo médio de ' + f(Jm, 1) + ' L/(m²·h): com soluções açucaradas, acima de 15 a 25 L/(m²·h) a membrana suja (biofilme) e a limpeza fica frequente; aumente a área');
+    if (ndpN < 3) warn.push('no fim dos vasos sobram só ' + f(ndpN, 1) + ' bar de pressão efetiva: o último elemento quase não produz. Aumente a pressão ou peça um concentrado menos concentrado');
+    if (P > 70) warn.push('pressão de ' + f(P, 0) + ' bar: as membranas de água do mar comuns vão até cerca de 70 a 83 bar; acima disso use elementos de alta pressão');
+    if (Bp.S / Math.max(Bp.M, 1e-12) * 1e6 > 2000) warn.push('o permeado leva ' + f(Bp.S / Bp.M * 1e6, 0) + ' mg/kg de sólidos: para reusar como água de processo pode precisar de um segundo passo de osmose');
+    if (kg0.some((m, i) => m > 0 && th.c[i].solid)) warn.push('a alimentação tem sólidos em suspensão: a osmose reversa precisa de pré-filtração (cartuchos de 5 µm ou ultrafiltração) para não entupir os elementos');
+    const res = [{ k: 'Alimentação', v: f(B0.M, 1) + ' kg/h (' + f(B0.Q, 2) + ' m³/h) com ' + f(B0.Bx, 2) + ' °Bx a ' + f(Tc, 1) + ' °C; pressão osmótica ' + f(pi0, 2) + ' bar', u: '' },
+      { k: 'Permeado (água que atravessa a membrana)', v: f(Bp.M, 1) + ' kg/h com ' + f(Bp.S / Math.max(Bp.M, 1e-12) * 1e6, 0) + ' mg/kg de sólidos (' + f(lossS, 2) + ' % da sacarose da alimentação se perde no permeado)', u: '' },
+      { k: 'Concentrado', v: f(Bc.M, 1) + ' kg/h com ' + f(Bc.Bx, 2) + ' °Bx; pressão osmótica ' + f(piC, 2) + ' bar no seio e ' + f(CP * piC, 1) + ' bar na parede', u: '' },
+      { k: 'Recuperação de água', v: f(100 * rec, 1) + ' % (o fator de concentração dos sólidos é ' + f(Bc.S > 0 ? (Bc.S / Bc.M) / (B0.S / B0.M) : 0, 2) + ')', u: '' },
+      { k: 'Pressão efetiva (ΔP − Δπ) na entrada e no fim dos vasos', v: f(ndp0, 1) + ' → ' + f(ndpN, 1) + ' bar', u: '' },
+      { k: 'Fluxo médio de permeado', v: f(Jm, 2) + ' L/(m²·h) (permeabilidade corrigida para ' + f(Tc, 0) + ' °C: ' + f(Aw * TCF, 2) + ' L/(m²·h·bar))', u: '' },
+      { k: 'Área de membrana', v: f(A, 1) + ' m²: ' + nE + (nE === 1 ? ' elemento' : ' elementos') + ' de ' + f(Ael, 1) + ' m² em ' + nV + (nV === 1 ? ' vaso de pressão' : ' vasos de pressão') + ' (até ' + nEl + ' elementos por vaso)', u: '' },
+      { k: 'Bomba de alta pressão', v: f(Wpump / 1000, 2) + ' kW (de ' + f(Pin, 2) + ' para ' + f(P, 1) + ' bar, rendimento ' + f(100 * effP, 0) + ' %)' + (Wrec > 0 ? '; o recuperador devolve ' + f(Wrec / 1000, 2) + ' kW' : ''), u: '' },
+      { k: 'Potência', v: kW(Wnet), u: 'kW' },
+      { k: 'Energia específica', v: f(SEC, 2) + ' kWh por m³ de permeado', u: '' },
+      { k: 'Comparação com o evaporador', v: 'tirar os mesmos ' + f(Wp, 0) + ' kg/h de água num evaporador com economia ' + f(econ, 1) + ' gastaria ' + f(steam, 0) + ' kg/h de vapor (cerca de ' + f(Qev, 0) + ' kW de calor), contra ' + f(Wnet / 1000, 1) + ' kW elétricos na osmose reversa', u: '' }];
+    const plots = [{ kind: 'curves', title: 'Pressões ao longo dos vasos: a pressão osmótica cresce com a concentração', data: { xLabel: 'Recuperação de água (%)', yLabel: 'bar', series: [
+        { name: 'Pressão aplicada − permeado', x: prof.r, y: prof.P.map(v => v - Pp), color: '#2563c9', width: 3 },
+        { name: 'Pressão osmótica na parede (com polarização)', x: prof.r, y: prof.piW, color: '#d1302b', width: 3 },
+        { name: 'Pressão osmótica no seio da solução', x: prof.r, y: prof.piB, color: '#e08a1e', width: 2, dash: 'dash' }] } },
+      { kind: 'curves', title: 'Fluxo de permeado ao longo dos vasos', data: { xLabel: 'Recuperação de água (%)', yLabel: 'L/(m²·h)', series: [{ name: 'Fluxo local J = A·(ΔP − Δπ)', x: prof.r, y: prof.J, color: '#1d8fd1', width: 3 }] } },
+      { kind: 'curves', title: '°Brix da solução ao longo dos vasos', data: { xLabel: 'Recuperação de água (%)', yLabel: '°Brix', series: [{ name: '°Brix no seio', x: prof.r, y: prof.Bx, color: '#2e9e6b', width: 3 }] } }];
+    return { out: { permeate: mkStream(th, flowsOfKg(th, kp), TK, Pp * BAR), concentrate: mkStream(th, flowsOfKg(th, kb), TK, Math.max(1.01325, P - dP) * BAR) },
+      res: decBR(decK(res)), warn: decW(warn), plots, duty: Wnet, power: true };
+  };
+
+  IMPL.gac_column = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, f = shFmt;
+    if (!connected(s)) throw sgErr('conecte a corrente de calda (xarope) a descolorir');
+    const ic = sgI(th, 'sugar-color'); if (ic < 0) throw sgErr('inclua na lista de componentes "Corantes do açúcar" (sugar-color): é o pseudocomponente que carrega a cor ICUMSA');
+    const kg = kgOf(th, s), B = sgBal(th, kg), Tc = K2C(s.T);
+    if (!(B.S > 0)) throw sgErr('a calda não tem sólidos dissolvidos');
+    const rem = clamp(num(p.rem, 50), 0, 99) / 100, KF = num(p.KF, 0.14), inv = num(p.inv, 1.2), eta = clamp(num(p.eta, 70), 5, 100) / 100, ebct = num(p.ebct, 60);
+    const nCol = Math.max(1, Math.round(num(p.nCol, 2))), HD = num(p.HD, 3), rhoB = num(p.rhoB, 480), loss = clamp(num(p.loss, 5), 0, 100) / 100, Tmax = num(p.Tmax, 85);
+    if (!(KF > 0 && inv > 0 && ebct > 0 && HD > 0 && rhoB > 0)) throw sgErr('a isoterma, o EBCT, a relação altura/diâmetro e a massa específica do leito devem ser positivos');
+    const C0 = B.IU, C1 = C0 * (1 - rem), q = C => KF * Math.pow(Math.max(C, 0), inv);   // mg/g
+    if (!(C0 > 0)) warn.push('a calda chega sem cor (0 UI): o carvão não tem o que remover');
+    const dCol = B.col * rem;   // kg/h de corante retido
+    // carvão gasto: no carrossel, o carvão que sai para regenerar está em equilíbrio com a calda de entrada (q(C0)), descontado o aproveitamento do leito
+    const CUR = C0 > 0 ? dCol * 1e6 / (q(C0) * 1000) / eta : 0;   // kg de carvão por hora
+    const PAC = C1 > 0 ? dCol * 1e6 / (q(C1) * 1000) : Infinity;    // carvão em pó, num só estágio, em equilíbrio com a calda de saída
+    const Vb = B.Q * ebct / 60, Mc = Vb * rhoB, Vc = Vb / nCol, Dc = Math.cbrt(4 * Vc / (Math.PI * HD)), Hc = HD * Dc, life = CUR > 0 ? Mc / nCol / CUR / 24 : Infinity;
+    const vS = B.Q / (Math.PI * Dc * Dc / 4), mk = CUR * loss;   // velocidade superficial (m/h) e reposição de carvão novo (kg/h)
+    const kgP = kg.slice(); kgP[ic] -= dCol;
+    if (Tc > Tmax) warn.push('calda a ' + f(Tc, 0) + ' °C: acima de cerca de ' + f(Tmax, 0) + ' °C a sacarose se inverte e forma mais cor; trabalhe entre 70 e 80 °C');
+    if (Tc < 60 && B.Bx > 50) warn.push('calda de ' + f(B.Bx, 0) + ' °Bx a ' + f(Tc, 0) + ' °C: fria e viscosa, a difusão dos corantes nos poros fica lenta; aqueça a 70–80 °C');
+    if (ebct < 20) warn.push('EBCT de ' + f(ebct, 0) + ' min: com xaropes viscosos, abaixo de 20 a 30 min a zona de transferência de massa ocupa quase todo o leito');
+    if (vS > 15) warn.push('velocidade superficial de ' + f(vS, 1) + ' m/h em cada coluna: com xarope viscoso a perda de carga sobe muito acima de cerca de 15 m/h; use colunas mais largas (menor relação altura/diâmetro)');
+    if (isFinite(life) && life < 3) warn.push('cada coluna satura em ' + f(life, 1) + ' dias: regeneração muito frequente; aumente o EBCT ou reduza a remoção pedida');
+    if (rem > 0.8) warn.push('remoção de ' + f(100 * rem, 0) + ' % só com carvão: o usual é dividir o trabalho com a resina de troca iônica (o carvão tira bem os corantes pequenos e a resina os grandes e carregados)');
+    const B1 = sgBal(th, kgP);
+    const res = [{ k: 'Calda na entrada', v: f(B.M, 1) + ' kg/h (' + f(B.Q, 2) + ' m³/h) com ' + f(B.Bx, 1) + ' °Bx a ' + f(Tc, 1) + ' °C e cor de ' + sgFmtIU(C0) + ' UI', u: '' },
+      { k: 'Cor na saída (ICUMSA)', v: sgFmtIU(B1.IU) + ' UI (' + f(100 * rem, 0) + ' % removida)', u: '' },
+      { k: 'Isoterma de Freundlich', v: 'q(C₀) = ' + f(q(C0), 1) + ' mg/g com a calda de entrada; q(C) = ' + f(q(C1), 1) + ' mg/g com a calda de saída', u: '' },
+      { k: 'Corante retido', v: f(dCol * 1000, 1) + ' g/h', u: '' },
+      { k: 'Leito de carvão (EBCT de ' + f(ebct, 0) + ' min)', v: f(Vb, 2) + ' m³ e ' + f(Mc / 1000, 2) + ' t de carvão em ' + nCol + (nCol === 1 ? ' coluna' : ' colunas') + ' de ' + f(Dc, 2) + ' m de diâmetro × ' + f(Hc, 2) + ' m (' + f(vS, 2) + ' m/h)', u: '' },
+      { k: 'Consumo de carvão granular', v: f(CUR, 2) + ' kg/h = ' + f(CUR / B.S * 1000, 2) + ' kg por tonelada de sólidos (aproveitamento do leito de ' + f(100 * eta, 0) + ' %)', u: '' },
+      { k: 'Vida de cada coluna até regenerar', v: isFinite(life) ? f(life, 1) + ' dias (' + f(life * 24 * B.Q / Math.max(Vc, 1e-12), 0) + ' volumes de leito de calda)' : '—', u: '' },
+      { k: 'Regeneração no forno', v: f(CUR * 24, 0) + ' kg/dia de carvão gasto reativados a cerca de 900 °C; reposição de ' + f(mk * 24, 1) + ' kg/dia de carvão novo (' + f(100 * loss, 0) + ' % de perda)', u: '' },
+      { k: 'Comparação: carvão em pó num só estágio', v: isFinite(PAC) ? f(PAC, 2) + ' kg/h (' + f(PAC / B.S * 1000, 1) + ' kg/t de sólidos) para a mesma remoção: ' + f(PAC / Math.max(CUR, 1e-12), 1) + ' vezes o granular, porque o pó sai em equilíbrio com a calda já clara' : '—', u: '' }];
+    const Cs = [], qs = [], Cmax = Math.max(C0 * 1.2, 1); for (let k2 = 0; k2 <= 60; k2++) { const C = Cmax * k2 / 60; Cs.push(+C.toFixed(2)); qs.push(+q(C).toFixed(3)); }
+    const plots = [{ kind: 'curves', title: 'Isoterma de Freundlich dos corantes no carvão ativado', data: { xLabel: 'Cor da calda em equilíbrio (UI)', yLabel: 'q (mg de corante por g de carvão)', series: [
+        { name: 'q = K·C^(1/n)', x: Cs, y: qs, color: '#2563c9', width: 3 },
+        { name: 'Carvão granular (sai em equilíbrio com a entrada)', x: [C0], y: [q(C0)], mode: 'markers', color: '#2e9e6b', size: 14 },
+        { name: 'Carvão em pó (equilíbrio com a saída)', x: [C1], y: [q(C1)], mode: 'markers', color: '#d1302b', size: 14 }] } },
+      { kind: 'bars', title: 'Cor da calda (UI ICUMSA)', data: { categories: ['Entrada', 'Saída'], yLabel: 'UI', series: [{ name: 'Cor', y: [C0, B1.IU], color: '#a0703a' }] } }];
+    return { out: { product: mkStream(th, flowsOfKg(th, kgP), s.T, s.P) }, res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
+  IMPL.ix_resin = function (th, b, ins) {
+    const p = b.params, warn = [], s = ins && ins.feed, f = shFmt;
+    if (!connected(s)) throw sgErr('conecte a corrente de calda (xarope) a descolorir');
+    const ic = sgI(th, 'sugar-color'), iw = sgI(th, 'water');
+    if (ic < 0) throw sgErr('inclua na lista de componentes "Corantes do açúcar" (sugar-color): é o pseudocomponente que carrega a cor ICUMSA');
+    if (iw < 0) throw sgErr('inclua Água na lista de componentes');
+    const kg = kgOf(th, s), B = sgBal(th, kg), Tc = K2C(s.T);
+    if (!(B.S > 0)) throw sgErr('a calda não tem sólidos dissolvidos');
+    const rem = clamp(num(p.rem, 60), 0, 99) / 100, Vr = num(p.Vr, 2), capC = num(p.capC, 8), cB = clamp(num(p.cB, 10), 0, 26) / 100, cOH = clamp(num(p.cOH, 0.2), 0, 5) / 100;
+    const bvB = Math.max(0, num(p.bvB, 2)), bvR = Math.max(0, num(p.bvR, 2)), hold = Math.max(0, num(p.hold, 1)), bvS = Math.max(0, num(p.bvS, 4)), Tmax = num(p.Tmax, 80);
+    if (!(Vr > 0 && capC > 0)) throw sgErr('o volume e a capacidade da resina devem ser positivos');
+    const dCol = B.col * rem;   // kg/h de corante retido
+    const tCyc = dCol > 0 ? capC * Vr / dCol : Infinity, nPh = isFinite(tCyc) ? 1 / tCyc : 0;   // h de serviço por ciclo (capC em g/L = kg/m³)
+    const bvh = B.Q / Vr, bvCyc = isFinite(tCyc) ? bvh * tCyc : Infinity;
+    // por hora: calda retida no leito no fim do ciclo vira água doce, junto com a água de adoçamento; salmoura e enxágue vão para o efluente
+    const kgP = kg.slice(); kgP[ic] -= dCol;
+    const Mh = Math.min(hold * Vr * B.rho * nPh, 0.5 * sum(kgP)), fH = Mh / sum(kgP);   // kg/h de calda retida (já descolorida)
+    const kgS = kgP.map(m => m * fH); kgP.forEach((m, i) => { kgP[i] = m - kgS[i]; });
+    const rhoBr = 1000 * (1 + 0.71 * cB), mBr = bvB * Vr * rhoBr * nPh;   // salmoura (kg/h)
+    const wS = bvS * Vr * 990 * nPh, wR = bvR * Vr * 990 * nPh;          // água de adoçamento e de enxágue (kg/h)
+    kgS[iw] += wS;
+    const kgW = new Array(th.n).fill(0); kgW[iw] = mBr * (1 - cB - cOH) + wR; kgW[ic] = dCol;
+    const iNa = sgI(th, 'nacl'), iOH = sgI(th, 'naoh');
+    if (mBr * cB > 0) { if (iNa < 0) throw sgErr('inclua na lista de componentes "Cloreto de sódio" (é o sal da salmoura de regeneração)'); kgW[iNa] += mBr * cB; }
+    if (mBr * cOH > 0) { if (iOH >= 0) kgW[iOH] += mBr * cOH; else { kgW[iw] += mBr * cOH; warn.push('a soda da salmoura alcalina (' + f(mBr * cOH, 2) + ' kg/h) foi contada como água porque "Hidróxido de sódio" não está na lista de componentes'); } }
+    const BP = sgBal(th, kgP), BS = sgBal(th, kgS), saltC = mBr * cB / Math.max(nPh, 1e-12), saltT = mBr * cB / Math.max(B.S / 1000, 1e-12);
+    if (Tc > Tmax) warn.push('calda a ' + f(Tc, 0) + ' °C: acima de ' + f(Tmax, 0) + ' °C a resina aniônica perde grupos ativos e capacidade; resfrie a calda');
+    if (bvh > 4) warn.push(f(bvh, 1) + ' volumes de leito por hora: para xaropes de 60 a 70 °Bx o usual é de 1 a 4; aumente a resina');
+    if (bvh < 0.5) warn.push('só ' + f(bvh, 2) + ' volumes de leito por hora: resina superdimensionada para essa vazão');
+    if (isFinite(tCyc) && tCyc < 8) warn.push('a resina satura em ' + f(tCyc, 1) + ' h: regenerações demais; aumente a resina ou tire parte da cor antes no carvão ativado');
+    if (B.IU > 1500) warn.push('calda com ' + sgFmtIU(B.IU) + ' UI: resinas trabalham melhor no acabamento (abaixo de cerca de 1 000 UI); faça antes a clarificação ou o carvão');
+    if (B.Bx < 50) warn.push('calda com ' + f(B.Bx, 0) + ' °Bx: diluída demais; cada volume de leito leva pouco açúcar e sobra mais água para evaporar depois');
+    const res = [{ k: 'Calda na entrada', v: f(B.M, 1) + ' kg/h (' + f(B.Q, 2) + ' m³/h) com ' + f(B.Bx, 1) + ' °Bx a ' + f(Tc, 1) + ' °C e cor de ' + sgFmtIU(B.IU) + ' UI', u: '' },
+      { k: 'Cor na saída (ICUMSA)', v: sgFmtIU(BP.IU) + ' UI (' + f(100 * rem, 0) + ' % removida, média do ciclo)', u: '' },
+      { k: 'Carga hidráulica', v: f(bvh, 2) + ' volumes de leito por hora em ' + f(Vr, 2) + ' m³ de resina', u: '' },
+      { k: 'Ciclo de serviço', v: isFinite(tCyc) ? f(tCyc, 1) + ' h e ' + f(bvCyc, 0) + ' volumes de leito de calda até saturar (' + f(capC, 1) + ' g de corante por litro de resina)' : 'sem cor a remover: não precisa regenerar', u: '' },
+      { k: 'Regeneração (salmoura alcalina)', v: f(bvB, 1) + ' volumes de leito de salmoura com ' + f(100 * cB, 0) + ' % de NaCl' + (cOH > 0 ? ' e ' + f(100 * cOH, 1) + ' % de NaOH' : '') + ': ' + f(saltC, 0) + ' kg de sal por regeneração (' + f(saltT, 2) + ' kg por tonelada de sólidos)', u: '' },
+      { k: 'Águas doces (adoçamento)', v: f(BS.M, 1) + ' kg/h com ' + f(BS.Bx, 1) + ' °Bx: a calda retida no leito, empurrada por ' + f(bvS, 1) + ' volumes de leito de água; volte com elas ao dissolvedor (de preferência concentradas na osmose reversa)', u: '' },
+      { k: 'Efluente da regeneração', v: f(sum(kgW), 1) + ' kg/h de salmoura usada e enxágue, com ' + f(dCol * 1000, 1) + ' g/h de corantes (a salmoura pode ser recuperada por nanofiltração)', u: '' },
+      { k: 'Água de processo consumida (adoçamento, salmoura e enxágue)', v: f(wS + wR + mBr * (1 - cB - cOH), 1) + ' kg/h, entra pelos campos do bloco', u: '' }];
+    const mCyc = x => (isFinite(tCyc) ? x * tCyc / 1000 : 0);   // t por ciclo
+    const plots = [{ kind: 'bars', title: 'Cor da calda (UI ICUMSA)', data: { categories: ['Entrada', 'Saída'], yLabel: 'UI', series: [{ name: 'Cor', y: [B.IU, BP.IU], color: '#a0703a' }] } },
+      { kind: 'bars', title: 'O que passa pela resina em cada ciclo (t)', data: { categories: ['Calda tratada', 'Águas doces', 'Salmoura', 'Enxágue'], yLabel: 't por ciclo',
+        series: [{ name: 't por ciclo', y: [mCyc(sum(kgP)), mCyc(BS.M), mCyc(mBr), mCyc(wR)], color: '#1d8fd1' }] } }];
+    return { out: { product: mkStream(th, flowsOfKg(th, kgP), s.T, s.P), sweet: mkStream(th, flowsOfKg(th, kgS), s.T, s.P), waste: mkStream(th, flowsOfKg(th, kgW), s.T, s.P) },
+      res: decBR(decK(res)), warn: decW(warn), plots };
+  };
+
   IMPL.pw_tank = function (th, b, ins) {
     const p = b.params, warn = [], s = ins && ins.feed, f = shFmt;
     if (!connected(s)) throw new Error('conecte a corrente de água purificada');
@@ -15607,6 +15834,34 @@ window.SIMULAFACIL_CONFIG = {
       sym: [[sub(Q, 'p'), 'vazão de projeto'], ['EBCT', 'tempo de contato em leito vazio'], [sub(V, 'r') + ', ' + sub(i('q'), 'r'), 'volume e capacidade útil da resina (g CaCO₃/L)'], [i('H'), 'dureza (mg CaCO₃/L)'], [sub(i('m'), 'sal'), 'sal por litro de resina na regeneração']],
       note: 'A água é o ingrediente principal do shampoo (cerca de 70 % da fórmula). O filtro de areia segura a turbidez; o carvão ativado tira o cloro, que oxidaria a fragrância e atacaria a resina; o abrandador troca o cálcio por sódio, porque o cálcio forma sabões insolúveis e muda a curva de sal; a lâmpada UV mata as bactérias que crescem no carvão depois que o cloro sai. A água abrandada ainda tem sais: para água purificada da Farmacopeia seria preciso osmose reversa ou deionização.'
     }),
+    ro_membrane: () => ({
+      name: 'Osmose reversa: membranas em espiral',
+      eqs: [eq(i('π') + ' = ' + i('φ') + '·' + i('m') + '·' + i('R') + T + ',&nbsp; ' + i('φ') + ' = 1 + 0,08·' + sub(i('m'), 'sacarose'), 'pressão osmótica de van \'t Hoff em molalidade; sais contam os íons'),
+        eq(sub(i('J'), 'w') + ' = ' + sub(i('A'), 'w') + '·TCF·[(' + sub(P, 'ali') + ' − ' + sub(P, 'perm') + ') − (' + sub(i('π'), 'parede') + ' − ' + sub(i('π'), 'perm') + ')]', 'fluxo de água pela membrana'),
+        eq(sub(i('π'), 'parede') + ' = ' + i('π') + '(CP·' + sub(i('c'), 'seio') + '),&nbsp; ' + sub(i('c'), 'perm') + ' = (1 − ' + i('R') + ')·CP·' + sub(i('c'), 'seio'), 'polarização de concentração e passagem de soluto'),
+        eq(i('A') + ' = ' + sum('') + ' ' + fr('Δ' + sub(i('m'), 'perm'), sub(i('J'), 'w')) + ',&nbsp; TCF = exp[2640(1/298 − 1/' + T + ')]', 'área integrada ao longo dos vasos'),
+        eq(sub(i('W'), 'bomba') + ' = ' + fr(sub(Q, 'ali') + '·Δ' + P, i('η')) + ' − ' + sub('η', 'rec') + '·' + sub(Q, 'conc') + '·' + sub(P, 'conc'), 'potência líquida da bomba de alta pressão')],
+      sym: [[i('π'), 'pressão osmótica (bar)'], [i('m'), 'molalidade (mol por kg de água)'], [sub(i('A'), 'w'), 'permeabilidade da membrana à água'], ['CP', 'fator de polarização de concentração'], [i('R'), 'rejeição dos solutos']],
+      note: 'A membrana deixa passar a água e segura a sacarose e os sais. Só sai permeado enquanto a pressão aplicada vence a pressão osmótica, que cresce à medida que a solução se concentra: por isso a osmose reversa pré-concentra soluções diluídas (águas doces, caldos, sucos) até cerca de 20 a 30 °Bx, e o evaporador termina o serviço. Ela gasta energia elétrica na bomba em vez de vapor.'
+    }),
+    gac_column: () => ({
+      name: 'Coluna de carvão ativado granular (descoloração)',
+      eqs: [eq(i('q') + ' = ' + i('K') + '·' + sup(C, '1/n'), 'isoterma de Freundlich: corante por grama de carvão em equilíbrio com a cor C (UI)'),
+        eq(sub(C, 'saída') + ' = (1 − ' + i('r') + ')·' + sub(C, '0') + ',&nbsp; ' + sub(i('m'), 'cor') + ' = ' + i('r') + '·' + sub(C, '0') + '·' + sub(i('S'), '') + '', 'cor retida (1 UI = 1 mg de corante por kg de sólidos S)'),
+        eq('CUR = ' + fr(sub(i('m'), 'cor'), i('q') + '(' + sub(C, '0') + ')·' + i('η')) + ',&nbsp; ' + sub(i('m'), 'pó') + ' = ' + fr(sub(i('m'), 'cor'), i('q') + '(' + sub(C, 'saída') + ')'), 'consumo do carvão granular (carrossel) e do carvão em pó num só estágio'),
+        eq(sub(V, 'leito') + ' = ' + Q + '·EBCT,&nbsp; vida = ' + fr(sub(i('ρ'), 'b') + '·' + sub(V, 'coluna'), 'CUR'), 'volume do leito e tempo até regenerar')],
+      sym: [[i('K') + ', 1/' + i('n'), 'constantes de Freundlich'], [sub(C, '0'), 'cor da calda na entrada (UI)'], [i('r'), 'remoção de cor'], [i('η'), 'aproveitamento do leito'], ['EBCT', 'tempo de contato em leito vazio']],
+      note: 'Os corantes do açúcar (melanoidinas, caramelos e polifenóis) ficam presos nos poros do carvão. No carrossel de colunas em série, a primeira coluna só sai para regenerar quando está em equilíbrio com a calda de entrada, a mais escura: por isso o carvão granular rende mais que o carvão em pó, que sai em equilíbrio com a calda já clara. O carvão gasto é reativado num forno a cerca de 900 °C.'
+    }),
+    ix_resin: () => ({
+      name: 'Resina de troca iônica para descoloração',
+      eqs: [eq('R–Cl + Cor⁻ → R–Cor + Cl⁻', 'a resina aniônica forte troca o cloreto pelos corantes aniônicos'),
+        eq('R–Cor + NaCl (+ NaOH) → R–Cl + Na–Cor', 'regeneração com salmoura alcalina'),
+        eq(sub(t, 'ciclo') + ' = ' + fr(sub(i('q'), 'r') + '·' + sub(V, 'r'), i('r') + '·' + sub(i('m'), 'cor')) + ',&nbsp; BV/h = ' + fr(Q, sub(V, 'r')), 'tempo de serviço até saturar e carga hidráulica'),
+        eq(sub(i('m'), 'doce') + ' = ' + fr(i('h') + '·' + sub(V, 'r') + '·' + i('ρ') + ' + ' + sub(i('n'), 'ad') + '·' + sub(V, 'r') + '·' + sub(i('ρ'), 'água'), sub(t, 'ciclo')), 'águas doces: calda retida e água de adoçamento')],
+      sym: [[sub(V, 'r'), 'volume de resina'], [sub(i('q'), 'r'), 'capacidade de cor por litro de resina'], [i('r'), 'remoção de cor'], [i('h'), 'calda retida (volumes de leito)'], ['BV', 'volume de leito']],
+      note: 'Os corantes do açúcar têm carga negativa e trocam de lugar com o cloreto da resina. Quando a resina satura, a calda é empurrada com água (adoçamento), formando as águas doces, que voltam ao processo; depois a salmoura alcalina devolve o cloreto à resina e leva os corantes para o efluente.'
+    }),
     pw_tank: () => ({
       name: 'Tanque de água purificada com anel de recirculação',
       eqs: [eq(sub(i('n'), 'bat') + ' = ' + fr(i('f') + V, sub(V, 'bat')) + ',&nbsp; autonomia = ' + fr(i('f') + V, sub(i('n'), 'dia') + sub(V, 'bat')), 'bateladas com o tanque cheio e dias de estoque'),
@@ -16285,6 +16540,18 @@ window.SIMULAFACIL_CONFIG = {
       'Numa fábrica de cosméticos a água é o ingrediente principal e precisa chegar sem cloro, sem dureza, sem turbidez e com poucas bactérias. O pré-tratamento simples tem quatro barreiras em série: filtro de areia (turbidez), carvão ativado (cloro livre), abrandador de resina catiônica (troca o cálcio pelo sódio) e lâmpada UV (bactérias).',
       'O bloco dimensiona as garrafas de PRFV pela vazão de projeto, calcula o ciclo e a regeneração do abrandador, o sal e a água de retrolavagem e de regeneração, e a dose e a potência da lâmpada UV. A química usa o sistema carbonato da ETA: o carvão converte o HOCl em cloreto e o abrandador troca o Ca(HCO₃)₂ por NaHCO₃.',
       'No exemplo, 45 kg de água bruta com 149 mg CaCO₃/L, 1 mg/L de cloro e 5 uT saem com 2 mg CaCO₃/L, 0,01 mg/L de cloro e 0,5 uT. A resina de 10 L regenera a cada 17 h de serviço com 1,5 kg de sal, a lâmpada UV de cerca de 12 W reduz 5 log das bactérias e o rejeito leva 19 % da água bruta.'] },
+    ro_membrane: { ex: ex('refino-acucar', 'Açúcar: refino do açúcar cristal'), p: [
+      'Na osmose reversa, uma bomba de alta pressão empurra a solução contra uma membrana de poliamida enrolada em espiral. A água atravessa a membrana e sai como permeado; a sacarose e os sais ficam no concentrado. A força motriz é a diferença entre a pressão aplicada e a pressão osmótica, que cresce à medida que a solução se concentra.',
+      'O bloco integra o fluxo ao longo dos vasos de pressão: em cada trecho calcula a pressão osmótica no seio e na parede da membrana (polarização de concentração), o fluxo local, a área e a passagem de soluto. Mostra o número de elementos, a energia da bomba e quanto vapor um evaporador gastaria para tirar a mesma água. Se a pressão não basta para chegar ao °Brix pedido, o bloco diz até onde dá para ir.',
+      'No exemplo do refino, as águas doces da resina (cerca de 16 °Bx) são resfriadas a 35 °C e concentradas a 25 °Bx com 40 bar em dois elementos de 4" antes de voltar ao dissolvedor. A bomba gasta cerca de 0,5 kW; tirar a mesma água num evaporador de triplo efeito gastaria perto de 28 kW de calor. O permeado pode voltar como água de dissolução.'] },
+    gac_column: { ex: ex('refino-acucar', 'Açúcar: refino do açúcar cristal'), p: [
+      'O carvão ativado granular tem uma área interna enorme (de 600 a 1 200 m² por grama) e prende nos poros os corantes da calda de açúcar. Na refinaria ele trabalha em colunas em série, quentes (70 a 80 °C), com tempos de contato de 30 a 90 minutos.',
+      'O bloco usa a isoterma de Freundlich para calcular quanto corante cada grama de carvão segura. No carrossel, o carvão que sai para regenerar está em equilíbrio com a calda de entrada, a mais escura, e por isso rende mais. O bloco calcula o consumo de carvão, o tamanho das colunas, a vida de cada coluna, a reposição no forno de regeneração e, para comparar, quanto carvão em pó seria preciso num só estágio.',
+      'No exemplo do refino, a calda de 65 °Bx chega com 400 UI e o carvão tira metade da cor. A cor ICUMSA anda nas correntes pelo pseudocomponente "Corantes do açúcar", na convenção do simulador: 1 UI = 1 mg de corante por kg de sólidos.'] },
+    ix_resin: { ex: ex('refino-acucar', 'Açúcar: refino do açúcar cristal'), p: [
+      'A resina aniônica forte, na forma cloreto, troca o cloreto pelos corantes de carga negativa da calda. Ela faz o acabamento da descoloração, depois do carvão ativado ou da carbonatação, e é regenerada com salmoura alcalina (NaCl com um pouco de NaOH).',
+      'O bloco calcula o tempo de serviço até a resina saturar, os volumes de leito tratados por ciclo, o sal de cada regeneração, as águas doces (a calda retida no leito empurrada pela água de adoçamento) e o efluente com a salmoura usada e os corantes. A água de adoçamento, de enxágue e da salmoura entra pelos campos do bloco.',
+      'No exemplo do refino, 2 m³ de resina tiram 60 % da cor que sobrou do carvão. As águas doces vão para a osmose reversa e voltam concentradas ao dissolvedor, fechando o reciclo de açúcar.'] },
     pw_tank: { ex: ex('shampoo-capilar', 'Cosméticos: fábrica de shampoo capilar perolado'), p: [
       'O tanque de inox guarda a água purificada entre o pré-tratamento, que trabalha por algumas horas, e as bateladas, que tiram a água de uma vez. Uma bomba recircula a água por um anel sanitário com uma lâmpada UV na volta, para que ela nunca fique parada.',
       'O bloco separa a água de cada batelada em fase quente e fase fria, deixa o excedente no tanque, calcula a autonomia, a velocidade e a perda de carga do anel e simula o nível ao longo do dia, com o pré-tratamento ligando abaixo de um nível mínimo.',
@@ -16555,6 +16822,9 @@ window.SIMULAFACIL_CONFIG = {
     conche: { feed: 'massa refinada', fat: 'manteiga de cacau', emulsifier: 'lecitina', product: 'chocolate conchado', vapor: 'ar de exaustão', q_in: 'motores' },
     temperer: { feed: 'chocolate conchado', product: 'barras de chocolate', q_out: 'água gelada' },
     pw_pretreat: { feed: 'água bruta', product: 'água purificada', waste: 'rejeito (retrolavagens e salmoura)' },
+    ro_membrane: { feed: 'alimentação (água doce)', permeate: 'permeado (água)', concentrate: 'concentrado' },
+    gac_column: { feed: 'calda a descolorir', product: 'calda descolorida' },
+    ix_resin: { feed: 'calda a descolorir', product: 'calda descolorida', sweet: 'águas doces (adoçamento)', waste: 'efluente da regeneração (salmoura)' },
     pw_tank: { feed: 'água purificada', hot: 'água para a fase quente', cold: 'água para a fase fria', stock: 'excedente (fica no tanque)' },
     shampoo_tank: { water_hot: 'água da fase quente', water_cold: 'água da fase fria', anionic: 'tensoativo aniônico (LESS)', amphoteric: 'tensoativo anfótero (betaína)', glycerin: 'glicerina',
       pearl: 'perolizante (EGDS)', additives: 'aditivos e corretores', out: 'shampoo a granel' },
@@ -16758,6 +17028,9 @@ window.SIMULAFACIL_CONFIG = {
     eta_thickener: { w: 150, h: 100, ports: { feed: P(40, 0, 'u', 'in'), feed2: P(150, 46, 'r', 'in'), supernatant: P(150, 24, 'r', 'out'), thickened: P(75, 100, 'd', 'out') } },
     eta_centrifuge: { w: 170, h: 90, ports: { feed: P(87, 0, 'u', 'in'), centrate: P(170, 30, 'r', 'out'), cake: P(25, 90, 'd', 'out'), q_in: P(130, 90, 'd', 'ein') } },
     pw_pretreat: { w: 220, h: 110, ports: { feed: P(0, 30, 'l', 'in'), product: P(220, 71, 'r', 'out'), waste: P(110, 110, 'd', 'out') } },
+    ro_membrane: { w: 190, h: 90, ports: { feed: P(0, 45, 'l', 'in'), concentrate: P(190, 30, 'r', 'out'), permeate: P(190, 72, 'r', 'out') } },
+    gac_column: { w: 120, h: 130, ports: { feed: P(0, 20, 'l', 'in'), product: P(120, 112, 'r', 'out') } },
+    ix_resin: { w: 130, h: 140, ports: { feed: P(0, 22, 'l', 'in'), product: P(130, 118, 'r', 'out'), sweet: P(130, 40, 'r', 'out'), waste: P(65, 140, 'd', 'out') } },
     pw_tank: { w: 150, h: 120, ports: { feed: P(0, 30, 'l', 'in'), hot: P(150, 70, 'r', 'out'), cold: P(150, 96, 'r', 'out'), stock: P(68, 120, 'd', 'out') } },
     shampoo_tank: { w: 170, h: 150, ports: { water_hot: P(0, 34, 'l', 'in'), water_cold: P(0, 60, 'l', 'in'), anionic: P(0, 86, 'l', 'in'), amphoteric: P(48, 0, 'u', 'in'), glycerin: P(64, 0, 'u', 'in'),
       pearl: P(106, 0, 'u', 'in'), additives: P(122, 0, 'u', 'in'), out: P(170, 142, 'r', 'out') } },
@@ -16916,6 +17189,20 @@ window.SIMULAFACIL_CONFIG = {
       o.push(L([[124, 30], [160, 30], [160, 63]]), R(156, 63, 58, 16, 8), L([[164, 71], [206, 71]], 'hot'), L([[172, 58], [174, 52]], 'hot'), L([[185, 58], [185, 51]], 'hot'), L([[198, 58], [196, 52]], 'hot'),
         T(185, 96, 'UV'), L([[214, 71], [220, 71]]));   // reator UV com a lâmpada
       o.push(L([[24, 92], [24, 100], [141, 100], [141, 92]], 'lnd'), L([[66, 92], [66, 100]], 'lnd'), L([[110, 100], [110, 110]], 'lnd'));   // rejeito
+      return o; },
+    ro_membrane: () => { // osmose reversa: bomba de alta pressão, vaso de pressão com as folhas de membrana em espiral, concentrado em cima e permeado embaixo
+      const o = [L([[0, 45], [14, 45]]), C(26, 45, 12), C(26, 45, 4, 'ln'), L([[22, 38], [32, 45], [22, 52]], 'ln'), L([[38, 45], [44, 45], [44, 36], [50, 36]]), R(50, 18, 126, 36, 16)];
+      for (let x = 66; x <= 160; x += 12) o.push(L([[x, 22], [x + 6, 50]], 'ln'));
+      o.push(L([[54, 36], [172, 36]], 'cold'), L([[176, 30], [190, 30]]), L([[150, 54], [150, 72], [190, 72]], 'cold'), T(113, 86, 'osmose reversa'));
+      return o; },
+    gac_column: () => { // duas colunas de carvão ativado granular em série (carrossel), cheias de grãos pretos
+      const o = [L([[0, 20], [14, 20]]), R(14, 8, 32, 112, 12), R(66, 8, 32, 112, 12), R(18, 28, 24, 84, 3, 'bodyb'), R(70, 28, 24, 84, 3, 'bodyb'),
+        L([[30, 120], [30, 126], [56, 126], [56, 14], [66, 14]]), L([[98, 112], [120, 112]]), T(56, 5, 'carvão')];
+      return o; },
+    ix_resin: () => { // coluna de resina com as esferas, saída da calda descolorida embaixo, águas doces pela lateral e efluente da regeneração no fundo
+      const o = [L([[0, 22], [30, 22]]), R(30, 8, 60, 116, 14), L([[32, 30], [88, 30]], 'cold')];
+      [[42, 44], [56, 42], [70, 46], [82, 44], [48, 58], [62, 60], [76, 58], [42, 72], [56, 74], [70, 72], [82, 74], [48, 88], [62, 90], [76, 88], [42, 102], [56, 104], [70, 102], [82, 104]].forEach(([x, y]) => o.push(C(x, y, 4, 'bodyw')));
+      o.push(L([[90, 118], [130, 118]]), L([[90, 40], [130, 40]], 'lnd'), L([[65, 124], [65, 140]], 'lnd'), T(60, 4, 'resina'));
       return o; },
     pw_tank: () => [ // tanque de inox com filtro de respiro, nível de água, bomba sanitária e anel de recirculação com lâmpada UV na volta
       L([[0, 30], [36, 30]]), R(36, 14, 64, 90, 14), R(60, 2, 16, 10, 2, 'bodyw'), L([[68, 12], [68, 14]]),
@@ -22817,6 +23104,28 @@ def pfr_transiente(P, nome):
       streams: [S('1', 'FC', 'out', 'X', 'solids', 'Café moído'), S('2', 'FW', 'out', 'X', 'solvent', 'Água quente'), S('3', 'X', 'overflow', 'EC', 'in', 'Extrato (22 %)'), S('4', 'X', 'underflow', 'PB', 'in', 'Borra'),
         S('5', 'EC', 'out', 'EV', 'feed', 'Extrato frio'), S('E1', 'ES', 'eo', 'EV', 'q_in', 'Vapor'), S('6', 'EV', 'product', 'SD', 'feed', 'Concentrado (45 %)'), S('7', 'EV', 'vapor', 'PV', 'in', 'Vapor'),
         S('E2', 'EA', 'eo', 'SD', 'q_in', 'Ar quente'), S('8', 'SD', 'product', 'PP', 'in', 'Café solúvel'), S('9', 'SD', 'exhaust', 'PA', 'in', 'Exaustão')] } },
+    { key: 'refino-acucar', title: 'Açúcar: refino do açúcar cristal — dissolução, carvão ativado granular, resina de troca iônica, osmose reversa das águas doces, cozedor a vácuo e centrífuga (5 t/h, cor ICUMSA)', fs: {
+      name: 'Refinaria de açúcar: do cristal ao refinado (5 t/h)', components: ['water', 'sucrose', 'sugar-color', 'nacl', 'naoh'], model: 'IDEAL',
+      blocks: [
+        { id: 'FA', type: 'feed', name: 'Açúcar cristal (400 UI)', params: { T: 25, P: 1.5, vf: '', flow: 5000, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 0.001, sucrose: 0.9986, 'sugar-color': 0.0004, nacl: 0, naoh: 0 } } },
+        { id: 'FW', type: 'feed', name: 'Água de dissolução (80 °C)', params: { T: 80, P: 1.5, vf: '', flow: 2510, flowUnit: 'kg/h', basis: 'mássica', composition: { water: 1 } } },
+        { id: 'DS', type: 'mixer', name: 'Dissolvedor (calda a 65 °Bx)', params: { P: '' } },
+        { id: 'HX', type: 'heater', name: 'Aquecedor da calda (80 °C)', params: { mode: 'Temperatura de saída', T: 80, dP: 0 } },
+        { id: 'CA', type: 'gac_column', name: 'Colunas de carvão ativado granular', params: {} },
+        { id: 'RT', type: 'ix_resin', name: 'Resina de troca iônica (descoloração)', params: {} },
+        { id: 'CL', type: 'cooler', name: 'Resfriador das águas doces (35 °C)', params: { mode: 'Temperatura de saída', T: 35, dP: 0 } },
+        { id: 'OR', type: 'ro_membrane', name: 'Osmose reversa das águas doces', params: { Ael: 7.4 } },
+        { id: 'PP', type: 'product', name: 'Permeado (água de reuso)' },
+        { id: 'PE', type: 'product', name: 'Efluente da regeneração (salmoura)' },
+        { id: 'EV', type: 'evap_single', name: 'Cozedor a vácuo (equivalente: evaporação até 88 % de sólidos)', params: { xP: 0.88, Ps: 200, PN: 20, U: '600', b1: 0, b2: 14, cp0: 4.19, cp1: 2.35 } },
+        { id: 'PV', type: 'product', name: 'Vapor do cozedor (para o condensador)' },
+        { id: 'CF', type: 'separator', name: 'Centrífuga (equivalente: cristais e licor-mãe)', params: { splits: { sucrose: 0.5, 'sugar-color': 0.05, water: 0.035, nacl: 0, naoh: 0 } } },
+        { id: 'PA', type: 'product', name: 'Açúcar refinado úmido (para o secador)' },
+        { id: 'PL', type: 'product', name: 'Licor-mãe (vai ao 2º cozimento)' }],
+      streams: [S('1', 'FA', 'out', 'DS', 'in1', 'Açúcar cristal'), S('2', 'FW', 'out', 'DS', 'in2', 'Água'), S('3', 'DS', 'out', 'HX', 'in', 'Calda bruta'), S('4', 'HX', 'out', 'CA', 'feed', 'Calda a 80 °C'),
+        S('5', 'CA', 'product', 'RT', 'feed', 'Calda clarificada'), S('6', 'RT', 'product', 'EV', 'feed', 'Calda fina'), S('7', 'RT', 'sweet', 'CL', 'in', 'Águas doces'), S('8', 'RT', 'waste', 'PE', 'in', 'Salmoura usada'),
+        S('9', 'CL', 'out', 'OR', 'feed', 'Águas doces a 35 °C'), S('10', 'OR', 'concentrate', 'DS', 'in3', 'Águas doces concentradas'), S('11', 'OR', 'permeate', 'PP', 'in', 'Permeado'),
+        S('12', 'EV', 'product', 'CF', 'in', 'Massa cozida'), S('13', 'EV', 'vapor', 'PV', 'in', 'Vapor'), S('14', 'CF', 'out1', 'PA', 'in', 'Açúcar refinado'), S('15', 'CF', 'out2', 'PL', 'in', 'Licor-mãe')] } },
     { key: 'extractive', title: 'Destilação extrativa etanol/água com etilenoglicol', fs: {
       name: 'Desidratação de etanol por destilação extrativa', components: ['ethanol', 'water', 'ethylene-glycol'], model: 'NRTL',
       blocks: [
@@ -23395,7 +23704,7 @@ def pfr_transiente(P, nome):
       '\n\n## Convenções da coluna rigorosa\nEstágio 1 = condensador, estágio N = refervedor. Dmode "Vazão D" usa D em kmol/h; "D/F" usa razão. feed2 é para solvente/arrastador (extrativa: perto do topo). Especificação de projeto opcional: specComp + specType + specValue + specVary (R ou D).';
   }
   const RULES = 'Você é o agente do SIMULA FÁCIL IA, simulador de processos químicos e bioprocessos no navegador. O software foi criado pelo Prof. Juan Canellas Bosch Neto (Curso de Engenharia Química – UFSJ; PPGEQ-DEQUI-CAP-UFSJ), autor do livro "Modelagem e Simulação de Processos Dinâmicos" (Editora Appris, 2019), com coautoria do CLAUDE (Anthropic); informe isso se perguntarem sobre a autoria e indique o livro a quem quiser aprofundar a modelagem dinâmica. Converse em português do Brasil com o engenheiro, entenda o processo (texto e figuras), sugira operações unitárias, modelo termodinâmico, condições e especificações, e use as ferramentas para montar e simular o fluxograma. O motor numérico do simulador faz os cálculos rigorosos (ELV com NRTL/UNIQUAC/UNIFAC/PR/PC-SAFT, colunas MESH por ponto de bolha + Newton, reatores com integração de EDOs). Nunca invente resultados: rode a simulação e cite os números retornados.\n\n' +
-    'Regras:\n1. Use somente ids de componentes e tipos/portas de bloco do catálogo. Se faltar um componente, diga qual e proponha substituto.\n2. Modelo: NRTL ou UNIQUAC para líquidos polares e azeótropos; UNIFAC se faltar dado; Peng-Robinson/SRK para gases, hidrocarbonetos leves e alta pressão; PC-SAFT para líquidos iônicos (ex.: CO2 em [C4mim][NTf2]), polímeros e associação forte (soft-SAFT também serve para hidrocarbonetos, água e álcoois); Ideal só para misturas quase ideais.\n3. Para montar do zero use construir_fluxograma com TODOS os blocos e correntes (cada alimentação é um bloco feed; saídas sem ligação viram produtos). Para ajustes use modificar_fluxograma. As duas ferramentas já simulam e devolvem o resumo.\n4. Se a simulação falhar, leia o erro, corrija a especificação e tente de novo (no máximo duas tentativas) antes de responder.\n5. Azeótropos (ex.: etanol/água ~0,89 a 1 atm): avise o limite e sugira destilação extrativa (etilenoglicol), azeotrópica heterogênea (ciclohexano + decantador), variação de pressão, peneira molecular ou pervaporação.\n6. Depois de simular: interprete pureza, recuperação, cargas térmicas e convergência, e dê de 2 a 4 sugestões concretas e quantificadas de melhoria.\n7. Figuras: descreva em uma ou duas frases o que identificou (equipamentos, correntes, condições) e monte o fluxograma correspondente; assuma valores típicos para dados ausentes e diga quais assumiu.\n8. Pedidos de código: MATLAB/Octave → chame abrir_codigo_matlab; Python → chame abrir_codigo_python (ambos geram o programa completo com fluxograma nos ícones padrão e gráficos com fonte 18). Para trechos específicos escreva um bloco ```matlab (set(0,\'DefaultAxesFontSize\',18)) ou ```python (plt.rcParams[\'font.size\'] = 18).\n9. Pedido de fluxograma final ou relatório: chame abrir_fluxograma_final.\n10. Seja conciso: frases curtas, listas curtas, números com unidade e vírgula decimal. Perguntas só conceituais dispensam ferramentas.\n\nUnidades dos parâmetros: T °C, P bar, vazões kmol/h (ou kg/h, L/s), cargas kW, volume m³, tempo s.\n\n';
+    'Regras:\n1. Use somente ids de componentes e tipos/portas de bloco do catálogo. Se faltar um componente, diga qual e proponha substituto.\n2. Modelo: NRTL ou UNIQUAC para líquidos polares e azeótropos; UNIFAC se faltar dado; Peng-Robinson/SRK para gases, hidrocarbonetos leves e alta pressão; PC-SAFT para líquidos iônicos (ex.: CO2 em [C4mim][NTf2]), polímeros e associação forte (soft-SAFT também serve para hidrocarbonetos, água e álcoois); Ideal só para misturas quase ideais.\n3. Para montar do zero use construir_fluxograma com TODOS os blocos e correntes (cada alimentação é um bloco feed; saídas sem ligação viram produtos). Para ajustes use modificar_fluxograma. As duas ferramentas já simulam e devolvem o resumo.\n4. Se a simulação falhar, leia o erro, corrija a especificação e tente de novo (no máximo duas tentativas) antes de responder.\n5. Azeótropos (ex.: etanol/água ~0,89 a 1 atm): avise o limite e sugira destilação extrativa (etilenoglicol), azeotrópica heterogênea (ciclohexano + decantador), variação de pressão, peneira molecular ou pervaporação.\n6. Depois de simular: interprete pureza, recuperação, cargas térmicas e convergência, e dê de 2 a 4 sugestões concretas e quantificadas de melhoria.\n7. Figuras: descreva em uma ou duas frases o que identificou (equipamentos, correntes, condições) e monte o fluxograma correspondente; assuma valores típicos para dados ausentes e diga quais assumiu.\n8. Pedidos de código: MATLAB/Octave → chame abrir_codigo_matlab; Python → chame abrir_codigo_python (ambos geram o programa completo com fluxograma nos ícones padrão e gráficos com fonte 18). Para trechos específicos escreva um bloco ```matlab (set(0,\'DefaultAxesFontSize\',18)) ou ```python (plt.rcParams[\'font.size\'] = 18).\n9. Pedido de fluxograma final ou relatório: chame abrir_fluxograma_final.\n10. Seja conciso: frases curtas, listas curtas, números com unidade e vírgula decimal. Perguntas só conceituais dispensam ferramentas.\n11. Equipamento que não existe no catálogo: não recuse e não invente tipo de bloco. Monte um equivalente com os blocos genéricos: separator (separador de componentes: a fração de cada componente que vai para a saída 1; serve para membranas, filtros, centrífugas, peneiras, adsorvedores e cristalização com separação), rconv (reator de conversão), heater/cooler (calor), pump/valve (pressão), mixer/splitter, ou uma combinação deles (ex.: ultrafiltração = bomba + separador). Dê ao bloco o nome do equipamento real com "(equivalente)", por exemplo "Centrífuga de cesto (equivalente)", diga em uma frase as hipóteses usadas (frações, conversões, pressões) e avise que é um modelo de balanço, sem o projeto do equipamento. Se o equipamento parecer útil para outras aulas, sugira ao usuário pedir ao Prof. Juan que avalie incluí-lo na paleta. Para açúcar e caldas, a cor ICUMSA anda no componente sugar-color (1 UI = 1 mg de corante por kg de sólidos); ro_membrane, gac_column e ix_resin já fazem osmose reversa, carvão ativado e resina de troca iônica.\n\nUnidades dos parâmetros: T °C, P bar, vazões kmol/h (ou kg/h, L/s), cargas kW, volume m³, tempo s.\n\n';
 
   /* ---------------- resumo do estado e dos resultados */
   function stateSummary(st) {
@@ -23430,7 +23739,7 @@ def pfr_transiente(P, nome):
     '- construir_fluxograma substitui tudo: inclua TODOS os componentes, blocos e correntes. Cada alimentação é um bloco feed; saídas sem ligação viram produtos.\n' +
     '- Para ajustar o que já existe use {"acao": "modificar_fluxograma", "args": {"alterar": [{"id": "T1", "params": {"R": 4}}], "adicionar_blocos": [...], "adicionar_correntes": [...], "remover_blocos": ["id"], "remover_correntes": ["nome"], "componentes": [...], "modelo": "..."}} (use só os campos necessários; params são mesclados aos existentes).\n' +
     '- Use somente ids de componentes, tipos de bloco, portas e parâmetros do catálogo abaixo, com os valores das listas entre chaves escritos exatamente como aparecem. JSON válido: aspas duplas, ponto decimal, sem comentários.\n\n' +
-    'Regras de engenharia:\n1. Modelo: NRTL ou UNIQUAC para líquidos polares e azeótropos; UNIFAC se faltar dado; Peng-Robinson/SRK para gases, hidrocarbonetos leves e alta pressão; PC-SAFT para líquidos iônicos (ex.: CO2 em [C4mim][NTf2]), polímeros e associação forte (soft-SAFT também serve para hidrocarbonetos, água e álcoois); Ideal só para misturas quase ideais.\n2. Azeótropos (ex.: etanol/água ~0,89 a 1 atm): avise o limite e sugira destilação extrativa (etilenoglicol), azeotrópica heterogênea (ciclohexano + decantador), variação de pressão, peneira molecular ou pervaporação.\n3. Quando receber resultados: interprete pureza, recuperação, cargas térmicas e convergência, e dê de 2 a 4 sugestões concretas e quantificadas; se quiser testar uma melhoria, devolva o bloco json de modificar_fluxograma.\n4. Se a simulação colada mostrar erro, leia a mensagem, corrija a especificação e devolva o json corrigido.\n5. Figuras: descreva em uma ou duas frases o que identificou e monte o fluxograma correspondente; assuma valores típicos para dados ausentes e diga quais assumiu.\n6. Código: o simulador gera MATLAB/Octave e Python completos pelos botões "MATLAB/Octave" e "Python"; indique esses botões. Para trechos específicos use set(0,\'DefaultAxesFontSize\',18) no MATLAB e plt.rcParams[\'font.size\'] = 18 no Python.\n7. Seja conciso: frases curtas, números com unidade e vírgula decimal no texto (no json, ponto decimal).\n\nUnidades dos parâmetros: T °C, P bar, vazões kmol/h (ou kg/h, L/s), cargas kW, volume m³, tempo s.\n\n';
+    'Regras de engenharia:\n1. Modelo: NRTL ou UNIQUAC para líquidos polares e azeótropos; UNIFAC se faltar dado; Peng-Robinson/SRK para gases, hidrocarbonetos leves e alta pressão; PC-SAFT para líquidos iônicos (ex.: CO2 em [C4mim][NTf2]), polímeros e associação forte (soft-SAFT também serve para hidrocarbonetos, água e álcoois); Ideal só para misturas quase ideais.\n2. Azeótropos (ex.: etanol/água ~0,89 a 1 atm): avise o limite e sugira destilação extrativa (etilenoglicol), azeotrópica heterogênea (ciclohexano + decantador), variação de pressão, peneira molecular ou pervaporação.\n3. Quando receber resultados: interprete pureza, recuperação, cargas térmicas e convergência, e dê de 2 a 4 sugestões concretas e quantificadas; se quiser testar uma melhoria, devolva o bloco json de modificar_fluxograma.\n4. Se a simulação colada mostrar erro, leia a mensagem, corrija a especificação e devolva o json corrigido.\n5. Figuras: descreva em uma ou duas frases o que identificou e monte o fluxograma correspondente; assuma valores típicos para dados ausentes e diga quais assumiu.\n6. Código: o simulador gera MATLAB/Octave e Python completos pelos botões "MATLAB/Octave" e "Python"; indique esses botões. Para trechos específicos use set(0,\'DefaultAxesFontSize\',18) no MATLAB e plt.rcParams[\'font.size\'] = 18 no Python.\n7. Seja conciso: frases curtas, números com unidade e vírgula decimal no texto (no json, ponto decimal).\n8. Equipamento que não existe no catálogo: não recuse e não invente tipo de bloco. Monte um equivalente com os blocos genéricos: separator (separador de componentes: a fração de cada componente que vai para a saída 1; serve para membranas, filtros, centrífugas, peneiras, adsorvedores e cristalização com separação), rconv (reator de conversão), heater/cooler (calor), pump/valve (pressão), mixer/splitter, ou uma combinação deles (ex.: ultrafiltração = bomba + separador). Dê ao bloco o nome do equipamento real com "(equivalente)", por exemplo "Centrífuga de cesto (equivalente)", diga em uma frase as hipóteses usadas (frações, conversões, pressões) e avise que é um modelo de balanço, sem o projeto do equipamento. Se o equipamento parecer útil para outras aulas, sugira ao usuário pedir ao Prof. Juan que avalie incluí-lo na paleta. Para açúcar e caldas, a cor ICUMSA anda no componente sugar-color (1 UI = 1 mg de corante por kg de sólidos); ro_membrane, gac_column e ix_resin já fazem osmose reversa, carvão ativado e resina de troca iônica.\n\nUnidades dos parâmetros: T °C, P bar, vazões kmol/h (ou kg/h, L/s), cargas kW, volume m³, tempo s.\n\n';
   function gemInstructions() { return GEM_RULES + catalog(); }
 
   // acha a ação no texto colado: bloco ```json, ou o maior objeto JSON do texto
@@ -24406,7 +24715,7 @@ def pfr_transiente(P, nome):
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const nf = (v, d) => (v == null || (typeof v === 'number' && !isFinite(v)) ? '—' : typeof v !== 'number' ? String(v) : (Math.abs(v) >= 1e6 || (Math.abs(v) < 1e-3 && v !== 0) ? v.toExponential(3) : v.toLocaleString('pt-BR', { maximumFractionDigits: d == null ? 3 : d, minimumFractionDigits: 0 })));
   const MAT_NONE = 'nenhum (composição manual)';   // mesmo texto do campo Alimento/Bebida da corrente (units.js)
-  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', cyclone_preheater: 'TC', clinker_cooler: 'RC', cement_mill: 'MC', sulfur_burner: 'FE', so2_converter: 'CV', acid_tower: 'TA', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', cooling_tower: 'TRF', deaerator: 'DA', reactor_kinetics: 'CIN', chem_kinetics: 'RQ', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN', pw_pretreat: 'PT', pw_tank: 'TQ', shampoo_tank: 'TM', filling: 'ENV', u_heap_leach: 'LX', u_sx: 'SX', u_yellowcake: 'YC', u_conversion: 'CV', u_enrichment: 'EN', u_auc: 'RC', u_pellets: 'FCN' };
+  const PREFIX = { feed: 'F', product: 'P', mixer: 'MIX', splitter: 'DIV', separator: 'SEP', heater: 'E', cooler: 'E', hx_shell: 'E', hx_plate: 'E', pump: 'B', compressor: 'K', valve: 'VLV', flash: 'V', decanter: 'V', column_short: 'T', ponchon: 'T', column: 'T', absorber: 'T', extractor: 'X', leaching: 'X', cstr: 'R', pfr: 'R', rconv: 'R', rgibbs: 'R', lle_ternary: 'X', evap_multi: 'EV', energy: 'Q', pid_cstr: 'PID', blast_furnace: 'AF', cement_kiln: 'FC', cyclone_preheater: 'TC', clinker_cooler: 'RC', cement_mill: 'MC', sulfur_burner: 'FE', so2_converter: 'CV', acid_tower: 'TA', silo: 'SL', thickener: 'SED', kraft_digester: 'DG', crusher: 'BR', ball_mill: 'MB', spiral_classifier: 'CE', hydrocyclone: 'HC', flotation: 'FL', flot_col_bench: 'CB', flot_col_ind: 'CF', coke_oven: 'CQ', sinter_plant: 'SI', bof: 'LD', caster: 'LC', rolling_mill: 'LA', wire_drawing: 'TR', wood_yard: 'PM', pulp_washer: 'LV', bleach_plant: 'BQ', paper_machine: 'MP', recovery_boiler: 'CR', causticizing: 'CA', steam_gen: 'GV', steam_turbine: 'TV', nuclear_reactor: 'RN', pwr_steam_gen: 'GV', msr: 'MSR', steam_condenser: 'CD', cooling_tower: 'TRF', deaerator: 'DA', reactor_kinetics: 'CIN', chem_kinetics: 'RQ', reactor_shutdown: 'PAR', p_precip: 'WWP', daf: 'DAF', act_sludge: 'BIO', bioreactor_tosetto: 'BR', bioreactor_1: 'BR', bioreactor_2: 'BR', bioreactor_monod: 'BR', bioreactor_verhulst: 'BR', tray_dryer: 'SEC', spray_dryer: 'SD', freeze_dryer: 'LF', microwave_dryer: 'MO', solar_dryer: 'SS', centrifuge: 'CF', biodigester: 'BD', pasteurizer: 'PAS', butter_churn: 'BAT', crystallizer: 'CR', evap_single: 'EV', evap_double: 'EV', biodiesel_reactor: 'RB', column_reflux: 'T', column_mt: 'T', pump_system: 'B', evap_cond: 'EV', filter_plate: 'FP', filter_rotary: 'FR', cocoa_roaster: 'TOR', cocoa_alkalizer: 'ALC', cocoa_mill: 'MOI', cocoa_press: 'PRE', conche: 'CON', temperer: 'TEM', eta_intake: 'CAP', eta_coag: 'MR', eta_floc: 'FLO', eta_settler: 'DEC', eta_filter: 'FIL', eta_disinfect: 'TC', eta_reservoir: 'RES', eta_washtank: 'REC', eta_thickener: 'ADE', eta_centrifuge: 'CEN', pw_pretreat: 'PT', ro_membrane: 'OR', gac_column: 'CA', ix_resin: 'RT', pw_tank: 'TQ', shampoo_tank: 'TM', filling: 'ENV', u_heap_leach: 'LX', u_sx: 'SX', u_yellowcake: 'YC', u_conversion: 'CV', u_enrichment: 'EN', u_auc: 'RC', u_pellets: 'FCN' };
 
   let state = blank(), results = null, undoStack = [], autoTimer = null, chartTarget = null, lastCharts = null, mview = 'flow', mFitted = false, chartsMax = false, drawerWasClosed = false;
   const caps = { downloads: undefined };
@@ -24740,6 +25049,16 @@ def pfr_transiente(P, nome):
     pw_pretreat: { ex: 'Cosméticos: fábrica de shampoo capilar perolado', items: [
       ['Correntes', 'entrada <b>água bruta</b> (Água com dureza, cloro e turbidez); saídas <b>água purificada</b> e <b>rejeito</b> (retrolavagens e salmoura da regeneração). O sal da regeneração entra pelo campo.'],
       ['Operação', '200 L/h por 5 h por semana; areia a 12 m/h; carvão com EBCT de 5 min; 10 L de resina com 50 g CaCO₃/L e 150 g de sal por litro; UV de 40 mJ/cm².']] },
+    ro_membrane: { ex: 'Açúcar: refino do açúcar cristal', items: [
+      ['Correntes', 'entrada <b>alimentação</b> (Água com Sacarose e outros solutos, sem sólidos em suspensão); saídas <b>permeado</b> (água quase pura) e <b>concentrado</b>.'],
+      ['Especificação', '<b>°Brix do concentrado</b> (25 °Bx no exemplo) ou <b>recuperação de água</b>. Se a pressão não bastar, o bloco diz até que °Brix dá para ir.'],
+      ['Membrana e bomba', '40 bar na saída da bomba; permeabilidade de 1,0 L/(m²·h·bar) a 25 °C; 99,5 % de rejeição; polarização 1,15; 2 bar de perda de carga; elementos de 4" com 7,4 m² no exemplo (o padrão é 8", com 37 m²), até 6 por vaso; bomba com 80 % de rendimento.']] },
+    gac_column: { ex: 'Açúcar: refino do açúcar cristal', items: [
+      ['Correntes', 'entrada <b>calda a descolorir</b> e saída <b>calda descolorida</b>. A lista de componentes precisa ter <b>Corantes do açúcar</b> (a cor ICUMSA, 1 UI = 1 mg de corante por kg de sólidos).'],
+      ['Isoterma e leito', 'Freundlich com K = 0,14 e 1/n = 1,2; 50 % de remoção; aproveitamento do leito de 70 %; EBCT de 60 min em 2 colunas em série com altura igual a 3 diâmetros; leito com 480 kg/m³; 5 % de perda por regeneração.']] },
+    ix_resin: { ex: 'Açúcar: refino do açúcar cristal', items: [
+      ['Correntes', 'entrada <b>calda a descolorir</b>; saídas <b>calda descolorida</b>, <b>águas doces</b> (adoçamento) e <b>efluente</b> (salmoura usada e corantes). Inclua <b>Corantes do açúcar</b> e <b>Cloreto de sódio</b> na lista; com <b>Hidróxido de sódio</b> a soda da salmoura também aparece.'],
+      ['Resina e regeneração', '2 m³ de resina com capacidade de 8 g de corante por litro; 60 % de remoção; 2 volumes de leito de salmoura com 10 % de NaCl e 0,2 % de NaOH, 2 de enxágue, 1 de calda retida e 4 de água de adoçamento.']] },
     pw_tank: { ex: 'Cosméticos: fábrica de shampoo capilar perolado', items: [
       ['Correntes', 'entrada <b>água purificada</b>; saídas <b>fase quente</b>, <b>fase fria</b> e <b>excedente</b> (o que fica no tanque).'],
       ['Operação', 'tanque de 300 L com 90 % de nível; 34,935 kg de água por batelada, 40 % para a fase quente; 4 bateladas por dia; anel de 1" a 2 000 L/h.']] },
@@ -26154,7 +26473,7 @@ def pfr_transiente(P, nome):
     { id: 'sep', chip: 'Separação', name: 'Flash, extração, absorção e adsorção', keys: 'flash lle ell-ternario leach gas adsorcao-mn co2-liquido-ionico metanol-agua-pcsaft metanol-agua-softsaft r410a-liquido-ionico-softsaft' },
     { id: 'reat', chip: 'Reatores', name: 'Reatores, cinética e controle', keys: 'cstr pfr pid-cstr cinetica-van-de-vusse-bequette cinetica-serie-ajuste-k cinetica-paralela-seletividade cinetica-van-de-vusse-calor gibbs-reforma nox-oxidacao embalagem-o2' },
     { id: 'bio', chip: 'Bioprocessos', name: 'Bioprocessos', keys: 'biorreatores-tosetto biorreator-tosetto-um biorreatores-dois-serie biorreator-monod biorreator-verhulst biodiesel-transesterificacao biodigestor-rural biodigestor-granja-suinos' },
-    { id: 'alim', chip: 'Alimentos e bebidas', name: 'Alimentos e bebidas', keys: 'fabrica-chocolate laticinio-completo centrifuga-leite degomagem-oleo-soja refrigerante-processo cerveja-processo cachaca-processo cafe-soluvel evaporador-tomate' },
+    { id: 'alim', chip: 'Alimentos e bebidas', name: 'Alimentos e bebidas', keys: 'fabrica-chocolate laticinio-completo centrifuga-leite degomagem-oleo-soja refrigerante-processo cerveja-processo cachaca-processo cafe-soluvel refino-acucar evaporador-tomate' },
     { id: 'seca', chip: 'Secagem e evaporação', name: 'Secagem, evaporação e cristalização', keys: 'secador-bandejas spray-dryer-leite liofilizador-esteira secador-micro-ondas secador-solar-abacaxi secador-solar-lodo evaporador-simples evaporador-duplo evaporador-triplo evaporador-energia cristalizador-msmpr cristalizador-kno3' },
     { id: 'ener', chip: 'Energia e frio', name: 'Calor, bombeamento, vapor e refrigeração', keys: 'hx bomba-afogada gerador-vapor-cavaco cogeracao-biomassa refrig cag-shopping-torre r407c-evaporador' },
     { id: 'agua', chip: 'Água e efluentes', name: 'Água e efluentes', keys: 'eta-convencional ete-refrigerantes-daf-fosforo' },

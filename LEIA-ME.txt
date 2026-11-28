@@ -1,3 +1,13 @@
+SIMULA FÁCIL IA 5.14.3 – Vídeo das alunas Gabriela, Giovanna e Klarisse: pasteurização do leite (28/11/2026)
+===========================================================================================================
+
+- Novo vídeo em "Vídeos dos alunos" (agora são 7), em quinto lugar, logo antes da Ana Clara: "Pasteurização do
+  leite", de Gabriela, Giovanna e Klarisse (Engenharia Química UFSJ), https://youtu.be/IUr8LjUvOP0, com a etiqueta
+  NOVO. Aparece no simulador (botão dos vídeos, tela inicial e janela dos tutoriais) e na página de apresentação.
+- Nova ordem dos "Vídeos dos alunos": 1º Silas Stevan Tavares, 2º Bruno Gontijo de Carvalho, 3º Maria Fernanda
+  Cavalcante Machado, 4º Darciele Permanhani Dalcin, 5º Gabriela, Giovanna e Klarisse, 6º Ana Clara Alves de Macedo,
+  7º Arthur Luiz Barcelos Rocha.
+
 SIMULA FÁCIL IA 5.14.2 – Vídeo da aluna Maria Fernanda: café solúvel (28/11/2026)
 ==================================================================================
 

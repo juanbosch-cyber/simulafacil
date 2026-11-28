@@ -1,3 +1,12 @@
+SIMULA FÁCIL IA 5.14.2 – Vídeo da aluna Maria Fernanda: café solúvel (28/11/2026)
+==================================================================================
+
+- Novo vídeo em "Vídeos dos alunos" (agora são 6), em terceiro lugar, logo depois do Bruno: "Café solúvel", de
+  Maria Fernanda Cavalcante Machado (Engenharia Química UFSJ), https://youtu.be/l5PTBOPCEPI, com a etiqueta NOVO.
+  Aparece no simulador (botão dos vídeos, tela inicial e janela dos tutoriais) e na página de apresentação.
+- Nova ordem dos "Vídeos dos alunos": 1º Silas Stevan Tavares, 2º Bruno Gontijo de Carvalho, 3º Maria Fernanda
+  Cavalcante Machado, 4º Darciele Permanhani Dalcin, 5º Ana Clara Alves de Macedo, 6º Arthur Luiz Barcelos Rocha.
+
 SIMULA FÁCIL IA 5.14.1 – Ajuste no aviso da versão 5.13 (28/11/2026)
 ====================================================================
 

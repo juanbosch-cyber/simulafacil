@@ -1,3 +1,15 @@
+SIMULA FÁCIL IA 5.14.4 – Novo manual em PDF: versão 5.14, com os suplementos G a N (28/11/2026)
+================================================================================================
+
+- Manual_SIMULA_FACIL_IA.pdf passou da versão 5.3 para a 5.14 (de 174 para 195 páginas). O texto anterior foi mantido;
+  a capa mostra a versão 5.14 e, logo depois dela, entra a página "Novidades das versões 5.4 a 5.14".
+- Oito suplementos novos no fim do manual, com fluxogramas dos exemplos capturados do simulador, equações e resultados:
+  G – cimento e ácido sulfúrico (5.4); H – cinética química (5.5 e 5.6); I – R-410A com líquidos iônicos (5.7 e 5.8);
+  J – torre de resfriamento (5.9); K – shampoo (5.10); L – ciclo do combustível nuclear (5.11); M – refino do açúcar
+  (5.13); N – evaporadores de duplo e triplo efeito com condensador acoplado (5.14).
+- manualVersion passou para '5.14-2026-11-28': os links do manual na página de apresentação e no simulador mudam e o
+  navegador baixa o PDF novo, em vez de abrir o antigo guardado no cache.
+
 SIMULA FÁCIL IA 5.14.3 – Vídeo das alunas Gabriela, Giovanna e Klarisse: pasteurização do leite (28/11/2026)
 ===========================================================================================================
 

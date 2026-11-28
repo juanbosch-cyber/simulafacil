@@ -1,3 +1,17 @@
+SIMULA FÁCIL IA 5.14.5 – Título novo no manual e vídeo da Maria Fernanda em primeiro lugar (28/11/2026)
+=======================================================================================================
+
+- Manual_SIMULA_FACIL_IA.pdf: a capa, o cabeçalho das páginas 1 e 5 a 105 e o título nas propriedades do PDF passaram
+  a dizer "Manual do SIMULA FÁCIL IA (Versão 5.14) – Simulador de Processos Químicos, Bioprocessos, Alimentos, Nuclear,
+  de Minas e Metalurgia". O título antigo e os remendos das versões 5.2 e 5.3 foram tirados da capa (a busca e a cópia
+  do texto no PDF não mostram mais o título antigo por baixo). manualVersion passou para '5.14-2026-11-28b'.
+- Site: o rodapé da página de apresentação, a citação ABNT, os créditos do simulador, o cabeçalho dos pacotes
+  MATLAB/Python e o texto do botão Compartilhar usam o título novo.
+- Nova ordem dos "Vídeos dos alunos": 1º Maria Fernanda Cavalcante Machado (café solúvel), 2º Silas Stevan Tavares,
+  3º Bruno Gontijo de Carvalho, 4º Darciele Permanhani Dalcin, 5º Gabriela, Giovanna e Klarisse, 6º Ana Clara Alves
+  de Macedo, 7º Arthur Luiz Barcelos Rocha. A etiqueta NOVO continua nos vídeos da Maria Fernanda, do Silas e de
+  Gabriela, Giovanna e Klarisse.
+
 SIMULA FÁCIL IA 5.14.4 – Novo manual em PDF: versão 5.14, com os suplementos G a N (28/11/2026)
 ================================================================================================
 

@@ -1,3 +1,10 @@
+SIMULA FÁCIL IA 5.14.1 – Ajuste no aviso da versão 5.13 (28/11/2026)
+====================================================================
+
+- Página de apresentação: o aviso "Novo na 5.13" e a seção "O que há de novo na versão 5.13" ficaram só com o refino
+  do açúcar (osmose reversa, carvão ativado granular, resina de troca iônica e cor ICUMSA); saiu a frase sobre o
+  agente de IA montando equivalentes.
+
 SIMULA FÁCIL IA 5.14.0 – Evaporadores de duplo e triplo efeito com condensador acoplado (27/11/2026)
 ====================================================================================================
 
